@@ -43,46 +43,56 @@ def disasm_word(w):
     if op == 0 and fn == 8: return "jr"
     return None
 
-print("== asm subsegments whose body tears down a frame but shows no prologue ==")
+print("== per-glabel census: functions (first or later glabel in an asm file)\n   whose body tears down a frame + restores $ra but shows no prologue ==")
 for i, (start, typ, name, size) in enumerate(subsegs):
     if typ not in ("asm", "c"):
         continue
-    text = ""
     asmfile = f"asm/nonmatchings/{name}.s"
     try:
         text = open(asmfile).read()
     except OSError:
         continue
-    has_teardown = re.search(r"addiu\s+\$sp, \$sp, (0x[0-9A-Fa-f]+)\s*$", text, re.M)
-    has_ra_restore = re.search(r"lw\s+\$ra, (0x[0-9A-Fa-f]+)\(\$sp\)", text)
-    has_prologue = re.search(r"addiu\s+\$sp, \$sp, -(0x[0-9A-Fa-f]+)", text)
-    if not (has_teardown and has_ra_restore and not has_prologue):
-        continue
-    frame = int(has_teardown.group(1), 16)
-    if i == 0:
-        continue
-    # scan backward across contiguous preceding subsegments (data or asm)
-    # up to 0x400 bytes total, for the frame-matching prologue word
-    found = []
-    budget = 0x400
-    j = i - 1
-    while j >= 0 and budget > 0:
-        pstart, ptyp, pname, psize = subsegs[j]
-        lo = max(pstart, start - budget)
-        for a in range(start - 4, lo - 1, -4):
-            w = word_at(a)
-            d = disasm_word(w) if w else None
-            if d and d.startswith("addiu $sp, $sp, -") and int(d.split(", ")[-1], 16) == frame:
-                found.append((a, d, pname))
-        budget -= start - lo
-        start = lo
-        j -= 1
-    tag = "HIDDEN-PROLOGUE" if found else "NO-PROLOGUE-FOUND"
-    if "_hdr" not in globals():
-        print(f"{'fragment':<24} {'frame':>6}  verdict (backward scan <=0x400)")
-        globals()["_hdr"] = True
-    extra = ""
-    if found:
-        a, d, pname = found[-1]
-        extra = f"  <- {a:#x} inside {pname}"
-    print(f"{name:<24} {frame:>6}  {tag}{extra}")
+    # split per glabel: each function in the file judged independently
+    blocks = re.split(r"(?=\n?glabel\s+)", text)
+    for blk in blocks:
+        m = re.match(r"\n?glabel\s+(\S+)", blk)
+        if not m:
+            continue
+        gname = m.group(1)
+        has_teardown = re.search(r"addiu\s+\$sp, \$sp, (0x[0-9A-Fa-f]+)\s*$", blk, re.M)
+        has_ra_restore = re.search(r"lw\s+\$ra, (0x[0-9A-Fa-f]+)\(\$sp\)", blk)
+        has_prologue = re.search(r"addiu\s+\$sp, \$sp, -(0x[0-9A-Fa-f]+)", blk)
+        if not (has_teardown and has_ra_restore and not has_prologue):
+            continue
+        frame = int(has_teardown.group(1), 16)
+        # the glabel's own address: spimdisasm labels are func_XXXXXXXX
+        gaddr = int(gname.split("_")[-1], 16) if re.fullmatch(r"func_[0-9A-Fa-f]{8}", gname) else None
+        if gaddr is None or i == 0:
+            continue
+        # scan backward across contiguous preceding subsegments (data or
+        # asm), up to 0x400 bytes total, for the frame-matching prologue
+        found = []
+        budget = 0x400
+        j = i - 1
+        vstart = gaddr  # vram; word_at takes vram
+        while j >= 0 and budget > 0:
+            pstart, ptyp, pname, psize = subsegs[j]
+            plo = VLOAD + pstart
+            lo = max(plo, vstart - budget)
+            for a in range(vstart - 4, lo - 1, -4):
+                w = word_at(a)
+                d = disasm_word(w) if w else None
+                if d and d.startswith("addiu $sp, $sp, -") and int(d.split(", ")[-1], 16) == frame:
+                    found.append((a, d, pname))
+            budget -= vstart - lo
+            vstart = lo
+            j -= 1
+        tag = "HIDDEN-PROLOGUE" if found else "NO-PROLOGUE-FOUND"
+        if "_hdr" not in globals():
+            print(f"{'fragment':<24} {'frame':>6}  verdict (backward scan <=0x400)")
+            globals()["_hdr"] = True
+        extra = ""
+        if found:
+            a, d, pname = found[-1]
+            extra = f"  <- {a:#x} inside {pname}"
+        print(f"{gname:<24} {frame:>6}  {tag}{extra}")
