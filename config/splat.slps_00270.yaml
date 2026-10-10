@@ -22,14 +22,13 @@ options:
     - config/symbols.slps_00270.txt
   ld_script_path: build/slps_00270.ld
 
-  compiler: GCC            # FILL: pin exact revision (see docs/RECON.md —
-                           # Psy-Q kernel strings date the SDK to 1995-10;
-                           # GCC 2.6.3 is the working hypothesis)
+  compiler: GCC            # pinned: GCC 2.6.3 Sony Playstation build
+                           # (docs/TOOLCHAIN.md) — Psy-Q kernel strings
+                           # date the SDK to 1995-10. C rebuild flags:
+                           # -mips1 -O2 -G0 -funsigned-char -fno-builtin
+                           # (probe-confirmed, probes/gcc263/idioms.c)
   platform: psx
   endianness: little
-
-  # FILL: compiler flags once identified from the toolchain fingerprint
-  # (candidates: -mips1 -mcpu=3000 -O2/-O3 -G0/-G4 -funsigned-char)
 
   create_undefined_syms_auto: true
   auto_link_sections: []
@@ -306,7 +305,7 @@ segments:
       - [0x16DC0, data, data_800365C0]   # 0x2cc
       - [0x1708C, asm, func_8003688C]   # 0x388
       - [0x17414, data, data_80036C14]   # 0xe8
-      - [0x174FC, asm, func_80036CFC]   # 0x8
+      - [0x174FC, c, func_80036CFC]   # 0x8
       - [0x17504, data, data_80036D04]   # 0x8c
       - [0x17590, asm, func_80036D90]   # 0x3c
       - [0x175CC, data, data_80036DCC]   # 0x4c0

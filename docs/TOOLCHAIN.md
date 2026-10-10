@@ -55,14 +55,65 @@ delay-slot scheduling match GCC 2.6.x-era MIPS output; they do not
 uniquely pin the minor revision — only a byte-comparison against the
 real compiler can.
 
-## Pinning the exact GCC revision (next step)
+## Pinned — GCC 2.6.3, Sony Playstation build (2026-10-10)
 
-1. Acquire candidates: `decompme/compilers` or `decompals/old-gcc`
-   prebuilt mips GCC 2.6.3 (and 2.7.x as a control).
-2. Compile probe functions exercising each fingerprint row above:
-   signed/unsigned division, INT_MIN edge, 64-bit products, unsigned
-   char arrays, switch tables (`jtbl` jumps), struct passing.
-3. Pass criterion: probe idioms byte-identical to the matched asm
-   (guard structure, register allocation, scheduling), not merely
-   similar. Record the winning revision + flags here.
-4. Only then start C matches; every one is gated by `make verify`.
+The compiler of record is **GCC 2.6.3 [AL 1.1, MM 40] Sony Playstation**
+— the Psy-Q compiler. Its banner identifies itself on every cc1 run;
+the Psy-Q kernel RCS dates (1995-10) agree. Acquired as prebuilt Linux
+binaries from `decompals/old-gcc` release 0.12 (`gcc-2.6.3-psx.tar.gz`,
+the same artifact decomp.me builds its PSX images from) via
+`tools/get_gcc.sh`. The binaries are 32-bit i386; this sandbox's
+seccomp allowlist rejects i386 syscall numbers (SIGSYS on first
+syscall), so cc1 runs under `qemu-i386` (static, from Debian bullseye's
+qemu-user-static — trixie's package only ships symlinks, and this
+sandbox refuses symlinks). qemu itself is an amd64 binary making
+ordinary syscalls and translates the guest syscalls in userspace.
+Everything lands in `tools-local/` (git-ignored, outside the repo,
+survives re-provisions); `tools/get_gcc.sh` re-acquires it idempotently.
+
+Pipeline (`tools/cc.sh`, one .c per invocation):
+
+```sh
+tools/cc.sh -o out.o file.c        # .c -> .o for standalone checks
+tools/cc.sh -S -o out.o file.c     # stop at the maspsx .s (build.sh path)
+```
+
+cpp (bundled) -> cc1 -> maspsx `--expand-div` -> mipsel as 2.31.1.
+Two non-obvious details: the Psy-Q cc1 rejects comments/#-directives in
+raw source (the original driver ran cpp first, so cc.sh does too), and
+`--expand-div` is what reproduces the ASPSX assembler's div/divu macro
+expansion — the break 7 / break 6 trap guards in the retail bytes come
+from that expansion, not from the compiler emitting them.
+
+Flag set: `-mips1 -O2 -G0 -funsigned-char -fno-builtin` (the earlier
+working hypothesis, now exercised by probes and the first match).
+
+Probe evidence (`probes/gcc263/idioms.c`, compare against
+`asm/nonmatchings/`):
+
+| probe | retail idiom | result |
+| --- | --- | --- |
+| `a / b` (signed) | `func_80028B8C.s` guard chain | **instruction-for-instruction identical**: `div $zero` + `bnez/nop/break 7` + `addiu $at,-1/bne/lui 0x8000/bne/nop/break 6` + `mflo` |
+| `a / b` (unsigned) | divu row | `divu` + `bnez/nop/break 7` + `mflo`, as measured |
+| `a * b` | mult row | `mult` + `mflo`, no MIPS32 `mul` |
+| `p[i]` plain char | char signedness row | `lbu` (default unsigned char) |
+| `p[i]` signed char | minority row | `lb` |
+
+cc1 defaults confirmed on the banner: `-mgas -msoft-float`,
+`-G value = 8` (overridden to `-G0`, matching the %gp_rel=0
+measurement), `Cpu = 3000, ISA = 1`.
+
+Gotcha for the linker path: gas pads the default `.text` section to 16
+bytes on MIPS regardless of content, while the asm staging path's fresh
+`.section .r_<rom>, "awx", @progbits` carries no default padding. C
+objects therefore go through the same in-source section rewrite
+(`tools/build.sh` compiles with `cc.sh -S`, rewrites `.text` in the
+.mas.s, assembles with `$ASFLAGS`); renaming with
+`objcopy --rename-section` after assembly would keep the padding.
+
+First C match through the round-trip oracle: `src/func_80036CFC.c`
+(empty function; retail body `jr $ra; nop`),
+`make verify TARGET=slps_00270` green with the C object in place of the
+generated disassembly (2026-10-10). Per-function byte-matching
+continues to validate the flag set; switch tables (`jtbl`) and struct
+passing probes are still open rows.

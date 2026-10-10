@@ -5,14 +5,16 @@
     "regression, lower means the baseline goes down in the same PR. A raise",
     "is a policy change and needs explicit review.",
     "Add your own patterns (e.g. raw-address debt, magic numbers) the day",
-    "you introduce them — ratchets go up the day the first placeholder appears."
+    "you introduce them — ratchets go up the day the first placeholder appears.",
+    "unknown_function 0->1 (2026-10-10): first C match, src/func_80036CFC.c,",
+    "matched but the original symbol name is still unidentified."
   ],
   "patterns": [
     { "name": "unknown_function", "regex": "\\bfunc_[0-9A-Fa-f]{8}\\b" },
     { "name": "unknown_data", "regex": "\\bD_[0-9A-Fa-f]{8}\\b" }
   ],
   "baselines": {
-    "unknown_function": 0,
+    "unknown_function": 1,
     "unknown_data": 0
   }
 }

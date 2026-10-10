@@ -119,6 +119,59 @@ done < <(find "$ASM_DIR" -name "*.s" | sort)
 echo "assembled: $n_ok ok, $n_fail failed"
 [ "$n_fail" -eq 0 ] || fail "assembly errors - fix the split or the pipeline"
 
+# --- compile C sources (matched functions) ------------------------------------
+# yaml subsegments of type `c` are matched C functions. They compile with
+# the Psy-Q-era compiler through tools/cc.sh -S (bundled cpp -> cc1 under
+# qemu-i386 -> maspsx --expand-div), then get the same staging treatment
+# as asm: the .text directive is rewritten to .r_<rom> IN THE SOURCE and
+# the file is assembled with $ASFLAGS. Doing the rename in the source (not
+# with objcopy --rename-section) matters: gas pads the default .text to 16
+# bytes on MIPS, while a fresh .section name carries no default padding —
+# this is exactly why the asm path stages the same way. Orphan sections
+# the C toolchain would contribute (.reginfo, .MIPS.abiflags,
+# .gnu.attributes, .pdr, .comment) are discarded by gen_ld.py's /DISCARD/.
+if [ -d src ]; then
+    mkdir -p build/src
+    c_list="build/${TARGET}.c_entries"
+    "$PY" - "$TARGET" > "$c_list" <<EOF || fail "could not list C subsegments"
+import sys, yaml
+cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
+for seg in cfg["segments"]:
+    if isinstance(seg, dict) and seg.get("type") == "code":
+        for e in seg.get("subsegments", []):
+            if isinstance(e, list) and len(e) >= 3 and e[1] == "c":
+                print(f"{e[2]} {e[0]:X}")
+EOF
+    n_c=0
+    n_c_fail=0
+    while read -r cname crom; do
+        [ -n "${cname:-}" ] || continue
+        [ -f "src/${cname}.c" ] || fail "yaml wants C at ${cname} but src/${cname}.c is missing"
+        if ! "$REPO/tools/cc.sh" -S -o "build/src/${cname}.o" "src/${cname}.c"; then
+            fail "C compile failed: src/${cname}.c"
+        fi
+        csec=$(printf '%08X' "0x${crom}")
+        staged="build/src/${cname}.r.s"
+        "$PY" - "build/src/${cname}.mas.s" "$staged" "$csec" <<'PYSEC' || fail "C staging failed: ${cname}"
+import re, sys
+src, dst, sec = sys.argv[1], sys.argv[2], sys.argv[3]
+text = open(src).read()
+text = re.sub(r"^\s*\.text\s*$",
+              f'.section .r_{sec}, "awx", @progbits', text, flags=re.M)
+open(dst, "w").write(text)
+PYSEC
+        if ! "$AS" $ASFLAGS -o "build/src/${cname}.o" "$staged" 2> "build/src/${cname}.aserr"; then
+            echo "as FAILED: src/${cname}.c" >&2
+            head -5 "build/src/${cname}.aserr" >&2
+            n_c_fail=$((n_c_fail + 1))
+            continue
+        fi
+        n_c=$((n_c + 1))
+    done < "$c_list"
+    [ "$n_c_fail" -eq 0 ] || fail "C assembly errors"
+    [ "$n_c" -eq 0 ] || echo "compiled: $n_c C source file(s)"
+fi
+
 # --- link (two-pass: auto-define address-encoded unresolved symbols) ---------
 # spimdisasm names symbols it cannot resolve after their runtime address
 # (D_8011C31C, func_8002DB14, ...). The retail bytes encode that same

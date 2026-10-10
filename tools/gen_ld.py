@@ -33,7 +33,13 @@ def obj_rel_path(name: str, typ: str, asm_path: str) -> str:
     'asm/'>, so the object lives at build/<asm_path minus 'asm/'>/<file>.o.
     asm_path comes from the target's own splat yaml (per-target asm trees,
     e.g. asm/nonmatchings for slps_00270 or asm/sces_00269/nonmatchings).
+
+    Type `c` subsegments are matched C functions: tools/build.sh compiles
+    src/<name>.c through tools/cc.sh (Psy-Q-era cc1 under qemu) and lays
+    the object at build/src/<name>.o with .text renamed to .r_<rom>.
     """
+    if typ == "c":
+        return f"build/src/{name}.o"
     if typ == "data":
         src = f"{asm_path}/data/{name}.data.s"
     else:

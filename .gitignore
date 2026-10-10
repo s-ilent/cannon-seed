@@ -45,3 +45,4 @@ __pycache__/
 asm/header.s
 mipsel-root/
 tools-local/
+tools-src/
