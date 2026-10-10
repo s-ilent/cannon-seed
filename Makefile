@@ -25,7 +25,10 @@ BUILD_DIR    ?= build
 SHA1_FILE    ?= config/sha1/$(TARGET).sha1
 SPLAT_CONFIG ?= config/splat.$(TARGET).yaml
 
-PY ?= python3
+# Interpreter resolution: persistent venv first (survives re-provisions),
+# legacy path as fallback, then bare python3. Same rule as tools/build.sh.
+PY_RESOLVED := $(shell for c in /home/z/my-project/.venv/bin/python3 /home/z/.venv/bin/python3 python3; do if [ -x "$$c" ] && "$$c" -c "import splat, spimdisasm" >/dev/null 2>&1; then echo "$$c"; exit 0; fi; done; echo python3)
+PY ?= $(PY_RESOLVED)
 
 # --- Bare-make guard --------------------------------------------------------
 # LSD rule 2, generalised: every build goes through the oracle gate. The hook
