@@ -42,34 +42,49 @@ Eve's overlays: one oracle file per target under `config/sha1/`.
 | `g3org_jp` | GOURB/G3ORG.EXE;1 | 628,736 | 626,688 | `5923d4eb4b239630286ab4f9b26b88186690def9` |
 | `g3org_eu` | GOURB/G3ORG.EXE;1 | 630,784 | 624,768 | `c83138e295864531c0cb7234b6059b340803eb9b` |
 
-(payload = file size − 0x800-byte PS-X EXE header. The header's own
-`t_size` field reads 0 in all eight — see §3.)
+(payload = file size − 0x800-byte PS-X EXE header. The payload size is
+also carried in the header's own `t_size` field — see §3, corrected.)
 
 Primary region: **Japan** (original). Europe is the regional port target
 afterwards; EU payloads differ by 1-4 KiB from their JP counterparts.
 
-## 3. Header facts (all eight executables)
+## 3. Header facts (all eight executables) — CORRECTED v2
 
-| target | t_addr (payload) | pc0 (entry) | gp0 ($gp) |
-| --- | --- | --- | --- |
-| slps_00270 | `0x8002DB14` | `0x80020000` | `0x00046800` |
-| sces_00269 | `0x8002D908` | `0x80020000` | `0x00046800` |
-| mainmenu_jp | `0x8005C530` | `0x80020000` | `0x000AA000` |
-| mainmenu_eu | `0x8005C160` | `0x80020000` | `0x000AA800` |
-| g3_jp | `0x80047EF0` | `0x80020000` | `0x0008C000` |
-| g3_eu | `0x80047B58` | `0x80020000` | `0x0008C800` |
-| g3org_jp | `0x8004538C` | `0x80020000` | `0x00099000` |
-| g3org_eu | `0x80044FAC` | `0x80020000` | `0x00099800` |
+The first recon script read the header one word shifted (its `t_addr`
+column was actually `pc0`, its `pc0` column was `t_addr`, its `gp0` column
+was `t_size`), which manufactured a "nonstandard chained-launch header"
+mystery. `tools/exe_map.py` (v2) reads the canonical PS-X EXE layout,
+cross-checks `t_size` against the real file size, and re-measured
+everything; the full generated tables live in `docs/LOADMAP.md`.
+
+Measured facts (identical shape for all eight):
+
+| target | entry `pc0` | entry offset | load `t_addr` | `t_size` | init `$sp` |
+| --- | --- | --- | --- | --- | --- |
+| slps_00270 | `0x8002DB14` | `0xDB14` | `0x80020000` | `0x46800` | `0x801FFFF0` |
+| sces_00269 | `0x8002D908` | `0xD908` | `0x80020000` | `0x46800` | `0x801FFFF0` |
+| mainmenu_jp | `0x8005C530` | `0x3C530` | `0x80020000` | `0xAA000` | `0x801FFFF0` |
+| mainmenu_eu | `0x8005C160` | `0x3C160` | `0x80020000` | `0xAA800` | `0x801FFFF0` |
+| g3_jp | `0x80047EF0` | `0x27EF0` | `0x80020000` | `0x8C000` | `0x801FFFF0` |
+| g3_eu | `0x80047B58` | `0x27B58` | `0x80020000` | `0x8C800` | `0x801FFFF0` |
+| g3org_jp | `0x8004538C` | `0x2538C` | `0x80020000` | `0x99000` | `0x801FFFF0` |
+| g3org_eu | `0x80044FAC` | `0x24FAC` | `0x80020000` | `0x99800` | `0x801FFFF0` |
+
+**Verdict: standard PS-X EXEs, no mystery.** Every target is one
+contiguous payload loaded by the BIOS at `0x80020000`; entry `pc0` sits
+inside the image (a mid-image function, e.g. `main()`); `t_size` equals
+the payload exactly; `data_addr/data_size/bss_addr/bss_size/gp0 = 0`
+(single text-plus-data blob; `$gp` is set by crt0 — the code uses
+gp-relative loads, so a small-data model is in play). The ASCII mark at
+0x4C is `Sony Computer Entertainment Inc. for Japan area` (JP targets) /
+`... for Europe area` (EU targets), NUL-padded; all padding is zero.
 
 `SYSTEM.CNF` (both regions): `TCB = 4`, `EVENT = 16`, `STACK = 801fff00`.
 
-**Open question (the first Phase-1 item):** the load scheme is nonstandard.
-All four exes share entry `0x80020000` while their `t_addr` values differ
-and `t_size` is 0 — consistent with a chained multi-EXE launcher where the
-BIOS boots SLPS_002.70 into the 0x80020000 region and each stage loads the
-next stage from disc and jumps. The exact mapping (what the BIOS does with
-this header, what each stage loads where) must be measured in a debugger
-(e.g. PCSX-Redux) before any `vram:` in a splat config is trusted.
+The multi-EXE **chain** itself (boot → MAINMENU → DRAGOON/G3 or GOURB/
+G3ORG) is still real — it lives in the game's own loader code, not in
+header oddities. A debugger pass is now an optional sanity check rather
+than a prerequisite; the splat `vram:` of `0x80020000` is proven.
 
 ## 4. Disc contents (Japan tree, abbreviated)
 

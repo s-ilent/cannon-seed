@@ -4,12 +4,11 @@
 # SLPS_002.70 (SLPS-00270), 290,816 bytes on disc, 288,768-byte payload.
 # SHA-1: f2a13b5270876e8117ddcc38fb99716124195c46 (config/sha1/slps_00270.sha1)
 #
-# STATUS: skeleton. The subsegments below are FILL — the first split needs
-# a function/data map from analysis (Ghidra, or splat's auto-detection
-# seeded by hand). Nonstandard header facts are in docs/RECON.md:
-# entry pc0=0x80020000, t_addr=0x8002DB14, t_size field is 0 (payload
-# size = file size - 0x800). Load semantics of the multi-EXE chain are
-# the first open question of Phase 1.
+# STATUS: layout PROVEN (docs/LOADMAP.md, tools/exe_map.py): standard PS-X
+# EXE — payload loads at vram 0x80020000, size 0x46800, entry pc0 =
+# 0x8002DB14 (image offset 0xDB14), no separate data/bss in the header.
+# The remaining FILL is the subsegment map: which payload ranges are code
+# vs data (spimdisasm auto-analysis seeds it; refine after the first split).
 # =============================================================================
 
 options:
@@ -36,11 +35,9 @@ options:
   ld_generate_symbol_yml: true
 
 segments:
-  # FILL: the PS-X EXE header occupies the first 0x800 bytes; the payload
-  # (file offset 0x800, 288,768 bytes) follows. Where the BIOS loads it for
-  # this chained multi-EXE build is an open recon item — the vram address
-  # below starts from the standard 0x80010000 mapping and MUST be verified
-  # against a debugger before any matching work.
+  # The PS-X EXE header occupies the first 0x800 bytes; the payload (file
+  # offset 0x800, 0x46800 bytes) follows and is one contiguous image at
+  # 0x80020000 (proven — see docs/LOADMAP.md).
   - name: header
     type: header
     start: 0x0
@@ -49,10 +46,10 @@ segments:
   - name: payload
     type: code
     start: 0x800
-    vram: 0x80020000       # FILL: verify — entry pc0 is 0x80020000
+    vram: 0x80020000       # proven: t_addr, confirmed by exe_map.py
     subsegments:
-      # FILL: seed from analysis. Shape only:
-      - [0x800, asm, entry]          # loader stub (pc0 target)
-      # - [0x..., c, unit_name]
-      # - [0x..., data, unit_name]
-  - [0x47500, end]       # FILL: 0x800 + 0x46D00 payload = 0x47500
+      # Whole-payload first split: spimdisasm discovers functions from the
+      # entry point (pc0 = 0x8002DB14) and jal scan; data falls out as data
+      # segments. Refine into named units after inspecting the result.
+      - [0x800, asm, whole]        # entire payload, entry at +0xDB14
+  - [0x47000, end]       # 0x800 + 0x46800 payload = 0x47000 (proven)
