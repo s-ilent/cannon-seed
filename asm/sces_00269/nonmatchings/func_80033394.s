@@ -17,7 +17,7 @@ glabel func_80033394
     /* 13BA4 800333A4 FF0FA330 */   andi      $v1, $a1, 0xFFF
     /* 13BA8 800333A8 FF07A330 */  andi       $v1, $a1, 0x7FF
     /* 13BAC 800333AC C01A0300 */  sll        $v1, $v1, 11
-    /* 13BB0 800333B0 D8C20008 */  j          D_80030B60
+    /* 13BB0 800333B0 D8C20008 */  j          func_80030B60
     /* 13BB4 800333B4 FF078230 */   andi      $v0, $a0, 0x7FF
   .L800333B8:
     /* 13BB8 800333B8 001B0300 */  sll        $v1, $v1, 12

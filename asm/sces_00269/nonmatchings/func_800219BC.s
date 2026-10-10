@@ -130,6 +130,10 @@ alabel func_80021A48
     /* 2380 80021B80 94760480 */ .word 0x80047694
     /* 2384 80021B84 A0760480 */ .word D_800476A0
     /* 2388 80021B88 B0760480 */ .word 0x800476B0
+
+nonmatching .L80021B8C
+
+alabel .L80021B8C
     /* 238C 80021B8C BC760480 */ .word 0x800476BC
     /* 2390 80021B90 13206F4D */ .word 0x4D6F2013 /* invalid instruction */
     /* 2394 80021B94 26A9387A */ .word 0x7A38A926 /* invalid instruction */

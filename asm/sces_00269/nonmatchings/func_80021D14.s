@@ -22,6 +22,7 @@ glabel func_80021D14
     /* 2538 80021D38 21380000 */   addu      $a3, $zero, $zero
     /* 253C 80021D3C 21200000 */  addu       $a0, $zero, $zero
     /* 2540 80021D40 21280000 */  addu       $a1, $zero, $zero
+  .L80021D44:
     /* 2544 80021D44 21300000 */  addu       $a2, $zero, $zero
     /* 2548 80021D48 39DC000C */  jal        func_800370E4
     /* 254C 80021D4C F0000734 */   ori       $a3, $zero, 0xF0

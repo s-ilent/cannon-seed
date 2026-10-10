@@ -19,13 +19,13 @@ glabel func_8004A768
     /* 2AF80 8004A780 01000231 */  andi       $v0, $t0, 0x1
     /* 2AF84 8004A784 30004010 */  beqz       $v0, .L8004A848
     /* 2AF88 8004A788 04000231 */   andi      $v0, $t0, 0x4
-    /* 2AF8C 8004A78C 1B004010 */  beqz       $v0, D_8004A7FC
+    /* 2AF8C 8004A78C 1B004010 */  beqz       $v0, func_8004A7FC
     /* 2AF90 8004A790 00000000 */   nop
   .L8004A794:
     /* 2AF94 8004A794 08008384 */  lh         $v1, 0x8($a0)
     /* 2AF98 8004A798 00000000 */  nop
     /* 2AF9C 8004A79C 0800622C */  sltiu      $v0, $v1, 0x8
-    /* 2AFA0 8004A7A0 16004010 */  beqz       $v0, D_8004A7FC
+    /* 2AFA0 8004A7A0 16004010 */  beqz       $v0, func_8004A7FC
     /* 2AFA4 8004A7A4 80100300 */   sll       $v0, $v1, 2
     /* 2AFA8 8004A7A8 0280013C */  lui        $at, %hi(jtbl_80021558)
     /* 2AFAC 8004A7AC 58152124 */  addiu      $at, $at, %lo(jtbl_80021558)

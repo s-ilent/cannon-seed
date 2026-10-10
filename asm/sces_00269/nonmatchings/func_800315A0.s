@@ -33,6 +33,7 @@ glabel func_800315A0
     /* 11DE8 800315E8 0800222A */  slti       $v0, $s1, 0x8
     /* 11DEC 800315EC F6FF4014 */  bnez       $v0, .L800315C8
     /* 11DF0 800315F0 00000000 */   nop
+  alabel func_800315F4
     /* 11DF4 800315F4 1800BF8F */  lw         $ra, 0x18($sp)
     /* 11DF8 800315F8 1400B18F */  lw         $s1, 0x14($sp)
     /* 11DFC 800315FC 1000B08F */  lw         $s0, 0x10($sp)

@@ -13,6 +13,11 @@ dlabel D_80020000
     /* 80C 8002000C 9C68186C */ .word 0x6C18689C
     /* 810 80020010 76FD2160 */ .word 0x6021FD76
     /* 814 80020014 AF6B8D12 */ .word 0x128D6BAF
+enddlabel D_80020000
+
+nonmatching D_80020018
+
+dlabel D_80020018
     /* 818 80020018 17166A9D */ .word 0x9D6A1617
     /* 81C 8002001C E6689FE6 */ .word 0xE69F68E6
     /* 820 80020020 ED9E91ED */ .word 0xED919EED
@@ -42,7 +47,7 @@ dlabel D_80020000
     /* 880 80020080 2EAA19B6 */ .word 0xB619AA2E
     /* 884 80020084 0493FADB */ .word 0xDBFA9304
     /* 888 80020088 0B65FA0B */ .word 0x0BFA650B
-enddlabel D_80020000
+enddlabel D_80020018
 
 nonmatching D_8002008C
 
@@ -260,34 +265,27 @@ dlabel D_8002008C
     /* BD4 800203D4 745F6761 */ .word 0x61675F74
     /* BD8 800203D8 6D655F69 */ .word 0x695F656D
     /* BDC 800203DC 6E666F28 */ .word 0x286F666E
-    /* BE0 800203E0 290A0000 */ .word 0x00000A29
-    /* BE4 800203E4 25732825 */ .word 0x25287325
-    /* BE8 800203E8 64293A49 */ .word 0x493A2964
-    /* BEC 800203EC 6E76616C */ .word 0x6C61766E
-    /* BF0 800203F0 69642053 */ .word 0x53206469
-    /* BF4 800203F4 55504552 */ .word 0x52455055
-    /* BF8 800203F8 5F424C41 */ .word 0x414C425F
-    /* BFC 800203FC 53544552 */ .word 0x52455453
-    /* C00 80020400 2076616C */ .word 0x6C617620
-    /* C04 80020404 75652069 */ .word 0x69206575
-    /* C08 80020408 6E207365 */ .word 0x6573206E
-    /* C0C 8002040C 745F6761 */ .word 0x61675F74
-    /* C10 80020410 6D655F69 */ .word 0x695F656D
-    /* C14 80020414 6E666F28 */ .word 0x286F666E
-    /* C18 80020418 290A0000 */ .word 0x00000A29
-    /* C1C 8002041C 25732825 */ .word 0x25287325
-    /* C20 80020420 64293A49 */ .word 0x493A2964
-    /* C24 80020424 6E76616C */ .word 0x6C61766E
-    /* C28 80020428 6964206D */ .word 0x6D206469
-    /* C2C 8002042C 6F646520 */ .word 0x2065646F
-    /* C30 80020430 73776974 */ .word 0x74697773
-    /* C34 80020434 63682069 */ .word 0x69206863
-    /* C38 80020438 6E207365 */ .word 0x6573206E
-    /* C3C 8002043C 745F6761 */ .word 0x61675F74
-    /* C40 80020440 6D655F69 */ .word 0x695F656D
-    /* C44 80020444 6E666F28 */ .word 0x286F666E
-    /* C48 80020448 290A0000 */ .word 0x00000A29
-    /* C4C 8002044C 00000000 */ .word 0x00000000
+enddlabel D_8002008C
+
+.align 2
+nonmatching D_800203E0
+
+dlabel D_800203E0
+    /* BE0 800203E0 */ .asciz ")\n"
+    /* 290A0000 */
+.align 2
+.align 2
+    /* BE4 800203E4 */ .asciz "%s(%d):Invalid SUPER_BLASTER value in set_game_info()\n"
+    /* 2573282564293A496E76616C69642053555045525F424C41535445522076616C756520696E207365745F67616D655F696E666F28290A0000 */
+.align 2
+.align 2
+    /* C1C 8002041C */ .asciz "%s(%d):Invalid mode switch in set_game_info()\n"
+    /* 2573282564293A496E76616C6964206D6F64652073776974636820696E207365745F67616D655F696E666F28290A0000 */
+.align 2
+.align 2
+    /* C4C 8002044C */ .asciz ""
+    /* 00000000 */
+.align 2
     /* C50 80020450 283E0280 */ .word 0x80023E28
     /* C54 80020454 643E0280 */ .word 0x80023E64
     /* C58 80020458 B03F0280 */ .word 0x80023FB0
@@ -348,6 +346,11 @@ dlabel D_8002008C
     /* D34 80020534 61796572 */ .word 0x72657961
     /* D38 80020538 5F696E66 */ .word 0x666E695F
     /* D3C 8002053C 6F28290A */ .word 0x0A29286F
+enddlabel D_800203E0
+
+nonmatching D_80020540
+
+dlabel D_80020540
     /* D40 80020540 00000000 */ .word 0x00000000
     /* D44 80020544 00000000 */ .word 0x00000000
     /* D48 80020548 74430280 */ .word 0x80024374
@@ -362,6 +365,11 @@ dlabel D_8002008C
     /* D6C 8002056C 24440280 */ .word 0x80024424
     /* D70 80020570 24440280 */ .word 0x80024424
     /* D74 80020574 24440280 */ .word 0x80024424
+enddlabel D_80020540
+
+nonmatching jtbl_80020578
+
+dlabel jtbl_80020578
     /* D78 80020578 24440280 */ .word 0x80024424
     /* D7C 8002057C 24440280 */ .word 0x80024424
     /* D80 80020580 24440280 */ .word 0x80024424
@@ -447,7 +455,7 @@ dlabel D_8002008C
     /* EC0 800206C0 C4450280 */ .word 0x800245C4
     /* EC4 800206C4 C4450280 */ .word 0x800245C4
     /* EC8 800206C8 C4450280 */ .word 0x800245C4
-enddlabel D_8002008C
+enddlabel jtbl_80020578
 
 nonmatching D_800206CC
 
@@ -465,6 +473,11 @@ dlabel D_800206CC
     /* EF4 800206F4 04450280 */ .word 0x80024504
     /* EF8 800206F8 10450280 */ .word 0x80024510
     /* EFC 800206FC C4450280 */ .word 0x800245C4
+enddlabel D_800206CC
+
+nonmatching D_80020700
+
+dlabel D_80020700
     /* F00 80020700 C4450280 */ .word 0x800245C4
     /* F04 80020704 C4450280 */ .word 0x800245C4
     /* F08 80020708 C4450280 */ .word 0x800245C4
@@ -477,9 +490,19 @@ dlabel D_800206CC
     /* F24 80020724 C4450280 */ .word 0x800245C4
     /* F28 80020728 1C450280 */ .word 0x8002451C
     /* F2C 8002072C C4450280 */ .word 0x800245C4
+enddlabel D_80020700
+
+nonmatching D_80020730
+
+dlabel D_80020730
     /* F30 80020730 C4450280 */ .word 0x800245C4
     /* F34 80020734 C4450280 */ .word 0x800245C4
     /* F38 80020738 C4450280 */ .word 0x800245C4
+enddlabel D_80020730
+
+nonmatching D_8002073C
+
+dlabel D_8002073C
     /* F3C 8002073C C4450280 */ .word 0x800245C4
     /* F40 80020740 C4450280 */ .word 0x800245C4
     /* F44 80020744 C4450280 */ .word 0x800245C4
@@ -519,7 +542,7 @@ dlabel D_800206CC
     /* FCC 800207CC AC450280 */ .word 0x800245AC
     /* FD0 800207D0 25732825 */ .word 0x25287325
     /* FD4 800207D4 64293A49 */ .word 0x493A2964
-enddlabel D_800206CC
+enddlabel D_8002073C
 
 nonmatching D_800207D8
 
@@ -589,23 +612,12 @@ dlabel D_80020854
     /* 106C 8002086C 25732825 */ .word 0x25287325
 enddlabel D_80020854
 
+.align 2
 nonmatching D_80020870
 
 dlabel D_80020870
-    /* 1070 80020870 64293A6D */ .word 0x6D3A2964
-    /* 1074 80020874 6F76655F */ .word 0x5F65766F
-    /* 1078 80020878 636F756E */ .word 0x6E756F63
-    /* 107C 8002087C 74657220 */ .word 0x20726574
-    /* 1080 80020880 6F766572 */ .word 0x7265766F
-    /* 1084 80020884 20746865 */ .word 0x65687420
-enddlabel D_80020870
-
-.align 2
-nonmatching D_80020888
-
-dlabel D_80020888
-    /* 1088 80020888 */ .asciz " record area !\n"
-    /* 207265636F7264206172656120210A00 */
+    /* 1070 80020870 */ .asciz "d):move_counter over the record area !\n"
+    /* 64293A6D6F76655F636F756E746572206F76657220746865207265636F7264206172656120210A00 */
 .align 2
     /* 1098 80020898 80730280 */ .word 0x80027380
     /* 109C 8002089C AC730280 */ .word 0x800273AC
@@ -626,7 +638,7 @@ dlabel D_80020888
     /* 10D8 800208D8 6C980280 */ .word 0x8002986C
     /* 10DC 800208DC 6C980280 */ .word 0x8002986C
     /* 10E0 800208E0 6C980280 */ .word 0x8002986C
-enddlabel D_80020888
+enddlabel D_80020870
 
 nonmatching D_800208E4
 
@@ -1190,11 +1202,16 @@ dlabel D_80020F68
     /* 1968 80021168 54720380 */ .word 0x80037254
     /* 196C 8002116C 54720380 */ .word 0x80037254
     /* 1970 80021170 54720380 */ .word 0x80037254
+enddlabel D_80020F68
+
+nonmatching D_80021174
+
+dlabel D_80021174
     /* 1974 80021174 54720380 */ .word 0x80037254
     /* 1978 80021178 54720380 */ .word 0x80037254
     /* 197C 8002117C 54720380 */ .word 0x80037254
     /* 1980 80021180 54720380 */ .word 0x80037254
-enddlabel D_80020F68
+enddlabel D_80021174
 
 nonmatching D_80021184
 
@@ -1256,20 +1273,45 @@ dlabel jtbl_800211E8
     /* 19F0 800211F0 00000000 */ .word 0x00000000
     /* 19F4 800211F4 4D444543 */ .word 0x4345444D
     /* 19F8 800211F8 5F6F7574 */ .word 0x74756F5F
-    /* 19FC 800211FC 5F73796E */ .word 0x6E79735F
-    /* 1A00 80021200 63000000 */ .word 0x00000063
+enddlabel jtbl_800211E8
+
+.align 2
+nonmatching D_800211FC
+
+dlabel D_800211FC
+    /* 19FC 800211FC */ .asciz "_sync"
+    /* 5F73796E63000000 */
+.align 2
     /* 1A04 80021204 0920444D */ .word 0x4D442009
     /* 1A08 80021208 413D2825 */ .word 0x25283D41
     /* 1A0C 8002120C 642C2564 */ .word 0x64252C64
+enddlabel D_800211FC
+
+nonmatching D_80021210
+
+dlabel D_80021210
     /* 1A10 80021210 292C2041 */ .word 0x41202C29
     /* 1A14 80021214 4444523D */ .word 0x3D524444
+enddlabel D_80021210
+
+nonmatching D_80021218
+
+dlabel D_80021218
     /* 1A18 80021218 28307825 */ .word 0x25783028
     /* 1A1C 8002121C 3038782D */ .word 0x2D783830
     /* 1A20 80021220 3E307825 */ .word 0x2578303E
     /* 1A24 80021224 30387829 */ .word 0x29783830
-    /* 1A28 80021228 0A000000 */ .word 0x0000000A
+enddlabel D_80021218
+
+.align 2
+nonmatching D_80021228
+
+dlabel D_80021228
+    /* 1A28 80021228 */ .asciz "\n"
+    /* 0A000000 */
+.align 2
     /* 1A2C 8002122C 09204649 */ .word 0x49462009
-enddlabel jtbl_800211E8
+enddlabel D_80021228
 
 nonmatching D_80021230
 
@@ -1487,21 +1529,50 @@ dlabel D_8002143C
     /* 1C70 80021470 */ .asciz "CdlStandby"
     /* 43646C5374616E6462790000 */
 .align 2
+    /* 1C7C 8002147C 43646C52 */ .word 0x526C6443
+enddlabel D_8002143C
+
 .align 2
-    /* 1C7C 8002147C */ .asciz "CdlReadN"
-    /* 43646C526561644E00000000 */
+nonmatching D_80021480
+
+dlabel D_80021480
+    /* 1C80 80021480 */ .asciz "eadN"
+    /* 6561644E00000000 */
 .align 2
 .align 2
     /* 1C88 80021488 */ .asciz "CdlBackword"
     /* 43646C4261636B776F726400 */
 .align 2
+    /* 1C94 80021494 43646C46 */ .word 0x466C6443
+    /* 1C98 80021498 6F727761 */ .word 0x6177726F
+enddlabel D_80021480
+
+nonmatching D_8002149C
+
+dlabel D_8002149C
+    /* 1C9C 8002149C */ .short 0x6472
+    /* 1C9E 8002149E */ .short 0x0000
+enddlabel D_8002149C
+
+nonmatching D_800214A0
+
+dlabel D_800214A0
+    /* 1CA0 800214A0 */ .short 0x6443
+enddlabel D_800214A0
+
+nonmatching D_800214A2
+
+dlabel D_800214A2
+    /* 1CA2 800214A2 */ .byte 0x6C
+    /* 1CA3 800214A3 */ .byte 0x50
+enddlabel D_800214A2
+
 .align 2
-    /* 1C94 80021494 */ .asciz "CdlForward"
-    /* 43646C466F72776172640000 */
-.align 2
-.align 2
-    /* 1CA0 800214A0 */ .asciz "CdlPlay"
-    /* 43646C506C617900 */
+nonmatching D_800214A4
+
+dlabel D_800214A4
+    /* 1CA4 800214A4 */ .asciz "lay"
+    /* 6C617900 */
 .align 2
 .align 2
     /* 1CA8 800214A8 */ .asciz "CdlSetloc"
@@ -1511,9 +1582,15 @@ dlabel D_8002143C
     /* 1CB4 800214B4 */ .asciz "CdlNop"
     /* 43646C4E6F700000 */
 .align 2
+    /* 1CBC 800214BC 43646C53 */ .word 0x536C6443
+enddlabel D_800214A4
+
 .align 2
-    /* 1CBC 800214BC */ .asciz "CdlSync"
-    /* 43646C53796E6300 */
+nonmatching D_800214C0
+
+dlabel D_800214C0
+    /* 1CC0 800214C0 */ .asciz "ync"
+    /* 796E6300 */
 .align 2
 .align 2
     /* 1CC4 800214C4 */ .asciz "DiskError"
@@ -1533,7 +1610,7 @@ dlabel D_8002143C
 .align 2
     /* 1CF0 800214F0 44617461 */ .word 0x61746144
     /* 1CF4 800214F4 52656164 */ .word 0x64616552
-enddlabel D_8002143C
+enddlabel D_800214C0
 
 .align 2
 nonmatching D_800214F8

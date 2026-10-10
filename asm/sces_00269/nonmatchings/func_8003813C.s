@@ -69,6 +69,10 @@ nonmatching .L80038214
 
 alabel .L80038214
     /* 18A14 80038214 A63F3355 */ .word 0x55333FA6
+
+nonmatching .L80038218
+
+alabel .L80038218
     /* 18A18 80038218 C8798ADD */ .word 0xDD8A79C8
 
 nonmatching .L8003821C

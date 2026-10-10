@@ -36,9 +36,3 @@ dlabel D_8002C5E8
     /* CE50 8002C650 00208424 */ .word 0x24842000
     /* CE54 8002C654 21180000 */ .word 0x00001821
 enddlabel D_8002C5E8
-
-nonmatching D_8002C658
-
-dlabel D_8002C658
-    /* CE58 8002C658 0780013C */ .word 0x3C018007
-enddlabel D_8002C658

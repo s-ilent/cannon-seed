@@ -46,14 +46,19 @@ glabel func_80049740
     /* 29F4C 8004974C 00000000 */   nop
 endlabel func_80049740
 
-nonmatching func_80049750, 0x1C
+nonmatching func_80049750, 0x10
 
 glabel func_80049750
     /* 29F50 80049750 1000BF8F */  lw         $ra, 0x10($sp)
     /* 29F54 80049754 1800BD27 */  addiu      $sp, $sp, 0x18
     /* 29F58 80049758 0800E003 */  jr         $ra
     /* 29F5C 8004975C 00000000 */   nop
+endlabel func_80049750
+
+nonmatching func_80049760, 0xC
+
+glabel func_80049760
     /* 29F60 80049760 B0000A24 */  addiu      $t2, $zero, 0xB0
     /* 29F64 80049764 08004001 */  jr         $t2
     /* 29F68 80049768 09000924 */   addiu     $t1, $zero, 0x9
-endlabel func_80049750
+endlabel func_80049760

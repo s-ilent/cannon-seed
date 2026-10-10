@@ -10,14 +10,14 @@
 nonmatching func_8002A0BC, 0x50
 
 glabel func_8002A0BC
-    /* A8BC 8002A0BC DCA20008 */  j          D_80028B70
+    /* A8BC 8002A0BC DCA20008 */  j          .L80028B70
     /* A8C0 8002A0C0 08000434 */   ori       $a0, $zero, 0x8
     /* A8C4 8002A0C4 06006214 */  bne        $v1, $v0, .L8002A0E0
     /* A8C8 8002A0C8 00000000 */   nop
     /* A8CC 8002A0CC 02000434 */  ori        $a0, $zero, 0x2
     /* A8D0 8002A0D0 96A1000C */  jal        func_80028658
     /* A8D4 8002A0D4 21280000 */   addu      $a1, $zero, $zero
-    /* A8D8 8002A0D8 E7A20008 */  j          D_80028B9C
+    /* A8D8 8002A0D8 E7A20008 */  j          .L80028B9C
     /* A8DC 8002A0DC 21204000 */   addu      $a0, $v0, $zero
   .L8002A0E0:
     /* A8E0 8002A0E0 0680023C */  lui        $v0, %hi(D_80066AA6)
