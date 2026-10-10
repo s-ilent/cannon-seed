@@ -98,6 +98,19 @@ else
     say "mipsel binutils intact"
 fi
 
+# --- 8. Psy-Q compiler (GCC 2.6.3-psx + qemu-i386, tools-local) ---------------
+# Needed for C matches (tools/cc.sh). get_gcc.sh is idempotent and only
+# hits the network when something is actually missing.
+if [ -x /home/z/my-project/tools-local/gcc-2.6.3-psx/cc1 ] \
+   && [ -x /home/z/my-project/tools-local/qemu-root/usr/bin/qemu-i386-static ]; then
+    say "gcc-2.6.3-psx + qemu-i386 intact"
+else
+    say "Psy-Q compiler missing -> running tools/get_gcc.sh (network)"
+    sh tools/get_gcc.sh >/dev/null 2>&1 \
+        && say "gcc-2.6.3-psx + qemu-i386 restored into tools-local/" \
+        || say "WARNING: compiler restore failed — run tools/get_gcc.sh manually"
+fi
+
 # --- smoke -------------------------------------------------------------------
 "$PYBIN" -c "import splat, spimdisasm, capstone; print('import smoke: OK')" || {
     say "FATAL: toolchain still broken"; exit 1; }
