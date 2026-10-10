@@ -82,6 +82,13 @@ build:
 extract:
 	$(PY) -m splat split $(SPLAT_CONFIG)
 
+# --- Measure the load maps ---------------------------------------------------
+# Regenerates docs/LOADMAP.md from the git-ignored baselines: header
+# invariants, per-target RAM map, entry disassembly. Needs capstone.
+.PHONY: map
+map:
+	$(PY) tools/exe_map.py
+
 # --- Measurement ------------------------------------------------------------
 # Project state lives in tools, never in prose. A number written in a
 # document is right for one session and wrong for every one after.
