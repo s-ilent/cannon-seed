@@ -13,6 +13,11 @@ glabel func_80023754
     /* 3F54 80023754 368E5F07 */ .word 0x075F8E36 /* invalid instruction */
     /* 3F58 80023758 4D5C93A4 */ .word 0xA4935C4D
     /* 3F5C 8002375C 2BEDC225 */ .word 0x25C2ED2B
+enddlabel func_80023754
+
+nonmatching func_80023760
+
+glabel func_80023760
     /* 3F60 80023760 D0FB5911 */ .word 0x1159FBD0
     /* 3F64 80023764 785C9ECD */ .word 0xCD9E5C78
     /* 3F68 80023768 AA4E91D5 */ .word 0xD5914EAA
@@ -27,6 +32,10 @@ glabel func_80023754
     /* 3F8C 8002378C EBF8B310 */ .word 0x10B3F8EB
     /* 3F90 80023790 2C16ED57 */ .word 0x57ED162C
     /* 3F94 80023794 092B3EF6 */ .word 0xF63E2B09
+
+nonmatching func_80023798
+
+alabel func_80023798
     /* 3F98 80023798 7C2F0482 */ .word 0x82042F7C
     /* 3F9C 8002379C BD74FFD5 */ .word 0xD5FF74BD
     /* 3FA0 800237A0 E925B037 */ .word 0x37B025E9
@@ -47,4 +56,4 @@ glabel func_80023754
     /* 3FDC 800237DC 08E00ED8 */ .word 0xD80EE008
     /* 3FE0 800237E0 6C9DE9CC */ .word 0xCCE99D6C
     /* 3FE4 800237E4 8B2108E3 */ .word 0xE308218B
-enddlabel func_80023754
+enddlabel func_80023760

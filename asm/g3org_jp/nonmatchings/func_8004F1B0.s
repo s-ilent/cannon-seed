@@ -11,10 +11,6 @@ nonmatching func_8004F1B0
 
 glabel func_8004F1B0
     /* 2F9B0 8004F1B0 A5BB9E54 */ .word 0x549EBBA5
-
-nonmatching .L8004F1B4
-
-alabel .L8004F1B4
     /* 2F9B4 8004F1B4 FADDAEE9 */ .word 0xE9AEDDFA
     /* 2F9B8 8004F1B8 67A3B0AF */ .word 0xAFB0A367
     /* 2F9BC 8004F1BC 12A77662 */ .word 0x6276A712

@@ -23,3 +23,49 @@ glabel func_80037D58
     /* 18580 80037D80 0800E003 */  jr         $ra
     /* 18584 80037D84 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80037D58
+
+nonmatching func_80037D88, 0x30
+
+glabel func_80037D88
+    /* 18588 80037D88 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 1858C 80037D8C 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 18590 80037D90 24008294 */  lhu        $v0, 0x24($a0)
+    /* 18594 80037D94 00000000 */  nop
+    /* 18598 80037D98 FFF34230 */  andi       $v0, $v0, 0xF3FF
+    /* 1859C 80037D9C C7D2000C */  jal        func_80034B1C
+    /* 185A0 80037DA0 240082A4 */   sh        $v0, 0x24($a0)
+    /* 185A4 80037DA4 00140200 */  sll        $v0, $v0, 16
+    /* 185A8 80037DA8 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 185AC 80037DAC 03140200 */  sra        $v0, $v0, 16
+    /* 185B0 80037DB0 0800E003 */  jr         $ra
+    /* 185B4 80037DB4 1800BD27 */   addiu     $sp, $sp, 0x18
+endlabel func_80037D88
+
+nonmatching func_80037DB8, 0x48
+
+glabel func_80037DB8
+    /* 185B8 80037DB8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 185BC 80037DBC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 185C0 80037DC0 24008294 */  lhu        $v0, 0x24($a0)
+    /* 185C4 80037DC4 00000000 */  nop
+    /* 185C8 80037DC8 00104234 */  ori        $v0, $v0, 0x1000
+    /* 185CC 80037DCC 240082A4 */  sh         $v0, 0x24($a0)
+    /* 185D0 80037DD0 0000A38C */  lw         $v1, 0x0($a1)
+    /* 185D4 80037DD4 00000000 */  nop
+    /* 185D8 80037DD8 02006224 */  addiu      $v0, $v1, 0x2
+    /* 185DC 80037DDC 0000A2AC */  sw         $v0, 0x0($a1)
+    /* 185E0 80037DE0 00006294 */  lhu        $v0, 0x0($v1)
+    /* 185E4 80037DE4 00000000 */  nop
+    /* 185E8 80037DE8 C7D2000C */  jal        func_80034B1C
+    /* 185EC 80037DEC 7C0082A4 */   sh        $v0, 0x7C($a0)
+    /* 185F0 80037DF0 00140200 */  sll        $v0, $v0, 16
+    /* 185F4 80037DF4 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 185F8 80037DF8 03140200 */  sra        $v0, $v0, 16
+    /* 185FC 80037DFC 0800E003 */  jr         $ra
+endlabel func_80037DB8
+
+nonmatching func_80037E00, 0x4
+
+glabel func_80037E00
+    /* 18600 80037E00 1800BD27 */  addiu      $sp, $sp, 0x18
+endlabel func_80037E00

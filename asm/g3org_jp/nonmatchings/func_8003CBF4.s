@@ -48,9 +48,9 @@ alabel func_8003CBFC
     /* 1D470 8003CC70 41968C0B */ .word 0x0B8C9641
     /* 1D474 8003CC74 C529981C */ .word 0x1C9829C5 /* invalid instruction */
 
-nonmatching .L8003CC78
+nonmatching func_8003CC78
 
-alabel .L8003CC78
+alabel func_8003CC78
     /* 1D478 8003CC78 00FFFFFF */ .word 0xFFFFFF00
     /* 1D47C 8003CC7C FFFFFFFF */ .word 0xFFFFFFFF
     /* 1D480 8003CC80 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */

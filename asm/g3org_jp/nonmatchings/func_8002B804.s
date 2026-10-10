@@ -34,9 +34,9 @@ glabel func_8002B804
     /* C058 8002B858 40DCBE9C */ .word 0x9CBEDC40
     /* C05C 8002B85C 2DF6577D */ .word 0x7D57F62D /* invalid instruction */
 
-nonmatching .L8002B860
+nonmatching func_8002B860
 
-alabel .L8002B860
+alabel func_8002B860
     /* C060 8002B860 96161483 */ .word 0x83141696
     /* C064 8002B864 A3F6819A */ .word 0x9A81F6A3
     /* C068 8002B868 1B7E310D */ .word 0x0D317E1B

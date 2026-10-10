@@ -26,18 +26,27 @@ glabel func_8004438C
     /* 24BC0 800443C0 76B401EF */ .word 0xEF01B476 /* invalid instruction */
     /* 24BC4 800443C4 9CB0302A */ .word 0x2A30B09C
     /* 24BC8 800443C8 69AD1C47 */ .word 0x471CAD69 /* invalid instruction */
+enddlabel func_8004438C
+
+nonmatching func_800443CC
+
+glabel func_800443CC
     /* 24BCC 800443CC BEF26615 */ .word 0x1566F2BE
-    /* 24BD0 800443D0 7955DBCE */ .word 0xCEDB5579
+    /* 24BD0 800443D0 7955DBCE */ .word 0xCEDB5579 /* handwritten instruction */
 
 nonmatching func_800443D4
 
 alabel func_800443D4
     /* 24BD4 800443D4 CBB3E564 */ .word 0x64E5B3CB
     /* 24BD8 800443D8 DF5B5079 */ .word 0x79505BDF /* invalid instruction */
+
+nonmatching func_800443DC
+
+alabel func_800443DC
     /* 24BDC 800443DC 5F19A535 */ .word 0x35A5195F
     /* 24BE0 800443E0 F8F69B10 */ .word 0x109BF6F8
     /* 24BE4 800443E4 257B4544 */ .word 0x44457B25 /* invalid instruction */
     /* 24BE8 800443E8 00FFFFFF */ .word 0xFFFFFF00
     /* 24BEC 800443EC FFFFFFFF */ .word 0xFFFFFFFF
     /* 24BF0 800443F0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
-enddlabel func_8004438C
+enddlabel func_800443CC

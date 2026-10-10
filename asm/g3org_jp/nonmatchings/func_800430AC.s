@@ -14,6 +14,10 @@ glabel func_800430AC
     /* 238B0 800430B0 E87A69F3 */ .word 0xF3697AE8 /* handwritten instruction */
     /* 238B4 800430B4 2384AA12 */ .word 0x12AA8423
     /* 238B8 800430B8 21227F89 */ .word 0x897F2221
+
+nonmatching func_800430BC
+
+alabel func_800430BC
     /* 238BC 800430BC A8F232A9 */ .word 0xA932F2A8
     /* 238C0 800430C0 51D4D25D */ .word 0x5DD2D451 /* invalid instruction */
     /* 238C4 800430C4 00A72FFD */ .word 0xFD2FA700

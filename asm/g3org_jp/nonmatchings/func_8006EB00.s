@@ -26,6 +26,6 @@ glabel func_8006EB20
     /* 4F320 8006EB20 3F432A90 */  lbu        $t2, 0x433F($at)
     /* 4F324 8006EB24 B0585EF6 */  sdc1       $f30, 0x58B0($s2)
     /* 4F328 8006EB28 1BB73766 */  daddiu     $s7, $s1, -0x48E5
-    /* 4F32C 8006EB2C 25A90354 */  bnel       $zero, $v1, D_80058FC4
+    /* 4F32C 8006EB2C 25A90354 */  bnel       $zero, $v1, .L80058FC4
     /* 4F330 8006EB30 0E7A126F */   ldr       $s2, 0x7A0E($t8)
 endlabel func_8006EB20

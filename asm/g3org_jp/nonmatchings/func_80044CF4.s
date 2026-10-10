@@ -10,7 +10,7 @@
 nonmatching func_80044CF4, 0x30
 
 glabel func_80044CF4
-    /* 254F4 80044CF4 DA9A801C */  bgtz       $a0, .L8002B860
+    /* 254F4 80044CF4 DA9A801C */  bgtz       $a0, func_8002B860
     /* 254F8 80044CF8 F811E7AA */   swl       $a3, 0x11F8($s7)
     /* 254FC 80044CFC FD7D295C */  .word      0x5C297DFD                    # bgtzl      $at, .L800644F4 # 00090000 <InstrIdType: CPU_NORMAL>
     /* 25500 80044D00 FB9FFF8B */   lwl       $ra, -0x6005($ra)

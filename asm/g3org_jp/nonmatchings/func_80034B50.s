@@ -11,6 +11,11 @@ nonmatching func_80034B50
 
 glabel func_80034B50
     /* 15350 80034B50 4203CDA7 */ .word 0xA7CD0342
+enddlabel func_80034B50
+
+nonmatching func_80034B54
+
+glabel func_80034B54
     /* 15354 80034B54 3421517A */ .word 0x7A512134 /* invalid instruction */
     /* 15358 80034B58 E8D5FC6D */ .word 0x6DFCD5E8
     /* 1535C 80034B5C 475C0519 */ .word 0x19055C47 /* invalid instruction */
@@ -47,4 +52,4 @@ glabel func_80034B50
     /* 153D8 80034BD8 00FFFFFF */ .word 0xFFFFFF00
     /* 153DC 80034BDC FFFFFFFF */ .word 0xFFFFFFFF
     /* 153E0 80034BE0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
-enddlabel func_80034B50
+enddlabel func_80034B54

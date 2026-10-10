@@ -18,6 +18,10 @@ nonmatching func_80034B1C
 alabel func_80034B1C
     /* 1531C 80034B1C F6A9B848 */ .word 0x48B8A9F6 /* invalid instruction */
     /* 15320 80034B20 53C5556A */ .word 0x6A55C553
+
+nonmatching func_80034B24
+
+alabel func_80034B24
     /* 15324 80034B24 ECF990EF */ .word 0xEF90F9EC /* invalid instruction */
     /* 15328 80034B28 899685D9 */ .word 0xD9859689
 enddlabel func_80034B14

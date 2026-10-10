@@ -20,3 +20,23 @@ glabel func_80025D58
     /* 6574 80025D74 0800E003 */  jr         $ra
     /* 6578 80025D78 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80025D58
+
+nonmatching func_80025D7C, 0x8
+
+glabel func_80025D7C
+    /* 657C 80025D7C 0800E003 */  jr         $ra
+    /* 6580 80025D80 00000000 */   nop
+endlabel func_80025D7C
+
+nonmatching func_80025D84, 0x20
+
+glabel func_80025D84
+    /* 6584 80025D84 0C80023C */  lui        $v0, %hi(D_800B94E0)
+    /* 6588 80025D88 E0944294 */  lhu        $v0, %lo(D_800B94E0)($v0)
+    /* 658C 80025D8C 00000000 */  nop
+    /* 6590 80025D90 01004224 */  addiu      $v0, $v0, 0x1
+    /* 6594 80025D94 0C80013C */  lui        $at, %hi(D_800B94E0)
+    /* 6598 80025D98 E09422A4 */  sh         $v0, %lo(D_800B94E0)($at)
+    /* 659C 80025D9C 0800E003 */  jr         $ra
+    /* 65A0 80025DA0 00000000 */   nop
+endlabel func_80025D84

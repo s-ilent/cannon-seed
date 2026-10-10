@@ -14,5 +14,10 @@ glabel func_80064F90
     /* 45794 80064F94 F2D365B9 */ .word 0xB965D3F2
     /* 45798 80064F98 00FFFFFF */ .word 0xFFFFFF00
     /* 4579C 80064F9C FFFFFFFF */ .word 0xFFFFFFFF
-    /* 457A0 80064FA0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
 enddlabel func_80064F90
+
+nonmatching func_80064FA0
+
+glabel func_80064FA0
+    /* 457A0 80064FA0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
+enddlabel func_80064FA0

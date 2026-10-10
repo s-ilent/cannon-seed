@@ -20,5 +20,10 @@ glabel func_8002E6A8
     /* EEC4 8002E6C4 D42F67C7 */ .word 0xC7672FD4
     /* EEC8 8002E6C8 00FFFFFF */ .word 0xFFFFFF00
     /* EECC 8002E6CC FFFFFFFF */ .word 0xFFFFFFFF
-    /* EED0 8002E6D0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
 enddlabel func_8002E6A8
+
+nonmatching func_8002E6D0
+
+glabel func_8002E6D0
+    /* EED0 8002E6D0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
+enddlabel func_8002E6D0

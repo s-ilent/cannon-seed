@@ -30,6 +30,7 @@ glabel func_8005B0B0
     /* 3B8F0 8005B0F0 80700E00 */  sll        $t6, $t6, 2
     /* 3B8F4 8005B0F4 2170C801 */  addu       $t6, $t6, $t0
     /* 3B8F8 8005B0F8 0000CD8D */  lw         $t5, 0x0($t6)
+  alabel func_8005B0FC
     /* 3B8FC 8005B0FC 0008023C */  lui        $v0, (0x8000000 >> 16)
     /* 3B900 8005B100 001A0D00 */  sll        $v1, $t5, 8
     /* 3B904 8005B104 021A0300 */  srl        $v1, $v1, 8

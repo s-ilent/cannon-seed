@@ -14,6 +14,11 @@ glabel func_8005F32C
     /* 3FB30 8005F330 EEE058D4 */ .word 0xD458E0EE
     /* 3FB34 8005F334 A3996C96 */ .word 0x966C99A3
     /* 3FB38 8005F338 FB5CAB72 */ .word 0x72AB5CFB /* invalid instruction */
+enddlabel func_8005F32C
+
+nonmatching func_8005F33C
+
+dlabel func_8005F33C
     /* 3FB3C 8005F33C 6F48CE8A */ .word 0x8ACE486F
     /* 3FB40 8005F340 24F3AA5C */ .word 0x5CAAF324 /* invalid instruction */
     /* 3FB44 8005F344 2C92C255 */ .word 0x55C2922C
@@ -48,4 +53,4 @@ glabel func_8005F32C
     /* 3FBB8 8005F3B8 00FFFFFF */ .word 0xFFFFFF00
     /* 3FBBC 8005F3BC FFFFFFFF */ .word 0xFFFFFFFF
     /* 3FBC0 8005F3C0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
-enddlabel func_8005F32C
+enddlabel func_8005F33C

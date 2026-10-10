@@ -65,3 +65,544 @@ glabel func_8004C670
     /* 2CF3C 8004C73C 0800E003 */  jr         $ra
     /* 2CF40 8004C740 00000000 */   nop
 endlabel func_8004C670
+
+/* Handwritten function */
+nonmatching func_8004C744, 0x10C
+
+glabel func_8004C744
+    /* 2CF44 8004C744 0000888C */  lw         $t0, 0x0($a0)
+    /* 2CF48 8004C748 0400898C */  lw         $t1, 0x4($a0)
+    /* 2CF4C 8004C74C 08008A8C */  lw         $t2, 0x8($a0)
+    /* 2CF50 8004C750 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 2CF54 8004C754 10008C8C */  lw         $t4, 0x10($a0)
+    /* 2CF58 8004C758 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 2CF5C 8004C75C 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
+    /* 2CF60 8004C760 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
+    /* 2CF64 8004C764 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
+    /* 2CF68 8004C768 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
+    /* 2CF6C 8004C76C 0000A894 */  lhu        $t0, 0x0($a1)
+    /* 2CF70 8004C770 0400A98C */  lw         $t1, 0x4($a1)
+    /* 2CF74 8004C774 0C00AA8C */  lw         $t2, 0xC($a1)
+    /* 2CF78 8004C778 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2CF7C 8004C77C 24482101 */  and        $t1, $t1, $at
+    /* 2CF80 8004C780 25400901 */  or         $t0, $t0, $t1
+    /* 2CF84 8004C784 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2CF88 8004C788 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2CF8C 8004C78C 00000000 */  nop
+    /* 2CF90 8004C790 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2CF94 8004C794 0200A894 */  lhu        $t0, 0x2($a1)
+    /* 2CF98 8004C798 0800A98C */  lw         $t1, 0x8($a1)
+    /* 2CF9C 8004C79C 0E00AA84 */  lh         $t2, 0xE($a1)
+    /* 2CFA0 8004C7A0 004C0900 */  sll        $t1, $t1, 16
+    /* 2CFA4 8004C7A4 25400901 */  or         $t0, $t0, $t1
+    /* 2CFA8 8004C7A8 00480B48 */  mfc2       $t3, $9 /* handwritten instruction */
+    /* 2CFAC 8004C7AC 00500C48 */  mfc2       $t4, $10 /* handwritten instruction */
+    /* 2CFB0 8004C7B0 00580D48 */  mfc2       $t5, $11 /* handwritten instruction */
+    /* 2CFB4 8004C7B4 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2CFB8 8004C7B8 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2CFBC 8004C7BC 00000000 */  nop
+    /* 2CFC0 8004C7C0 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2CFC4 8004C7C4 0400A894 */  lhu        $t0, 0x4($a1)
+    /* 2CFC8 8004C7C8 0800A98C */  lw         $t1, 0x8($a1)
+    /* 2CFCC 8004C7CC 1000AA8C */  lw         $t2, 0x10($a1)
+    /* 2CFD0 8004C7D0 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2CFD4 8004C7D4 24482101 */  and        $t1, $t1, $at
+    /* 2CFD8 8004C7D8 25400901 */  or         $t0, $t0, $t1
+    /* 2CFDC 8004C7DC 00480E48 */  mfc2       $t6, $9 /* handwritten instruction */
+    /* 2CFE0 8004C7E0 00500F48 */  mfc2       $t7, $10 /* handwritten instruction */
+    /* 2CFE4 8004C7E4 00581848 */  mfc2       $t8, $11 /* handwritten instruction */
+    /* 2CFE8 8004C7E8 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2CFEC 8004C7EC 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2CFF0 8004C7F0 00000000 */  nop
+    /* 2CFF4 8004C7F4 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2CFF8 8004C7F8 FFFF6B31 */  andi       $t3, $t3, 0xFFFF
+    /* 2CFFC 8004C7FC 00740E00 */  sll        $t6, $t6, 16
+    /* 2D000 8004C800 2570CB01 */  or         $t6, $t6, $t3
+  alabel func_8004C804
+    /* 2D004 8004C804 0000CEAC */  sw         $t6, 0x0($a2)
+    /* 2D008 8004C808 FFFFAD31 */  andi       $t5, $t5, 0xFFFF
+    /* 2D00C 8004C80C 00C41800 */  sll        $t8, $t8, 16
+    /* 2D010 8004C810 25C00D03 */  or         $t8, $t8, $t5
+    /* 2D014 8004C814 0C00D8AC */  sw         $t8, 0xC($a2)
+    /* 2D018 8004C818 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
+    /* 2D01C 8004C81C 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
+    /* 2D020 8004C820 FFFF0831 */  andi       $t0, $t0, 0xFFFF
+    /* 2D024 8004C824 00640C00 */  sll        $t4, $t4, 16
+    /* 2D028 8004C828 25400C01 */  or         $t0, $t0, $t4
+    /* 2D02C 8004C82C 0400C8AC */  sw         $t0, 0x4($a2)
+    /* 2D030 8004C830 FFFFEF31 */  andi       $t7, $t7, 0xFFFF
+    /* 2D034 8004C834 004C0900 */  sll        $t1, $t1, 16
+    /* 2D038 8004C838 25482F01 */  or         $t1, $t1, $t7
+    /* 2D03C 8004C83C 0800C9AC */  sw         $t1, 0x8($a2)
+    /* 2D040 8004C840 1000CBE8 */  swc2       $11, 0x10($a2)
+    /* 2D044 8004C844 2110C000 */  addu       $v0, $a2, $zero
+    /* 2D048 8004C848 0800E003 */  jr         $ra
+    /* 2D04C 8004C84C 00000000 */   nop
+endlabel func_8004C744
+
+/* Handwritten function */
+nonmatching func_8004C850, 0xE4
+
+glabel func_8004C850
+    /* 2D050 8004C850 00008894 */  lhu        $t0, 0x0($a0)
+    /* 2D054 8004C854 0400898C */  lw         $t1, 0x4($a0)
+    /* 2D058 8004C858 0C008A8C */  lw         $t2, 0xC($a0)
+    /* 2D05C 8004C85C FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2D060 8004C860 24482101 */  and        $t1, $t1, $at
+    /* 2D064 8004C864 25400901 */  or         $t0, $t0, $t1
+    /* 2D068 8004C868 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D06C 8004C86C 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D070 8004C870 00000000 */  nop
+    /* 2D074 8004C874 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D078 8004C878 02008894 */  lhu        $t0, 0x2($a0)
+    /* 2D07C 8004C87C 0800898C */  lw         $t1, 0x8($a0)
+    /* 2D080 8004C880 0E008A84 */  lh         $t2, 0xE($a0)
+    /* 2D084 8004C884 004C0900 */  sll        $t1, $t1, 16
+  alabel func_8004C888
+    /* 2D088 8004C888 25400901 */  or         $t0, $t0, $t1
+    /* 2D08C 8004C88C 00480B48 */  mfc2       $t3, $9 /* handwritten instruction */
+    /* 2D090 8004C890 00500C48 */  mfc2       $t4, $10 /* handwritten instruction */
+    /* 2D094 8004C894 00580D48 */  mfc2       $t5, $11 /* handwritten instruction */
+    /* 2D098 8004C898 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D09C 8004C89C 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D0A0 8004C8A0 00000000 */  nop
+    /* 2D0A4 8004C8A4 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D0A8 8004C8A8 04008894 */  lhu        $t0, 0x4($a0)
+    /* 2D0AC 8004C8AC 0800898C */  lw         $t1, 0x8($a0)
+    /* 2D0B0 8004C8B0 10008A8C */  lw         $t2, 0x10($a0)
+    /* 2D0B4 8004C8B4 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2D0B8 8004C8B8 24482101 */  and        $t1, $t1, $at
+    /* 2D0BC 8004C8BC 25400901 */  or         $t0, $t0, $t1
+    /* 2D0C0 8004C8C0 00480E48 */  mfc2       $t6, $9 /* handwritten instruction */
+    /* 2D0C4 8004C8C4 00500F48 */  mfc2       $t7, $10 /* handwritten instruction */
+    /* 2D0C8 8004C8C8 00581848 */  mfc2       $t8, $11 /* handwritten instruction */
+    /* 2D0CC 8004C8CC 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D0D0 8004C8D0 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D0D4 8004C8D4 00000000 */  nop
+    /* 2D0D8 8004C8D8 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D0DC 8004C8DC FFFF6B31 */  andi       $t3, $t3, 0xFFFF
+    /* 2D0E0 8004C8E0 00740E00 */  sll        $t6, $t6, 16
+    /* 2D0E4 8004C8E4 2570CB01 */  or         $t6, $t6, $t3
+    /* 2D0E8 8004C8E8 0000AEAC */  sw         $t6, 0x0($a1)
+    /* 2D0EC 8004C8EC FFFFAD31 */  andi       $t5, $t5, 0xFFFF
+    /* 2D0F0 8004C8F0 00C41800 */  sll        $t8, $t8, 16
+    /* 2D0F4 8004C8F4 25C00D03 */  or         $t8, $t8, $t5
+    /* 2D0F8 8004C8F8 0C00B8AC */  sw         $t8, 0xC($a1)
+    /* 2D0FC 8004C8FC 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
+    /* 2D100 8004C900 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
+    /* 2D104 8004C904 FFFF0831 */  andi       $t0, $t0, 0xFFFF
+    /* 2D108 8004C908 00640C00 */  sll        $t4, $t4, 16
+    /* 2D10C 8004C90C 25400C01 */  or         $t0, $t0, $t4
+    /* 2D110 8004C910 0400A8AC */  sw         $t0, 0x4($a1)
+    /* 2D114 8004C914 FFFFEF31 */  andi       $t7, $t7, 0xFFFF
+    /* 2D118 8004C918 004C0900 */  sll        $t1, $t1, 16
+    /* 2D11C 8004C91C 25482F01 */  or         $t1, $t1, $t7
+    /* 2D120 8004C920 0800A9AC */  sw         $t1, 0x8($a1)
+    /* 2D124 8004C924 1000ABE8 */  swc2       $11, 0x10($a1)
+    /* 2D128 8004C928 2110A000 */  addu       $v0, $a1, $zero
+    /* 2D12C 8004C92C 0800E003 */  jr         $ra
+    /* 2D130 8004C930 00000000 */   nop
+endlabel func_8004C850
+
+/* Handwritten function */
+nonmatching func_8004C934, 0xE8
+
+glabel func_8004C934
+    /* 2D134 8004C934 0000888C */  lw         $t0, 0x0($a0)
+    /* 2D138 8004C938 0400898C */  lw         $t1, 0x4($a0)
+    /* 2D13C 8004C93C 0C008A8C */  lw         $t2, 0xC($a0)
+    /* 2D140 8004C940 FFFF0831 */  andi       $t0, $t0, 0xFFFF
+    /* 2D144 8004C944 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2D148 8004C948 24482101 */  and        $t1, $t1, $at
+    /* 2D14C 8004C94C 25400901 */  or         $t0, $t0, $t1
+    /* 2D150 8004C950 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D154 8004C954 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D158 8004C958 00000000 */  nop
+    /* 2D15C 8004C95C 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D160 8004C960 02008894 */  lhu        $t0, 0x2($a0)
+    /* 2D164 8004C964 0800898C */  lw         $t1, 0x8($a0)
+    /* 2D168 8004C968 0E008A84 */  lh         $t2, 0xE($a0)
+    /* 2D16C 8004C96C 004C0900 */  sll        $t1, $t1, 16
+    /* 2D170 8004C970 25400901 */  or         $t0, $t0, $t1
+    /* 2D174 8004C974 00480B48 */  mfc2       $t3, $9 /* handwritten instruction */
+    /* 2D178 8004C978 00500C48 */  mfc2       $t4, $10 /* handwritten instruction */
+    /* 2D17C 8004C97C 00580D48 */  mfc2       $t5, $11 /* handwritten instruction */
+    /* 2D180 8004C980 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D184 8004C984 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D188 8004C988 00000000 */  nop
+    /* 2D18C 8004C98C 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D190 8004C990 04008894 */  lhu        $t0, 0x4($a0)
+    /* 2D194 8004C994 0800898C */  lw         $t1, 0x8($a0)
+    /* 2D198 8004C998 10008A8C */  lw         $t2, 0x10($a0)
+    /* 2D19C 8004C99C FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2D1A0 8004C9A0 24482101 */  and        $t1, $t1, $at
+    /* 2D1A4 8004C9A4 25400901 */  or         $t0, $t0, $t1
+    /* 2D1A8 8004C9A8 00480E48 */  mfc2       $t6, $9 /* handwritten instruction */
+    /* 2D1AC 8004C9AC 00500F48 */  mfc2       $t7, $10 /* handwritten instruction */
+  alabel func_8004C9B0
+    /* 2D1B0 8004C9B0 00581848 */  mfc2       $t8, $11 /* handwritten instruction */
+    /* 2D1B4 8004C9B4 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D1B8 8004C9B8 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D1BC 8004C9BC 00000000 */  nop
+    /* 2D1C0 8004C9C0 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D1C4 8004C9C4 FFFF6B31 */  andi       $t3, $t3, 0xFFFF
+    /* 2D1C8 8004C9C8 00740E00 */  sll        $t6, $t6, 16
+    /* 2D1CC 8004C9CC 2570CB01 */  or         $t6, $t6, $t3
+    /* 2D1D0 8004C9D0 00008EAC */  sw         $t6, 0x0($a0)
+    /* 2D1D4 8004C9D4 FFFFAD31 */  andi       $t5, $t5, 0xFFFF
+    /* 2D1D8 8004C9D8 00C41800 */  sll        $t8, $t8, 16
+    /* 2D1DC 8004C9DC 25C00D03 */  or         $t8, $t8, $t5
+    /* 2D1E0 8004C9E0 0C0098AC */  sw         $t8, 0xC($a0)
+    /* 2D1E4 8004C9E4 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
+    /* 2D1E8 8004C9E8 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
+    /* 2D1EC 8004C9EC FFFF0831 */  andi       $t0, $t0, 0xFFFF
+    /* 2D1F0 8004C9F0 00640C00 */  sll        $t4, $t4, 16
+    /* 2D1F4 8004C9F4 25400C01 */  or         $t0, $t0, $t4
+    /* 2D1F8 8004C9F8 040088AC */  sw         $t0, 0x4($a0)
+    /* 2D1FC 8004C9FC FFFFEF31 */  andi       $t7, $t7, 0xFFFF
+    /* 2D200 8004CA00 004C0900 */  sll        $t1, $t1, 16
+    /* 2D204 8004CA04 25482F01 */  or         $t1, $t1, $t7
+    /* 2D208 8004CA08 080089AC */  sw         $t1, 0x8($a0)
+    /* 2D20C 8004CA0C 10008BE8 */  swc2       $11, 0x10($a0)
+    /* 2D210 8004CA10 21108000 */  addu       $v0, $a0, $zero
+    /* 2D214 8004CA14 0800E003 */  jr         $ra
+    /* 2D218 8004CA18 00000000 */   nop
+endlabel func_8004C934
+
+/* Handwritten function */
+nonmatching func_8004CA1C, 0x2C
+
+glabel func_8004CA1C
+    /* 2D21C 8004CA1C 0000888C */  lw         $t0, 0x0($a0)
+    /* 2D220 8004CA20 0400898C */  lw         $t1, 0x4($a0)
+    /* 2D224 8004CA24 08008A8C */  lw         $t2, 0x8($a0)
+    /* 2D228 8004CA28 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 2D22C 8004CA2C 10008C8C */  lw         $t4, 0x10($a0)
+    /* 2D230 8004CA30 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 2D234 8004CA34 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
+    /* 2D238 8004CA38 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
+    /* 2D23C 8004CA3C 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
+    /* 2D240 8004CA40 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
+    /* 2D244 8004CA44 0000A894 */  lhu        $t0, 0x0($a1)
+endlabel func_8004CA1C
+
+/* Handwritten function */
+nonmatching func_8004CA48, 0x78
+
+glabel func_8004CA48
+    /* 2D248 8004CA48 0400A98C */  lw         $t1, 0x4($a1)
+    /* 2D24C 8004CA4C 0C00AA8C */  lw         $t2, 0xC($a1)
+    /* 2D250 8004CA50 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2D254 8004CA54 24482101 */  and        $t1, $t1, $at
+    /* 2D258 8004CA58 25400901 */  or         $t0, $t0, $t1
+    /* 2D25C 8004CA5C 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D260 8004CA60 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D264 8004CA64 00000000 */  nop
+    /* 2D268 8004CA68 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D26C 8004CA6C 0200A894 */  lhu        $t0, 0x2($a1)
+    /* 2D270 8004CA70 0800A98C */  lw         $t1, 0x8($a1)
+    /* 2D274 8004CA74 0E00AA84 */  lh         $t2, 0xE($a1)
+    /* 2D278 8004CA78 004C0900 */  sll        $t1, $t1, 16
+    /* 2D27C 8004CA7C 25400901 */  or         $t0, $t0, $t1
+    /* 2D280 8004CA80 00480B48 */  mfc2       $t3, $9 /* handwritten instruction */
+    /* 2D284 8004CA84 00500C48 */  mfc2       $t4, $10 /* handwritten instruction */
+    /* 2D288 8004CA88 00580D48 */  mfc2       $t5, $11 /* handwritten instruction */
+    /* 2D28C 8004CA8C 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D290 8004CA90 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D294 8004CA94 00000000 */  nop
+    /* 2D298 8004CA98 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D29C 8004CA9C 0400A894 */  lhu        $t0, 0x4($a1)
+    /* 2D2A0 8004CAA0 0800A98C */  lw         $t1, 0x8($a1)
+    /* 2D2A4 8004CAA4 1000AA8C */  lw         $t2, 0x10($a1)
+    /* 2D2A8 8004CAA8 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+    /* 2D2AC 8004CAAC 24482101 */  and        $t1, $t1, $at
+    /* 2D2B0 8004CAB0 25400901 */  or         $t0, $t0, $t1
+    /* 2D2B4 8004CAB4 00480E48 */  mfc2       $t6, $9 /* handwritten instruction */
+    /* 2D2B8 8004CAB8 00500F48 */  mfc2       $t7, $10 /* handwritten instruction */
+    /* 2D2BC 8004CABC 00581848 */  mfc2       $t8, $11 /* handwritten instruction */
+endlabel func_8004CA48
+
+/* Handwritten function */
+nonmatching func_8004CAC0, 0x6C
+
+glabel func_8004CAC0
+    /* 2D2C0 8004CAC0 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
+    /* 2D2C4 8004CAC4 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
+    /* 2D2C8 8004CAC8 00000000 */  nop
+    /* 2D2CC 8004CACC 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2D2D0 8004CAD0 FFFF6B31 */  andi       $t3, $t3, 0xFFFF
+    /* 2D2D4 8004CAD4 00740E00 */  sll        $t6, $t6, 16
+    /* 2D2D8 8004CAD8 2570CB01 */  or         $t6, $t6, $t3
+    /* 2D2DC 8004CADC FFFFAD31 */  andi       $t5, $t5, 0xFFFF
+    /* 2D2E0 8004CAE0 00C41800 */  sll        $t8, $t8, 16
+    /* 2D2E4 8004CAE4 25C00D03 */  or         $t8, $t8, $t5
+    /* 2D2E8 8004CAE8 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
+    /* 2D2EC 8004CAEC 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
+    /* 2D2F0 8004CAF0 00580A48 */  mfc2       $t2, $11 /* handwritten instruction */
+    /* 2D2F4 8004CAF4 FFFF0831 */  andi       $t0, $t0, 0xFFFF
+    /* 2D2F8 8004CAF8 00640C00 */  sll        $t4, $t4, 16
+    /* 2D2FC 8004CAFC 25400C01 */  or         $t0, $t0, $t4
+    /* 2D300 8004CB00 FFFFEF31 */  andi       $t7, $t7, 0xFFFF
+    /* 2D304 8004CB04 004C0900 */  sll        $t1, $t1, 16
+    /* 2D308 8004CB08 25482F01 */  or         $t1, $t1, $t7
+    /* 2D30C 8004CB0C 0000CE48 */  ctc2       $t6, $0 /* handwritten instruction */
+    /* 2D310 8004CB10 0008C848 */  ctc2       $t0, $1 /* handwritten instruction */
+    /* 2D314 8004CB14 0010C948 */  ctc2       $t1, $2 /* handwritten instruction */
+    /* 2D318 8004CB18 0018D848 */  ctc2       $t8, $3 /* handwritten instruction */
+    /* 2D31C 8004CB1C 0020CA48 */  ctc2       $t2, $4 /* handwritten instruction */
+    /* 2D320 8004CB20 21108000 */  addu       $v0, $a0, $zero
+    /* 2D324 8004CB24 0800E003 */  jr         $ra
+    /* 2D328 8004CB28 00000000 */   nop
+endlabel func_8004CAC0
+
+/* Handwritten function */
+nonmatching func_8004CB2C, 0x58
+
+glabel func_8004CB2C
+    /* 2D32C 8004CB2C 0000888C */  lw         $t0, 0x0($a0)
+    /* 2D330 8004CB30 0400898C */  lw         $t1, 0x4($a0)
+    /* 2D334 8004CB34 08008A8C */  lw         $t2, 0x8($a0)
+    /* 2D338 8004CB38 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 2D33C 8004CB3C 10008C8C */  lw         $t4, 0x10($a0)
+    /* 2D340 8004CB40 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 2D344 8004CB44 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
+    /* 2D348 8004CB48 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
+    /* 2D34C 8004CB4C 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
+    /* 2D350 8004CB50 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
+    /* 2D354 8004CB54 0000A88C */  lw         $t0, 0x0($a1)
+    /* 2D358 8004CB58 0400A98C */  lw         $t1, 0x4($a1)
+    /* 2D35C 8004CB5C 0800AA8C */  lw         $t2, 0x8($a1)
+    /* 2D360 8004CB60 08000105 */  bgez       $t0, func_8004CB84
+    /* 2D364 8004CB64 C35B0800 */   sra       $t3, $t0, 15
+    /* 2D368 8004CB68 23400800 */  negu       $t0, $t0
+    /* 2D36C 8004CB6C C35B0800 */  sra        $t3, $t0, 15
+    /* 2D370 8004CB70 FF7F0831 */  andi       $t0, $t0, 0x7FFF
+    /* 2D374 8004CB74 23580B00 */  negu       $t3, $t3
+    /* 2D378 8004CB78 03000010 */  b          func_8004CB88
+    /* 2D37C 8004CB7C 23400800 */   negu      $t0, $t0
+    /* 2D380 8004CB80 C35B0800 */  sra        $t3, $t0, 15
+endlabel func_8004CB2C
+
+nonmatching func_8004CB84, 0x4
+
+glabel func_8004CB84
+    /* 2D384 8004CB84 FF7F0831 */  andi       $t0, $t0, 0x7FFF
+endlabel func_8004CB84
+
+nonmatching func_8004CB88, 0x14
+
+glabel func_8004CB88
+    /* 2D388 8004CB88 08002105 */  bgez       $t1, func_8004CBAC
+    /* 2D38C 8004CB8C C3630900 */   sra       $t4, $t1, 15
+    /* 2D390 8004CB90 23480900 */  negu       $t1, $t1
+    /* 2D394 8004CB94 C3630900 */  sra        $t4, $t1, 15
+    /* 2D398 8004CB98 FF7F2931 */  andi       $t1, $t1, 0x7FFF
+endlabel func_8004CB88
+
+nonmatching func_8004CB9C, 0x8
+
+glabel func_8004CB9C
+    /* 2D39C 8004CB9C 23600C00 */  negu       $t4, $t4
+    /* 2D3A0 8004CBA0 03000010 */  b          func_8004CBB0
+endlabel func_8004CB9C
+
+nonmatching func_8004CBA4, 0x8
+
+glabel func_8004CBA4
+    /* 2D3A4 8004CBA4 23480900 */  negu       $t1, $t1
+    /* 2D3A8 8004CBA8 C3630900 */  sra        $t4, $t1, 15
+endlabel func_8004CBA4
+
+nonmatching func_8004CBAC, 0x4
+
+glabel func_8004CBAC
+    /* 2D3AC 8004CBAC FF7F2931 */  andi       $t1, $t1, 0x7FFF
+endlabel func_8004CBAC
+
+nonmatching func_8004CBB0, 0x24
+
+glabel func_8004CBB0
+    /* 2D3B0 8004CBB0 08004105 */  bgez       $t2, func_8004CBD4
+    /* 2D3B4 8004CBB4 C36B0A00 */   sra       $t5, $t2, 15
+    /* 2D3B8 8004CBB8 23500A00 */  negu       $t2, $t2
+    /* 2D3BC 8004CBBC C36B0A00 */  sra        $t5, $t2, 15
+    /* 2D3C0 8004CBC0 FF7F4A31 */  andi       $t2, $t2, 0x7FFF
+    /* 2D3C4 8004CBC4 23680D00 */  negu       $t5, $t5
+    /* 2D3C8 8004CBC8 03000010 */  b          func_8004CBD8
+    /* 2D3CC 8004CBCC 23500A00 */   negu      $t2, $t2
+    /* 2D3D0 8004CBD0 C36B0A00 */  sra        $t5, $t2, 15
+endlabel func_8004CBB0
+
+nonmatching func_8004CBD4, 0x4
+
+glabel func_8004CBD4
+    /* 2D3D4 8004CBD4 FF7F4A31 */  andi       $t2, $t2, 0x7FFF
+endlabel func_8004CBD4
+
+/* Handwritten function */
+nonmatching func_8004CBD8, 0x4C
+
+glabel func_8004CBD8
+    /* 2D3D8 8004CBD8 00488B48 */  mtc2       $t3, $9 /* handwritten instruction */
+    /* 2D3DC 8004CBDC 00508C48 */  mtc2       $t4, $10 /* handwritten instruction */
+    /* 2D3E0 8004CBE0 00588D48 */  mtc2       $t5, $11 /* handwritten instruction */
+    /* 2D3E4 8004CBE4 00000000 */  nop
+    /* 2D3E8 8004CBE8 12E0414A */  mvmva      0, 0, 3, 3, 0
+    /* 2D3EC 8004CBEC 00C80B48 */  mfc2       $t3, $25 /* handwritten instruction */
+    /* 2D3F0 8004CBF0 00D00C48 */  mfc2       $t4, $26 /* handwritten instruction */
+    /* 2D3F4 8004CBF4 00D80D48 */  mfc2       $t5, $27 /* handwritten instruction */
+    /* 2D3F8 8004CBF8 00488848 */  mtc2       $t0, $9 /* handwritten instruction */
+    /* 2D3FC 8004CBFC 00508948 */  mtc2       $t1, $10 /* handwritten instruction */
+    /* 2D400 8004CC00 00588A48 */  mtc2       $t2, $11 /* handwritten instruction */
+    /* 2D404 8004CC04 00000000 */  nop
+    /* 2D408 8004CC08 12E0494A */  mvmva      1, 0, 3, 3, 0
+    /* 2D40C 8004CC0C 05006105 */  bgez       $t3, func_8004CC24
+    /* 2D410 8004CC10 00000000 */   nop
+    /* 2D414 8004CC14 23580B00 */  negu       $t3, $t3
+    /* 2D418 8004CC18 C0580B00 */  sll        $t3, $t3, 3
+    /* 2D41C 8004CC1C 02000010 */  b          func_8004CC28
+    /* 2D420 8004CC20 23580B00 */   negu      $t3, $t3
+endlabel func_8004CBD8
+
+nonmatching func_8004CC24, 0x4
+
+glabel func_8004CC24
+    /* 2D424 8004CC24 C0580B00 */  sll        $t3, $t3, 3
+endlabel func_8004CC24
+
+nonmatching func_8004CC28, 0x18
+
+glabel func_8004CC28
+    /* 2D428 8004CC28 05008105 */  bgez       $t4, func_8004CC40
+    /* 2D42C 8004CC2C 00000000 */   nop
+    /* 2D430 8004CC30 23600C00 */  negu       $t4, $t4
+    /* 2D434 8004CC34 C0600C00 */  sll        $t4, $t4, 3
+    /* 2D438 8004CC38 02000010 */  b          func_8004CC44
+    /* 2D43C 8004CC3C 23600C00 */   negu      $t4, $t4
+endlabel func_8004CC28
+
+nonmatching func_8004CC40, 0x4
+
+glabel func_8004CC40
+    /* 2D440 8004CC40 C0600C00 */  sll        $t4, $t4, 3
+endlabel func_8004CC40
+
+nonmatching func_8004CC44, 0x18
+
+glabel func_8004CC44
+    /* 2D444 8004CC44 0500A105 */  bgez       $t5, func_8004CC5C
+    /* 2D448 8004CC48 00000000 */   nop
+    /* 2D44C 8004CC4C 23680D00 */  negu       $t5, $t5
+    /* 2D450 8004CC50 C0680D00 */  sll        $t5, $t5, 3
+    /* 2D454 8004CC54 02000010 */  b          func_8004CC60
+    /* 2D458 8004CC58 23680D00 */   negu      $t5, $t5
+endlabel func_8004CC44
+
+nonmatching func_8004CC5C, 0x4
+
+glabel func_8004CC5C
+    /* 2D45C 8004CC5C C0680D00 */  sll        $t5, $t5, 3
+endlabel func_8004CC5C
+
+/* Handwritten function */
+nonmatching func_8004CC60, 0x2C
+
+glabel func_8004CC60
+    /* 2D460 8004CC60 00C80848 */  mfc2       $t0, $25 /* handwritten instruction */
+    /* 2D464 8004CC64 00D00948 */  mfc2       $t1, $26 /* handwritten instruction */
+    /* 2D468 8004CC68 00D80A48 */  mfc2       $t2, $27 /* handwritten instruction */
+    /* 2D46C 8004CC6C 21400B01 */  addu       $t0, $t0, $t3
+    /* 2D470 8004CC70 21482C01 */  addu       $t1, $t1, $t4
+    /* 2D474 8004CC74 21504D01 */  addu       $t2, $t2, $t5
+    /* 2D478 8004CC78 0000C8AC */  sw         $t0, 0x0($a2)
+    /* 2D47C 8004CC7C 0400C9AC */  sw         $t1, 0x4($a2)
+    /* 2D480 8004CC80 0800CAAC */  sw         $t2, 0x8($a2)
+    /* 2D484 8004CC84 0800E003 */  jr         $ra
+    /* 2D488 8004CC88 2110C000 */   addu      $v0, $a2, $zero
+endlabel func_8004CC60
+
+nonmatching D_8004CC8C
+
+dlabel D_8004CC8C
+    /* 2D48C 8004CC8C 0000888C */ .word 0x8C880000
+    /* 2D490 8004CC90 0400898C */ .word 0x8C890004
+    /* 2D494 8004CC94 00008848 */ .word 0x48880000
+    /* 2D498 8004CC98 00088948 */ .word 0x48890800
+    /* 2D49C 8004CC9C 00000000 */ .word 0x00000000
+    /* 2D4A0 8004CCA0 0B191488 */ .word 0x8814190B
+    /* 2D4A4 8004CCA4 0B9CE001 */ .word 0x01E09C0B /* invalid instruction */
+    /* 2D4A8 8004CCA8 E4229FA9 */ .word 0xA99F22E4
+    /* 2D4AC 8004CCAC 8DBA24F9 */ .word 0xF924BA8D
+    /* 2D4B0 8004CCB0 44179520 */ .word 0x20951744
+    /* 2D4B4 8004CCB4 AA9FC5B5 */ .word 0xB5C59FAA
+    /* 2D4B8 8004CCB8 5B564822 */ .word 0x2248565B
+    /* 2D4BC 8004CCBC A470B340 */ .word 0x40B370A4 /* invalid instruction */
+    /* 2D4C0 8004CCC0 524B203A */ .word 0x3A204B52
+    /* 2D4C4 8004CCC4 50EBAB28 */ .word 0x28ABEB50
+    /* 2D4C8 8004CCC8 F568F3F3 */ .word 0xF3F368F5
+    /* 2D4CC 8004CCCC A8A3AC6D */ .word 0x6DACA3A8
+    /* 2D4D0 8004CCD0 503D1CA9 */ .word 0xA91C3D50
+    /* 2D4D4 8004CCD4 03E8B21B */ .word 0x1BB2E803 /* invalid instruction */
+    /* 2D4D8 8004CCD8 2F59EC70 */ .word 0x70EC592F /* invalid instruction */
+    /* 2D4DC 8004CCDC 7D862DA0 */ .word 0xA02D867D
+    /* 2D4E0 8004CCE0 7020E5B7 */ .word 0xB7E52070
+    /* 2D4E4 8004CCE4 78CE08CC */ .word 0xCC08CE78
+    /* 2D4E8 8004CCE8 20D05845 */ .word 0x4558D020 /* invalid instruction */
+    /* 2D4EC 8004CCEC C87BDAF9 */ .word 0xF9DA7BC8
+    /* 2D4F0 8004CCF0 908D6F49 */ .word 0x496F8D90 /* invalid instruction */
+    /* 2D4F4 8004CCF4 52559808 */ .word 0x08985552
+    /* 2D4F8 8004CCF8 8EF2311F */ .word 0x1F31F28E /* invalid instruction */
+    /* 2D4FC 8004CCFC 3531130C */ .word 0x0C133135
+    /* 2D500 8004CD00 303D3B69 */ .word 0x693B3D30
+    /* 2D504 8004CD04 424DDF0F */ .word 0x0FDF4D42
+    /* 2D508 8004CD08 75212B99 */ .word 0x992B2175
+    /* 2D50C 8004CD0C 835FC85F */ .word 0x5FC85F83 /* invalid instruction */
+    /* 2D510 8004CD10 D5ABC33B */ .word 0x3BC3ABD5
+    /* 2D514 8004CD14 6444A5EF */ .word 0xEFA54464 /* invalid instruction */
+    /* 2D518 8004CD18 032DE4EE */ .word 0xEEE42D03 /* invalid instruction */
+    /* 2D51C 8004CD1C 7D49D090 */ .word 0x90D0497D
+    /* 2D520 8004CD20 AEDD0214 */ .word 0x1402DDAE
+    /* 2D524 8004CD24 DD6F9260 */ .word 0x60926FDD
+    /* 2D528 8004CD28 75972BC4 */ .word 0xC42B9775
+    /* 2D52C 8004CD2C 1029843E */ .word 0x3E842910 /* invalid instruction */
+    /* 2D530 8004CD30 FA33C49B */ .word 0x9BC433FA
+    /* 2D534 8004CD34 609822D0 */ .word 0xD0229860
+    /* 2D538 8004CD38 87B12C4D */ .word 0x4D2CB187 /* invalid instruction */
+    /* 2D53C 8004CD3C 68C46A1D */ .word 0x1D6AC468 /* invalid instruction */
+
+nonmatching func_8004CD40
+
+alabel func_8004CD40
+    /* 2D540 8004CD40 9EB5DF35 */ .word 0x35DFB59E
+    /* 2D544 8004CD44 F0B0EC46 */ .word 0x46ECB0F0 /* invalid instruction */
+    /* 2D548 8004CD48 5754FB30 */ .word 0x30FB5457
+    /* 2D54C 8004CD4C 89D4C2D3 */ .word 0xD3C2D489
+    /* 2D550 8004CD50 6C57B908 */ .word 0x08B9576C
+    /* 2D554 8004CD54 768D7812 */ .word 0x12788D76
+    /* 2D558 8004CD58 6C75F2B1 */ .word 0xB1F2756C
+    /* 2D55C 8004CD5C 3CCC75DE */ .word 0xDE75CC3C
+    /* 2D560 8004CD60 B4F0893F */ .word 0x3F89F0B4 /* invalid instruction */
+    /* 2D564 8004CD64 3999AB09 */ .word 0x09AB9939
+    /* 2D568 8004CD68 5749BEBE */ .word 0xBEBE4957
+    /* 2D56C 8004CD6C D28AFD53 */ .word 0x53FD8AD2
+    /* 2D570 8004CD70 F1949828 */ .word 0x289894F1
+    /* 2D574 8004CD74 DABB6B0A */ .word 0x0A6BBBDA
+    /* 2D578 8004CD78 055BC5A5 */ .word 0xA5C55B05
+    /* 2D57C 8004CD7C E59429B2 */ .word 0xB22994E5
+    /* 2D580 8004CD80 BED60F64 */ .word 0x640FD6BE
+    /* 2D584 8004CD84 4C62A5B8 */ .word 0xB8A5624C
+    /* 2D588 8004CD88 6F2C2D9C */ .word 0x9C2D2C6F
+    /* 2D58C 8004CD8C F8727935 */ .word 0x357972F8
+    /* 2D590 8004CD90 A38A35C6 */ .word 0xC6358AA3
+    /* 2D594 8004CD94 F7D654C5 */ .word 0xC554D6F7
+    /* 2D598 8004CD98 747E1B8C */ .word 0x8C1B7E74
+    /* 2D59C 8004CD9C 5FD8892A */ .word 0x2A89D85F
+    /* 2D5A0 8004CDA0 454CF05F */ .word 0x5FF04C45 /* invalid instruction */
+    /* 2D5A4 8004CDA4 8502C73A */ .word 0x3AC70285
+    /* 2D5A8 8004CDA8 2A3BA0D3 */ .word 0xD3A03B2A
+    /* 2D5AC 8004CDAC 30E19B97 */ .word 0x979BE130
+    /* 2D5B0 8004CDB0 16B23E0D */ .word 0x0D3EB216
+    /* 2D5B4 8004CDB4 642D3C55 */ .word 0x553C2D64
+    /* 2D5B8 8004CDB8 00FFFFFF */ .word 0xFFFFFF00
+    /* 2D5BC 8004CDBC FFFFFFFF */ .word 0xFFFFFFFF
+enddlabel D_8004CC8C

@@ -22,6 +22,10 @@ glabel func_80047AB4
     /* 282D8 80047AD8 4E5A4E15 */ .word 0x154E5A4E
     /* 282DC 80047ADC CA468499 */ .word 0x998446CA
     /* 282E0 80047AE0 0905947B */ .word 0x7B940509 /* invalid instruction */
+
+nonmatching func_80047AE4
+
+alabel func_80047AE4
     /* 282E4 80047AE4 C4A67F3C */ .word 0x3C7FA6C4 /* invalid instruction */
     /* 282E8 80047AE8 98FC6317 */ .word 0x1763FC98
     /* 282EC 80047AEC D29C204F */ .word 0x4F209CD2 /* invalid instruction */
