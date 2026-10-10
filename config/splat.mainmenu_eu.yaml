@@ -51,818 +51,296 @@ segments:
       - [0x4294, asm, func_80023A94]   # 0x28
       - [0x42BC, data, data_80023ABC]   # 0x718
       - [0x49D4, asm, func_800241D4]   # 0x8c8
-      - [0x529C, data, data_80024A9C]   # 0xc8
-      - [0x5364, asm, func_80024B64]   # 0x120
-      - [0x5484, data, data_80024C84]   # 0x54
-      - [0x54D8, asm, func_80024CD8]   # 0x1f0
-      - [0x56C8, data, data_80024EC8]   # 0x8
-      - [0x56D0, asm, func_80024ED0]   # 0x8
-      - [0x56D8, data, data_80024ED8]   # 0x30c
-      - [0x59E4, asm, func_800251E4]   # 0x110
+      - [0x529C, data, data_80024A9C]   # 0x5c
+      - [0x52F8, asm, func_80024AF8]   # 0x4b0
+      - [0x57A8, data, data_80024FA8]   # 0x4
+      - [0x57AC, asm, func_80024FAC]   # 0x348
       - [0x5AF4, data, data_800252F4]   # 0x20
-      - [0x5B14, asm, func_80025314]   # 0x1f0
-      - [0x5D04, data, data_80025504]   # 0x38
-      - [0x5D3C, asm, func_8002553C]   # 0x78
-      - [0x5DB4, data, data_800255B4]   # 0x74
-      - [0x5E28, asm, func_80025628]   # 0x8
-      - [0x5E30, data, data_80025630]   # 0xc4
-      - [0x5EF4, asm, func_800256F4]   # 0x50
-      - [0x5F44, data, data_80025744]   # 0x98
-      - [0x5FDC, asm, func_800257DC]   # 0xdc
-      - [0x60B8, data, data_800258B8]   # 0x44
-      - [0x60FC, asm, func_800258FC]   # 0x30
-      - [0x612C, data, data_8002592C]   # 0x74
-      - [0x61A0, asm, func_800259A0]   # 0x24
-      - [0x61C4, data, data_800259C4]   # 0x24
-      - [0x61E8, asm, func_800259E8]   # 0xb4
-      - [0x629C, data, data_80025A9C]   # 0x98
-      - [0x6334, asm, func_80025B34]   # 0xd4
-      - [0x6408, data, data_80025C08]   # 0xe4
-      - [0x64EC, asm, func_80025CEC]   # 0x208
-      - [0x66F4, data, data_80025EF4]   # 0x470
-      - [0x6B64, asm, func_80026364]   # 0xa0
-      - [0x6C04, data, data_80026404]   # 0x70
-      - [0x6C74, asm, func_80026474]   # 0x78
-      - [0x6CEC, data, data_800264EC]   # 0x24
-      - [0x6D10, asm, func_80026510]   # 0x98
+      - [0x5B14, asm, func_80025314]   # 0x908
+      - [0x641C, data, data_80025C1C]   # 0xd0
+      - [0x64EC, asm, func_80025CEC]   # 0x4b4
+      - [0x69A0, data, data_800261A0]   # 0x44
+      - [0x69E4, asm, func_800261E4]   # 0x308
+      - [0x6CEC, data, data_800264EC]   # 0x10
+      - [0x6CFC, asm, func_800264FC]   # 0xac
       - [0x6DA8, data, data_800265A8]   # 0x4
       - [0x6DAC, asm, func_800265AC]   # 0x84
-      - [0x6E30, data, data_80026630]   # 0xa4
-      - [0x6ED4, asm, func_800266D4]   # 0x68
+      - [0x6E30, data, data_80026630]   # 0x4c
+      - [0x6E7C, asm, func_8002667C]   # 0xc0
       - [0x6F3C, data, data_8002673C]   # 0x8
-      - [0x6F44, asm, func_80026744]   # 0x9c
-      - [0x6FE0, data, data_800267E0]   # 0xf0
-      - [0x70D0, asm, func_800268D0]   # 0xa4
-      - [0x7174, data, data_80026974]   # 0x280
-      - [0x73F4, asm, func_80026BF4]   # 0x34
-      - [0x7428, data, data_80026C28]   # 0xc8
-      - [0x74F0, asm, func_80026CF0]   # 0x1c0
-      - [0x76B0, data, data_80026EB0]   # 0x154
-      - [0x7804, asm, func_80027004]   # 0x2d0
-      - [0x7AD4, data, data_800272D4]   # 0x2fc
-      - [0x7DD0, asm, func_800275D0]   # 0x74
+      - [0x6F44, asm, func_80026744]   # 0x180
+      - [0x70C4, data, data_800268C4]   # 0xc
+      - [0x70D0, asm, func_800268D0]   # 0xd74
       - [0x7E44, data, data_80027644]   # 0x8
-      - [0x7E4C, asm, func_8002764C]   # 0x3c
-      - [0x7E88, data, data_80027688]   # 0x1e0
-      - [0x8068, asm, func_80027868]   # 0xfc
-      - [0x8164, data, data_80027964]   # 0x4c
-      - [0x81B0, asm, func_800279B0]   # 0x48
-      - [0x81F8, data, data_800279F8]   # 0x1b8
-      - [0x83B0, asm, func_80027BB0]   # 0xe4
-      - [0x8494, data, data_80027C94]   # 0x70
-      - [0x8504, asm, func_80027D04]   # 0x8c
-      - [0x8590, data, data_80027D90]   # 0x5c
-      - [0x85EC, asm, func_80027DEC]   # 0x10
-      - [0x85FC, data, data_80027DFC]   # 0x94
-      - [0x8690, asm, func_80027E90]   # 0x214
-      - [0x88A4, data, data_800280A4]   # 0x170
-      - [0x8A14, asm, func_80028214]   # 0x84
-      - [0x8A98, data, data_80028298]   # 0x35c
-      - [0x8DF4, asm, func_800285F4]   # 0x1ac
-      - [0x8FA0, data, data_800287A0]   # 0xd34
-      - [0x9CD4, asm, func_800294D4]   # 0x8c
-      - [0x9D60, data, data_80029560]   # 0x7c
-      - [0x9DDC, asm, func_800295DC]   # 0x68
-      - [0x9E44, data, data_80029644]   # 0x50
-      - [0x9E94, asm, func_80029694]   # 0x238
-      - [0xA0CC, data, data_800298CC]   # 0x20a4
-      - [0xC170, asm, func_8002B970]   # 0x188
-      - [0xC2F8, data, data_8002BAF8]   # 0x2a04
-      - [0xECFC, asm, func_8002E4FC]   # 0x130
-      - [0xEE2C, data, data_8002E62C]   # 0x4258
-      - [0x13084, asm, func_80032884]   # 0x250
-      - [0x132D4, data, data_80032AD4]   # 0xed0
-      - [0x141A4, asm, func_800339A4]   # 0x94
-      - [0x14238, data, data_80033A38]   # 0x644
-      - [0x1487C, asm, func_8003407C]   # 0x158
-      - [0x149D4, data, data_800341D4]   # 0xf0
-      - [0x14AC4, asm, func_800342C4]   # 0x2f0
-      - [0x14DB4, data, data_800345B4]   # 0xdc0
-      - [0x15B74, asm, func_80035374]   # 0x30
-      - [0x15BA4, data, data_800353A4]   # 0x2c0
-      - [0x15E64, asm, func_80035664]   # 0x1e4
-      - [0x16048, data, data_80035848]   # 0x1d0
-      - [0x16218, asm, func_80035A18]   # 0x80
-      - [0x16298, data, data_80035A98]   # 0x114
-      - [0x163AC, asm, func_80035BAC]   # 0x284
-      - [0x16630, data, data_80035E30]   # 0x68
-      - [0x16698, asm, func_80035E98]   # 0x1b4
-      - [0x1684C, data, data_8003604C]   # 0x118
-      - [0x16964, asm, func_80036164]   # 0x64
-      - [0x169C8, data, data_800361C8]   # 0x68
-      - [0x16A30, asm, func_80036230]   # 0x68
-      - [0x16A98, data, data_80036298]   # 0x8
-      - [0x16AA0, asm, func_800362A0]   # 0xb4
-      - [0x16B54, data, data_80036354]   # 0x280
-      - [0x16DD4, asm, func_800365D4]   # 0xd8
+      - [0x7E4C, asm, func_8002764C]   # 0x188
+      - [0x7FD4, data, data_800277D4]   # 0x94
+      - [0x8068, asm, func_80027868]   # 0x868
+      - [0x88D0, data, data_800280D0]   # 0x104
+      - [0x89D4, asm, func_800281D4]   # 0x84c
+      - [0x9220, data, data_80028A20]   # 0x148
+      - [0x9368, asm, func_80028B68]   # 0x864
+      - [0x9BCC, data, data_800293CC]   # 0x9c
+      - [0x9C68, asm, func_80029468]   # 0x8e8
+      - [0xA550, data, data_80029D50]   # 0xe14
+      - [0xB364, asm, func_8002AB64]   # 0x3b4
+      - [0xB718, data, data_8002AF18]   # 0x154
+      - [0xB86C, asm, func_8002B06C]   # 0x788
+      - [0xBFF4, data, data_8002B7F4]   # 0x120
+      - [0xC114, asm, func_8002B914]   # 0x8b4
+      - [0xC9C8, data, data_8002C1C8]   # 0xa94
+      - [0xD45C, asm, func_8002CC5C]   # 0x73c
+      - [0xDB98, data, data_8002D398]   # 0x290
+      - [0xDE28, asm, func_8002D628]   # 0x710
+      - [0xE538, data, data_8002DD38]   # 0xc8
+      - [0xE600, asm, func_8002DE00]   # 0x82c
+      - [0xEE2C, data, data_8002E62C]   # 0x538
+      - [0xF364, asm, func_8002EB64]   # 0x3ac
+      - [0xF710, data, data_8002EF10]   # 0x458
+      - [0xFB68, asm, func_8002F368]   # 0x4cc
+      - [0x10034, data, data_8002F834]   # 0x388
+      - [0x103BC, asm, func_8002FBBC]   # 0x608
+      - [0x109C4, data, data_800301C4]   # 0x184
+      - [0x10B48, asm, func_80030348]   # 0x7ec
+      - [0x11334, data, data_80030B34]   # 0x7c
+      - [0x113B0, asm, func_80030BB0]   # 0x820
+      - [0x11BD0, data, data_800313D0]   # 0x108
+      - [0x11CD8, asm, func_800314D8]   # 0x828
+      - [0x12500, data, data_80031D00]   # 0x1ec
+      - [0x126EC, asm, func_80031EEC]   # 0x10c0
+      - [0x137AC, data, data_80032FAC]   # 0x180
+      - [0x1392C, asm, func_8003312C]   # 0x78c
+      - [0x140B8, data, data_800338B8]   # 0x90
+      - [0x14148, asm, func_80033948]   # 0x1188
+      - [0x152D0, data, data_80034AD0]   # 0x128
+      - [0x153F8, asm, func_80034BF8]   # 0x87c
+      - [0x15C74, data, data_80035474]   # 0x130
+      - [0x15DA4, asm, func_800355A4]   # 0xb0
+      - [0x15E54, data, data_80035654]   # 0x10
+      - [0x15E64, asm, func_80035664]   # 0x1048
       - [0x16EAC, data, data_800366AC]   # 0xc
       - [0x16EB8, asm, func_800366B8]   # 0x1c
       - [0x16ED4, data, data_800366D4]   # 0x38
-      - [0x16F0C, asm, func_8003670C]   # 0x84
-      - [0x16F90, data, data_80036790]   # 0x104
-      - [0x17094, asm, func_80036894]   # 0x24
-      - [0x170B8, data, data_800368B8]   # 0x34
-      - [0x170EC, asm, func_800368EC]   # 0x38
-      - [0x17124, data, data_80036924]   # 0x20
-      - [0x17144, asm, func_80036944]   # 0x134
-      - [0x17278, data, data_80036A78]   # 0x4c
-      - [0x172C4, asm, func_80036AC4]   # 0x13c
-      - [0x17400, data, data_80036C00]   # 0x258
-      - [0x17658, asm, func_80036E58]   # 0x64
-      - [0x176BC, data, data_80036EBC]   # 0x3e0
-      - [0x17A9C, asm, func_8003729C]   # 0xc8
-      - [0x17B64, data, data_80037364]   # 0xc
-      - [0x17B70, asm, func_80037370]   # 0x9c
-      - [0x17C0C, data, data_8003740C]   # 0x170
-      - [0x17D7C, asm, func_8003757C]   # 0x8
-      - [0x17D84, data, data_80037584]   # 0x2c8
-      - [0x1804C, asm, func_8003784C]   # 0x64
+      - [0x16F0C, asm, func_8003670C]   # 0x8d0
+      - [0x177DC, data, data_80036FDC]   # 0x150
+      - [0x1792C, asm, func_8003712C]   # 0x784
       - [0x180B0, data, data_800378B0]   # 0x28
       - [0x180D8, asm, func_800378D8]   # 0xd8
-      - [0x181B0, data, data_800379B0]   # 0x320
-      - [0x184D0, asm, func_80037CD0]   # 0x20
-      - [0x184F0, data, data_80037CF0]   # 0x46c
-      - [0x1895C, asm, func_8003815C]   # 0x8
-      - [0x18964, data, data_80038164]   # 0x20
-      - [0x18984, asm, func_80038184]   # 0x178
-      - [0x18AFC, data, data_800382FC]   # 0x1a8
-      - [0x18CA4, asm, func_800384A4]   # 0x1a0
-      - [0x18E44, data, data_80038644]   # 0x74
-      - [0x18EB8, asm, func_800386B8]   # 0x2bc
-      - [0x19174, data, data_80038974]   # 0x9c
-      - [0x19210, asm, func_80038A10]   # 0x128
+      - [0x181B0, data, data_800379B0]   # 0x34
+      - [0x181E4, asm, func_800379E4]   # 0x2c8
+      - [0x184AC, data, data_80037CAC]   # 0x4
+      - [0x184B0, asm, func_80037CB0]   # 0x64c
+      - [0x18AFC, data, data_800382FC]   # 0x170
+      - [0x18C6C, asm, func_8003846C]   # 0x6cc
       - [0x19338, data, data_80038B38]   # 0x28
       - [0x19360, asm, func_80038B60]   # 0xd0
       - [0x19430, data, data_80038C30]   # 0x2c
-      - [0x1945C, asm, func_80038C5C]   # 0x1fc
-      - [0x19658, data, data_80038E58]   # 0x80
-      - [0x196D8, asm, func_80038ED8]   # 0x114
-      - [0x197EC, data, data_80038FEC]   # 0x2c
-      - [0x19818, asm, func_80039018]   # 0x40
-      - [0x19858, data, data_80039058]   # 0x1dc
-      - [0x19A34, asm, func_80039234]   # 0xa4
-      - [0x19AD8, data, data_800392D8]   # 0xcc
-      - [0x19BA4, asm, func_800393A4]   # 0x330
-      - [0x19ED4, data, data_800396D4]   # 0x10
-      - [0x19EE4, asm, func_800396E4]   # 0xbc
-      - [0x19FA0, data, data_800397A0]   # 0x198
-      - [0x1A138, asm, func_80039938]   # 0x20c
-      - [0x1A344, data, data_80039B44]   # 0x2d0
-      - [0x1A614, asm, func_80039E14]   # 0x2c
-      - [0x1A640, data, data_80039E40]   # 0x364
-      - [0x1A9A4, asm, func_8003A1A4]   # 0x10
-      - [0x1A9B4, data, data_8003A1B4]   # 0x5cc
-      - [0x1AF80, asm, func_8003A780]   # 0x40
-      - [0x1AFC0, data, data_8003A7C0]   # 0x2d4
-      - [0x1B294, asm, func_8003AA94]   # 0x60
-      - [0x1B2F4, data, data_8003AAF4]   # 0x34
-      - [0x1B328, asm, func_8003AB28]   # 0x18
-      - [0x1B340, data, data_8003AB40]   # 0x8c
-      - [0x1B3CC, asm, func_8003ABCC]   # 0x180
-      - [0x1B54C, data, data_8003AD4C]   # 0x100
-      - [0x1B64C, asm, func_8003AE4C]   # 0x258
-      - [0x1B8A4, data, data_8003B0A4]   # 0xc8
-      - [0x1B96C, asm, func_8003B16C]   # 0x6c
-      - [0x1B9D8, data, data_8003B1D8]   # 0x34
-      - [0x1BA0C, asm, func_8003B20C]   # 0x14
-      - [0x1BA20, data, data_8003B220]   # 0x18c
-      - [0x1BBAC, asm, func_8003B3AC]   # 0x10c
-      - [0x1BCB8, data, data_8003B4B8]   # 0x198
-      - [0x1BE50, asm, func_8003B650]   # 0x348
-      - [0x1C198, data, data_8003B998]   # 0x108
-      - [0x1C2A0, asm, func_8003BAA0]   # 0xec
-      - [0x1C38C, data, data_8003BB8C]   # 0x278
-      - [0x1C604, asm, func_8003BE04]   # 0xd0
-      - [0x1C6D4, data, data_8003BED4]   # 0x21c
+      - [0x1945C, asm, func_80038C5C]   # 0x11e4
+      - [0x1A640, data, data_80039E40]   # 0xf4
+      - [0x1A734, asm, func_80039F34]   # 0x620
+      - [0x1AD54, data, data_8003A554]   # 0x8
+      - [0x1AD5C, asm, func_8003A55C]   # 0x264
+      - [0x1AFC0, data, data_8003A7C0]   # 0x2ac
+      - [0x1B26C, asm, func_8003AA6C]   # 0x638
+      - [0x1B8A4, data, data_8003B0A4]   # 0xa8
+      - [0x1B94C, asm, func_8003B14C]   # 0x84c
+      - [0x1C198, data, data_8003B998]   # 0x44
+      - [0x1C1DC, asm, func_8003B9DC]   # 0x70c
+      - [0x1C8E8, data, data_8003C0E8]   # 0x8
       - [0x1C8F0, asm, func_8003C0F0]   # 0x160
-      - [0x1CA50, data, data_8003C250]   # 0x78
-      - [0x1CAC8, asm, func_8003C2C8]   # 0x154
-      - [0x1CC1C, data, data_8003C41C]   # 0x70
-      - [0x1CC8C, asm, func_8003C48C]   # 0x3c
-      - [0x1CCC8, data, data_8003C4C8]   # 0x5c
-      - [0x1CD24, asm, func_8003C524]   # 0x4c
-      - [0x1CD70, data, data_8003C570]   # 0x138
-      - [0x1CEA8, asm, func_8003C6A8]   # 0x18
-      - [0x1CEC0, data, data_8003C6C0]   # 0x140
-      - [0x1D000, asm, func_8003C800]   # 0x194
-      - [0x1D194, data, data_8003C994]   # 0x48
-      - [0x1D1DC, asm, func_8003C9DC]   # 0x5c
-      - [0x1D238, data, data_8003CA38]   # 0x40
-      - [0x1D278, asm, func_8003CA78]   # 0x40
-      - [0x1D2B8, data, data_8003CAB8]   # 0x19c
+      - [0x1CA50, data, data_8003C250]   # 0xc
+      - [0x1CA5C, asm, func_8003C25C]   # 0x434
+      - [0x1CE90, data, data_8003C690]   # 0xc
+      - [0x1CE9C, asm, func_8003C69C]   # 0x120
+      - [0x1CFBC, data, data_8003C7BC]   # 0x8
+      - [0x1CFC4, asm, func_8003C7C4]   # 0x274
+      - [0x1D238, data, data_8003CA38]   # 0x4
+      - [0x1D23C, asm, func_8003CA3C]   # 0x138
+      - [0x1D374, data, data_8003CB74]   # 0xe0
       - [0x1D454, asm, func_8003CC54]   # 0x18
-      - [0x1D46C, data, data_8003CC6C]   # 0x80
-      - [0x1D4EC, asm, func_8003CCEC]   # 0x1d8
-      - [0x1D6C4, data, data_8003CEC4]   # 0x7c
-      - [0x1D740, asm, func_8003CF40]   # 0x118
-      - [0x1D858, data, data_8003D058]   # 0x6c
-      - [0x1D8C4, asm, func_8003D0C4]   # 0x178
-      - [0x1DA3C, data, data_8003D23C]   # 0x40
-      - [0x1DA7C, asm, func_8003D27C]   # 0x24
-      - [0x1DAA0, data, data_8003D2A0]   # 0xd4
-      - [0x1DB74, asm, func_8003D374]   # 0x78
+      - [0x1D46C, data, data_8003CC6C]   # 0x5c
+      - [0x1D4C8, asm, func_8003CCC8]   # 0x724
       - [0x1DBEC, data, data_8003D3EC]   # 0x8
       - [0x1DBF4, asm, func_8003D3F4]   # 0xd0
       - [0x1DCC4, data, data_8003D4C4]   # 0xc0
       - [0x1DD84, asm, func_8003D584]   # 0x10
-      - [0x1DD94, data, data_8003D594]   # 0x70
-      - [0x1DE04, asm, func_8003D604]   # 0xf4
-      - [0x1DEF8, data, data_8003D6F8]   # 0x50
-      - [0x1DF48, asm, func_8003D748]   # 0x18
-      - [0x1DF60, data, data_8003D760]   # 0x6ac
-      - [0x1E60C, asm, func_8003DE0C]   # 0xc
+      - [0x1DD94, data, data_8003D594]   # 0x5c
+      - [0x1DDF0, asm, func_8003D5F0]   # 0x828
       - [0x1E618, data, data_8003DE18]   # 0x6c
       - [0x1E684, asm, func_8003DE84]   # 0x54
       - [0x1E6D8, data, data_8003DED8]   # 0x24
-      - [0x1E6FC, asm, func_8003DEFC]   # 0x198
-      - [0x1E894, data, data_8003E094]   # 0x1cc
-      - [0x1EA60, asm, func_8003E260]   # 0x410
-      - [0x1EE70, data, data_8003E670]   # 0x32c
-      - [0x1F19C, asm, func_8003E99C]   # 0x118
-      - [0x1F2B4, data, data_8003EAB4]   # 0x4
-      - [0x1F2B8, asm, func_8003EAB8]   # 0x28
-      - [0x1F2E0, data, data_8003EAE0]   # 0x4c
-      - [0x1F32C, asm, func_8003EB2C]   # 0x1c
-      - [0x1F348, data, data_8003EB48]   # 0x1b8
-      - [0x1F500, asm, func_8003ED00]   # 0x10
-      - [0x1F510, data, data_8003ED10]   # 0x7c
-      - [0x1F58C, asm, func_8003ED8C]   # 0xe0
-      - [0x1F66C, data, data_8003EE6C]   # 0x5c
-      - [0x1F6C8, asm, func_8003EEC8]   # 0x24
-      - [0x1F6EC, data, data_8003EEEC]   # 0x2c
-      - [0x1F718, asm, func_8003EF18]   # 0x14
-      - [0x1F72C, data, data_8003EF2C]   # 0x3c
-      - [0x1F768, asm, func_8003EF68]   # 0x40
-      - [0x1F7A8, data, data_8003EFA8]   # 0x224
-      - [0x1F9CC, asm, func_8003F1CC]   # 0xf0
-      - [0x1FABC, data, data_8003F2BC]   # 0x3c
-      - [0x1FAF8, asm, func_8003F2F8]   # 0x64
-      - [0x1FB5C, data, data_8003F35C]   # 0x114
-      - [0x1FC70, asm, func_8003F470]   # 0x8c
-      - [0x1FCFC, data, data_8003F4FC]   # 0x60
-      - [0x1FD5C, asm, func_8003F55C]   # 0x50
-      - [0x1FDAC, data, data_8003F5AC]   # 0x14
-      - [0x1FDC0, asm, func_8003F5C0]   # 0x1e0
-      - [0x1FFA0, data, data_8003F7A0]   # 0x190
-      - [0x20130, asm, func_8003F930]   # 0x30
+      - [0x1E6FC, asm, func_8003DEFC]   # 0x884
+      - [0x1EF80, data, data_8003E780]   # 0x158
+      - [0x1F0D8, asm, func_8003E8D8]   # 0x764
+      - [0x1F83C, data, data_8003F03C]   # 0x190
+      - [0x1F9CC, asm, func_8003F1CC]   # 0x794
       - [0x20160, data, data_8003F960]   # 0x70
       - [0x201D0, asm, func_8003F9D0]   # 0x54
-      - [0x20224, data, data_8003FA24]   # 0xb8
-      - [0x202DC, asm, func_8003FADC]   # 0x244
-      - [0x20520, data, data_8003FD20]   # 0x54
-      - [0x20574, asm, func_8003FD74]   # 0x310
-      - [0x20884, data, data_80040084]   # 0xc0
-      - [0x20944, asm, func_80040144]   # 0x194
+      - [0x20224, data, data_8003FA24]   # 0x7c
+      - [0x202A0, asm, func_8003FAA0]   # 0x838
       - [0x20AD8, data, data_800402D8]   # 0xc0
-      - [0x20B98, asm, func_80040398]   # 0x108
-      - [0x20CA0, data, data_800404A0]   # 0x58
-      - [0x20CF8, asm, func_800404F8]   # 0x180
-      - [0x20E78, data, data_80040678]   # 0x108
-      - [0x20F80, asm, func_80040780]   # 0xbc
-      - [0x2103C, data, data_8004083C]   # 0x1dc
-      - [0x21218, asm, func_80040A18]   # 0x40
-      - [0x21258, data, data_80040A58]   # 0x30
-      - [0x21288, asm, func_80040A88]   # 0x128
+      - [0x20B98, asm, func_80040398]   # 0x818
       - [0x213B0, data, data_80040BB0]   # 0x114
-      - [0x214C4, asm, func_80040CC4]   # 0x124
-      - [0x215E8, data, data_80040DE8]   # 0x84
-      - [0x2166C, asm, func_80040E6C]   # 0x20
-      - [0x2168C, data, data_80040E8C]   # 0x4c
-      - [0x216D8, asm, func_80040ED8]   # 0x80
-      - [0x21758, data, data_80040F58]   # 0x34
-      - [0x2178C, asm, func_80040F8C]   # 0x1a8
-      - [0x21934, data, data_80041134]   # 0xc8
-      - [0x219FC, asm, func_800411FC]   # 0x198
-      - [0x21B94, data, data_80041394]   # 0x34
-      - [0x21BC8, asm, func_800413C8]   # 0x58
-      - [0x21C20, data, data_80041420]   # 0x288
-      - [0x21EA8, asm, func_800416A8]   # 0x2c
-      - [0x21ED4, data, data_800416D4]   # 0xc8
-      - [0x21F9C, asm, func_8004179C]   # 0xf0
-      - [0x2208C, data, data_8004188C]   # 0xc0
-      - [0x2214C, asm, func_8004194C]   # 0x38
-      - [0x22184, data, data_80041984]   # 0x16c
-      - [0x222F0, asm, func_80041AF0]   # 0xa4
-      - [0x22394, data, data_80041B94]   # 0x650
-      - [0x229E4, asm, func_800421E4]   # 0x368
-      - [0x22D4C, data, data_8004254C]   # 0x7c
-      - [0x22DC8, asm, func_800425C8]   # 0x74
-      - [0x22E3C, data, data_8004263C]   # 0x2bc
-      - [0x230F8, asm, func_800428F8]   # 0x1d8
-      - [0x232D0, data, data_80042AD0]   # 0x7c
-      - [0x2334C, asm, func_80042B4C]   # 0xd4
-      - [0x23420, data, data_80042C20]   # 0x168
-      - [0x23588, asm, func_80042D88]   # 0x50
-      - [0x235D8, data, data_80042DD8]   # 0x104
-      - [0x236DC, asm, func_80042EDC]   # 0x244
+      - [0x214C4, asm, func_80040CC4]   # 0x1f8
+      - [0x216BC, data, data_80040EBC]   # 0x10
+      - [0x216CC, asm, func_80040ECC]   # 0xb4
+      - [0x21780, data, data_80040F80]   # 0x4
+      - [0x21784, asm, func_80040F84]   # 0x5d0
+      - [0x21D54, data, data_80041554]   # 0xf0
+      - [0x21E44, asm, func_80041644]   # 0x150
+      - [0x21F94, data, data_80041794]   # 0x8
+      - [0x21F9C, asm, func_8004179C]   # 0x794
+      - [0x22730, data, data_80041F30]   # 0x2a4
+      - [0x229D4, asm, func_800421D4]   # 0x3f0
+      - [0x22DC4, data, data_800425C4]   # 0x4
+      - [0x22DC8, asm, func_800425C8]   # 0x250
+      - [0x23018, data, data_80042818]   # 0xcc
+      - [0x230E4, asm, func_800428E4]   # 0x83c
       - [0x23920, data, data_80043120]   # 0xd8
-      - [0x239F8, asm, func_800431F8]   # 0xb4
-      - [0x23AAC, data, data_800432AC]   # 0x14
-      - [0x23AC0, asm, func_800432C0]   # 0x198
-      - [0x23C58, data, data_80043458]   # 0x574
+      - [0x239F8, asm, func_800431F8]   # 0x7d0
+      - [0x241C8, data, data_800439C8]   # 0x4
       - [0x241CC, asm, func_800439CC]   # 0x4c
       - [0x24218, data, data_80043A18]   # 0x14
-      - [0x2422C, asm, func_80043A2C]   # 0xd8
-      - [0x24304, data, data_80043B04]   # 0x14c
-      - [0x24450, asm, func_80043C50]   # 0x4c
-      - [0x2449C, data, data_80043C9C]   # 0x34
-      - [0x244D0, asm, func_80043CD0]   # 0xf8
-      - [0x245C8, data, data_80043DC8]   # 0xb8
-      - [0x24680, asm, func_80043E80]   # 0xc0
-      - [0x24740, data, data_80043F40]   # 0x1b4
-      - [0x248F4, asm, func_800440F4]   # 0x43c
-      - [0x24D30, data, data_80044530]   # 0x58
-      - [0x24D88, asm, func_80044588]   # 0x48
-      - [0x24DD0, data, data_800445D0]   # 0x40
-      - [0x24E10, asm, func_80044610]   # 0xcc
-      - [0x24EDC, data, data_800446DC]   # 0x38
-      - [0x24F14, asm, func_80044714]   # 0x64
-      - [0x24F78, data, data_80044778]   # 0x58
-      - [0x24FD0, asm, func_800447D0]   # 0xb8
-      - [0x25088, data, data_80044888]   # 0xcc
-      - [0x25154, asm, func_80044954]   # 0x20
-      - [0x25174, data, data_80044974]   # 0x40
-      - [0x251B4, asm, func_800449B4]   # 0x68
-      - [0x2521C, data, data_80044A1C]   # 0x2c
-      - [0x25248, asm, func_80044A48]   # 0x174
-      - [0x253BC, data, data_80044BBC]   # 0x80
-      - [0x2543C, asm, func_80044C3C]   # 0x64
+      - [0x2422C, asm, func_80043A2C]   # 0x1274
       - [0x254A0, data, data_80044CA0]   # 0xc
       - [0x254AC, asm, func_80044CAC]   # 0x10
       - [0x254BC, data, data_80044CBC]   # 0x2c
       - [0x254E8, asm, func_80044CE8]   # 0x14
-      - [0x254FC, data, data_80044CFC]   # 0x114
-      - [0x25610, asm, func_80044E10]   # 0x64
-      - [0x25674, data, data_80044E74]   # 0x190
-      - [0x25804, asm, func_80045004]   # 0xc4
-      - [0x258C8, data, data_800450C8]   # 0x174
-      - [0x25A3C, asm, func_8004523C]   # 0x274
-      - [0x25CB0, data, data_800454B0]   # 0x98
-      - [0x25D48, asm, func_80045548]   # 0x108
-      - [0x25E50, data, data_80045650]   # 0x40
-      - [0x25E90, asm, func_80045690]   # 0x1e8
-      - [0x26078, data, data_80045878]   # 0xc8
-      - [0x26140, asm, func_80045940]   # 0xc0
-      - [0x26200, data, data_80045A00]   # 0x4
-      - [0x26204, asm, func_80045A04]   # 0x120
-      - [0x26324, data, data_80045B24]   # 0x10
-      - [0x26334, asm, func_80045B34]   # 0x8
-      - [0x2633C, data, data_80045B3C]   # 0x68
-      - [0x263A4, asm, func_80045BA4]   # 0x128
-      - [0x264CC, data, data_80045CCC]   # 0xf0
-      - [0x265BC, asm, func_80045DBC]   # 0x30
-      - [0x265EC, data, data_80045DEC]   # 0xc
-      - [0x265F8, asm, func_80045DF8]   # 0x1d0
-      - [0x267C8, data, data_80045FC8]   # 0x44
-      - [0x2680C, asm, func_8004600C]   # 0xb4
-      - [0x268C0, data, data_800460C0]   # 0x274
-      - [0x26B34, asm, func_80046334]   # 0x24
-      - [0x26B58, data, data_80046358]   # 0xa4
-      - [0x26BFC, asm, func_800463FC]   # 0x23c
-      - [0x26E38, data, data_80046638]   # 0xcc
-      - [0x26F04, asm, func_80046704]   # 0x28
-      - [0x26F2C, data, data_8004672C]   # 0x10c
-      - [0x27038, asm, func_80046838]   # 0x20
+      - [0x254FC, data, data_80044CFC]   # 0x38
+      - [0x25534, asm, func_80044D34]   # 0x1974
+      - [0x26EA8, data, data_800466A8]   # 0xc
+      - [0x26EB4, asm, func_800466B4]   # 0xf4
+      - [0x26FA8, data, data_800467A8]   # 0x60
+      - [0x27008, asm, func_80046808]   # 0x50
       - [0x27058, data, data_80046858]   # 0xe0
-      - [0x27138, asm, func_80046938]   # 0xd4
-      - [0x2720C, data, data_80046A0C]   # 0x118
-      - [0x27324, asm, func_80046B24]   # 0x8c
-      - [0x273B0, data, data_80046BB0]   # 0xa0
-      - [0x27450, asm, func_80046C50]   # 0x588
-      - [0x279D8, data, data_800471D8]   # 0xe4
-      - [0x27ABC, asm, func_800472BC]   # 0x118
-      - [0x27BD4, data, data_800473D4]   # 0x8
-      - [0x27BDC, asm, func_800473DC]   # 0x164
-      - [0x27D40, data, data_80047540]   # 0x18
-      - [0x27D58, asm, func_80047558]   # 0x3c
-      - [0x27D94, data, data_80047594]   # 0x138
-      - [0x27ECC, asm, func_800476CC]   # 0xec
-      - [0x27FB8, data, data_800477B8]   # 0x78
-      - [0x28030, asm, func_80047830]   # 0xdc
-      - [0x2810C, data, data_8004790C]   # 0xa8
-      - [0x281B4, asm, func_800479B4]   # 0x74
+      - [0x27138, asm, func_80046938]   # 0x8a0
+      - [0x279D8, data, data_800471D8]   # 0xd4
+      - [0x27AAC, asm, func_800472AC]   # 0x77c
       - [0x28228, data, data_80047A28]   # 0xc0
       - [0x282E8, asm, func_80047AE8]   # 0x20
       - [0x28308, data, data_80047B08]   # 0x108
-      - [0x28410, asm, func_80047C10]   # 0x8
-      - [0x28418, data, data_80047C18]   # 0xf8
-      - [0x28510, asm, func_80047D10]   # 0x1c
-      - [0x2852C, data, data_80047D2C]   # 0x158
-      - [0x28684, asm, func_80047E84]   # 0x224
-      - [0x288A8, data, data_800480A8]   # 0x2e4
-      - [0x28B8C, asm, func_8004838C]   # 0x138
-      - [0x28CC4, data, data_800484C4]   # 0x34
-      - [0x28CF8, asm, func_800484F8]   # 0x20
-      - [0x28D18, data, data_80048518]   # 0x104
-      - [0x28E1C, asm, func_8004861C]   # 0x2c
-      - [0x28E48, data, data_80048648]   # 0x13c
-      - [0x28F84, asm, func_80048784]   # 0x8
-      - [0x28F8C, data, data_8004878C]   # 0x58
-      - [0x28FE4, asm, func_800487E4]   # 0x1c
-      - [0x29000, data, data_80048800]   # 0xcc
-      - [0x290CC, asm, func_800488CC]   # 0x80
-      - [0x2914C, data, data_8004894C]   # 0x24
-      - [0x29170, asm, func_80048970]   # 0x3a0
-      - [0x29510, data, data_80048D10]   # 0x84
-      - [0x29594, asm, func_80048D94]   # 0x178
-      - [0x2970C, data, data_80048F0C]   # 0xd4
-      - [0x297E0, asm, func_80048FE0]   # 0xc
-      - [0x297EC, data, data_80048FEC]   # 0x298
-      - [0x29A84, asm, func_80049284]   # 0xc0
-      - [0x29B44, data, data_80049344]   # 0x24
-      - [0x29B68, asm, func_80049368]   # 0x98
-      - [0x29C00, data, data_80049400]   # 0x40
-      - [0x29C40, asm, func_80049440]   # 0xf8
-      - [0x29D38, data, data_80049538]   # 0x38
-      - [0x29D70, asm, func_80049570]   # 0x234
-      - [0x29FA4, data, data_800497A4]   # 0x84
-      - [0x2A028, asm, func_80049828]   # 0x60
-      - [0x2A088, data, data_80049888]   # 0x1c
-      - [0x2A0A4, asm, func_800498A4]   # 0x134
-      - [0x2A1D8, data, data_800499D8]   # 0x110
-      - [0x2A2E8, asm, func_80049AE8]   # 0x150
-      - [0x2A438, data, data_80049C38]   # 0x74
-      - [0x2A4AC, asm, func_80049CAC]   # 0x14
-      - [0x2A4C0, data, data_80049CC0]   # 0x14
-      - [0x2A4D4, asm, func_80049CD4]   # 0xf0
-      - [0x2A5C4, data, data_80049DC4]   # 0x140
-      - [0x2A704, asm, func_80049F04]   # 0x50
-      - [0x2A754, data, data_80049F54]   # 0x68
-      - [0x2A7BC, asm, func_80049FBC]   # 0xd4
-      - [0x2A890, data, data_8004A090]   # 0x39c
-      - [0x2AC2C, asm, func_8004A42C]   # 0x60
-      - [0x2AC8C, data, data_8004A48C]   # 0x38
-      - [0x2ACC4, asm, func_8004A4C4]   # 0x12c
-      - [0x2ADF0, data, data_8004A5F0]   # 0x108
-      - [0x2AEF8, asm, func_8004A6F8]   # 0xec
-      - [0x2AFE4, data, data_8004A7E4]   # 0x308
-      - [0x2B2EC, asm, func_8004AAEC]   # 0x60
-      - [0x2B34C, data, data_8004AB4C]   # 0x2c
-      - [0x2B378, asm, func_8004AB78]   # 0x88
-      - [0x2B400, data, data_8004AC00]   # 0x90
-      - [0x2B490, asm, func_8004AC90]   # 0xf0
-      - [0x2B580, data, data_8004AD80]   # 0x2e8
-      - [0x2B868, asm, func_8004B068]   # 0xf0
-      - [0x2B958, data, data_8004B158]   # 0x1dc
-      - [0x2BB34, asm, func_8004B334]   # 0x4c
-      - [0x2BB80, data, data_8004B380]   # 0x4
-      - [0x2BB84, asm, func_8004B384]   # 0xc
-      - [0x2BB90, data, data_8004B390]   # 0x94
-      - [0x2BC24, asm, func_8004B424]   # 0x20
-      - [0x2BC44, data, data_8004B444]   # 0x12c
-      - [0x2BD70, asm, func_8004B570]   # 0x74
-      - [0x2BDE4, data, data_8004B5E4]   # 0x50
-      - [0x2BE34, asm, func_8004B634]   # 0x1c8
-      - [0x2BFFC, data, data_8004B7FC]   # 0xb8
-      - [0x2C0B4, asm, func_8004B8B4]   # 0x88
-      - [0x2C13C, data, data_8004B93C]   # 0xe0
-      - [0x2C21C, asm, func_8004BA1C]   # 0x6c
-      - [0x2C288, data, data_8004BA88]   # 0x770
-      - [0x2C9F8, asm, func_8004C1F8]   # 0x7c
-      - [0x2CA74, data, data_8004C274]   # 0xc0
-      - [0x2CB34, asm, func_8004C334]   # 0x134
-      - [0x2CC68, data, data_8004C468]   # 0x260
-      - [0x2CEC8, asm, func_8004C6C8]   # 0xfc
-      - [0x2CFC4, data, data_8004C7C4]   # 0x14
-      - [0x2CFD8, asm, func_8004C7D8]   # 0x64
-      - [0x2D03C, data, data_8004C83C]   # 0x4c
-      - [0x2D088, asm, func_8004C888]   # 0x68
-      - [0x2D0F0, data, data_8004C8F0]   # 0x9c
-      - [0x2D18C, asm, func_8004C98C]   # 0x10c
-      - [0x2D298, data, data_8004CA98]   # 0x190
-      - [0x2D428, asm, func_8004CC28]   # 0xa8
+      - [0x28410, asm, func_80047C10]   # 0x2344
+      - [0x2A754, data, data_80049F54]   # 0x48
+      - [0x2A79C, asm, func_80049F9C]   # 0x480
+      - [0x2AC1C, data, data_8004A41C]   # 0x10
+      - [0x2AC2C, asm, func_8004A42C]   # 0x3f4
+      - [0x2B020, data, data_8004A820]   # 0x144
+      - [0x2B164, asm, func_8004A964]   # 0x7f4
+      - [0x2B958, data, data_8004B158]   # 0x100
+      - [0x2BA58, asm, func_8004B258]   # 0x1bc
+      - [0x2BC14, data, data_8004B414]   # 0x10
+      - [0x2BC24, asm, func_8004B424]   # 0x594
+      - [0x2C1B8, data, data_8004B9B8]   # 0x8
+      - [0x2C1C0, asm, func_8004B9C0]   # 0xc8
+      - [0x2C288, data, data_8004BA88]   # 0xf4
+      - [0x2C37C, asm, func_8004BB7C]   # 0x8ec
+      - [0x2CC68, data, data_8004C468]   # 0x70
+      - [0x2CCD8, asm, func_8004C4D8]   # 0x7f8
       - [0x2D4D0, data, data_8004CCD0]   # 0x48
-      - [0x2D518, asm, func_8004CD18]   # 0xe8
-      - [0x2D600, data, data_8004CE00]   # 0x1e4
-      - [0x2D7E4, asm, func_8004CFE4]   # 0x144
-      - [0x2D928, data, data_8004D128]   # 0x3c
-      - [0x2D964, asm, func_8004D164]   # 0x48
-      - [0x2D9AC, data, data_8004D1AC]   # 0x28
-      - [0x2D9D4, asm, func_8004D1D4]   # 0x14
-      - [0x2D9E8, data, data_8004D1E8]   # 0x28
-      - [0x2DA10, asm, func_8004D210]   # 0x118
-      - [0x2DB28, data, data_8004D328]   # 0xa4
-      - [0x2DBCC, asm, func_8004D3CC]   # 0xd0
-      - [0x2DC9C, data, data_8004D49C]   # 0xdc
-      - [0x2DD78, asm, func_8004D578]   # 0xb0
+      - [0x2D518, asm, func_8004CD18]   # 0x910
       - [0x2DE28, data, data_8004D628]   # 0x38
-      - [0x2DE60, asm, func_8004D660]   # 0xd0
-      - [0x2DF30, data, data_8004D730]   # 0x4a4
-      - [0x2E3D4, asm, func_8004DBD4]   # 0x3c
-      - [0x2E410, data, data_8004DC10]   # 0x6c
-      - [0x2E47C, asm, func_8004DC7C]   # 0x108
+      - [0x2DE60, asm, func_8004D660]   # 0x5b0
+      - [0x2E410, data, data_8004DC10]   # 0x10
+      - [0x2E420, asm, func_8004DC20]   # 0x164
       - [0x2E584, data, data_8004DD84]   # 0x4
-      - [0x2E588, asm, func_8004DD88]   # 0x118
-      - [0x2E6A0, data, data_8004DEA0]   # 0x14
-      - [0x2E6B4, asm, func_8004DEB4]   # 0xbc
+      - [0x2E588, asm, func_8004DD88]   # 0x1e8
       - [0x2E770, data, data_8004DF70]   # 0x68
       - [0x2E7D8, asm, func_8004DFD8]   # 0x44
       - [0x2E81C, data, data_8004E01C]   # 0x70
-      - [0x2E88C, asm, func_8004E08C]   # 0x330
-      - [0x2EBBC, data, data_8004E3BC]   # 0x100
-      - [0x2ECBC, asm, func_8004E4BC]   # 0x8
-      - [0x2ECC4, data, data_8004E4C4]   # 0x7c
-      - [0x2ED40, asm, func_8004E540]   # 0x90
-      - [0x2EDD0, data, data_8004E5D0]   # 0x28
-      - [0x2EDF8, asm, func_8004E5F8]   # 0x54
-      - [0x2EE4C, data, data_8004E64C]   # 0x48
-      - [0x2EE94, asm, func_8004E694]   # 0x120
-      - [0x2EFB4, data, data_8004E7B4]   # 0x30
-      - [0x2EFE4, asm, func_8004E7E4]   # 0x30
-      - [0x2F014, data, data_8004E814]   # 0x58
-      - [0x2F06C, asm, func_8004E86C]   # 0xe0
+      - [0x2E88C, asm, func_8004E08C]   # 0x8c0
       - [0x2F14C, data, data_8004E94C]   # 0x9c
       - [0x2F1E8, asm, func_8004E9E8]   # 0x44
       - [0x2F22C, data, data_8004EA2C]   # 0x8
       - [0x2F234, asm, func_8004EA34]   # 0x9c
       - [0x2F2D0, data, data_8004EAD0]   # 0x4
-      - [0x2F2D4, asm, func_8004EAD4]   # 0x58
-      - [0x2F32C, data, data_8004EB2C]   # 0xbc
-      - [0x2F3E8, asm, func_8004EBE8]   # 0x34
-      - [0x2F41C, data, data_8004EC1C]   # 0x35c
-      - [0x2F778, asm, func_8004EF78]   # 0xc
-      - [0x2F784, data, data_8004EF84]   # 0x12c
-      - [0x2F8B0, asm, func_8004F0B0]   # 0x90
-      - [0x2F940, data, data_8004F140]   # 0x30
-      - [0x2F970, asm, func_8004F170]   # 0x5c
+      - [0x2F2D4, asm, func_8004EAD4]   # 0x6f8
       - [0x2F9CC, data, data_8004F1CC]   # 0x9c
       - [0x2FA68, asm, func_8004F268]   # 0x14
-      - [0x2FA7C, data, data_8004F27C]   # 0x128
-      - [0x2FBA4, asm, func_8004F3A4]   # 0xf8
-      - [0x2FC9C, data, data_8004F49C]   # 0x170
-      - [0x2FE0C, asm, func_8004F60C]   # 0x18
-      - [0x2FE24, data, data_8004F624]   # 0x168
-      - [0x2FF8C, asm, func_8004F78C]   # 0x74
-      - [0x30000, data, data_8004F800]   # 0x9c
-      - [0x3009C, asm, func_8004F89C]   # 0x2a8
-      - [0x30344, data, data_8004FB44]   # 0x230
-      - [0x30574, asm, func_8004FD74]   # 0xe8
-      - [0x3065C, data, data_8004FE5C]   # 0x160
-      - [0x307BC, asm, func_8004FFBC]   # 0x34
+      - [0x2FA7C, data, data_8004F27C]   # 0x24
+      - [0x2FAA0, asm, func_8004F2A0]   # 0x4dc
+      - [0x2FF7C, data, data_8004F77C]   # 0x10
+      - [0x2FF8C, asm, func_8004F78C]   # 0x3b8
+      - [0x30344, data, data_8004FB44]   # 0xa4
+      - [0x303E8, asm, func_8004FBE8]   # 0x408
       - [0x307F0, data, data_8004FFF0]   # 0x8
-      - [0x307F8, asm, func_8004FFF8]   # 0x74
-      - [0x3086C, data, data_8005006C]   # 0x178
-      - [0x309E4, asm, func_800501E4]   # 0xe0
-      - [0x30AC4, data, data_800502C4]   # 0x114
-      - [0x30BD8, asm, func_800503D8]   # 0x2dc
-      - [0x30EB4, data, data_800506B4]   # 0x190
-      - [0x31044, asm, func_80050844]   # 0x30
-      - [0x31074, data, data_80050874]   # 0x1cc
-      - [0x31240, asm, func_80050A40]   # 0x1a8
-      - [0x313E8, data, data_80050BE8]   # 0x48
-      - [0x31430, asm, func_80050C30]   # 0x3c
-      - [0x3146C, data, data_80050C6C]   # 0x48
-      - [0x314B4, asm, func_80050CB4]   # 0x9c
+      - [0x307F8, asm, func_8004FFF8]   # 0xa44
+      - [0x3123C, data, data_80050A3C]   # 0x4
+      - [0x31240, asm, func_80050A40]   # 0x1e0
+      - [0x31420, data, data_80050C20]   # 0x10
+      - [0x31430, asm, func_80050C30]   # 0x120
       - [0x31550, data, data_80050D50]   # 0x3c
       - [0x3158C, asm, func_80050D8C]   # 0x44
       - [0x315D0, data, data_80050DD0]   # 0x28
       - [0x315F8, asm, func_80050DF8]   # 0x10
-      - [0x31608, data, data_80050E08]   # 0x120
-      - [0x31728, asm, func_80050F28]   # 0x1e4
-      - [0x3190C, data, data_8005110C]   # 0x364
-      - [0x31C70, asm, func_80051470]   # 0x44
-      - [0x31CB4, data, data_800514B4]   # 0x50
-      - [0x31D04, asm, func_80051504]   # 0x15c
-      - [0x31E60, data, data_80051660]   # 0x24
-      - [0x31E84, asm, func_80051684]   # 0x7c
-      - [0x31F00, data, data_80051700]   # 0xa0
-      - [0x31FA0, asm, func_800517A0]   # 0x18
-      - [0x31FB8, data, data_800517B8]   # 0x80
-      - [0x32038, asm, func_80051838]   # 0x24c
-      - [0x32284, data, data_80051A84]   # 0x364
-      - [0x325E8, asm, func_80051DE8]   # 0x28
-      - [0x32610, data, data_80051E10]   # 0x74
-      - [0x32684, asm, func_80051E84]   # 0x18
-      - [0x3269C, data, data_80051E9C]   # 0x168
+      - [0x31608, data, data_80050E08]   # 0x44
+      - [0x3164C, asm, func_80050E4C]   # 0x8b4
+      - [0x31F00, data, data_80051700]   # 0x98
+      - [0x31F98, asm, func_80051798]   # 0x7e4
+      - [0x3277C, data, data_80051F7C]   # 0x88
       - [0x32804, asm, func_80052004]   # 0x68
-      - [0x3286C, data, data_8005206C]   # 0x120
-      - [0x3298C, asm, func_8005218C]   # 0x110
-      - [0x32A9C, data, data_8005229C]   # 0x18
-      - [0x32AB4, asm, func_800522B4]   # 0x20
-      - [0x32AD4, data, data_800522D4]   # 0xac
-      - [0x32B80, asm, func_80052380]   # 0x530
+      - [0x3286C, data, data_8005206C]   # 0xc8
+      - [0x32934, asm, func_80052134]   # 0x77c
       - [0x330B0, data, data_800528B0]   # 0x44
       - [0x330F4, asm, func_800528F4]   # 0x48
-      - [0x3313C, data, data_8005293C]   # 0xe4
-      - [0x33220, asm, func_80052A20]   # 0x188
-      - [0x333A8, data, data_80052BA8]   # 0x9c
-      - [0x33444, asm, func_80052C44]   # 0xa0
-      - [0x334E4, data, data_80052CE4]   # 0x2c
-      - [0x33510, asm, func_80052D10]   # 0x64
-      - [0x33574, data, data_80052D74]   # 0xcc
-      - [0x33640, asm, func_80052E40]   # 0x238
-      - [0x33878, data, data_80053078]   # 0xbc
-      - [0x33934, asm, func_80053134]   # 0x54
-      - [0x33988, data, data_80053188]   # 0x4c
-      - [0x339D4, asm, func_800531D4]   # 0x5c
-      - [0x33A30, data, data_80053230]   # 0xdc
-      - [0x33B0C, asm, func_8005330C]   # 0x5c
-      - [0x33B68, data, data_80053368]   # 0x84
-      - [0x33BEC, asm, func_800533EC]   # 0x80
-      - [0x33C6C, data, data_8005346C]   # 0xd4
-      - [0x33D40, asm, func_80053540]   # 0xe8
-      - [0x33E28, data, data_80053628]   # 0x6c
-      - [0x33E94, asm, func_80053694]   # 0x74
-      - [0x33F08, data, data_80053708]   # 0xd8
-      - [0x33FE0, asm, func_800537E0]   # 0x18
-      - [0x33FF8, data, data_800537F8]   # 0x48
-      - [0x34040, asm, func_80053840]   # 0x18
-      - [0x34058, data, data_80053858]   # 0xd0
-      - [0x34128, asm, func_80053928]   # 0x19c
-      - [0x342C4, data, data_80053AC4]   # 0x554
-      - [0x34818, asm, func_80054018]   # 0x3c
-      - [0x34854, data, data_80054054]   # 0x98
-      - [0x348EC, asm, func_800540EC]   # 0x9c
-      - [0x34988, data, data_80054188]   # 0x1c
-      - [0x349A4, asm, func_800541A4]   # 0x64
-      - [0x34A08, data, data_80054208]   # 0x74
-      - [0x34A7C, asm, func_8005427C]   # 0x18
-      - [0x34A94, data, data_80054294]   # 0x30
-      - [0x34AC4, asm, func_800542C4]   # 0x170
-      - [0x34C34, data, data_80054434]   # 0x20
-      - [0x34C54, asm, func_80054454]   # 0x4c0
-      - [0x35114, data, data_80054914]   # 0x3c
-      - [0x35150, asm, func_80054950]   # 0x6c
-      - [0x351BC, data, data_800549BC]   # 0x30
-      - [0x351EC, asm, func_800549EC]   # 0x60
-      - [0x3524C, data, data_80054A4C]   # 0x34
-      - [0x35280, asm, func_80054A80]   # 0x48
-      - [0x352C8, data, data_80054AC8]   # 0x154
-      - [0x3541C, asm, func_80054C1C]   # 0x24
-      - [0x35440, data, data_80054C40]   # 0x130
-      - [0x35570, asm, func_80054D70]   # 0xc
+      - [0x3313C, data, data_8005293C]   # 0xd4
+      - [0x33210, asm, func_80052A10]   # 0x820
+      - [0x33A30, data, data_80053230]   # 0x60
+      - [0x33A90, asm, func_80053290]   # 0x914
+      - [0x343A4, data, data_80053BA4]   # 0xf8
+      - [0x3449C, asm, func_80053C9C]   # 0x10e0
       - [0x3557C, data, data_80054D7C]   # 0xd0
-      - [0x3564C, asm, func_80054E4C]   # 0xb0
-      - [0x356FC, data, data_80054EFC]   # 0x7c
-      - [0x35778, asm, func_80054F78]   # 0x9c
-      - [0x35814, data, data_80055014]   # 0x34
-      - [0x35848, asm, func_80055048]   # 0x14
-      - [0x3585C, data, data_8005505C]   # 0x140
-      - [0x3599C, asm, func_8005519C]   # 0x190
-      - [0x35B2C, data, data_8005532C]   # 0x6c
-      - [0x35B98, asm, func_80055398]   # 0x18
-      - [0x35BB0, data, data_800553B0]   # 0xbc
-      - [0x35C6C, asm, func_8005546C]   # 0x1c
-      - [0x35C88, data, data_80055488]   # 0x50
-      - [0x35CD8, asm, func_800554D8]   # 0x2c
-      - [0x35D04, data, data_80055504]   # 0xf4
-      - [0x35DF8, asm, func_800555F8]   # 0x14
-      - [0x35E0C, data, data_8005560C]   # 0x84
-      - [0x35E90, asm, func_80055690]   # 0x58
+      - [0x3564C, asm, func_80054E4C]   # 0x61c
+      - [0x35C68, data, data_80055468]   # 0x4
+      - [0x35C6C, asm, func_8005546C]   # 0x27c
       - [0x35EE8, data, data_800556E8]   # 0x14
-      - [0x35EFC, asm, func_800556FC]   # 0x110
-      - [0x3600C, data, data_8005580C]   # 0x28
-      - [0x36034, asm, func_80055834]   # 0x98
-      - [0x360CC, data, data_800558CC]   # 0x48
-      - [0x36114, asm, func_80055914]   # 0x74
-      - [0x36188, data, data_80055988]   # 0xe0
-      - [0x36268, asm, func_80055A68]   # 0xc
-      - [0x36274, data, data_80055A74]   # 0x148
-      - [0x363BC, asm, func_80055BBC]   # 0x68
-      - [0x36424, data, data_80055C24]   # 0xe4
-      - [0x36508, asm, func_80055D08]   # 0x210
-      - [0x36718, data, data_80055F18]   # 0x658
-      - [0x36D70, asm, func_80056570]   # 0x16c
-      - [0x36EDC, data, data_800566DC]   # 0xb0
-      - [0x36F8C, asm, func_8005678C]   # 0xd0
-      - [0x3705C, data, data_8005685C]   # 0x54
-      - [0x370B0, asm, func_800568B0]   # 0x34
-      - [0x370E4, data, data_800568E4]   # 0x80
-      - [0x37164, asm, func_80056964]   # 0x138
-      - [0x3729C, data, data_80056A9C]   # 0x74
-      - [0x37310, asm, func_80056B10]   # 0xdc
-      - [0x373EC, data, data_80056BEC]   # 0x2f0
-      - [0x376DC, asm, func_80056EDC]   # 0x98
-      - [0x37774, data, data_80056F74]   # 0x48
-      - [0x377BC, asm, func_80056FBC]   # 0x34
-      - [0x377F0, data, data_80056FF0]   # 0x198
-      - [0x37988, asm, func_80057188]   # 0x34
-      - [0x379BC, data, data_800571BC]   # 0xf4
-      - [0x37AB0, asm, func_800572B0]   # 0x264
-      - [0x37D14, data, data_80057514]   # 0xb0
-      - [0x37DC4, asm, func_800575C4]   # 0x144
-      - [0x37F08, data, data_80057708]   # 0xb4
-      - [0x37FBC, asm, func_800577BC]   # 0x38
-      - [0x37FF4, data, data_800577F4]   # 0x80
-      - [0x38074, asm, func_80057874]   # 0x60
-      - [0x380D4, data, data_800578D4]   # 0x90
-      - [0x38164, asm, func_80057964]   # 0x1d8
+      - [0x35EFC, asm, func_800556FC]   # 0x338
+      - [0x36234, data, data_80055A34]   # 0x4
+      - [0x36238, asm, func_80055A38]   # 0x630
+      - [0x36868, data, data_80056068]   # 0x118
+      - [0x36980, asm, func_80056180]   # 0x764
+      - [0x370E4, data, data_800568E4]   # 0x34
+      - [0x37118, asm, func_80056918]   # 0x920
+      - [0x37A38, data, data_80057238]   # 0x78
+      - [0x37AB0, asm, func_800572B0]   # 0x88c
       - [0x3833C, data, data_80057B3C]   # 0x64
       - [0x383A0, asm, func_80057BA0]   # 0xb0
-      - [0x38450, data, data_80057C50]   # 0x17c
-      - [0x385CC, asm, func_80057DCC]   # 0xd4
-      - [0x386A0, data, data_80057EA0]   # 0x38
-      - [0x386D8, asm, func_80057ED8]   # 0x124
-      - [0x387FC, data, data_80057FFC]   # 0x4
-      - [0x38800, asm, func_80058000]   # 0x90
+      - [0x38450, data, data_80057C50]   # 0x5c
+      - [0x384AC, asm, func_80057CAC]   # 0x3e4
       - [0x38890, data, data_80058090]   # 0xc
-      - [0x3889C, asm, func_8005809C]   # 0x78
-      - [0x38914, data, data_80058114]   # 0x48
-      - [0x3895C, asm, func_8005815C]   # 0x24
-      - [0x38980, data, data_80058180]   # 0x11c
-      - [0x38A9C, asm, func_8005829C]   # 0xec
-      - [0x38B88, data, data_80058388]   # 0xac
-      - [0x38C34, asm, func_80058434]   # 0x7c
+      - [0x3889C, asm, func_8005809C]   # 0x414
       - [0x38CB0, data, data_800584B0]   # 0x54
       - [0x38D04, asm, func_80058504]   # 0x34
       - [0x38D38, data, data_80058538]   # 0x1e0
-      - [0x38F18, asm, func_80058718]   # 0x2e8
-      - [0x39200, data, data_80058A00]   # 0x150
-      - [0x39350, asm, func_80058B50]   # 0x24
-      - [0x39374, data, data_80058B74]   # 0x168
-      - [0x394DC, asm, func_80058CDC]   # 0x118
-      - [0x395F4, data, data_80058DF4]   # 0x1a8
-      - [0x3979C, asm, func_80058F9C]   # 0x68
-      - [0x39804, data, data_80059004]   # 0x3c
-      - [0x39840, asm, func_80059040]   # 0x58
-      - [0x39898, data, data_80059098]   # 0xbc
-      - [0x39954, asm, func_80059154]   # 0x1c8
-      - [0x39B1C, data, data_8005931C]   # 0x18
-      - [0x39B34, asm, func_80059334]   # 0x18
-      - [0x39B4C, data, data_8005934C]   # 0x10
-      - [0x39B5C, asm, func_8005935C]   # 0x14
-      - [0x39B70, data, data_80059370]   # 0x28
-      - [0x39B98, asm, func_80059398]   # 0x10
-      - [0x39BA8, data, data_800593A8]   # 0x24
-      - [0x39BCC, asm, func_800593CC]   # 0x34
-      - [0x39C00, data, data_80059400]   # 0x24
-      - [0x39C24, asm, func_80059424]   # 0xc
-      - [0x39C30, data, data_80059430]   # 0x9c
-      - [0x39CCC, asm, func_800594CC]   # 0xc
-      - [0x39CD8, data, data_800594D8]   # 0x24
-      - [0x39CFC, asm, func_800594FC]   # 0x48
-      - [0x39D44, data, data_80059544]   # 0x74
-      - [0x39DB8, asm, func_800595B8]   # 0x10c
-      - [0x39EC4, data, data_800596C4]   # 0x18
-      - [0x39EDC, asm, func_800596DC]   # 0x7c
+      - [0x38F18, asm, func_80058718]   # 0x6dc
+      - [0x395F4, data, data_80058DF4]   # 0x104
+      - [0x396F8, asm, func_80058EF8]   # 0x860
       - [0x39F58, data, data_80059758]   # 0xc
       - [0x39F64, asm, func_80059764]   # 0x7c
-      - [0x39FE0, data, data_800597E0]   # 0x54
-      - [0x3A034, asm, func_80059834]   # 0x148
-      - [0x3A17C, data, data_8005997C]   # 0x54
-      - [0x3A1D0, asm, func_800599D0]   # 0x10
+      - [0x39FE0, data, data_800597E0]   # 0x14
+      - [0x39FF4, asm, func_800597F4]   # 0x1ec
       - [0x3A1E0, data, data_800599E0]   # 0x10
-      - [0x3A1F0, asm, func_800599F0]   # 0xb4
-      - [0x3A2A4, data, data_80059AA4]   # 0x58
-      - [0x3A2FC, asm, func_80059AFC]   # 0x74
-      - [0x3A370, data, data_80059B70]   # 0x28
-      - [0x3A398, asm, func_80059B98]   # 0x50
-      - [0x3A3E8, data, data_80059BE8]   # 0x5c
-      - [0x3A444, asm, func_80059C44]   # 0x40
-      - [0x3A484, data, data_80059C84]   # 0x188
-      - [0x3A60C, asm, func_80059E0C]   # 0x1c
+      - [0x3A1F0, asm, func_800599F0]   # 0x438
       - [0x3A628, data, data_80059E28]   # 0x4
-      - [0x3A62C, asm, func_80059E2C]   # 0x88
-      - [0x3A6B4, data, data_80059EB4]   # 0xb4
-      - [0x3A768, asm, func_80059F68]   # 0x14
-      - [0x3A77C, data, data_80059F7C]   # 0x1c8
-      - [0x3A944, asm, func_8005A144]   # 0xd0
-      - [0x3AA14, data, data_8005A214]   # 0x7c
-      - [0x3AA90, asm, func_8005A290]   # 0x24
+      - [0x3A62C, asm, func_80059E2C]   # 0x488
       - [0x3AAB4, data, data_8005A2B4]   # 0xc
       - [0x3AAC0, asm, func_8005A2C0]   # 0x80
       - [0x3AB40, data, data_8005A340]   # 0x4
-      - [0x3AB44, asm, func_8005A344]   # 0x54
-      - [0x3AB98, data, data_8005A398]   # 0x80
-      - [0x3AC18, asm, func_8005A418]   # 0x64
-      - [0x3AC7C, data, data_8005A47C]   # 0x14
-      - [0x3AC90, asm, func_8005A490]   # 0x48
-      - [0x3ACD8, data, data_8005A4D8]   # 0x9c
-      - [0x3AD74, asm, func_8005A574]   # 0xbc
-      - [0x3AE30, data, data_8005A630]   # 0x64
-      - [0x3AE94, asm, func_8005A694]   # 0x40
+      - [0x3AB44, asm, func_8005A344]   # 0xcc
+      - [0x3AC10, data, data_8005A410]   # 0x8
+      - [0x3AC18, asm, func_8005A418]   # 0x14c
+      - [0x3AD64, data, data_8005A564]   # 0x10
+      - [0x3AD74, asm, func_8005A574]   # 0x160
       - [0x3AED4, data, data_8005A6D4]   # 0x8
-      - [0x3AEDC, asm, func_8005A6DC]   # 0x84
-      - [0x3AF60, data, data_8005A760]   # 0x180
-      - [0x3B0E0, asm, func_8005A8E0]   # 0x1c
-      - [0x3B0FC, data, data_8005A8FC]   # 0x8c
-      - [0x3B188, asm, func_8005A988]   # 0x130
-      - [0x3B2B8, data, data_8005AAB8]   # 0x10c
-      - [0x3B3C4, asm, func_8005ABC4]   # 0x60
-      - [0x3B424, data, data_8005AC24]   # 0x3c
-      - [0x3B460, asm, func_8005AC60]   # 0x20
-      - [0x3B480, data, data_8005AC80]   # 0x18
-      - [0x3B498, asm, func_8005AC98]   # 0x58
+      - [0x3AEDC, asm, func_8005A6DC]   # 0x268
+      - [0x3B144, data, data_8005A944]   # 0x44
+      - [0x3B188, asm, func_8005A988]   # 0x368
       - [0x3B4F0, data, data_8005ACF0]   # 0xc
-      - [0x3B4FC, asm, func_8005ACFC]   # 0x60
-      - [0x3B55C, data, data_8005AD5C]   # 0x58
-      - [0x3B5B4, asm, func_8005ADB4]   # 0x88
-      - [0x3B63C, data, data_8005AE3C]   # 0x34
-      - [0x3B670, asm, func_8005AE70]   # 0x38
-      - [0x3B6A8, data, data_8005AEA8]   # 0x30
-      - [0x3B6D8, asm, func_8005AED8]   # 0x2c
+      - [0x3B4FC, asm, func_8005ACFC]   # 0x208
       - [0x3B704, data, data_8005AF04]   # 0xc
       - [0x3B710, asm, func_8005AF10]   # 0x80
       - [0x3B790, data, data_8005AF90]   # 0x10
-      - [0x3B7A0, asm, func_8005AFA0]   # 0x5c
-      - [0x3B7FC, data, data_8005AFFC]   # 0x60
-      - [0x3B85C, asm, func_8005B05C]   # 0x88
-      - [0x3B8E4, data, data_8005B0E4]   # 0x34
-      - [0x3B918, asm, func_8005B118]   # 0x30
-      - [0x3B948, data, data_8005B148]   # 0x18
-      - [0x3B960, asm, func_8005B160]   # 0x50
-      - [0x3B9B0, data, data_8005B1B0]   # 0x44
-      - [0x3B9F4, asm, func_8005B1F4]   # 0x3c
+      - [0x3B7A0, asm, func_8005AFA0]   # 0xb8
+      - [0x3B858, data, data_8005B058]   # 0x4
+      - [0x3B85C, asm, func_8005B05C]   # 0x1d4
       - [0x3BA30, data, data_8005B230]   # 0x10
       - [0x3BA40, asm, func_8005B240]   # 0x1c
       - [0x3BA5C, data, data_8005B25C]   # 0x4c
@@ -870,341 +348,149 @@ segments:
       - [0x3BADC, data, data_8005B2DC]   # 0x30
       - [0x3BB0C, asm, func_8005B30C]   # 0x64
       - [0x3BB70, data, data_8005B370]   # 0x2c
-      - [0x3BB9C, asm, func_8005B39C]   # 0x24
-      - [0x3BBC0, data, data_8005B3C0]   # 0x44
-      - [0x3BC04, asm, func_8005B404]   # 0xa4
-      - [0x3BCA8, data, data_8005B4A8]   # 0x58
-      - [0x3BD00, asm, func_8005B500]   # 0x18
-      - [0x3BD18, data, data_8005B518]   # 0x34
-      - [0x3BD4C, asm, func_8005B54C]   # 0x4c
-      - [0x3BD98, data, data_8005B598]   # 0x58
-      - [0x3BDF0, asm, func_8005B5F0]   # 0x2c
+      - [0x3BB9C, asm, func_8005B39C]   # 0x280
       - [0x3BE1C, data, data_8005B61C]   # 0x10
-      - [0x3BE2C, asm, func_8005B62C]   # 0x84
-      - [0x3BEB0, data, data_8005B6B0]   # 0x50
-      - [0x3BF00, asm, func_8005B700]   # 0x20
-      - [0x3BF20, data, data_8005B720]   # 0x58
-      - [0x3BF78, asm, func_8005B778]   # 0x78
-      - [0x3BFF0, data, data_8005B7F0]   # 0x30
-      - [0x3C020, asm, func_8005B820]   # 0x154
-      - [0x3C174, data, data_8005B974]   # 0x18
-      - [0x3C18C, asm, func_8005B98C]   # 0x70
-      - [0x3C1FC, data, data_8005B9FC]   # 0x1c
-      - [0x3C218, asm, func_8005BA18]   # 0x74
-      - [0x3C28C, data, data_8005BA8C]   # 0x3c
-      - [0x3C2C8, asm, func_8005BAC8]   # 0x64
-      - [0x3C32C, data, data_8005BB2C]   # 0x6c
-      - [0x3C398, asm, func_8005BB98]   # 0x10
+      - [0x3BE2C, asm, func_8005B62C]   # 0x57c
       - [0x3C3A8, data, data_8005BBA8]   # 0x94
-      - [0x3C43C, asm, func_8005BC3C]   # 0x8c
-      - [0x3C4C8, data, data_8005BCC8]   # 0x40
-      - [0x3C508, asm, func_8005BD08]   # 0x94
-      - [0x3C59C, data, data_8005BD9C]   # 0x48
-      - [0x3C5E4, asm, func_8005BDE4]   # 0x1c
+      - [0x3C43C, asm, func_8005BC3C]   # 0x1c4
       - [0x3C600, data, data_8005BE00]   # 0xc
-      - [0x3C60C, asm, func_8005BE0C]   # 0x48
-      - [0x3C654, data, data_8005BE54]   # 0xe8
-      - [0x3C73C, asm, func_8005BF3C]   # 0x38
-      - [0x3C774, data, data_8005BF74]   # 0x40
-      - [0x3C7B4, asm, func_8005BFB4]   # 0x20
-      - [0x3C7D4, data, data_8005BFD4]   # 0x3c
-      - [0x3C810, asm, func_8005C010]   # 0x40
-      - [0x3C850, data, data_8005C050]   # 0x108
-      - [0x3C958, asm, func_8005C158]   # 0x58
-      - [0x3C9B0, data, data_8005C1B0]   # 0x6c
-      - [0x3CA1C, asm, func_8005C21C]   # 0x7c
+      - [0x3C60C, asm, func_8005BE0C]   # 0x2f8
+      - [0x3C904, data, data_8005C104]   # 0x10
+      - [0x3C914, asm, func_8005C114]   # 0x184
       - [0x3CA98, data, data_8005C298]   # 0x4
-      - [0x3CA9C, asm, func_8005C29C]   # 0xe0
-      - [0x3CB7C, data, data_8005C37C]   # 0xa70
-      - [0x3D5EC, asm, func_8005CDEC]   # 0x5c
+      - [0x3CA9C, asm, func_8005C29C]   # 0xbac
       - [0x3D648, data, data_8005CE48]   # 0x34
       - [0x3D67C, asm, func_8005CE7C]   # 0x84
-      - [0x3D700, data, data_8005CF00]   # 0x15c
-      - [0x3D85C, asm, func_8005D05C]   # 0x50
-      - [0x3D8AC, data, data_8005D0AC]   # 0x150
-      - [0x3D9FC, asm, func_8005D1FC]   # 0x20
-      - [0x3DA1C, data, data_8005D21C]   # 0x2e0
-      - [0x3DCFC, asm, func_8005D4FC]   # 0xc
-      - [0x3DD08, data, data_8005D508]   # 0x3dc
-      - [0x3E0E4, asm, func_8005D8E4]   # 0x70
-      - [0x3E154, data, data_8005D954]   # 0x244
-      - [0x3E398, asm, func_8005DB98]   # 0x64
-      - [0x3E3FC, data, data_8005DBFC]   # 0x3c
-      - [0x3E438, asm, func_8005DC38]   # 0x28
-      - [0x3E460, data, data_8005DC60]   # 0x15c
-      - [0x3E5BC, asm, func_8005DDBC]   # 0xd4
-      - [0x3E690, data, data_8005DE90]   # 0x38
-      - [0x3E6C8, asm, func_8005DEC8]   # 0x38
-      - [0x3E700, data, data_8005DF00]   # 0xd4
-      - [0x3E7D4, asm, func_8005DFD4]   # 0x30
-      - [0x3E804, data, data_8005E004]   # 0x7c
-      - [0x3E880, asm, func_8005E080]   # 0x84
+      - [0x3D700, data, data_8005CF00]   # 0x58
+      - [0x3D758, asm, func_8005CF58]   # 0x86c
+      - [0x3DFC4, data, data_8005D7C4]   # 0xb0
+      - [0x3E074, asm, func_8005D874]   # 0x890
       - [0x3E904, data, data_8005E104]   # 0xc4
-      - [0x3E9C8, asm, func_8005E1C8]   # 0x68
-      - [0x3EA30, data, data_8005E230]   # 0x28
-      - [0x3EA58, asm, func_8005E258]   # 0xec
-      - [0x3EB44, data, data_8005E344]   # 0x1c8
-      - [0x3ED0C, asm, func_8005E50C]   # 0x24
+      - [0x3E9C8, asm, func_8005E1C8]   # 0x368
       - [0x3ED30, data, data_8005E530]   # 0x4
       - [0x3ED34, asm, func_8005E534]   # 0x8c
       - [0x3EDC0, data, data_8005E5C0]   # 0x4
-      - [0x3EDC4, asm, func_8005E5C4]   # 0xb0
-      - [0x3EE74, data, data_8005E674]   # 0x14
-      - [0x3EE88, asm, func_8005E688]   # 0x58
-      - [0x3EEE0, data, data_8005E6E0]   # 0xc8
-      - [0x3EFA8, asm, func_8005E7A8]   # 0x28
-      - [0x3EFD0, data, data_8005E7D0]   # 0x44c
-      - [0x3F41C, asm, func_8005EC1C]   # 0xac
-      - [0x3F4C8, data, data_8005ECC8]   # 0x20c
-      - [0x3F6D4, asm, func_8005EED4]   # 0x5c
-      - [0x3F730, data, data_8005EF30]   # 0xd0
-      - [0x3F800, asm, func_8005F000]   # 0x114
-      - [0x3F914, data, data_8005F114]   # 0x60
-      - [0x3F974, asm, func_8005F174]   # 0x8
-      - [0x3F97C, data, data_8005F17C]   # 0x94
-      - [0x3FA10, asm, func_8005F210]   # 0x4c
-      - [0x3FA5C, data, data_8005F25C]   # 0x4
-      - [0x3FA60, asm, func_8005F260]   # 0x3c
-      - [0x3FA9C, data, data_8005F29C]   # 0x4
-      - [0x3FAA0, asm, func_8005F2A0]   # 0xc4
+      - [0x3EDC4, asm, func_8005E5C4]   # 0x430
+      - [0x3F1F4, data, data_8005E9F4]   # 0xe0
+      - [0x3F2D4, asm, func_8005EAD4]   # 0x3f4
+      - [0x3F6C8, data, data_8005EEC8]   # 0xc
+      - [0x3F6D4, asm, func_8005EED4]   # 0x490
       - [0x3FB64, data, data_8005F364]   # 0xc
       - [0x3FB70, asm, func_8005F370]   # 0x50
-      - [0x3FBC0, data, data_8005F3C0]   # 0x368
-      - [0x3FF28, asm, func_8005F728]   # 0x48
-      - [0x3FF70, data, data_8005F770]   # 0x34
-      - [0x3FFA4, asm, func_8005F7A4]   # 0xd8
-      - [0x4007C, data, data_8005F87C]   # 0x30
-      - [0x400AC, asm, func_8005F8AC]   # 0x24
-      - [0x400D0, data, data_8005F8D0]   # 0x104
-      - [0x401D4, asm, func_8005F9D4]   # 0xd0
-      - [0x402A4, data, data_8005FAA4]   # 0x28
-      - [0x402CC, asm, func_8005FACC]   # 0xc0
-      - [0x4038C, data, data_8005FB8C]   # 0x120
+      - [0x3FBC0, data, data_8005F3C0]   # 0x90
+      - [0x3FC50, asm, func_8005F450]   # 0x838
+      - [0x40488, data, data_8005FC88]   # 0x24
       - [0x404AC, asm, func_8005FCAC]   # 0x40
-      - [0x404EC, data, data_8005FCEC]   # 0xb8
-      - [0x405A4, asm, func_8005FDA4]   # 0xc0
-      - [0x40664, data, data_8005FE64]   # 0xb0
-      - [0x40714, asm, func_8005FF14]   # 0x54
-      - [0x40768, data, data_8005FF68]   # 0x5c0
-      - [0x40D28, asm, func_80060528]   # 0x28
-      - [0x40D50, data, data_80060550]   # 0x27c
-      - [0x40FCC, asm, func_800607CC]   # 0xa8
-      - [0x41074, data, data_80060874]   # 0x80
-      - [0x410F4, asm, func_800608F4]   # 0x2c
-      - [0x41120, data, data_80060920]   # 0xa0
-      - [0x411C0, asm, func_800609C0]   # 0xa4
-      - [0x41264, data, data_80060A64]   # 0x28
-      - [0x4128C, asm, func_80060A8C]   # 0x8c
-      - [0x41318, data, data_80060B18]   # 0x8d4
-      - [0x41BEC, asm, func_800613EC]   # 0x50
-      - [0x41C3C, data, data_8006143C]   # 0x50
-      - [0x41C8C, asm, func_8006148C]   # 0x90
-      - [0x41D1C, data, data_8006151C]   # 0x264
-      - [0x41F80, asm, func_80061780]   # 0x60
-      - [0x41FE0, data, data_800617E0]   # 0x2b4
-      - [0x42294, asm, func_80061A94]   # 0xc0
-      - [0x42354, data, data_80061B54]   # 0x1c4
-      - [0x42518, asm, func_80061D18]   # 0x44
-      - [0x4255C, data, data_80061D5C]   # 0x15c
-      - [0x426B8, asm, func_80061EB8]   # 0x20
-      - [0x426D8, data, data_80061ED8]   # 0xc0
-      - [0x42798, asm, func_80061F98]   # 0x5c
-      - [0x427F4, data, data_80061FF4]   # 0x218
-      - [0x42A0C, asm, func_8006220C]   # 0x1c
-      - [0x42A28, data, data_80062228]   # 0x2bc
-      - [0x42CE4, asm, func_800624E4]   # 0x74
-      - [0x42D58, data, data_80062558]   # 0x220
-      - [0x42F78, asm, func_80062778]   # 0x54
-      - [0x42FCC, data, data_800627CC]   # 0x50
-      - [0x4301C, asm, func_8006281C]   # 0x24
-      - [0x43040, data, data_80062840]   # 0x90
-      - [0x430D0, asm, func_800628D0]   # 0x58
-      - [0x43128, data, data_80062928]   # 0x68
-      - [0x43190, asm, func_80062990]   # 0x5c
-      - [0x431EC, data, data_800629EC]   # 0x174
-      - [0x43360, asm, func_80062B60]   # 0xd4
-      - [0x43434, data, data_80062C34]   # 0x1a8
-      - [0x435DC, asm, func_80062DDC]   # 0x58
-      - [0x43634, data, data_80062E34]   # 0x110
-      - [0x43744, asm, func_80062F44]   # 0x3c
-      - [0x43780, data, data_80062F80]   # 0x6c
-      - [0x437EC, asm, func_80062FEC]   # 0x70
-      - [0x4385C, data, data_8006305C]   # 0x124
-      - [0x43980, asm, func_80063180]   # 0x2c
-      - [0x439AC, data, data_800631AC]   # 0x58
-      - [0x43A04, asm, func_80063204]   # 0x44
-      - [0x43A48, data, data_80063248]   # 0xe4
-      - [0x43B2C, asm, func_8006332C]   # 0x24
-      - [0x43B50, data, data_80063350]   # 0x74
-      - [0x43BC4, asm, func_800633C4]   # 0x4c
+      - [0x404EC, data, data_8005FCEC]   # 0x88
+      - [0x40574, asm, func_8005FD74]   # 0x7dc
+      - [0x40D50, data, data_80060550]   # 0xe0
+      - [0x40E30, asm, func_80060630]   # 0x378
+      - [0x411A8, data, data_800609A8]   # 0x8
+      - [0x411B0, asm, func_800609B0]   # 0x498
+      - [0x41648, data, data_80060E48]   # 0x234
+      - [0x4187C, asm, func_8006107C]   # 0x764
+      - [0x41FE0, data, data_800617E0]   # 0xf0
+      - [0x420D0, asm, func_800618D0]   # 0x7d8
+      - [0x428A8, data, data_800620A8]   # 0x144
+      - [0x429EC, asm, func_800621EC]   # 0x1010
+      - [0x439FC, data, data_800631FC]   # 0x8
+      - [0x43A04, asm, func_80063204]   # 0x14c
+      - [0x43B50, data, data_80063350]   # 0x5c
+      - [0x43BAC, asm, func_800633AC]   # 0x64
       - [0x43C10, data, data_80063410]   # 0x2c
-      - [0x43C3C, asm, func_8006343C]   # 0xc4
-      - [0x43D00, data, data_80063500]   # 0x20
-      - [0x43D20, asm, func_80063520]   # 0x88
-      - [0x43DA8, data, data_800635A8]   # 0x24c
-      - [0x43FF4, asm, func_800637F4]   # 0x8c
-      - [0x44080, data, data_80063880]   # 0x238
-      - [0x442B8, asm, func_80063AB8]   # 0x8
-      - [0x442C0, data, data_80063AC0]   # 0x20
-      - [0x442E0, asm, func_80063AE0]   # 0x18
-      - [0x442F8, data, data_80063AF8]   # 0x60
-      - [0x44358, asm, func_80063B58]   # 0xc
-      - [0x44364, data, data_80063B64]   # 0x3bc
-      - [0x44720, asm, func_80063F20]   # 0x24
-      - [0x44744, data, data_80063F44]   # 0xcc
-      - [0x44810, asm, func_80064010]   # 0x10
-      - [0x44820, data, data_80064020]   # 0xb8
-      - [0x448D8, asm, func_800640D8]   # 0x14
+      - [0x43C3C, asm, func_8006343C]   # 0x3a8
+      - [0x43FE4, data, data_800637E4]   # 0x10
+      - [0x43FF4, asm, func_800637F4]   # 0x4c4
+      - [0x444B8, data, data_80063CB8]   # 0xf4
+      - [0x445AC, asm, func_80063DAC]   # 0x340
       - [0x448EC, data, data_800640EC]   # 0x8
-      - [0x448F4, asm, func_800640F4]   # 0x60
-      - [0x44954, data, data_80064154]   # 0x110
-      - [0x44A64, asm, func_80064264]   # 0x38
-      - [0x44A9C, data, data_8006429C]   # 0x94c
-      - [0x453E8, asm, func_80064BE8]   # 0x7c
-      - [0x45464, data, data_80064C64]   # 0x60
-      - [0x454C4, asm, func_80064CC4]   # 0x8
-      - [0x454CC, data, data_80064CCC]   # 0x920
-      - [0x45DEC, asm, func_800655EC]   # 0x204
-      - [0x45FF0, data, data_800657F0]   # 0x140
-      - [0x46130, asm, func_80065930]   # 0x598
-      - [0x466C8, data, data_80065EC8]   # 0x188
-      - [0x46850, asm, func_80066050]   # 0xc8
+      - [0x448F4, asm, func_800640F4]   # 0x510
+      - [0x44E04, data, data_80064604]   # 0x9c
+      - [0x44EA0, asm, func_800646A0]   # 0x540
+      - [0x453E0, data, data_80064BE0]   # 0x8
+      - [0x453E8, asm, func_80064BE8]   # 0x2d0
+      - [0x456B8, data, data_80064EB8]   # 0x554
+      - [0x45C0C, asm, func_8006540C]   # 0xabc
+      - [0x466C8, data, data_80065EC8]   # 0x14c
+      - [0x46814, asm, func_80066014]   # 0x104
       - [0x46918, data, data_80066118]   # 0x2c
       - [0x46944, asm, func_80066144]   # 0x120
-      - [0x46A64, data, data_80066264]   # 0x17c
-      - [0x46BE0, asm, func_800663E0]   # 0x24
+      - [0x46A64, data, data_80066264]   # 0x44
+      - [0x46AA8, asm, func_800662A8]   # 0x15c
       - [0x46C04, data, data_80066404]   # 0x70
       - [0x46C74, asm, func_80066474]   # 0x130
-      - [0x46DA4, data, data_800665A4]   # 0x3c14
-      - [0x4A9B8, asm, func_8006A1B8]   # 0x28
+      - [0x46DA4, data, data_800665A4]   # 0x3704
+      - [0x4A4A8, asm, func_80069CA8]   # 0x538
       - [0x4A9E0, data, data_8006A1E0]   # 0x68
-      - [0x4AA48, asm, func_8006A248]   # 0x40
-      - [0x4AA88, data, data_8006A288]   # 0x70
-      - [0x4AAF8, asm, func_8006A2F8]   # 0x5c
-      - [0x4AB54, data, data_8006A354]   # 0x3a50
-      - [0x4E5A4, asm, func_8006DDA4]   # 0x2fc
-      - [0x4E8A0, data, data_8006E0A0]   # 0x2d4
-      - [0x4EB74, asm, func_8006E374]   # 0x14
-      - [0x4EB88, data, data_8006E388]   # 0x44
-      - [0x4EBCC, asm, func_8006E3CC]   # 0x28
-      - [0x4EBF4, data, data_8006E3F4]   # 0x3f8
-      - [0x4EFEC, asm, func_8006E7EC]   # 0xd8
-      - [0x4F0C4, data, data_8006E8C4]   # 0x32c
-      - [0x4F3F0, asm, func_8006EBF0]   # 0xf0
-      - [0x4F4E0, data, data_8006ECE0]   # 0x450
-      - [0x4F930, asm, func_8006F130]   # 0x24
-      - [0x4F954, data, data_8006F154]   # 0x50
-      - [0x4F9A4, asm, func_8006F1A4]   # 0x220
-      - [0x4FBC4, data, data_8006F3C4]   # 0x2fc
-      - [0x4FEC0, asm, func_8006F6C0]   # 0x3c
-      - [0x4FEFC, data, data_8006F6FC]   # 0x50
-      - [0x4FF4C, asm, func_8006F74C]   # 0xd0
-      - [0x5001C, data, data_8006F81C]   # 0x3b8
-      - [0x503D4, asm, func_8006FBD4]   # 0x40
-      - [0x50414, data, data_8006FC14]   # 0x58
-      - [0x5046C, asm, func_8006FC6C]   # 0x8c
+      - [0x4AA48, asm, func_8006A248]   # 0x854
+      - [0x4B29C, data, data_8006AA9C]   # 0x319c
+      - [0x4E438, asm, func_8006DC38]   # 0x8d4
+      - [0x4ED0C, data, data_8006E50C]   # 0x2e0
+      - [0x4EFEC, asm, func_8006E7EC]   # 0x374
+      - [0x4F360, data, data_8006EB60]   # 0x90
+      - [0x4F3F0, asm, func_8006EBF0]   # 0x4b4
+      - [0x4F8A4, data, data_8006F0A4]   # 0x8c
+      - [0x4F930, asm, func_8006F130]   # 0x324
+      - [0x4FC54, data, data_8006F454]   # 0x250
+      - [0x4FEA4, asm, func_8006F6A4]   # 0x654
       - [0x504F8, data, data_8006FCF8]   # 0x378
-      - [0x50870, asm, func_80070070]   # 0x78
-      - [0x508E8, data, data_800700E8]   # 0x24
-      - [0x5090C, asm, func_8007010C]   # 0x88
-      - [0x50994, data, data_80070194]   # 0x4dc
-      - [0x50E70, asm, func_80070670]   # 0x40
-      - [0x50EB0, data, data_800706B0]   # 0x1278
-      - [0x52128, asm, func_80071928]   # 0x10
+      - [0x50870, asm, func_80070070]   # 0x640
+      - [0x50EB0, data, data_800706B0]   # 0x11b8
+      - [0x52068, asm, func_80071868]   # 0xd0
       - [0x52138, data, data_80071938]   # 0xd10
-      - [0x52E48, asm, func_80072648]   # 0x250
-      - [0x53098, data, data_80072898]   # 0x6b4
-      - [0x5374C, asm, func_80072F4C]   # 0x26c
-      - [0x539B8, data, data_800731B8]   # 0x24
-      - [0x539DC, asm, func_800731DC]   # 0x218
-      - [0x53BF4, data, data_800733F4]   # 0x8
-      - [0x53BFC, asm, func_800733FC]   # 0xf4
-      - [0x53CF0, data, data_800734F0]   # 0x3d0
-      - [0x540C0, asm, func_800738C0]   # 0x24
+      - [0x52E48, asm, func_80072648]   # 0xea8
+      - [0x53CF0, data, data_800734F0]   # 0x358
+      - [0x54048, asm, func_80073848]   # 0x9c
       - [0x540E4, data, data_800738E4]   # 0x44
       - [0x54128, asm, func_80073928]   # 0x28
       - [0x54150, data, data_80073950]   # 0x28
-      - [0x54178, asm, func_80073978]   # 0xac
-      - [0x54224, data, data_80073A24]   # 0x48
-      - [0x5426C, asm, func_80073A6C]   # 0x100
+      - [0x54178, asm, func_80073978]   # 0x1f4
       - [0x5436C, data, data_80073B6C]   # 0x208
       - [0x54574, asm, func_80073D74]   # 0x34
       - [0x545A8, data, data_80073DA8]   # 0x234
-      - [0x547DC, asm, func_80073FDC]   # 0x8c
-      - [0x54868, data, data_80074068]   # 0xa4
-      - [0x5490C, asm, func_8007410C]   # 0x5c
-      - [0x54968, data, data_80074168]   # 0x20
-      - [0x54988, asm, func_80074188]   # 0x58
-      - [0x549E0, data, data_800741E0]   # 0x2c
-      - [0x54A0C, asm, func_8007420C]   # 0x14
-      - [0x54A20, data, data_80074220]   # 0x10
-      - [0x54A30, asm, func_80074230]   # 0xc8
-      - [0x54AF8, data, data_800742F8]   # 0x40
-      - [0x54B38, asm, func_80074338]   # 0x38
+      - [0x547DC, asm, func_80073FDC]   # 0x31c
+      - [0x54AF8, data, data_800742F8]   # 0x30
+      - [0x54B28, asm, func_80074328]   # 0x48
       - [0x54B70, data, data_80074370]   # 0x5c
       - [0x54BCC, asm, func_800743CC]   # 0x34
       - [0x54C00, data, data_80074400]   # 0x5c
       - [0x54C5C, asm, func_8007445C]   # 0x40
-      - [0x54C9C, data, data_8007449C]   # 0x58
-      - [0x54CF4, asm, func_800744F4]   # 0x2c
-      - [0x54D20, data, data_80074520]   # 0x6c
-      - [0x54D8C, asm, func_8007458C]   # 0x7c
-      - [0x54E08, data, data_80074608]   # 0xd8
-      - [0x54EE0, asm, func_800746E0]   # 0xd0
-      - [0x54FB0, data, data_800747B0]   # 0x2e4
-      - [0x55294, asm, func_80074A94]   # 0x18
-      - [0x552AC, data, data_80074AAC]   # 0x3c4
-      - [0x55670, asm, func_80074E70]   # 0x48
-      - [0x556B8, data, data_80074EB8]   # 0x1ec
-      - [0x558A4, asm, func_800750A4]   # 0x124
+      - [0x54C9C, data, data_8007449C]   # 0x48
+      - [0x54CE4, asm, func_800744E4]   # 0x88
+      - [0x54D6C, data, data_8007456C]   # 0x10
+      - [0x54D7C, asm, func_8007457C]   # 0x234
+      - [0x54FB0, data, data_800747B0]   # 0x88
+      - [0x55038, asm, func_80074838]   # 0x274
+      - [0x552AC, data, data_80074AAC]   # 0x2e8
+      - [0x55594, asm, func_80074D94]   # 0x434
       - [0x559C8, data, data_800751C8]   # 0x10
       - [0x559D8, asm, func_800751D8]   # 0x8c
-      - [0x55A64, data, data_80075264]   # 0x260
-      - [0x55CC4, asm, func_800754C4]   # 0x1bc
-      - [0x55E80, data, data_80075680]   # 0x24
-      - [0x55EA4, asm, func_800756A4]   # 0x24c
-      - [0x560F0, data, data_800758F0]   # 0x51c
-      - [0x5660C, asm, func_80075E0C]   # 0x118
-      - [0x56724, data, data_80075F24]   # 0x16c
-      - [0x56890, asm, func_80076090]   # 0x11c
-      - [0x569AC, data, data_800761AC]   # 0x1b4
-      - [0x56B60, asm, func_80076360]   # 0x200
-      - [0x56D60, data, data_80076560]   # 0x268
-      - [0x56FC8, asm, func_800767C8]   # 0x258
-      - [0x57220, data, data_80076A20]   # 0x28
-      - [0x57248, asm, func_80076A48]   # 0x20
-      - [0x57268, data, data_80076A68]   # 0xd4
-      - [0x5733C, asm, func_80076B3C]   # 0x94
-      - [0x573D0, data, data_80076BD0]   # 0x2ec
-      - [0x576BC, asm, func_80076EBC]   # 0xb4
-      - [0x57770, data, data_80076F70]   # 0x2c8
-      - [0x57A38, asm, func_80077238]   # 0x40
-      - [0x57A78, data, data_80077278]   # 0xb8
+      - [0x55A64, data, data_80075264]   # 0x21c
+      - [0x55C80, asm, func_80075480]   # 0xdc8
+      - [0x56A48, data, data_80076248]   # 0xe8
+      - [0x56B30, asm, func_80076330]   # 0x8a0
+      - [0x573D0, data, data_80076BD0]   # 0x228
+      - [0x575F8, asm, func_80076DF8]   # 0x178
+      - [0x57770, data, data_80076F70]   # 0x2a0
+      - [0x57A10, asm, func_80077210]   # 0xb0
+      - [0x57AC0, data, data_800772C0]   # 0x70
       - [0x57B30, asm, func_80077330]   # 0x3c
       - [0x57B6C, data, data_8007736C]   # 0x27c
       - [0x57DE8, asm, func_800775E8]   # 0xc
-      - [0x57DF4, data, data_800775F4]   # 0x160
-      - [0x57F54, asm, func_80077754]   # 0x4c
+      - [0x57DF4, data, data_800775F4]   # 0x110
+      - [0x57F04, asm, func_80077704]   # 0x9c
       - [0x57FA0, data, data_800777A0]   # 0x2f0
-      - [0x58290, asm, func_80077A90]   # 0x130
-      - [0x583C0, data, data_80077BC0]   # 0x7c
-      - [0x5843C, asm, func_80077C3C]   # 0x120
-      - [0x5855C, data, data_80077D5C]   # 0x250
-      - [0x587AC, asm, func_80077FAC]   # 0x8c
-      - [0x58838, data, data_80078038]   # 0x28c
-      - [0x58AC4, asm, func_800782C4]   # 0x84
-      - [0x58B48, data, data_80078348]   # 0x28
-      - [0x58B70, asm, func_80078370]   # 0x3c
-      - [0x58BAC, data, data_800783AC]   # 0x280
-      - [0x58E2C, asm, func_8007862C]   # 0x34
+      - [0x58290, asm, func_80077A90]   # 0x754
+      - [0x589E4, data, data_800781E4]   # 0xa4
+      - [0x58A88, asm, func_80078288]   # 0x16c
+      - [0x58BF4, data, data_800783F4]   # 0xfc
+      - [0x58CF0, asm, func_800784F0]   # 0x170
       - [0x58E60, data, data_80078660]   # 0x38
       - [0x58E98, asm, func_80078698]   # 0x70
       - [0x58F08, data, data_80078708]   # 0x1c
       - [0x58F24, asm, func_80078724]   # 0x24
-      - [0x58F48, data, data_80078748]   # 0xb78
-      - [0x59AC0, asm, func_800792C0]   # 0x120
-      - [0x59BE0, data, data_800793E0]   # 0xa0
-      - [0x59C80, asm, func_80079480]   # 0x264
+      - [0x58F48, data, data_80078748]   # 0xa98
+      - [0x599E0, asm, func_800791E0]   # 0x504
       - [0x59EE4, data, data_800796E4]   # 0x74
       - [0x59F58, asm, func_80079758]   # 0xc
       - [0x59F64, data, data_80079764]   # 0x164
@@ -1214,13 +500,11 @@ segments:
       - [0x5A11C, data, data_8007991C]   # 0x84
       - [0x5A1A0, asm, func_800799A0]   # 0xb4
       - [0x5A254, data, data_80079A54]   # 0x84
-      - [0x5A2D8, asm, func_80079AD8]   # 0x3c
-      - [0x5A314, data, data_80079B14]   # 0x50c
+      - [0x5A2D8, asm, func_80079AD8]   # 0x1c0
+      - [0x5A498, data, data_80079C98]   # 0x388
       - [0x5A820, asm, func_8007A020]   # 0xb0
       - [0x5A8D0, data, data_8007A0D0]   # 0x630
-      - [0x5AF00, asm, func_8007A700]   # 0x90
-      - [0x5AF90, data, data_8007A790]   # 0x218
-      - [0x5B1A8, asm, func_8007A9A8]   # 0xac
+      - [0x5AF00, asm, func_8007A700]   # 0x354
       - [0x5B254, data, data_8007AA54]   # 0x44
       - [0x5B298, asm, func_8007AA98]   # 0x70
       - [0x5B308, data, data_8007AB08]   # 0xb8
@@ -1230,135 +514,59 @@ segments:
       - [0x5B564, data, data_8007AD64]   # 0x254
       - [0x5B7B8, asm, func_8007AFB8]   # 0x28
       - [0x5B7E0, data, data_8007AFE0]   # 0x4c8
-      - [0x5BCA8, asm, func_8007B4A8]   # 0x28
-      - [0x5BCD0, data, data_8007B4D0]   # 0x214
+      - [0x5BCA8, asm, func_8007B4A8]   # 0x5c
+      - [0x5BD04, data, data_8007B504]   # 0x1e0
       - [0x5BEE4, asm, func_8007B6E4]   # 0xc0
       - [0x5BFA4, data, data_8007B7A4]   # 0x41c
       - [0x5C3C0, asm, func_8007BBC0]   # 0x78
       - [0x5C438, data, data_8007BC38]   # 0x148
-      - [0x5C580, asm, func_8007BD80]   # 0x44
-      - [0x5C5C4, data, data_8007BDC4]   # 0x78
-      - [0x5C63C, asm, func_8007BE3C]   # 0xb8
+      - [0x5C580, asm, func_8007BD80]   # 0x174
       - [0x5C6F4, data, data_8007BEF4]   # 0x218
-      - [0x5C90C, asm, func_8007C10C]   # 0x18
-      - [0x5C924, data, data_8007C124]   # 0x1b8
+      - [0x5C90C, asm, func_8007C10C]   # 0x188
+      - [0x5CA94, data, data_8007C294]   # 0x48
       - [0x5CADC, asm, func_8007C2DC]   # 0x6c
       - [0x5CB48, data, data_8007C348]   # 0x330
-      - [0x5CE78, asm, func_8007C678]   # 0xe8
-      - [0x5CF60, data, data_8007C760]   # 0xe8
-      - [0x5D048, asm, func_8007C848]   # 0x174
-      - [0x5D1BC, data, data_8007C9BC]   # 0x21c
-      - [0x5D3D8, asm, func_8007CBD8]   # 0x50
-      - [0x5D428, data, data_8007CC28]   # 0x5c4
-      - [0x5D9EC, asm, func_8007D1EC]   # 0x58
-      - [0x5DA44, data, data_8007D244]   # 0x1d0
-      - [0x5DC14, asm, func_8007D414]   # 0x18
-      - [0x5DC2C, data, data_8007D42C]   # 0xd8
-      - [0x5DD04, asm, func_8007D504]   # 0x160
-      - [0x5DE64, data, data_8007D664]   # 0x264
-      - [0x5E0C8, asm, func_8007D8C8]   # 0xf8
+      - [0x5CE78, asm, func_8007C678]   # 0xac0
+      - [0x5D938, data, data_8007D138]   # 0xb4
+      - [0x5D9EC, asm, func_8007D1EC]   # 0x7d4
       - [0x5E1C0, data, data_8007D9C0]   # 0x514
-      - [0x5E6D4, asm, func_8007DED4]   # 0x5c
-      - [0x5E730, data, data_8007DF30]   # 0x2d8
-      - [0x5EA08, asm, func_8007E208]   # 0xdc
-      - [0x5EAE4, data, data_8007E2E4]   # 0xa4
+      - [0x5E6D4, asm, func_8007DED4]   # 0xe0
+      - [0x5E7B4, data, data_8007DFB4]   # 0x254
+      - [0x5EA08, asm, func_8007E208]   # 0xe8
+      - [0x5EAF0, data, data_8007E2F0]   # 0x98
       - [0x5EB88, asm, func_8007E388]   # 0x54
       - [0x5EBDC, data, data_8007E3DC]   # 0xc4
       - [0x5ECA0, asm, func_8007E4A0]   # 0x10
       - [0x5ECB0, data, data_8007E4B0]   # 0x144
       - [0x5EDF4, asm, func_8007E5F4]   # 0x48
       - [0x5EE3C, data, data_8007E63C]   # 0x148
-      - [0x5EF84, asm, func_8007E784]   # 0x7c
-      - [0x5F000, data, data_8007E800]   # 0x494
+      - [0x5EF84, asm, func_8007E784]   # 0x100
+      - [0x5F084, data, data_8007E884]   # 0x410
       - [0x5F494, asm, func_8007EC94]   # 0x74
-      - [0x5F508, data, data_8007ED08]   # 0x37c
-      - [0x5F884, asm, func_8007F084]   # 0x3e8
-      - [0x5FC6C, data, data_8007F46C]   # 0x790
-      - [0x603FC, asm, func_8007FBFC]   # 0x348
+      - [0x5F508, data, data_8007ED08]   # 0x240
+      - [0x5F748, asm, func_8007EF48]   # 0x614
+      - [0x5FD5C, data, data_8007F55C]   # 0x2e0
+      - [0x6003C, asm, func_8007F83C]   # 0x708
       - [0x60744, data, data_8007FF44]   # 0x8
-      - [0x6074C, asm, func_8007FF4C]   # 0xf4
-      - [0x60840, data, data_80080040]   # 0x38
-      - [0x60878, asm, func_80080078]   # 0x30
-      - [0x608A8, data, data_800800A8]   # 0xa4
-      - [0x6094C, asm, func_8008014C]   # 0xa0
-      - [0x609EC, data, data_800801EC]   # 0xac
-      - [0x60A98, asm, func_80080298]   # 0x25c
-      - [0x60CF4, data, data_800804F4]   # 0x144
-      - [0x60E38, asm, func_80080638]   # 0x124
-      - [0x60F5C, data, data_8008075C]   # 0x16c
-      - [0x610C8, asm, func_800808C8]   # 0x88
-      - [0x61150, data, data_80080950]   # 0x5c
-      - [0x611AC, asm, func_800809AC]   # 0x10
-      - [0x611BC, data, data_800809BC]   # 0x8c
-      - [0x61248, asm, func_80080A48]   # 0x10
-      - [0x61258, data, data_80080A58]   # 0xc8
-      - [0x61320, asm, func_80080B20]   # 0x15c
-      - [0x6147C, data, data_80080C7C]   # 0x8
-      - [0x61484, asm, func_80080C84]   # 0x88
-      - [0x6150C, data, data_80080D0C]   # 0x24
-      - [0x61530, asm, func_80080D30]   # 0x74
-      - [0x615A4, data, data_80080DA4]   # 0x408
-      - [0x619AC, asm, func_800811AC]   # 0x6a4
-      - [0x62050, data, data_80081850]   # 0x80
-      - [0x620D0, asm, func_800818D0]   # 0x1a0
+      - [0x6074C, asm, func_8007FF4C]   # 0x93c
+      - [0x61088, data, data_80080888]   # 0x40
+      - [0x610C8, asm, func_800808C8]   # 0x170
+      - [0x61238, data, data_80080A38]   # 0x10
+      - [0x61248, asm, func_80080A48]   # 0x1028
       - [0x62270, data, data_80081A70]   # 0xa0
-      - [0x62310, asm, func_80081B10]   # 0x84
-      - [0x62394, data, data_80081B94]   # 0x360
-      - [0x626F4, asm, func_80081EF4]   # 0xe0
-      - [0x627D4, data, data_80081FD4]   # 0x80
-      - [0x62854, asm, func_80082054]   # 0xf8
-      - [0x6294C, data, data_8008214C]   # 0x250
-      - [0x62B9C, asm, func_8008239C]   # 0x74
+      - [0x62310, asm, func_80081B10]   # 0x900
       - [0x62C10, data, data_80082410]   # 0x90
-      - [0x62CA0, asm, func_800824A0]   # 0x68
-      - [0x62D08, data, data_80082508]   # 0x178
-      - [0x62E80, asm, func_80082680]   # 0xe4
-      - [0x62F64, data, data_80082764]   # 0x244
-      - [0x631A8, asm, func_800829A8]   # 0xa4
-      - [0x6324C, data, data_80082A4C]   # 0x104
-      - [0x63350, asm, func_80082B50]   # 0x1d0
+      - [0x62CA0, asm, func_800824A0]   # 0x880
       - [0x63520, data, data_80082D20]   # 0xe0
-      - [0x63600, asm, func_80082E00]   # 0x2d0
-      - [0x638D0, data, data_800830D0]   # 0x45c
-      - [0x63D2C, asm, func_8008352C]   # 0xc
-      - [0x63D38, data, data_80083538]   # 0x15c
-      - [0x63E94, asm, func_80083694]   # 0x5c
-      - [0x63EF0, data, data_800836F0]   # 0x70
-      - [0x63F60, asm, func_80083760]   # 0xa0
-      - [0x64000, data, data_80083800]   # 0x94
-      - [0x64094, asm, func_80083894]   # 0x54
-      - [0x640E8, data, data_800838E8]   # 0xf4
-      - [0x641DC, asm, func_800839DC]   # 0x70
-      - [0x6424C, data, data_80083A4C]   # 0xc
-      - [0x64258, asm, func_80083A58]   # 0x304
-      - [0x6455C, data, data_80083D5C]   # 0x358
-      - [0x648B4, asm, func_800840B4]   # 0x154
-      - [0x64A08, data, data_80084208]   # 0x178
-      - [0x64B80, asm, func_80084380]   # 0x238
-      - [0x64DB8, data, data_800845B8]   # 0x1cc
-      - [0x64F84, asm, func_80084784]   # 0x16c
-      - [0x650F0, data, data_800848F0]   # 0x38
-      - [0x65128, asm, func_80084928]   # 0xc
-      - [0x65134, data, data_80084934]   # 0x14
-      - [0x65148, asm, func_80084948]   # 0xdc
-      - [0x65224, data, data_80084A24]   # 0x90
-      - [0x652B4, asm, func_80084AB4]   # 0xdc
-      - [0x65390, data, data_80084B90]   # 0x4b4
-      - [0x65844, asm, func_80085044]   # 0x68
-      - [0x658AC, data, data_800850AC]   # 0x4d8
-      - [0x65D84, asm, func_80085584]   # 0x1c
-      - [0x65DA0, data, data_800855A0]   # 0x5c
-      - [0x65DFC, asm, func_800855FC]   # 0x260
-      - [0x6605C, data, data_8008585C]   # 0x20
-      - [0x6607C, asm, func_8008587C]   # 0x4c
-      - [0x660C8, data, data_800858C8]   # 0x180
-      - [0x66248, asm, func_80085A48]   # 0xc4
+      - [0x63600, asm, func_80082E00]   # 0x1ea4
+      - [0x654A4, data, data_80084CA4]   # 0x314
+      - [0x657B8, asm, func_80084FB8]   # 0x1ac
+      - [0x65964, data, data_80085164]   # 0x180
+      - [0x65AE4, asm, func_800852E4]   # 0x828
       - [0x6630C, data, data_80085B0C]   # 0x58
-      - [0x66364, asm, func_80085B64]   # 0x144
-      - [0x664A8, data, data_80085CA8]   # 0x398
-      - [0x66840, asm, func_80086040]   # 0x3e4
-      - [0x66C24, data, data_80086424]   # 0xf18
-      - [0x67B3C, asm, func_8008733C]   # 0x320
+      - [0x66364, asm, func_80085B64]   # 0x8c0
+      - [0x66C24, data, data_80086424]   # 0xa98
+      - [0x676BC, asm, func_80086EBC]   # 0x7a0
       - [0x67E5C, data, data_8008765C]   # 0x431a4
     # END GENERATED SUBSEGMENTS
   - [0xAB000]

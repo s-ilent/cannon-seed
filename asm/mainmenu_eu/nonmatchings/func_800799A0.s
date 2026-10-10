@@ -43,6 +43,10 @@ glabel func_800799A0
     /* 5A218 80079A18 DC38319A */ .word 0x9A3138DC
     /* 5A21C 80079A1C 95449394 */ .word 0x94934495
     /* 5A220 80079A20 BC66829B */ .word 0x9B8266BC
+
+nonmatching func_80079A24
+
+alabel func_80079A24
     /* 5A224 80079A24 A84D5D43 */ .word 0x435D4DA8 /* invalid instruction */
     /* 5A228 80079A28 13031950 */ .word 0x50190313
     /* 5A22C 80079A2C AA80B244 */ .word 0x44B280AA /* invalid instruction */

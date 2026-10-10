@@ -20,6 +20,10 @@ glabel func_8005B2A8
     /* 3BAC4 8005B2C4 FBB8D701 */ .word 0x01D7B8FB /* invalid instruction */
     /* 3BAC8 8005B2C8 1FC1B428 */ .word 0x28B4C11F
     /* 3BACC 8005B2CC B4C8AEA8 */ .word 0xA8AEC8B4
+
+nonmatching func_8005B2D0
+
+alabel func_8005B2D0
     /* 3BAD0 8005B2D0 696C8BB5 */ .word 0xB58B6C69
     /* 3BAD4 8005B2D4 AE7B996F */ .word 0x6F997BAE
     /* 3BAD8 8005B2D8 07819BCB */ .word 0xCB9B8107

@@ -52,7 +52,7 @@ glabel func_80066474
 endlabel func_80066474
     /* 46D10 80066510 00000000 */  nop
 
-nonmatching func_80066514, 0x90
+nonmatching func_80066514, 0x5C
 
 glabel func_80066514
     /* 46D14 80066514 12C00000 */  mflo       $t8
@@ -78,6 +78,11 @@ glabel func_80066514
     /* 46D64 80066564 03C31900 */  sra        $t8, $t9, 12
     /* 46D68 80066568 19002C01 */  multu      $t1, $t4
     /* 46D6C 8006656C 0800B8A4 */  sh         $t8, 0x8($a1)
+endlabel func_80066514
+
+nonmatching func_80066570, 0x34
+
+glabel func_80066570
     /* 46D70 80066570 00000000 */  nop
     /* 46D74 80066574 12C00000 */  mflo       $t8
     /* 46D78 80066578 00000000 */  nop
@@ -91,4 +96,4 @@ glabel func_80066514
     /* 46D98 80066598 0A00B8A4 */  sh         $t8, 0xA($a1)
     /* 46D9C 8006659C 0800E003 */  jr         $ra
     /* 46DA0 800665A0 00000000 */   nop
-endlabel func_80066514
+endlabel func_80066570

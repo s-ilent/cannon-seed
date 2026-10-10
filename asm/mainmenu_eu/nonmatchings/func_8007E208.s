@@ -64,5 +64,19 @@ glabel func_8007E208
     /* 5EAD4 8007E2D4 ACC5AC3E */ .word 0x3EACC5AC /* invalid instruction */
     /* 5EAD8 8007E2D8 655115FF */ .word 0xFF155165
     /* 5EADC 8007E2DC 4D1DA0F0 */ .word 0xF0A01D4D
-    /* 5EAE0 8007E2E0 1C49D5D8 */ .word 0xD8D5491C
 enddlabel func_8007E208
+
+nonmatching func_8007E2E0, 0x4
+
+glabel func_8007E2E0
+    /* 5EAE0 8007E2E0 1C49D5D8 */  ldc2       $21, 0x491C($a2)
+endlabel func_8007E2E0
+
+/* Handwritten function */
+nonmatching func_8007E2E4, 0xC
+
+glabel func_8007E2E4
+    /* 5EAE4 8007E2E4 EC56DFF2 */  scd        $ra, 0x56EC($s6) /* handwritten instruction */
+    /* 5EAE8 8007E2E8 F80451F9 */  sdc2       $17, 0x4F8($t2)
+    /* 5EAEC 8007E2EC 60079DFF */  sd         $sp, 0x760($gp)
+endlabel func_8007E2E4

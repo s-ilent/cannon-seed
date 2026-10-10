@@ -21,10 +21,15 @@ glabel func_8004DFD8
     /* 2E7F8 8004DFF8 B2EC840A */ .word 0x0A84ECB2
     /* 2E7FC 8004DFFC 7D948993 */ .word 0x9389947D
     /* 2E800 8004E000 2DD8EE2E */ .word 0x2EEED82D
+enddlabel func_8004DFD8
+
+nonmatching func_8004E004
+
+glabel func_8004E004
     /* 2E804 8004E004 7A67346C */ .word 0x6C34677A
     /* 2E808 8004E008 6B00F1D7 */ .word 0xD7F1006B
     /* 2E80C 8004E00C 40F890D7 */ .word 0xD790F840
     /* 2E810 8004E010 633FFE5F */ .word 0x5FFE3F63 /* invalid instruction */
     /* 2E814 8004E014 0C9BBBC8 */ .word 0xC8BB9B0C
     /* 2E818 8004E018 00FFFFFF */ .word 0xFFFFFF00
-enddlabel func_8004DFD8
+enddlabel func_8004E004

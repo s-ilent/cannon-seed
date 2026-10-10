@@ -14,6 +14,11 @@ glabel func_8003F9D0
     /* 201D4 8003F9D4 DC22F518 */ .word 0x18F522DC /* invalid instruction */
     /* 201D8 8003F9D8 39991785 */ .word 0x85179939
     /* 201DC 8003F9DC 577FD55A */ .word 0x5AD57F57 /* invalid instruction */
+enddlabel func_8003F9D0
+
+nonmatching func_8003F9E0
+
+glabel func_8003F9E0
     /* 201E0 8003F9E0 82FBCA09 */ .word 0x09CAFB82
     /* 201E4 8003F9E4 74FC6623 */ .word 0x2366FC74
     /* 201E8 8003F9E8 982B44AE */ .word 0xAE442B98
@@ -31,4 +36,4 @@ glabel func_8003F9D0
     /* 20218 8003FA18 38422071 */ .word 0x71204238 /* invalid instruction */
     /* 2021C 8003FA1C FF0752E1 */ .word 0xE15207FF
     /* 20220 8003FA20 BB913C7F */ .word 0x7F3C91BB /* invalid instruction */
-enddlabel func_8003F9D0
+enddlabel func_8003F9E0

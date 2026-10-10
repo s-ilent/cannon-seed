@@ -14,13 +14,18 @@ glabel func_80078724
     /* 58F28 80078728 D953EEFA */ .word 0xFAEE53D9
     /* 58F2C 8007872C 6B8C0649 */ .word 0x49068C6B /* invalid instruction */
     /* 58F30 80078730 5F7B4F86 */ .word 0x864F7B5F
+enddlabel func_80078724
 
-nonmatching .L80078734
+nonmatching func_80078734
 
-alabel .L80078734
+glabel func_80078734
     /* 58F34 80078734 141B091B */ .word 0x1B091B14 /* invalid instruction */
     /* 58F38 80078738 3BA497D4 */ .word 0xD497A43B
     /* 58F3C 8007873C 5BB71E54 */ .word 0x541EB75B
     /* 58F40 80078740 99827068 */ .word 0x68708299
+
+nonmatching func_80078744
+
+alabel func_80078744
     /* 58F44 80078744 24E7E352 */ .word 0x52E3E724
-enddlabel func_80078724
+enddlabel func_80078734

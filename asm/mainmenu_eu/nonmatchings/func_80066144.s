@@ -13,6 +13,10 @@ glabel func_80066144
     /* 46944 80066144 54DB1141 */ .word 0x4111DB54 /* invalid instruction */
     /* 46948 80066148 3B58A31E */ .word 0x1EA3583B /* invalid instruction */
     /* 4694C 8006614C 2A7B79CD */ .word 0xCD797B2A
+
+nonmatching func_80066150
+
+alabel func_80066150
     /* 46950 80066150 B06AF60C */ .word 0x0CF66AB0
     /* 46954 80066154 F4EA677C */ .word 0x7C67EAF4 /* invalid instruction */
     /* 46958 80066158 FB3A7D59 */ .word 0x597D3AFB /* invalid instruction */
