@@ -65,4 +65,39 @@ glabel func_800349F8
     /* 152C8 80034AC8 40A40E20 */ .word 0x200EA440
     /* 152CC 80034ACC AAA18108 */ .word 0x0881A1AA
     /* 152D0 80034AD0 F537461F */ .word 0x1F4637F5 /* invalid instruction */
+    /* 152D4 80034AD4 B7594615 */ .word 0x154659B7
+    /* 152D8 80034AD8 946FF97E */ .word 0x7EF96F94 /* invalid instruction */
+    /* 152DC 80034ADC 25261BD6 */ .word 0xD61B2625
+    /* 152E0 80034AE0 FA8F0282 */ .word 0x82028FFA
+    /* 152E4 80034AE4 1A9BB4AE */ .word 0xAEB49B1A
+    /* 152E8 80034AE8 B2BCFE40 */ .word 0x40FEBCB2 /* invalid instruction */
+    /* 152EC 80034AEC 323B025B */ .word 0x5B023B32 /* invalid instruction */
+    /* 152F0 80034AF0 70382FD4 */ .word 0xD42F3870
+    /* 152F4 80034AF4 C00F46CF */ .word 0xCF460FC0
+    /* 152F8 80034AF8 2BE476E3 */ .word 0xE376E42B
+    /* 152FC 80034AFC BA1D8891 */ .word 0x91881DBA
+    /* 15300 80034B00 44D85C68 */ .word 0x685CD844
+    /* 15304 80034B04 1D51FA9F */ .word 0x9FFA511D
+    /* 15308 80034B08 C545A674 */ .word 0x74A645C5 /* invalid instruction */
+    /* 1530C 80034B0C 7335DF3F */ .word 0x3FDF3573 /* invalid instruction */
+    /* 15310 80034B10 5E2D6128 */ .word 0x28612D5E
+    /* 15314 80034B14 314485F2 */ .word 0xF2854431
+    /* 15318 80034B18 855CE9B2 */ .word 0xB2E95C85
+    /* 1531C 80034B1C 0CD13343 */ .word 0x4333D10C /* invalid instruction */
+    /* 15320 80034B20 EE271464 */ .word 0x641427EE
+    /* 15324 80034B24 9FFF638E */ .word 0x8E63FF9F
+    /* 15328 80034B28 F796E0D9 */ .word 0xD9E096F7
+    /* 1532C 80034B2C BA22F135 */ .word 0x35F122BA
+    /* 15330 80034B30 576B1F58 */ .word 0x581F6B57 /* invalid instruction */
+    /* 15334 80034B34 DFE3BB3B */ .word 0x3BBBE3DF
+    /* 15338 80034B38 3C6B2DAB */ .word 0xAB2D6B3C
+    /* 1533C 80034B3C 3F2BD853 */ .word 0x53D82B3F
+    /* 15340 80034B40 DBBFDB7E */ .word 0x7EDBBFDB /* invalid instruction */
+    /* 15344 80034B44 6712C603 */ .word 0x03C61267 /* invalid instruction */
+    /* 15348 80034B48 5512DC24 */ .word 0x24DC1255
+    /* 1534C 80034B4C A42DBC13 */ .word 0x13BC2DA4
+    /* 15350 80034B50 7B94261A */ .word 0x1A26947B /* invalid instruction */
+    /* 15354 80034B54 90F859BF */ .word 0xBF59F890
+    /* 15358 80034B58 4D93F7B2 */ .word 0xB2F7934D
+    /* 1535C 80034B5C 311452B7 */ .word 0xB7521431
 enddlabel func_800349F8

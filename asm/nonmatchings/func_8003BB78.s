@@ -67,14 +67,3 @@ glabel func_8003BB78
     /* 1C44C 8003BC4C 0800E003 */  jr         $ra
     /* 1C450 8003BC50 00000000 */   nop
 endlabel func_8003BB78
-
-nonmatching func_8003BC54, 0x18
-
-glabel func_8003BC54
-    /* 1C454 8003BC54 0580033C */  lui        $v1, %hi(D_80053494)
-    /* 1C458 8003BC58 9434638C */  lw         $v1, %lo(D_80053494)($v1)
-    /* 1C45C 8003BC5C 03008010 */  beqz       $a0, D_8003BC6C
-    /* 1C460 8003BC60 00000000 */   nop
-    /* 1C464 8003BC64 91E00008 */  j          .L80038244
-    /* 1C468 8003BC68 40100400 */   sll       $v0, $a0, 1
-endlabel func_8003BC54

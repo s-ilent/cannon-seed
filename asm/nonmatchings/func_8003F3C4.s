@@ -42,7 +42,6 @@ glabel func_8003F3C4
     /* 1FC34 8003F434 8BE7000C */  jal        func_80039E2C
     /* 1FC38 8003F438 21380000 */   addu      $a3, $zero, $zero
     /* 1FC3C 8003F43C 0680033C */  lui        $v1, %hi(D_80065534)
-  .L8003F440:
     /* 1FC40 8003F440 3455638C */  lw         $v1, %lo(D_80065534)($v1)
     /* 1FC44 8003F444 00000000 */  nop
     /* 1FC48 8003F448 08006010 */  beqz       $v1, .L8003F46C
@@ -63,31 +62,3 @@ glabel func_8003F3C4
     /* 1FC7C 8003F47C 0800E003 */  jr         $ra
     /* 1FC80 8003F480 00000000 */   nop
 endlabel func_8003F3C4
-
-nonmatching func_8003F484, 0x5C
-
-glabel func_8003F484
-    /* 1FC84 8003F484 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 1FC88 8003F488 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 1FC8C 8003F48C 04001034 */  ori        $s0, $zero, 0x4
-    /* 1FC90 8003F490 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 1FC94 8003F494 E6E2000C */  jal        func_80038B98
-    /* 1FC98 8003F498 01000434 */   ori       $a0, $zero, 0x1
-    /* 1FC9C 8003F49C 01000334 */  ori        $v1, $zero, 0x1
-    /* 1FCA0 8003F4A0 0F004314 */  bne        $v0, $v1, D_8003F4E0
-    /* 1FCA4 8003F4A4 FFFF1026 */   addiu     $s0, $s0, -0x1
-    /* 1FCA8 8003F4A8 0480043C */  lui        $a0, %hi(D_8003B3C4)
-    /* 1FCAC 8003F4AC C4B38424 */  addiu      $a0, $a0, %lo(D_8003B3C4)
-    /* 1FCB0 8003F4B0 3BE3000C */  jal        func_80038CEC
-    /* 1FCB4 8003F4B4 00000000 */   nop
-    /* 1FCB8 8003F4B8 0480043C */  lui        $a0, %hi(D_8003B3EC)
-    /* 1FCBC 8003F4BC ECB38424 */  addiu      $a0, $a0, %lo(D_8003B3EC)
-    /* 1FCC0 8003F4C0 41E3000C */  jal        func_80038D04
-    /* 1FCC4 8003F4C4 00000000 */   nop
-    /* 1FCC8 8003F4C8 0480043C */  lui        $a0, %hi(D_8003B414)
-    /* 1FCCC 8003F4CC 14B48424 */  addiu      $a0, $a0, %lo(D_8003B414)
-    /* 1FCD0 8003F4D0 47E3000C */  jal        func_80038D1C
-    /* 1FCD4 8003F4D4 00000000 */   nop
-    /* 1FCD8 8003F4D8 ECEC0008 */  j          D_8003B3B0
-    /* 1FCDC 8003F4DC 01000234 */   ori       $v0, $zero, 0x1
-endlabel func_8003F484

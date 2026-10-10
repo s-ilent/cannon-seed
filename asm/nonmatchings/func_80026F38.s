@@ -12,10 +12,6 @@ nonmatching func_80026F38
 glabel func_80026F38
     /* 7738 80026F38 024E71B2 */ .word 0xB2714E02
     /* 773C 80026F3C 2B435AC6 */ .word 0xC65A432B
-
-nonmatching .L80026F40
-
-alabel .L80026F40
     /* 7740 80026F40 B5524387 */ .word 0x874352B5
     /* 7744 80026F44 41AE25A8 */ .word 0xA825AE41
     /* 7748 80026F48 6D6EC43F */ .word 0x3FC46E6D /* invalid instruction */

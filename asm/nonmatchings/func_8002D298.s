@@ -29,25 +29,3 @@ glabel func_8002D298
     /* DAD8 8002D2D8 0800E003 */  jr         $ra
     /* DADC 8002D2DC 220083A4 */   sh        $v1, 0x22($a0)
 endlabel func_8002D298
-
-nonmatching func_8002D2E0, 0x44
-
-glabel func_8002D2E0
-    /* DAE0 8002D2E0 58FFBD27 */  addiu      $sp, $sp, -0xA8
-    /* DAE4 8002D2E4 A400BFAF */  sw         $ra, 0xA4($sp)
-    /* DAE8 8002D2E8 A000B4AF */  sw         $s4, 0xA0($sp)
-    /* DAEC 8002D2EC 9C00B3AF */  sw         $s3, 0x9C($sp)
-    /* DAF0 8002D2F0 9800B2AF */  sw         $s2, 0x98($sp)
-    /* DAF4 8002D2F4 9400B1AF */  sw         $s1, 0x94($sp)
-    /* DAF8 8002D2F8 9000B0AF */  sw         $s0, 0x90($sp)
-    /* DAFC 8002D2FC 0A00A22C */  sltiu      $v0, $a1, 0xA
-    /* DB00 8002D300 08004014 */  bnez       $v0, D_8002D324
-    /* DB04 8002D304 21A08000 */   addu      $s4, $a0, $zero
-    /* DB08 8002D308 0280043C */  lui        $a0, %hi(D_8002089C)
-    /* DB0C 8002D30C 9C088424 */  addiu      $a0, $a0, %lo(D_8002089C)
-    /* DB10 8002D310 21280000 */  addu       $a1, $zero, $zero
-    /* DB14 8002D314 42B0000C */  jal        func_8002C108
-    /* DB18 8002D318 21300000 */   addu      $a2, $zero, $zero
-    /* DB1C 8002D31C 5DAE0008 */  j          D_8002B974
-    /* DB20 8002D320 21100000 */   addu      $v0, $zero, $zero
-endlabel func_8002D2E0

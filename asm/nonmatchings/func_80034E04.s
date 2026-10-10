@@ -23,20 +23,6 @@ glabel func_80034E04
     /* 15628 80034E28 1400BF8F */  lw         $ra, 0x14($sp)
     /* 1562C 80034E2C 1000B08F */  lw         $s0, 0x10($sp)
     /* 15630 80034E30 1800BD27 */  addiu      $sp, $sp, 0x18
-  alabel func_80034E34
     /* 15634 80034E34 0800E003 */  jr         $ra
     /* 15638 80034E38 00000000 */   nop
 endlabel func_80034E04
-
-nonmatching func_80034E3C, 0x20
-
-glabel func_80034E3C
-    /* 1563C 80034E3C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 15640 80034E40 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 15644 80034E44 2A008014 */  bnez       $a0, D_80034EF0
-    /* 15648 80034E48 1000B0AF */   sw        $s0, 0x10($sp)
-    /* 1564C 80034E4C E5C8000C */  jal        func_80032394
-    /* 15650 80034E50 00000000 */   nop
-    /* 15654 80034E54 A1C80008 */  j          D_80032284
-    /* 15658 80034E58 00000000 */   nop
-endlabel func_80034E3C

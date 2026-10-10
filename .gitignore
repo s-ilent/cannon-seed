@@ -43,3 +43,5 @@ __pycache__/
 .vscode/
 *.swp
 asm/header.s
+mipsel-root/
+tools-local/

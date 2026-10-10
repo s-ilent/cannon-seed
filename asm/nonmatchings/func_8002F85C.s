@@ -30,10 +30,18 @@ alabel func_8002F87C
     /* 10090 8002F890 F32EA647 */ .word 0x47A62EF3 /* invalid instruction */
     /* 10094 8002F894 DCE4B1E5 */ .word 0xE5B1E4DC
     /* 10098 8002F898 820A4052 */ .word 0x52400A82
+
+nonmatching func_8002F89C
+
+alabel func_8002F89C
     /* 1009C 8002F89C A69AA995 */ .word 0x95A99AA6
     /* 100A0 8002F8A0 2200BF88 */ .word 0x88BF0022
     /* 100A4 8002F8A4 0ED9E644 */ .word 0x44E6D90E /* invalid instruction */
     /* 100A8 8002F8A8 3EA105F7 */ .word 0xF705A13E
+
+nonmatching func_8002F8AC
+
+alabel func_8002F8AC
     /* 100AC 8002F8AC EC13A951 */ .word 0x51A913EC
     /* 100B0 8002F8B0 AB185ED1 */ .word 0xD15E18AB
     /* 100B4 8002F8B4 AFC5C7E2 */ .word 0xE2C7C5AF

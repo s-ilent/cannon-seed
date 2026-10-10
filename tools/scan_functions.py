@@ -107,9 +107,12 @@ def scan(payload: bytes, entry_off: int):
                     break
             else:
                 bad = 0
-                if w == JR or (w >> 26) == 2:  # jr (any reg) or j: stop after delay slot
-                    i += 1
-                    end = (i + 1) * 4
+                if (w >> 26) == 0 and (w & 0x3F) == 0x08:  # jr (any reg)
+                    # keep the delay slot only when it is plausible (a real
+                    # nop or branch); garbage behind a return is data and
+                    # must fall to the next segment instead
+                    nxt = words[i + 1] if i + 1 < n else 0
+                    end = ((i + 2) if (nxt == 0 or plausible(nxt)) else (i + 1)) * 4
                     break
             i += 1
             end = i * 4
@@ -118,14 +121,23 @@ def scan(payload: bytes, entry_off: int):
         if end > a:
             covered[a] = end
 
-    # merge overlapping ranges
+    # merge overlapping ranges, then trim trailing all-zero runs (>= 2
+    # words) out of code ranges into the data side so spimdisasm never gets
+    # the chance to classify real file bytes as NOBITS .bss (the retail
+    # payload carries those zeros as actual bytes).
     merged = []
     for s in sorted(covered):
         if merged and s <= merged[-1][1]:
             merged[-1][1] = max(merged[-1][1], covered[s])
         else:
             merged.append([s, covered[s]])
-    return merged
+    trimmed = []
+    for s, e in merged:
+        z = e
+        while z - 8 >= s and words[(z // 4) - 1] == 0 and words[(z // 4) - 2] == 0:
+            z -= 4
+        trimmed.append([s, z])
+    return trimmed
 
 
 def data_gaps(code_ranges, payload_len):
@@ -168,6 +180,13 @@ def main(argv):
           f"{len(gaps)} data gaps ({data_bytes:,} B)")
 
     # --- rewrite the splat yaml subsegments (regenerate wholesale) --------
+    # One code segment covering the payload, subsegments in payload order.
+    # splat 0.50 refuses top-level asm segments (needs a code parent), so
+    # the interleaved layout is restored at LINK time instead:
+    # tools/gen_ld.py gives every subsegment its own output section at its
+    # explicit vram/rom address, in order.
+    # The PS-X EXE header is NOT a segment: tools/mkpsxexe.py regenerates it
+    # from committed config, so the linked image is the payload only.
     yaml_path = REPO / "config" / f"splat.{target}.yaml"
     ytext = yaml_path.read_text()
     gen = ["    # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)"]
@@ -176,11 +195,17 @@ def main(argv):
     gen.append("    # END GENERATED SUBSEGMENTS")
     block = "\n".join(gen)
     new_ytext, count = re.subn(
-        r"  subsegments:\n.*?\n(\s*# rom end marker)",
-        "  subsegments:\n" + block + "\n\n  \\1",
+        r"segments:\n.*?\n(\s*- \[0x[0-9A-Fa-f]+\])",
+        "segments:\n"
+        "  - name: payload\n"
+        "    type: code\n"
+        "    start: 0x800\n"
+        "    vram: 0x80020000\n"
+        "    subsegments:\n"
+        + block + "\n\\1",
         ytext, flags=re.S)
     if count != 1:
-        raise SystemExit(f"could not locate subsegments/end-marker in {yaml_path}")
+        raise SystemExit(f"could not locate segments/end-marker in {yaml_path}")
     yaml_path.write_text(new_ytext)
 
     # --- rewrite function symbols between markers -------------------------

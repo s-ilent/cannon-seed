@@ -18,4 +18,6 @@ glabel func_80048374
     /* 28B88 80048388 EAFBBD48 */ .word 0x48BDFBEA /* invalid instruction */
     /* 28B8C 8004838C EF4A320A */ .word 0x0A324AEF
     /* 28B90 80048390 34152D65 */ .word 0x652D1534
+    /* 28B94 80048394 3CB15CCC */ .word 0xCC5CB13C
+    /* 28B98 80048398 5E552376 */ .word 0x7623555E /* invalid instruction */
 enddlabel func_80048374

@@ -1,0 +1,64 @@
+{
+  "_comment": [
+    "PS-X EXE header build configuration per target, measured in Phase 1",
+    "(tools/exe_map.py, docs/LOADMAP.md). tools/mkpsxexe.py regenerates",
+    "the 2048-byte header from this file; t_size is filled at build time",
+    "from the linked payload length."
+  ],
+  "g3_eu": {
+    "pc0": "0x80047B58",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Europe area"
+  },
+  "g3_jp": {
+    "pc0": "0x80047EF0",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Japan area"
+  },
+  "g3org_eu": {
+    "pc0": "0x80044FAC",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Europe area"
+  },
+  "g3org_jp": {
+    "pc0": "0x8004538C",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Japan area"
+  },
+  "mainmenu_eu": {
+    "pc0": "0x8005C160",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Europe area"
+  },
+  "mainmenu_jp": {
+    "pc0": "0x8005C530",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Japan area"
+  },
+  "sces_00269": {
+    "pc0": "0x8002D908",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Europe area"
+  },
+  "slps_00270": {
+    "pc0": "0x8002DB14",
+    "gp0": "0x00000000",
+    "t_addr": "0x80020000",
+    "sp0": "0x801FFFF0",
+    "mark": "Sony Computer Entertainment Inc. for Japan area"
+  }
+}

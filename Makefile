@@ -71,10 +71,7 @@ verify:
 # docs/REFERENCES.md for pointers.
 .PHONY: build
 build:
-	@echo "FILL: implement the compile pipeline (target 'build' in the Makefile,"
-	@echo "      or a script called from tools/verify.sh). Pin the exact original"
-	@echo "      compiler revision — the compiler is part of the retail bytes."
-	@exit 2
+	./tools/build.sh
 
 # --- Split the retail executable --------------------------------------------
 # Runs splat over your (git-ignored) executable and generates asm/, data,
