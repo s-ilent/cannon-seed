@@ -1,0 +1,58 @@
+# =============================================================================
+# config/splat.slps_00270.yaml — primary target: Japan boot executable
+#
+# SLPS_002.70 (SLPS-00270), 290,816 bytes on disc, 288,768-byte payload.
+# SHA-1: f2a13b5270876e8117ddcc38fb99716124195c46 (config/sha1/slps_00270.sha1)
+#
+# STATUS: skeleton. The subsegments below are FILL — the first split needs
+# a function/data map from analysis (Ghidra, or splat's auto-detection
+# seeded by hand). Nonstandard header facts are in docs/RECON.md:
+# entry pc0=0x80020000, t_addr=0x8002DB14, t_size field is 0 (payload
+# size = file size - 0x800). Load semantics of the multi-EXE chain are
+# the first open question of Phase 1.
+# =============================================================================
+
+options:
+  basename: slps_00270
+  base_path: .
+  target_path: baselines/slps_00270.bin
+  build_path: build
+  asm_path: asm
+  asset_path: assets
+  symbol_addrs_path:
+    - config/symbols.slps_00270.txt
+  ld_script_path: build/slps_00270.ld
+
+  compiler: GCC            # FILL: pin exact revision (see docs/RECON.md —
+                           # Psy-Q kernel strings date the SDK to 1995-10;
+                           # GCC 2.6.3 is the working hypothesis)
+  platform: psx
+  endianness: little
+
+  # FILL: compiler flags once identified from the toolchain fingerprint
+  # (candidates: -mips1 -mcpu=3000 -O2/-O3 -G0/-G4 -funsigned-char)
+
+  create_undefined_syms_auto: true
+  ld_generate_symbol_yml: true
+
+segments:
+  # FILL: the PS-X EXE header occupies the first 0x800 bytes; the payload
+  # (file offset 0x800, 288,768 bytes) follows. Where the BIOS loads it for
+  # this chained multi-EXE build is an open recon item — the vram address
+  # below starts from the standard 0x80010000 mapping and MUST be verified
+  # against a debugger before any matching work.
+  - name: header
+    type: header
+    start: 0x0
+    end: 0x800
+
+  - name: payload
+    type: code
+    start: 0x800
+    vram: 0x80020000       # FILL: verify — entry pc0 is 0x80020000
+    subsegments:
+      # FILL: seed from analysis. Shape only:
+      - [0x800, asm, entry]          # loader stub (pc0 target)
+      # - [0x..., c, unit_name]
+      # - [0x..., data, unit_name]
+  - [0x47500, end]       # FILL: 0x800 + 0x46D00 payload = 0x47500
