@@ -38,10 +38,15 @@ extraction from their own CHDs — and the docs.
 
 ## Status
 
-Phase 0-1 (groundwork + recon) complete: both discs characterised, all
-eight regional executables extracted and hashed, SDK fingerprinted to an
-October-1995 Psy-Q, multi-EXE load scheme identified as the first open
-question. Next: debugger-proven RAM maps, compiler pinning, first split.
+The repo owns a byte-exact build machine: splat split → maspsx → mipsel
+as → per-subsegment linker script → objcopy → generated PS-X EXE header.
+The round-trip oracle is GREEN for **2 of 8 targets** — `slps_00270`
+(Japan boot) and `sces_00269` (Europe boot) — i.e. `make verify
+TARGET=<t>` reproduces those retail executables byte-for-byte from
+committed asm. This is an asm round-trip, not decompiled source: every
+function is still nonmatching, and the remaining six targets await their
+scan configs. Next: compiler pinning (docs/TOOLCHAIN.md), GCC 2.6.3
+acquisition, first C function match, then the remaining targets.
 Live facts: [docs/RECON.md](docs/RECON.md). Measure, don't transcribe:
 `make progress`, `make nonmatchings`, `make ratchets`.
 
