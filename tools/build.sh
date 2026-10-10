@@ -6,14 +6,26 @@
 # retail SHA-1.
 #
 # Toolchain (no root in this sandbox): mipsel binutils 2.31.1 extracted
-# from the Debian buster .deb into tools-local/ (git-ignored). maspsx from
-# tools-src/maspsx (pinned clone). Python bits from /home/z/.venv.
+# from the Debian buster .deb into tools-local/ (git-ignored, rebuild via
+# tools/get_binutils.sh). maspsx from tools-src/maspsx (pinned clone).
+# Python bits from the persistent venv /home/z/my-project/.venv (survives
+# re-provisions; tools/rehydrate.sh rebuilds it offline from the wheelhouse).
 set -u
 
 cd "$(dirname "$0")/.."
 REPO="$PWD"
 
-PY="${PY:-/home/z/.venv/bin/python3}"
+# Interpreter resolution: persistent venv first, legacy path as fallback.
+PY="${PY:-}"
+if [ -z "$PY" ]; then
+    for cand in /home/z/my-project/.venv/bin/python3 /home/z/.venv/bin/python3; do
+        if [ -x "$cand" ] && "$cand" -c "import splat, spimdisasm" >/dev/null 2>&1; then
+            PY="$cand"
+            break
+        fi
+    done
+fi
+[ -n "$PY" ] || PY=python3
 MASPSX="${MASPSX:-/home/z/my-project/tools-src/maspsx/maspsx.py}"
 TOOLROOT="${TOOLROOT:-/home/z/my-project/tools-local/mipsel-root}"
 export LD_LIBRARY_PATH="$TOOLROOT/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"

@@ -37,6 +37,27 @@ methodology lives in `docs/RULES.md`, `docs/GUIDELINES.md` and
    (COP2/GTE layer), and those constraints live in the sanctioned macro
    header.
 
+## Sandbox re-provision recovery
+
+The sandbox is periodically re-provisioned: file modes flip, `/home/z`
+dotfiles (PAT locations) are wiped, `/home/z/.venv` reverts to the base
+image, and the repo can roll back to an older snapshot. `my-project/`
+keeps the wheelhouse, the persistent venv and `.secrets/`. **First action
+after any anomaly — one command, idempotent, offline, seconds:**
+
+```sh
+sh tools/rehydrate.sh        # add --smoke for a full oracle proof
+```
+
+It restores git config (filemode, identity, credential helper), the PAT
+locations from `.secrets/`, the persistent venv (offline wheelhouse:
+`requirements-lock.txt` + `/home/z/my-project/wheelhouse`, rebuild via
+`tools/make_wheelhouse.sh`), the maspsx clone and the mipsel binutils.
+If `git log` looks older than the last pushed commit:
+`git fetch origin && git reset --hard origin/main` — pushed work is never
+lost. Which is the rule this section rests on: **commit and push at every
+milestone; GitHub is the recovery medium.**
+
 ## The loop
 
 1. Edit `src/` or `include/`. Functions within a file stay in ROM-address
