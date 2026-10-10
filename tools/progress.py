@@ -81,8 +81,16 @@ def count_matched_functions() -> int:
 def count_nonmatching() -> list[str]:
     if not NONMATCH.exists():
         return []
-    # splat layout: asm/nonmatchings/<unit>/<function>.s
-    return sorted(p.stem for p in NONMATCH.rglob("*.s"))
+    # splat layout: asm/nonmatchings/<...>.s - one or more functions per
+    # file, each introduced by a `glabel` line. Data subsegments carry only
+    # `dlabel`s, so counting glabels counts functions, not data blobs.
+    names: list[str] = []
+    for path in sorted(NONMATCH.rglob("*.s")):
+        for line in path.read_text(errors="replace").splitlines():
+            m = re.match(r"glabel\s+(\S+)", line)
+            if m:
+                names.append(m.group(1))
+    return names
 
 
 def main() -> int:

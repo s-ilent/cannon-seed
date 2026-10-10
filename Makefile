@@ -41,6 +41,8 @@ _bare-make-blocked:
 	@echo ""
 	@echo "  make verify TARGET=<t>    build + compare the whole image with retail"
 	@echo "  make extract TARGET=<t>   split the retail executable (splat)"
+	@echo "  make scan                 bootstrap the code/data map (MIPS-I scan)"
+	@echo "  make map                  regenerate the load-map measurement"
 	@echo "  make progress             matched / nonmatching function report"
 	@echo "  make nonmatchings         list functions that do not match yet"
 	@echo "  make ratchets             placeholder / debt ratchet audit"
@@ -88,6 +90,14 @@ extract:
 .PHONY: map
 map:
 	$(PY) tools/exe_map.py
+
+# --- Bootstrap the code/data map ---------------------------------------------
+# Deterministic MIPS-I scanner: entry + jal targets -> function ranges,
+# everything else -> data. Regenerates the splat subsegments and symbols
+# for the primary target. Re-run after layout discoveries; then re-split.
+.PHONY: scan
+scan:
+	$(PY) tools/scan_functions.py
 
 # --- Measurement ------------------------------------------------------------
 # Project state lives in tools, never in prose. A number written in a
