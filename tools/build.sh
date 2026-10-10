@@ -158,6 +158,18 @@ src, dst, sec = sys.argv[1], sys.argv[2], sys.argv[3]
 text = open(src).read()
 text = re.sub(r"^\s*\.text\s*$",
               f'.section .r_{sec}, "awx", @progbits', text, flags=re.M)
+# Small-data rewrite: cc1 -G8 emits bare-symbol memory operands for
+# gp-relative globals (aspsx would relax them via .extern size + -G).
+# maspsx only registers .comm/.sdata symbols, so extern-referenced
+# globals pass through bare — GNU as would emit HI16/LO16 (absolute),
+# which does NOT round-trip. Convert to the explicit form; the linker
+# resolves GPREL16 against _gp (gen_ld.py emits it from yaml gp_value).
+text = re.sub(
+    r"(?m)^(\s*(?:lb|lbu|lh|lhu|lw|lwl|lwr|sb|sh|sw|swl|swr)\s+\$[a-z0-9]+,)"
+    r"([A-Za-z_][A-Za-z0-9_]*(?:\+[0-9]+)?)\s*$",
+    r"\1%gp_rel(\2)($gp)",
+    text,
+)
 open(dst, "w").write(text)
 PYSEC
         if ! "$AS" $ASFLAGS -o "build/src/${cname}.o" "$staged" 2> "build/src/${cname}.aserr"; then

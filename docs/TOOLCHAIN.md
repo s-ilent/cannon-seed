@@ -43,7 +43,7 @@ Evidence is reproducible with grep against `asm/nonmatchings/`
 | division guard | `div` 13, `break` 33; e.g. `0x80028D74`: `bnez $a3,+7; nop; break 7` then `addiu $at,$zero,-1; bne/lui 0x80000000; break 6` | inline divide-by-zero **and** INT_MIN/-1 overflow traps — the classic GCC MIPS1 idiom |
 | libgcc arithmetic calls | 0 `jal` to `__divsi3/__mulsi3/...` | arithmetic fully inlined by the compiler |
 | char signedness | `lbu` 184 vs `lb` 13 | **unsigned char is the default** (`-funsigned-char` convention), with a minority of genuinely signed char fields |
-| gp-relative addressing | `0` occurrences of `%gp_rel` | **no small-data use** — working assumption `-G0`; *revises* the earlier small-data guess in docs/RECON.md. %hi/%lo pairs carry all data addressing |
+| gp-relative addressing | `%gp_rel` 0 in generated stubs, BUT raw `$gp`-base loads/stores everywhere (e.g. `0x3C($gp)`, `0x68($gp)`); gp base **0x8006322C** set at 0x800304D4 (`lui $gp,0x8006; addiu $gp,$gp,0x632C`) | **small-data model in play** — retail references a compact global area off $gp. Working flags **-G8** (cc1 default); extern-referenced small globals need build.sh's `%gp_rel` staging rewrite (maspsx registers only .comm/.sdata, not `.extern`) — see probes/gcc263/gp_probe.c |
 | delay slots | `.set noreorder` + explicit `nop` scheduling | compiler-scheduled delay slots, not assembler-reordered |
 
 ## Working hypothesis (until pinned per-function)
@@ -100,8 +100,11 @@ Probe evidence (`probes/gcc263/idioms.c`, compare against
 | `p[i]` signed char | minority row | `lb` |
 
 cc1 defaults confirmed on the banner: `-mgas -msoft-float`,
-`-G value = 8` (overridden to `-G0`, matching the %gp_rel=0
-measurement), `Cpu = 3000, ISA = 1`.
+`-G value = 8` (**kept** — the gp-base discovery at 0x800304D4 and the
+`off($gp)` access pattern prove the original build used small data;
+the earlier -G0 assumption came from stub disassembly, which renders
+gp forms as raw `$gp` offsets rather than `%gp_rel` relocations),
+`Cpu = 3000, ISA = 1`.
 
 Gotcha for the linker path: gas pads the default `.text` section to 16
 bytes on MIPS regardless of content, while the asm staging path's fresh

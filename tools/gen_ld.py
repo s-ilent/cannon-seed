@@ -79,6 +79,13 @@ def main(argv):
         "{",
         "    HIDDEN(__romPos = 0);",
     ]
+    # Optional global-pointer base (yaml options.gp_value): matched C that
+    # references small-data globals carries R_MIPS_GPREL16 relocations,
+    # resolved by the linker against _gp. slps_00270: gp base 0x8006322C
+    # (lui $gp,0x8006 / addiu $gp,$gp,0x632C at 0x800304D4).
+    gp_value = cfg["options"].get("gp_value")
+    if gp_value is not None:
+        lines.append(f"    _gp = 0x{int(gp_value):X};")
     for rom, typ, name in subs:
         vram = base_vram + (rom - HDR)
         sec = f".r_{rom:08X}"

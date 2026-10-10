@@ -12,7 +12,12 @@
 # Flag set is the working hypothesis from docs/TOOLCHAIN.md:
 #   -mips1  MIPS1 ISA (measured: mult/mflo, no MIPS32 mul)
 #   -O2     optimization level (hypothesis; probes must confirm)
-#   -G0     no small-data (%gp_rel never appears in the matched asm)
+#   -G8     small-data threshold: retail DOES use gp-relative data
+#           (0x3C($gp) etc. off the 0x8006322C base in slps_00270), so
+#           the original build compiled with small data enabled. cc1
+#           emits bare-symbol memory operands for such globals; the
+#           %gp_rel conversion happens in build.sh's C staging (maspsx
+#           only registers .comm/.sdata symbols, not .extern ones).
 #   -funsigned-char  plain char is unsigned (lbu 184 vs lb 13)
 #   -fno-builtin     no libc call substitution (libgcc calls: zero)
 #
@@ -56,7 +61,7 @@ SRC=$(echo $SOURCES)
 BASE="$(basename "$SRC" .c)"
 STEM="${OUT%.o}"
 
-CC1FLAGS="-quiet -mips1 -O2 -G0 -funsigned-char -fno-builtin $INCS"
+CC1FLAGS="-quiet -mips1 -O2 -G8 -funsigned-char -fno-builtin $INCS"
 
 # The Psy-Q cc1 wants preprocessed input (it rejects unstripped
 # comments), so run the bundled cpp first — same as the original
