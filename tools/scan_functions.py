@@ -6,7 +6,7 @@ compiler-idiom or matching work; it produces the first-pass subsegment
 list so splat can split per-function and progress/ratchets have something
 honest to count.
 
-Method (v2, documented and re-runnable):
+Method (v1, documented and re-runnable):
 
 1. Anchors: the proven entry point (pc0) plus every `jal` target found in
    the payload. `jal` encodes an absolute image address, so its target is
@@ -16,20 +16,7 @@ Method (v2, documented and re-runnable):
    they are plausible MIPS-I; stop after a `jr`/`j` plus its delay slot
    (function return or tail jump), after a run of >= 3 zero words
    (padding), or after 4 consecutive implausible words (embedded data).
-3. v2 flow-through: a `jr`+delay does NOT end the walk when (a) the
-   boundary address is not a jal target and (b) plausible code follows.
-   GCC 2.6.3 places mid-function epilogues (early `return`s) whose
-   fall-through continues the same function; v1 stopped there and
-   manufactured prologue-less fragments (104 of 253 subsegments on
-   slps_00270, see tools/prologue_hunt.py).
-4. v2 branch-target rescue: branch/jump targets that land in remaining
-   data gaps seed additional walks. A rescued run is kept only when it
-   connects to (reaches or overlaps) an existing or other rescued range —
-   orphaned walks would create NEW mid-function fragments, the very
-   disease being fixed.
-5. Ranges are merged; every uncovered aligned gap is data.
-6. Type preservation: subsegments the tree already carries as `c`
-   (C-matched functions) keep their type across re-scans.
+3. Ranges are merged; every uncovered aligned gap is data.
 
 Outputs (regenerated wholesale):
   - config/splat.slps_00270.yaml  subsegments section (between markers)
@@ -79,7 +66,7 @@ def plausible(w: int) -> bool:
     return True
 
 
-def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
+def scan(payload: bytes, entry_off: int):
     n = len(payload) // 4
     words = struct.unpack(f"<{n}I", payload[: n * 4])
 
@@ -98,23 +85,10 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
     # jal targets inside data produce garbage anchors; the walk from an
     # implausible anchor dies immediately, so no special filtering needed.
 
-    def branch_target(i, w):
-        """vram address a branch/jump at word i targets, or None."""
-        op = w >> 26
-        pc = BASE + i * 4
-        if op in (0x04, 0x05, 0x06, 0x07) or op == 0x01:
-            simm = w & 0xFFFF
-            if simm >= 0x8000:
-                simm -= 0x10000
-            return pc + 4 + (simm << 2)
-        if op == 0x02:  # j (not jal — jal targets are anchors already)
-            return ((w & 0x3FFFFFF) << 2) | (BASE & 0xF0000000)
-        return None
-
-    def walk(start_off):
-        """Forward walk with v1 stop rules + v2 jr flow-through.
-        Returns (start, end) with end exclusive, or None."""
-        a = start_off
+    covered = {}  # start_off -> end_off (function ranges)
+    for a in sorted(anchors):
+        if any(s <= a < e for s, e in covered.items()):
+            continue
         end = a
         bad = 0
         zeros = 0
@@ -124,75 +98,28 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
             if w == 0:
                 zeros += 1
                 if zeros >= 3:
-                    return (a, end)
+                    break
             else:
                 zeros = 0
             if not plausible(w):
                 bad += 1
                 if bad >= 4:
-                    return (a, end)
+                    break
             else:
                 bad = 0
                 if (w >> 26) == 0 and (w & 0x3F) == 0x08:  # jr (any reg)
+                    # keep the delay slot only when it is plausible (a real
+                    # nop or branch); garbage behind a return is data and
+                    # must fall to the next segment instead
                     nxt = words[i + 1] if i + 1 < n else 0
-                    stop = ((i + 2) if (nxt == 0 or plausible(nxt)) else (i + 1)) * 4
-                    end = stop
-                    # v2: flow through the jr when the boundary is not a
-                    # jal target (nor a preserved C-matched function entry)
-                    # and real code follows — this is a mid-function
-                    # epilogue, not a function end.
-                    if (stop not in anchors
-                            and stop not in hard_stops
-                            and stop // 4 < n
-                            and words[stop // 4] != 0
-                            and plausible(words[stop // 4])):
-                        i = stop // 4
-                        zeros = 0
-                        bad = 0
-                        continue
-                    return (a, end)
+                    end = ((i + 2) if (nxt == 0 or plausible(nxt)) else (i + 1)) * 4
+                    break
             i += 1
             end = i * 4
         if end > len(payload):
             end = len(payload)
-        return (a, end) if end > a else None
-
-    covered = {}  # start_off -> end_off (function ranges)
-    for a in sorted(anchors):
-        if any(s <= a < e for s, e in covered.items()):
-            continue
-        r = walk(a)
-        if r and r[1] > r[0]:
-            covered[r[0]] = r[1]
-
-    # v2 branch-target rescue for the remaining gaps
-    def in_covered(o):
-        return any(s <= o < e for s, e in covered.items())
-
-    seeds = set()
-    for s, e in list(covered.items()):
-        for i in range(s // 4, e // 4):
-            t = branch_target(i, words[i])
-            if t is None:
-                continue
-            o = v2o(t)
-            if o is not None and not in_covered(o & ~3) and (o & ~3) not in hard_stops:
-                seeds.add(o & ~3)
-    for a in sorted(seeds):
-        if in_covered(a):
-            continue
-        r = walk(a)
-        if not r:
-            continue
-        s, e = r
-        # keep the rescued run only when it CONNECTS to an existing range:
-        # its end reaches/overlaps one, or another seed's walk does.
-        if any(s < e2 and e > s2 for s2, e2 in covered.items()):
-            covered[s] = max(e, covered.get(s, 0))
-        elif any(e2 == s for s2, e2 in covered.items()) or any(
-            s2 == e for s2, e2 in covered.items()
-        ):
-            covered[s] = e
+        if end > a:
+            covered[a] = end
 
     # merge overlapping ranges, then trim trailing all-zero runs (>= 2
     # words) out of code ranges into the data side so spimdisasm never gets
@@ -225,28 +152,6 @@ def data_gaps(code_ranges, payload_len):
     return gaps
 
 
-def preserved_types(yaml_path: Path):
-    """Offsets the tree already carries with a hand-set type ("c" for
-    C-matched functions). Returns {offset: (type, name)} and the set of
-    offsets as hard walk-stop boundaries."""
-    kept = {}
-    if not yaml_path.exists():
-        return kept
-    in_block = False
-    for ln in yaml_path.read_text().splitlines():
-        if "# BEGIN GENERATED SUBSEGMENTS" in ln:
-            in_block = True
-            continue
-        if "# END GENERATED SUBSEGMENTS" in ln:
-            break
-        if not in_block:
-            continue
-        m = re.match(r"\s*- \[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]", ln)
-        if m and m.group(2) != "asm":
-            kept[int(m.group(1), 16) - HDR] = (m.group(2), m.group(3))
-    return kept
-
-
 def main(argv):
     target = argv[1] if len(argv) > 1 else "slps_00270"
     binpath = BASELINES / f"{target}.bin"
@@ -258,29 +163,12 @@ def main(argv):
     pc0 = header_words[0]
     entry_off = pc0 - BASE
 
-    kept = preserved_types(yaml_path := REPO / "config" / f"splat.{target}.yaml")
-    hard_stops = frozenset(kept)
-
-    ranges = scan(payload, entry_off, hard_stops)
+    ranges = scan(payload, entry_off)
     gaps = data_gaps(ranges, len(payload))
-
-    # Defensive: a preserved c-function must START its own subsegment. If a
-    # v2 merged range swallowed it, split the range at that offset so the
-    # C file stays wired into the build (and log loudly).
-    for off in sorted(kept):
-        for i, (s, e) in enumerate(ranges):
-            if s < off < e:
-                print(f"scan: WARNING: splitting range {s:#x}..{e:#x} at "
-                      f"preserved c-function {off:#x}")
-                ranges[i:i + 1] = [[s, off], [off, e]]
-                break
 
     subsegs = []
     for s, e in ranges:
-        typ, name = "asm", f"func_{BASE + s:08X}"
-        if s in kept:
-            typ, name = kept[s]
-        subsegs.append((s, typ, name, e - s))
+        subsegs.append((s, "asm", f"func_{BASE + s:08X}", e - s))
     for s, e in gaps:
         subsegs.append((s, "data", f"data_{BASE + s:08X}", e - s))
     subsegs.sort()
@@ -299,11 +187,7 @@ def main(argv):
     # explicit vram/rom address, in order.
     # The PS-X EXE header is NOT a segment: tools/mkpsxexe.py regenerates it
     # from committed config, so the linked image is the payload only.
-    # NOTE on the rewrite regex: the group pattern requires `]` directly
-    # after the hex digits, so it only matches a bare `- [0xNNN]` segment
-    # reference line AFTER the generated block — the generated entries
-    # themselves (`- [0xNNN, type, name]`) can never match, which is what
-    # makes the wholesale replace + idempotent re-runs work.
+    yaml_path = REPO / "config" / f"splat.{target}.yaml"
     ytext = yaml_path.read_text()
     gen = ["    # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)"]
     for off, typ, name, size in subsegs:
