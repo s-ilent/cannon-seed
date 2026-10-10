@@ -26,16 +26,28 @@ BASE = 0x80020000
 HDR = 0x800
 
 
-def obj_rel_path(name: str, typ: str) -> str:
-    """Object path the ld script references, relative to repo root."""
+def obj_rel_path(name: str, typ: str, asm_path: str) -> str:
+    """Object path the ld script references, relative to repo root.
+
+    tools/build.sh stages every source under build/<path minus the leading
+    'asm/'>, so the object lives at build/<asm_path minus 'asm/'>/<file>.o.
+    asm_path comes from the target's own splat yaml (per-target asm trees,
+    e.g. asm/nonmatchings for slps_00270 or asm/sces_00269/nonmatchings).
+    """
     if typ == "data":
-        return f"build/asm/nonmatchings/data/{name}.data.s.o"
-    return f"build/asm/nonmatchings/{name}.s.o"
+        src = f"{asm_path}/data/{name}.data.s"
+    else:
+        src = f"{asm_path}/{name}.s"
+    prefix = "asm/"
+    assert src.startswith(prefix), f"asm_path must live under asm/: {src}"
+    # staged tree: build/asm/<path minus leading 'asm/'>, obj adds .o
+    return f"build/asm/{src[len(prefix):]}.o"
 
 
 def main(argv):
     target = argv[1] if len(argv) > 1 else "slps_00270"
     cfg = yaml.safe_load((REPO / "config" / f"splat.{target}.yaml").read_text())
+    asm_path = cfg["options"]["asm_path"].rstrip("/")
 
     segs = cfg["segments"]
     code = [s for s in segs if isinstance(s, dict) and s.get("type") == "code"]
@@ -66,7 +78,7 @@ def main(argv):
         sec = f".r_{rom:08X}"
         lines.append(
             f"    .o_{rom:08X} 0x{vram:08X} : AT(0x{rom:X}) "
-            f"{{ {obj_rel_path(name, typ)}({sec}) }} :payload"
+            f"{{ {obj_rel_path(name, typ, asm_path)}({sec}) }} :payload"
         )
     lines.append("")
     lines.append("    /DISCARD/ : { *(.reginfo) *(.MIPS.abiflags) *(.gnu.attributes) *(.comment) *(.pdr) }")

@@ -71,7 +71,7 @@ verify:
 # docs/REFERENCES.md for pointers.
 .PHONY: build
 build:
-	./tools/build.sh
+	TARGET="$(TARGET)" ./tools/build.sh
 
 # --- Split the retail executable --------------------------------------------
 # Runs splat over your (git-ignored) executable and generates asm/, data,
@@ -94,7 +94,7 @@ map:
 # for the primary target. Re-run after layout discoveries; then re-split.
 .PHONY: scan
 scan:
-	$(PY) tools/scan_functions.py
+	$(PY) tools/scan_functions.py $(TARGET)
 
 # --- Measurement ------------------------------------------------------------
 # Project state lives in tools, never in prose. A number written in a

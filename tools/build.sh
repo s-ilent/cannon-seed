@@ -5,8 +5,8 @@
 # -> objcopy -> full image; tools/verify.sh compares the result with the
 # retail SHA-1.
 #
-# Toolchain (no root in this sandbox): mipsel binutils 2.30 extracted from
-# the Ubuntu bionic .deb into tools-local/ (git-ignored). maspsx from
+# Toolchain (no root in this sandbox): mipsel binutils 2.31.1 extracted
+# from the Debian buster .deb into tools-local/ (git-ignored). maspsx from
 # tools-src/maspsx (pinned clone). Python bits from /home/z/.venv.
 set -u
 
@@ -31,6 +31,14 @@ fail() { echo "build: $*" >&2; exit 2; }
 
 [ -x "$AS" ] || fail "mipsel-as not found at $AS (see tools-local/ setup in docs/TOOLCHAIN.md)"
 [ -f "config/splat.${TARGET}.yaml" ] || fail "splat config missing - run the split pipeline first"
+
+# asm tree is PER TARGET (every address is valid for one revision only):
+# build.sh follows the yaml's asm_path, so the target's own split is
+# assembled - never a mix of two targets' files.
+ASM_DIR=$("$PY" -c "import yaml; print(yaml.safe_load(open('config/splat.${TARGET}.yaml'))['options']['asm_path'].rstrip('/'))") \
+    || fail "could not read asm_path from config/splat.${TARGET}.yaml"
+[ -d "$ASM_DIR" ] || fail "asm tree missing at $ASM_DIR - run: make extract TARGET=$TARGET"
+ASFLAGS="$ASFLAGS -I $ASM_DIR"
 
 mkdir -p build
 # regenerate the round-trip linker script from the committed yaml
@@ -94,7 +102,7 @@ PYSEC
         continue
     fi
     n_ok=$((n_ok + 1))
-done < <(find asm/nonmatchings -name "*.s" | sort)
+done < <(find "$ASM_DIR" -name "*.s" | sort)
 
 echo "assembled: $n_ok ok, $n_fail failed"
 [ "$n_fail" -eq 0 ] || fail "assembly errors - fix the split or the pipeline"

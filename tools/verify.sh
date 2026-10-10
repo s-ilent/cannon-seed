@@ -60,7 +60,7 @@ say "verify: baseline matches oracle (${expected})."
 # 3. Build. -------------------------------------------------------------------
 # FILL: point this at your real pipeline. The template's stub fails on
 # purpose until you configure the pinned toolchain.
-if ! make build; then
+if ! make build TARGET="$TARGET"; then
     die "build failed (see above)"
 fi
 
