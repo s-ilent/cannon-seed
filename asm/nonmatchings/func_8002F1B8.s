@@ -56,7 +56,7 @@ glabel func_8002F1B8
     /* FA58 8002F258 21280002 */   addu      $a1, $s0, $zero
     /* FA5C 8002F25C E9DD000C */  jal        func_800377A4
     /* FA60 8002F260 21202002 */   addu      $a0, $s1, $zero
-    /* FA64 8002F264 42B40008 */  j          D_8002D108
+    /* FA64 8002F264 42B40008 */  j          func_8002D108
     /* FA68 8002F268 00000000 */   nop
   .L8002F26C:
     /* FA6C 8002F26C 02AF000C */  jal        func_8002BC08

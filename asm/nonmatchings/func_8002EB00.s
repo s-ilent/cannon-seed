@@ -22,6 +22,7 @@ glabel func_8002EB00
     /* F324 8002EB24 040000A6 */  sh         $zero, 0x4($s0)
     /* F328 8002EB28 060000A6 */  sh         $zero, 0x6($s0)
     /* F32C 8002EB2C 03006330 */  andi       $v1, $v1, 0x3
+  alabel func_8002EB30
     /* F330 8002EB30 001E0300 */  sll        $v1, $v1, 24
     /* F334 8002EB34 000003AE */  sw         $v1, 0x0($s0)
     /* F338 8002EB38 1A00A397 */  lhu        $v1, 0x1A($sp)
@@ -34,6 +35,7 @@ glabel func_8002EB00
     /* F354 8002EB54 21884000 */  addu       $s1, $v0, $zero
     /* F358 8002EB58 02006104 */  bgez       $v1, .L8002EB64
     /* F35C 8002EB5C 21206000 */   addu      $a0, $v1, $zero
+  alabel func_8002EB60
     /* F360 8002EB60 3F006324 */  addiu      $v1, $v1, 0x3F
   .L8002EB64:
     /* F364 8002EB64 C0006230 */  andi       $v0, $v1, 0xC0

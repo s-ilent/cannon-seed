@@ -22,6 +22,7 @@ glabel func_80021CBC
     /* 24E0 80021CE0 5986000C */  jal        func_80021964
     /* 24E4 80021CE4 00000000 */   nop
     /* 24E8 80021CE8 AC8E000C */  jal        func_80023AB0
+  .L80021CEC:
     /* 24EC 80021CEC 00000000 */   nop
     /* 24F0 80021CF0 A894000C */  jal        func_800252A0
     /* 24F4 80021CF4 00000000 */   nop

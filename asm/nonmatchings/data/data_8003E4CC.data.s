@@ -26,9 +26,3 @@ dlabel D_8003E4CC
     /* 1ED0C 8003E50C 0680013C */ .word 0x3C018006
     /* 1ED10 8003E510 3C5520AC */ .word 0xAC20553C
 enddlabel D_8003E4CC
-
-nonmatching D_8003E514
-
-dlabel D_8003E514
-    /* 1ED14 8003E514 000060AC */ .word 0xAC600000
-enddlabel D_8003E514

@@ -10,7 +10,7 @@
 nonmatching func_8002F7C0, 0x14
 
 glabel func_8002F7C0
-    /* FFC0 8002F7C0 CC0080AF */  sw         $zero, 0xCC($gp)
+    /* FFC0 8002F7C0 CC0080AF */  sw         $zero, %gp_rel(D_800632F8)($gp)
     /* FFC4 8002F7C4 1000BF8F */  lw         $ra, 0x10($sp)
     /* FFC8 8002F7C8 00000000 */  nop
     /* FFCC 8002F7CC 0800E003 */  jr         $ra

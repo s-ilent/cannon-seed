@@ -23,7 +23,7 @@ glabel func_8002DA20
     /* E248 8002DA48 76AF0008 */  j          .L8002BDD8
     /* E24C 8002DA4C 02000234 */   ori       $v0, $zero, 0x2
   .L8002DA50:
-    /* E250 8002DA50 B40082AF */  sw         $v0, 0xB4($gp)
+    /* E250 8002DA50 B40082AF */  sw         $v0, %gp_rel(D_800632E0)($gp)
     /* E254 8002DA54 02000234 */  ori        $v0, $zero, 0x2
     /* E258 8002DA58 30006216 */  bne        $s3, $v0, .L8002DB1C
     /* E25C 8002DA5C 00000000 */   nop
@@ -62,7 +62,7 @@ glabel func_8002DA20
     /* E2DC 8002DADC 1000C624 */  addiu      $a2, $a2, 0x10
     /* E2E0 8002DAE0 EEFFC814 */  bne        $a2, $t0, .L8002DA9C
     /* E2E4 8002DAE4 1000E724 */   addiu     $a3, $a3, 0x10
-    /* E2E8 8002DAE8 A7AF0008 */  j          D_8002BE9C
+    /* E2E8 8002DAE8 A7AF0008 */  j          func_8002BE9C
     /* E2EC 8002DAEC 00000000 */   nop
   .L8002DAF0:
     /* E2F0 8002DAF0 0000C28C */  lw         $v0, 0x0($a2)
@@ -89,24 +89,24 @@ glabel entry
   .L8002DB1C:
     /* E31C 8002DB1C 0680043C */  lui        $a0, %hi(D_800664CC)
     /* E320 8002DB20 CC64848C */  lw         $a0, %lo(D_800664CC)($a0)
-    /* E324 8002DB24 B800828F */  lw         $v0, 0xB8($gp)
+    /* E324 8002DB24 B800828F */  lw         $v0, %gp_rel(D_800632E4)($gp)
     /* E328 8002DB28 10008594 */  lhu        $a1, 0x10($a0)
     /* E32C 8002DB2C 00000000 */  nop
     /* E330 8002DB30 06004514 */  bne        $v0, $a1, .L8002DB4C
     /* E334 8002DB34 00000000 */   nop
     /* E338 8002DB38 12008394 */  lhu        $v1, 0x12($a0)
-    /* E33C 8002DB3C BC00828F */  lw         $v0, 0xBC($gp)
+    /* E33C 8002DB3C BC00828F */  lw         $v0, %gp_rel(D_800632E8)($gp)
     /* E340 8002DB40 00000000 */  nop
     /* E344 8002DB44 04004310 */  beq        $v0, $v1, .L8002DB58
     /* E348 8002DB48 00000000 */   nop
   .L8002DB4C:
     /* E34C 8002DB4C 12008294 */  lhu        $v0, 0x12($a0)
-    /* E350 8002DB50 B80085AF */  sw         $a1, 0xB8($gp)
-    /* E354 8002DB54 BC0082AF */  sw         $v0, 0xBC($gp)
+    /* E350 8002DB50 B80085AF */  sw         $a1, %gp_rel(D_800632E4)($gp)
+    /* E354 8002DB54 BC0082AF */  sw         $v0, %gp_rel(D_800632E8)($gp)
   .L8002DB58:
-    /* E358 8002DB58 B8008397 */  lhu        $v1, 0xB8($gp)
+    /* E358 8002DB58 B8008397 */  lhu        $v1, %gp_rel(D_800632E4)($gp)
     /* E35C 8002DB5C 1000A28F */  lw         $v0, 0x10($sp)
-    /* E360 8002DB60 BC008497 */  lhu        $a0, 0xBC($gp)
+    /* E360 8002DB60 BC008497 */  lhu        $a0, %gp_rel(D_800632E8)($gp)
     /* E364 8002DB64 140043A6 */  sh         $v1, 0x14($s2)
     /* E368 8002DB68 160044A6 */  sh         $a0, 0x16($s2)
     /* E36C 8002DB6C 220044A6 */  sh         $a0, 0x22($s2)

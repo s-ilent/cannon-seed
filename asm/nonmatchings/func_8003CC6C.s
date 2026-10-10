@@ -84,7 +84,7 @@ glabel func_8003CCD4
     /* 1D558 8003CD58 3EE6000C */  jal        func_800398F8
     /* 1D55C 8003CD5C 21286002 */   addu      $a1, $s3, $zero
     /* 1D560 8003CD60 02004238 */  xori       $v0, $v0, 0x2
-    /* 1D564 8003CD64 38E40008 */  j          D_800390E0
+    /* 1D564 8003CD64 38E40008 */  j          .L800390E0
     /* 1D568 8003CD68 0100422C */   sltiu     $v0, $v0, 0x1
   .L8003CD6C:
     /* 1D56C 8003CD6C 21100000 */  addu       $v0, $zero, $zero

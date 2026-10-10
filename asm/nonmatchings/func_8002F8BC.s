@@ -53,6 +53,10 @@ dlabel func_8002F90C
     /* 10110 8002F910 CBB099B2 */ .word 0xB299B0CB
     /* 10114 8002F914 FB94DB23 */ .word 0x23DB94FB
     /* 10118 8002F918 083D4C93 */ .word 0x934C3D08
+
+nonmatching func_8002F91C
+
+alabel func_8002F91C
     /* 1011C 8002F91C C177744D */ .word 0x4D7477C1 /* invalid instruction */
     /* 10120 8002F920 148916F7 */ .word 0xF7168914
     /* 10124 8002F924 C552E978 */ .word 0x78E952C5 /* invalid instruction */

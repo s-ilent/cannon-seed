@@ -27,14 +27,14 @@ glabel func_8002C4AC
     /* CCAC 8002C4AC FFFF0224 */  addiu      $v0, $zero, -0x1
     /* CCB0 8002C4B0 03000216 */  bne        $s0, $v0, .L8002C4C0
     /* CCB4 8002C4B4 21200002 */   addu      $a0, $s0, $zero
-    /* CCB8 8002C4B8 EBAA0008 */  j          D_8002ABAC
+    /* CCB8 8002C4B8 EBAA0008 */  j          func_8002ABAC
     /* CCBC 8002C4BC F6FF0224 */   addiu     $v0, $zero, -0xA
   .L8002C4C0:
     /* CCC0 8002C4C0 43AB000C */  jal        func_8002AD0C
     /* CCC4 8002C4C4 21280000 */   addu      $a1, $zero, $zero
     /* CCC8 8002C4C8 03004010 */  beqz       $v0, .L8002C4D8
     /* CCCC 8002C4CC 03111000 */   sra       $v0, $s0, 4
-    /* CCD0 8002C4D0 EBAA0008 */  j          D_8002ABAC
+    /* CCD0 8002C4D0 EBAA0008 */  j          func_8002ABAC
     /* CCD4 8002C4D4 FFFF0224 */   addiu     $v0, $zero, -0x1
   .L8002C4D8:
     /* CCD8 8002C4D8 0F004230 */  andi       $v0, $v0, 0xF

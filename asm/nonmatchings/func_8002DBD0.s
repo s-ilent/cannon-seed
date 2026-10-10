@@ -35,19 +35,23 @@ glabel func_8002DC00
     /* E40C 8002DC0C 21280002 */   addu      $a1, $s0, $zero
 endlabel func_8002DC00
 
-nonmatching func_8002DC10, 0x20
+nonmatching func_8002DC10, 0x10
 
 glabel func_8002DC10
     /* E410 8002DC10 21200002 */  addu       $a0, $s0, $zero
     /* E414 8002DC14 0EAF000C */  jal        func_8002BC38
     /* E418 8002DC18 01000534 */   ori       $a1, $zero, 0x1
     /* E41C 8002DC1C 2800BF8F */  lw         $ra, 0x28($sp)
-  alabel func_8002DC20
+endlabel func_8002DC10
+
+nonmatching func_8002DC20, 0x10
+
+glabel func_8002DC20
     /* E420 8002DC20 2400B18F */  lw         $s1, 0x24($sp)
     /* E424 8002DC24 2000B08F */  lw         $s0, 0x20($sp)
     /* E428 8002DC28 0800E003 */  jr         $ra
     /* E42C 8002DC2C 3000BD27 */   addiu     $sp, $sp, 0x30
-endlabel func_8002DC10
+endlabel func_8002DC20
 
 nonmatching func_8002DC30, 0x10
 
@@ -58,13 +62,18 @@ glabel func_8002DC30
     /* E43C 8002DC3C 2000B0AF */  sw         $s0, 0x20($sp)
 endlabel func_8002DC30
 
-nonmatching func_8002DC40
+nonmatching func_8002DC40, 0x10
 
-dlabel func_8002DC40
-    /* E440 8002DC40 E2B1000C */ .word 0x0C00B1E2
-    /* E444 8002DC44 21888000 */ .word 0x00808821
-    /* E448 8002DC48 0680023C */ .word 0x3C028006
-    /* E44C 8002DC4C DC644290 */ .word 0x904264DC
+glabel func_8002DC40
+    /* E440 8002DC40 E2B1000C */  jal        func_8002C788
+    /* E444 8002DC44 21888000 */   addu      $s1, $a0, $zero
+    /* E448 8002DC48 0680023C */  lui        $v0, %hi(D_800664DC)
+    /* E44C 8002DC4C DC644290 */  lbu        $v0, %lo(D_800664DC)($v0)
+endlabel func_8002DC40
+
+nonmatching func_8002DC50
+
+dlabel func_8002DC50
     /* E450 8002DC50 0680033C */ .word 0x3C038006
     /* E454 8002DC54 DD646390 */ .word 0x906364DD
     /* E458 8002DC58 0680053C */ .word 0x3C058006
@@ -88,4 +97,4 @@ dlabel func_8002DC40
     /* E4A0 8002DCA0 B867267D */ .word 0x7D2667B8 /* invalid instruction */
     /* E4A4 8002DCA4 994C83C1 */ .word 0xC1834C99
     /* E4A8 8002DCA8 4D8243C3 */ .word 0xC343824D
-enddlabel func_8002DC40
+enddlabel func_8002DC50

@@ -28,6 +28,10 @@ glabel func_80032F70
     /* 137AC 80032FAC BE79813D */ .word 0x3D8179BE /* invalid instruction */
     /* 137B0 80032FB0 2F1A017B */ .word 0x7B011A2F /* invalid instruction */
     /* 137B4 80032FB4 155AF272 */ .word 0x72F25A15 /* invalid instruction */
+
+nonmatching func_80032FB8
+
+alabel func_80032FB8
     /* 137B8 80032FB8 15B13C68 */ .word 0x683CB115
     /* 137BC 80032FBC 07313CD7 */ .word 0xD73C3107
     /* 137C0 80032FC0 9EA58DC0 */ .word 0xC08DA59E

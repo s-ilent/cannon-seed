@@ -11,7 +11,7 @@ nonmatching func_80025F20, 0x10
 
 glabel func_80025F20
     /* 6720 80025F20 2800BD27 */  addiu      $sp, $sp, 0x28
-    /* 6724 80025F24 3800828F */  lw         $v0, 0x38($gp)
+    /* 6724 80025F24 3800828F */  lw         $v0, %gp_rel(D_80063264)($gp)
     /* 6728 80025F28 0800E003 */  jr         $ra
     /* 672C 80025F2C 00000000 */   nop
 endlabel func_80025F20

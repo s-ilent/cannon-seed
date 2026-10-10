@@ -56,9 +56,3 @@ dlabel D_8002A908
     /* B1C0 8002A9C0 0780023C */ .word 0x3C028007
     /* B1C4 8002A9C4 9C954224 */ .word 0x2442959C
 enddlabel D_8002A908
-
-nonmatching D_8002A9C8
-
-dlabel D_8002A9C8
-    /* B1C8 8002A9C8 000040AC */ .word 0xAC400000
-enddlabel D_8002A9C8

@@ -54,6 +54,7 @@ glabel func_8003BB78
     /* 1C418 8003BC18 000040AC */  sw         $zero, 0x0($v0)
     /* 1C41C 8003BC1C 21100000 */  addu       $v0, $zero, $zero
     /* 1C420 8003BC20 0580033C */  lui        $v1, %hi(D_8005346C)
+  alabel func_8003BC24
     /* 1C424 8003BC24 6C34638C */  lw         $v1, %lo(D_8005346C)($v1)
     /* 1C428 8003BC28 0580043C */  lui        $a0, %hi(D_8005348C)
     /* 1C42C 8003BC2C 8C34848C */  lw         $a0, %lo(D_8005348C)($a0)
