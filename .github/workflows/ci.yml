@@ -1,0 +1,78 @@
+# =============================================================================
+# CI — continuous verification (Phase 5 of docs/WORKFLOW.md)
+#
+# Four jobs:
+#   lint         cheap hygiene checks on the tracked tree
+#   ratchets     placeholder/debt counts may not increase (docs/RULES.md §4.4)
+#   progress     measure the tree, upload the report as an artifact
+#   oracle-gate  rebuild and compare the whole image with retail
+#
+# The oracle-gate needs the retail executable, which is never committed.
+# Two options used by the source projects:
+#   * parasite-eve-decomp: contributors run `make verify` locally; CI runs
+#     the source-only subset.
+#   * lsddecomp: CI reads the private files (disc, converted SDK) from a
+#     private repository via a secret, so the public pipeline still runs the
+#     full gate end to end. Wire that up when you have a private deps repo.
+# =============================================================================
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trailing whitespace in tracked sources
+        run: |
+          if git grep -InE ' +$' -- '*.c' '*.h' '*.inc' '*.py' '*.yaml' '*.md' | grep -v 'docs/PSX-Decompilation-Methodology-Report.pdf'; then
+            echo "::error::trailing whitespace found"; exit 1
+          fi
+      - name: Merge-conflict markers
+        run: |
+          if git grep -InE '^(<<<<<<<|>>>>>>>)( |$)' -- . ; then
+            echo "::error::conflict markers found"; exit 1
+          fi
+      - name: Python tooling compiles
+        run: python3 -m compileall -q tools
+
+  ratchets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Placeholder / debt ratchets
+        run: python3 tools/check_ratchets.py
+
+  progress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Measure the tree
+        run: |
+          python3 tools/progress.py --json > progress.json
+          cat progress.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: progress-report
+          path: progress.json
+
+  oracle-gate:
+    runs-on: ubuntu-latest
+    # FILL: wire the real gate when your pipeline exists.
+    # Option A (private deps repo, lsddecomp-style): check out your private
+    #   repo with a deploy key/secret into baselines/ (+ sdk/lib), then run
+    #   `make verify` unconditionally.
+    steps:
+      - uses: actions/checkout@v4
+      - name: Oracle gate (requires retail baseline)
+        run: |
+          if [ ! -f baselines/main.bin ]; then
+            echo "::notice::No retail baseline in the clone — template mode."
+            echo "::notice::Contributors run 'make verify' locally; wire a"
+            echo "::notice::private deps repo (see header comment) for CI."
+            exit 0
+          fi
+          make verify
