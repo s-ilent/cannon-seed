@@ -16,6 +16,10 @@ glabel func_80049608
     /* 29E14 80049614 FBBA4C1A */ .word 0x1A4CBAFB /* invalid instruction */
     /* 29E18 80049618 71F8672A */ .word 0x2A67F871
     /* 29E1C 8004961C 744E0B96 */ .word 0x960B4E74
+
+nonmatching func_80049620
+
+alabel func_80049620
     /* 29E20 80049620 F54C0375 */ .word 0x75034CF5 /* invalid instruction */
     /* 29E24 80049624 89A0AE26 */ .word 0x26AEA089
     /* 29E28 80049628 87180EA1 */ .word 0xA10E1887

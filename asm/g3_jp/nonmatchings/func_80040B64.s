@@ -81,6 +81,10 @@ glabel func_80040B64
     /* 21474 80040C74 F9AD8416 */ .word 0x1684ADF9
     /* 21478 80040C78 1F07F65D */ .word 0x5DF6071F /* invalid instruction */
     /* 2147C 80040C7C 766A9988 */ .word 0x88996A76
+
+nonmatching func_80040C80
+
+alabel func_80040C80
     /* 21480 80040C80 4D686365 */ .word 0x6563684D
     /* 21484 80040C84 3AD4994B */ .word 0x4B99D43A /* invalid instruction */
     /* 21488 80040C88 4215114A */ .word 0x4A111542 /* invalid instruction */

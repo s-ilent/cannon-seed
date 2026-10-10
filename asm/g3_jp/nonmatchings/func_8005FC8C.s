@@ -31,8 +31,17 @@ glabel func_8005FC8C
     /* 404D4 8005FCD4 0EA7E705 */ .word 0x05E7A70E /* invalid instruction */
     /* 404D8 8005FCD8 74F4592B */ .word 0x2B59F474
     /* 404DC 8005FCDC CC3D5B05 */ .word 0x055B3DCC /* invalid instruction */
+enddlabel func_8005FC8C
+
+nonmatching func_8005FCE0
+
+glabel func_8005FCE0
     /* 404E0 8005FCE0 24A16318 */ .word 0x1863A124 /* invalid instruction */
     /* 404E4 8005FCE4 8B7C9A68 */ .word 0x689A7C8B
     /* 404E8 8005FCE8 00FFFFFF */ .word 0xFFFFFF00
+
+nonmatching func_8005FCEC
+
+alabel func_8005FCEC
     /* 404EC 8005FCEC FFFFFFFF */ .word 0xFFFFFFFF
-enddlabel func_8005FC8C
+enddlabel func_8005FCE0

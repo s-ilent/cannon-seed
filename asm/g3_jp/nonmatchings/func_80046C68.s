@@ -24,6 +24,7 @@ glabel func_80046C68
     /* 27494 80046C94 94BE22A4 */  sh         $v0, %lo(D_800ABE94)($at)
     /* 27498 80046C98 02000234 */  ori        $v0, $zero, 0x2
     /* 2749C 80046C9C 0B80013C */  lui        $at, %hi(D_800AC43C)
+  alabel func_80046CA0
     /* 274A0 80046CA0 3CC422A4 */  sh         $v0, %lo(D_800AC43C)($at)
     /* 274A4 80046CA4 01006324 */  addiu      $v1, $v1, 0x1
     /* 274A8 80046CA8 0B80013C */  lui        $at, %hi(D_800AC19C)

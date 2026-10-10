@@ -15,3 +15,11 @@ glabel func_80051B18
     /* 3231C 80051B1C 0800E003 */  jr         $ra
     /* 32320 80051B20 00000000 */   nop
 endlabel func_80051B18
+
+nonmatching func_80051B24, 0xC
+
+glabel func_80051B24
+    /* 32324 80051B24 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 32328 80051B28 08004001 */  jr         $t2
+    /* 3232C 80051B2C 33000924 */   addiu     $t1, $zero, 0x33
+endlabel func_80051B24

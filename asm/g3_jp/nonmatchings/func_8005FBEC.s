@@ -46,6 +46,10 @@ dlabel func_8005FC0C
     /* 4045C 8005FC5C FA841886 */ .word 0x861884FA
     /* 40460 8005FC60 B21BD5BE */ .word 0xBED51BB2
     /* 40464 8005FC64 8B2B107B */ .word 0x7B102B8B /* invalid instruction */
+
+nonmatching func_8005FC68
+
+alabel func_8005FC68
     /* 40468 8005FC68 EC11DF92 */ .word 0x92DF11EC
     /* 4046C 8005FC6C 6AD54765 */ .word 0x6547D56A
     /* 40470 8005FC70 35988AF9 */ .word 0xF98A9835

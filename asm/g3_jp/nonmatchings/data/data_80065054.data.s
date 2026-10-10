@@ -9,10 +9,3 @@ nonmatching D_80065054
 dlabel D_80065054
     /* 45854 80065054 1000ECE8 */ .word 0xE8EC0010
 enddlabel D_80065054
-
-nonmatching D_80065058
-
-dlabel D_80065058
-    /* 45858 80065058 2800EDE8 */ .word 0xE8ED0028
-    /* 4585C 8006505C 4000EEE8 */ .word 0xE8EE0040
-enddlabel D_80065058

@@ -17,12 +17,20 @@ glabel func_80064ED0
     /* 456E0 80064EE0 FCB1D1D2 */ .word 0xD2D1B1FC
     /* 456E4 80064EE4 3F2F8B4E */ .word 0x4E8B2F3F /* invalid instruction */
     /* 456E8 80064EE8 E61B2E79 */ .word 0x792E1BE6 /* invalid instruction */
+
+nonmatching func_80064EEC
+
+alabel func_80064EEC
     /* 456EC 80064EEC 060585FB */ .word 0xFB850506
     /* 456F0 80064EF0 CD2970B1 */ .word 0xB17029CD
     /* 456F4 80064EF4 6EDB9216 */ .word 0x1692DB6E
     /* 456F8 80064EF8 9C37CB6A */ .word 0x6ACB379C
     /* 456FC 80064EFC A391C437 */ .word 0x37C491A3
     /* 45700 80064F00 032E1012 */ .word 0x12102E03
+
+nonmatching func_80064F04
+
+alabel func_80064F04
     /* 45704 80064F04 7F872DC5 */ .word 0xC52D877F
     /* 45708 80064F08 6A7999AD */ .word 0xAD99796A
     /* 4570C 80064F0C 77102727 */ .word 0x27271077
