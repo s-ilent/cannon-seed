@@ -42,3 +42,4 @@ __pycache__/
 .idea/
 .vscode/
 *.swp
+asm/header.s
