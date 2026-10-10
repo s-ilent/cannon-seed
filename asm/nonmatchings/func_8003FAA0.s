@@ -615,7 +615,7 @@ glabel func_80040130
     /* 20930 80040130 01000234 */  ori        $v0, $zero, 0x1
 endlabel func_80040130
 
-nonmatching func_80040134, 0x98
+nonmatching func_80040134, 0x80
 
 glabel func_80040134
     /* 20934 80040134 3C00BF8F */  lw         $ra, 0x3C($sp)
@@ -650,13 +650,18 @@ glabel func_80040134
     /* 209A8 800401A8 66E4000C */  jal        func_80039198
     /* 209AC 800401AC 21280000 */   addu      $a1, $zero, $zero
     /* 209B0 800401B0 0100422C */  sltiu      $v0, $v0, 0x1
+endlabel func_80040134
+
+nonmatching func_800401B4, 0x18
+
+glabel func_800401B4
     /* 209B4 800401B4 2000BF8F */  lw         $ra, 0x20($sp)
     /* 209B8 800401B8 1C00B18F */  lw         $s1, 0x1C($sp)
     /* 209BC 800401BC 1800B08F */  lw         $s0, 0x18($sp)
     /* 209C0 800401C0 2800BD27 */  addiu      $sp, $sp, 0x28
     /* 209C4 800401C4 0800E003 */  jr         $ra
     /* 209C8 800401C8 00000000 */   nop
-endlabel func_80040134
+endlabel func_800401B4
 
 nonmatching func_800401CC, 0x10
 

@@ -44,6 +44,14 @@ Method (v2, documented and re-runnable):
 7. Ranges are merged; every uncovered aligned gap is data.
 8. Type preservation: subsegments the tree already carries as `c`
    (C-matched functions) keep their type across re-scans.
+9. v3c continuation merge: a prologue-less range whose PREDECESSOR
+   branches into it (start or interior, never jal) and which no OTHER
+   range references is the continuation of that predecessor - one
+   function split by an embedded literal pool / barrier stop. It is
+   merged back; the pool bytes ride inside the merged range (spimdisasm
+   emits the same bytes however it decodes them; verify is the gate).
+   Guarded: never merges a range other code enters (shared tail), never
+   across a preserved c-function, never one starting a fresh prologue.
 
 Outputs (regenerated wholesale):
   - config/splat.slps_00270.yaml  subsegments section (between markers)
@@ -317,6 +325,83 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
         while z - 8 >= s and words[(z // 4) - 1] == 0 and words[(z // 4) - 2] == 0:
             z -= 4
         trimmed.append([s, z])
+
+    # v3c: merge prologue-less continuations back into their predecessor.
+    # GCC 2.6.3 embeds literal pools / jump tables INSIDE functions; the
+    # walk stops at the implausible words and the code after the pool
+    # becomes a prologue-less fragment. When the predecessor branches into
+    # the fragment (start or interior - branches are intra-function by
+    # construction) and nothing else references it, the fragment rejoins
+    # the predecessor and the pool rides inside the merged range.
+    # Guards: the fragment must not start a fresh prologue (that is the
+    # NEXT function, see 5), must have no referrer other than the
+    # predecessor (a jal/branch from elsewhere = shared block or a real
+    # pointer-called function), and no preserved c-function may sit in
+    # the swallowed gap (matched C files own their exact bytes).
+    merged_fragments = 0
+    merged_bytes = 0
+    while True:
+        # referrers: range index -> set of OTHER range indices whose code
+        # branches/jumps/jals to this range's exact start
+        idx_of = {s: i for i, (s, _) in enumerate(trimmed)}
+        referrers = {i: set() for i in range(len(trimmed))}
+        for i, (s, e) in enumerate(trimmed):
+            for j in range(s // 4, e // 4):
+                t = branch_target(j, words[j])
+                if t is None:
+                    continue
+                ri = idx_of.get(t - BASE)
+                if ri is not None and ri != i:
+                    referrers[ri].add(i)
+        done = True
+        for i, (s, e) in enumerate(trimmed):
+            if i == 0 or s in hard_stops:
+                continue
+            if prologue_frame(words, s // 4, n) is not None:
+                continue
+            if referrers[i] - {i - 1}:
+                continue  # entered from elsewhere: shared block, keep
+            ps, pe = trimmed[i - 1]
+            if ps in hard_stops:
+                continue  # predecessor is a matched C function: fixed size
+            if any(ps <= k < s for k in hard_stops):
+                continue  # a c-function sits in the gap
+            hit = False
+            for j in range(ps // 4, pe // 4):
+                op = words[j] >> 26
+                if op == 3 or op not in (1, 2, 4, 5, 6, 7):
+                    continue  # jal = a call: that is a function, not flow
+                t = branch_target(j, words[j])
+                if t is not None and s <= t - BASE < e:
+                    hit = True
+                    break
+            if not hit:
+                continue
+            trimmed[i - 1][1] = e
+            del trimmed[i]
+            merged_fragments += 1
+            merged_bytes += e - s
+            done = False
+            break  # indices shifted; recompute referrers
+        if done:
+            break
+    if merged_fragments:
+        print(f"scan: v3c merged {merged_fragments} continuation fragments "
+              f"({merged_bytes:,} B) back into their predecessors")
+        # re-merge (the join may now touch the next range) and re-trim
+        m2 = []
+        for s, e in trimmed:
+            if m2 and s <= m2[-1][1]:
+                m2[-1][1] = max(m2[-1][1], e)
+            else:
+                m2.append([s, e])
+        trimmed = []
+        for s, e in m2:
+            z = e
+            while (z - 8 >= s and words[(z // 4) - 1] == 0
+                   and words[(z // 4) - 2] == 0):
+                z -= 4
+            trimmed.append([s, z])
 
     # v3b: cross-range branch targets need NAMES, not boundaries. Each
     # subsegment is one spimdisasm file that defines only its start glabel;

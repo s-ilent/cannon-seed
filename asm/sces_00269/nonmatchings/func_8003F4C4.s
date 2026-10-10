@@ -332,7 +332,7 @@ glabel func_8003F77C
     /* 20028 8003F828 80138424 */  addiu      $a0, $a0, %lo(D_80021380)
     /* 2002C 8003F82C 81B6000C */  jal        func_8002DA04
     /* 20030 8003F830 00000000 */   nop
-    /* 20034 8003F834 51EE0008 */  j          D_8003B944
+    /* 20034 8003F834 51EE0008 */  j          func_8003B944
     /* 20038 8003F838 21100000 */   addu      $v0, $zero, $zero
 endlabel func_8003F77C
 
@@ -354,7 +354,7 @@ glabel func_8003F83C
     /* 2006C 8003F86C B4138424 */  addiu      $a0, $a0, %lo(D_800213B4)
     /* 20070 8003F870 81B6000C */  jal        func_8002DA04
     /* 20074 8003F874 00000000 */   nop
-    /* 20078 8003F878 51EE0008 */  j          D_8003B944
+    /* 20078 8003F878 51EE0008 */  j          func_8003B944
     /* 2007C 8003F87C 21100000 */   addu      $v0, $zero, $zero
 endlabel func_8003F83C
 
@@ -384,7 +384,7 @@ glabel func_8003F880
     /* 200D0 8003F8D0 E4138424 */  addiu      $a0, $a0, %lo(D_800213E4)
     /* 200D4 8003F8D4 81B6000C */  jal        func_8002DA04
     /* 200D8 8003F8D8 00000000 */   nop
-    /* 200DC 8003F8DC 51EE0008 */  j          D_8003B944
+    /* 200DC 8003F8DC 51EE0008 */  j          func_8003B944
     /* 200E0 8003F8E0 21100000 */   addu      $v0, $zero, $zero
 endlabel func_8003F880
 

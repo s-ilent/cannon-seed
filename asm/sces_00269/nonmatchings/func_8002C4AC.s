@@ -398,7 +398,6 @@ glabel func_8002C8A8
     /* D0D8 8002C8D8 0B00E4A8 */  swl        $a0, 0xB($a3)
     /* D0DC 8002C8DC 0800E4B8 */  swr        $a0, 0x8($a3)
     /* D0E0 8002C8E0 0F00E5A8 */  swl        $a1, 0xF($a3)
-  .L8002C8E4:
     /* D0E4 8002C8E4 0C00E5B8 */  swr        $a1, 0xC($a3)
     /* D0E8 8002C8E8 1000C624 */  addiu      $a2, $a2, 0x10
     /* D0EC 8002C8EC EEFFC814 */  bne        $a2, $t0, func_8002C8A8

@@ -8,11 +8,6 @@ nonmatching D_8002BBF4
 
 dlabel D_8002BBF4
     /* C3F4 8002BBF4 D0FFBD27 */ .word 0x27BDFFD0
-enddlabel D_8002BBF4
-
-nonmatching D_8002BBF8
-
-dlabel D_8002BBF8
     /* C3F8 8002BBF8 2800BFAF */ .word 0xAFBF0028
     /* C3FC 8002BBFC 2138A000 */ .word 0x00A03821
-enddlabel D_8002BBF8
+enddlabel D_8002BBF4

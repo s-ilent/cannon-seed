@@ -747,6 +747,10 @@ glabel func_80042760
     /* 22F78 80042778 4C53ED38 */ .word 0x38ED534C
     /* 22F7C 8004277C A24D9C7E */ .word 0x7E9C4DA2 /* invalid instruction */
     /* 22F80 80042780 441788BA */ .word 0xBA881744
+
+nonmatching func_80042784
+
+alabel func_80042784
     /* 22F84 80042784 BA759F05 */ .word 0x059F75BA /* invalid instruction */
 
 nonmatching func_80042788
