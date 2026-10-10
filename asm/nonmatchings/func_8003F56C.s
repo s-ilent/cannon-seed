@@ -19,3 +19,11 @@ glabel func_8003F56C
     /* 1FD84 8003F584 0800E003 */  jr         $ra
     /* 1FD88 8003F588 00000000 */   nop
 endlabel func_8003F56C
+
+nonmatching func_8003F58C, 0xC
+
+glabel func_8003F58C
+    /* 1FD8C 8003F58C B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 1FD90 8003F590 08004001 */  jr         $t2
+    /* 1FD94 8003F594 07000924 */   addiu     $t1, $zero, 0x7
+endlabel func_8003F58C

@@ -23,11 +23,17 @@ dlabel func_8002F8CC
     /* 100D0 8002F8D0 9CCF1384 */ .word 0x8413CF9C
     /* 100D4 8002F8D4 470C7377 */ .word 0x77730C47 /* invalid instruction */
     /* 100D8 8002F8D8 DD0CC2DA */ .word 0xDAC20CDD
-    /* 100DC 8002F8DC 0931D68E */ .word 0x8ED63109
-    /* 100E0 8002F8E0 03BA44B3 */ .word 0xB344BA03
-    /* 100E4 8002F8E4 95DF28C0 */ .word 0xC028DF95
-    /* 100E8 8002F8E8 2C453611 */ .word 0x1136452C
 enddlabel func_8002F8CC
+
+/* Handwritten function */
+nonmatching func_8002F8DC, 0x10
+
+glabel func_8002F8DC
+    /* 100DC 8002F8DC 0931D68E */  lw         $s6, 0x3109($s6)
+    /* 100E0 8002F8E0 03BA44B3 */  sdl        $a0, -0x45FD($k0) /* handwritten instruction */
+    /* 100E4 8002F8E4 95DF28C0 */  ll         $t0, -0x206B($at) /* handwritten instruction */
+    /* 100E8 8002F8E8 2C453611 */  beq        $t1, $s6, func_80040D9C
+endlabel func_8002F8DC
 
 nonmatching func_8002F8EC
 

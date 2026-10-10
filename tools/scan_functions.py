@@ -27,8 +27,22 @@ Method (v2, documented and re-runnable):
    connects to (reaches or overlaps) an existing or other rescued range —
    orphaned walks would create NEW mid-function fragments, the very
    disease being fixed.
-5. Ranges are merged; every uncovered aligned gap is data.
-6. Type preservation: subsegments the tree already carries as `c`
+5. v3 jr/prologue boundary: a jr flow-through does NOT continue when the
+   following words form a fresh function prologue (addiu $sp,$sp,-N plus
+   a `sw $ra,(N-4|N-8)($sp)` within two instructions). GCC sets the
+   frame once per function, so such a boundary is the START of the next
+   function, not this function's continuation — stopping there keeps
+   pointer-called function chains (see 6) as separate subsegments.
+6. v3 prologue rescue: functions called through pointers (task/init
+   tables, pc0 callbacks) are never jal targets, so nothing anchors them
+   and whole prologue'd functions hide in data gaps (176 candidates /
+   several KB found on slps_00270, e.g. the chain at 0x80021DCC).
+   Walks are seeded at every `addiu $sp,$sp,-N` + `sw $ra` candidate
+   inside remaining gaps; a rescued run is kept when it terminates in a
+   matching epilogue teardown (`jr $ra` + `addiu $sp,$sp,+N`) or
+   connects to an existing range. Everything else stays data.
+7. Ranges are merged; every uncovered aligned gap is data.
+8. Type preservation: subsegments the tree already carries as `c`
    (C-matched functions) keep their type across re-scans.
 
 Outputs (regenerated wholesale):
@@ -66,6 +80,39 @@ J = 2 << 26
 JAL = 3 << 26
 
 
+def prologue_frame(words, i, n):
+    """Frame size if words[i..] starts a GCC function prologue, else None.
+
+    Pattern: `addiu $sp,$sp,-N` (8 <= N <= 0x7F00) followed within two
+    instructions by `sw $ra,(N-4)($sp)` or `sw $ra,(N-8)($sp)`. GCC 2.6.3
+    always saves $ra when a function makes calls, at frame-4 or frame-8
+    (the largest first-word slot). Data that happens to decode as addiu
+    is rejected by the required sw within the two-instruction window.
+    """
+    if i >= n:
+        return None
+    w = words[i]
+    if (w & 0xFFFF0000) != 0x27BD0000:
+        return None
+    imm = w & 0xFFFF
+    if imm >= 0x8000:
+        imm -= 0x10000
+    if not (-0x7F00 <= imm <= -8):
+        return None
+    frame = -imm
+    for j in (1, 2):
+        if i + j >= n:
+            break
+        w2 = words[i + j]
+        if (w2 & 0xFFFF0000) == 0xAFBF0000:
+            k = w2 & 0xFFFF
+            if k >= 0x8000:
+                k -= 0x10000
+            if k in (frame - 4, frame - 8):
+                return frame
+    return None
+
+
 def plausible(w: int) -> bool:
     if w == 0:
         return True
@@ -79,7 +126,7 @@ def plausible(w: int) -> bool:
     return True
 
 
-def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
+def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
     n = len(payload) // 4
     words = struct.unpack(f"<{n}I", payload[: n * 4])
 
@@ -111,15 +158,21 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
             return ((w & 0x3FFFFFF) << 2) | (BASE & 0xF0000000)
         return None
 
-    def walk(start_off):
-        """Forward walk with v1 stop rules + v2 jr flow-through.
-        Returns (start, end) with end exclusive, or None."""
+    def walk(start_off, barrier=None):
+        """Forward walk with v1 stop rules + v2 jr flow-through + v3
+        prologue boundary. Returns (start, end) with end exclusive, or
+        None."""
         a = start_off
         end = a
         bad = 0
         zeros = 0
         i = a // 4
         while i < n:
+            # v3 barrier (rescue walks): never consume words that belong to
+            # an already-covered range — the walk ends at its boundary so
+            # rescued runs cannot swallow covered functions.
+            if barrier is not None and i != a // 4 and barrier[i]:
+                return (a, i * 4) if i * 4 > a else None
             w = words[i]
             if w == 0:
                 zeros += 1
@@ -141,11 +194,16 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
                     # jal target (nor a preserved C-matched function entry)
                     # and real code follows — this is a mid-function
                     # epilogue, not a function end.
+                    # v3: do NOT flow through when the following words are
+                    # a fresh prologue: GCC sets the frame once per
+                    # function, so that boundary is the next function's
+                    # start (pointer-called chains sit back to back).
                     if (stop not in anchors
                             and stop not in hard_stops
                             and stop // 4 < n
                             and words[stop // 4] != 0
-                            and plausible(words[stop // 4])):
+                            and plausible(words[stop // 4])
+                            and prologue_frame(words, stop // 4, n) is None):
                         i = stop // 4
                         zeros = 0
                         bad = 0
@@ -194,6 +252,55 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
         ):
             covered[s] = e
 
+    # v3 prologue rescue: pointer-called functions are never jal targets,
+    # so their prologues hide in data gaps. Seed a walk at every prologue
+    # candidate inside a gap; keep the run when it ends in a matching
+    # epilogue teardown (jr $ra + addiu $sp,$sp,+frame within the last two
+    # words) or connects to an existing range. Rescuing a function can
+    # expose the next one in the chain (the walk now stops at prologues,
+    # see walk()), so iterate until nothing new is accepted.
+    rescued_bytes = 0
+    mask = bytearray(n)  # 1 = word belongs to a covered/rescued range
+    for s, e in covered.items():
+        for o in range(s // 4, e // 4):
+            mask[o] = 1
+    while True:
+        accepted = False
+        for i in range(n):
+            off = i * 4
+            if mask[i]:
+                continue
+            frame = prologue_frame(words, i, n)
+            if frame is None:
+                continue
+            r = walk(off, barrier=mask)
+            if not r:
+                continue
+            s, e = r
+            if e - s < 0x14:
+                continue
+            ends_clean = (
+                e >= 8
+                and words[(e // 4) - 2] == 0x03E00008  # jr $ra
+                and (words[(e // 4) - 1] & 0xFFFF0000) == 0x27BD0000
+                and (words[(e // 4) - 1] & 0xFFFF) == frame
+            )
+            connects = any(s < e2 and e > s2 for s2, e2 in covered.items()) or any(
+                e2 == s or s2 == e for s2, e2 in covered.items()
+            )
+            if not (ends_clean or connects):
+                continue
+            covered[s] = e
+            rescued_bytes += e - s
+            for o in range(s // 4, min(e // 4, n)):
+                mask[o] = 1
+            accepted = True
+        if not accepted:
+            break
+    if rescued_bytes:
+        print(f"scan: v3 prologue rescue recovered {rescued_bytes:,} B "
+              f"of pointer-called code from data gaps")
+
     # merge overlapping ranges, then trim trailing all-zero runs (>= 2
     # words) out of code ranges into the data side so spimdisasm never gets
     # the chance to classify real file bytes as NOBITS .bss (the retail
@@ -210,7 +317,30 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset()):
         while z - 8 >= s and words[(z // 4) - 1] == 0 and words[(z // 4) - 2] == 0:
             z -= 4
         trimmed.append([s, z])
-    return trimmed
+
+    # v3b: cross-range branch targets need NAMES, not boundaries. Each
+    # subsegment is one spimdisasm file that defines only its start glabel;
+    # a j/branch landing inside a DIFFERENT subsegment would emit a
+    # file-local `.L` reference the linker cannot resolve (witnessed:
+    # func_8002C2F4 -> 0x8002ACF4 after v3 merged the shared-tail block
+    # away). Splitting ranges at such targets explodes (every split
+    # creates new cross-range references), so instead they are returned
+    # to main() and written as `func_<addr>` symbols: spimdisasm then
+    # references them by name and tools/build.sh's second link pass
+    # auto-defines the address-encoded names.
+    starts = {s for s, _ in trimmed}
+    cross = set()
+    for s, e in trimmed:
+        for j in range(s // 4, e // 4):
+            t = branch_target(j, words[j])
+            if t is None:
+                continue
+            o = v2o(t)
+            if o is None or o in starts:
+                continue
+            if any(s2 <= o < e2 for s2, e2 in trimmed):
+                cross.add(o)
+    return trimmed, cross
 
 
 def data_gaps(code_ranges, payload_len):
@@ -226,9 +356,20 @@ def data_gaps(code_ranges, payload_len):
 
 
 def preserved_types(yaml_path: Path):
-    """Offsets the tree already carries with a hand-set type ("c" for
-    C-matched functions). Returns {offset: (type, name)} and the set of
-    offsets as hard walk-stop boundaries."""
+    """Offsets the tree carries with a HAND-set type: `c` for C-matched
+    functions. Returns {offset: (type, name, size)} and the set of offsets
+    as hard walk-stop boundaries.
+
+    v3 note: only `c` entries are preserved. `data` subsegments are the
+    scanner's own auto-named output and get regenerated wholesale — and
+    since v3 rescues real code out of data gaps, treating old data starts
+    as immutable types would re-type rescued functions back to data.
+    The recorded SIZE matters as much as the type: the C file was matched
+    against a subsegment of exactly that size, so the defensive split in
+    main() must carve the c-range out at that size, not to the end of the
+    merged range (the range may contain v3-rescued code the C file must
+    not swallow — witnessed with the 0x10-byte func_80025AE0 stub).
+    """
     kept = {}
     if not yaml_path.exists():
         return kept
@@ -241,9 +382,10 @@ def preserved_types(yaml_path: Path):
             break
         if not in_block:
             continue
-        m = re.match(r"\s*- \[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]", ln)
-        if m and m.group(2) != "asm":
-            kept[int(m.group(1), 16) - HDR] = (m.group(2), m.group(3))
+        m = re.match(r"\s*- \[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]\s*#\s*(0x[0-9A-Fa-f]+)", ln)
+        if m and m.group(2) == "c":
+            kept[int(m.group(1), 16) - HDR] = (
+                m.group(2), m.group(3), int(m.group(4), 16))
     return kept
 
 
@@ -261,25 +403,36 @@ def main(argv):
     kept = preserved_types(yaml_path := REPO / "config" / f"splat.{target}.yaml")
     hard_stops = frozenset(kept)
 
-    ranges = scan(payload, entry_off, hard_stops)
+    ranges, cross_targets = scan(payload, entry_off, hard_stops)
     gaps = data_gaps(ranges, len(payload))
 
-    # Defensive: a preserved c-function must START its own subsegment. If a
-    # v2 merged range swallowed it, split the range at that offset so the
-    # C file stays wired into the build (and log loudly).
+    # Defensive: a preserved c-function must START its own subsegment at
+    # its ORIGINAL size. If a v3 merged/rescued range swallowed it, carve
+    # [off, off+size) out (the C file was matched against exactly those
+    # bytes); leftover range parts stay code. Logs loudly.
     for off in sorted(kept):
+        typ, name, csize = kept[off]
         for i, (s, e) in enumerate(ranges):
             if s < off < e:
-                print(f"scan: WARNING: splitting range {s:#x}..{e:#x} at "
-                      f"preserved c-function {off:#x}")
-                ranges[i:i + 1] = [[s, off], [off, e]]
+                ce = min(off + csize, e)
+                print(f"scan: WARNING: carving c-function {name} "
+                      f"[{off:#x}+{ce - off:#x}] out of range {s:#x}..{e:#x}")
+                parts = [[s, off], [off, ce]]
+                if ce < e:
+                    parts.append([ce, e])
+                ranges[i:i + 1] = parts
+                break
+            if s == off and e - s != csize and e - s > csize:
+                print(f"scan: WARNING: trimming c-function {name} to its "
+                      f"matched size {csize:#x} (range was {e - s:#x})")
+                ranges[i:i + 1] = [[s, s + csize], [s + csize, e]]
                 break
 
     subsegs = []
     for s, e in ranges:
         typ, name = "asm", f"func_{BASE + s:08X}"
         if s in kept:
-            typ, name = kept[s]
+            typ, name = kept[s][0], kept[s][1]
         subsegs.append((s, typ, name, e - s))
     for s, e in gaps:
         subsegs.append((s, "data", f"data_{BASE + s:08X}", e - s))
@@ -332,6 +485,11 @@ def main(argv):
     gen_syms = ["// BEGIN GENERATED FUNCTION SYMBOLS (tools/scan_functions.py)"]
     for s, e in ranges:
         gen_syms.append(f"func_{BASE + s:08X} = 0x{BASE + s:08X}; // type:func")
+    # v3b: cross-range branch targets (see scan()). Naming them lets
+    # spimdisasm emit `j func_XXXXXXXX` instead of an unresolvable
+    # file-local `.L`; the second link pass defines address-encoded names.
+    for o in sorted(cross_targets):
+        gen_syms.append(f"func_{BASE + o:08X} = 0x{BASE + o:08X}; // type:func (branch target)")
     gen_syms.append("// END GENERATED FUNCTION SYMBOLS")
     sym_path.write_text(head + "\n" + "\n".join(gen_syms) + "\n")
 

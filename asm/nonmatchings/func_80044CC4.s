@@ -17,6 +17,11 @@ glabel func_80044CC4
     /* 254D4 80044CD4 909B6B85 */ .word 0x856B9B90
     /* 254D8 80044CD8 BDB0382D */ .word 0x2D38B0BD
     /* 254DC 80044CDC B7CDB2CB */ .word 0xCBB2CDB7
+enddlabel func_80044CC4
+
+nonmatching func_80044CE0
+
+dlabel func_80044CE0
     /* 254E0 80044CE0 78FD1662 */ .word 0x6216FD78
     /* 254E4 80044CE4 79E594FB */ .word 0xFB94E579
     /* 254E8 80044CE8 DF023AB3 */ .word 0xB33A02DF
@@ -31,4 +36,4 @@ glabel func_80044CC4
     /* 2550C 80044D0C F6097C00 */ .word 0x007C09F6
     /* 25510 80044D10 1911A3F8 */ .word 0xF8A31119
     /* 25514 80044D14 B3FFDA70 */ .word 0x70DAFFB3 /* invalid instruction */
-enddlabel func_80044CC4
+enddlabel func_80044CE0

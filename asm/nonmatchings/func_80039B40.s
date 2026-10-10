@@ -44,3 +44,15 @@ glabel func_80039B4C
     /* 1A39C 80039B9C 0800E003 */  jr         $ra
     /* 1A3A0 80039BA0 00000000 */   nop
 endlabel func_80039B4C
+
+/* Handwritten function */
+nonmatching func_80039BA4, 0x18
+
+glabel func_80039BA4
+    /* 1A3A4 80039BA4 00F08448 */  mtc2       $a0, $30 /* handwritten instruction */
+    /* 1A3A8 80039BA8 00000000 */  nop
+    /* 1A3AC 80039BAC 00000000 */  nop
+    /* 1A3B0 80039BB0 00F80248 */  mfc2       $v0, $31 /* handwritten instruction */
+    /* 1A3B4 80039BB4 0800E003 */  jr         $ra
+    /* 1A3B8 80039BB8 00000000 */   nop
+endlabel func_80039BA4
