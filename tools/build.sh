@@ -125,6 +125,7 @@ echo "assembled: $n_ok ok, $n_fail failed"
 # address via %hi/%lo pairs, so defining the symbol AT its name address
 # reproduces the original word exactly. Symbols without an address in the
 # name are a real problem and fail the build loudly.
+rm -f build/undef_syms.ld
 "$LD" -N -T "$LD_SCRIPT" --no-check-sections -o "$OUT_ELF" 2> build/ld.err || true
 if grep -q "undefined reference" build/ld.err; then
     "$PY" - <<EOF
@@ -133,7 +134,10 @@ errs = open("build/ld.err", errors="replace").read()
 names = sorted(set(re.findall(r"undefined reference to \`([A-Za-z_][A-Za-z0-9_]*)'", errs)))
 out, bad = [], []
 for n in names:
-    m = re.match(r"^[A-Za-z_]+_([0-9A-Fa-f]{8})$", n)
+    # spimdisasm names unresolved references after their runtime value;
+    # values may be real addresses (8 hex) or address-like constants
+    # (e.g. the 0x7FFFFF bitmask via lui/addiu) with fewer digits.
+    m = re.match(r"^[A-Za-z_]+_([0-9A-Fa-f]{1,8})$", n)
     (out.append(f"{n} = 0x{m.group(1)};") if m else bad.append(n))
 if bad:
     sys.stderr.write("build: unresolved symbols without address-encoded names:\\n"
