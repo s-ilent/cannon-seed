@@ -11,19 +11,31 @@ nonmatching func_8002A58C
 
 glabel func_8002A58C
     /* AD8C 8002A58C C2AAEB30 */ .word 0x30EBAAC2
+enddlabel func_8002A58C
 
-nonmatching .L8002A590
+nonmatching func_8002A590
 
-alabel .L8002A590
+glabel func_8002A590
     /* AD90 8002A590 2853E94B */ .word 0x4BE95328 /* invalid instruction */
     /* AD94 8002A594 DE818591 */ .word 0x918581DE
     /* AD98 8002A598 5A70082F */ .word 0x2F08705A
     /* AD9C 8002A59C 42AF1FDF */ .word 0xDF1FAF42
-    /* ADA0 8002A5A0 4717E093 */ .word 0x93E01747
-    /* ADA4 8002A5A4 B448850E */ .word 0x0E8548B4
-    /* ADA8 8002A5A8 BE72F623 */ .word 0x23F672BE
-    /* ADAC 8002A5AC 30CFB1EB */ .word 0xEBB1CF30
-    /* ADB0 8002A5B0 0690AFFE */ .word 0xFEAF9006
+enddlabel func_8002A590
+
+/* Handwritten function */
+nonmatching func_8002A5A0, 0x14
+
+glabel func_8002A5A0
+    /* ADA0 8002A5A0 4717E093 */  lbu        $zero, 0x1747($ra)
+    /* ADA4 8002A5A4 B448850E */  jal        func_8A1522D0
+    /* ADA8 8002A5A8 BE72F623 */   addi      $s6, $ra, 0x72BE /* handwritten instruction */
+    /* ADAC 8002A5AC 30CFB1EB */  swc2       $17, -0x30D0($sp)
+    /* ADB0 8002A5B0 0690AFFE */  sd         $t7, -0x6FFA($s5)
+endlabel func_8002A5A0
+
+nonmatching func_8002A5B4
+
+glabel func_8002A5B4
     /* ADB4 8002A5B4 81416FF5 */ .word 0xF56F4181
     /* ADB8 8002A5B8 6573EE66 */ .word 0x66EE7365
     /* ADBC 8002A5BC 817E0DED */ .word 0xED0D7E81 /* invalid instruction */
@@ -40,10 +52,24 @@ alabel .L8002A590
     /* ADE8 8002A5E8 A2BFDD02 */ .word 0x02DDBFA2 /* invalid instruction */
     /* ADEC 8002A5EC F1221A7E */ .word 0x7E1A22F1 /* invalid instruction */
     /* ADF0 8002A5F0 34A177DB */ .word 0xDB77A134
-    /* ADF4 8002A5F4 1344E0A9 */ .word 0xA9E04413
+enddlabel func_8002A5B4
+
+nonmatching func_8002A5F4, 0x4
+
+glabel func_8002A5F4
+    /* ADF4 8002A5F4 1344E0A9 */  swl        $zero, 0x4413($t7)
+endlabel func_8002A5F4
+
+nonmatching func_8002A5F8
+
+glabel func_8002A5F8
     /* ADF8 8002A5F8 800A3BAF */ .word 0xAF3B0A80
     /* ADFC 8002A5FC 262E3965 */ .word 0x65392E26
     /* AE00 8002A600 BFF7516B */ .word 0x6B51F7BF
+
+nonmatching func_8002A604
+
+alabel func_8002A604
     /* AE04 8002A604 0950A23C */ .word 0x3CA25009 /* invalid instruction */
     /* AE08 8002A608 586C56F6 */ .word 0xF6566C58
     /* AE0C 8002A60C 9973A997 */ .word 0x97A97399
@@ -65,4 +91,4 @@ alabel .L8002A590
     /* AE4C 8002A64C 3112CE54 */ .word 0x54CE1231
     /* AE50 8002A650 05DD8D6B */ .word 0x6B8DDD05
     /* AE54 8002A654 8EB618CC */ .word 0xCC18B68E
-enddlabel func_8002A58C
+enddlabel func_8002A5F8
