@@ -1,0 +1,3 @@
+# The retail executable(s) you verify against. Git-ignored by design.
+# Record the SHA-1 of each one in config/sha1/<target>.sha1 — that file
+# (not the binary) is the committed oracle.

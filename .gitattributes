@@ -1,0 +1,13 @@
+# Never let git touch the bytes it cannot rebuild:
+baselines/** binary
+disk/** binary
+*.bin binary
+*.exe binary
+
+# Generated disassembly and configs are line-based and must diff cleanly:
+*.s text eol=lf
+*.yaml text eol=lf
+*.sha1 text eol=lf
+
+# Windows users keep the tree sane:
+* text=auto

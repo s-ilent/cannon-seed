@@ -1,0 +1,44 @@
+# =============================================================================
+# Source-only repository policy (inherited from tenchu-decomp, lsddecomp,
+# parasite-eve-decomp and rage-racer-decomp).
+#
+# NOTHING copyrighted is ever committed: no disc images, no game executable,
+# no extracted assets, no Sony Psy-Q SDK files, no compiler binaries.
+# Contributors supply legally obtained copies; the build reads them from
+# the git-ignored directories below.
+# =============================================================================
+
+# You provide these (git-ignored, never committed):
+/disk/
+/sdk/
+/lib/
+/include/psyq/
+/assets/
+
+# The retail executable(s) you verify against live here:
+/baselines/*
+!/baselines/.gitignore
+
+# Build products:
+/build/
+*.o
+*.obj
+*.elf
+*.map
+
+# Community tools cloned or installed locally (pin exact revisions in your
+# setup script instead of committing them):
+/decomp-permuter/
+/asm-differ/
+/m2c/
+/objdiff/
+/.venv/
+/venv/
+
+# Python / editor / OS noise:
+__pycache__/
+*.pyc
+.DS_Store
+.idea/
+.vscode/
+*.swp
