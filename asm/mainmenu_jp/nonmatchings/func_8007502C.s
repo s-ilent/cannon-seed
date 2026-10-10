@@ -23,6 +23,10 @@ glabel func_8007502C
     /* 55854 80075054 C1826A8E */ .word 0x8E6A82C1
     /* 55858 80075058 578F55EC */ .word 0xEC558F57 /* invalid instruction */
     /* 5585C 8007505C 7F3AAAB0 */ .word 0xB0AA3A7F
+
+nonmatching func_80075060
+
+alabel func_80075060
     /* 55860 80075060 FCF1725A */ .word 0x5A72F1FC /* invalid instruction */
     /* 55864 80075064 9E2D6524 */ .word 0x24652D9E
     /* 55868 80075068 98693CC2 */ .word 0xC23C6998

@@ -44,10 +44,18 @@ glabel func_80073DB4
     /* 54630 80073E30 7D62F3D4 */ .word 0xD4F3627D
     /* 54634 80073E34 26B37974 */ .word 0x7479B326 /* invalid instruction */
     /* 54638 80073E38 F08143C1 */ .word 0xC14381F0
+
+nonmatching func_80073E3C
+
+alabel func_80073E3C
     /* 5463C 80073E3C 8B440D67 */ .word 0x670D448B
     /* 54640 80073E40 90014F98 */ .word 0x984F0190
     /* 54644 80073E44 1FB81B72 */ .word 0x721BB81F /* invalid instruction */
     /* 54648 80073E48 75123667 */ .word 0x67361275
+
+nonmatching func_80073E4C
+
+alabel func_80073E4C
     /* 5464C 80073E4C 8BA93390 */ .word 0x9033A98B
     /* 54650 80073E50 0588B5AE */ .word 0xAEB58805
     /* 54654 80073E54 98FEB23F */ .word 0x3FB2FE98 /* invalid instruction */

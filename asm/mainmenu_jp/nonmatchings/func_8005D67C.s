@@ -33,3 +33,32 @@ glabel func_8005D67C
     /* 3DECC 8005D6CC 0800E003 */  jr         $ra
     /* 3DED0 8005D6D0 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005D67C
+
+nonmatching func_8005D6D4, 0x38
+
+glabel func_8005D6D4
+    /* 3DED4 8005D6D4 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 3DED8 8005D6D8 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 3DEDC 8005D6DC 0280043C */  lui        $a0, %hi(D_80022684)
+    /* 3DEE0 8005D6E0 84268424 */  addiu      $a0, $a0, %lo(D_80022684)
+    /* 3DEE4 8005D6E4 04DD000C */  jal        func_80037410
+    /* 3DEE8 8005D6E8 00000000 */   nop
+    /* 3DEEC 8005D6EC 3366010C */  jal        func_800598CC
+    /* 3DEF0 8005D6F0 00000000 */   nop
+    /* 3DEF4 8005D6F4 05004014 */  bnez       $v0, func_8005D70C
+    /* 3DEF8 8005D6F8 01000334 */   ori       $v1, $zero, 0x1
+    /* 3DEFC 8005D6FC F752010C */  jal        func_80054BDC
+    /* 3DF00 8005D700 00000000 */   nop
+    /* 3DF04 8005D704 0B560108 */  j          func_8005582C
+    /* 3DF08 8005D708 00000000 */   nop
+endlabel func_8005D6D4
+
+/* Handwritten function */
+nonmatching func_8005D70C, 0x10
+
+glabel func_8005D70C
+    /* 3DF0C 8005D70C 0D80023C */  lui        $v0, (0x800D0000 >> 16)
+    /* 3DF10 8005D710 001EF9DF */  ld         $t9, 0x1E00($ra)
+    /* 3DF14 8005D714 414D3D53 */  beql       $t9, $sp, .L80070C1C
+    /* 3DF18 8005D718 B46CD300 */   teq       $a2, $s3, 434 /* handwritten instruction */
+endlabel func_8005D70C

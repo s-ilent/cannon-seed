@@ -19,6 +19,10 @@ glabel func_80077DA8
     /* 585C0 80077DC0 6D1469BE */ .word 0xBE69146D
     /* 585C4 80077DC4 C62E2D8C */ .word 0x8C2D2EC6
     /* 585C8 80077DC8 BAEFBD44 */ .word 0x44BDEFBA /* invalid instruction */
+
+nonmatching func_80077DCC
+
+alabel func_80077DCC
     /* 585CC 80077DCC 9752F397 */ .word 0x97F35297
     /* 585D0 80077DD0 EB129038 */ .word 0x389012EB
     /* 585D4 80077DD4 D943E0CC */ .word 0xCCE043D9

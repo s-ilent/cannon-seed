@@ -25,6 +25,7 @@ glabel func_8007A484
     /* 5ACB4 8007A4B4 D8FFED24 */  addiu      $t5, $a3, -0x28
     /* 5ACB8 8007A4B8 C0FFEE24 */  addiu      $t6, $a3, -0x40
     /* 5ACBC 8007A4BC 4800ECAC */  sw         $t4, 0x48($a3)
+  alabel func_8007A4C0
     /* 5ACC0 8007A4C0 4C00EDAC */  sw         $t5, 0x4C($a3)
     /* 5ACC4 8007A4C4 5000EEAC */  sw         $t6, 0x50($a3)
     /* 5ACC8 8007A4C8 94B9010C */  jal        func_8006E650
@@ -40,7 +41,32 @@ glabel func_8007A484
     /* 5ACF0 8007A4F0 5400FF8C */  lw         $ra, 0x54($a3)
     /* 5ACF4 8007A4F4 A8FFE724 */  addiu      $a3, $a3, -0x58
     /* 5ACF8 8007A4F8 FFFFC624 */  addiu      $a2, $a2, -0x1
+  alabel func_8007A4FC
     /* 5ACFC 8007A4FC 21108000 */  addu       $v0, $a0, $zero
     /* 5AD00 8007A500 0800E003 */  jr         $ra
     /* 5AD04 8007A504 00000000 */   nop
 endlabel func_8007A484
+
+nonmatching func_8007A508, 0x4C
+
+glabel func_8007A508
+    /* 5AD08 8007A508 1000B88C */  lw         $t8, 0x10($a1)
+    /* 5AD0C 8007A50C 10000C8D */  lw         $t4, 0x10($t0)
+    /* 5AD10 8007A510 10002D8D */  lw         $t5, 0x10($t1)
+    /* 5AD14 8007A514 10004E8D */  lw         $t6, 0x10($t2)
+    /* 5AD18 8007A518 08008CAC */  sw         $t4, 0x8($a0)
+    /* 5AD1C 8007A51C 0C008DAC */  sw         $t5, 0xC($a0)
+    /* 5AD20 8007A520 10008EAC */  sw         $t6, 0x10($a0)
+    /* 5AD24 8007A524 040098AC */  sw         $t8, 0x4($a0)
+    /* 5AD28 8007A528 1400AC8C */  lw         $t4, 0x14($a1)
+    /* 5AD2C 8007A52C 00CA0400 */  sll        $t9, $a0, 8
+    /* 5AD30 8007A530 02CA1900 */  srl        $t9, $t9, 8
+    /* 5AD34 8007A534 0000988D */  lw         $t8, 0x0($t4)
+    /* 5AD38 8007A538 000099AD */  sw         $t9, 0x0($t4)
+    /* 5AD3C 8007A53C 00040E3C */  lui        $t6, (0x4000000 >> 16)
+    /* 5AD40 8007A540 25C00E03 */  or         $t8, $t8, $t6
+    /* 5AD44 8007A544 000098AC */  sw         $t8, 0x0($a0)
+    /* 5AD48 8007A548 14008424 */  addiu      $a0, $a0, 0x14
+    /* 5AD4C 8007A54C 0800E003 */  jr         $ra
+    /* 5AD50 8007A550 00000000 */   nop
+endlabel func_8007A508
