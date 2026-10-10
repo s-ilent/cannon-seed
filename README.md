@@ -40,13 +40,13 @@ extraction from their own CHDs — and the docs.
 
 The repo owns a byte-exact build machine: splat split → maspsx → mipsel
 as → per-subsegment linker script → objcopy → generated PS-X EXE header.
-The round-trip oracle is GREEN for **2 of 8 targets** — `slps_00270`
-(Japan boot) and `sces_00269` (Europe boot) — i.e. `make verify
-TARGET=<t>` reproduces those retail executables byte-for-byte from
-committed asm. This is an asm round-trip, not decompiled source: every
-function is still nonmatching, and the remaining six targets await their
-scan configs. Next: compiler pinning (docs/TOOLCHAIN.md), GCC 2.6.3
-acquisition, first C function match, then the remaining targets.
+The round-trip oracle is GREEN for **all 8 targets** — every retail
+executable in both regions (`slps_00270`/`sces_00269` boots, both
+`MAINMENU.EXE`, both `DRAGOON/G3.EXE`, both `GOURB/G3ORG.EXE`) reproduces
+byte-for-byte from committed asm via `make verify TARGET=<t>`. This is an
+asm round-trip, not decompiled source: every function is still
+nonmatching. Next: compiler pinning (docs/TOOLCHAIN.md), GCC 2.6.3
+acquisition, then the first C function match.
 Live facts: [docs/RECON.md](docs/RECON.md). Measure, don't transcribe:
 `make progress`, `make nonmatchings`, `make ratchets`.
 
