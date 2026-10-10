@@ -120,3 +120,20 @@ First C match through the round-trip oracle: `src/func_80036CFC.c`
 generated disassembly (2026-10-10). Per-function byte-matching
 continues to validate the flag set; switch tables (`jtbl`) and struct
 passing probes are still open rows.
+
+## Hand-written asm in the source tree (classified 2026-10-10)
+
+Not every retail function is compiler output. The leading-nop store
+leaves (`func_80025AE0`/`func_8002A0DC`: `nop; sw/sh $zero,off($gp);
+jr $ra; nop`), the (=1) `ori`-store twins before them (whose `jr` delay
+slot is the next function's entry byte), and the GTE `ctc2` stub
+`func_80037AC8` (spimdisasm annotates the ctc2 as handwritten) share a
+signature: shapes the compiler cannot emit. An exhaustive probe sweep
+(`probes/gcc263/nop_sweep.sh`, `nop_sweep2.sh` — ~620 cc1 and cc1plus
+compilations: `-O0..-O3` x `-G0/4/8`, every `-f`/`-m` flag the binaries
+support, 12 source shapes) never produced an entry nop; the pipeline
+(cc1 + maspsx) also always fills delay slots, so delay-slot overlap is
+impossible from C. Verdict: those stubs are hand-written assembly in
+the original source. They stay matched through the volatile-asm
+reproduction (store leaves) or data attribution (twins) — do not burn
+sessions trying to make cc1 emit them.

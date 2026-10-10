@@ -21,9 +21,15 @@
  *      g = 1;                    -> ori $v0,$zero,1; sh/sw $v0,SYM; j $31
  *      __asm__ volatile("nop");  -> a real leading nop
  *    Retail func_80025AE0/func_8002A0DC are (nop; store; jr; nop) with
- *    the nop genuinely executed (live jal targets). No cc1 flag tested
- *    (-O0..-O3, -G8, volatile, -fvolatile) emits that leading nop for a
- *    plain store, so the matched C carries a volatile asm — OPEN.
+ *    the nop genuinely executed (live jal targets). CLASSIFIED
+ *    2026-10-10: exhaustive sweep (scripts/nop_sweep.sh, ~620 cc1 and
+ *    cc1plus compilations: -O0..-O3 x -G0/4/8, every -f/-m flag the
+ *    binaries support, 12 source shapes) NEVER emits a leading nop, so
+ *    the entry nop is hand-written asm in the original source. The
+ *    matched C files reproduce it with a volatile asm — settled, not
+ *    open. Same verdict covers the (=1) twins' jr-delay-slot overlap
+ *    (cc1-impossible) and func_80037AC8's ctc2 stub (spimdisasm marks
+ *    it handwritten).
  *
  * 4. Tail-jump overlap: the (=1) twins (ori; store; jr) sit immediately
  *    before the (=0) functions; their jr delay slot IS the next

@@ -6,11 +6,16 @@
  * with the pinned flags, now -G8 because retail demonstrably uses
  * gp-relative data addressing.
  *
- * OPEN QUESTION: the leading nop is real, executed code (retail jal's
- * this entry from the caller at 0x80026300), but no cc1 2.6.3 flag
- * combination tested so far emits it for a plain global store. It is
- * reproduced with a volatile asm until a probe explains it — see
- * probes/gcc263/gp_probe.c and the worklog.
+ * CLASSIFIED (2026-10-10, probe sweep): the leading nop is a source-level
+ * hand-written asm construct, not compiler output. ~620 cc1/cc1plus
+ * compilations (all -O0..-O3, -G0/4/8, every -f/-m flag the binary
+ * supports, 12 source shapes incl. volatile/defined/static/K&R/unused-
+ * param/TU-neighbour variants) emit the bare `sw/sh $0,SYM; j $31` shape
+ * and never a leading nop. The same conclusion independently covers the
+ * (=1) twins next door (jr delay slot overlapped by the next function's
+ * entry — also cc1-impossible) and the GTE ctc2 stub spimdisasm marks
+ * handwritten. The volatile asm below is therefore the settled, faithful
+ * reproduction of a hand-asm stub.
  */
 extern unsigned int D_80063268;
 

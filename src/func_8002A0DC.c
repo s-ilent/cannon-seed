@@ -7,11 +7,11 @@
  * the pinned flags, now -G8 because retail demonstrably uses
  * gp-relative data addressing.
  *
- * OPEN QUESTION: the leading nop is real, executed code (retail jal's
- * this entry from two call sites in the 0x8002A8xx/0x8002ACxx region),
- * but no cc1 2.6.3 flag combination tested so far emits it for a plain
- * global store. It is reproduced with a volatile asm until a probe
- * explains it — see probes/gcc263/gp_probe.c and the worklog.
+ * CLASSIFIED (2026-10-10, probe sweep): the leading nop is a source-level
+ * hand-written asm construct, not compiler output — see the (=0) store
+ * leaf's header for the sweep summary (no cc1/cc1plus flag or source
+ * shape emits an entry nop). The volatile asm below is therefore
+ * the settled, faithful reproduction of a hand-asm stub.
  */
 extern unsigned short D_80063294;
 
