@@ -46,7 +46,22 @@ temporaries):
    move-to-$v0 (`addu $2,$X,$zero`, X != $2). Pure register move,
    side-effect free; the grown nop reproduces the retail delay slot.
 
-Both rules trigger on narrow, byte-verified patterns; anything that
+4. PROLOGUE SAVE RESTORE (found 2026-10-11, mainmenu_eu
+   func_80037A0C, `D_800C936C = 1;` wrapper). GCC's scheduler hoists
+   an independent constant materialization for the first body store
+   above the $ra spill, between the frame alloc and the save; retail
+   keeps the prologue pair adjacent:
+       subu $sp,$sp,24      subu $sp,$sp,24
+       ori  $2,$zero,1  ->  sw   $31,16($sp)
+       sw   $31,16($sp)     ori  $2,$zero,1
+   Fires only on a frame-alloc instruction immediately followed by a
+   $zero-based v0 materialization immediately followed by the $ra
+   spill. The materialization reads $zero and writes $2, the spill
+   reads $31/$sp - no shared operands, so the reorder is
+   semantically a no-op. Keeps every other hoisted instruction
+   (arguments, later loads) untouched.
+
+Every rule triggers on a narrow, byte-verified pattern; anything that
 does not match passes through untouched. The SHA-1 oracle gates the
 result either way.
 """
@@ -60,6 +75,9 @@ JUMP_RA = re.compile(r"^j(?:r)?\t\$(?:31|ra)$")
 SLL16 = re.compile(r"^sll\t\$(\w+),\$(\w+),16$")
 SRA16 = re.compile(r"^sra\t\$(\w+),\$(\w+),16$")
 MOVE_V0 = re.compile(r"^addu\t\$2,\$(\w+),\$zero$")
+FRAME_ALLOC = re.compile(r"^(?:subu|addiu)\t\$sp,\$sp,(-?0x[0-9a-f]+|\d+)$")
+V0_IMM = re.compile(r"^(?:ori|addiu|li)\t\$(?:2|v0),(?:\$(?:0|zero),)?(-?0x[0-9a-f]+|\d+)$")
+SW_RA = re.compile(r"^sw\t\$(?:31|ra),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
 
 NOP = re.compile(r"^nop(\s*#.*)?$")
 # maspsx marks its load-delay decisions as '#nop # DEBUG: ...' comments;
@@ -120,6 +138,16 @@ def apply_rules(insns: list[str]) -> list[str]:
                 res[i : i + 2] = [res[i + 1], res[i], "nop"]
                 i += 3
                 continue
+        i += 1
+
+    # Rule 4: [subu $sp][v0 imm][sw $ra] -> [subu $sp][sw $ra][v0 imm]
+    i = 0
+    while i < len(res) - 2:
+        if (FRAME_ALLOC.match(res[i]) and V0_IMM.match(res[i + 1])
+                and SW_RA.match(res[i + 2])):
+            res[i : i + 3] = [res[i], res[i + 2], res[i + 1]]
+            i += 3
+            continue
         i += 1
 
     return res

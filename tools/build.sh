@@ -37,7 +37,12 @@ TARGET="${TARGET:-slps_00270}"
 LD_SCRIPT="build/${TARGET}.gen.ld"
 OUT_ELF="build/${TARGET}.elf"
 
-ASFLAGS="-march=mips64 -mabi=32 -EL -I include -I asm/nonmatchings"
+# -G0: no implicit small-data relaxation. cc1 -G8 emits bare-symbol
+# operands for extern globals; gas's default -G8 would relax those to
+# %gp_rel silently, but only the boot targets (yaml gp_value) really
+# use gp-relative data - the others use absolute lui/$at in retail.
+# Explicit forms in the sources (%hi/%lo, %gp_rel) are unaffected.
+ASFLAGS="-march=mips64 -mabi=32 -EL -G0 -I include -I asm/nonmatchings"
 
 fail() { echo "build: $*" >&2; exit 2; }
 
@@ -133,6 +138,16 @@ echo "assembled: $n_ok ok, $n_fail failed"
 if [ -d src ]; then
     mkdir -p build/src
     c_list="build/${TARGET}.c_entries"
+    # gp_rel rewrite applies only to targets whose retail build used
+    # gp-relative small data (yaml options.gp_value, _gp in the linker
+    # script). Targets without a gp base keep cc1's bare-symbol form;
+    # with -G0 gas expands it to the absolute lui/$at pair retail shows.
+    GP_REWRITE=$("$PY" - "$TARGET" <<'EOF'
+import sys, yaml
+cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
+print("1" if cfg["options"].get("gp_value") is not None else "0")
+EOF
+)
     "$PY" - "$TARGET" > "$c_list" <<EOF || fail "could not list C subsegments"
 import sys, yaml
 cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
@@ -152,24 +167,29 @@ EOF
         fi
         csec=$(printf '%08X' "0x${crom}")
         staged="build/src/${cname}.r.s"
-        "$PY" - "build/src/${cname}.mas.s" "$staged" "$csec" <<'PYSEC' || fail "C staging failed: ${cname}"
+        "$PY" - "build/src/${cname}.mas.s" "$staged" "$csec" "$GP_REWRITE" <<'PYSEC' || fail "C staging failed: ${cname}"
 import re, sys
-src, dst, sec = sys.argv[1], sys.argv[2], sys.argv[3]
+src, dst, sec, gp_rewrite = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 text = open(src).read()
 text = re.sub(r"^\s*\.text\s*$",
               f'.section .r_{sec}, "awx", @progbits', text, flags=re.M)
-# Small-data rewrite: cc1 -G8 emits bare-symbol memory operands for
-# gp-relative globals (aspsx would relax them via .extern size + -G).
-# maspsx only registers .comm/.sdata symbols, so extern-referenced
-# globals pass through bare — GNU as would emit HI16/LO16 (absolute),
-# which does NOT round-trip. Convert to the explicit form; the linker
-# resolves GPREL16 against _gp (gen_ld.py emits it from yaml gp_value).
-text = re.sub(
-    r"(?m)^(\s*(?:lb|lbu|lh|lhu|lw|lwl|lwr|sb|sh|sw|swl|swr)\s+\$[a-z0-9]+,)"
-    r"([A-Za-z_][A-Za-z0-9_]*(?:\+[0-9]+)?)\s*$",
-    r"\1%gp_rel(\2)($gp)",
-    text,
-)
+# Small-data rewrite, gp targets only (GP_REWRITE=1: yaml options.gp_value
+# exists, _gp is in the linker script): cc1 -G8 emits bare-symbol memory
+# operands for gp-relative globals (aspsx would relax them via .extern
+# size + -G). maspsx only registers .comm/.sdata symbols, so
+# extern-referenced globals pass through bare - GNU as would emit
+# HI16/LO16 (absolute), which does NOT round-trip when retail used
+# gp-relative form. Convert to the explicit form; the linker resolves
+# GPREL16 against _gp. Targets WITHOUT a gp base (GP_REWRITE=0) keep the
+# bare form; with -G0 gas expands it to the absolute lui/$at pair that
+# those targets' retail shows.
+if gp_rewrite == "1":
+    text = re.sub(
+        r"(?m)^(\s*(?:lb|lbu|lh|lhu|lw|lwl|lwr|sb|sh|sw|swl|swr)\s+\$[a-z0-9]+,)"
+        r"([A-Za-z_][A-Za-z0-9_]*(?:\+[0-9]+)?)\s*$",
+        r"\1%gp_rel(\2)($gp)",
+        text,
+    )
 open(dst, "w").write(text)
 PYSEC
         if ! "$AS" $ASFLAGS -o "build/src/${cname}.o" "$staged" 2> "build/src/${cname}.aserr"; then
