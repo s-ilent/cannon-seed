@@ -38584,20 +38584,11 @@ dlabel D_80098400
     /* 78C24 80098424 5E0B0000 */ .word 0x00000B5E
     /* 78C28 80098428 1CE4FFFF */ .word 0xFFFFE41C
     /* 78C2C 8009842C 36F60000 */ .word 0x0000F636
+    /* 78C30 80098430 FFFF0000 */ .word 0x0000FFFF
+    /* 78C34 80098434 00000000 */ .word 0x00000000
+    /* 78C38 80098438 00000000 */ .word 0x00000000
+    /* 78C3C 8009843C 00000000 */ .word 0x00000000
 enddlabel D_80098400
-
-nonmatching D_80098430
-
-dlabel D_80098430
-    /* 78C30 80098430 */ .short 0xFFFF
-    /* 78C32 80098432 */ .short 0x0000
-    /* 78C34 80098434 */ .short 0x0000
-    /* 78C36 80098436 */ .short 0x0000
-    /* 78C38 80098438 */ .short 0x0000
-    /* 78C3A 8009843A */ .short 0x0000
-    /* 78C3C 8009843C */ .short 0x0000
-    /* 78C3E 8009843E */ .short 0x0000
-enddlabel D_80098430
 
 nonmatching D_80098440
 
@@ -81010,20 +81001,23 @@ dlabel D_800B968C
     /* 99E8E 800B968E */ .short 0x5345
     /* 99E90 800B9690 */ .short 0x0000
     /* 99E92 800B9692 */ .short 0x6000
+    /* 99E94 800B9694 */ .short 0x5A82
+    /* 99E96 800B9696 */ .short 0x5A82
+    /* 99E98 800B9698 */ .short 0x5A82
+    /* 99E9A 800B969A */ .short 0x5A82
+    /* 99E9C 800B969C */ .short 0x5A82
+    /* 99E9E 800B969E */ .short 0x5A82
+    /* 99EA0 800B96A0 */ .short 0x5A82
+    /* 99EA2 800B96A2 */ .short 0x5A82
+    /* 99EA4 800B96A4 */ .short 0x7D8A
+    /* 99EA6 800B96A6 */ .short 0x6A6D
+    /* 99EA8 800B96A8 */ .short 0x471C
+    /* 99EAA 800B96AA */ .short 0x18F8
+    /* 99EAC 800B96AC */ .short 0xE707
+    /* 99EAE 800B96AE */ .short 0xB8E3
+    /* 99EB0 800B96B0 */ .short 0x9592
+    /* 99EB2 800B96B2 */ .short 0x8275
 enddlabel D_800B968C
-
-nonmatching D_800B9694
-
-dlabel D_800B9694
-    /* 99E94 800B9694 825A825A */ .word 0x5A825A82
-    /* 99E98 800B9698 825A825A */ .word 0x5A825A82
-    /* 99E9C 800B969C 825A825A */ .word 0x5A825A82
-    /* 99EA0 800B96A0 825A825A */ .word 0x5A825A82
-    /* 99EA4 800B96A4 8A7D6D6A */ .word 0x6A6D7D8A
-    /* 99EA8 800B96A8 1C47F818 */ .word 0x18F8471C
-    /* 99EAC 800B96AC 07E7E3B8 */ .word 0xB8E3E707
-    /* 99EB0 800B96B0 92957582 */ .word 0x82759592
-enddlabel D_800B9694
 
 nonmatching D_800B96B4
 
