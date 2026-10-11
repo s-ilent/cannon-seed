@@ -39,6 +39,15 @@ This script restores git configuration, credentials, the virtual environment (`t
 3. Check progress and ratchets: `make progress`, `make ratchets`. Use automated renaming tools instead of manual search and replace.
 4. Non-matching C code must not remain active. Put near-matches in `#ifdef NON_MATCHING` with the `INCLUDE_ASM` stub in the `#else` block. Mark matching quirks with a `/* MATCHING: */` comment.
 
+## Naming what you find
+
+Two classes of function have names you can recover rather than guess:
+
+* **PSY-Q library veneers** — a three-instruction body (`addiu $t2,$zero,0xA0|0xB0`, `jr $t2`, `addiu $t1,$zero,<index>`). These are SDK assembly the original build linked in; they match as `INCLUDE_ASM`, never from C. Their names come from the SDK archives: `tools/sdk_symbols.py --libs <psyq lib dir>` writes `config/sdk_symbols.txt`, and adopted names go in `config/symbols.curated.txt`, which the scanner preserves across re-scans. `docs/MATCHING.md` §3b has the SDK setup and the traps.
+* **GTE and hand-written routines** — leave the assembly; name them when the evidence is clear.
+
+A name goes in the `config/symbols.*.txt` file, never in a yaml subsegment: `tools/build.sh` reads each section's address out of the file name.
+
 ## How a score lies
 
 Watch for stale objects, inactive `INCLUDE_ASM` stubs, address shifts, and unmerged files (`docs/MATCHING.md` §5). Code is accepted only when `make verify` produces a matching SHA-1.

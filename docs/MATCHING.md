@@ -71,15 +71,35 @@ and the original build linked them in. A C compiler cannot emit this: its
 So these are matched with `INCLUDE_ASM`, exactly like the other hand-written
 routines, and **must not** be chased from C.
 
-They are also identifyable. The function number is an index into the vector
-table, and the SDK's own archives record which member emits which index:
-`tools/sdk_symbols.py --libs <psyq lib dir>` parses them and writes
-`config/sdk_symbols.txt`, a report of every pure veneer in the tree with the
-SDK member it dispatches to. Confirmed names are then adopted by listing
-them in `config/symbols.curated.txt` under a `// target: <name>` header; the
-scanner keeps them instead of reverting to `func_XXXXXXXX`.
+They are also identifiable, and this is the one place the environment has to be
+extended: the names come from the Psy-Q SDK, which is not in this repo. Get it
+once, then the command is a straight run:
 
-Two traps, both hit while building this:
+```sh
+git clone --depth 1 https://github.com/sozud/psy-q ~/psyq     # 4.0 is the pinned SDK
+python3 tools/sdk_symbols.py --libs ~/psyq/4.0/PSX/LIB        # writes the report
+```
+
+That parses the SDK's own archives and rewrites `config/sdk_symbols.txt`, a
+report of every pure veneer in the tree with the library member it dispatches
+to. Check it after any re-split: newly resolved rows are names someone can
+adopt. To adopt one, add a line to `config/symbols.curated.txt` under the
+target's header:
+
+```
+// target: sces_00269
+DisableEvent = 0x80049770; // SDK veneer: vector 0xb0, index 0x0d
+```
+
+then `make extract TARGET=<t> && make verify TARGET=<t>`. The scanner reads
+that file when it regenerates the symbols file, so the name survives re-scans
+instead of reverting to `func_XXXXXXXX`.
+
+Without the SDK nothing breaks: the tool exits 0 writing nothing, the scanner
+treats a missing curated file as empty, and every build still works. Names
+already adopted are committed, so they are visible without cloning anything.
+
+Four traps, all hit while building this:
 
 * **Only a function whose ENTIRE body is one veneer is an SDK member.** A
   game function that merely *contains* a BIOS call is game code — a real
@@ -88,10 +108,18 @@ Two traps, both hit while building this:
 * **Curated names are per target.** The same VRAM address holds different
   code in different builds, so a name listed for one target must never be
   applied to another. The scanner enforces the scoping.
+* **Never rename the subsegment.** Curated names go in the **symbols file
+  only**. `tools/build.sh` derives each section's address from its file name
+  (`func_XXXXXXXX`), and splat takes that name from the yaml subsegment, so
+  renaming a subsegment makes build.sh fail with
+  `0x<name>: value too great for base`.
+* **Keep the comment clean.** splat parses `// type:func` on a symbols line
+  and reads any following parenthetical as more attributes — a colon in it
+  aborts `make extract` with `Missing attribute value`. Name and type tag
+  only; the evidence belongs in `config/symbols.curated.txt`.
 
-Curated names go in the **symbols file only**. `tools/build.sh` derives each
-section's address from its file name (`func_XXXXXXXX`), and splat takes that
-name from the yaml subsegment, so renaming subsegments breaks the build.
+After adopting names, `make verify` on the affected targets is the gate: the
+rename must leave the image byte-identical.
 
 ## 4. Parking: NON_MATCHING is a state, not a defeat
 
