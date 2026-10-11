@@ -29,7 +29,7 @@ glabel func_80035E8C
     /* 166A4 80035EA4 04008004 */  bltz       $a0, func_80035EB8
     /* 166A8 80035EA8 00140300 */   sll       $v0, $v1, 16
     /* 166AC 80035EAC 03140200 */  sra        $v0, $v0, 16
-    /* 166B0 80035EB0 1FCC0008 */  j          D_8003307C
+    /* 166B0 80035EB0 1FCC0008 */  j          func_8003307C
     /* 166B4 80035EB4 2A104400 */   slt       $v0, $v0, $a0
 endlabel func_80035E8C
 

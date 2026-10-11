@@ -60,11 +60,21 @@ dlabel D_80020094
     /* 8A0 800200A0 00000000 */ .word 0x00000000
     /* 8A4 800200A4 00000000 */ .word 0x00000000
     /* 8A8 800200A8 00000000 */ .word 0x00000000
+enddlabel D_80020094
+
+nonmatching D_800200AC
+
+dlabel D_800200AC
     /* 8AC 800200AC 01FEE273 */ .word 0x73E2FE01
     /* 8B0 800200B0 826F433F */ .word 0x3F436F82
     /* 8B4 800200B4 0BEDE958 */ .word 0x58E9ED0B
     /* 8B8 800200B8 180A8B77 */ .word 0x778B0A18
     /* 8BC 800200BC 92FFCB7A */ .word 0x7ACBFF92
+enddlabel D_800200AC
+
+nonmatching D_800200C0
+
+dlabel D_800200C0
     /* 8C0 800200C0 E9C8873D */ .word 0x3D87C8E9
     /* 8C4 800200C4 2EB5C50C */ .word 0x0CC5B52E
     /* 8C8 800200C8 C9A575CC */ .word 0xCC75A5C9
@@ -103,7 +113,7 @@ dlabel D_80020094
     /* 94C 8002014C 5C54494D */ .word 0x4D49545C
     /* 950 80020150 322E4441 */ .word 0x41442E32
     /* 954 80020154 543B3100 */ .word 0x00313B54
-enddlabel D_80020094
+enddlabel D_800200C0
 
 .align 2
 nonmatching D_80020158
@@ -819,12 +829,21 @@ dlabel D_80020AB4
     /* 1350 80020B50 61645379 */ .word 0x79536461
 enddlabel D_80020AB4
 
-.align 2
 nonmatching D_80020B54
 
 dlabel D_80020B54
-    /* 1354 80020B54 */ .asciz "nc in snd_fload3_TransBody()\n"
-    /* 6E6320696E20736E645F666C6F6164335F5472616E73426F647928290A000000 */
+    /* 1354 80020B54 6E632069 */ .word 0x6920636E
+    /* 1358 80020B58 6E20736E */ .word 0x6E73206E
+    /* 135C 80020B5C 645F666C */ .word 0x6C665F64
+    /* 1360 80020B60 6F616433 */ .word 0x3364616F
+enddlabel D_80020B54
+
+.align 2
+nonmatching D_80020B64
+
+dlabel D_80020B64
+    /* 1364 80020B64 */ .asciz "_TransBody()\n"
+    /* 5F5472616E73426F647928290A000000 */
 .align 2
 .align 2
     /* 1374 80020B74 */ .asciz "Cannot find file(%s) in fload3()\n,filename"
@@ -838,7 +857,7 @@ dlabel D_80020B54
     /* 13C0 80020BC0 */ .asciz "Fault CdSync in fload3()\n"
     /* 4661756C7420436453796E6320696E20666C6F61643328290A000000 */
 .align 2
-enddlabel D_80020B54
+enddlabel D_80020B64
 
 .align 2
 nonmatching D_80020BDC
@@ -966,6 +985,11 @@ dlabel jtbl_80020D3C
     /* 155C 80020D5C 04DF0280 */ .word 0x8002DF04
     /* 1560 80020D60 04DF0280 */ .word 0x8002DF04
     /* 1564 80020D64 04DF0280 */ .word 0x8002DF04
+enddlabel jtbl_80020D3C
+
+nonmatching jtbl_80020D68
+
+dlabel jtbl_80020D68
     /* 1568 80020D68 BCDE0280 */ .word 0x8002DEBC
     /* 156C 80020D6C 496E7661 */ .word 0x61766E49
     /* 1570 80020D70 6C696420 */ .word 0x2064696C
@@ -1005,7 +1029,7 @@ dlabel jtbl_80020D3C
     /* 15F8 80020DF8 696E2073 */ .word 0x73206E69
     /* 15FC 80020DFC 74646D76 */ .word 0x766D6474
     /* 1600 80020E00 2E630000 */ .word 0x0000632E
-enddlabel jtbl_80020D3C
+enddlabel jtbl_80020D68
 
 nonmatching jtbl_80020E04
 
@@ -1816,30 +1840,75 @@ dlabel jtbl_800214C8
     /* 1DC4 800215C4 00000000 */ .word 0x00000000
     /* 1DC8 800215C8 56494354 */ .word 0x54434956
     /* 1DCC 800215CC 4F52595F */ .word 0x5F59524F
-    /* 1DD0 800215D0 53455436 */ .word 0x36544553
-    /* 1DD4 800215D4 00000000 */ .word 0x00000000
+enddlabel jtbl_800214C8
+
+.align 2
+nonmatching D_800215D0
+
+dlabel D_800215D0
+    /* 1DD0 800215D0 */ .asciz "SET6"
+    /* 5345543600000000 */
+.align 2
     /* 1DD8 800215D8 44454645 */ .word 0x45464544
     /* 1DDC 800215DC 41545F49 */ .word 0x495F5441
-    /* 1DE0 800215E0 4E495400 */ .word 0x0054494E
-    /* 1DE4 800215E4 44454645 */ .word 0x45464544
-    /* 1DE8 800215E8 41545F53 */ .word 0x535F5441
-    /* 1DEC 800215EC 45543200 */ .word 0x00325445
-    /* 1DF0 800215F0 44454645 */ .word 0x45464544
-    /* 1DF4 800215F4 41545F53 */ .word 0x535F5441
-    /* 1DF8 800215F8 45543300 */ .word 0x00335445
+enddlabel D_800215D0
+
+.align 2
+nonmatching D_800215E0
+
+dlabel D_800215E0
+    /* 1DE0 800215E0 */ .asciz "NIT"
+    /* 4E495400 */
+.align 2
+.align 2
+    /* 1DE4 800215E4 */ .asciz "DEFEAT_SET2"
+    /* 4445464541545F5345543200 */
+.align 2
+enddlabel D_800215E0
+
+.align 2
+nonmatching D_800215F0
+
+dlabel D_800215F0
+    /* 1DF0 800215F0 */ .asciz "DEFEAT_SET3"
+    /* 4445464541545F5345543300 */
+.align 2
     /* 1DFC 800215FC 44454645 */ .word 0x45464544
-    /* 1E00 80021600 41545F53 */ .word 0x535F5441
-    /* 1E04 80021604 45543400 */ .word 0x00345445
+enddlabel D_800215F0
+
+.align 2
+nonmatching D_80021600
+
+dlabel D_80021600
+    /* 1E00 80021600 */ .asciz "AT_SET4"
+    /* 41545F5345543400 */
+.align 2
     /* 1E08 80021608 44454645 */ .word 0x45464544
-    /* 1E0C 8002160C 41545F53 */ .word 0x535F5441
-    /* 1E10 80021610 45543500 */ .word 0x00355445
+enddlabel D_80021600
+
+.align 2
+nonmatching D_8002160C
+
+dlabel D_8002160C
+    /* 1E0C 8002160C */ .asciz "AT_SET5"
+    /* 41545F5345543500 */
+.align 2
     /* 1E14 80021614 44454645 */ .word 0x45464544
     /* 1E18 80021618 41545F53 */ .word 0x535F5441
-    /* 1E1C 8002161C 45543600 */ .word 0x00365445
-    /* 1E20 80021620 44454144 */ .word 0x44414544
-    /* 1E24 80021624 5F454E44 */ .word 0x444E455F
-    /* 1E28 80021628 00000000 */ .word 0x00000000
-enddlabel jtbl_800214C8
+enddlabel D_8002160C
+
+.align 2
+nonmatching D_8002161C
+
+dlabel D_8002161C
+    /* 1E1C 8002161C */ .asciz "ET6"
+    /* 45543600 */
+.align 2
+.align 2
+    /* 1E20 80021620 */ .asciz "DEAD_END"
+    /* 444541445F454E4400000000 */
+.align 2
+enddlabel D_8002161C
 
 .align 2
 nonmatching D_8002162C

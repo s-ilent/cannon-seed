@@ -167,31 +167,31 @@ glabel func_8003EA40
     /* 1F284 8003EA84 00000000 */   nop
     /* 1F288 8003EA88 F9EE000C */  jal        func_8003BBE4
     /* 1F28C 8003EA8C 00000000 */   nop
-    /* 1F290 8003EA90 BCEA0008 */  j          D_8003AAF0
+    /* 1F290 8003EA90 BCEA0008 */  j          func_8003AAF0
     /* 1F294 8003EA94 00000000 */   nop
     /* 1F298 8003EA98 14ED000C */  jal        func_8003B450
     /* 1F29C 8003EA9C 00000000 */   nop
-    /* 1F2A0 8003EAA0 BCEA0008 */  j          D_8003AAF0
+    /* 1F2A0 8003EAA0 BCEA0008 */  j          func_8003AAF0
     /* 1F2A4 8003EAA4 00000000 */   nop
     /* 1F2A8 8003EAA8 A9EC000C */  jal        func_8003B2A4
     /* 1F2AC 8003EAAC 00000000 */   nop
-    /* 1F2B0 8003EAB0 BCEA0008 */  j          D_8003AAF0
+    /* 1F2B0 8003EAB0 BCEA0008 */  j          func_8003AAF0
     /* 1F2B4 8003EAB4 00000000 */   nop
     /* 1F2B8 8003EAB8 59ED000C */  jal        func_8003B564
     /* 1F2BC 8003EABC 00000000 */   nop
-    /* 1F2C0 8003EAC0 BCEA0008 */  j          D_8003AAF0
+    /* 1F2C0 8003EAC0 BCEA0008 */  j          func_8003AAF0
     /* 1F2C4 8003EAC4 00000000 */   nop
     /* 1F2C8 8003EAC8 C0EA000C */  jal        func_8003AB00
     /* 1F2CC 8003EACC 00000000 */   nop
-    /* 1F2D0 8003EAD0 BCEA0008 */  j          D_8003AAF0
+    /* 1F2D0 8003EAD0 BCEA0008 */  j          func_8003AAF0
     /* 1F2D4 8003EAD4 00000000 */   nop
     /* 1F2D8 8003EAD8 14EB000C */  jal        func_8003AC50
     /* 1F2DC 8003EADC 00000000 */   nop
-    /* 1F2E0 8003EAE0 BCEA0008 */  j          D_8003AAF0
+    /* 1F2E0 8003EAE0 BCEA0008 */  j          func_8003AAF0
     /* 1F2E4 8003EAE4 00000000 */   nop
     /* 1F2E8 8003EAE8 4EED000C */  jal        func_8003B538
     /* 1F2EC 8003EAEC 00000000 */   nop
-    /* 1F2F0 8003EAF0 BCEA0008 */  j          D_8003AAF0
+    /* 1F2F0 8003EAF0 BCEA0008 */  j          func_8003AAF0
     /* 1F2F4 8003EAF4 00000000 */   nop
 endlabel func_8003EA40
 

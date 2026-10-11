@@ -119,6 +119,7 @@ glabel func_80046B00
     /* 27304 80046B04 8CCC4294 */  lhu        $v0, %lo(D_800ACC8C)($v0)
     /* 27308 80046B08 0B80013C */  lui        $at, %hi(D_800AC7FC)
     /* 2730C 80046B0C FCC723A4 */  sh         $v1, %lo(D_800AC7FC)($at)
+  alabel func_80046B10
     /* 27310 80046B10 0B030334 */  ori        $v1, $zero, 0x30B
     /* 27314 80046B14 0B80013C */  lui        $at, %hi(D_800AC6CC)
     /* 27318 80046B18 CCC623A4 */  sh         $v1, %lo(D_800AC6CC)($at)
@@ -142,6 +143,7 @@ glabel func_80046B38
     /* 2734C 80046B4C 00000000 */   nop
     /* 27350 80046B50 0B80023C */  lui        $v0, %hi(D_800AC6CC)
     /* 27354 80046B54 CCC64294 */  lhu        $v0, %lo(D_800AC6CC)($v0)
+  alabel func_80046B58
     /* 27358 80046B58 00000000 */  nop
     /* 2735C 80046B5C FFFF4224 */  addiu      $v0, $v0, -0x1
     /* 27360 80046B60 0B80013C */  lui        $at, %hi(D_800AC6CC)
@@ -189,6 +191,7 @@ glabel func_80046BB8
     /* 273E0 80046BE0 80180200 */  sll        $v1, $v0, 2
     /* 273E4 80046BE4 21104300 */  addu       $v0, $v0, $v1
     /* 273E8 80046BE8 80100200 */  sll        $v0, $v0, 2
+  alabel func_80046BEC
     /* 273EC 80046BEC FFFF4430 */  andi       $a0, $v0, 0xFFFF
     /* 273F0 80046BF0 0B80013C */  lui        $at, %hi(D_800ACB04)
     /* 273F4 80046BF4 04CB24A4 */  sh         $a0, %lo(D_800ACB04)($at)
@@ -244,6 +247,7 @@ glabel func_80046C40
     /* 27494 80046C94 01004224 */  addiu      $v0, $v0, 0x1
     /* 27498 80046C98 0B80013C */  lui        $at, %hi(D_800ACDFC)
     /* 2749C 80046C9C FCCD22A4 */  sh         $v0, %lo(D_800ACDFC)($at)
+  alabel func_80046CA0
     /* 274A0 80046CA0 0B80013C */  lui        $at, %hi(D_800ACCD4)
     /* 274A4 80046CA4 D4CC23A4 */  sh         $v1, %lo(D_800ACCD4)($at)
     /* 274A8 80046CA8 041D010C */  jal        func_80047410
@@ -259,6 +263,7 @@ glabel func_80046CB8
     /* 274BC 80046CBC CCCC4284 */  lh         $v0, %lo(D_800ACCCC)($v0)
     /* 274C0 80046CC0 00000000 */  nop
     /* 274C4 80046CC4 2D004014 */  bnez       $v0, func_80046D7C
+  alabel func_80046CC8
     /* 274C8 80046CC8 00000000 */   nop
     /* 274CC 80046CCC 0B80023C */  lui        $v0, %hi(D_800ACB04)
     /* 274D0 80046CD0 04CB4284 */  lh         $v0, %lo(D_800ACB04)($v0)

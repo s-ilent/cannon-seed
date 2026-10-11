@@ -33,6 +33,7 @@ glabel func_8004693C
     /* 2718C 8004698C ECC923A4 */  sh         $v1, %lo(D_800AC9EC)($at)
     /* 27190 80046990 B113010C */  jal        func_80044EC4
     /* 27194 80046994 38000434 */   ori       $a0, $zero, 0x38
+  alabel func_80046998
     /* 27198 80046998 0B80013C */  lui        $at, %hi(D_800ACC8C)
     /* 2719C 8004699C 8CCC30A4 */  sh         $s0, %lo(D_800ACC8C)($at)
     /* 271A0 800469A0 1400BF8F */  lw         $ra, 0x14($sp)
