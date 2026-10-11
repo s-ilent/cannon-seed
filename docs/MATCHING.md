@@ -54,6 +54,45 @@ converges in minutes; a base with the wrong register plateaus.
 `tools/permuter/` holds the project template and a runner — see
 `tools/permuter/README.md`.
 
+### 3b. BIOS-call veneers are SDK code, not matchable C
+
+A three-instruction body of this shape is a PSY-Q library veneer, not a
+compiled C function:
+
+```
+addiu $t2, $zero, 0xB0     ; 0xA0 = the C library vector, 0xB0 = the kernel vector
+jr    $t2                  ; enter the BIOS
+ addiu $t1, $zero, 0xD     ; delay slot: function number (0x0D = free)
+```
+
+The SDK ships these as small library members — one per callable function —
+and the original build linked them in. A C compiler cannot emit this: its
+`jr` is always a return, and a cross-function call is `jal` to a wrapper.
+So these are matched with `INCLUDE_ASM`, exactly like the other hand-written
+routines, and **must not** be chased from C.
+
+They are also identifyable. The function number is an index into the vector
+table, and the SDK's own archives record which member emits which index:
+`tools/sdk_symbols.py --libs <psyq lib dir>` parses them and writes
+`config/sdk_symbols.txt`, a report of every pure veneer in the tree with the
+SDK member it dispatches to. Confirmed names are then adopted by listing
+them in `config/symbols.curated.txt` under a `// target: <name>` header; the
+scanner keeps them instead of reverting to `func_XXXXXXXX`.
+
+Two traps, both hit while building this:
+
+* **Only a function whose ENTIRE body is one veneer is an SDK member.** A
+  game function that merely *contains* a BIOS call is game code — a real
+  function that happened to use `memcpy`. `tools/sdk_symbols.py` enforces
+  this by requiring exactly three instructions and no frame.
+* **Curated names are per target.** The same VRAM address holds different
+  code in different builds, so a name listed for one target must never be
+  applied to another. The scanner enforces the scoping.
+
+Curated names go in the **symbols file only**. `tools/build.sh` derives each
+section's address from its file name (`func_XXXXXXXX`), and splat takes that
+name from the yaml subsegment, so renaming subsegments breaks the build.
+
 ## 4. Parking: NON_MATCHING is a state, not a defeat
 
 Some compiler patterns resist matching from C source. Put readable near-matches in `#ifdef NON_MATCHING` blocks. Put the `INCLUDE_ASM` stub in the `#else` block. The linked binary stays byte-identical. The source tracks progress clearly. Record attempted approaches in the header comment of the function.

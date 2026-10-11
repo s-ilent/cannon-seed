@@ -176,6 +176,30 @@ def plausible(w: int) -> bool:
     return True
 
 
+def load_curated(target):
+    """offset -> name, from config/symbols.curated.txt for this target.
+
+    Curated names are facts established outside the scan (identified SDK
+    library members, recovered subsystem names). Every name sits under a
+    `// target: <name>` header: the same VRAM address holds different code
+    in different builds, so a name applies to exactly one target.
+    """
+    cpath = REPO / "config" / "symbols.curated.txt"
+    out = {}
+    if not cpath.is_file():
+        return out
+    scope = None
+    for line in cpath.read_text(errors="replace").splitlines():
+        mt = re.match(r"\s*//\s*target:\s*(\w+)", line)
+        if mt:
+            scope = mt.group(1)
+            continue
+        m = re.match(r"\s*([A-Za-z_]\w*)\s*=\s*(0x[0-9A-Fa-f]+)", line)
+        if m and scope == target:
+            out[int(m.group(2), 16) - BASE] = m.group(1)
+    return out
+
+
 def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
     n = len(payload) // 4
     words = struct.unpack(f"<{n}I", payload[: n * 4])
@@ -757,11 +781,17 @@ def main(argv):
                 ranges[i:i + 1] = [[s, s + csize], [s + csize, e]]
                 break
 
+    curated = load_curated(target)
     subsegs = []
     for s, e in ranges:
         typ, name = "asm", f"func_{BASE + s:08X}"
         if s in kept:
             typ, name = kept[s][0], kept[s][1]
+        # NOTE: curated names are deliberately NOT applied to subsegment
+        # names. splat derives each output file's name from them, and
+        # tools/build.sh reads each section's address out of that file
+        # name (`func_XXXXXXXX`). Curated names go into the symbols file
+        # only, where the linker resolves them by address.
         subsegs.append((s, typ, name, e - s))
     for s, e in gaps:
         subsegs.append((s, "data", f"data_{BASE + s:08X}", e - s))
@@ -807,13 +837,19 @@ def main(argv):
     yaml_path.write_text(new_ytext)
 
     # --- rewrite function symbols between markers -------------------------
+    # Curated names win (loaded above, same mapping used for the yaml).
     sym_path = REPO / "config" / f"symbols.{target}.txt"
     stext = sym_path.read_text() if sym_path.exists() else ""
     head = stext.split("// BEGIN GENERATED FUNCTION SYMBOLS")[0]
     head = head.split("# BEGIN GENERATED FUNCTION SYMBOLS")[0].rstrip("\n")
     gen_syms = ["// BEGIN GENERATED FUNCTION SYMBOLS (tools/scan_functions.py)"]
+    n_curated = 0
     for s, e in ranges:
-        gen_syms.append(f"func_{BASE + s:08X} = 0x{BASE + s:08X}; // type:func")
+        if s in curated:
+            gen_syms.append(f"{curated[s]} = 0x{BASE + s:08X}; // type:func")
+            n_curated += 1
+        else:
+            gen_syms.append(f"func_{BASE + s:08X} = 0x{BASE + s:08X}; // type:func")
     # v3b: cross-range branch targets (see scan()). Naming them lets
     # spimdisasm emit `j func_XXXXXXXX` instead of an unresolvable
     # file-local `.L`; the second link pass defines address-encoded names.
@@ -821,6 +857,8 @@ def main(argv):
         gen_syms.append(f"func_{BASE + o:08X} = 0x{BASE + o:08X}; // type:func (branch target)")
     gen_syms.append("// END GENERATED FUNCTION SYMBOLS")
     sym_path.write_text(head + "\n" + "\n".join(gen_syms) + "\n")
+    if n_curated:
+        print(f"scan: kept {n_curated} curated symbol name(s)")
 
     print(f"wrote subsegments into {yaml_path.relative_to(REPO)} "
           f"and symbols into {sym_path.relative_to(REPO)}")

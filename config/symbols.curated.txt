@@ -1,0 +1,23 @@
+// Curated symbol names - hand-maintained, preserved across re-scans.
+//
+// tools/scan_functions.py reads this file when regenerating
+// config/symbols.*.txt and uses these names instead of func_XXXXXXXX.
+//
+// SCOPING: every name sits under a `// target: <name>` header, because the
+// same VRAM address holds different code in different builds. A name must
+// only be listed under the target whose split actually contains it.
+//
+// Entries are facts established outside the scan. The SDK veneer names were
+// derived with tools/sdk_symbols.py (see config/sdk_symbols.txt for the
+// full evidence report).
+
+// target: g3_eu
+OpenEvent = 0x80051454; // SDK veneer: vector 0xb0, index 0x08
+
+// target: g3_jp
+strcat = 0x8004DEDC; // SDK veneer: vector 0xa0, index 0x15
+InitHeap = 0x80051BE4; // SDK veneer: vector 0xa0, index 0x39
+
+// target: sces_00269
+_96_init = 0x800318E8; // SDK veneer: vector 0xa0, index 0x71
+DisableEvent = 0x80049770; // SDK veneer: vector 0xb0, index 0x0d
