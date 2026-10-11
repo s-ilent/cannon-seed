@@ -294,12 +294,14 @@ glabel func_8002D480
     /* E0B0 8002D8B0 00000000 */   nop
     /* E0B4 8002D8B4 0980043C */  lui        $a0, %hi(D_8008B688)
     /* E0B8 8002D8B8 88B68424 */  addiu      $a0, $a0, %lo(D_8008B688)
+  .L8002D8BC:
     /* E0BC 8002D8BC 9799000C */  jal        func_8002665C
     /* E0C0 8002D8C0 00000000 */   nop
     /* E0C4 8002D8C4 0D80033C */  lui        $v1, %hi(D_800C9B7C)
     /* E0C8 8002D8C8 7C9B638C */  lw         $v1, %lo(D_800C9B7C)($v1)
     /* E0CC 8002D8CC 21804000 */  addu       $s0, $v0, $zero
     /* E0D0 8002D8D0 80180300 */  sll        $v1, $v1, 2
+  .L8002D8D4:
     /* E0D4 8002D8D4 0980013C */  lui        $at, %hi(D_8008E87C)
     /* E0D8 8002D8D8 7CE82124 */  addiu      $at, $at, %lo(D_8008E87C)
     /* E0DC 8002D8DC 21082300 */  addu       $at, $at, $v1
@@ -323,6 +325,7 @@ glabel func_8002D480
     /* E124 8002D924 9F71010C */  jal        func_8005C67C
     /* E128 8002D928 21200002 */   addu      $a0, $s0, $zero
     /* E12C 8002D92C 0980043C */  lui        $a0, %hi(D_8008B648)
+  .L8002D930:
     /* E130 8002D930 48B68424 */  addiu      $a0, $a0, %lo(D_8008B648)
     /* E134 8002D934 7099000C */  jal        func_800265C0
     /* E138 8002D938 21280002 */   addu      $a1, $s0, $zero
@@ -378,6 +381,7 @@ glabel func_8002D480
     /* E200 8002DA00 21984000 */   addu      $s3, $v0, $zero
     /* E204 8002DA04 E3D8000C */  jal        func_8003638C
     /* E208 8002DA08 21B04000 */   addu      $s6, $v0, $zero
+  .L8002DA0C:
     /* E20C 8002DA0C 5804828F */  lw         $v0, 0x458($gp)
     /* E210 8002DA10 5C048383 */  lb         $v1, 0x45C($gp)
     /* E214 8002DA14 000062AE */  sw         $v0, 0x0($s3)
@@ -398,6 +402,7 @@ glabel func_8002D480
     /* E24C 8002DA4C FFFF0624 */   addiu     $a2, $zero, -0x1
     /* E250 8002DA50 0980043C */  lui        $a0, %hi(D_8008B73C)
     /* E254 8002DA54 3CB78424 */  addiu      $a0, $a0, %lo(D_8008B73C)
+  .L8002DA58:
     /* E258 8002DA58 21280000 */  addu       $a1, $zero, $zero
     /* E25C 8002DA5C 0599000C */  jal        func_80026414
     /* E260 8002DA60 FFFF0624 */   addiu     $a2, $zero, -0x1

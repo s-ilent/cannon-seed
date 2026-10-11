@@ -92,6 +92,7 @@ glabel func_8002DEEC
     /* E700 8002DF00 0980023C */  lui        $v0, %hi(D_8008F06C)
     /* E704 8002DF04 6CF04224 */  addiu      $v0, $v0, %lo(D_8008F06C)
     /* E708 8002DF08 000002AE */  sw         $v0, 0x0($s0)
+  .L8002DF0C:
     /* E70C 8002DF0C F2E4000C */  jal        func_800393C8
     /* E710 8002DF10 06000434 */   ori       $a0, $zero, 0x6
 endlabel func_8002DEEC
@@ -138,6 +139,7 @@ glabel func_8002DF44
     /* E77C 8002DF7C 31004014 */  bnez       $v0, func_8002E044
     /* E780 8002DF80 00000000 */   nop
     /* E784 8002DF84 0980043C */  lui        $a0, %hi(D_80088E14)
+  .L8002DF88:
     /* E788 8002DF88 148E8424 */  addiu      $a0, $a0, %lo(D_80088E14)
     /* E78C 8002DF8C 21280000 */  addu       $a1, $zero, $zero
     /* E790 8002DF90 D998000C */  jal        func_80026364
@@ -222,6 +224,7 @@ glabel func_8002E044
     /* E8B8 8002E0B8 DA8E8424 */  addiu      $a0, $a0, %lo(D_80088EDA)
     /* E8BC 8002E0BC 00008684 */  lh         $a2, 0x0($a0)
     /* E8C0 8002E0C0 FAFF8424 */  addiu      $a0, $a0, -0x6
+  .L8002E0C4:
     /* E8C4 8002E0C4 B599000C */  jal        func_800266D4
     /* E8C8 8002E0C8 B4FF0524 */   addiu     $a1, $zero, -0x4C
     /* E8CC 8002E0CC 0980043C */  lui        $a0, %hi(D_80088FF2)
@@ -338,6 +341,7 @@ glabel func_8002E1FC
     /* EA10 8002E210 D998000C */  jal        func_80026364
     /* EA14 8002E214 FFFF0624 */   addiu     $a2, $zero, -0x1
     /* EA18 8002E218 0800058E */  lw         $a1, 0x8($s0)
+  .L8002E21C:
     /* EA1C 8002E21C 21202002 */  addu       $a0, $s1, $zero
     /* EA20 8002E220 349A000C */  jal        func_800268D0
     /* EA24 8002E224 002C0500 */   sll       $a1, $a1, 16
@@ -587,6 +591,7 @@ glabel func_8002E4B0
     /* ECF0 8002E4F0 00000000 */   nop
     /* ECF4 8002E4F4 0980043C */  lui        $a0, %hi(D_8008B9EC)
     /* ECF8 8002E4F8 ECB98424 */  addiu      $a0, $a0, %lo(D_8008B9EC)
+  alabel func_8002E4FC
     /* ECFC 8002E4FC 369A000C */  jal        func_800268D8
     /* ED00 8002E500 00000000 */   nop
     /* ED04 8002E504 FFFF5024 */  addiu      $s0, $v0, -0x1

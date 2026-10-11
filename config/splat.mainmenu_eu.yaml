@@ -158,7 +158,30 @@ segments:
       - [0xF7F8, data, data_8002EFF8]  # 0x18 sector 7 header (MSF 00:19:60)
       - [0xF810, asm, func_8002F010]   # 0x358 switch-chain continuation code
       - [0xFB68, asm, func_8002F368]   # 0x4cc
-      - [0x10034, data, data_8002F834]   # 0x137c
+      # F834 carve (recon 2026-10-12, scripts/f834_carve_recon1.py), JP twin
+      # commit; the EU row runs 0x137c (no func_80030348 row - the EU image
+      # runs on to 30BB0), so window 9 is one full asm row and the sector-10
+      # boundary lands inside this yaml span: [sector-7 overhead tail 0xf4
+      # (H=7.04) | sector-8 header 0x18 (MSF 00:19:61) | user window 8
+      # func_8002F940 0x800 (GRID decode 1.00; pure relocation twin of JP:
+      # 375/512 eq, 68 lo + 65 jal + 4 other, 0 opcode-class diffs) |
+      # sector-8 overhead 0x118 | sector-9 header 0x18 (00:19:62) | user
+      # window 9 func_80030270 0x800 (GRID decode 1.00; twin 380/512 eq,
+      # 43 lo + 89 jal, 0 opcode-class) | sector-9 overhead 0x118 |
+      # sector-10 header 0x18 (00:19:63) | user window-10 head
+      # func_80030BA0 0x10 (lw ra/nop/jr ra/addiu sp,0x18 epilogue,
+      # byte-identical to the JP twin inside data_80030A88) | func_80030BB0
+      # continues at 0x113B0]. The old whole-row census was an artifact -
+      # the user windows ARE the code (FABRIC.md misclassified-rows row 2).
+      - [0x10034, data, data_8002F834]   # 0xf4 sector-7 overhead tail
+      - [0x10128, data, data_8002F928]  # 0x18 sector 8 header (MSF 00:19:61)
+      - [0x10140, asm, func_8002F940]   # 0x800 window 8: switch-chain code
+      - [0x10940, data, data_80030140]  # 0x118 sector-8 overhead
+      - [0x10A58, data, data_80030258]  # 0x18 sector 9 header (MSF 00:19:62)
+      - [0x10A70, asm, func_80030270]   # 0x800 window 9: continuation code
+      - [0x11270, data, data_80030A70]  # 0x118 sector-9 overhead
+      - [0x11388, data, data_80030B88]  # 0x18 sector 10 header (MSF 00:19:63)
+      - [0x113A0, asm, func_80030BA0]   # 0x10 window-10 head epilogue
       - [0x113B0, asm, func_80030BB0]   # 0x820
       - [0x11BD0, data, data_800313D0]   # 0x108
       - [0x11CD8, asm, func_800314D8]   # 0x828

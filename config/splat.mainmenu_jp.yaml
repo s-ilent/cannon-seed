@@ -154,7 +154,33 @@ segments:
       - [0xF7F8, data, data_8002EFF8]  # 0x18 sector 7 header (MSF 00:17:58)
       - [0xF810, asm, func_8002F010]   # 0x358 switch-chain continuation code
       - [0xFB68, asm, func_8002F368]   # 0x4cc
-      - [0x10034, data, data_8002F834]  # 0xb14
+      # F834 carve (recon 2026-10-12, scripts/f834_carve_recon1.py): the row
+      # decomposes per the raw-sector grid (docs/GRID.md: [0x18 header]
+      # [0x800 user][0x118 overhead]) as [sector-7 overhead tail 0xf4
+      # (H=7.15, parity entropy) | sector-8 header 0x18 (MSF 00:17:59) |
+      # user window 8 func_8002F940 0x800 | sector-8 overhead 0x118 |
+      # sector-9 header 0x18 (00:17:60) | user window 9 head func_80030270
+      # 0xd8, flowing into func_80030348]. Window 8 is code from word 0
+      # (addu a2,zero,zero + jal 80026414 idiom at F940, state-id switch
+      # chains from F9C8, calls 8005C62C/80035D50/80026668/80026414, j into
+      # D480 mid-body D8BC/D8D4/D930/DA0C/DA58 and the DDB4 tail store);
+      # GRID decode 1.00 for both windows. The old whole-row census
+      # "0/709 words decode" was an artifact - the user windows ARE the
+      # code (FABRIC.md misclassified-rows row 2). Twin: window 8 = pure
+      # relocation twin of EU (375/512 eq, 68 lo + 65 jal + 4 other, 0
+      # opcode-class diffs; GRID twin col 137). The capture-linear callback
+      # pointer 8002F8EC lands inside the overhead tail (GRID consequence 3:
+      # retail linked the ISO image without overhead; the capture inserts
+      # it - the raw word is preserved as-is). External refs identical JP/EU:
+      # callback words 8002FA2C/FD30/FDB4/FE38/FEBC/300E0 (data_80086D3C
+      # range) and the 8002FFC8 lui/addiu pair @13164 (inside
+      # data_800313C0, still data -> raw words).
+      - [0x10034, data, data_8002F834]  # 0xf4 sector-7 overhead tail
+      - [0x10128, data, data_8002F928]  # 0x18 sector 8 header (MSF 00:17:59)
+      - [0x10140, asm, func_8002F940]   # 0x800 window 8: switch-chain code
+      - [0x10940, data, data_80030140]  # 0x118 sector-8 overhead
+      - [0x10A58, data, data_80030258]  # 0x18 sector 9 header (MSF 00:17:60)
+      - [0x10A70, asm, func_80030270]   # 0xd8 window-9 head
       - [0x10B48, asm, func_80030348]   # 0x740
       - [0x11288, data, data_80030A88]   # 0x128
       - [0x113B0, asm, func_80030BB0]   # 0x810

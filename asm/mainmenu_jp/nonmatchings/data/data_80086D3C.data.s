@@ -86858,9 +86858,14 @@ nonmatching D_800C8F7C
 dlabel D_800C8F7C
     /* A977C 800C8F7C C1F14207 */ .word 0x0742F1C1
     /* A9780 800C8F80 C4F14807 */ .word 0x0748F1C4
+enddlabel D_800C8F7C
+
+nonmatching D_800C8F84
+
+dlabel D_800C8F84
     /* A9784 800C8F84 C6F14E07 */ .word 0x074EF1C6
     /* A9788 800C8F88 C9F15307 */ .word 0x0753F1C9
-enddlabel D_800C8F7C
+enddlabel D_800C8F84
 
 nonmatching D_800C8F8C
 
