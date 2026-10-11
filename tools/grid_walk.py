@@ -156,7 +156,10 @@ def find_descriptors(payload, t_addr):
                 vram = t_addr + off
                 idx = w[3] >> 16
                 flags = (w[3] >> 8) & 0xFF
-                hits.append((vram, idx, flags))
+                # sector header bytes (LE): [min][sec][frame][mode], all BCD
+                msf = (w[3] & 0xFF, (w[3] >> 8) & 0xFF, (w[3] >> 16) & 0xFF,
+                       (w[3] >> 24) & 0xFF)
+                hits.append((vram, idx, flags, msf))
     return hits
 
 
@@ -179,7 +182,7 @@ def main(argv):
         vmap = subseg_map(entries, t_addr, payload_len)
         descs = find_descriptors(payload, t_addr)
         rows = []
-        for vram, idx, flags in descs:
+        for vram, idx, flags, msf in descs:
             p_lo = vram - PAYLOAD_LEN
             c_lo = vram + DESC_LEN
             p_bytes = b""
@@ -205,51 +208,68 @@ def main(argv):
                 for v in (p_lo, vram, c_lo, c_lo + CODE_LEN - 4)
                 if p_lo >= t_addr
             )
-            rows.append((vram, idx, flags, p_ent, c_ratio, tdiff, zone))
+            rows.append((vram, idx, flags, msf, p_ent, c_ratio, tdiff, zone))
         rows_by_target[name] = rows
 
     # emit docs/GRID.md
     lines = []
     A = lines.append
-    A("# GRID: the 0x930 text-segment block grid")
+    A("# GRID: the 0x930 text-segment block grid = raw CD-ROM sectors")
     A("")
     A("Measured by `tools/grid_walk.py` (regenerated wholesale - measurement")
     A("over transcription). Baselines proven against `config/sha1/` before")
     A("measuring. Discovery and evidence: the data_8002B7F4 / data_8002CB50")
-    A("carves (commits 8159794, 1fd69db, 8974d3a, 13a0fcd).")
+    A("carves (commits 8159794, 1fd69db, 8974d3a, 13a0fcd); sector identity")
+    A("proven 2026-10-12 (scripts/idx_gap_sample.py, sector_edc_proof.py).")
     A("")
-    A("The text segment is organized in 0x930-byte blocks:")
+    A("## The blocks are raw Mode 2 sectors, not a game structure")
     A("")
-    A("    [0x18 descriptor][0x800 plaintext code][0x118 encrypted payload]")
+    A("0x930 = 2352 = raw CD-ROM sector size. Each block is one raw sector")
+    A("of the disc track, captured by the baseline extraction:")
     A("")
-    A("Descriptor signature (6 words): `FFFFFF00 FFFFFFFF 00FFFFFF")
-    A("<idx:flags> 00080000 00080000`. The index increments by 1 per block")
-    A("(with occasional gaps - e.g. a 6-index gap a few blocks into every")
-    A("exe), and the FIRST descriptor of every image starts at a different")
-    A("global base, so the index is a pipeline-wide counter, not per-exe:")
-    A("first idx per target: slps_00270/sces_00269 549 (flags 0x02),")
-    A("mainmenu_jp 562 (0x17), mainmenu_eu 564 (0x19), g3_jp 592 (0x28),")
-    A("g3_eu 534 (0x31), g3org_jp 518 (0x06), g3org_eu 529 (0x09) - the")
-    A("flag byte is per-target. Within an exe pair the JP/EU index offset")
-    A("at the same vram is constant per exe (mainmenu -2, g3org -11, g3")
-    A("+58), and descriptor vrams are identical across each JP/EU pair.")
+    A("    [0x18 sector header][0x800 user data][0x118 EDC+ECC region]")
     A("")
-    A("Reading the columns: payloads are encrypted at rest (~7.2-7.9")
-    A("bits/byte; some are executed only after runtime decryption - stub")
-    A("rows j INTO payload 1 with real store delay slots - so at-rest low")
-    A("decode there is expected and those bytes stay data until the")
-    A("decryption site is understood). Code-half decode 1.00 means the")
-    A("whole half decodes as MIPS. CAUTION on twin diffs: they compare the")
-    A("code half at the SAME vram in the region twin - where the two")
-    A("discs place functions at shifted vrams (per-region deltas +0xB0/")
-    A("+0x60/+0x5c/0 measured on mainmenu), the diff counts placement")
-    A("shift, not content difference; only near-0 counts indicate")
-    A("same-vram twins. ~500/512 means the halves do not correspond at")
-    A("all (different placement or content). The grid is a transport/")
-    A("descriptor layer, not a uniform code template: per-block splits")
-    A("must be measured, descriptor positions are ground truth (some")
-    A("blocks' code halves are truncated by real linked code, e.g.")
-    A("mainmenu func_8002DE00 after block 5).")
+    A("The 0x18 'descriptor' is the sector header: sync `00 FF*10 00` (12)")
+    A("+ BCD MSF address (min, sec, frame) + mode 0x02 (4) + subheader")
+    A("`00 00 08 00` x2 (8, data sector). Header bytes advance +1 sector")
+    A("per block in pure BCD. The former 'index gaps' are BCD carries")
+    A("(09+1=10, 19+1=20, ...); the former '6-index gaps' are nothing more")
+    A("- binary digits A..F never occur in BCD. An exe-wide scan found 0")
+    A("descriptor-like records beyond the standard signature, so no")
+    A("variant descriptors exist. The 'module groups' are BCD seconds:")
+    A("each exe spans a contiguous MSF run (boots sec 0x02-0x03, g3org")
+    A("0x06-0x09, mainmenu_jp 0x17-0x21, mainmenu_eu 0x19-0x23, g3_jp")
+    A("0x28-0x31, g3_eu 0x31-0x34, g3org_eu 0x09-0x12); full sectors per")
+    A("second = 75 (frame 0x00..0x74). The JP/EU 'index offset at the same")
+    A("vram' (mainmenu -2, g3org -11, g3 +58) is the two discs' LBA")
+    A("placement difference for the same file. File layout of every")
+    A("baseline: [PS-X header 0x800 = sector 0 user data][sector 0's own")
+    A("0x118 tail][raw sectors 1..N including all overhead].")
+    A("")
+    A("Consequences: (1) the 0x118 'encrypted payloads' are sector overhead")
+    A("bytes - their high entropy is expected, they have no game meaning,")
+    A("no runtime decryption exists, and they stay data forever; (2) the")
+    A("only game data per sector is the 0x800 user-data window; (3) stub")
+    A("rows 'j INTO payload 1' point at overlay bytes that live in a")
+    A("DIFFERENT file's sectors on disc - the j targets are real code,")
+    A("just not user data of THIS capture; (4) the stored 0x118 bytes do")
+    A("NOT match the standard EDC (poly 0x80018001) over any standard")
+    A("range - open question (Sony mastering scramble or variant); the")
+    A("sector-header evidence above is independent of that.")
+    A("")
+    A("Reading the columns: payload entropy measures the overhead bytes")
+    A("(~7.2-7.9 bits/byte is normal for parity/EDC regions). Code-half")
+    A("decode 1.00 means the whole half decodes as MIPS. CAUTION on twin")
+    A("diffs: they compare the user data at the SAME vram in the region")
+    A("twin - where the two discs place functions at shifted vrams")
+    A("(per-region deltas +0xB0/+0x60/+0x5c/0 measured on mainmenu), the")
+    A("diff counts placement shift, not content difference; only near-0")
+    A("counts indicate same-vram twins. ~500/512 means the halves do not")
+    A("correspond at all. The sector grid is not a code template: real")
+    A("linked code crosses sector boundaries freely (e.g. mainmenu")
+    A("func_8002DE00 after block 5), so per-block splits must be")
+    A("measured; the header positions are ground truth only for the")
+    A("overhead boundaries.")
     A("")
     for name in names:
         if name not in rows_by_target:
@@ -261,18 +281,18 @@ def main(argv):
             A("No descriptor hits - the grid layer is not present in this image.")
             A("")
             continue
-        A(f"{len(rows)} descriptors found. Columns: payload entropy (bits/B),")
-        A("code-half decode ratio, word diffs vs the region twin across the")
-        A("code half, and the yaml zones the four probe points fall in")
-        A("(payload start / descriptor / code start / code end).")
+        A(f"{len(rows)} sector headers found. Columns: BCD MSF address, payload")
+        A("entropy (bits/B), code-half decode ratio, word diffs vs the region")
+        A("twin across the user-data half, and the yaml zones the four probe")
+        A("points fall in (overhead start / header / data start / data end).")
         A("")
-        A("| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |")
-        A("| --- | --- | --- | --- | --- | --- | --- |")
-        for vram, idx, flags, p_ent, c_ratio, tdiff, zone in rows:
+        A("| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |")
+        A("| --- | --- | --- | --- | --- | --- |")
+        for vram, idx, flags, msf, p_ent, c_ratio, tdiff, zone in rows:
             pe = f"{p_ent:.2f}" if p_ent == p_ent else "n/a"
             cr = f"{c_ratio:.2f}" if c_ratio == c_ratio else "n/a"
             td = str(tdiff) if tdiff is not None else "n/a"
-            A(f"| {vram:08X} | {idx} | {flags:#04x} | {pe} | {cr} | {td} | {zone} |")
+            A(f"| {vram:08X} | {msf[0]:02x}:{msf[1]:02x}:{msf[2]:02x} | {pe} | {cr} | {td} | {zone} |")
         A("")
     OUT.write_text("\n".join(lines) + "\n")
     print(f"[grid] wrote {OUT}")

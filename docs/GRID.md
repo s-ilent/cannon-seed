@@ -1,1983 +1,2000 @@
-# GRID: the 0x930 text-segment block grid
+# GRID: the 0x930 text-segment block grid = raw CD-ROM sectors
 
 Measured by `tools/grid_walk.py` (regenerated wholesale - measurement
 over transcription). Baselines proven against `config/sha1/` before
 measuring. Discovery and evidence: the data_8002B7F4 / data_8002CB50
-carves (commits 8159794, 1fd69db, 8974d3a, 13a0fcd).
+carves (commits 8159794, 1fd69db, 8974d3a, 13a0fcd); sector identity
+proven 2026-10-12 (scripts/idx_gap_sample.py, sector_edc_proof.py).
 
-The text segment is organized in 0x930-byte blocks:
+## The blocks are raw Mode 2 sectors, not a game structure
 
-    [0x18 descriptor][0x800 plaintext code][0x118 encrypted payload]
+0x930 = 2352 = raw CD-ROM sector size. Each block is one raw sector
+of the disc track, captured by the baseline extraction:
 
-Descriptor signature (6 words): `FFFFFF00 FFFFFFFF 00FFFFFF
-<idx:flags> 00080000 00080000`. The index increments by 1 per block
-(with occasional gaps - e.g. a 6-index gap a few blocks into every
-exe), and the FIRST descriptor of every image starts at a different
-global base, so the index is a pipeline-wide counter, not per-exe:
-first idx per target: slps_00270/sces_00269 549 (flags 0x02),
-mainmenu_jp 562 (0x17), mainmenu_eu 564 (0x19), g3_jp 592 (0x28),
-g3_eu 534 (0x31), g3org_jp 518 (0x06), g3org_eu 529 (0x09) - the
-flag byte is per-target. Within an exe pair the JP/EU index offset
-at the same vram is constant per exe (mainmenu -2, g3org -11, g3
-+58), and descriptor vrams are identical across each JP/EU pair.
+    [0x18 sector header][0x800 user data][0x118 EDC+ECC region]
 
-Reading the columns: payloads are encrypted at rest (~7.2-7.9
-bits/byte; some are executed only after runtime decryption - stub
-rows j INTO payload 1 with real store delay slots - so at-rest low
-decode there is expected and those bytes stay data until the
-decryption site is understood). Code-half decode 1.00 means the
-whole half decodes as MIPS. CAUTION on twin diffs: they compare the
-code half at the SAME vram in the region twin - where the two
-discs place functions at shifted vrams (per-region deltas +0xB0/
-+0x60/+0x5c/0 measured on mainmenu), the diff counts placement
-shift, not content difference; only near-0 counts indicate
-same-vram twins. ~500/512 means the halves do not correspond at
-all (different placement or content). The grid is a transport/
-descriptor layer, not a uniform code template: per-block splits
-must be measured, descriptor positions are ground truth (some
-blocks' code halves are truncated by real linked code, e.g.
-mainmenu func_8002DE00 after block 5).
+The 0x18 'descriptor' is the sector header: sync `00 FF*10 00` (12)
++ BCD MSF address (min, sec, frame) + mode 0x02 (4) + subheader
+`00 00 08 00` x2 (8, data sector). Header bytes advance +1 sector
+per block in pure BCD. The former 'index gaps' are BCD carries
+(09+1=10, 19+1=20, ...); the former '6-index gaps' are nothing more
+- binary digits A..F never occur in BCD. An exe-wide scan found 0
+descriptor-like records beyond the standard signature, so no
+variant descriptors exist. The 'module groups' are BCD seconds:
+each exe spans a contiguous MSF run (boots sec 0x02-0x03, g3org
+0x06-0x09, mainmenu_jp 0x17-0x21, mainmenu_eu 0x19-0x23, g3_jp
+0x28-0x31, g3_eu 0x31-0x34, g3org_eu 0x09-0x12); full sectors per
+second = 75 (frame 0x00..0x74). The JP/EU 'index offset at the same
+vram' (mainmenu -2, g3org -11, g3 +58) is the two discs' LBA
+placement difference for the same file. File layout of every
+baseline: [PS-X header 0x800 = sector 0 user data][sector 0's own
+0x118 tail][raw sectors 1..N including all overhead].
+
+Consequences: (1) the 0x118 'encrypted payloads' are sector overhead
+bytes - their high entropy is expected, they have no game meaning,
+no runtime decryption exists, and they stay data forever; (2) the
+only game data per sector is the 0x800 user-data window; (3) stub
+rows 'j INTO payload 1' point at overlay bytes that live in a
+DIFFERENT file's sectors on disc - the j targets are real code,
+just not user data of THIS capture; (4) the stored 0x118 bytes do
+NOT match the standard EDC (poly 0x80018001) over any standard
+range - open question (Sony mastering scramble or variant); the
+sector-header evidence above is independent of that.
+
+Reading the columns: payload entropy measures the overhead bytes
+(~7.2-7.9 bits/byte is normal for parity/EDC regions). Code-half
+decode 1.00 means the whole half decodes as MIPS. CAUTION on twin
+diffs: they compare the user data at the SAME vram in the region
+twin - where the two discs place functions at shifted vrams
+(per-region deltas +0xB0/+0x60/+0x5c/0 measured on mainmenu), the
+diff counts placement shift, not content difference; only near-0
+counts indicate same-vram twins. ~500/512 means the halves do not
+correspond at all. The sector grid is not a code template: real
+linked code crosses sector boundaries freely (e.g. mainmenu
+func_8002DE00 after block 5), so per-block splits must be
+measured; the header positions are ground truth only for the
+overhead boundaries.
 
 ## g3_eu
 
-245 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+245 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 534 | 0x31 | 6.08 | 0.60 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 535 | 0x31 | 7.16 | 0.62 | 497 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 536 | 0x31 | 7.25 | 0.49 | 488 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021CA8 | 537 | 0x31 | 7.31 | 0.62 | 508 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800225D8 | 544 | 0x31 | 7.17 | 0.86 | 505 | data:data_80020000/data:data_80020000/data:data_80020000/asm:func_80022A18 |
-| 80022F08 | 545 | 0x31 | 7.21 | 1.00 | 509 | asm:func_80022A18/data:data_80022E08/data:data_80022E08/data:data_8002351C |
-| 80023838 | 546 | 0x31 | 7.25 | 1.00 | 493 | data:data_8002351C/data:data_8002351C/data:data_8002351C/data:data_8002351C |
-| 80024168 | 547 | 0x31 | 7.19 | 1.00 | 498 | data:data_8002351C/data:data_8002351C/data:data_8002351C/asm:func_800241B4 |
-| 80024A98 | 548 | 0x31 | 7.24 | 1.00 | 497 | asm:func_800241B4/data:data_800249F0/data:data_800249F0/data:data_800249F0 |
-| 800253C8 | 549 | 0x31 | 7.25 | 1.00 | 508 | data:data_800249F0/data:data_800249F0/data:data_800249F0/data:data_800249F0 |
-| 80025CF8 | 550 | 0x31 | 7.27 | 1.00 | 511 | data:data_800249F0/data:data_800249F0/data:data_800249F0/asm:func_80025DA0 |
-| 80026628 | 551 | 0x31 | 7.26 | 1.00 | 474 | asm:func_80025DA0/data:data_800265A0/data:data_800265A0/data:data_800265A0 |
-| 80026F58 | 552 | 0x31 | 7.23 | 1.00 | 508 | data:data_800265A0/data:data_800265A0/data:data_800265A0/data:data_800265A0 |
-| 80027888 | 553 | 0x31 | 7.27 | 1.00 | 502 | data:data_800265A0/data:data_800265A0/data:data_800265A0/asm:func_80027B00 |
-| 800281B8 | 560 | 0x31 | 7.14 | 1.00 | 512 | asm:func_80027B00/data:data_800280F8/data:data_800280F8/data:data_800280F8 |
-| 80028AE8 | 561 | 0x31 | 7.29 | 1.00 | 512 | data:data_800280F8/data:data_800280F8/data:data_800280F8/data:data_800280F8 |
-| 80029418 | 562 | 0x31 | 7.24 | 1.00 | 511 | data:data_800280F8/data:data_800280F8/data:data_800280F8/asm:func_800299B8 |
-| 80029D48 | 563 | 0x31 | 7.36 | 1.00 | 509 | asm:func_800299B8/data:data_80029C90/data:data_80029C90/data:data_80029C90 |
-| 8002A678 | 564 | 0x31 | 7.28 | 1.00 | 510 | data:data_80029C90/data:data_80029C90/data:data_80029C90/data:data_80029C90 |
-| 8002AFA8 | 565 | 0x31 | 7.25 | 1.00 | 510 | data:data_80029C90/data:data_80029C90/data:data_80029C90/asm:func_8002B3E4 |
-| 8002B8D8 | 566 | 0x31 | 7.21 | 1.00 | 494 | asm:func_8002B3E4/data:data_8002B7CC/data:data_8002B7CC/asm:func_8002BA84 |
-| 8002C208 | 567 | 0x31 | 7.16 | 1.00 | 496 | asm:func_8002BA84/data:data_8002C1C0/data:data_8002C1C0/asm:func_8002C7BC |
-| 8002CB38 | 568 | 0x31 | 7.30 | 1.00 | 508 | asm:func_8002C7BC/data:data_8002CA64/data:data_8002CA64/data:data_8002CA64 |
-| 8002D468 | 569 | 0x31 | 7.16 | 1.00 | 507 | data:data_8002CA64/data:data_8002CA64/data:data_8002CA64/asm:func_8002D4E0 |
-| 8002DD98 | 576 | 0x31 | 7.19 | 1.00 | 512 | asm:func_8002D4E0/data:data_8002DCC8/asm:func_8002DDA8/asm:func_8002DDA8 |
-| 8002E6C8 | 577 | 0x31 | 7.25 | 1.00 | 510 | asm:func_8002DDA8/data:data_8002E658/data:data_8002E658/data:data_8002E658 |
-| 8002EFF8 | 578 | 0x31 | 7.25 | 1.00 | 510 | data:data_8002E658/data:data_8002E658/data:data_8002E658/asm:func_8002F068 |
-| 8002F928 | 579 | 0x31 | 7.18 | 1.00 | 507 | asm:func_8002F068/data:data_8002F82C/data:data_8002F82C/data:data_8002F82C |
-| 80030258 | 580 | 0x31 | 7.27 | 1.00 | 512 | data:data_8002F82C/data:data_8002F82C/data:data_8002F82C/data:data_800308D4 |
-| 80030B88 | 581 | 0x31 | 7.22 | 1.00 | 511 | data:data_800308D4/data:data_800308D4/data:data_800308D4/data:data_800310F4 |
-| 800314B8 | 582 | 0x31 | 7.23 | 1.00 | 508 | data:data_800310F4/data:data_800310F4/data:data_800310F4/data:data_800310F4 |
-| 80031DE8 | 583 | 0x31 | 7.25 | 1.00 | 510 | data:data_800310F4/data:data_800310F4/data:data_800310F4/data:data_800310F4 |
-| 80032718 | 584 | 0x31 | 7.30 | 1.00 | 511 | data:data_800310F4/asm:func_80032660/data:data_80032720/asm:func_80032D2C |
-| 80033048 | 585 | 0x31 | 7.19 | 1.00 | 500 | asm:func_80032D2C/data:data_80032F90/data:data_80032F90/asm:func_8003307C |
-| 80033978 | 592 | 0x31 | 7.23 | 1.00 | 497 | asm:func_8003307C/asm:func_80033974/data:data_80033980/data:data_80033980 |
-| 800342A8 | 593 | 0x31 | 7.27 | 1.00 | 493 | data:data_80033980/asm:func_80034294/asm:func_80034294/data:data_80034588 |
-| 80034BD8 | 594 | 0x31 | 7.37 | 1.00 | 494 | data:data_80034588/data:data_80034588/data:data_80034588/data:data_80034588 |
-| 80035508 | 595 | 0x31 | 7.24 | 1.00 | 506 | data:data_80034588/data:data_80034588/data:data_80034588/asm:func_800355A4 |
-| 80035E38 | 596 | 0x31 | 7.26 | 1.00 | 504 | asm:func_800355A4/data:data_80035D68/data:data_80035D68/asm:func_800362B8 |
-| 80036768 | 597 | 0x31 | 7.21 | 1.00 | 503 | asm:func_800362B8/data:data_80036684/data:data_80036684/asm:func_800367A4 |
-| 80037098 | 598 | 0x31 | 7.31 | 1.00 | 504 | asm:func_800367A4/data:data_80037040/data:data_80037040/data:data_80037040 |
-| 800379C8 | 599 | 0x31 | 7.22 | 1.00 | 508 | data:data_80037040/data:data_80037040/data:data_80037040/asm:func_800379F0 |
-| 800382F8 | 600 | 0x31 | 7.23 | 1.00 | 503 | asm:func_800379F0/asm:func_80038248/asm:func_80038248/data:data_80038600 |
-| 80038C28 | 601 | 0x31 | 7.17 | 1.00 | 501 | data:data_80038600/data:data_80038600/data:data_80038600/asm:func_80038CCC |
-| 80039558 | 608 | 0x31 | 7.27 | 1.00 | 498 | asm:func_80038CCC/data:data_80039454/data:data_80039454/data:data_80039454 |
-| 80039E88 | 609 | 0x31 | 7.30 | 1.00 | 501 | data:data_80039454/data:data_80039454/data:data_80039454/data:data_8003A1FC |
-| 8003A7B8 | 610 | 0x31 | 7.29 | 1.00 | 499 | data:data_8003A1FC/data:data_8003A1FC/data:data_8003A1FC/data:data_8003AB28 |
-| 8003B0E8 | 611 | 0x31 | 7.25 | 1.00 | 505 | data:data_8003AB28/data:data_8003AB28/data:data_8003AB28/asm:func_8003B124 |
-| 8003BA18 | 612 | 0x31 | 7.28 | 1.00 | 504 | asm:func_8003B124/data:data_8003B960/data:data_8003B960/data:data_8003BDCC |
-| 8003C348 | 613 | 0x31 | 7.24 | 1.00 | 503 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC |
-| 8003CC78 | 614 | 0x31 | 7.23 | 1.00 | 506 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC |
-| 8003D5A8 | 615 | 0x31 | 7.15 | 1.00 | 505 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC |
-| 8003DED8 | 616 | 0x31 | 7.23 | 1.00 | 506 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003E4E4 |
-| 8003E808 | 617 | 0x31 | 7.30 | 1.00 | 509 | data:data_8003E4E4/data:data_8003E4E4/data:data_8003E4E4/asm:func_8003E884 |
-| 8003F138 | 624 | 0x31 | 7.18 | 1.00 | 500 | asm:func_8003E884/data:data_8003F080/data:data_8003F080/data:data_8003F080 |
-| 8003FA68 | 625 | 0x31 | 7.30 | 1.00 | 506 | data:data_8003F080/data:data_8003F080/data:data_8003F080/data:data_800401E4 |
-| 80040398 | 626 | 0x31 | 7.24 | 1.00 | 506 | data:data_800401E4/data:data_800401E4/data:data_800401E4/asm:func_800407CC |
-| 80040CC8 | 627 | 0x31 | 7.19 | 1.00 | 501 | data:data_80040BB0/data:data_80040C58/data:data_80040C58/data:data_80040C58 |
-| 800415F8 | 628 | 0x31 | 7.29 | 1.00 | 500 | data:data_80040C58/data:data_800415F8/data:data_800415F8/asm:func_80041658 |
-| 80041F28 | 512 | 0x32 | 7.20 | 1.00 | 506 | asm:func_80041658/data:data_80041EFC/data:data_80041EFC/asm:func_80041F44 |
-| 80042858 | 513 | 0x32 | 7.23 | 1.00 | 507 | asm:func_80041F44/asm:func_80042858/asm:func_80042858/asm:func_80042858 |
-| 80043188 | 514 | 0x32 | 7.21 | 1.00 | 504 | asm:func_80042858/data:data_800430D8/data:data_800430D8/data:data_800430D8 |
-| 80043AB8 | 515 | 0x32 | 7.19 | 1.00 | 502 | data:data_800430D8/data:data_800430D8/data:data_800430D8/asm:func_80043B00 |
-| 800443E8 | 516 | 0x32 | 7.25 | 1.00 | 501 | asm:func_80043B00/data:data_8004430C/data:data_8004430C/data:data_8004453C |
-| 80044D18 | 517 | 0x32 | 7.27 | 1.00 | 500 | data:data_8004453C/data:data_8004453C/asm:func_80044D2C/asm:func_80044D2C |
-| 80045648 | 518 | 0x32 | 7.25 | 1.00 | 470 | asm:func_80044D2C/data:data_80045540/data:data_80045540/asm:func_800456CC |
-| 80045F78 | 519 | 0x32 | 7.23 | 1.00 | 492 | asm:func_800456CC/asm:func_80045F6C/asm:func_80045F6C/asm:func_80045F6C |
-| 800468A8 | 520 | 0x32 | 7.21 | 1.00 | 497 | data:data_80046790/asm:func_8004682C/asm:func_8004682C/asm:func_8004682C |
-| 800471D8 | 521 | 0x32 | 7.29 | 1.00 | 486 | asm:func_8004682C/data:data_8004712C/data:data_8004712C/data:data_8004712C |
-| 80047B08 | 528 | 0x32 | 7.14 | 1.00 | 487 | data:data_8004712C/data:data_8004712C/data:data_8004712C/data:data_8004712C |
-| 80048438 | 529 | 0x32 | 7.35 | 1.00 | 503 | data:data_8004712C/data:data_8004712C/data:data_8004712C/data:data_8004712C |
-| 80048D68 | 530 | 0x32 | 7.31 | 1.00 | 490 | data:data_8004712C/data:data_8004712C/data:data_8004712C/asm:func_80048DC4 |
-| 80049698 | 531 | 0x32 | 7.26 | 1.00 | 485 | asm:func_80048DC4/data:data_800495B8/data:data_800495B8/data:data_800495B8 |
-| 80049FC8 | 532 | 0x32 | 7.20 | 1.00 | 503 | data:data_800495B8/data:data_800495B8/data:data_800495B8/asm:func_8004A020 |
-| 8004A8F8 | 533 | 0x32 | 7.22 | 1.00 | 494 | asm:func_8004A020/data:data_8004A828/data:data_8004A828/data:data_8004A828 |
-| 8004B228 | 534 | 0x32 | 7.23 | 1.00 | 506 | data:data_8004A828/data:data_8004A828/data:data_8004A828/data:data_8004A828 |
-| 8004BB58 | 535 | 0x32 | 7.22 | 1.00 | 509 | data:data_8004A828/data:data_8004A828/data:data_8004A828/data:data_8004A828 |
-| 8004C488 | 536 | 0x32 | 7.25 | 1.00 | 503 | data:data_8004A828/data:data_8004A828/data:data_8004A828/data:data_8004CA34 |
-| 8004CDB8 | 537 | 0x32 | 7.22 | 1.00 | 509 | data:data_8004CA34/data:data_8004CA34/data:data_8004CA34/asm:func_8004CE58 |
-| 8004D6E8 | 544 | 0x32 | 7.22 | 0.99 | 507 | asm:func_8004CE58/data:data_8004D5D4/data:data_8004D5D4/data:data_8004DB20 |
-| 8004E018 | 545 | 0x32 | 7.31 | 1.00 | 511 | data:data_8004DB20/data:data_8004DB20/data:data_8004DB20/data:data_8004E810 |
-| 8004E948 | 546 | 0x32 | 7.25 | 0.98 | 500 | data:data_8004E810/data:data_8004E91C/data:data_8004E91C/asm:func_8004F03C |
-| 8004F278 | 547 | 0x32 | 7.20 | 0.90 | 507 | asm:func_8004F03C/data:data_8004F170/data:data_8004F170/data:data_8004F170 |
-| 8004FBA8 | 548 | 0x32 | 7.25 | 0.87 | 456 | data:data_8004F170/data:data_8004F170/data:data_8004F170/data:data_8005015C |
-| 800504D8 | 549 | 0x32 | 7.23 | 1.00 | 502 | data:data_8005015C/data:data_8005015C/data:data_8005015C/data:data_80050C68 |
-| 80050E08 | 550 | 0x32 | 7.28 | 1.00 | 497 | data:data_80050C68/data:data_80050C68/data:data_80050C68/asm:func_80051520 |
-| 80051738 | 551 | 0x32 | 7.31 | 1.00 | 500 | asm:func_80051520/data:data_800516A8/data:data_800516A8/data:data_800516A8 |
-| 80052068 | 552 | 0x32 | 7.22 | 1.00 | 493 | data:data_800516A8/data:data_80052068/data:data_80052068/data:data_80052068 |
-| 80052998 | 553 | 0x32 | 7.22 | 1.00 | 500 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
-| 800532C8 | 560 | 0x32 | 7.20 | 1.00 | 508 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
-| 80053BF8 | 561 | 0x32 | 7.26 | 1.00 | 499 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
-| 80054528 | 562 | 0x32 | 7.16 | 1.00 | 502 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
-| 80054E58 | 563 | 0x32 | 7.27 | 0.97 | 505 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
-| 80055788 | 564 | 0x32 | 7.27 | 1.00 | 508 | data:data_80052068/data:data_80052068/data:data_80052068/asm:func_800558A8 |
-| 800560B8 | 565 | 0x32 | 7.23 | 1.00 | 505 | asm:func_800558A8/data:data_80056004/data:data_80056004/data:data_80056004 |
-| 800569E8 | 566 | 0x32 | 7.26 | 1.00 | 512 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
-| 80057318 | 567 | 0x32 | 7.20 | 1.00 | 508 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
-| 80057C48 | 568 | 0x32 | 7.27 | 1.00 | 510 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
-| 80058578 | 569 | 0x32 | 7.18 | 0.91 | 507 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
-| 80058EA8 | 576 | 0x32 | 7.20 | 0.99 | 510 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80059234 |
-| 800597D8 | 577 | 0x32 | 7.24 | 1.00 | 506 | data:data_80059234/data:data_80059234/data:data_80059234/data:data_80059234 |
-| 8005A108 | 578 | 0x32 | 7.35 | 1.00 | 512 | data:data_80059234/data:data_80059234/data:data_80059234/asm:func_8005A310 |
-| 8005AA38 | 579 | 0x32 | 7.25 | 1.00 | 510 | asm:func_8005A310/data:data_8005A930/data:data_8005A930/asm:func_8005AB74 |
-| 8005B368 | 580 | 0x32 | 7.19 | 1.00 | 509 | asm:func_8005AB74/data:data_8005B25C/data:data_8005B25C/data:data_8005B25C |
-| 8005BC98 | 581 | 0x32 | 7.25 | 0.98 | 511 | data:data_8005B25C/data:data_8005B25C/data:data_8005B25C/data:data_8005B25C |
-| 8005C5C8 | 582 | 0x32 | 7.24 | 0.95 | 508 | data:data_8005B25C/data:data_8005B25C/data:data_8005B25C/data:data_8005B25C |
-| 8005CEF8 | 583 | 0x32 | 7.25 | 0.94 | 490 | data:data_8005B25C/data:data_8005B25C/data:data_8005B25C/data:data_8005D520 |
-| 8005D828 | 584 | 0x32 | 7.27 | 0.93 | 507 | data:data_8005D520/data:data_8005D520/data:data_8005D520/data:data_8005D520 |
-| 8005E158 | 585 | 0x32 | 7.24 | 1.00 | 510 | data:data_8005D520/data:data_8005D520/data:data_8005D520/data:data_8005D520 |
-| 8005EA88 | 592 | 0x32 | 7.31 | 1.00 | 511 | data:data_8005D520/data:data_8005D520/data:data_8005D520/data:data_8005D520 |
-| 8005F3B8 | 593 | 0x32 | 7.23 | 0.96 | 509 | data:data_8005D520/asm:func_8005F378/asm:func_8005F3C8/data:data_8005FB54 |
-| 8005FCE8 | 594 | 0x32 | 7.22 | 0.96 | 500 | data:data_8005FB54/data:data_8005FB54/asm:func_8005FCEC/data:data_80060444 |
-| 80060618 | 595 | 0x32 | 7.26 | 0.94 | 506 | data:data_80060444/data:data_80060444/data:data_80060444/data:data_80060DBC |
-| 80060F48 | 596 | 0x32 | 7.15 | 0.96 | 510 | data:data_80060DBC/data:data_80060DBC/data:data_80060DBC/data:data_80061500 |
-| 80061878 | 597 | 0x32 | 7.26 | 1.00 | 509 | data:data_80061500/data:data_80061500/data:data_80061500/data:data_80061500 |
-| 800621A8 | 598 | 0x32 | 7.20 | 0.95 | 505 | data:data_80061500/data:data_80061500/data:data_80061500/asm:func_800628D4 |
-| 80062AD8 | 599 | 0x32 | 7.18 | 0.98 | 507 | asm:func_800628D4/data:data_80062A04/data:data_80062A04/data:data_8006302C |
-| 80063408 | 600 | 0x32 | 7.28 | 0.97 | 507 | data:data_8006302C/data:data_8006302C/data:data_8006302C/data:data_8006302C |
-| 80063D38 | 601 | 0x32 | 7.27 | 0.98 | 506 | data:data_8006302C/data:data_8006302C/data:data_8006302C/data:data_800644D4 |
-| 80064668 | 608 | 0x32 | 7.21 | 0.99 | 511 | data:data_800644D4/data:data_800644D4/data:data_800644D4/data:data_80064968 |
-| 80064F98 | 609 | 0x32 | 7.23 | 1.00 | 510 | data:data_80064968/data:data_80064EEC/data:data_80064EEC/asm:func_80065260 |
-| 800658C8 | 610 | 0x32 | 7.27 | 1.00 | 512 | asm:func_80065260/data:data_800657C4/data:data_800657C4/data:data_800657C4 |
-| 800661F8 | 611 | 0x32 | 7.17 | 0.97 | 512 | data:data_800657C4/data:data_800657C4/data:data_800657C4/data:data_800666FC |
-| 80066B28 | 612 | 0x32 | 7.25 | 0.88 | 502 | data:data_800666FC/data:data_800666FC/data:data_800666FC/data:data_80066F24 |
-| 80067458 | 613 | 0x32 | 7.25 | 0.98 | 501 | data:data_80066F24/data:data_80066F24/data:data_80066F24/data:data_80066F24 |
-| 80067D88 | 614 | 0x32 | 7.14 | 1.00 | 510 | data:data_80066F24/data:data_80067CCC/data:data_80067CCC/data:data_80067CCC |
-| 800686B8 | 615 | 0x32 | 7.24 | 1.00 | 506 | data:data_80067CCC/data:data_80067CCC/data:data_80067CCC/data:data_80067CCC |
-| 80068FE8 | 616 | 0x32 | 7.17 | 1.00 | 508 | data:data_80067CCC/data:data_80067CCC/data:data_80067CCC/data:data_80067CCC |
-| 80069918 | 617 | 0x32 | 7.24 | 1.00 | 506 | data:data_80067CCC/data:data_80067CCC/data:data_80067CCC/asm:func_80069ADC |
-| 8006A248 | 624 | 0x32 | 7.29 | 1.00 | 503 | asm:func_80069ADC/data:data_8006A13C/data:data_8006A13C/asm:func_8006A434 |
-| 8006AB78 | 625 | 0x32 | 7.29 | 1.00 | 504 | asm:func_8006A434/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006B4A8 | 626 | 0x32 | 7.26 | 1.00 | 508 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006BDD8 | 627 | 0x32 | 7.26 | 1.00 | 501 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006C708 | 628 | 0x32 | 7.23 | 1.00 | 502 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006D038 | 512 | 0x33 | 7.24 | 1.00 | 509 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006D968 | 513 | 0x33 | 7.21 | 1.00 | 501 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006E298 | 514 | 0x33 | 7.29 | 1.00 | 492 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
-| 8006EBC8 | 515 | 0x33 | 7.23 | 1.00 | 503 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/asm:func_8006EC70 |
-| 8006F4F8 | 516 | 0x33 | 7.27 | 1.00 | 509 | asm:func_8006EC70/asm:func_8006F438/asm:func_8006F510/asm:func_8006F510 |
-| 8006FE28 | 517 | 0x33 | 7.23 | 1.00 | 508 | asm:func_8006F510/data:data_8006FD48/data:data_8006FD48/data:data_8006FD48 |
-| 80070758 | 518 | 0x33 | 7.26 | 1.00 | 505 | data:data_8006FD48/data:data_8006FD48/data:data_8006FD48/asm:func_80070A5C |
-| 80071088 | 519 | 0x33 | 7.17 | 1.00 | 508 | asm:func_80070A5C/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 800719B8 | 520 | 0x33 | 7.21 | 1.00 | 511 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 800722E8 | 521 | 0x33 | 7.28 | 1.00 | 510 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80072C18 | 528 | 0x33 | 7.29 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80073548 | 529 | 0x33 | 7.17 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80073E78 | 530 | 0x33 | 7.25 | 1.00 | 508 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 800747A8 | 531 | 0x33 | 7.29 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 800750D8 | 532 | 0x33 | 7.20 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80075A08 | 533 | 0x33 | 7.31 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80076338 | 534 | 0x33 | 7.30 | 1.00 | 500 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80076C68 | 535 | 0x33 | 7.33 | 1.00 | 503 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80077598 | 536 | 0x33 | 7.26 | 1.00 | 500 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80077EC8 | 537 | 0x33 | 7.25 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 800787F8 | 544 | 0x33 | 7.21 | 1.00 | 510 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80079128 | 545 | 0x33 | 7.24 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 80079A58 | 546 | 0x33 | 7.27 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007A388 | 547 | 0x33 | 7.25 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007ACB8 | 548 | 0x33 | 7.23 | 1.00 | 506 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007B5E8 | 549 | 0x33 | 7.15 | 1.00 | 506 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007BF18 | 550 | 0x33 | 7.29 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007C848 | 551 | 0x33 | 7.22 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007D178 | 552 | 0x33 | 7.25 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007DAA8 | 553 | 0x33 | 7.21 | 1.00 | 483 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
-| 8007E3D8 | 560 | 0x33 | 7.26 | 0.78 | 495 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_8007E6D0 |
-| 8007ED08 | 561 | 0x33 | 6.51 | 0.68 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8007F638 | 562 | 0x33 | 6.93 | 0.66 | 368 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8007FF68 | 563 | 0x33 | 6.96 | 0.92 | 214 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80080898 | 564 | 0x33 | 7.19 | 0.90 | 238 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800811C8 | 565 | 0x33 | 7.13 | 0.88 | 258 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80081AF8 | 566 | 0x33 | 6.97 | 0.86 | 258 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80082428 | 567 | 0x33 | 7.21 | 0.90 | 216 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80082D58 | 568 | 0x33 | 7.15 | 0.92 | 176 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80083688 | 569 | 0x33 | 7.07 | 0.88 | 290 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80083FB8 | 576 | 0x33 | 7.13 | 0.82 | 430 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800848E8 | 577 | 0x33 | 7.25 | 0.69 | 480 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80085218 | 578 | 0x33 | 7.17 | 0.74 | 499 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80085B48 | 579 | 0x33 | 7.21 | 0.49 | 484 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80086478 | 580 | 0x33 | 7.22 | 0.47 | 440 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80086DA8 | 581 | 0x33 | 7.36 | 0.61 | 437 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800876D8 | 582 | 0x33 | 7.19 | 0.65 | 436 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80088008 | 583 | 0x33 | 7.17 | 0.62 | 440 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80088938 | 584 | 0x33 | 7.21 | 0.61 | 413 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80089268 | 585 | 0x33 | 7.21 | 0.66 | 403 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80089B98 | 592 | 0x33 | 7.27 | 0.75 | 389 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008A4C8 | 593 | 0x33 | 7.22 | 0.66 | 401 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008ADF8 | 594 | 0x33 | 7.33 | 0.63 | 410 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008B728 | 595 | 0x33 | 7.32 | 0.70 | 383 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008C058 | 596 | 0x33 | 7.22 | 0.65 | 383 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008C988 | 597 | 0x33 | 7.27 | 0.65 | 390 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008D2B8 | 598 | 0x33 | 7.30 | 0.70 | 409 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008DBE8 | 599 | 0x33 | 7.15 | 0.62 | 398 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008E518 | 600 | 0x33 | 7.26 | 0.74 | 449 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008EE48 | 601 | 0x33 | 7.23 | 0.70 | 502 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8008F778 | 608 | 0x33 | 7.22 | 0.66 | 510 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800900A8 | 609 | 0x33 | 7.17 | 0.69 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800909D8 | 610 | 0x33 | 7.32 | 0.67 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80091308 | 611 | 0x33 | 7.20 | 0.64 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80091C38 | 612 | 0x33 | 7.18 | 0.67 | 508 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80092568 | 613 | 0x33 | 7.19 | 0.70 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80092E98 | 614 | 0x33 | 7.21 | 0.64 | 482 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800937C8 | 615 | 0x33 | 7.32 | 0.73 | 485 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800940F8 | 616 | 0x33 | 7.18 | 0.76 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80094A28 | 617 | 0x33 | 7.12 | 0.68 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80095358 | 624 | 0x33 | 7.15 | 0.72 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80095C88 | 625 | 0x33 | 7.16 | 0.71 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800965B8 | 626 | 0x33 | 7.30 | 0.65 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80096EE8 | 627 | 0x33 | 7.30 | 0.70 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80097818 | 628 | 0x33 | 7.24 | 0.71 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80098148 | 512 | 0x34 | 7.17 | 0.63 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80098A78 | 513 | 0x34 | 7.15 | 0.49 | 477 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800993A8 | 514 | 0x34 | 6.96 | 0.60 | 506 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 80099CD8 | 515 | 0x34 | 7.06 | 0.88 | 483 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009A608 | 516 | 0x34 | 7.28 | 0.78 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009AF38 | 517 | 0x34 | 7.32 | 0.57 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009B868 | 518 | 0x34 | 7.21 | 0.49 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009C198 | 519 | 0x34 | 7.29 | 0.62 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009CAC8 | 520 | 0x34 | 6.71 | 1.00 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009D3F8 | 521 | 0x34 | 6.85 | 0.48 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009DD28 | 528 | 0x34 | 6.68 | 0.08 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009E658 | 529 | 0x34 | 6.61 | 0.71 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009EF88 | 530 | 0x34 | 7.19 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 8009F8B8 | 531 | 0x34 | 6.49 | 0.38 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A01E8 | 532 | 0x34 | 6.96 | 0.45 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A0B18 | 533 | 0x34 | 6.92 | 0.00 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A1448 | 534 | 0x34 | 6.92 | 0.42 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A1D78 | 535 | 0x34 | 6.73 | 0.26 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A26A8 | 536 | 0x34 | 6.55 | 0.09 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A2FD8 | 537 | 0x34 | 7.25 | 0.20 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A3908 | 544 | 0x34 | 7.29 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A4238 | 545 | 0x34 | 7.26 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A4B68 | 546 | 0x34 | 6.80 | 0.32 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A5498 | 547 | 0x34 | 6.90 | 0.58 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A5DC8 | 548 | 0x34 | 6.75 | 0.00 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A66F8 | 549 | 0x34 | 6.72 | 0.58 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A7028 | 550 | 0x34 | 6.76 | 0.39 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A7958 | 551 | 0x34 | 6.66 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A8288 | 552 | 0x34 | 6.85 | 1.00 | 257 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A8BB8 | 553 | 0x34 | 6.51 | 1.00 | 162 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A94E8 | 560 | 0x34 | 1.36 | 0.90 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800A9E18 | 561 | 0x34 | 7.18 | 0.77 | 510 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800AA748 | 562 | 0x34 | 6.93 | 0.95 | 371 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800AB078 | 563 | 0x34 | 7.34 | 1.00 | 261 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800AB9A8 | 564 | 0x34 | 4.23 | 0.94 | n/a | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
-| 800AC2D8 | 565 | 0x34 | 7.23 | n/a | n/a | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 00:31:16 | 6.08 | 0.60 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 00:31:17 | 7.16 | 0.62 | 497 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 00:31:18 | 7.25 | 0.49 | 488 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021CA8 | 00:31:19 | 7.31 | 0.62 | 508 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800225D8 | 00:31:20 | 7.17 | 0.86 | 505 | data:data_80020000/data:data_80020000/data:data_80020000/asm:func_80022A18 |
+| 80022F08 | 00:31:21 | 7.21 | 1.00 | 509 | asm:func_80022A18/data:data_80022E08/data:data_80022E08/data:data_8002351C |
+| 80023838 | 00:31:22 | 7.25 | 1.00 | 493 | data:data_8002351C/data:data_8002351C/data:data_8002351C/data:data_8002351C |
+| 80024168 | 00:31:23 | 7.19 | 1.00 | 498 | data:data_8002351C/data:data_8002351C/data:data_8002351C/asm:func_800241B4 |
+| 80024A98 | 00:31:24 | 7.24 | 1.00 | 497 | asm:func_800241B4/data:data_800249F0/data:data_800249F0/data:data_800249F0 |
+| 800253C8 | 00:31:25 | 7.25 | 1.00 | 508 | data:data_800249F0/data:data_800249F0/data:data_800249F0/data:data_800249F0 |
+| 80025CF8 | 00:31:26 | 7.27 | 1.00 | 511 | data:data_800249F0/data:data_800249F0/data:data_800249F0/asm:func_80025DA0 |
+| 80026628 | 00:31:27 | 7.26 | 1.00 | 474 | asm:func_80025DA0/data:data_800265A0/data:data_800265A0/data:data_800265A0 |
+| 80026F58 | 00:31:28 | 7.23 | 1.00 | 508 | data:data_800265A0/data:data_800265A0/data:data_800265A0/data:data_800265A0 |
+| 80027888 | 00:31:29 | 7.27 | 1.00 | 502 | data:data_800265A0/data:data_800265A0/data:data_800265A0/asm:func_80027B00 |
+| 800281B8 | 00:31:30 | 7.14 | 1.00 | 512 | asm:func_80027B00/data:data_800280F8/data:data_800280F8/data:data_800280F8 |
+| 80028AE8 | 00:31:31 | 7.29 | 1.00 | 512 | data:data_800280F8/data:data_800280F8/data:data_800280F8/data:data_800280F8 |
+| 80029418 | 00:31:32 | 7.24 | 1.00 | 511 | data:data_800280F8/data:data_800280F8/data:data_800280F8/asm:func_800299B8 |
+| 80029D48 | 00:31:33 | 7.36 | 1.00 | 509 | asm:func_800299B8/data:data_80029C90/data:data_80029C90/data:data_80029C90 |
+| 8002A678 | 00:31:34 | 7.28 | 1.00 | 510 | data:data_80029C90/data:data_80029C90/data:data_80029C90/data:data_80029C90 |
+| 8002AFA8 | 00:31:35 | 7.25 | 1.00 | 510 | data:data_80029C90/data:data_80029C90/data:data_80029C90/asm:func_8002B3E4 |
+| 8002B8D8 | 00:31:36 | 7.21 | 1.00 | 494 | asm:func_8002B3E4/data:data_8002B7CC/data:data_8002B7CC/asm:func_8002BA84 |
+| 8002C208 | 00:31:37 | 7.16 | 1.00 | 496 | asm:func_8002BA84/data:data_8002C1C0/data:data_8002C1C0/asm:func_8002C7BC |
+| 8002CB38 | 00:31:38 | 7.30 | 1.00 | 508 | asm:func_8002C7BC/data:data_8002CA64/data:data_8002CA64/data:data_8002CA64 |
+| 8002D468 | 00:31:39 | 7.16 | 1.00 | 507 | data:data_8002CA64/data:data_8002CA64/data:data_8002CA64/asm:func_8002D4E0 |
+| 8002DD98 | 00:31:40 | 7.19 | 1.00 | 512 | asm:func_8002D4E0/data:data_8002DCC8/asm:func_8002DDA8/asm:func_8002DDA8 |
+| 8002E6C8 | 00:31:41 | 7.25 | 1.00 | 510 | asm:func_8002DDA8/data:data_8002E658/data:data_8002E658/data:data_8002E658 |
+| 8002EFF8 | 00:31:42 | 7.25 | 1.00 | 510 | data:data_8002E658/data:data_8002E658/data:data_8002E658/asm:func_8002F068 |
+| 8002F928 | 00:31:43 | 7.18 | 1.00 | 507 | asm:func_8002F068/data:data_8002F82C/data:data_8002F82C/data:data_8002F82C |
+| 80030258 | 00:31:44 | 7.27 | 1.00 | 512 | data:data_8002F82C/data:data_8002F82C/data:data_8002F82C/data:data_800308D4 |
+| 80030B88 | 00:31:45 | 7.22 | 1.00 | 511 | data:data_800308D4/data:data_800308D4/data:data_800308D4/data:data_800310F4 |
+| 800314B8 | 00:31:46 | 7.23 | 1.00 | 508 | data:data_800310F4/data:data_800310F4/data:data_800310F4/data:data_800310F4 |
+| 80031DE8 | 00:31:47 | 7.25 | 1.00 | 510 | data:data_800310F4/data:data_800310F4/data:data_800310F4/data:data_800310F4 |
+| 80032718 | 00:31:48 | 7.30 | 1.00 | 511 | data:data_800310F4/asm:func_80032660/data:data_80032720/asm:func_80032D2C |
+| 80033048 | 00:31:49 | 7.19 | 1.00 | 500 | asm:func_80032D2C/data:data_80032F90/data:data_80032F90/asm:func_8003307C |
+| 80033978 | 00:31:50 | 7.23 | 1.00 | 497 | asm:func_8003307C/asm:func_80033974/data:data_80033980/data:data_80033980 |
+| 800342A8 | 00:31:51 | 7.27 | 1.00 | 493 | data:data_80033980/asm:func_80034294/asm:func_80034294/data:data_80034588 |
+| 80034BD8 | 00:31:52 | 7.37 | 1.00 | 494 | data:data_80034588/data:data_80034588/data:data_80034588/data:data_80034588 |
+| 80035508 | 00:31:53 | 7.24 | 1.00 | 506 | data:data_80034588/data:data_80034588/data:data_80034588/asm:func_800355A4 |
+| 80035E38 | 00:31:54 | 7.26 | 1.00 | 504 | asm:func_800355A4/data:data_80035D68/data:data_80035D68/asm:func_800362B8 |
+| 80036768 | 00:31:55 | 7.21 | 1.00 | 503 | asm:func_800362B8/data:data_80036684/data:data_80036684/asm:func_800367A4 |
+| 80037098 | 00:31:56 | 7.31 | 1.00 | 504 | asm:func_800367A4/data:data_80037040/data:data_80037040/data:data_80037040 |
+| 800379C8 | 00:31:57 | 7.22 | 1.00 | 508 | data:data_80037040/data:data_80037040/data:data_80037040/asm:func_800379F0 |
+| 800382F8 | 00:31:58 | 7.23 | 1.00 | 503 | asm:func_800379F0/asm:func_80038248/asm:func_80038248/data:data_80038600 |
+| 80038C28 | 00:31:59 | 7.17 | 1.00 | 501 | data:data_80038600/data:data_80038600/data:data_80038600/asm:func_80038CCC |
+| 80039558 | 00:31:60 | 7.27 | 1.00 | 498 | asm:func_80038CCC/data:data_80039454/data:data_80039454/data:data_80039454 |
+| 80039E88 | 00:31:61 | 7.30 | 1.00 | 501 | data:data_80039454/data:data_80039454/data:data_80039454/data:data_8003A1FC |
+| 8003A7B8 | 00:31:62 | 7.29 | 1.00 | 499 | data:data_8003A1FC/data:data_8003A1FC/data:data_8003A1FC/data:data_8003AB28 |
+| 8003B0E8 | 00:31:63 | 7.25 | 1.00 | 505 | data:data_8003AB28/data:data_8003AB28/data:data_8003AB28/asm:func_8003B124 |
+| 8003BA18 | 00:31:64 | 7.28 | 1.00 | 504 | asm:func_8003B124/data:data_8003B960/data:data_8003B960/data:data_8003BDCC |
+| 8003C348 | 00:31:65 | 7.24 | 1.00 | 503 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC |
+| 8003CC78 | 00:31:66 | 7.23 | 1.00 | 506 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC |
+| 8003D5A8 | 00:31:67 | 7.15 | 1.00 | 505 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC |
+| 8003DED8 | 00:31:68 | 7.23 | 1.00 | 506 | data:data_8003BDCC/data:data_8003BDCC/data:data_8003BDCC/data:data_8003E4E4 |
+| 8003E808 | 00:31:69 | 7.30 | 1.00 | 509 | data:data_8003E4E4/data:data_8003E4E4/data:data_8003E4E4/asm:func_8003E884 |
+| 8003F138 | 00:31:70 | 7.18 | 1.00 | 500 | asm:func_8003E884/data:data_8003F080/data:data_8003F080/data:data_8003F080 |
+| 8003FA68 | 00:31:71 | 7.30 | 1.00 | 506 | data:data_8003F080/data:data_8003F080/data:data_8003F080/data:data_800401E4 |
+| 80040398 | 00:31:72 | 7.24 | 1.00 | 506 | data:data_800401E4/data:data_800401E4/data:data_800401E4/asm:func_800407CC |
+| 80040CC8 | 00:31:73 | 7.19 | 1.00 | 501 | data:data_80040BB0/data:data_80040C58/data:data_80040C58/data:data_80040C58 |
+| 800415F8 | 00:31:74 | 7.29 | 1.00 | 500 | data:data_80040C58/data:data_800415F8/data:data_800415F8/asm:func_80041658 |
+| 80041F28 | 00:32:00 | 7.20 | 1.00 | 506 | asm:func_80041658/data:data_80041EFC/data:data_80041EFC/asm:func_80041F44 |
+| 80042858 | 00:32:01 | 7.23 | 1.00 | 507 | asm:func_80041F44/asm:func_80042858/asm:func_80042858/asm:func_80042858 |
+| 80043188 | 00:32:02 | 7.21 | 1.00 | 504 | asm:func_80042858/data:data_800430D8/data:data_800430D8/data:data_800430D8 |
+| 80043AB8 | 00:32:03 | 7.19 | 1.00 | 502 | data:data_800430D8/data:data_800430D8/data:data_800430D8/asm:func_80043B00 |
+| 800443E8 | 00:32:04 | 7.25 | 1.00 | 501 | asm:func_80043B00/data:data_8004430C/data:data_8004430C/data:data_8004453C |
+| 80044D18 | 00:32:05 | 7.27 | 1.00 | 500 | data:data_8004453C/data:data_8004453C/asm:func_80044D2C/asm:func_80044D2C |
+| 80045648 | 00:32:06 | 7.25 | 1.00 | 470 | asm:func_80044D2C/data:data_80045540/data:data_80045540/asm:func_800456CC |
+| 80045F78 | 00:32:07 | 7.23 | 1.00 | 492 | asm:func_800456CC/asm:func_80045F6C/asm:func_80045F6C/asm:func_80045F6C |
+| 800468A8 | 00:32:08 | 7.21 | 1.00 | 497 | data:data_80046790/asm:func_8004682C/asm:func_8004682C/asm:func_8004682C |
+| 800471D8 | 00:32:09 | 7.29 | 1.00 | 486 | asm:func_8004682C/data:data_8004712C/data:data_8004712C/data:data_8004712C |
+| 80047B08 | 00:32:10 | 7.14 | 1.00 | 487 | data:data_8004712C/data:data_8004712C/data:data_8004712C/data:data_8004712C |
+| 80048438 | 00:32:11 | 7.35 | 1.00 | 503 | data:data_8004712C/data:data_8004712C/data:data_8004712C/data:data_8004712C |
+| 80048D68 | 00:32:12 | 7.31 | 1.00 | 490 | data:data_8004712C/data:data_8004712C/data:data_8004712C/asm:func_80048DC4 |
+| 80049698 | 00:32:13 | 7.26 | 1.00 | 485 | asm:func_80048DC4/data:data_800495B8/data:data_800495B8/data:data_800495B8 |
+| 80049FC8 | 00:32:14 | 7.20 | 1.00 | 503 | data:data_800495B8/data:data_800495B8/data:data_800495B8/asm:func_8004A020 |
+| 8004A8F8 | 00:32:15 | 7.22 | 1.00 | 494 | asm:func_8004A020/data:data_8004A828/data:data_8004A828/data:data_8004A828 |
+| 8004B228 | 00:32:16 | 7.23 | 1.00 | 506 | data:data_8004A828/data:data_8004A828/data:data_8004A828/data:data_8004A828 |
+| 8004BB58 | 00:32:17 | 7.22 | 1.00 | 509 | data:data_8004A828/data:data_8004A828/data:data_8004A828/data:data_8004A828 |
+| 8004C488 | 00:32:18 | 7.25 | 1.00 | 503 | data:data_8004A828/data:data_8004A828/data:data_8004A828/data:data_8004CA34 |
+| 8004CDB8 | 00:32:19 | 7.22 | 1.00 | 509 | data:data_8004CA34/data:data_8004CA34/data:data_8004CA34/asm:func_8004CE58 |
+| 8004D6E8 | 00:32:20 | 7.22 | 0.99 | 507 | asm:func_8004CE58/data:data_8004D5D4/data:data_8004D5D4/data:data_8004DB20 |
+| 8004E018 | 00:32:21 | 7.31 | 1.00 | 511 | data:data_8004DB20/data:data_8004DB20/data:data_8004DB20/data:data_8004E810 |
+| 8004E948 | 00:32:22 | 7.25 | 0.98 | 500 | data:data_8004E810/data:data_8004E91C/data:data_8004E91C/asm:func_8004F03C |
+| 8004F278 | 00:32:23 | 7.20 | 0.90 | 507 | asm:func_8004F03C/data:data_8004F170/data:data_8004F170/data:data_8004F170 |
+| 8004FBA8 | 00:32:24 | 7.25 | 0.87 | 456 | data:data_8004F170/data:data_8004F170/data:data_8004F170/data:data_8005015C |
+| 800504D8 | 00:32:25 | 7.23 | 1.00 | 502 | data:data_8005015C/data:data_8005015C/data:data_8005015C/data:data_80050C68 |
+| 80050E08 | 00:32:26 | 7.28 | 1.00 | 497 | data:data_80050C68/data:data_80050C68/data:data_80050C68/asm:func_80051520 |
+| 80051738 | 00:32:27 | 7.31 | 1.00 | 500 | asm:func_80051520/data:data_800516A8/data:data_800516A8/data:data_800516A8 |
+| 80052068 | 00:32:28 | 7.22 | 1.00 | 493 | data:data_800516A8/data:data_80052068/data:data_80052068/data:data_80052068 |
+| 80052998 | 00:32:29 | 7.22 | 1.00 | 500 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
+| 800532C8 | 00:32:30 | 7.20 | 1.00 | 508 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
+| 80053BF8 | 00:32:31 | 7.26 | 1.00 | 499 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
+| 80054528 | 00:32:32 | 7.16 | 1.00 | 502 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
+| 80054E58 | 00:32:33 | 7.27 | 0.97 | 505 | data:data_80052068/data:data_80052068/data:data_80052068/data:data_80052068 |
+| 80055788 | 00:32:34 | 7.27 | 1.00 | 508 | data:data_80052068/data:data_80052068/data:data_80052068/asm:func_800558A8 |
+| 800560B8 | 00:32:35 | 7.23 | 1.00 | 505 | asm:func_800558A8/data:data_80056004/data:data_80056004/data:data_80056004 |
+| 800569E8 | 00:32:36 | 7.26 | 1.00 | 512 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
+| 80057318 | 00:32:37 | 7.20 | 1.00 | 508 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
+| 80057C48 | 00:32:38 | 7.27 | 1.00 | 510 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
+| 80058578 | 00:32:39 | 7.18 | 0.91 | 507 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80056004 |
+| 80058EA8 | 00:32:40 | 7.20 | 0.99 | 510 | data:data_80056004/data:data_80056004/data:data_80056004/data:data_80059234 |
+| 800597D8 | 00:32:41 | 7.24 | 1.00 | 506 | data:data_80059234/data:data_80059234/data:data_80059234/data:data_80059234 |
+| 8005A108 | 00:32:42 | 7.35 | 1.00 | 512 | data:data_80059234/data:data_80059234/data:data_80059234/asm:func_8005A310 |
+| 8005AA38 | 00:32:43 | 7.25 | 1.00 | 510 | asm:func_8005A310/data:data_8005A930/data:data_8005A930/asm:func_8005AB74 |
+| 8005B368 | 00:32:44 | 7.19 | 1.00 | 509 | asm:func_8005AB74/data:data_8005B25C/data:data_8005B25C/data:data_8005B25C |
+| 8005BC98 | 00:32:45 | 7.25 | 0.98 | 511 | data:data_8005B25C/data:data_8005B25C/data:data_8005B25C/data:data_8005B25C |
+| 8005C5C8 | 00:32:46 | 7.24 | 0.95 | 508 | data:data_8005B25C/data:data_8005B25C/data:data_8005B25C/data:data_8005B25C |
+| 8005CEF8 | 00:32:47 | 7.25 | 0.94 | 490 | data:data_8005B25C/data:data_8005B25C/data:data_8005B25C/data:data_8005D520 |
+| 8005D828 | 00:32:48 | 7.27 | 0.93 | 507 | data:data_8005D520/data:data_8005D520/data:data_8005D520/data:data_8005D520 |
+| 8005E158 | 00:32:49 | 7.24 | 1.00 | 510 | data:data_8005D520/data:data_8005D520/data:data_8005D520/data:data_8005D520 |
+| 8005EA88 | 00:32:50 | 7.31 | 1.00 | 511 | data:data_8005D520/data:data_8005D520/data:data_8005D520/data:data_8005D520 |
+| 8005F3B8 | 00:32:51 | 7.23 | 0.96 | 509 | data:data_8005D520/asm:func_8005F378/asm:func_8005F3C8/data:data_8005FB54 |
+| 8005FCE8 | 00:32:52 | 7.22 | 0.96 | 500 | data:data_8005FB54/data:data_8005FB54/asm:func_8005FCEC/data:data_80060444 |
+| 80060618 | 00:32:53 | 7.26 | 0.94 | 506 | data:data_80060444/data:data_80060444/data:data_80060444/data:data_80060DBC |
+| 80060F48 | 00:32:54 | 7.15 | 0.96 | 510 | data:data_80060DBC/data:data_80060DBC/data:data_80060DBC/data:data_80061500 |
+| 80061878 | 00:32:55 | 7.26 | 1.00 | 509 | data:data_80061500/data:data_80061500/data:data_80061500/data:data_80061500 |
+| 800621A8 | 00:32:56 | 7.20 | 0.95 | 505 | data:data_80061500/data:data_80061500/data:data_80061500/asm:func_800628D4 |
+| 80062AD8 | 00:32:57 | 7.18 | 0.98 | 507 | asm:func_800628D4/data:data_80062A04/data:data_80062A04/data:data_8006302C |
+| 80063408 | 00:32:58 | 7.28 | 0.97 | 507 | data:data_8006302C/data:data_8006302C/data:data_8006302C/data:data_8006302C |
+| 80063D38 | 00:32:59 | 7.27 | 0.98 | 506 | data:data_8006302C/data:data_8006302C/data:data_8006302C/data:data_800644D4 |
+| 80064668 | 00:32:60 | 7.21 | 0.99 | 511 | data:data_800644D4/data:data_800644D4/data:data_800644D4/data:data_80064968 |
+| 80064F98 | 00:32:61 | 7.23 | 1.00 | 510 | data:data_80064968/data:data_80064EEC/data:data_80064EEC/asm:func_80065260 |
+| 800658C8 | 00:32:62 | 7.27 | 1.00 | 512 | asm:func_80065260/data:data_800657C4/data:data_800657C4/data:data_800657C4 |
+| 800661F8 | 00:32:63 | 7.17 | 0.97 | 512 | data:data_800657C4/data:data_800657C4/data:data_800657C4/data:data_800666FC |
+| 80066B28 | 00:32:64 | 7.25 | 0.88 | 502 | data:data_800666FC/data:data_800666FC/data:data_800666FC/data:data_80066F24 |
+| 80067458 | 00:32:65 | 7.25 | 0.98 | 501 | data:data_80066F24/data:data_80066F24/data:data_80066F24/data:data_80066F24 |
+| 80067D88 | 00:32:66 | 7.14 | 1.00 | 510 | data:data_80066F24/data:data_80067CCC/data:data_80067CCC/data:data_80067CCC |
+| 800686B8 | 00:32:67 | 7.24 | 1.00 | 506 | data:data_80067CCC/data:data_80067CCC/data:data_80067CCC/data:data_80067CCC |
+| 80068FE8 | 00:32:68 | 7.17 | 1.00 | 508 | data:data_80067CCC/data:data_80067CCC/data:data_80067CCC/data:data_80067CCC |
+| 80069918 | 00:32:69 | 7.24 | 1.00 | 506 | data:data_80067CCC/data:data_80067CCC/data:data_80067CCC/asm:func_80069ADC |
+| 8006A248 | 00:32:70 | 7.29 | 1.00 | 503 | asm:func_80069ADC/data:data_8006A13C/data:data_8006A13C/asm:func_8006A434 |
+| 8006AB78 | 00:32:71 | 7.29 | 1.00 | 504 | asm:func_8006A434/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006B4A8 | 00:32:72 | 7.26 | 1.00 | 508 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006BDD8 | 00:32:73 | 7.26 | 1.00 | 501 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006C708 | 00:32:74 | 7.23 | 1.00 | 502 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006D038 | 00:33:00 | 7.24 | 1.00 | 509 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006D968 | 00:33:01 | 7.21 | 1.00 | 501 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006E298 | 00:33:02 | 7.29 | 1.00 | 492 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4 |
+| 8006EBC8 | 00:33:03 | 7.23 | 1.00 | 503 | data:data_8006AAF4/data:data_8006AAF4/data:data_8006AAF4/asm:func_8006EC70 |
+| 8006F4F8 | 00:33:04 | 7.27 | 1.00 | 509 | asm:func_8006EC70/asm:func_8006F438/asm:func_8006F510/asm:func_8006F510 |
+| 8006FE28 | 00:33:05 | 7.23 | 1.00 | 508 | asm:func_8006F510/data:data_8006FD48/data:data_8006FD48/data:data_8006FD48 |
+| 80070758 | 00:33:06 | 7.26 | 1.00 | 505 | data:data_8006FD48/data:data_8006FD48/data:data_8006FD48/asm:func_80070A5C |
+| 80071088 | 00:33:07 | 7.17 | 1.00 | 508 | asm:func_80070A5C/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 800719B8 | 00:33:08 | 7.21 | 1.00 | 511 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 800722E8 | 00:33:09 | 7.28 | 1.00 | 510 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80072C18 | 00:33:10 | 7.29 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80073548 | 00:33:11 | 7.17 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80073E78 | 00:33:12 | 7.25 | 1.00 | 508 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 800747A8 | 00:33:13 | 7.29 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 800750D8 | 00:33:14 | 7.20 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80075A08 | 00:33:15 | 7.31 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80076338 | 00:33:16 | 7.30 | 1.00 | 500 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80076C68 | 00:33:17 | 7.33 | 1.00 | 503 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80077598 | 00:33:18 | 7.26 | 1.00 | 500 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80077EC8 | 00:33:19 | 7.25 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 800787F8 | 00:33:20 | 7.21 | 1.00 | 510 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80079128 | 00:33:21 | 7.24 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 80079A58 | 00:33:22 | 7.27 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007A388 | 00:33:23 | 7.25 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007ACB8 | 00:33:24 | 7.23 | 1.00 | 506 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007B5E8 | 00:33:25 | 7.15 | 1.00 | 506 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007BF18 | 00:33:26 | 7.29 | 1.00 | 507 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007C848 | 00:33:27 | 7.22 | 1.00 | 509 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007D178 | 00:33:28 | 7.25 | 1.00 | 504 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007DAA8 | 00:33:29 | 7.21 | 1.00 | 483 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_80070FB8 |
+| 8007E3D8 | 00:33:30 | 7.26 | 0.78 | 495 | data:data_80070FB8/data:data_80070FB8/data:data_80070FB8/data:data_8007E6D0 |
+| 8007ED08 | 00:33:31 | 6.51 | 0.68 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8007F638 | 00:33:32 | 6.93 | 0.66 | 368 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8007FF68 | 00:33:33 | 6.96 | 0.92 | 214 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80080898 | 00:33:34 | 7.19 | 0.90 | 238 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800811C8 | 00:33:35 | 7.13 | 0.88 | 258 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80081AF8 | 00:33:36 | 6.97 | 0.86 | 258 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80082428 | 00:33:37 | 7.21 | 0.90 | 216 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80082D58 | 00:33:38 | 7.15 | 0.92 | 176 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80083688 | 00:33:39 | 7.07 | 0.88 | 290 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80083FB8 | 00:33:40 | 7.13 | 0.82 | 430 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800848E8 | 00:33:41 | 7.25 | 0.69 | 480 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80085218 | 00:33:42 | 7.17 | 0.74 | 499 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80085B48 | 00:33:43 | 7.21 | 0.49 | 484 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80086478 | 00:33:44 | 7.22 | 0.47 | 440 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80086DA8 | 00:33:45 | 7.36 | 0.61 | 437 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800876D8 | 00:33:46 | 7.19 | 0.65 | 436 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80088008 | 00:33:47 | 7.17 | 0.62 | 440 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80088938 | 00:33:48 | 7.21 | 0.61 | 413 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80089268 | 00:33:49 | 7.21 | 0.66 | 403 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80089B98 | 00:33:50 | 7.27 | 0.75 | 389 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008A4C8 | 00:33:51 | 7.22 | 0.66 | 401 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008ADF8 | 00:33:52 | 7.33 | 0.63 | 410 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008B728 | 00:33:53 | 7.32 | 0.70 | 383 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008C058 | 00:33:54 | 7.22 | 0.65 | 383 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008C988 | 00:33:55 | 7.27 | 0.65 | 390 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008D2B8 | 00:33:56 | 7.30 | 0.70 | 409 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008DBE8 | 00:33:57 | 7.15 | 0.62 | 398 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008E518 | 00:33:58 | 7.26 | 0.74 | 449 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008EE48 | 00:33:59 | 7.23 | 0.70 | 502 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8008F778 | 00:33:60 | 7.22 | 0.66 | 510 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800900A8 | 00:33:61 | 7.17 | 0.69 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800909D8 | 00:33:62 | 7.32 | 0.67 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80091308 | 00:33:63 | 7.20 | 0.64 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80091C38 | 00:33:64 | 7.18 | 0.67 | 508 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80092568 | 00:33:65 | 7.19 | 0.70 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80092E98 | 00:33:66 | 7.21 | 0.64 | 482 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800937C8 | 00:33:67 | 7.32 | 0.73 | 485 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800940F8 | 00:33:68 | 7.18 | 0.76 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80094A28 | 00:33:69 | 7.12 | 0.68 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80095358 | 00:33:70 | 7.15 | 0.72 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80095C88 | 00:33:71 | 7.16 | 0.71 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800965B8 | 00:33:72 | 7.30 | 0.65 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80096EE8 | 00:33:73 | 7.30 | 0.70 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80097818 | 00:33:74 | 7.24 | 0.71 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80098148 | 00:34:00 | 7.17 | 0.63 | 507 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80098A78 | 00:34:01 | 7.15 | 0.49 | 477 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800993A8 | 00:34:02 | 6.96 | 0.60 | 506 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 80099CD8 | 00:34:03 | 7.06 | 0.88 | 483 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009A608 | 00:34:04 | 7.28 | 0.78 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009AF38 | 00:34:05 | 7.32 | 0.57 | 509 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009B868 | 00:34:06 | 7.21 | 0.49 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009C198 | 00:34:07 | 7.29 | 0.62 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009CAC8 | 00:34:08 | 6.71 | 1.00 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009D3F8 | 00:34:09 | 6.85 | 0.48 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009DD28 | 00:34:10 | 6.68 | 0.08 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009E658 | 00:34:11 | 6.61 | 0.71 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009EF88 | 00:34:12 | 7.19 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 8009F8B8 | 00:34:13 | 6.49 | 0.38 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A01E8 | 00:34:14 | 6.96 | 0.45 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A0B18 | 00:34:15 | 6.92 | 0.00 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A1448 | 00:34:16 | 6.92 | 0.42 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A1D78 | 00:34:17 | 6.73 | 0.26 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A26A8 | 00:34:18 | 6.55 | 0.09 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A2FD8 | 00:34:19 | 7.25 | 0.20 | 511 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A3908 | 00:34:20 | 7.29 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A4238 | 00:34:21 | 7.26 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A4B68 | 00:34:22 | 6.80 | 0.32 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A5498 | 00:34:23 | 6.90 | 0.58 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A5DC8 | 00:34:24 | 6.75 | 0.00 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A66F8 | 00:34:25 | 6.72 | 0.58 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A7028 | 00:34:26 | 6.76 | 0.39 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A7958 | 00:34:27 | 6.66 | 0.91 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A8288 | 00:34:28 | 6.85 | 1.00 | 257 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A8BB8 | 00:34:29 | 6.51 | 1.00 | 162 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A94E8 | 00:34:30 | 1.36 | 0.90 | 512 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800A9E18 | 00:34:31 | 7.18 | 0.77 | 510 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800AA748 | 00:34:32 | 6.93 | 0.95 | 371 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800AB078 | 00:34:33 | 7.34 | 1.00 | 261 | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800AB9A8 | 00:34:34 | 4.23 | 0.94 | n/a | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0 |
+| 800AC2D8 | 00:34:35 | 7.23 | n/a | n/a | data:data_8007E6D0/data:data_8007E6D0/data:data_8007E6D0/? |
 
 ## g3_jp
 
-244 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+244 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 592 | 0x28 | 6.11 | 0.61 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 593 | 0x28 | 7.27 | 0.62 | 497 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 594 | 0x28 | 7.19 | 0.49 | 488 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021CA8 | 595 | 0x28 | 7.23 | 0.62 | 508 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800225D8 | 596 | 0x28 | 7.15 | 0.87 | 505 | asm:func_800224C0/data:data_800224CC/data:data_800224CC/asm:func_80022878 |
-| 80022F08 | 597 | 0x28 | 7.14 | 1.00 | 509 | asm:func_80022878/data:data_80022E48/data:data_80022E48/data:data_800234BC |
-| 80023838 | 598 | 0x28 | 7.29 | 1.00 | 493 | data:data_800234BC/data:data_800234BC/data:data_800234BC/data:data_800234BC |
-| 80024168 | 599 | 0x28 | 7.21 | 1.00 | 498 | data:data_800234BC/data:data_800234BC/data:data_800234BC/data:data_800234BC |
-| 80024A98 | 600 | 0x28 | 7.25 | 1.00 | 497 | data:data_800234BC/data:data_800249E4/data:data_800249E4/asm:func_80024AD8 |
-| 800253C8 | 601 | 0x28 | 7.30 | 1.00 | 508 | asm:func_80024AD8/data:data_800252EC/data:data_800252EC/asm:func_80025534 |
-| 80025CF8 | 608 | 0x28 | 7.24 | 1.00 | 511 | asm:func_80025534/data:data_80025CBC/data:data_80025CBC/data:data_80025CBC |
-| 80026628 | 609 | 0x28 | 7.22 | 1.00 | 474 | data:data_80025CBC/data:data_80025CBC/data:data_80025CBC/data:data_80025CBC |
-| 80026F58 | 610 | 0x28 | 7.28 | 1.00 | 508 | data:data_80025CBC/asm:func_80026F50/asm:func_80026F50/data:data_80027554 |
-| 80027888 | 611 | 0x28 | 7.18 | 1.00 | 502 | data:data_80027554/data:data_80027554/data:data_80027554/data:data_80027554 |
-| 800281B8 | 612 | 0x28 | 7.28 | 1.00 | 512 | data:data_80027554/data:data_80027554/data:data_80027554/data:data_80027554 |
-| 80028AE8 | 613 | 0x28 | 7.28 | 1.00 | 512 | data:data_80027554/asm:func_80028AC8/asm:func_80028AC8/asm:func_80028AC8 |
-| 80029418 | 614 | 0x28 | 7.22 | 1.00 | 511 | asm:func_80028AC8/asm:func_80028AC8/asm:func_80028AC8/data:data_800299B8 |
-| 80029D48 | 615 | 0x28 | 7.26 | 1.00 | 509 | data:data_800299B8/data:data_800299B8/data:data_800299B8/data:data_800299B8 |
-| 8002A678 | 616 | 0x28 | 7.27 | 1.00 | 510 | data:data_800299B8/data:data_800299B8/data:data_800299B8/data:data_800299B8 |
-| 8002AFA8 | 617 | 0x28 | 7.25 | 1.00 | 510 | data:data_800299B8/data:data_800299B8/asm:func_8002AFB8/asm:func_8002AFB8 |
-| 8002B8D8 | 624 | 0x28 | 7.21 | 1.00 | 494 | asm:func_8002AFB8/data:data_8002B834/data:data_8002B834/asm:func_8002BA94 |
-| 8002C208 | 625 | 0x28 | 7.28 | 1.00 | 496 | asm:func_8002BA94/data:data_8002C154/asm:func_8002C220/data:data_8002C870 |
-| 8002CB38 | 626 | 0x28 | 7.23 | 1.00 | 508 | data:data_8002C870/data:data_8002C870/data:data_8002C870/data:data_8002C870 |
-| 8002D468 | 627 | 0x28 | 7.27 | 1.00 | 507 | data:data_8002C870/data:data_8002C870/data:data_8002C870/data:data_8002C870 |
-| 8002DD98 | 628 | 0x28 | 7.18 | 1.00 | 512 | data:data_8002C870/data:data_8002C870/data:data_8002C870/data:data_8002C870 |
-| 8002E6C8 | 512 | 0x29 | 7.26 | 1.00 | 510 | data:data_8002C870/data:data_8002C870/data:data_8002C870/asm:func_8002E9C8 |
-| 8002EFF8 | 513 | 0x29 | 7.31 | 1.00 | 510 | asm:func_8002E9C8/data:data_8002EEFC/data:data_8002EEFC/data:data_8002EEFC |
-| 8002F928 | 514 | 0x29 | 7.22 | 1.00 | 507 | data:data_8002EEFC/asm:func_8002F8A8/asm:func_8002F8A8/asm:func_8002F8A8 |
-| 80030258 | 515 | 0x29 | 7.18 | 1.00 | 512 | asm:func_8002F8A8/data:data_80030160/asm:func_8003025C/asm:func_8003025C |
-| 80030B88 | 516 | 0x29 | 7.29 | 1.00 | 511 | asm:func_8003025C/data:data_80030A8C/data:data_80030A8C/asm:func_80030BEC |
-| 800314B8 | 517 | 0x29 | 7.24 | 1.00 | 508 | asm:func_80030BEC/data:data_800313B4/data:data_800313B4/data:data_800313B4 |
-| 80031DE8 | 518 | 0x29 | 7.20 | 1.00 | 510 | data:data_800313B4/data:data_800313B4/data:data_800313B4/asm:func_80031E38 |
-| 80032718 | 519 | 0x29 | 7.27 | 1.00 | 511 | asm:func_80031E38/data:data_800326C4/data:data_800326C4/data:data_800326C4 |
-| 80033048 | 520 | 0x29 | 7.31 | 1.00 | 500 | data:data_800326C4/data:data_800326C4/data:data_800326C4/data:data_800326C4 |
-| 80033978 | 521 | 0x29 | 7.34 | 1.00 | 497 | data:data_800326C4/data:data_800326C4/data:data_800326C4/data:data_80033CC8 |
-| 800342A8 | 528 | 0x29 | 7.36 | 1.00 | 493 | data:data_80033CC8/data:data_80033CC8/data:data_80033CC8/asm:func_80034924 |
-| 80034BD8 | 529 | 0x29 | 7.22 | 1.00 | 494 | asm:func_80034924/asm:func_80034BA8/data:data_80034BDC/data:data_80034BDC |
-| 80035508 | 530 | 0x29 | 7.24 | 1.00 | 506 | data:data_80034BDC/data:data_80034BDC/asm:func_8003551C/asm:func_8003551C |
-| 80035E38 | 531 | 0x29 | 7.20 | 1.00 | 504 | asm:func_8003551C/data:data_80035D70/data:data_80035D70/data:data_80036648 |
-| 80036768 | 532 | 0x29 | 7.22 | 1.00 | 503 | data:data_80036648/asm:func_80036768/asm:func_80036768/asm:func_8003688C |
-| 80037098 | 533 | 0x29 | 7.11 | 1.00 | 504 | asm:func_8003688C/data:data_80036FB0/data:data_80036FB0/data:data_80036FB0 |
-| 800379C8 | 534 | 0x29 | 7.27 | 1.00 | 508 | data:data_80036FB0/data:data_80036FB0/data:data_80036FB0/asm:func_80037A08 |
-| 800382F8 | 535 | 0x29 | 7.22 | 1.00 | 503 | asm:func_80037A08/asm:func_80037A08/data:data_80038300/asm:func_800389A0 |
-| 80038C28 | 536 | 0x29 | 7.25 | 1.00 | 501 | asm:func_800389A0/data:data_80038B5C/data:data_80038B5C/data:data_80038B5C |
-| 80039558 | 537 | 0x29 | 7.20 | 1.00 | 498 | data:data_80038B5C/data:data_80038B5C/data:data_80038B5C/data:data_80038B5C |
-| 80039E88 | 544 | 0x29 | 7.18 | 1.00 | 501 | data:data_80038B5C/data:data_80038B5C/data:data_80038B5C/asm:func_80039EB0 |
-| 8003A7B8 | 545 | 0x29 | 7.22 | 1.00 | 499 | data:data_8003A6A0/data:data_8003A6A0/data:data_8003A6A0/asm:func_8003A7D4 |
-| 8003B0E8 | 546 | 0x29 | 7.25 | 1.00 | 505 | asm:func_8003A7D4/data:data_8003AFFC/data:data_8003AFFC/data:data_8003AFFC |
-| 8003BA18 | 547 | 0x29 | 7.26 | 1.00 | 504 | data:data_8003AFFC/data:data_8003AFFC/data:data_8003AFFC/data:data_8003C164 |
-| 8003C348 | 548 | 0x29 | 7.21 | 1.00 | 503 | data:data_8003C164/data:data_8003C164/asm:func_8003C35C/data:data_8003C5FC |
-| 8003CC78 | 549 | 0x29 | 7.17 | 1.00 | 506 | data:data_8003C5FC/data:data_8003C5FC/data:data_8003C5FC/asm:func_8003CDA0 |
-| 8003D5A8 | 550 | 0x29 | 7.15 | 1.00 | 505 | asm:func_8003CDA0/data:data_8003D4C4/data:data_8003D4C4/data:data_8003D4C4 |
-| 8003DED8 | 551 | 0x29 | 7.26 | 1.00 | 506 | data:data_8003D4C4/data:data_8003D4C4/data:data_8003D4C4/data:data_8003D4C4 |
-| 8003E808 | 552 | 0x29 | 7.25 | 1.00 | 509 | data:data_8003D4C4/data:data_8003E77C/asm:func_8003E814/data:data_8003EB18 |
-| 8003F138 | 553 | 0x29 | 7.25 | 1.00 | 500 | data:data_8003EB18/data:data_8003EB18/data:data_8003EB18/data:data_8003F78C |
-| 8003FA68 | 560 | 0x29 | 7.31 | 1.00 | 506 | data:data_8003F78C/data:data_8003F78C/data:data_8003F78C/data:data_8003F78C |
-| 80040398 | 561 | 0x29 | 7.19 | 1.00 | 506 | data:data_8003F78C/data:data_8003F78C/asm:func_800403B0/data:data_80040B60 |
-| 80040CC8 | 562 | 0x29 | 7.22 | 1.00 | 501 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
-| 800415F8 | 563 | 0x29 | 7.25 | 1.00 | 500 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
-| 80041F28 | 564 | 0x29 | 7.30 | 1.00 | 506 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
-| 80042858 | 565 | 0x29 | 7.29 | 1.00 | 507 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
-| 80043188 | 566 | 0x29 | 7.14 | 1.00 | 504 | data:data_80040B60/data:data_80040B60/data:data_80040B60/asm:func_800431B4 |
-| 80043AB8 | 567 | 0x29 | 7.25 | 1.00 | 502 | asm:func_800431B4/data:data_80043A2C/data:data_80043A2C/data:data_800441B8 |
-| 800443E8 | 568 | 0x29 | 7.30 | 1.00 | 501 | data:data_800441B8/data:data_800441B8/data:data_800441B8/data:data_800448D4 |
-| 80044D18 | 569 | 0x29 | 7.26 | 1.00 | 500 | data:data_800448D4/data:data_800448D4/data:data_800448D4/data:data_800448D4 |
-| 80045648 | 576 | 0x29 | 7.28 | 1.00 | 470 | data:data_800448D4/data:data_800448D4/data:data_800448D4/asm:func_800459C4 |
-| 80045F78 | 577 | 0x29 | 7.19 | 1.00 | 492 | asm:func_800459C4/asm:func_80045F78/asm:func_80045F78/data:data_80046040 |
-| 800468A8 | 578 | 0x29 | 7.18 | 1.00 | 497 | data:data_80046040/data:data_80046040/data:data_80046040/data:data_80046D48 |
-| 800471D8 | 579 | 0x29 | 7.20 | 1.00 | 486 | data:data_80046D48/asm:func_80047194/asm:func_80047194/data:data_8004736C |
-| 80047B08 | 580 | 0x29 | 7.29 | 1.00 | 487 | data:data_8004736C/data:data_8004736C/data:data_8004736C/asm:func_80047D44 |
-| 80048438 | 581 | 0x29 | 7.27 | 1.00 | 503 | asm:func_80047D44/data:data_80048360/data:data_80048360/asm:func_80048490 |
-| 80048D68 | 582 | 0x29 | 7.24 | 1.00 | 490 | data:data_80048C50/data:data_80048C50/data:data_80048C50/asm:func_80048DA8 |
-| 80049698 | 583 | 0x29 | 7.23 | 1.00 | 485 | asm:func_80048DA8/data:data_80049654/data:data_80049654/asm:func_800496DC |
-| 80049FC8 | 584 | 0x29 | 7.29 | 1.00 | 503 | asm:func_800496DC/data:data_80049EDC/data:data_80049EDC/data:data_80049EDC |
-| 8004A8F8 | 585 | 0x29 | 7.20 | 1.00 | 494 | data:data_80049EDC/asm:func_8004A88C/asm:func_8004A88C/asm:func_8004B094 |
-| 8004B228 | 592 | 0x29 | 7.22 | 1.00 | 506 | asm:func_8004B094/data:data_8004B1B4/data:data_8004B1B4/asm:func_8004B73C |
-| 8004BB58 | 593 | 0x29 | 7.25 | 1.00 | 509 | asm:func_8004B73C/asm:func_8004BB38/asm:func_8004BB38/asm:func_8004BB38 |
-| 8004C488 | 594 | 0x29 | 7.15 | 1.00 | 503 | asm:func_8004BB38/data:data_8004C3B0/data:data_8004C3B0/asm:func_8004C5F4 |
-| 8004CDB8 | 595 | 0x29 | 7.30 | 1.00 | 509 | asm:func_8004C5F4/data:data_8004CCD8/data:data_8004CCD8/data:data_8004CCD8 |
-| 8004D6E8 | 596 | 0x29 | 7.27 | 0.99 | 507 | data:data_8004CCD8/data:data_8004D688/data:data_8004D688/data:data_8004DEE8 |
-| 8004E018 | 597 | 0x29 | 7.29 | 1.00 | 511 | data:data_8004DEE8/data:data_8004DF3C/data:data_8004DF3C/data:data_8004DF3C |
-| 8004E948 | 598 | 0x29 | 7.16 | 1.00 | 500 | data:data_8004DF3C/data:data_8004DF3C/data:data_8004DF3C/data:data_8004EFD8 |
-| 8004F278 | 599 | 0x29 | 7.36 | 0.96 | 507 | data:data_8004EFD8/data:data_8004EFD8/data:data_8004EFD8/asm:func_8004F85C |
-| 8004FBA8 | 600 | 0x29 | 7.27 | 0.85 | 456 | asm:func_8004F85C/data:data_8004FAF4/data:data_8004FAF4/asm:func_800502C0 |
-| 800504D8 | 601 | 0x29 | 7.24 | 0.94 | 502 | asm:func_800502C0/data:data_80050464/data:data_80050464/data:data_80050464 |
-| 80050E08 | 608 | 0x29 | 7.27 | 1.00 | 497 | data:data_80050464/data:data_80050464/data:data_80050464/data:data_80050464 |
-| 80051738 | 609 | 0x29 | 7.19 | 1.00 | 500 | data:data_80050464/data:data_80050464/data:data_80050464/asm:func_80051D14 |
-| 80052068 | 610 | 0x29 | 7.29 | 1.00 | 493 | asm:func_80051D14/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80052998 | 611 | 0x29 | 7.17 | 1.00 | 500 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 800532C8 | 612 | 0x29 | 7.21 | 1.00 | 508 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80053BF8 | 613 | 0x29 | 7.28 | 1.00 | 499 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80054528 | 614 | 0x29 | 7.27 | 1.00 | 502 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80054E58 | 615 | 0x29 | 7.25 | 1.00 | 505 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80055788 | 616 | 0x29 | 7.13 | 0.97 | 508 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 800560B8 | 617 | 0x29 | 7.26 | 1.00 | 505 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 800569E8 | 624 | 0x29 | 7.15 | 1.00 | 512 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80057318 | 625 | 0x29 | 7.22 | 1.00 | 508 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80057C48 | 626 | 0x29 | 7.25 | 1.00 | 510 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80058578 | 627 | 0x29 | 7.22 | 1.00 | 507 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 80058EA8 | 628 | 0x29 | 7.24 | 0.91 | 510 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 800597D8 | 512 | 0x30 | 7.29 | 0.99 | 506 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 8005A108 | 513 | 0x30 | 7.28 | 1.00 | 512 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
-| 8005AA38 | 514 | 0x30 | 7.25 | 1.00 | 510 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/asm:func_8005ACC8 |
-| 8005B368 | 515 | 0x30 | 7.26 | 1.00 | 509 | asm:func_8005ACC8/data:data_8005B27C/data:data_8005B27C/data:data_8005B27C |
-| 8005BC98 | 516 | 0x30 | 7.23 | 1.00 | 511 | data:data_8005B27C/data:data_8005B27C/asm:func_8005BCAC/asm:func_8005BCAC |
-| 8005C5C8 | 517 | 0x30 | 7.18 | 0.96 | 508 | asm:func_8005BCAC/data:data_8005C4F8/data:data_8005C4F8/data:data_8005C970 |
-| 8005CEF8 | 518 | 0x30 | 7.10 | 0.95 | 490 | data:data_8005C970/data:data_8005C970/data:data_8005C970/data:data_8005C970 |
-| 8005D828 | 519 | 0x30 | 7.30 | 0.93 | 507 | data:data_8005C970/data:data_8005C970/data:data_8005C970/data:data_8005E018 |
-| 8005E158 | 520 | 0x30 | 7.25 | 0.96 | 510 | data:data_8005E018/data:data_8005E018/data:data_8005E018/asm:func_8005E610 |
-| 8005EA88 | 521 | 0x30 | 7.28 | 1.00 | 511 | asm:func_8005E610/data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC |
-| 8005F3B8 | 528 | 0x30 | 7.13 | 1.00 | 509 | data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC |
-| 8005FCE8 | 529 | 0x30 | 7.30 | 0.95 | 500 | data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC/data:data_80060370 |
-| 80060618 | 530 | 0x30 | 7.22 | 0.95 | 506 | data:data_80060370/data:data_80060370/data:data_80060370/asm:func_80060DF4 |
-| 80060F48 | 531 | 0x30 | 7.31 | 0.94 | 510 | asm:func_80060DF4/data:data_80060F1C/data:data_80060F1C/data:data_8006155C |
-| 80061878 | 532 | 0x30 | 7.21 | 0.97 | 509 | data:data_8006155C/data:data_8006155C/data:data_8006155C/data:data_8006155C |
-| 800621A8 | 533 | 0x30 | 7.24 | 0.98 | 505 | data:data_8006155C/data:data_8006155C/data:data_8006155C/data:data_800629A8 |
-| 80062AD8 | 534 | 0x30 | 7.22 | 0.96 | 507 | data:data_800629A8/data:data_800629A8/data:data_800629A8/data:data_800629A8 |
-| 80063408 | 535 | 0x30 | 7.22 | 0.98 | 507 | data:data_800629A8/data:data_80063388/data:data_80063388/data:data_80063BB4 |
-| 80063D38 | 536 | 0x30 | 7.33 | 0.97 | 506 | data:data_80063BB4/data:data_80063BB4/data:data_80063BB4/data:data_80064070 |
-| 80064668 | 537 | 0x30 | 7.25 | 0.98 | 511 | data:data_80064070/asm:func_8006465C/asm:func_8006465C/data:data_80064D98 |
-| 80064F98 | 544 | 0x30 | 7.24 | 0.99 | 510 | data:data_80064D98/data:data_80064F30/data:data_80064F30/data:data_800657AC |
-| 800658C8 | 545 | 0x30 | 7.26 | 1.00 | 512 | data:data_800657AC/data:data_800657D0/data:data_800657D0/data:data_800657D0 |
-| 800661F8 | 546 | 0x30 | 7.26 | 1.00 | 512 | data:data_800657D0/data:data_800657D0/data:data_800657D0/data:data_800657D0 |
-| 80066B28 | 547 | 0x30 | 7.19 | 0.97 | 502 | data:data_800657D0/data:data_800657D0/data:data_800657D0/data:data_80067088 |
-| 80067458 | 548 | 0x30 | 7.26 | 1.00 | 501 | data:data_80067088/asm:func_80067428/data:data_8006745C/data:data_8006745C |
-| 80067D88 | 549 | 0x30 | 7.23 | 1.00 | 510 | data:data_8006745C/data:data_8006745C/data:data_8006745C/asm:func_80067FB4 |
-| 800686B8 | 550 | 0x30 | 7.21 | 1.00 | 506 | asm:func_80067FB4/data:data_800685AC/data:data_800685AC/asm:func_80068718 |
-| 80068FE8 | 551 | 0x30 | 7.29 | 1.00 | 508 | asm:func_80068718/data:data_80068EE4/data:data_80068EE4/data:data_80068EE4 |
-| 80069918 | 552 | 0x30 | 7.23 | 1.00 | 506 | data:data_80068EE4/data:data_80068EE4/data:data_80068EE4/asm:func_80069B18 |
-| 8006A248 | 553 | 0x30 | 7.23 | 1.00 | 503 | asm:func_80069B18/data:data_8006A214/data:data_8006A214/data:data_8006A214 |
-| 8006AB78 | 560 | 0x30 | 7.22 | 1.00 | 504 | data:data_8006A214/data:data_8006AB3C/data:data_8006AB3C/data:data_8006AB3C |
-| 8006B4A8 | 561 | 0x30 | 7.27 | 1.00 | 508 | data:data_8006AB3C/data:data_8006AB3C/data:data_8006AB3C/data:data_8006BB5C |
-| 8006BDD8 | 562 | 0x30 | 7.33 | 1.00 | 501 | data:data_8006BB5C/data:data_8006BB5C/data:data_8006BB5C/data:data_8006BB5C |
-| 8006C708 | 563 | 0x30 | 7.31 | 1.00 | 502 | data:data_8006BB5C/asm:func_8006C684/asm:func_8006C684/asm:func_8006C684 |
-| 8006D038 | 564 | 0x30 | 7.19 | 1.00 | 509 | asm:func_8006C684/data:data_8006CF48/data:data_8006CF48/data:data_8006CF48 |
-| 8006D968 | 565 | 0x30 | 7.12 | 1.00 | 501 | data:data_8006CF48/data:data_8006CF48/data:data_8006CF48/asm:func_8006DE14 |
-| 8006E298 | 566 | 0x30 | 7.25 | 1.00 | 492 | asm:func_8006DE14/data:data_8006E1EC/data:data_8006E1EC/asm:func_8006E3A8 |
-| 8006EBC8 | 567 | 0x30 | 7.23 | 1.00 | 503 | asm:func_8006E3A8/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8006F4F8 | 568 | 0x30 | 7.18 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8006FE28 | 569 | 0x30 | 7.16 | 1.00 | 508 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80070758 | 576 | 0x30 | 7.26 | 1.00 | 505 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80071088 | 577 | 0x30 | 7.20 | 1.00 | 508 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 800719B8 | 578 | 0x30 | 7.20 | 1.00 | 511 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 800722E8 | 579 | 0x30 | 7.16 | 1.00 | 510 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80072C18 | 580 | 0x30 | 7.36 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80073548 | 581 | 0x30 | 7.21 | 1.00 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80073E78 | 582 | 0x30 | 7.24 | 1.00 | 508 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 800747A8 | 583 | 0x30 | 7.19 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 800750D8 | 584 | 0x30 | 7.26 | 1.00 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80075A08 | 585 | 0x30 | 7.20 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80076338 | 592 | 0x30 | 7.20 | 1.00 | 500 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80076C68 | 593 | 0x30 | 7.22 | 1.00 | 503 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80077598 | 594 | 0x30 | 7.27 | 1.00 | 500 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80077EC8 | 595 | 0x30 | 7.27 | 1.00 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 800787F8 | 596 | 0x30 | 7.25 | 1.00 | 510 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80079128 | 597 | 0x30 | 7.15 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 80079A58 | 598 | 0x30 | 7.27 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8007A388 | 599 | 0x30 | 7.25 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8007ACB8 | 600 | 0x30 | 7.32 | 1.00 | 506 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8007B5E8 | 601 | 0x30 | 7.18 | 1.00 | 506 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8007BF18 | 608 | 0x30 | 7.27 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8007C848 | 609 | 0x30 | 7.25 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
-| 8007D178 | 610 | 0x30 | 7.20 | 0.99 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8007D8F4 |
-| 8007DAA8 | 611 | 0x30 | 7.15 | 0.77 | 483 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8007E3D8 | 612 | 0x30 | 6.48 | 0.69 | 495 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8007ED08 | 613 | 0x30 | 6.81 | 0.67 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8007F638 | 614 | 0x30 | 7.05 | 0.91 | 368 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8007FF68 | 615 | 0x30 | 7.01 | 0.88 | 214 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80080898 | 616 | 0x30 | 7.07 | 0.91 | 238 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800811C8 | 617 | 0x30 | 7.11 | 0.91 | 258 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80081AF8 | 624 | 0x30 | 7.24 | 0.88 | 258 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80082428 | 625 | 0x30 | 7.04 | 0.88 | 216 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80082D58 | 626 | 0x30 | 7.00 | 0.88 | 176 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80083688 | 627 | 0x30 | 7.15 | 0.83 | 290 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80083FB8 | 628 | 0x30 | 7.30 | 0.68 | 430 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800848E8 | 512 | 0x31 | 7.27 | 0.74 | 480 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80085218 | 513 | 0x31 | 7.24 | 0.48 | 499 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80085B48 | 514 | 0x31 | 7.21 | 0.47 | 484 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80086478 | 515 | 0x31 | 7.19 | 0.61 | 440 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80086DA8 | 516 | 0x31 | 7.25 | 0.65 | 437 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800876D8 | 517 | 0x31 | 7.27 | 0.62 | 436 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80088008 | 518 | 0x31 | 7.24 | 0.60 | 440 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80088938 | 519 | 0x31 | 7.22 | 0.67 | 413 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80089268 | 520 | 0x31 | 7.18 | 0.75 | 403 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80089B98 | 521 | 0x31 | 7.19 | 0.67 | 389 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008A4C8 | 528 | 0x31 | 7.24 | 0.63 | 401 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008ADF8 | 529 | 0x31 | 7.27 | 0.70 | 410 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008B728 | 530 | 0x31 | 7.30 | 0.65 | 383 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008C058 | 531 | 0x31 | 7.29 | 0.65 | 383 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008C988 | 532 | 0x31 | 7.22 | 0.69 | 390 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008D2B8 | 533 | 0x31 | 7.24 | 0.62 | 409 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008DBE8 | 534 | 0x31 | 7.30 | 0.74 | 398 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008E518 | 535 | 0x31 | 7.19 | 0.70 | 449 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008EE48 | 536 | 0x31 | 7.20 | 0.66 | 502 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8008F778 | 537 | 0x31 | 7.27 | 0.70 | 510 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800900A8 | 544 | 0x31 | 7.22 | 0.66 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800909D8 | 545 | 0x31 | 7.24 | 0.64 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80091308 | 546 | 0x31 | 7.22 | 0.67 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80091C38 | 547 | 0x31 | 7.19 | 0.70 | 508 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80092568 | 548 | 0x31 | 7.26 | 0.64 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80092E98 | 549 | 0x31 | 7.28 | 0.73 | 482 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800937C8 | 550 | 0x31 | 7.19 | 0.76 | 485 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800940F8 | 551 | 0x31 | 7.20 | 0.68 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80094A28 | 552 | 0x31 | 7.21 | 0.72 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80095358 | 553 | 0x31 | 7.21 | 0.71 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80095C88 | 560 | 0x31 | 7.22 | 0.65 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800965B8 | 561 | 0x31 | 7.28 | 0.70 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80096EE8 | 562 | 0x31 | 7.10 | 0.71 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80097818 | 563 | 0x31 | 7.21 | 0.62 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80098148 | 564 | 0x31 | 7.21 | 0.49 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80098A78 | 565 | 0x31 | 7.05 | 0.60 | 477 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800993A8 | 566 | 0x31 | 7.18 | 0.88 | 506 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 80099CD8 | 567 | 0x31 | 7.27 | 0.78 | 483 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009A608 | 568 | 0x31 | 7.31 | 0.56 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009AF38 | 569 | 0x31 | 7.28 | 0.49 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009B868 | 576 | 0x31 | 7.23 | 0.63 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009C198 | 577 | 0x31 | 6.73 | 1.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009CAC8 | 578 | 0x31 | 6.74 | 0.46 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009D3F8 | 579 | 0x31 | 6.61 | 0.09 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009DD28 | 580 | 0x31 | 6.65 | 0.71 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009E658 | 581 | 0x31 | 7.02 | 0.92 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009EF88 | 582 | 0x31 | 6.31 | 0.37 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 8009F8B8 | 583 | 0x31 | 6.99 | 0.45 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A01E8 | 584 | 0x31 | 6.93 | 0.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A0B18 | 585 | 0x31 | 6.92 | 0.43 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A1448 | 592 | 0x31 | 6.80 | 0.25 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A1D78 | 593 | 0x31 | 6.64 | 0.09 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A26A8 | 594 | 0x31 | 7.27 | 0.20 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A2FD8 | 595 | 0x31 | 7.29 | 0.92 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A3908 | 596 | 0x31 | 7.25 | 0.91 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A4238 | 597 | 0x31 | 6.74 | 0.32 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A4B68 | 598 | 0x31 | 6.78 | 0.57 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A5498 | 599 | 0x31 | 6.91 | 0.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A5DC8 | 600 | 0x31 | 6.68 | 0.59 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A66F8 | 601 | 0x31 | 6.80 | 0.38 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A7028 | 608 | 0x31 | 6.78 | 0.92 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A7958 | 609 | 0x31 | 6.89 | 1.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A8288 | 610 | 0x31 | 6.64 | 1.00 | 257 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A8BB8 | 611 | 0x31 | 1.36 | 0.89 | 162 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A94E8 | 612 | 0x31 | 7.14 | 0.78 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800A9E18 | 613 | 0x31 | 6.93 | 0.95 | 510 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800AA748 | 614 | 0x31 | 7.18 | 1.00 | 371 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800AB078 | 615 | 0x31 | 4.29 | 0.94 | 261 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
-| 800AB9A8 | 616 | 0x31 | 7.14 | n/a | n/a | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 00:28:50 | 6.11 | 0.61 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 00:28:51 | 7.27 | 0.62 | 497 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 00:28:52 | 7.19 | 0.49 | 488 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021CA8 | 00:28:53 | 7.23 | 0.62 | 508 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800225D8 | 00:28:54 | 7.15 | 0.87 | 505 | asm:func_800224C0/data:data_800224CC/data:data_800224CC/asm:func_80022878 |
+| 80022F08 | 00:28:55 | 7.14 | 1.00 | 509 | asm:func_80022878/data:data_80022E48/data:data_80022E48/data:data_800234BC |
+| 80023838 | 00:28:56 | 7.29 | 1.00 | 493 | data:data_800234BC/data:data_800234BC/data:data_800234BC/data:data_800234BC |
+| 80024168 | 00:28:57 | 7.21 | 1.00 | 498 | data:data_800234BC/data:data_800234BC/data:data_800234BC/data:data_800234BC |
+| 80024A98 | 00:28:58 | 7.25 | 1.00 | 497 | data:data_800234BC/data:data_800249E4/data:data_800249E4/asm:func_80024AD8 |
+| 800253C8 | 00:28:59 | 7.30 | 1.00 | 508 | asm:func_80024AD8/data:data_800252EC/data:data_800252EC/asm:func_80025534 |
+| 80025CF8 | 00:28:60 | 7.24 | 1.00 | 511 | asm:func_80025534/data:data_80025CBC/data:data_80025CBC/data:data_80025CBC |
+| 80026628 | 00:28:61 | 7.22 | 1.00 | 474 | data:data_80025CBC/data:data_80025CBC/data:data_80025CBC/data:data_80025CBC |
+| 80026F58 | 00:28:62 | 7.28 | 1.00 | 508 | data:data_80025CBC/asm:func_80026F50/asm:func_80026F50/data:data_80027554 |
+| 80027888 | 00:28:63 | 7.18 | 1.00 | 502 | data:data_80027554/data:data_80027554/data:data_80027554/data:data_80027554 |
+| 800281B8 | 00:28:64 | 7.28 | 1.00 | 512 | data:data_80027554/data:data_80027554/data:data_80027554/data:data_80027554 |
+| 80028AE8 | 00:28:65 | 7.28 | 1.00 | 512 | data:data_80027554/asm:func_80028AC8/asm:func_80028AC8/asm:func_80028AC8 |
+| 80029418 | 00:28:66 | 7.22 | 1.00 | 511 | asm:func_80028AC8/asm:func_80028AC8/asm:func_80028AC8/data:data_800299B8 |
+| 80029D48 | 00:28:67 | 7.26 | 1.00 | 509 | data:data_800299B8/data:data_800299B8/data:data_800299B8/data:data_800299B8 |
+| 8002A678 | 00:28:68 | 7.27 | 1.00 | 510 | data:data_800299B8/data:data_800299B8/data:data_800299B8/data:data_800299B8 |
+| 8002AFA8 | 00:28:69 | 7.25 | 1.00 | 510 | data:data_800299B8/data:data_800299B8/asm:func_8002AFB8/asm:func_8002AFB8 |
+| 8002B8D8 | 00:28:70 | 7.21 | 1.00 | 494 | asm:func_8002AFB8/data:data_8002B834/data:data_8002B834/asm:func_8002BA94 |
+| 8002C208 | 00:28:71 | 7.28 | 1.00 | 496 | asm:func_8002BA94/data:data_8002C154/asm:func_8002C220/data:data_8002C870 |
+| 8002CB38 | 00:28:72 | 7.23 | 1.00 | 508 | data:data_8002C870/data:data_8002C870/data:data_8002C870/data:data_8002C870 |
+| 8002D468 | 00:28:73 | 7.27 | 1.00 | 507 | data:data_8002C870/data:data_8002C870/data:data_8002C870/data:data_8002C870 |
+| 8002DD98 | 00:28:74 | 7.18 | 1.00 | 512 | data:data_8002C870/data:data_8002C870/data:data_8002C870/data:data_8002C870 |
+| 8002E6C8 | 00:29:00 | 7.26 | 1.00 | 510 | data:data_8002C870/data:data_8002C870/data:data_8002C870/asm:func_8002E9C8 |
+| 8002EFF8 | 00:29:01 | 7.31 | 1.00 | 510 | asm:func_8002E9C8/data:data_8002EEFC/data:data_8002EEFC/data:data_8002EEFC |
+| 8002F928 | 00:29:02 | 7.22 | 1.00 | 507 | data:data_8002EEFC/asm:func_8002F8A8/asm:func_8002F8A8/asm:func_8002F8A8 |
+| 80030258 | 00:29:03 | 7.18 | 1.00 | 512 | asm:func_8002F8A8/data:data_80030160/asm:func_8003025C/asm:func_8003025C |
+| 80030B88 | 00:29:04 | 7.29 | 1.00 | 511 | asm:func_8003025C/data:data_80030A8C/data:data_80030A8C/asm:func_80030BEC |
+| 800314B8 | 00:29:05 | 7.24 | 1.00 | 508 | asm:func_80030BEC/data:data_800313B4/data:data_800313B4/data:data_800313B4 |
+| 80031DE8 | 00:29:06 | 7.20 | 1.00 | 510 | data:data_800313B4/data:data_800313B4/data:data_800313B4/asm:func_80031E38 |
+| 80032718 | 00:29:07 | 7.27 | 1.00 | 511 | asm:func_80031E38/data:data_800326C4/data:data_800326C4/data:data_800326C4 |
+| 80033048 | 00:29:08 | 7.31 | 1.00 | 500 | data:data_800326C4/data:data_800326C4/data:data_800326C4/data:data_800326C4 |
+| 80033978 | 00:29:09 | 7.34 | 1.00 | 497 | data:data_800326C4/data:data_800326C4/data:data_800326C4/data:data_80033CC8 |
+| 800342A8 | 00:29:10 | 7.36 | 1.00 | 493 | data:data_80033CC8/data:data_80033CC8/data:data_80033CC8/asm:func_80034924 |
+| 80034BD8 | 00:29:11 | 7.22 | 1.00 | 494 | asm:func_80034924/asm:func_80034BA8/data:data_80034BDC/data:data_80034BDC |
+| 80035508 | 00:29:12 | 7.24 | 1.00 | 506 | data:data_80034BDC/data:data_80034BDC/asm:func_8003551C/asm:func_8003551C |
+| 80035E38 | 00:29:13 | 7.20 | 1.00 | 504 | asm:func_8003551C/data:data_80035D70/data:data_80035D70/data:data_80036648 |
+| 80036768 | 00:29:14 | 7.22 | 1.00 | 503 | data:data_80036648/asm:func_80036768/asm:func_80036768/asm:func_8003688C |
+| 80037098 | 00:29:15 | 7.11 | 1.00 | 504 | asm:func_8003688C/data:data_80036FB0/data:data_80036FB0/data:data_80036FB0 |
+| 800379C8 | 00:29:16 | 7.27 | 1.00 | 508 | data:data_80036FB0/data:data_80036FB0/data:data_80036FB0/asm:func_80037A08 |
+| 800382F8 | 00:29:17 | 7.22 | 1.00 | 503 | asm:func_80037A08/asm:func_80037A08/data:data_80038300/asm:func_800389A0 |
+| 80038C28 | 00:29:18 | 7.25 | 1.00 | 501 | asm:func_800389A0/data:data_80038B5C/data:data_80038B5C/data:data_80038B5C |
+| 80039558 | 00:29:19 | 7.20 | 1.00 | 498 | data:data_80038B5C/data:data_80038B5C/data:data_80038B5C/data:data_80038B5C |
+| 80039E88 | 00:29:20 | 7.18 | 1.00 | 501 | data:data_80038B5C/data:data_80038B5C/data:data_80038B5C/asm:func_80039EB0 |
+| 8003A7B8 | 00:29:21 | 7.22 | 1.00 | 499 | data:data_8003A6A0/data:data_8003A6A0/data:data_8003A6A0/asm:func_8003A7D4 |
+| 8003B0E8 | 00:29:22 | 7.25 | 1.00 | 505 | asm:func_8003A7D4/data:data_8003AFFC/data:data_8003AFFC/data:data_8003AFFC |
+| 8003BA18 | 00:29:23 | 7.26 | 1.00 | 504 | data:data_8003AFFC/data:data_8003AFFC/data:data_8003AFFC/data:data_8003C164 |
+| 8003C348 | 00:29:24 | 7.21 | 1.00 | 503 | data:data_8003C164/data:data_8003C164/asm:func_8003C35C/data:data_8003C5FC |
+| 8003CC78 | 00:29:25 | 7.17 | 1.00 | 506 | data:data_8003C5FC/data:data_8003C5FC/data:data_8003C5FC/asm:func_8003CDA0 |
+| 8003D5A8 | 00:29:26 | 7.15 | 1.00 | 505 | asm:func_8003CDA0/data:data_8003D4C4/data:data_8003D4C4/data:data_8003D4C4 |
+| 8003DED8 | 00:29:27 | 7.26 | 1.00 | 506 | data:data_8003D4C4/data:data_8003D4C4/data:data_8003D4C4/data:data_8003D4C4 |
+| 8003E808 | 00:29:28 | 7.25 | 1.00 | 509 | data:data_8003D4C4/data:data_8003E77C/asm:func_8003E814/data:data_8003EB18 |
+| 8003F138 | 00:29:29 | 7.25 | 1.00 | 500 | data:data_8003EB18/data:data_8003EB18/data:data_8003EB18/data:data_8003F78C |
+| 8003FA68 | 00:29:30 | 7.31 | 1.00 | 506 | data:data_8003F78C/data:data_8003F78C/data:data_8003F78C/data:data_8003F78C |
+| 80040398 | 00:29:31 | 7.19 | 1.00 | 506 | data:data_8003F78C/data:data_8003F78C/asm:func_800403B0/data:data_80040B60 |
+| 80040CC8 | 00:29:32 | 7.22 | 1.00 | 501 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
+| 800415F8 | 00:29:33 | 7.25 | 1.00 | 500 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
+| 80041F28 | 00:29:34 | 7.30 | 1.00 | 506 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
+| 80042858 | 00:29:35 | 7.29 | 1.00 | 507 | data:data_80040B60/data:data_80040B60/data:data_80040B60/data:data_80040B60 |
+| 80043188 | 00:29:36 | 7.14 | 1.00 | 504 | data:data_80040B60/data:data_80040B60/data:data_80040B60/asm:func_800431B4 |
+| 80043AB8 | 00:29:37 | 7.25 | 1.00 | 502 | asm:func_800431B4/data:data_80043A2C/data:data_80043A2C/data:data_800441B8 |
+| 800443E8 | 00:29:38 | 7.30 | 1.00 | 501 | data:data_800441B8/data:data_800441B8/data:data_800441B8/data:data_800448D4 |
+| 80044D18 | 00:29:39 | 7.26 | 1.00 | 500 | data:data_800448D4/data:data_800448D4/data:data_800448D4/data:data_800448D4 |
+| 80045648 | 00:29:40 | 7.28 | 1.00 | 470 | data:data_800448D4/data:data_800448D4/data:data_800448D4/asm:func_800459C4 |
+| 80045F78 | 00:29:41 | 7.19 | 1.00 | 492 | asm:func_800459C4/asm:func_80045F78/asm:func_80045F78/data:data_80046040 |
+| 800468A8 | 00:29:42 | 7.18 | 1.00 | 497 | data:data_80046040/data:data_80046040/data:data_80046040/data:data_80046D48 |
+| 800471D8 | 00:29:43 | 7.20 | 1.00 | 486 | data:data_80046D48/asm:func_80047194/asm:func_80047194/data:data_8004736C |
+| 80047B08 | 00:29:44 | 7.29 | 1.00 | 487 | data:data_8004736C/data:data_8004736C/data:data_8004736C/asm:func_80047D44 |
+| 80048438 | 00:29:45 | 7.27 | 1.00 | 503 | asm:func_80047D44/data:data_80048360/data:data_80048360/asm:func_80048490 |
+| 80048D68 | 00:29:46 | 7.24 | 1.00 | 490 | data:data_80048C50/data:data_80048C50/data:data_80048C50/asm:func_80048DA8 |
+| 80049698 | 00:29:47 | 7.23 | 1.00 | 485 | asm:func_80048DA8/data:data_80049654/data:data_80049654/asm:func_800496DC |
+| 80049FC8 | 00:29:48 | 7.29 | 1.00 | 503 | asm:func_800496DC/data:data_80049EDC/data:data_80049EDC/data:data_80049EDC |
+| 8004A8F8 | 00:29:49 | 7.20 | 1.00 | 494 | data:data_80049EDC/asm:func_8004A88C/asm:func_8004A88C/asm:func_8004B094 |
+| 8004B228 | 00:29:50 | 7.22 | 1.00 | 506 | asm:func_8004B094/data:data_8004B1B4/data:data_8004B1B4/asm:func_8004B73C |
+| 8004BB58 | 00:29:51 | 7.25 | 1.00 | 509 | asm:func_8004B73C/asm:func_8004BB38/asm:func_8004BB38/asm:func_8004BB38 |
+| 8004C488 | 00:29:52 | 7.15 | 1.00 | 503 | asm:func_8004BB38/data:data_8004C3B0/data:data_8004C3B0/asm:func_8004C5F4 |
+| 8004CDB8 | 00:29:53 | 7.30 | 1.00 | 509 | asm:func_8004C5F4/data:data_8004CCD8/data:data_8004CCD8/data:data_8004CCD8 |
+| 8004D6E8 | 00:29:54 | 7.27 | 0.99 | 507 | data:data_8004CCD8/data:data_8004D688/data:data_8004D688/data:data_8004DEE8 |
+| 8004E018 | 00:29:55 | 7.29 | 1.00 | 511 | data:data_8004DEE8/data:data_8004DF3C/data:data_8004DF3C/data:data_8004DF3C |
+| 8004E948 | 00:29:56 | 7.16 | 1.00 | 500 | data:data_8004DF3C/data:data_8004DF3C/data:data_8004DF3C/data:data_8004EFD8 |
+| 8004F278 | 00:29:57 | 7.36 | 0.96 | 507 | data:data_8004EFD8/data:data_8004EFD8/data:data_8004EFD8/asm:func_8004F85C |
+| 8004FBA8 | 00:29:58 | 7.27 | 0.85 | 456 | asm:func_8004F85C/data:data_8004FAF4/data:data_8004FAF4/asm:func_800502C0 |
+| 800504D8 | 00:29:59 | 7.24 | 0.94 | 502 | asm:func_800502C0/data:data_80050464/data:data_80050464/data:data_80050464 |
+| 80050E08 | 00:29:60 | 7.27 | 1.00 | 497 | data:data_80050464/data:data_80050464/data:data_80050464/data:data_80050464 |
+| 80051738 | 00:29:61 | 7.19 | 1.00 | 500 | data:data_80050464/data:data_80050464/data:data_80050464/asm:func_80051D14 |
+| 80052068 | 00:29:62 | 7.29 | 1.00 | 493 | asm:func_80051D14/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80052998 | 00:29:63 | 7.17 | 1.00 | 500 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 800532C8 | 00:29:64 | 7.21 | 1.00 | 508 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80053BF8 | 00:29:65 | 7.28 | 1.00 | 499 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80054528 | 00:29:66 | 7.27 | 1.00 | 502 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80054E58 | 00:29:67 | 7.25 | 1.00 | 505 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80055788 | 00:29:68 | 7.13 | 0.97 | 508 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 800560B8 | 00:29:69 | 7.26 | 1.00 | 505 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 800569E8 | 00:29:70 | 7.15 | 1.00 | 512 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80057318 | 00:29:71 | 7.22 | 1.00 | 508 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80057C48 | 00:29:72 | 7.25 | 1.00 | 510 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80058578 | 00:29:73 | 7.22 | 1.00 | 507 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 80058EA8 | 00:29:74 | 7.24 | 0.91 | 510 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 800597D8 | 00:30:00 | 7.29 | 0.99 | 506 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 8005A108 | 00:30:01 | 7.28 | 1.00 | 512 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/data:data_80051FB8 |
+| 8005AA38 | 00:30:02 | 7.25 | 1.00 | 510 | data:data_80051FB8/data:data_80051FB8/data:data_80051FB8/asm:func_8005ACC8 |
+| 8005B368 | 00:30:03 | 7.26 | 1.00 | 509 | asm:func_8005ACC8/data:data_8005B27C/data:data_8005B27C/data:data_8005B27C |
+| 8005BC98 | 00:30:04 | 7.23 | 1.00 | 511 | data:data_8005B27C/data:data_8005B27C/asm:func_8005BCAC/asm:func_8005BCAC |
+| 8005C5C8 | 00:30:05 | 7.18 | 0.96 | 508 | asm:func_8005BCAC/data:data_8005C4F8/data:data_8005C4F8/data:data_8005C970 |
+| 8005CEF8 | 00:30:06 | 7.10 | 0.95 | 490 | data:data_8005C970/data:data_8005C970/data:data_8005C970/data:data_8005C970 |
+| 8005D828 | 00:30:07 | 7.30 | 0.93 | 507 | data:data_8005C970/data:data_8005C970/data:data_8005C970/data:data_8005E018 |
+| 8005E158 | 00:30:08 | 7.25 | 0.96 | 510 | data:data_8005E018/data:data_8005E018/data:data_8005E018/asm:func_8005E610 |
+| 8005EA88 | 00:30:09 | 7.28 | 1.00 | 511 | asm:func_8005E610/data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC |
+| 8005F3B8 | 00:30:10 | 7.13 | 1.00 | 509 | data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC |
+| 8005FCE8 | 00:30:11 | 7.30 | 0.95 | 500 | data:data_8005E9BC/data:data_8005E9BC/data:data_8005E9BC/data:data_80060370 |
+| 80060618 | 00:30:12 | 7.22 | 0.95 | 506 | data:data_80060370/data:data_80060370/data:data_80060370/asm:func_80060DF4 |
+| 80060F48 | 00:30:13 | 7.31 | 0.94 | 510 | asm:func_80060DF4/data:data_80060F1C/data:data_80060F1C/data:data_8006155C |
+| 80061878 | 00:30:14 | 7.21 | 0.97 | 509 | data:data_8006155C/data:data_8006155C/data:data_8006155C/data:data_8006155C |
+| 800621A8 | 00:30:15 | 7.24 | 0.98 | 505 | data:data_8006155C/data:data_8006155C/data:data_8006155C/data:data_800629A8 |
+| 80062AD8 | 00:30:16 | 7.22 | 0.96 | 507 | data:data_800629A8/data:data_800629A8/data:data_800629A8/data:data_800629A8 |
+| 80063408 | 00:30:17 | 7.22 | 0.98 | 507 | data:data_800629A8/data:data_80063388/data:data_80063388/data:data_80063BB4 |
+| 80063D38 | 00:30:18 | 7.33 | 0.97 | 506 | data:data_80063BB4/data:data_80063BB4/data:data_80063BB4/data:data_80064070 |
+| 80064668 | 00:30:19 | 7.25 | 0.98 | 511 | data:data_80064070/asm:func_8006465C/asm:func_8006465C/data:data_80064D98 |
+| 80064F98 | 00:30:20 | 7.24 | 0.99 | 510 | data:data_80064D98/data:data_80064F30/data:data_80064F30/data:data_800657AC |
+| 800658C8 | 00:30:21 | 7.26 | 1.00 | 512 | data:data_800657AC/data:data_800657D0/data:data_800657D0/data:data_800657D0 |
+| 800661F8 | 00:30:22 | 7.26 | 1.00 | 512 | data:data_800657D0/data:data_800657D0/data:data_800657D0/data:data_800657D0 |
+| 80066B28 | 00:30:23 | 7.19 | 0.97 | 502 | data:data_800657D0/data:data_800657D0/data:data_800657D0/data:data_80067088 |
+| 80067458 | 00:30:24 | 7.26 | 1.00 | 501 | data:data_80067088/asm:func_80067428/data:data_8006745C/data:data_8006745C |
+| 80067D88 | 00:30:25 | 7.23 | 1.00 | 510 | data:data_8006745C/data:data_8006745C/data:data_8006745C/asm:func_80067FB4 |
+| 800686B8 | 00:30:26 | 7.21 | 1.00 | 506 | asm:func_80067FB4/data:data_800685AC/data:data_800685AC/asm:func_80068718 |
+| 80068FE8 | 00:30:27 | 7.29 | 1.00 | 508 | asm:func_80068718/data:data_80068EE4/data:data_80068EE4/data:data_80068EE4 |
+| 80069918 | 00:30:28 | 7.23 | 1.00 | 506 | data:data_80068EE4/data:data_80068EE4/data:data_80068EE4/asm:func_80069B18 |
+| 8006A248 | 00:30:29 | 7.23 | 1.00 | 503 | asm:func_80069B18/data:data_8006A214/data:data_8006A214/data:data_8006A214 |
+| 8006AB78 | 00:30:30 | 7.22 | 1.00 | 504 | data:data_8006A214/data:data_8006AB3C/data:data_8006AB3C/data:data_8006AB3C |
+| 8006B4A8 | 00:30:31 | 7.27 | 1.00 | 508 | data:data_8006AB3C/data:data_8006AB3C/data:data_8006AB3C/data:data_8006BB5C |
+| 8006BDD8 | 00:30:32 | 7.33 | 1.00 | 501 | data:data_8006BB5C/data:data_8006BB5C/data:data_8006BB5C/data:data_8006BB5C |
+| 8006C708 | 00:30:33 | 7.31 | 1.00 | 502 | data:data_8006BB5C/asm:func_8006C684/asm:func_8006C684/asm:func_8006C684 |
+| 8006D038 | 00:30:34 | 7.19 | 1.00 | 509 | asm:func_8006C684/data:data_8006CF48/data:data_8006CF48/data:data_8006CF48 |
+| 8006D968 | 00:30:35 | 7.12 | 1.00 | 501 | data:data_8006CF48/data:data_8006CF48/data:data_8006CF48/asm:func_8006DE14 |
+| 8006E298 | 00:30:36 | 7.25 | 1.00 | 492 | asm:func_8006DE14/data:data_8006E1EC/data:data_8006E1EC/asm:func_8006E3A8 |
+| 8006EBC8 | 00:30:37 | 7.23 | 1.00 | 503 | asm:func_8006E3A8/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8006F4F8 | 00:30:38 | 7.18 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8006FE28 | 00:30:39 | 7.16 | 1.00 | 508 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80070758 | 00:30:40 | 7.26 | 1.00 | 505 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80071088 | 00:30:41 | 7.20 | 1.00 | 508 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 800719B8 | 00:30:42 | 7.20 | 1.00 | 511 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 800722E8 | 00:30:43 | 7.16 | 1.00 | 510 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80072C18 | 00:30:44 | 7.36 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80073548 | 00:30:45 | 7.21 | 1.00 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80073E78 | 00:30:46 | 7.24 | 1.00 | 508 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 800747A8 | 00:30:47 | 7.19 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 800750D8 | 00:30:48 | 7.26 | 1.00 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80075A08 | 00:30:49 | 7.20 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80076338 | 00:30:50 | 7.20 | 1.00 | 500 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80076C68 | 00:30:51 | 7.22 | 1.00 | 503 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80077598 | 00:30:52 | 7.27 | 1.00 | 500 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80077EC8 | 00:30:53 | 7.27 | 1.00 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 800787F8 | 00:30:54 | 7.25 | 1.00 | 510 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80079128 | 00:30:55 | 7.15 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 80079A58 | 00:30:56 | 7.27 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8007A388 | 00:30:57 | 7.25 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8007ACB8 | 00:30:58 | 7.32 | 1.00 | 506 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8007B5E8 | 00:30:59 | 7.18 | 1.00 | 506 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8007BF18 | 00:30:60 | 7.27 | 1.00 | 507 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8007C848 | 00:30:61 | 7.25 | 1.00 | 509 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C |
+| 8007D178 | 00:30:62 | 7.20 | 0.99 | 504 | data:data_8006EB0C/data:data_8006EB0C/data:data_8006EB0C/data:data_8007D8F4 |
+| 8007DAA8 | 00:30:63 | 7.15 | 0.77 | 483 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8007E3D8 | 00:30:64 | 6.48 | 0.69 | 495 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8007ED08 | 00:30:65 | 6.81 | 0.67 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8007F638 | 00:30:66 | 7.05 | 0.91 | 368 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8007FF68 | 00:30:67 | 7.01 | 0.88 | 214 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80080898 | 00:30:68 | 7.07 | 0.91 | 238 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800811C8 | 00:30:69 | 7.11 | 0.91 | 258 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80081AF8 | 00:30:70 | 7.24 | 0.88 | 258 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80082428 | 00:30:71 | 7.04 | 0.88 | 216 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80082D58 | 00:30:72 | 7.00 | 0.88 | 176 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80083688 | 00:30:73 | 7.15 | 0.83 | 290 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80083FB8 | 00:30:74 | 7.30 | 0.68 | 430 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800848E8 | 00:31:00 | 7.27 | 0.74 | 480 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80085218 | 00:31:01 | 7.24 | 0.48 | 499 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80085B48 | 00:31:02 | 7.21 | 0.47 | 484 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80086478 | 00:31:03 | 7.19 | 0.61 | 440 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80086DA8 | 00:31:04 | 7.25 | 0.65 | 437 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800876D8 | 00:31:05 | 7.27 | 0.62 | 436 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80088008 | 00:31:06 | 7.24 | 0.60 | 440 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80088938 | 00:31:07 | 7.22 | 0.67 | 413 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80089268 | 00:31:08 | 7.18 | 0.75 | 403 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80089B98 | 00:31:09 | 7.19 | 0.67 | 389 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008A4C8 | 00:31:10 | 7.24 | 0.63 | 401 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008ADF8 | 00:31:11 | 7.27 | 0.70 | 410 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008B728 | 00:31:12 | 7.30 | 0.65 | 383 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008C058 | 00:31:13 | 7.29 | 0.65 | 383 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008C988 | 00:31:14 | 7.22 | 0.69 | 390 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008D2B8 | 00:31:15 | 7.24 | 0.62 | 409 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008DBE8 | 00:31:16 | 7.30 | 0.74 | 398 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008E518 | 00:31:17 | 7.19 | 0.70 | 449 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008EE48 | 00:31:18 | 7.20 | 0.66 | 502 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8008F778 | 00:31:19 | 7.27 | 0.70 | 510 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800900A8 | 00:31:20 | 7.22 | 0.66 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800909D8 | 00:31:21 | 7.24 | 0.64 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80091308 | 00:31:22 | 7.22 | 0.67 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80091C38 | 00:31:23 | 7.19 | 0.70 | 508 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80092568 | 00:31:24 | 7.26 | 0.64 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80092E98 | 00:31:25 | 7.28 | 0.73 | 482 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800937C8 | 00:31:26 | 7.19 | 0.76 | 485 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800940F8 | 00:31:27 | 7.20 | 0.68 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80094A28 | 00:31:28 | 7.21 | 0.72 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80095358 | 00:31:29 | 7.21 | 0.71 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80095C88 | 00:31:30 | 7.22 | 0.65 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800965B8 | 00:31:31 | 7.28 | 0.70 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80096EE8 | 00:31:32 | 7.10 | 0.71 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80097818 | 00:31:33 | 7.21 | 0.62 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80098148 | 00:31:34 | 7.21 | 0.49 | 507 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80098A78 | 00:31:35 | 7.05 | 0.60 | 477 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800993A8 | 00:31:36 | 7.18 | 0.88 | 506 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 80099CD8 | 00:31:37 | 7.27 | 0.78 | 483 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009A608 | 00:31:38 | 7.31 | 0.56 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009AF38 | 00:31:39 | 7.28 | 0.49 | 509 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009B868 | 00:31:40 | 7.23 | 0.63 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009C198 | 00:31:41 | 6.73 | 1.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009CAC8 | 00:31:42 | 6.74 | 0.46 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009D3F8 | 00:31:43 | 6.61 | 0.09 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009DD28 | 00:31:44 | 6.65 | 0.71 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009E658 | 00:31:45 | 7.02 | 0.92 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009EF88 | 00:31:46 | 6.31 | 0.37 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 8009F8B8 | 00:31:47 | 6.99 | 0.45 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A01E8 | 00:31:48 | 6.93 | 0.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A0B18 | 00:31:49 | 6.92 | 0.43 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A1448 | 00:31:50 | 6.80 | 0.25 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A1D78 | 00:31:51 | 6.64 | 0.09 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A26A8 | 00:31:52 | 7.27 | 0.20 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A2FD8 | 00:31:53 | 7.29 | 0.92 | 511 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A3908 | 00:31:54 | 7.25 | 0.91 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A4238 | 00:31:55 | 6.74 | 0.32 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A4B68 | 00:31:56 | 6.78 | 0.57 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A5498 | 00:31:57 | 6.91 | 0.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A5DC8 | 00:31:58 | 6.68 | 0.59 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A66F8 | 00:31:59 | 6.80 | 0.38 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A7028 | 00:31:60 | 6.78 | 0.92 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A7958 | 00:31:61 | 6.89 | 1.00 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A8288 | 00:31:62 | 6.64 | 1.00 | 257 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A8BB8 | 00:31:63 | 1.36 | 0.89 | 162 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A94E8 | 00:31:64 | 7.14 | 0.78 | 512 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800A9E18 | 00:31:65 | 6.93 | 0.95 | 510 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800AA748 | 00:31:66 | 7.18 | 1.00 | 371 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800AB078 | 00:31:67 | 4.29 | 0.94 | 261 | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4 |
+| 800AB9A8 | 00:31:68 | 7.14 | n/a | n/a | data:data_8007D8F4/data:data_8007D8F4/data:data_8007D8F4/? |
 
 ## g3org_eu
 
-268 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+268 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 529 | 0x09 | 6.15 | 0.61 | 502 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 530 | 0x09 | 7.23 | 0.64 | 390 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 531 | 0x09 | 7.23 | 0.66 | 375 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021CA8 | 532 | 0x09 | 7.27 | 0.51 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800225D8 | 533 | 0x09 | 7.24 | 0.62 | 510 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80022F08 | 534 | 0x09 | 7.25 | 0.78 | 499 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_8002314C |
-| 80023838 | 535 | 0x09 | 7.24 | 1.00 | 496 | data:data_8002314C/data:data_800237C0/data:data_800237C0/asm:func_80023968 |
-| 80024168 | 536 | 0x09 | 7.25 | 1.00 | 493 | asm:func_80023968/data:data_80024084/data:data_80024084/data:data_80024084 |
-| 80024A98 | 537 | 0x09 | 7.23 | 1.00 | 484 | data:data_80024084/data:data_80024084/data:data_80024084/asm:func_80024B7C |
-| 800253C8 | 544 | 0x09 | 7.29 | 1.00 | 500 | asm:func_80024B7C/asm:func_80025398/data:data_800253D4/asm:func_80025494 |
-| 80025CF8 | 545 | 0x09 | 7.22 | 1.00 | 503 | asm:func_80025494/data:data_80025CF8/data:data_80025CF8/data:data_800261C4 |
-| 80026628 | 546 | 0x09 | 7.27 | 1.00 | 509 | data:data_800261C4/data:data_800261C4/data:data_800261C4/asm:func_80026714 |
-| 80026F58 | 547 | 0x09 | 7.24 | 1.00 | 509 | asm:func_80026714/data:data_80026E5C/data:data_80026E5C/asm:func_8002713C |
-| 80027888 | 548 | 0x09 | 7.22 | 1.00 | 493 | asm:func_8002713C/data:data_8002777C/data:data_8002777C/data:data_8002777C |
-| 800281B8 | 549 | 0x09 | 7.20 | 1.00 | 506 | data:data_8002777C/data:data_8002777C/asm:func_800281BC/data:data_8002830C |
-| 80028AE8 | 550 | 0x09 | 7.23 | 1.00 | 500 | data:data_8002830C/asm:func_80028ADC/data:data_80028AF4/asm:func_80028B1C |
-| 80029418 | 551 | 0x09 | 7.16 | 1.00 | 504 | asm:func_80028B1C/data:data_80029334/data:data_80029334/asm:func_80029750 |
-| 80029D48 | 552 | 0x09 | 7.27 | 1.00 | 505 | asm:func_80029750/data:data_80029D3C/asm:func_80029D5C/asm:func_80029D5C |
-| 8002A678 | 553 | 0x09 | 7.23 | 1.00 | 500 | data:data_8002A560/data:data_8002A560/data:data_8002A560/asm:func_8002A698 |
-| 8002AFA8 | 560 | 0x09 | 7.24 | 1.00 | 512 | asm:func_8002A698/asm:func_8002AFA4/data:data_8002AFB4/data:data_8002AFB4 |
-| 8002B8D8 | 561 | 0x09 | 7.13 | 1.00 | 487 | data:data_8002AFB4/data:data_8002AFB4/data:data_8002AFB4/asm:func_8002B924 |
-| 8002C208 | 562 | 0x09 | 7.25 | 1.00 | 503 | asm:func_8002B924/data:data_8002C1F4/data:data_8002C1F4/asm:func_8002C2A0 |
-| 8002CB38 | 563 | 0x09 | 7.15 | 1.00 | 507 | asm:func_8002C2A0/data:data_8002CAB0/data:data_8002CAB0/data:data_8002CAB0 |
-| 8002D468 | 564 | 0x09 | 7.16 | 1.00 | 504 | data:data_8002CAB0/asm:func_8002D41C/data:data_8002D470/asm:func_8002D4D4 |
-| 8002DD98 | 565 | 0x09 | 7.21 | 1.00 | 510 | asm:func_8002D4D4/data:data_8002DCA0/data:data_8002DCA0/asm:func_8002DE2C |
-| 8002E6C8 | 566 | 0x09 | 7.30 | 1.00 | 511 | asm:func_8002DE2C/data:data_8002E5F8/data:data_8002E5F8/asm:func_8002E854 |
-| 8002EFF8 | 567 | 0x09 | 7.30 | 1.00 | 511 | asm:func_8002E854/data:data_8002EF10/data:data_8002EF10/data:data_8002F198 |
-| 8002F928 | 568 | 0x09 | 7.26 | 1.00 | 512 | data:data_8002F198/data:data_8002F198/data:data_8002F198/data:data_8002FC20 |
-| 80030258 | 569 | 0x09 | 7.25 | 1.00 | 437 | data:data_8002FC20/data:data_8002FC20/data:data_8002FC20/asm:func_80030290 |
-| 80030B88 | 576 | 0x09 | 7.21 | 1.00 | 505 | asm:func_80030290/data:data_80030A88/asm:func_80030B8C/asm:func_80030B8C |
-| 800314B8 | 577 | 0x09 | 7.35 | 1.00 | 512 | asm:func_80030B8C/asm:func_8003146C/data:data_800314C4/data:data_80031794 |
-| 80031DE8 | 578 | 0x09 | 7.27 | 1.00 | 508 | data:data_80031794/asm:func_80031DD8/asm:func_80031DD8/asm:func_80031DD8 |
-| 80032718 | 579 | 0x09 | 7.22 | 1.00 | 508 | asm:func_80031DD8/data:data_80032620/data:data_80032620/data:data_80032ABC |
-| 80033048 | 580 | 0x09 | 7.24 | 1.00 | 509 | data:data_80032ABC/data:data_80032ABC/data:data_80032ABC/data:data_80032ABC |
-| 80033978 | 581 | 0x09 | 7.21 | 1.00 | 511 | data:data_80032ABC/data:data_80032ABC/data:data_80032ABC/asm:func_80033A30 |
-| 800342A8 | 582 | 0x09 | 7.33 | 1.00 | 501 | data:data_80034190/data:data_80034190/data:data_80034190/data:data_8003463C |
-| 80034BD8 | 583 | 0x09 | 7.31 | 1.00 | 495 | data:data_8003463C/data:data_80034BBC/data:data_80034BBC/data:data_80034BBC |
-| 80035508 | 584 | 0x09 | 7.29 | 1.00 | 483 | data:data_80034BBC/data:data_80034BBC/data:data_80034BBC/data:data_80034BBC |
-| 80035E38 | 585 | 0x09 | 7.25 | 1.00 | 496 | data:data_80034BBC/asm:func_80035DE0/data:data_80035E44/asm:func_80035E8C |
-| 80036768 | 592 | 0x09 | 7.13 | 1.00 | 511 | asm:func_80035E8C/data:data_80036708/asm:func_80036780/asm:func_800369B8 |
-| 80037098 | 593 | 0x09 | 7.26 | 1.00 | 504 | asm:func_800369B8/data:data_80037088/data:data_80037088/asm:func_800370E0 |
-| 800379C8 | 594 | 0x09 | 7.28 | 1.00 | 500 | asm:func_800370E0/data:data_800378C8/data:data_800378C8/data:data_80037ABC |
-| 800382F8 | 595 | 0x09 | 7.33 | 1.00 | 507 | data:data_80037ABC/data:data_80037ABC/data:data_80037ABC/data:data_800389E0 |
-| 80038C28 | 596 | 0x09 | 7.31 | 1.00 | 503 | data:data_800389E0/data:data_800389E0/data:data_800389E0/asm:func_80038C7C |
-| 80039558 | 597 | 0x09 | 7.22 | 1.00 | 503 | asm:func_80038C7C/data:data_800394D0/asm:func_80039564/asm:func_800398D8 |
-| 80039E88 | 598 | 0x09 | 7.30 | 1.00 | 498 | asm:func_800398D8/data:data_80039D80/data:data_80039D80/asm:func_80039EE8 |
-| 8003A7B8 | 599 | 0x09 | 7.24 | 1.00 | 497 | asm:func_80039EE8/data:data_8003A7A8/data:data_8003A7A8/asm:func_8003AB30 |
-| 8003B0E8 | 600 | 0x09 | 7.28 | 1.00 | 500 | asm:func_8003AB30/data:data_8003B00C/data:data_8003B00C/data:data_8003B8AC |
-| 8003BA18 | 601 | 0x09 | 7.33 | 1.00 | 508 | data:data_8003B8AC/data:data_8003B8AC/data:data_8003B8AC/data:data_8003B8AC |
-| 8003C348 | 608 | 0x09 | 7.17 | 1.00 | 502 | data:data_8003B8AC/data:data_8003B8AC/data:data_8003B8AC/asm:func_8003C3E4 |
-| 8003CC78 | 609 | 0x09 | 7.33 | 1.00 | 509 | asm:func_8003C3E4/data:data_8003CC34/data:data_8003CC34/data:data_8003CC34 |
-| 8003D5A8 | 610 | 0x09 | 7.32 | 1.00 | 508 | data:data_8003CC34/asm:func_8003D594/data:data_8003D5B0/data:data_8003D8C4 |
-| 8003DED8 | 611 | 0x09 | 7.22 | 1.00 | 506 | data:data_8003D8C4/data:data_8003D8C4/data:data_8003D8C4/data:data_8003D8C4 |
-| 8003E808 | 612 | 0x09 | 7.23 | 1.00 | 504 | data:data_8003D8C4/data:data_8003D8C4/data:data_8003D8C4/data:data_8003EB50 |
-| 8003F138 | 613 | 0x09 | 7.13 | 1.00 | 506 | data:data_8003EB50/data:data_8003EB50/data:data_8003EB50/asm:func_8003F8D4 |
-| 8003FA68 | 614 | 0x09 | 7.29 | 1.00 | 507 | asm:func_8003F8D4/data:data_8003FA54/data:data_8003FA54/asm:func_8003FAE8 |
-| 80040398 | 615 | 0x09 | 7.23 | 1.00 | 503 | asm:func_8003FAE8/data:data_8004028C/data:data_8004028C/data:data_8004028C |
-| 80040CC8 | 616 | 0x09 | 7.25 | 1.00 | 499 | data:data_8004028C/data:data_8004028C/data:data_8004028C/data:data_8004028C |
-| 800415F8 | 617 | 0x09 | 7.25 | 1.00 | 501 | data:data_8004028C/data:data_8004028C/data:data_8004028C/data:data_80041C80 |
-| 80041F28 | 624 | 0x09 | 7.21 | 1.00 | 488 | data:data_80041C80/data:data_80041C80/data:data_80041C80/data:data_80042478 |
-| 80042858 | 625 | 0x09 | 7.30 | 1.00 | 494 | data:data_80042478/data:data_80042478/data:data_80042478/asm:func_80042924 |
-| 80043188 | 626 | 0x09 | 7.18 | 1.00 | 490 | asm:func_80042924/data:data_8004317C/asm:func_80043190/data:data_80043554 |
-| 80043AB8 | 627 | 0x09 | 7.28 | 1.00 | 498 | data:data_80043554/asm:func_80043A10/asm:func_80043A10/asm:func_800440F4 |
-| 800443E8 | 628 | 0x09 | 7.18 | 1.00 | 486 | asm:func_800440F4/data:data_800443D8/data:data_800443D8/data:data_80044ACC |
-| 80044D18 | 512 | 0x10 | 7.26 | 1.00 | 493 | data:data_80044ACC/data:data_80044CA4/data:data_80044CA4/data:data_8004507C |
-| 80045648 | 513 | 0x10 | 7.19 | 1.00 | 503 | data:data_8004507C/data:data_8004507C/data:data_8004507C/data:data_80045D48 |
-| 80045F78 | 514 | 0x10 | 7.17 | 1.00 | 501 | data:data_80045D48/data:data_80045D48/data:data_80045D48/data:data_80045D48 |
-| 800468A8 | 515 | 0x10 | 7.22 | 1.00 | 500 | data:data_80045D48/data:data_80045D48/data:data_80045D48/data:data_80045D48 |
-| 800471D8 | 516 | 0x10 | 7.30 | 1.00 | 505 | data:data_80045D48/data:data_800471D8/data:data_800471D8/data:data_80047718 |
-| 80047B08 | 517 | 0x10 | 7.26 | 1.00 | 503 | data:data_80047718/data:data_80047718/data:data_80047718/data:data_80047718 |
-| 80048438 | 518 | 0x10 | 7.10 | 1.00 | 505 | data:data_80047718/data:data_80047718/data:data_80047718/data:data_80048930 |
-| 80048D68 | 519 | 0x10 | 7.19 | 1.00 | 511 | data:data_80048930/data:data_80048930/data:data_80048930/asm:func_80048D90 |
-| 80049698 | 520 | 0x10 | 7.22 | 1.00 | 508 | asm:func_80048D90/data:data_80049608/data:data_80049608/data:data_80049A48 |
-| 80049FC8 | 521 | 0x10 | 7.13 | 1.00 | 511 | data:data_80049A48/data:data_80049A48/asm:func_80049FE0/data:data_8004A7B8 |
-| 8004A8F8 | 528 | 0x10 | 7.17 | 0.99 | 510 | data:data_8004A7B8/data:data_8004A7B8/data:data_8004A7B8/data:data_8004A7B8 |
-| 8004B228 | 529 | 0x10 | 7.27 | 1.00 | 507 | data:data_8004A7B8/data:data_8004A7B8/data:data_8004A7B8/data:data_8004BA0C |
-| 8004BB58 | 530 | 0x10 | 7.20 | 0.94 | 499 | data:data_8004BA0C/data:data_8004BA0C/data:data_8004BA0C/asm:func_8004BEBC |
-| 8004C488 | 531 | 0x10 | 7.22 | 0.84 | 507 | asm:func_8004BEBC/data:data_8004C410/asm:func_8004C498/asm:func_8004CA30 |
-| 8004CDB8 | 532 | 0x10 | 7.26 | 0.96 | 438 | asm:func_8004CA30/data:data_8004CD14/data:data_8004CD14/data:data_8004D250 |
-| 8004D6E8 | 533 | 0x10 | 7.34 | 1.00 | 503 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
-| 8004E018 | 534 | 0x10 | 7.29 | 1.00 | 493 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
-| 8004E948 | 535 | 0x10 | 7.14 | 1.00 | 499 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
-| 8004F278 | 536 | 0x10 | 7.26 | 1.00 | 506 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
-| 8004FBA8 | 537 | 0x10 | 7.23 | 1.00 | 508 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
-| 800504D8 | 544 | 0x10 | 7.30 | 1.00 | 505 | data:data_8004D250/data:data_8004D250/data:data_8004D250/asm:func_8005070C |
-| 80050E08 | 545 | 0x10 | 7.30 | 1.00 | 496 | asm:func_8005070C/data:data_80050D18/data:data_80050D18/data:data_80051568 |
-| 80051738 | 546 | 0x10 | 7.31 | 0.99 | 507 | data:data_80051568/data:data_80051568/data:data_80051568/data:data_80051568 |
-| 80052068 | 547 | 0x10 | 7.25 | 0.98 | 508 | data:data_80051568/data:data_80051568/data:data_80051568/data:data_80051568 |
-| 80052998 | 548 | 0x10 | 7.19 | 1.00 | 510 | data:data_80051568/data:data_80051568/data:data_80051568/asm:func_800529E0 |
-| 800532C8 | 549 | 0x10 | 7.25 | 1.00 | 507 | asm:func_800529E0/data:data_800531BC/data:data_800531BC/data:data_800531BC |
-| 80053BF8 | 550 | 0x10 | 7.33 | 1.00 | 508 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
-| 80054528 | 551 | 0x10 | 7.19 | 1.00 | 510 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
-| 80054E58 | 552 | 0x10 | 7.24 | 0.96 | 504 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
-| 80055788 | 553 | 0x10 | 7.25 | 0.95 | 507 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
-| 800560B8 | 560 | 0x10 | 7.16 | 0.99 | 511 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_80056424 |
-| 800569E8 | 561 | 0x10 | 7.18 | 1.00 | 508 | data:data_80056424/data:data_80056424/data:data_80056424/asm:func_80056D1C |
-| 80057318 | 562 | 0x10 | 7.27 | 1.00 | 511 | asm:func_80056D1C/data:data_80057280/data:data_80057280/asm:func_80057344 |
-| 80057C48 | 563 | 0x10 | 7.29 | 1.00 | 508 | asm:func_80057344/data:data_80057B54/data:data_80057B54/asm:func_80057F40 |
-| 80058578 | 564 | 0x10 | 7.20 | 1.00 | 512 | asm:func_80057F40/data:data_80058484/data:data_80058484/asm:func_800585F8 |
-| 80058EA8 | 565 | 0x10 | 7.27 | 0.96 | 510 | asm:func_800585F8/asm:func_800585F8/asm:func_800585F8/data:data_800595F8 |
-| 800597D8 | 566 | 0x10 | 7.12 | 0.95 | 510 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
-| 8005A108 | 567 | 0x10 | 7.17 | 0.93 | 486 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
-| 8005AA38 | 568 | 0x10 | 7.30 | 0.96 | 507 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
-| 8005B368 | 569 | 0x10 | 7.37 | 1.00 | 512 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
-| 8005BC98 | 576 | 0x10 | 7.21 | 0.99 | 510 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_8005C444 |
-| 8005C5C8 | 577 | 0x10 | 7.25 | 0.95 | 511 | data:data_8005C444/data:data_8005C444/asm:func_8005C5D0/data:data_8005CB98 |
-| 8005CEF8 | 578 | 0x10 | 7.25 | 0.95 | 506 | data:data_8005CB98/data:data_8005CB98/data:data_8005CB98/data:data_8005D340 |
-| 8005D828 | 579 | 0x10 | 7.27 | 0.94 | 508 | data:data_8005D340/asm:func_8005D7B0/asm:func_8005D830/data:data_8005DF38 |
-| 8005E158 | 580 | 0x10 | 7.27 | 0.98 | 510 | data:data_8005DF38/data:data_8005DF38/data:data_8005DF38/asm:func_8005E3E4 |
-| 8005EA88 | 581 | 0x10 | 7.26 | 0.96 | 506 | asm:func_8005E3E4/asm:func_8005EA4C/data:data_8005EA94/data:data_8005F0FC |
-| 8005F3B8 | 582 | 0x10 | 7.14 | 0.98 | 504 | data:data_8005F0FC/asm:func_8005F324/data:data_8005F3BC/data:data_8005FB88 |
-| 8005FCE8 | 583 | 0x10 | 7.19 | 0.98 | 510 | data:data_8005FB88/data:data_8005FB88/data:data_8005FB88/data:data_800603E0 |
-| 80060618 | 584 | 0x10 | 7.23 | 0.97 | 500 | data:data_800603E0/data:data_800603E0/data:data_800603E0/data:data_800607AC |
-| 80060F48 | 585 | 0x10 | 7.25 | 0.99 | 510 | data:data_800607AC/data:data_800607AC/data:data_800607AC/asm:func_800615C8 |
-| 80061878 | 592 | 0x10 | 7.21 | 0.99 | 504 | asm:func_800615C8/data:data_800617E8/data:data_800617E8/data:data_80061F24 |
-| 800621A8 | 593 | 0x10 | 7.28 | 1.00 | 511 | data:data_80061F24/data:data_80061F24/data:data_80061F24/data:data_80061F24 |
-| 80062AD8 | 594 | 0x10 | 7.24 | 1.00 | 512 | data:data_80061F24/data:data_80061F24/data:data_80061F24/asm:func_80062B08 |
-| 80063408 | 595 | 0x10 | 7.32 | 0.88 | 507 | asm:func_80062B08/data:data_80063328/data:data_80063328/data:data_80063644 |
-| 80063D38 | 596 | 0x10 | 7.23 | 0.95 | 499 | data:data_80063644/data:data_80063644/data:data_80063644/asm:func_80063FA4 |
-| 80064668 | 597 | 0x10 | 7.21 | 1.00 | 503 | asm:func_80063FA4/asm:func_80063FA4/data:data_80064670/data:data_80064670 |
-| 80064F98 | 598 | 0x10 | 7.35 | 1.00 | 507 | data:data_80064670/data:data_80064670/data:data_80064670/asm:func_800650F0 |
-| 800658C8 | 599 | 0x10 | 7.33 | 1.00 | 509 | asm:func_800650F0/data:data_80065870/data:data_80065870/data:data_80065870 |
-| 800661F8 | 600 | 0x10 | 7.26 | 1.00 | 507 | data:data_80065870/data:data_80065870/data:data_80065870/asm:func_80066294 |
-| 80066B28 | 601 | 0x10 | 7.33 | 1.00 | 506 | asm:func_80066294/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
-| 80067458 | 608 | 0x10 | 7.23 | 1.00 | 503 | data:data_80066A40/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
-| 80067D88 | 609 | 0x10 | 7.29 | 1.00 | 504 | data:data_80066A40/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
-| 800686B8 | 610 | 0x10 | 7.16 | 1.00 | 496 | data:data_80066A40/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
-| 80068FE8 | 611 | 0x10 | 7.24 | 1.00 | 505 | data:data_80066A40/data:data_80066A40/data:data_80066A40/asm:func_800695E4 |
-| 80069918 | 612 | 0x10 | 7.23 | 1.00 | 505 | asm:func_800695E4/data:data_80069834/data:data_80069834/data:data_800699C8 |
-| 8006A248 | 613 | 0x10 | 7.27 | 1.00 | 504 | data:data_800699C8/data:data_8006A21C/data:data_8006A21C/data:data_8006A21C |
-| 8006AB78 | 614 | 0x10 | 7.26 | 1.00 | 497 | data:data_8006A21C/data:data_8006A21C/data:data_8006A21C/data:data_8006B1E0 |
-| 8006B4A8 | 615 | 0x10 | 7.23 | 1.00 | 500 | data:data_8006B1E0/data:data_8006B3FC/data:data_8006B3FC/asm:func_8006B504 |
-| 8006BDD8 | 616 | 0x10 | 7.25 | 1.00 | 504 | asm:func_8006B504/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
-| 8006C708 | 617 | 0x10 | 7.26 | 1.00 | 509 | data:data_8006BD40/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
-| 8006D038 | 624 | 0x10 | 7.29 | 1.00 | 509 | data:data_8006BD40/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
-| 8006D968 | 625 | 0x10 | 7.23 | 1.00 | 508 | data:data_8006BD40/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
-| 8006E298 | 626 | 0x10 | 7.27 | 1.00 | 508 | data:data_8006BD40/asm:func_8006E250/data:data_8006E2A0/data:data_8006E2A0 |
-| 8006EBC8 | 627 | 0x10 | 7.28 | 1.00 | 510 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8006F4F8 | 628 | 0x10 | 7.19 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8006FE28 | 512 | 0x11 | 7.31 | 1.00 | 510 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80070758 | 513 | 0x11 | 7.23 | 1.00 | 509 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80071088 | 514 | 0x11 | 7.26 | 1.00 | 509 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 800719B8 | 515 | 0x11 | 7.18 | 1.00 | 508 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 800722E8 | 516 | 0x11 | 7.20 | 1.00 | 508 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80072C18 | 517 | 0x11 | 7.26 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80073548 | 518 | 0x11 | 7.19 | 1.00 | 506 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80073E78 | 519 | 0x11 | 7.15 | 1.00 | 500 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 800747A8 | 520 | 0x11 | 7.19 | 1.00 | 505 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 800750D8 | 521 | 0x11 | 7.21 | 1.00 | 508 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80075A08 | 528 | 0x11 | 7.23 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80076338 | 529 | 0x11 | 7.30 | 1.00 | 512 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80076C68 | 530 | 0x11 | 7.20 | 1.00 | 509 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80077598 | 531 | 0x11 | 7.24 | 1.00 | 506 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80077EC8 | 532 | 0x11 | 7.27 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 800787F8 | 533 | 0x11 | 7.23 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80079128 | 534 | 0x11 | 7.21 | 1.00 | 504 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 80079A58 | 535 | 0x11 | 7.28 | 1.00 | 494 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8007A388 | 536 | 0x11 | 7.26 | 1.00 | 496 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8007ACB8 | 537 | 0x11 | 7.24 | 0.92 | 383 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8007B5E8 | 544 | 0x11 | 7.25 | 0.66 | 248 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8007BF18 | 545 | 0x11 | 7.05 | 0.68 | 240 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8007C848 | 546 | 0x11 | 6.75 | 0.67 | 336 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
-| 8007D178 | 547 | 0x11 | 6.96 | 0.86 | 238 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8007D5DC |
-| 8007DAA8 | 548 | 0x11 | 7.12 | 0.91 | 201 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8007E3D8 | 549 | 0x11 | 7.09 | 0.89 | 213 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8007ED08 | 550 | 0x11 | 7.10 | 0.86 | 216 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8007F638 | 551 | 0x11 | 7.03 | 0.87 | 220 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8007FF68 | 552 | 0x11 | 7.19 | 0.93 | 177 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80080898 | 553 | 0x11 | 7.12 | 0.89 | 228 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800811C8 | 560 | 0x11 | 7.18 | 0.88 | 366 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80081AF8 | 561 | 0x11 | 7.16 | 0.71 | 453 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80082428 | 562 | 0x11 | 7.28 | 0.93 | 448 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80082D58 | 563 | 0x11 | 7.20 | 0.77 | 446 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80083688 | 564 | 0x11 | 7.24 | 0.62 | 485 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80083FB8 | 565 | 0x11 | 7.06 | 0.53 | 462 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800848E8 | 566 | 0x11 | 7.27 | 0.56 | 380 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80085218 | 567 | 0x11 | 7.26 | 0.53 | 393 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80085B48 | 568 | 0x11 | 7.21 | 0.58 | 383 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80086478 | 569 | 0x11 | 7.32 | 0.60 | 360 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80086DA8 | 576 | 0x11 | 7.30 | 0.59 | 382 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800876D8 | 577 | 0x11 | 7.31 | 0.58 | 381 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80088008 | 578 | 0x11 | 7.22 | 0.55 | 372 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80088938 | 579 | 0x11 | 7.32 | 0.55 | 380 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80089268 | 580 | 0x11 | 7.23 | 0.58 | 373 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80089B98 | 581 | 0x11 | 7.28 | 0.59 | 349 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008A4C8 | 582 | 0x11 | 7.24 | 0.63 | 317 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008ADF8 | 583 | 0x11 | 7.30 | 0.61 | 339 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008B728 | 584 | 0x11 | 7.23 | 0.61 | 377 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008C058 | 585 | 0x11 | 7.23 | 0.58 | 360 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008C988 | 592 | 0x11 | 7.22 | 0.64 | 352 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008D2B8 | 593 | 0x11 | 7.37 | 0.64 | 366 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008DBE8 | 594 | 0x11 | 7.31 | 0.57 | 358 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008E518 | 595 | 0x11 | 7.18 | 0.60 | 329 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008EE48 | 596 | 0x11 | 7.20 | 0.66 | 341 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8008F778 | 597 | 0x11 | 7.32 | 0.59 | 354 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800900A8 | 598 | 0x11 | 7.37 | 0.67 | 359 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800909D8 | 599 | 0x11 | 7.20 | 0.59 | 386 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80091308 | 600 | 0x11 | 7.22 | 0.56 | 392 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80091C38 | 601 | 0x11 | 7.31 | 0.61 | 375 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80092568 | 608 | 0x11 | 7.25 | 0.57 | 377 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80092E98 | 609 | 0x11 | 7.28 | 0.63 | 354 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800937C8 | 610 | 0x11 | 7.18 | 0.62 | 367 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800940F8 | 611 | 0x11 | 7.25 | 0.62 | 377 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80094A28 | 612 | 0x11 | 7.33 | 0.65 | 403 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80095358 | 613 | 0x11 | 7.21 | 0.51 | 410 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80095C88 | 614 | 0x11 | 7.23 | 0.53 | 373 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800965B8 | 615 | 0x11 | 7.30 | 0.56 | 384 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80096EE8 | 616 | 0x11 | 7.28 | 0.59 | 379 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80097818 | 617 | 0x11 | 7.27 | 0.60 | 372 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80098148 | 624 | 0x11 | 7.20 | 0.57 | 364 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80098A78 | 625 | 0x11 | 7.21 | 0.55 | 481 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800993A8 | 626 | 0x11 | 7.26 | 0.63 | 508 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 80099CD8 | 627 | 0x11 | 7.32 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009A608 | 628 | 0x11 | 7.34 | 0.71 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009AF38 | 512 | 0x12 | 7.27 | 0.71 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009B868 | 513 | 0x12 | 7.15 | 0.66 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009C198 | 514 | 0x12 | 7.29 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009CAC8 | 515 | 0x12 | 7.32 | 0.70 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009D3F8 | 516 | 0x12 | 7.20 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009DD28 | 517 | 0x12 | 7.31 | 0.66 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009E658 | 518 | 0x12 | 7.21 | 0.59 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009EF88 | 519 | 0x12 | 7.27 | 0.68 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 8009F8B8 | 520 | 0x12 | 7.27 | 0.65 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A01E8 | 521 | 0x12 | 7.27 | 0.71 | 510 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A0B18 | 528 | 0x12 | 7.25 | 0.68 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A1448 | 529 | 0x12 | 7.32 | 0.67 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A1D78 | 530 | 0x12 | 7.25 | 0.66 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A26A8 | 531 | 0x12 | 7.29 | 0.58 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A2FD8 | 532 | 0x12 | 7.23 | 0.64 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A3908 | 533 | 0x12 | 7.21 | 0.61 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A4238 | 534 | 0x12 | 7.30 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A4B68 | 535 | 0x12 | 7.32 | 0.60 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A5498 | 536 | 0x12 | 7.32 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A5DC8 | 537 | 0x12 | 7.15 | 0.59 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A66F8 | 544 | 0x12 | 7.10 | 0.45 | 505 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A7028 | 545 | 0x12 | 7.00 | 0.57 | 475 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A7958 | 546 | 0x12 | 7.03 | 0.81 | 499 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A8288 | 547 | 0x12 | 7.01 | 0.41 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A8BB8 | 548 | 0x12 | 7.16 | 0.55 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A94E8 | 549 | 0x12 | 7.04 | 0.80 | 507 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800A9E18 | 550 | 0x12 | 7.32 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AA748 | 551 | 0x12 | 7.31 | 0.39 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AB078 | 552 | 0x12 | 7.21 | 0.87 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AB9A8 | 553 | 0x12 | 6.75 | 1.00 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AC2D8 | 560 | 0x12 | 6.56 | 0.12 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800ACC08 | 561 | 0x12 | 6.53 | 0.37 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AD538 | 562 | 0x12 | 6.98 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800ADE68 | 563 | 0x12 | 6.86 | 0.93 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AE798 | 564 | 0x12 | 6.89 | 0.22 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AF0C8 | 565 | 0x12 | 6.92 | 0.32 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800AF9F8 | 566 | 0x12 | 6.98 | 0.01 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B0328 | 567 | 0x12 | 6.90 | 0.57 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B0C58 | 568 | 0x12 | 6.53 | 0.12 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B1588 | 569 | 0x12 | 6.57 | 0.16 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B1EB8 | 576 | 0x12 | 7.13 | 0.43 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B27E8 | 577 | 0x12 | 7.29 | 0.96 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B3118 | 578 | 0x12 | 7.19 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B3A48 | 579 | 0x12 | 6.85 | 0.58 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B4378 | 580 | 0x12 | 6.89 | 0.21 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B4CA8 | 581 | 0x12 | 6.86 | 0.00 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B55D8 | 582 | 0x12 | 6.71 | 0.76 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B5F08 | 583 | 0x12 | 6.87 | 0.49 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B6838 | 584 | 0x12 | 6.73 | 1.00 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B7168 | 585 | 0x12 | 6.88 | 1.00 | 68 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B7A98 | 592 | 0x12 | 6.80 | 1.00 | 336 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B83C8 | 593 | 0x12 | 1.36 | 0.67 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B8CF8 | 594 | 0x12 | 7.21 | 0.99 | n/a | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
-| 800B9628 | 595 | 0x12 | 7.32 | n/a | n/a | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 29:09:11 | 6.15 | 0.61 | 502 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 29:09:12 | 7.23 | 0.64 | 390 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 29:09:13 | 7.23 | 0.66 | 375 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021CA8 | 29:09:14 | 7.27 | 0.51 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800225D8 | 29:09:15 | 7.24 | 0.62 | 510 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80022F08 | 29:09:16 | 7.25 | 0.78 | 499 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_8002314C |
+| 80023838 | 29:09:17 | 7.24 | 1.00 | 496 | data:data_8002314C/data:data_800237C0/data:data_800237C0/asm:func_80023968 |
+| 80024168 | 29:09:18 | 7.25 | 1.00 | 493 | asm:func_80023968/data:data_80024084/data:data_80024084/data:data_80024084 |
+| 80024A98 | 29:09:19 | 7.23 | 1.00 | 484 | data:data_80024084/data:data_80024084/data:data_80024084/asm:func_80024B7C |
+| 800253C8 | 29:09:20 | 7.29 | 1.00 | 500 | asm:func_80024B7C/asm:func_80025398/data:data_800253D4/asm:func_80025494 |
+| 80025CF8 | 29:09:21 | 7.22 | 1.00 | 503 | asm:func_80025494/data:data_80025CF8/data:data_80025CF8/data:data_800261C4 |
+| 80026628 | 29:09:22 | 7.27 | 1.00 | 509 | data:data_800261C4/data:data_800261C4/data:data_800261C4/asm:func_80026714 |
+| 80026F58 | 29:09:23 | 7.24 | 1.00 | 509 | asm:func_80026714/data:data_80026E5C/data:data_80026E5C/asm:func_8002713C |
+| 80027888 | 29:09:24 | 7.22 | 1.00 | 493 | asm:func_8002713C/data:data_8002777C/data:data_8002777C/data:data_8002777C |
+| 800281B8 | 29:09:25 | 7.20 | 1.00 | 506 | data:data_8002777C/data:data_8002777C/asm:func_800281BC/data:data_8002830C |
+| 80028AE8 | 29:09:26 | 7.23 | 1.00 | 500 | data:data_8002830C/asm:func_80028ADC/data:data_80028AF4/asm:func_80028B1C |
+| 80029418 | 29:09:27 | 7.16 | 1.00 | 504 | asm:func_80028B1C/data:data_80029334/data:data_80029334/asm:func_80029750 |
+| 80029D48 | 29:09:28 | 7.27 | 1.00 | 505 | asm:func_80029750/data:data_80029D3C/asm:func_80029D5C/asm:func_80029D5C |
+| 8002A678 | 29:09:29 | 7.23 | 1.00 | 500 | data:data_8002A560/data:data_8002A560/data:data_8002A560/asm:func_8002A698 |
+| 8002AFA8 | 29:09:30 | 7.24 | 1.00 | 512 | asm:func_8002A698/asm:func_8002AFA4/data:data_8002AFB4/data:data_8002AFB4 |
+| 8002B8D8 | 29:09:31 | 7.13 | 1.00 | 487 | data:data_8002AFB4/data:data_8002AFB4/data:data_8002AFB4/asm:func_8002B924 |
+| 8002C208 | 29:09:32 | 7.25 | 1.00 | 503 | asm:func_8002B924/data:data_8002C1F4/data:data_8002C1F4/asm:func_8002C2A0 |
+| 8002CB38 | 29:09:33 | 7.15 | 1.00 | 507 | asm:func_8002C2A0/data:data_8002CAB0/data:data_8002CAB0/data:data_8002CAB0 |
+| 8002D468 | 29:09:34 | 7.16 | 1.00 | 504 | data:data_8002CAB0/asm:func_8002D41C/data:data_8002D470/asm:func_8002D4D4 |
+| 8002DD98 | 29:09:35 | 7.21 | 1.00 | 510 | asm:func_8002D4D4/data:data_8002DCA0/data:data_8002DCA0/asm:func_8002DE2C |
+| 8002E6C8 | 29:09:36 | 7.30 | 1.00 | 511 | asm:func_8002DE2C/data:data_8002E5F8/data:data_8002E5F8/asm:func_8002E854 |
+| 8002EFF8 | 29:09:37 | 7.30 | 1.00 | 511 | asm:func_8002E854/data:data_8002EF10/data:data_8002EF10/data:data_8002F198 |
+| 8002F928 | 29:09:38 | 7.26 | 1.00 | 512 | data:data_8002F198/data:data_8002F198/data:data_8002F198/data:data_8002FC20 |
+| 80030258 | 29:09:39 | 7.25 | 1.00 | 437 | data:data_8002FC20/data:data_8002FC20/data:data_8002FC20/asm:func_80030290 |
+| 80030B88 | 29:09:40 | 7.21 | 1.00 | 505 | asm:func_80030290/data:data_80030A88/asm:func_80030B8C/asm:func_80030B8C |
+| 800314B8 | 29:09:41 | 7.35 | 1.00 | 512 | asm:func_80030B8C/asm:func_8003146C/data:data_800314C4/data:data_80031794 |
+| 80031DE8 | 29:09:42 | 7.27 | 1.00 | 508 | data:data_80031794/asm:func_80031DD8/asm:func_80031DD8/asm:func_80031DD8 |
+| 80032718 | 29:09:43 | 7.22 | 1.00 | 508 | asm:func_80031DD8/data:data_80032620/data:data_80032620/data:data_80032ABC |
+| 80033048 | 29:09:44 | 7.24 | 1.00 | 509 | data:data_80032ABC/data:data_80032ABC/data:data_80032ABC/data:data_80032ABC |
+| 80033978 | 29:09:45 | 7.21 | 1.00 | 511 | data:data_80032ABC/data:data_80032ABC/data:data_80032ABC/asm:func_80033A30 |
+| 800342A8 | 29:09:46 | 7.33 | 1.00 | 501 | data:data_80034190/data:data_80034190/data:data_80034190/data:data_8003463C |
+| 80034BD8 | 29:09:47 | 7.31 | 1.00 | 495 | data:data_8003463C/data:data_80034BBC/data:data_80034BBC/data:data_80034BBC |
+| 80035508 | 29:09:48 | 7.29 | 1.00 | 483 | data:data_80034BBC/data:data_80034BBC/data:data_80034BBC/data:data_80034BBC |
+| 80035E38 | 29:09:49 | 7.25 | 1.00 | 496 | data:data_80034BBC/asm:func_80035DE0/data:data_80035E44/asm:func_80035E8C |
+| 80036768 | 29:09:50 | 7.13 | 1.00 | 511 | asm:func_80035E8C/data:data_80036708/asm:func_80036780/asm:func_800369B8 |
+| 80037098 | 29:09:51 | 7.26 | 1.00 | 504 | asm:func_800369B8/data:data_80037088/data:data_80037088/asm:func_800370E0 |
+| 800379C8 | 29:09:52 | 7.28 | 1.00 | 500 | asm:func_800370E0/data:data_800378C8/data:data_800378C8/data:data_80037ABC |
+| 800382F8 | 29:09:53 | 7.33 | 1.00 | 507 | data:data_80037ABC/data:data_80037ABC/data:data_80037ABC/data:data_800389E0 |
+| 80038C28 | 29:09:54 | 7.31 | 1.00 | 503 | data:data_800389E0/data:data_800389E0/data:data_800389E0/asm:func_80038C7C |
+| 80039558 | 29:09:55 | 7.22 | 1.00 | 503 | asm:func_80038C7C/data:data_800394D0/asm:func_80039564/asm:func_800398D8 |
+| 80039E88 | 29:09:56 | 7.30 | 1.00 | 498 | asm:func_800398D8/data:data_80039D80/data:data_80039D80/asm:func_80039EE8 |
+| 8003A7B8 | 29:09:57 | 7.24 | 1.00 | 497 | asm:func_80039EE8/data:data_8003A7A8/data:data_8003A7A8/asm:func_8003AB30 |
+| 8003B0E8 | 29:09:58 | 7.28 | 1.00 | 500 | asm:func_8003AB30/data:data_8003B00C/data:data_8003B00C/data:data_8003B8AC |
+| 8003BA18 | 29:09:59 | 7.33 | 1.00 | 508 | data:data_8003B8AC/data:data_8003B8AC/data:data_8003B8AC/data:data_8003B8AC |
+| 8003C348 | 29:09:60 | 7.17 | 1.00 | 502 | data:data_8003B8AC/data:data_8003B8AC/data:data_8003B8AC/asm:func_8003C3E4 |
+| 8003CC78 | 29:09:61 | 7.33 | 1.00 | 509 | asm:func_8003C3E4/data:data_8003CC34/data:data_8003CC34/data:data_8003CC34 |
+| 8003D5A8 | 29:09:62 | 7.32 | 1.00 | 508 | data:data_8003CC34/asm:func_8003D594/data:data_8003D5B0/data:data_8003D8C4 |
+| 8003DED8 | 29:09:63 | 7.22 | 1.00 | 506 | data:data_8003D8C4/data:data_8003D8C4/data:data_8003D8C4/data:data_8003D8C4 |
+| 8003E808 | 29:09:64 | 7.23 | 1.00 | 504 | data:data_8003D8C4/data:data_8003D8C4/data:data_8003D8C4/data:data_8003EB50 |
+| 8003F138 | 29:09:65 | 7.13 | 1.00 | 506 | data:data_8003EB50/data:data_8003EB50/data:data_8003EB50/asm:func_8003F8D4 |
+| 8003FA68 | 29:09:66 | 7.29 | 1.00 | 507 | asm:func_8003F8D4/data:data_8003FA54/data:data_8003FA54/asm:func_8003FAE8 |
+| 80040398 | 29:09:67 | 7.23 | 1.00 | 503 | asm:func_8003FAE8/data:data_8004028C/data:data_8004028C/data:data_8004028C |
+| 80040CC8 | 29:09:68 | 7.25 | 1.00 | 499 | data:data_8004028C/data:data_8004028C/data:data_8004028C/data:data_8004028C |
+| 800415F8 | 29:09:69 | 7.25 | 1.00 | 501 | data:data_8004028C/data:data_8004028C/data:data_8004028C/data:data_80041C80 |
+| 80041F28 | 29:09:70 | 7.21 | 1.00 | 488 | data:data_80041C80/data:data_80041C80/data:data_80041C80/data:data_80042478 |
+| 80042858 | 29:09:71 | 7.30 | 1.00 | 494 | data:data_80042478/data:data_80042478/data:data_80042478/asm:func_80042924 |
+| 80043188 | 29:09:72 | 7.18 | 1.00 | 490 | asm:func_80042924/data:data_8004317C/asm:func_80043190/data:data_80043554 |
+| 80043AB8 | 29:09:73 | 7.28 | 1.00 | 498 | data:data_80043554/asm:func_80043A10/asm:func_80043A10/asm:func_800440F4 |
+| 800443E8 | 29:09:74 | 7.18 | 1.00 | 486 | asm:func_800440F4/data:data_800443D8/data:data_800443D8/data:data_80044ACC |
+| 80044D18 | 29:10:00 | 7.26 | 1.00 | 493 | data:data_80044ACC/data:data_80044CA4/data:data_80044CA4/data:data_8004507C |
+| 80045648 | 29:10:01 | 7.19 | 1.00 | 503 | data:data_8004507C/data:data_8004507C/data:data_8004507C/data:data_80045D48 |
+| 80045F78 | 29:10:02 | 7.17 | 1.00 | 501 | data:data_80045D48/data:data_80045D48/data:data_80045D48/data:data_80045D48 |
+| 800468A8 | 29:10:03 | 7.22 | 1.00 | 500 | data:data_80045D48/data:data_80045D48/data:data_80045D48/data:data_80045D48 |
+| 800471D8 | 29:10:04 | 7.30 | 1.00 | 505 | data:data_80045D48/data:data_800471D8/data:data_800471D8/data:data_80047718 |
+| 80047B08 | 29:10:05 | 7.26 | 1.00 | 503 | data:data_80047718/data:data_80047718/data:data_80047718/data:data_80047718 |
+| 80048438 | 29:10:06 | 7.10 | 1.00 | 505 | data:data_80047718/data:data_80047718/data:data_80047718/data:data_80048930 |
+| 80048D68 | 29:10:07 | 7.19 | 1.00 | 511 | data:data_80048930/data:data_80048930/data:data_80048930/asm:func_80048D90 |
+| 80049698 | 29:10:08 | 7.22 | 1.00 | 508 | asm:func_80048D90/data:data_80049608/data:data_80049608/data:data_80049A48 |
+| 80049FC8 | 29:10:09 | 7.13 | 1.00 | 511 | data:data_80049A48/data:data_80049A48/asm:func_80049FE0/data:data_8004A7B8 |
+| 8004A8F8 | 29:10:10 | 7.17 | 0.99 | 510 | data:data_8004A7B8/data:data_8004A7B8/data:data_8004A7B8/data:data_8004A7B8 |
+| 8004B228 | 29:10:11 | 7.27 | 1.00 | 507 | data:data_8004A7B8/data:data_8004A7B8/data:data_8004A7B8/data:data_8004BA0C |
+| 8004BB58 | 29:10:12 | 7.20 | 0.94 | 499 | data:data_8004BA0C/data:data_8004BA0C/data:data_8004BA0C/asm:func_8004BEBC |
+| 8004C488 | 29:10:13 | 7.22 | 0.84 | 507 | asm:func_8004BEBC/data:data_8004C410/asm:func_8004C498/asm:func_8004CA30 |
+| 8004CDB8 | 29:10:14 | 7.26 | 0.96 | 438 | asm:func_8004CA30/data:data_8004CD14/data:data_8004CD14/data:data_8004D250 |
+| 8004D6E8 | 29:10:15 | 7.34 | 1.00 | 503 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
+| 8004E018 | 29:10:16 | 7.29 | 1.00 | 493 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
+| 8004E948 | 29:10:17 | 7.14 | 1.00 | 499 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
+| 8004F278 | 29:10:18 | 7.26 | 1.00 | 506 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
+| 8004FBA8 | 29:10:19 | 7.23 | 1.00 | 508 | data:data_8004D250/data:data_8004D250/data:data_8004D250/data:data_8004D250 |
+| 800504D8 | 29:10:20 | 7.30 | 1.00 | 505 | data:data_8004D250/data:data_8004D250/data:data_8004D250/asm:func_8005070C |
+| 80050E08 | 29:10:21 | 7.30 | 1.00 | 496 | asm:func_8005070C/data:data_80050D18/data:data_80050D18/data:data_80051568 |
+| 80051738 | 29:10:22 | 7.31 | 0.99 | 507 | data:data_80051568/data:data_80051568/data:data_80051568/data:data_80051568 |
+| 80052068 | 29:10:23 | 7.25 | 0.98 | 508 | data:data_80051568/data:data_80051568/data:data_80051568/data:data_80051568 |
+| 80052998 | 29:10:24 | 7.19 | 1.00 | 510 | data:data_80051568/data:data_80051568/data:data_80051568/asm:func_800529E0 |
+| 800532C8 | 29:10:25 | 7.25 | 1.00 | 507 | asm:func_800529E0/data:data_800531BC/data:data_800531BC/data:data_800531BC |
+| 80053BF8 | 29:10:26 | 7.33 | 1.00 | 508 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
+| 80054528 | 29:10:27 | 7.19 | 1.00 | 510 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
+| 80054E58 | 29:10:28 | 7.24 | 0.96 | 504 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
+| 80055788 | 29:10:29 | 7.25 | 0.95 | 507 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_800531BC |
+| 800560B8 | 29:10:30 | 7.16 | 0.99 | 511 | data:data_800531BC/data:data_800531BC/data:data_800531BC/data:data_80056424 |
+| 800569E8 | 29:10:31 | 7.18 | 1.00 | 508 | data:data_80056424/data:data_80056424/data:data_80056424/asm:func_80056D1C |
+| 80057318 | 29:10:32 | 7.27 | 1.00 | 511 | asm:func_80056D1C/data:data_80057280/data:data_80057280/asm:func_80057344 |
+| 80057C48 | 29:10:33 | 7.29 | 1.00 | 508 | asm:func_80057344/data:data_80057B54/data:data_80057B54/asm:func_80057F40 |
+| 80058578 | 29:10:34 | 7.20 | 1.00 | 512 | asm:func_80057F40/data:data_80058484/data:data_80058484/asm:func_800585F8 |
+| 80058EA8 | 29:10:35 | 7.27 | 0.96 | 510 | asm:func_800585F8/asm:func_800585F8/asm:func_800585F8/data:data_800595F8 |
+| 800597D8 | 29:10:36 | 7.12 | 0.95 | 510 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
+| 8005A108 | 29:10:37 | 7.17 | 0.93 | 486 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
+| 8005AA38 | 29:10:38 | 7.30 | 0.96 | 507 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
+| 8005B368 | 29:10:39 | 7.37 | 1.00 | 512 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_800595F8 |
+| 8005BC98 | 29:10:40 | 7.21 | 0.99 | 510 | data:data_800595F8/data:data_800595F8/data:data_800595F8/data:data_8005C444 |
+| 8005C5C8 | 29:10:41 | 7.25 | 0.95 | 511 | data:data_8005C444/data:data_8005C444/asm:func_8005C5D0/data:data_8005CB98 |
+| 8005CEF8 | 29:10:42 | 7.25 | 0.95 | 506 | data:data_8005CB98/data:data_8005CB98/data:data_8005CB98/data:data_8005D340 |
+| 8005D828 | 29:10:43 | 7.27 | 0.94 | 508 | data:data_8005D340/asm:func_8005D7B0/asm:func_8005D830/data:data_8005DF38 |
+| 8005E158 | 29:10:44 | 7.27 | 0.98 | 510 | data:data_8005DF38/data:data_8005DF38/data:data_8005DF38/asm:func_8005E3E4 |
+| 8005EA88 | 29:10:45 | 7.26 | 0.96 | 506 | asm:func_8005E3E4/asm:func_8005EA4C/data:data_8005EA94/data:data_8005F0FC |
+| 8005F3B8 | 29:10:46 | 7.14 | 0.98 | 504 | data:data_8005F0FC/asm:func_8005F324/data:data_8005F3BC/data:data_8005FB88 |
+| 8005FCE8 | 29:10:47 | 7.19 | 0.98 | 510 | data:data_8005FB88/data:data_8005FB88/data:data_8005FB88/data:data_800603E0 |
+| 80060618 | 29:10:48 | 7.23 | 0.97 | 500 | data:data_800603E0/data:data_800603E0/data:data_800603E0/data:data_800607AC |
+| 80060F48 | 29:10:49 | 7.25 | 0.99 | 510 | data:data_800607AC/data:data_800607AC/data:data_800607AC/asm:func_800615C8 |
+| 80061878 | 29:10:50 | 7.21 | 0.99 | 504 | asm:func_800615C8/data:data_800617E8/data:data_800617E8/data:data_80061F24 |
+| 800621A8 | 29:10:51 | 7.28 | 1.00 | 511 | data:data_80061F24/data:data_80061F24/data:data_80061F24/data:data_80061F24 |
+| 80062AD8 | 29:10:52 | 7.24 | 1.00 | 512 | data:data_80061F24/data:data_80061F24/data:data_80061F24/asm:func_80062B08 |
+| 80063408 | 29:10:53 | 7.32 | 0.88 | 507 | asm:func_80062B08/data:data_80063328/data:data_80063328/data:data_80063644 |
+| 80063D38 | 29:10:54 | 7.23 | 0.95 | 499 | data:data_80063644/data:data_80063644/data:data_80063644/asm:func_80063FA4 |
+| 80064668 | 29:10:55 | 7.21 | 1.00 | 503 | asm:func_80063FA4/asm:func_80063FA4/data:data_80064670/data:data_80064670 |
+| 80064F98 | 29:10:56 | 7.35 | 1.00 | 507 | data:data_80064670/data:data_80064670/data:data_80064670/asm:func_800650F0 |
+| 800658C8 | 29:10:57 | 7.33 | 1.00 | 509 | asm:func_800650F0/data:data_80065870/data:data_80065870/data:data_80065870 |
+| 800661F8 | 29:10:58 | 7.26 | 1.00 | 507 | data:data_80065870/data:data_80065870/data:data_80065870/asm:func_80066294 |
+| 80066B28 | 29:10:59 | 7.33 | 1.00 | 506 | asm:func_80066294/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
+| 80067458 | 29:10:60 | 7.23 | 1.00 | 503 | data:data_80066A40/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
+| 80067D88 | 29:10:61 | 7.29 | 1.00 | 504 | data:data_80066A40/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
+| 800686B8 | 29:10:62 | 7.16 | 1.00 | 496 | data:data_80066A40/data:data_80066A40/data:data_80066A40/data:data_80066A40 |
+| 80068FE8 | 29:10:63 | 7.24 | 1.00 | 505 | data:data_80066A40/data:data_80066A40/data:data_80066A40/asm:func_800695E4 |
+| 80069918 | 29:10:64 | 7.23 | 1.00 | 505 | asm:func_800695E4/data:data_80069834/data:data_80069834/data:data_800699C8 |
+| 8006A248 | 29:10:65 | 7.27 | 1.00 | 504 | data:data_800699C8/data:data_8006A21C/data:data_8006A21C/data:data_8006A21C |
+| 8006AB78 | 29:10:66 | 7.26 | 1.00 | 497 | data:data_8006A21C/data:data_8006A21C/data:data_8006A21C/data:data_8006B1E0 |
+| 8006B4A8 | 29:10:67 | 7.23 | 1.00 | 500 | data:data_8006B1E0/data:data_8006B3FC/data:data_8006B3FC/asm:func_8006B504 |
+| 8006BDD8 | 29:10:68 | 7.25 | 1.00 | 504 | asm:func_8006B504/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
+| 8006C708 | 29:10:69 | 7.26 | 1.00 | 509 | data:data_8006BD40/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
+| 8006D038 | 29:10:70 | 7.29 | 1.00 | 509 | data:data_8006BD40/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
+| 8006D968 | 29:10:71 | 7.23 | 1.00 | 508 | data:data_8006BD40/data:data_8006BD40/data:data_8006BD40/data:data_8006BD40 |
+| 8006E298 | 29:10:72 | 7.27 | 1.00 | 508 | data:data_8006BD40/asm:func_8006E250/data:data_8006E2A0/data:data_8006E2A0 |
+| 8006EBC8 | 29:10:73 | 7.28 | 1.00 | 510 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8006F4F8 | 29:10:74 | 7.19 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8006FE28 | 29:11:00 | 7.31 | 1.00 | 510 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80070758 | 29:11:01 | 7.23 | 1.00 | 509 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80071088 | 29:11:02 | 7.26 | 1.00 | 509 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 800719B8 | 29:11:03 | 7.18 | 1.00 | 508 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 800722E8 | 29:11:04 | 7.20 | 1.00 | 508 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80072C18 | 29:11:05 | 7.26 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80073548 | 29:11:06 | 7.19 | 1.00 | 506 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80073E78 | 29:11:07 | 7.15 | 1.00 | 500 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 800747A8 | 29:11:08 | 7.19 | 1.00 | 505 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 800750D8 | 29:11:09 | 7.21 | 1.00 | 508 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80075A08 | 29:11:10 | 7.23 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80076338 | 29:11:11 | 7.30 | 1.00 | 512 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80076C68 | 29:11:12 | 7.20 | 1.00 | 509 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80077598 | 29:11:13 | 7.24 | 1.00 | 506 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80077EC8 | 29:11:14 | 7.27 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 800787F8 | 29:11:15 | 7.23 | 1.00 | 507 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80079128 | 29:11:16 | 7.21 | 1.00 | 504 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 80079A58 | 29:11:17 | 7.28 | 1.00 | 494 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8007A388 | 29:11:18 | 7.26 | 1.00 | 496 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8007ACB8 | 29:11:19 | 7.24 | 0.92 | 383 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8007B5E8 | 29:11:20 | 7.25 | 0.66 | 248 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8007BF18 | 29:11:21 | 7.05 | 0.68 | 240 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8007C848 | 29:11:22 | 6.75 | 0.67 | 336 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0 |
+| 8007D178 | 29:11:23 | 6.96 | 0.86 | 238 | data:data_8006E2A0/data:data_8006E2A0/data:data_8006E2A0/data:data_8007D5DC |
+| 8007DAA8 | 29:11:24 | 7.12 | 0.91 | 201 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8007E3D8 | 29:11:25 | 7.09 | 0.89 | 213 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8007ED08 | 29:11:26 | 7.10 | 0.86 | 216 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8007F638 | 29:11:27 | 7.03 | 0.87 | 220 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8007FF68 | 29:11:28 | 7.19 | 0.93 | 177 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80080898 | 29:11:29 | 7.12 | 0.89 | 228 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800811C8 | 29:11:30 | 7.18 | 0.88 | 366 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80081AF8 | 29:11:31 | 7.16 | 0.71 | 453 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80082428 | 29:11:32 | 7.28 | 0.93 | 448 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80082D58 | 29:11:33 | 7.20 | 0.77 | 446 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80083688 | 29:11:34 | 7.24 | 0.62 | 485 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80083FB8 | 29:11:35 | 7.06 | 0.53 | 462 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800848E8 | 29:11:36 | 7.27 | 0.56 | 380 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80085218 | 29:11:37 | 7.26 | 0.53 | 393 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80085B48 | 29:11:38 | 7.21 | 0.58 | 383 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80086478 | 29:11:39 | 7.32 | 0.60 | 360 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80086DA8 | 29:11:40 | 7.30 | 0.59 | 382 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800876D8 | 29:11:41 | 7.31 | 0.58 | 381 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80088008 | 29:11:42 | 7.22 | 0.55 | 372 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80088938 | 29:11:43 | 7.32 | 0.55 | 380 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80089268 | 29:11:44 | 7.23 | 0.58 | 373 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80089B98 | 29:11:45 | 7.28 | 0.59 | 349 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008A4C8 | 29:11:46 | 7.24 | 0.63 | 317 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008ADF8 | 29:11:47 | 7.30 | 0.61 | 339 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008B728 | 29:11:48 | 7.23 | 0.61 | 377 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008C058 | 29:11:49 | 7.23 | 0.58 | 360 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008C988 | 29:11:50 | 7.22 | 0.64 | 352 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008D2B8 | 29:11:51 | 7.37 | 0.64 | 366 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008DBE8 | 29:11:52 | 7.31 | 0.57 | 358 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008E518 | 29:11:53 | 7.18 | 0.60 | 329 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008EE48 | 29:11:54 | 7.20 | 0.66 | 341 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8008F778 | 29:11:55 | 7.32 | 0.59 | 354 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800900A8 | 29:11:56 | 7.37 | 0.67 | 359 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800909D8 | 29:11:57 | 7.20 | 0.59 | 386 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80091308 | 29:11:58 | 7.22 | 0.56 | 392 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80091C38 | 29:11:59 | 7.31 | 0.61 | 375 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80092568 | 29:11:60 | 7.25 | 0.57 | 377 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80092E98 | 29:11:61 | 7.28 | 0.63 | 354 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800937C8 | 29:11:62 | 7.18 | 0.62 | 367 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800940F8 | 29:11:63 | 7.25 | 0.62 | 377 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80094A28 | 29:11:64 | 7.33 | 0.65 | 403 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80095358 | 29:11:65 | 7.21 | 0.51 | 410 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80095C88 | 29:11:66 | 7.23 | 0.53 | 373 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800965B8 | 29:11:67 | 7.30 | 0.56 | 384 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80096EE8 | 29:11:68 | 7.28 | 0.59 | 379 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80097818 | 29:11:69 | 7.27 | 0.60 | 372 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80098148 | 29:11:70 | 7.20 | 0.57 | 364 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80098A78 | 29:11:71 | 7.21 | 0.55 | 481 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800993A8 | 29:11:72 | 7.26 | 0.63 | 508 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 80099CD8 | 29:11:73 | 7.32 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009A608 | 29:11:74 | 7.34 | 0.71 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009AF38 | 29:12:00 | 7.27 | 0.71 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009B868 | 29:12:01 | 7.15 | 0.66 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009C198 | 29:12:02 | 7.29 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009CAC8 | 29:12:03 | 7.32 | 0.70 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009D3F8 | 29:12:04 | 7.20 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009DD28 | 29:12:05 | 7.31 | 0.66 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009E658 | 29:12:06 | 7.21 | 0.59 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009EF88 | 29:12:07 | 7.27 | 0.68 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 8009F8B8 | 29:12:08 | 7.27 | 0.65 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A01E8 | 29:12:09 | 7.27 | 0.71 | 510 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A0B18 | 29:12:10 | 7.25 | 0.68 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A1448 | 29:12:11 | 7.32 | 0.67 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A1D78 | 29:12:12 | 7.25 | 0.66 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A26A8 | 29:12:13 | 7.29 | 0.58 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A2FD8 | 29:12:14 | 7.23 | 0.64 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A3908 | 29:12:15 | 7.21 | 0.61 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A4238 | 29:12:16 | 7.30 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A4B68 | 29:12:17 | 7.32 | 0.60 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A5498 | 29:12:18 | 7.32 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A5DC8 | 29:12:19 | 7.15 | 0.59 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A66F8 | 29:12:20 | 7.10 | 0.45 | 505 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A7028 | 29:12:21 | 7.00 | 0.57 | 475 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A7958 | 29:12:22 | 7.03 | 0.81 | 499 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A8288 | 29:12:23 | 7.01 | 0.41 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A8BB8 | 29:12:24 | 7.16 | 0.55 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A94E8 | 29:12:25 | 7.04 | 0.80 | 507 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800A9E18 | 29:12:26 | 7.32 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AA748 | 29:12:27 | 7.31 | 0.39 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AB078 | 29:12:28 | 7.21 | 0.87 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AB9A8 | 29:12:29 | 6.75 | 1.00 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AC2D8 | 29:12:30 | 6.56 | 0.12 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800ACC08 | 29:12:31 | 6.53 | 0.37 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AD538 | 29:12:32 | 6.98 | 0.69 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800ADE68 | 29:12:33 | 6.86 | 0.93 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AE798 | 29:12:34 | 6.89 | 0.22 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AF0C8 | 29:12:35 | 6.92 | 0.32 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800AF9F8 | 29:12:36 | 6.98 | 0.01 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B0328 | 29:12:37 | 6.90 | 0.57 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B0C58 | 29:12:38 | 6.53 | 0.12 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B1588 | 29:12:39 | 6.57 | 0.16 | 511 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B1EB8 | 29:12:40 | 7.13 | 0.43 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B27E8 | 29:12:41 | 7.29 | 0.96 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B3118 | 29:12:42 | 7.19 | 0.65 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B3A48 | 29:12:43 | 6.85 | 0.58 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B4378 | 29:12:44 | 6.89 | 0.21 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B4CA8 | 29:12:45 | 6.86 | 0.00 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B55D8 | 29:12:46 | 6.71 | 0.76 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B5F08 | 29:12:47 | 6.87 | 0.49 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B6838 | 29:12:48 | 6.73 | 1.00 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B7168 | 29:12:49 | 6.88 | 1.00 | 68 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B7A98 | 29:12:50 | 6.80 | 1.00 | 336 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B83C8 | 29:12:51 | 1.36 | 0.67 | 512 | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B8CF8 | 29:12:52 | 7.21 | 0.99 | n/a | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC |
+| 800B9628 | 29:12:53 | 7.32 | n/a | n/a | data:data_8007D5DC/data:data_8007D5DC/data:data_8007D5DC/? |
 
 ## g3org_jp
 
-267 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+267 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 518 | 0x06 | 6.14 | 0.62 | 502 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 519 | 0x06 | 7.23 | 0.63 | 390 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 520 | 0x06 | 7.27 | 0.67 | 375 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021CA8 | 521 | 0x06 | 7.33 | 0.51 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800225D8 | 528 | 0x06 | 7.19 | 0.63 | 510 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80022F08 | 529 | 0x06 | 7.20 | 0.79 | 499 | data:data_80020000/data:data_80022E10/data:data_80022E10/asm:func_8002332C |
-| 80023838 | 530 | 0x06 | 7.21 | 1.00 | 496 | asm:func_8002332C/data:data_80023738/data:data_80023738/asm:func_80023950 |
-| 80024168 | 531 | 0x06 | 7.26 | 1.00 | 493 | asm:func_80023950/data:data_8002406C/data:data_8002406C/data:data_8002406C |
-| 80024A98 | 532 | 0x06 | 7.22 | 1.00 | 484 | data:data_8002406C/data:data_8002406C/data:data_8002406C/data:data_8002406C |
-| 800253C8 | 533 | 0x06 | 7.26 | 1.00 | 500 | data:data_8002406C/asm:func_80025380/data:data_800253D4/asm:func_8002547C |
-| 80025CF8 | 534 | 0x06 | 7.23 | 1.00 | 503 | asm:func_8002547C/data:data_80025C58/data:data_80025C58/asm:func_80026028 |
-| 80026628 | 535 | 0x06 | 7.22 | 1.00 | 509 | asm:func_80026028/asm:func_800265D8/data:data_80026630/asm:func_80026704 |
-| 80026F58 | 536 | 0x06 | 7.24 | 1.00 | 509 | asm:func_80026704/asm:func_80026E9C/data:data_80026F60/data:data_80026F60 |
-| 80027888 | 537 | 0x06 | 7.28 | 1.00 | 493 | data:data_80026F60/data:data_80026F60/data:data_80026F60/asm:func_80027964 |
-| 800281B8 | 544 | 0x06 | 7.26 | 1.00 | 506 | asm:func_80027964/data:data_8002813C/data:data_8002813C/data:data_8002813C |
-| 80028AE8 | 545 | 0x06 | 7.26 | 1.00 | 500 | data:data_8002813C/data:data_8002813C/data:data_8002813C/asm:func_80028B0C |
-| 80029418 | 546 | 0x06 | 7.24 | 1.00 | 504 | asm:func_80028B0C/data:data_80029378/data:data_80029378/data:data_80029378 |
-| 80029D48 | 547 | 0x06 | 7.27 | 1.00 | 505 | data:data_80029378/data:data_80029378/data:data_80029378/data:data_80029378 |
-| 8002A678 | 548 | 0x06 | 7.36 | 1.00 | 500 | data:data_80029378/asm:func_8002A61C/data:data_8002A684/asm:func_8002A6E4 |
-| 8002AFA8 | 549 | 0x06 | 7.20 | 1.00 | 512 | asm:func_8002A6E4/asm:func_8002AF14/data:data_8002AFB0/asm:func_8002B1B0 |
-| 8002B8D8 | 550 | 0x06 | 7.24 | 1.00 | 487 | asm:func_8002B1B0/data:data_8002B7FC/data:data_8002B7FC/data:data_8002BEAC |
-| 8002C208 | 551 | 0x06 | 7.21 | 1.00 | 503 | data:data_8002BEAC/asm:func_8002C194/data:data_8002C214/data:data_8002C214 |
-| 8002CB38 | 552 | 0x06 | 7.25 | 1.00 | 507 | data:data_8002C214/data:data_8002C214/data:data_8002C214/asm:func_8002CBE4 |
-| 8002D468 | 553 | 0x06 | 7.26 | 1.00 | 504 | asm:func_8002CBE4/data:data_8002D41C/data:data_8002D41C/asm:func_8002D788 |
-| 8002DD98 | 560 | 0x06 | 7.22 | 1.00 | 510 | asm:func_8002D788/data:data_8002DCB8/data:data_8002DCB8/asm:func_8002DDF0 |
-| 8002E6C8 | 561 | 0x06 | 7.23 | 1.00 | 511 | asm:func_8002DDF0/asm:func_8002E6A8/data:data_8002E6D4/asm:func_8002EAD4 |
-| 8002EFF8 | 562 | 0x06 | 7.33 | 1.00 | 511 | asm:func_8002EAD4/asm:func_8002EFC0/data:data_8002F000/data:data_8002F410 |
-| 8002F928 | 563 | 0x06 | 7.18 | 1.00 | 512 | data:data_8002F410/asm:func_8002F924/data:data_8002F930/asm:func_8002FE9C |
-| 80030258 | 564 | 0x06 | 7.23 | 1.00 | 437 | asm:func_8002FE9C/data:data_8003018C/data:data_8003018C/asm:func_80030290 |
-| 80030B88 | 565 | 0x06 | 7.20 | 1.00 | 505 | asm:func_80030290/data:data_80030A94/data:data_80030A94/data:data_80030A94 |
-| 800314B8 | 566 | 0x06 | 7.24 | 1.00 | 512 | data:data_80030A94/data:data_80030A94/data:data_80030A94/asm:func_80031564 |
-| 80031DE8 | 567 | 0x06 | 7.28 | 1.00 | 508 | asm:func_80031564/data:data_80031D30/data:data_80031D30/data:data_80031D30 |
-| 80032718 | 568 | 0x06 | 7.23 | 1.00 | 508 | data:data_80031D30/data:data_80031D30/data:data_80031D30/data:data_80032D88 |
-| 80033048 | 569 | 0x06 | 7.27 | 1.00 | 509 | data:data_80032D88/data:data_80032D88/asm:func_80033054/asm:func_800332C8 |
-| 80033978 | 576 | 0x06 | 7.23 | 1.00 | 511 | asm:func_800332C8/data:data_8003386C/data:data_8003386C/data:data_80033B40 |
-| 800342A8 | 577 | 0x06 | 7.19 | 1.00 | 501 | data:data_80033B40/data:data_8003425C/asm:func_800342B8/asm:func_80034590 |
-| 80034BD8 | 578 | 0x06 | 7.32 | 1.00 | 495 | asm:func_80034590/data:data_80034B2C/data:data_80034B2C/data:data_80034B2C |
-| 80035508 | 579 | 0x06 | 7.28 | 1.00 | 483 | data:data_80034B2C/data:data_80034B2C/data:data_80034B2C/asm:func_80035904 |
-| 80035E38 | 580 | 0x06 | 7.26 | 1.00 | 496 | asm:func_80035904/data:data_80035D6C/data:data_80035D6C/asm:func_80035E74 |
-| 80036768 | 581 | 0x06 | 7.21 | 1.00 | 511 | asm:func_80035E74/data:data_8003666C/data:data_8003666C/asm:func_80036D98 |
-| 80037098 | 582 | 0x06 | 7.26 | 1.00 | 504 | asm:func_80036D98/data:data_80036FD4/data:data_80036FD4/data:data_80036FD4 |
-| 800379C8 | 583 | 0x06 | 7.24 | 1.00 | 500 | data:data_80036FD4/asm:func_800379BC/asm:func_800379BC/data:data_80037E9C |
-| 800382F8 | 584 | 0x06 | 7.26 | 1.00 | 507 | data:data_80037E9C/data:data_80037E9C/data:data_80037E9C/asm:func_80038934 |
-| 80038C28 | 585 | 0x06 | 7.24 | 1.00 | 503 | asm:func_80038934/data:data_80038B80/asm:func_80038C34/asm:func_80038C34 |
-| 80039558 | 592 | 0x06 | 7.19 | 1.00 | 503 | asm:func_80038C34/data:data_80039550/data:data_80039550/asm:func_800398A0 |
-| 80039E88 | 593 | 0x06 | 7.24 | 1.00 | 498 | asm:func_800398A0/data:data_80039DA8/data:data_80039DA8/data:data_8003A2C4 |
-| 8003A7B8 | 594 | 0x06 | 7.22 | 1.00 | 497 | data:data_8003A2C4/data:data_8003A2C4/data:data_8003A2C4/data:data_8003A2C4 |
-| 8003B0E8 | 595 | 0x06 | 7.27 | 1.00 | 500 | data:data_8003A2C4/data:data_8003A2C4/data:data_8003A2C4/asm:func_8003B170 |
-| 8003BA18 | 596 | 0x06 | 7.23 | 1.00 | 508 | asm:func_8003B170/data:data_8003B930/data:data_8003B930/asm:func_8003BA48 |
-| 8003C348 | 597 | 0x06 | 7.19 | 1.00 | 502 | asm:func_8003BA48/asm:func_8003BA48/asm:func_8003BA48/asm:func_8003BA48 |
-| 8003CC78 | 598 | 0x06 | 7.25 | 1.00 | 509 | asm:func_8003BA48/data:data_8003CB70/asm:func_8003CC88/data:data_8003D0D4 |
-| 8003D5A8 | 599 | 0x06 | 7.28 | 1.00 | 508 | data:data_8003D0D4/asm:func_8003D56C/data:data_8003D5B4/data:data_8003DCA4 |
-| 8003DED8 | 600 | 0x06 | 7.29 | 1.00 | 506 | data:data_8003DCA4/data:data_8003DCA4/data:data_8003DCA4/asm:func_8003DF54 |
-| 8003E808 | 601 | 0x06 | 7.25 | 1.00 | 504 | asm:func_8003DF54/data:data_8003E6FC/asm:func_8003E814/data:data_8003EF30 |
-| 8003F138 | 608 | 0x06 | 7.31 | 1.00 | 506 | data:data_8003EF30/data:data_8003F0EC/data:data_8003F0EC/asm:func_8003F170 |
-| 8003FA68 | 609 | 0x06 | 7.21 | 1.00 | 507 | asm:func_8003F170/data:data_8003F96C/data:data_8003F96C/data:data_8003F96C |
-| 80040398 | 610 | 0x06 | 7.18 | 1.00 | 503 | data:data_8003F96C/data:data_8003F96C/asm:func_800403A4/asm:func_800403A4 |
-| 80040CC8 | 611 | 0x06 | 7.25 | 1.00 | 499 | asm:func_800403A4/data:data_80040BBC/data:data_80040BBC/data:data_800410DC |
-| 800415F8 | 612 | 0x06 | 7.22 | 1.00 | 501 | data:data_800410DC/data:data_800410DC/data:data_800410DC/data:data_800410DC |
-| 80041F28 | 613 | 0x06 | 7.25 | 1.00 | 488 | data:data_800410DC/asm:func_80041F08/data:data_80041F34/data:data_800425F4 |
-| 80042858 | 614 | 0x06 | 7.18 | 1.00 | 494 | data:data_800425F4/data:data_800425F4/asm:func_80042864/asm:func_80042864 |
-| 80043188 | 615 | 0x06 | 7.27 | 1.00 | 490 | asm:func_80042864/data:data_8004312C/asm:func_80043194/data:data_80043934 |
-| 80043AB8 | 616 | 0x06 | 7.20 | 1.00 | 498 | data:data_80043934/data:data_80043934/data:data_80043934/data:data_800440BC |
-| 800443E8 | 617 | 0x06 | 7.27 | 1.00 | 486 | data:data_800440BC/asm:func_8004438C/data:data_800443F4/asm:func_80044AC0 |
-| 80044D18 | 624 | 0x06 | 7.24 | 1.00 | 493 | asm:func_80044AC0/asm:func_80044CF4/data:data_80044D24/asm:func_80044DC4 |
-| 80045648 | 625 | 0x06 | 7.23 | 1.00 | 503 | asm:func_80044DC4/data:data_80045580/data:data_80045580/data:data_80045580 |
-| 80045F78 | 626 | 0x06 | 7.27 | 1.00 | 501 | data:data_80045580/data:data_80045580/data:data_80045580/data:data_80046458 |
-| 800468A8 | 627 | 0x06 | 7.27 | 1.00 | 500 | data:data_80046458/data:data_80046458/data:data_80046458/asm:func_80046AA0 |
-| 800471D8 | 628 | 0x06 | 7.24 | 1.00 | 505 | asm:func_80046AA0/data:data_80047100/data:data_80047100/asm:func_800478E8 |
-| 80047B08 | 512 | 0x07 | 7.18 | 1.00 | 503 | asm:func_800478E8/asm:func_80047AB4/asm:func_80047B14/asm:func_80047C30 |
-| 80048438 | 513 | 0x07 | 7.21 | 1.00 | 505 | asm:func_80047C30/data:data_80048368/asm:func_8004844C/asm:func_8004844C |
-| 80048D68 | 514 | 0x07 | 7.31 | 1.00 | 511 | asm:func_8004844C/data:data_80048CA0/asm:func_80048D78/data:data_80048E88 |
-| 80049698 | 515 | 0x07 | 7.14 | 1.00 | 508 | data:data_80048E88/data:data_80048E88/data:data_80048E88/data:data_800497B4 |
-| 80049FC8 | 516 | 0x07 | 7.25 | 1.00 | 511 | data:data_800497B4/data:data_800497B4/data:data_800497B4/data:data_800497B4 |
-| 8004A8F8 | 517 | 0x07 | 7.27 | 0.99 | 510 | data:data_800497B4/data:data_800497B4/data:data_800497B4/data:data_8004ACC8 |
-| 8004B228 | 518 | 0x07 | 7.31 | 1.00 | 507 | data:data_8004ACC8/data:data_8004ACC8/data:data_8004ACC8/data:data_8004ACC8 |
-| 8004BB58 | 519 | 0x07 | 7.23 | 1.00 | 499 | data:data_8004ACC8/data:data_8004ACC8/asm:func_8004BB6C/data:data_8004C30C |
-| 8004C488 | 520 | 0x07 | 7.24 | 0.92 | 507 | data:data_8004C30C/data:data_8004C488/data:data_8004C488/data:data_8004C5DC |
-| 8004CDB8 | 521 | 0x07 | 7.25 | 0.84 | 438 | data:data_8004C5DC/data:data_8004C5DC/asm:func_8004CDC8/asm:func_8004D13C |
-| 8004D6E8 | 528 | 0x07 | 7.23 | 0.99 | 503 | data:data_8004D5D0/data:data_8004D6BC/data:data_8004D6BC/data:data_8004D9B0 |
-| 8004E018 | 529 | 0x07 | 7.27 | 1.00 | 493 | data:data_8004D9B0/data:data_8004D9B0/data:data_8004D9B0/asm:func_8004E26C |
-| 8004E948 | 530 | 0x07 | 7.31 | 1.00 | 499 | asm:func_8004E26C/data:data_8004E844/data:data_8004E844/data:data_8004E844 |
-| 8004F278 | 531 | 0x07 | 7.34 | 1.00 | 506 | data:data_8004E844/data:data_8004E844/data:data_8004E844/asm:func_8004F2B0 |
-| 8004FBA8 | 532 | 0x07 | 7.24 | 1.00 | 508 | asm:func_8004F2B0/data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8 |
-| 800504D8 | 533 | 0x07 | 7.27 | 1.00 | 505 | data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8 |
-| 80050E08 | 534 | 0x07 | 7.24 | 1.00 | 496 | data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8 |
-| 80051738 | 535 | 0x07 | 7.20 | 1.00 | 507 | data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8/data:data_80051D80 |
-| 80052068 | 536 | 0x07 | 7.31 | 0.97 | 508 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 80052998 | 537 | 0x07 | 7.30 | 1.00 | 510 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 800532C8 | 544 | 0x07 | 7.24 | 1.00 | 507 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 80053BF8 | 545 | 0x07 | 7.25 | 1.00 | 508 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 80054528 | 546 | 0x07 | 7.23 | 1.00 | 510 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 80054E58 | 547 | 0x07 | 7.26 | 1.00 | 504 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 80055788 | 548 | 0x07 | 7.18 | 0.94 | 507 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 800560B8 | 549 | 0x07 | 7.24 | 0.96 | 511 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
-| 800569E8 | 550 | 0x07 | 7.24 | 1.00 | 508 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80056C38 |
-| 80057318 | 551 | 0x07 | 7.21 | 1.00 | 511 | data:data_80056C38/data:data_80056C38/asm:func_80057320/asm:func_80057320 |
-| 80057C48 | 552 | 0x07 | 7.28 | 1.00 | 508 | asm:func_80057320/data:data_80057B3C/data:data_80057B3C/asm:func_80057D68 |
-| 80058578 | 553 | 0x07 | 7.35 | 1.00 | 512 | asm:func_80057D68/data:data_8005847C/data:data_8005847C/data:data_8005847C |
-| 80058EA8 | 560 | 0x07 | 7.18 | 1.00 | 510 | data:data_8005847C/data:data_8005847C/data:data_8005847C/asm:func_80058FB4 |
-| 800597D8 | 561 | 0x07 | 7.22 | 0.95 | 510 | asm:func_80058FB4/data:data_800596E4/data:data_800596E4/data:data_80059CC0 |
-| 8005A108 | 562 | 0x07 | 7.29 | 0.93 | 486 | data:data_80059CC0/data:data_80059CC0/data:data_80059CC0/data:data_80059CC0 |
-| 8005AA38 | 563 | 0x07 | 7.27 | 0.93 | 507 | data:data_80059CC0/data:data_80059CC0/data:data_80059CC0/asm:func_8005B22C |
-| 8005B368 | 564 | 0x07 | 7.33 | 0.99 | 512 | asm:func_8005B22C/data:data_8005B278/data:data_8005B278/data:data_8005B44C |
-| 8005BC98 | 565 | 0x07 | 7.12 | 1.00 | 510 | data:data_8005B44C/asm:func_8005BC60/data:data_8005BCA0/data:data_8005BCA0 |
-| 8005C5C8 | 566 | 0x07 | 7.26 | 0.98 | 511 | data:data_8005BCA0/data:data_8005BCA0/data:data_8005BCA0/data:data_8005BCA0 |
-| 8005CEF8 | 567 | 0x07 | 7.30 | 0.95 | 506 | data:data_8005BCA0/data:data_8005BCA0/data:data_8005BCA0/data:data_8005D2CC |
-| 8005D828 | 568 | 0x07 | 7.30 | 0.94 | 508 | data:data_8005D2CC/data:data_8005D2CC/data:data_8005D2CC/data:data_8005DA74 |
-| 8005E158 | 569 | 0x07 | 7.27 | 0.94 | 510 | data:data_8005DA74/data:data_8005DA74/asm:func_8005E170/data:data_8005E878 |
-| 8005EA88 | 576 | 0x07 | 7.22 | 1.00 | 506 | data:data_8005E878/data:data_8005E878/data:data_8005E878/asm:func_8005EAE4 |
-| 8005F3B8 | 577 | 0x07 | 7.30 | 0.95 | 504 | asm:func_8005EAE4/data:data_8005F2F4/data:data_8005F2F4/data:data_8005FB74 |
-| 8005FCE8 | 578 | 0x07 | 7.17 | 0.98 | 510 | data:data_8005FB74/data:data_8005FB74/data:data_8005FB74/data:data_800602BC |
-| 80060618 | 579 | 0x07 | 7.22 | 0.98 | 500 | data:data_800602BC/data:data_800602BC/data:data_800602BC/data:data_80060DB8 |
-| 80060F48 | 580 | 0x07 | 7.27 | 0.97 | 510 | data:data_80060DB8/data:data_80060DB8/data:data_80060DB8/data:data_80061680 |
-| 80061878 | 581 | 0x07 | 7.28 | 0.99 | 504 | data:data_80061680/data:data_80061680/data:data_80061680/data:data_80061C44 |
-| 800621A8 | 582 | 0x07 | 7.29 | 1.00 | 511 | data:data_80061C44/data:data_80061C44/data:data_80061C44/asm:func_80062670 |
-| 80062AD8 | 583 | 0x07 | 7.25 | 1.00 | 512 | asm:func_80062670/data:data_800629D0/data:data_800629D0/data:data_800629D0 |
-| 80063408 | 584 | 0x07 | 7.28 | 0.98 | 507 | data:data_800629D0/data:data_800629D0/data:data_800629D0/data:data_80063AC4 |
-| 80063D38 | 585 | 0x07 | 7.23 | 0.99 | 499 | data:data_80063AC4/data:data_80063AC4/data:data_80063AC4/data:data_80063F34 |
-| 80064668 | 592 | 0x07 | 7.20 | 1.00 | 503 | data:data_80063F34/data:data_80063F34/data:data_80063F34/asm:func_80064780 |
-| 80064F98 | 593 | 0x07 | 7.06 | 1.00 | 507 | asm:func_80064780/asm:func_80064F90/data:data_80064FA4/data:data_80064FA4 |
-| 800658C8 | 594 | 0x07 | 7.17 | 1.00 | 509 | data:data_80064FA4/data:data_80064FA4/data:data_80064FA4/asm:func_800658E8 |
-| 800661F8 | 595 | 0x07 | 7.20 | 1.00 | 507 | asm:func_800658E8/data:data_8006610C/data:data_8006610C/data:data_8006610C |
-| 80066B28 | 596 | 0x07 | 7.25 | 1.00 | 506 | data:data_8006610C/data:data_8006610C/data:data_8006610C/data:data_8006610C |
-| 80067458 | 597 | 0x07 | 7.13 | 1.00 | 503 | data:data_8006610C/asm:func_8006741C/data:data_80067464/data:data_80067464 |
-| 80067D88 | 598 | 0x07 | 7.23 | 1.00 | 504 | data:data_80067464/data:data_80067464/data:data_80067464/data:data_80067464 |
-| 800686B8 | 599 | 0x07 | 7.14 | 1.00 | 496 | data:data_80067464/data:data_80067464/data:data_80067464/data:data_80068A08 |
-| 80068FE8 | 600 | 0x07 | 7.23 | 1.00 | 505 | data:data_80068A08/data:data_80068A08/data:data_80068A08/asm:func_80069110 |
-| 80069918 | 601 | 0x07 | 7.22 | 1.00 | 505 | asm:func_80069110/data:data_8006982C/data:data_8006982C/data:data_8006982C |
-| 8006A248 | 608 | 0x07 | 7.23 | 1.00 | 504 | data:data_8006982C/data:data_8006982C/data:data_8006982C/data:data_8006A768 |
-| 8006AB78 | 609 | 0x07 | 7.25 | 1.00 | 497 | data:data_8006A768/data:data_8006A768/data:data_8006A768/data:data_8006A768 |
-| 8006B4A8 | 610 | 0x07 | 7.22 | 1.00 | 500 | data:data_8006A768/data:data_8006A768/data:data_8006A768/asm:func_8006B4F8 |
-| 8006BDD8 | 611 | 0x07 | 7.07 | 1.00 | 504 | asm:func_8006B4F8/data:data_8006BDCC/data:data_8006BDCC/asm:func_8006BE7C |
-| 8006C708 | 612 | 0x07 | 7.22 | 1.00 | 509 | asm:func_8006BE7C/data:data_8006C62C/data:data_8006C62C/data:data_8006C62C |
-| 8006D038 | 613 | 0x07 | 7.19 | 1.00 | 509 | data:data_8006C62C/data:data_8006C62C/data:data_8006C62C/asm:func_8006D2F8 |
-| 8006D968 | 614 | 0x07 | 7.24 | 1.00 | 508 | asm:func_8006D2F8/data:data_8006D964/data:data_8006D964/data:data_8006D964 |
-| 8006E298 | 615 | 0x07 | 7.29 | 1.00 | 508 | data:data_8006D964/data:data_8006D964/data:data_8006D964/asm:func_8006E46C |
-| 8006EBC8 | 616 | 0x07 | 7.24 | 1.00 | 510 | asm:func_8006E46C/asm:func_8006EB8C/data:data_8006EBD4/data:data_8006EBD4 |
-| 8006F4F8 | 617 | 0x07 | 7.25 | 1.00 | 507 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
-| 8006FE28 | 624 | 0x07 | 7.29 | 1.00 | 510 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
-| 80070758 | 625 | 0x07 | 7.27 | 1.00 | 509 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
-| 80071088 | 626 | 0x07 | 7.32 | 1.00 | 509 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
-| 800719B8 | 627 | 0x07 | 7.26 | 1.00 | 508 | data:data_8006EBD4/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 800722E8 | 628 | 0x07 | 7.15 | 1.00 | 508 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80072C18 | 512 | 0x08 | 7.25 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80073548 | 513 | 0x08 | 7.26 | 1.00 | 506 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80073E78 | 514 | 0x08 | 7.24 | 1.00 | 500 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 800747A8 | 515 | 0x08 | 7.25 | 1.00 | 505 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 800750D8 | 516 | 0x08 | 7.29 | 1.00 | 508 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80075A08 | 517 | 0x08 | 7.26 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80076338 | 518 | 0x08 | 7.16 | 1.00 | 512 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80076C68 | 519 | 0x08 | 7.22 | 1.00 | 509 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80077598 | 520 | 0x08 | 7.28 | 1.00 | 506 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80077EC8 | 521 | 0x08 | 7.22 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 800787F8 | 528 | 0x08 | 7.33 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80079128 | 529 | 0x08 | 7.20 | 1.00 | 504 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 80079A58 | 530 | 0x08 | 7.33 | 1.00 | 494 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 8007A388 | 531 | 0x08 | 7.29 | 0.92 | 496 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 8007ACB8 | 532 | 0x08 | 7.20 | 0.66 | 383 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 8007B5E8 | 533 | 0x08 | 7.00 | 0.68 | 248 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 8007BF18 | 534 | 0x08 | 6.89 | 0.67 | 240 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 8007C848 | 535 | 0x08 | 7.19 | 0.86 | 336 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
-| 8007D178 | 536 | 0x08 | 7.16 | 0.91 | 238 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007D5D0 |
-| 8007DAA8 | 537 | 0x08 | 7.06 | 0.89 | 201 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8007E3D8 | 544 | 0x08 | 7.13 | 0.86 | 213 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8007ED08 | 545 | 0x08 | 7.16 | 0.88 | 216 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8007F638 | 546 | 0x08 | 7.15 | 0.92 | 220 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8007FF68 | 547 | 0x08 | 7.10 | 0.89 | 177 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80080898 | 548 | 0x08 | 7.14 | 0.88 | 228 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800811C8 | 549 | 0x08 | 7.18 | 0.71 | 366 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80081AF8 | 550 | 0x08 | 7.21 | 0.92 | 453 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80082428 | 551 | 0x08 | 7.27 | 0.77 | 448 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80082D58 | 552 | 0x08 | 7.22 | 0.62 | 446 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80083688 | 553 | 0x08 | 7.30 | 0.53 | 485 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80083FB8 | 560 | 0x08 | 7.24 | 0.56 | 462 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800848E8 | 561 | 0x08 | 7.13 | 0.53 | 380 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80085218 | 562 | 0x08 | 7.17 | 0.58 | 393 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80085B48 | 563 | 0x08 | 7.20 | 0.59 | 383 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80086478 | 564 | 0x08 | 7.13 | 0.59 | 360 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80086DA8 | 565 | 0x08 | 7.25 | 0.58 | 382 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800876D8 | 566 | 0x08 | 7.25 | 0.56 | 381 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80088008 | 567 | 0x08 | 7.20 | 0.54 | 372 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80088938 | 568 | 0x08 | 7.22 | 0.59 | 380 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80089268 | 569 | 0x08 | 7.26 | 0.59 | 373 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80089B98 | 576 | 0x08 | 7.16 | 0.63 | 349 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008A4C8 | 577 | 0x08 | 7.26 | 0.61 | 317 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008ADF8 | 578 | 0x08 | 7.23 | 0.60 | 339 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008B728 | 579 | 0x08 | 7.20 | 0.58 | 377 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008C058 | 580 | 0x08 | 7.25 | 0.63 | 360 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008C988 | 581 | 0x08 | 7.27 | 0.64 | 352 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008D2B8 | 582 | 0x08 | 7.20 | 0.57 | 366 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008DBE8 | 583 | 0x08 | 7.19 | 0.61 | 358 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008E518 | 584 | 0x08 | 7.10 | 0.65 | 329 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008EE48 | 585 | 0x08 | 7.32 | 0.60 | 341 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8008F778 | 592 | 0x08 | 7.25 | 0.67 | 354 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800900A8 | 593 | 0x08 | 7.28 | 0.59 | 359 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800909D8 | 594 | 0x08 | 7.24 | 0.56 | 386 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80091308 | 595 | 0x08 | 7.36 | 0.60 | 392 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80091C38 | 596 | 0x08 | 7.32 | 0.56 | 375 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80092568 | 597 | 0x08 | 7.26 | 0.63 | 377 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80092E98 | 598 | 0x08 | 7.19 | 0.62 | 354 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800937C8 | 599 | 0x08 | 7.32 | 0.62 | 367 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800940F8 | 600 | 0x08 | 7.26 | 0.65 | 377 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80094A28 | 601 | 0x08 | 7.21 | 0.51 | 403 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80095358 | 608 | 0x08 | 7.26 | 0.54 | 410 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80095C88 | 609 | 0x08 | 7.23 | 0.56 | 373 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800965B8 | 610 | 0x08 | 7.18 | 0.59 | 384 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80096EE8 | 611 | 0x08 | 7.21 | 0.61 | 379 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80097818 | 612 | 0x08 | 7.24 | 0.56 | 372 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80098148 | 613 | 0x08 | 7.32 | 0.56 | 364 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80098A78 | 614 | 0x08 | 7.24 | 0.63 | 481 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800993A8 | 615 | 0x08 | 7.18 | 0.68 | 508 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 80099CD8 | 616 | 0x08 | 7.13 | 0.71 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009A608 | 617 | 0x08 | 7.22 | 0.71 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009AF38 | 624 | 0x08 | 7.19 | 0.66 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009B868 | 625 | 0x08 | 7.23 | 0.69 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009C198 | 626 | 0x08 | 7.18 | 0.70 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009CAC8 | 627 | 0x08 | 7.16 | 0.69 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009D3F8 | 628 | 0x08 | 7.34 | 0.66 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009DD28 | 512 | 0x09 | 7.19 | 0.59 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009E658 | 513 | 0x09 | 7.25 | 0.68 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009EF88 | 514 | 0x09 | 7.26 | 0.65 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 8009F8B8 | 515 | 0x09 | 7.21 | 0.71 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A01E8 | 516 | 0x09 | 7.35 | 0.68 | 510 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A0B18 | 517 | 0x09 | 7.24 | 0.67 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A1448 | 518 | 0x09 | 7.22 | 0.66 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A1D78 | 519 | 0x09 | 7.36 | 0.59 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A26A8 | 520 | 0x09 | 7.30 | 0.64 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A2FD8 | 521 | 0x09 | 7.24 | 0.61 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A3908 | 528 | 0x09 | 7.26 | 0.65 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A4238 | 529 | 0x09 | 7.16 | 0.60 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A4B68 | 530 | 0x09 | 7.12 | 0.65 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A5498 | 531 | 0x09 | 7.20 | 0.59 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A5DC8 | 532 | 0x09 | 7.18 | 0.45 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A66F8 | 533 | 0x09 | 7.14 | 0.57 | 505 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A7028 | 534 | 0x09 | 7.15 | 0.80 | 475 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A7958 | 535 | 0x09 | 6.94 | 0.43 | 499 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A8288 | 536 | 0x09 | 7.22 | 0.54 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A8BB8 | 537 | 0x09 | 7.04 | 0.81 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A94E8 | 544 | 0x09 | 7.28 | 0.65 | 507 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800A9E18 | 545 | 0x09 | 7.23 | 0.39 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AA748 | 546 | 0x09 | 7.17 | 0.87 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AB078 | 547 | 0x09 | 6.70 | 1.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AB9A8 | 548 | 0x09 | 6.51 | 0.14 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AC2D8 | 549 | 0x09 | 6.65 | 0.35 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800ACC08 | 550 | 0x09 | 6.91 | 0.69 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AD538 | 551 | 0x09 | 6.79 | 0.95 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800ADE68 | 552 | 0x09 | 6.83 | 0.21 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AE798 | 553 | 0x09 | 6.99 | 0.33 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AF0C8 | 560 | 0x09 | 7.02 | 0.01 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800AF9F8 | 561 | 0x09 | 6.97 | 0.56 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B0328 | 562 | 0x09 | 6.69 | 0.13 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B0C58 | 563 | 0x09 | 6.71 | 0.15 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B1588 | 564 | 0x09 | 7.20 | 0.42 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B1EB8 | 565 | 0x09 | 7.24 | 0.96 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B27E8 | 566 | 0x09 | 7.24 | 0.67 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B3118 | 567 | 0x09 | 6.89 | 0.56 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B3A48 | 568 | 0x09 | 6.77 | 0.23 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B4378 | 569 | 0x09 | 6.71 | 0.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B4CA8 | 576 | 0x09 | 6.80 | 0.76 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B55D8 | 577 | 0x09 | 6.81 | 0.47 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B5F08 | 578 | 0x09 | 6.70 | 1.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B6838 | 579 | 0x09 | 6.86 | 1.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B7168 | 580 | 0x09 | 6.75 | 1.00 | 68 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B7A98 | 581 | 0x09 | 1.36 | 0.67 | 336 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B83C8 | 582 | 0x09 | 7.23 | 0.99 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
-| 800B8CF8 | 583 | 0x09 | 7.19 | n/a | n/a | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 29:06:06 | 6.14 | 0.62 | 502 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 29:06:07 | 7.23 | 0.63 | 390 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 29:06:08 | 7.27 | 0.67 | 375 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021CA8 | 29:06:09 | 7.33 | 0.51 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800225D8 | 29:06:10 | 7.19 | 0.63 | 510 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80022F08 | 29:06:11 | 7.20 | 0.79 | 499 | data:data_80020000/data:data_80022E10/data:data_80022E10/asm:func_8002332C |
+| 80023838 | 29:06:12 | 7.21 | 1.00 | 496 | asm:func_8002332C/data:data_80023738/data:data_80023738/asm:func_80023950 |
+| 80024168 | 29:06:13 | 7.26 | 1.00 | 493 | asm:func_80023950/data:data_8002406C/data:data_8002406C/data:data_8002406C |
+| 80024A98 | 29:06:14 | 7.22 | 1.00 | 484 | data:data_8002406C/data:data_8002406C/data:data_8002406C/data:data_8002406C |
+| 800253C8 | 29:06:15 | 7.26 | 1.00 | 500 | data:data_8002406C/asm:func_80025380/data:data_800253D4/asm:func_8002547C |
+| 80025CF8 | 29:06:16 | 7.23 | 1.00 | 503 | asm:func_8002547C/data:data_80025C58/data:data_80025C58/asm:func_80026028 |
+| 80026628 | 29:06:17 | 7.22 | 1.00 | 509 | asm:func_80026028/asm:func_800265D8/data:data_80026630/asm:func_80026704 |
+| 80026F58 | 29:06:18 | 7.24 | 1.00 | 509 | asm:func_80026704/asm:func_80026E9C/data:data_80026F60/data:data_80026F60 |
+| 80027888 | 29:06:19 | 7.28 | 1.00 | 493 | data:data_80026F60/data:data_80026F60/data:data_80026F60/asm:func_80027964 |
+| 800281B8 | 29:06:20 | 7.26 | 1.00 | 506 | asm:func_80027964/data:data_8002813C/data:data_8002813C/data:data_8002813C |
+| 80028AE8 | 29:06:21 | 7.26 | 1.00 | 500 | data:data_8002813C/data:data_8002813C/data:data_8002813C/asm:func_80028B0C |
+| 80029418 | 29:06:22 | 7.24 | 1.00 | 504 | asm:func_80028B0C/data:data_80029378/data:data_80029378/data:data_80029378 |
+| 80029D48 | 29:06:23 | 7.27 | 1.00 | 505 | data:data_80029378/data:data_80029378/data:data_80029378/data:data_80029378 |
+| 8002A678 | 29:06:24 | 7.36 | 1.00 | 500 | data:data_80029378/asm:func_8002A61C/data:data_8002A684/asm:func_8002A6E4 |
+| 8002AFA8 | 29:06:25 | 7.20 | 1.00 | 512 | asm:func_8002A6E4/asm:func_8002AF14/data:data_8002AFB0/asm:func_8002B1B0 |
+| 8002B8D8 | 29:06:26 | 7.24 | 1.00 | 487 | asm:func_8002B1B0/data:data_8002B7FC/data:data_8002B7FC/data:data_8002BEAC |
+| 8002C208 | 29:06:27 | 7.21 | 1.00 | 503 | data:data_8002BEAC/asm:func_8002C194/data:data_8002C214/data:data_8002C214 |
+| 8002CB38 | 29:06:28 | 7.25 | 1.00 | 507 | data:data_8002C214/data:data_8002C214/data:data_8002C214/asm:func_8002CBE4 |
+| 8002D468 | 29:06:29 | 7.26 | 1.00 | 504 | asm:func_8002CBE4/data:data_8002D41C/data:data_8002D41C/asm:func_8002D788 |
+| 8002DD98 | 29:06:30 | 7.22 | 1.00 | 510 | asm:func_8002D788/data:data_8002DCB8/data:data_8002DCB8/asm:func_8002DDF0 |
+| 8002E6C8 | 29:06:31 | 7.23 | 1.00 | 511 | asm:func_8002DDF0/asm:func_8002E6A8/data:data_8002E6D4/asm:func_8002EAD4 |
+| 8002EFF8 | 29:06:32 | 7.33 | 1.00 | 511 | asm:func_8002EAD4/asm:func_8002EFC0/data:data_8002F000/data:data_8002F410 |
+| 8002F928 | 29:06:33 | 7.18 | 1.00 | 512 | data:data_8002F410/asm:func_8002F924/data:data_8002F930/asm:func_8002FE9C |
+| 80030258 | 29:06:34 | 7.23 | 1.00 | 437 | asm:func_8002FE9C/data:data_8003018C/data:data_8003018C/asm:func_80030290 |
+| 80030B88 | 29:06:35 | 7.20 | 1.00 | 505 | asm:func_80030290/data:data_80030A94/data:data_80030A94/data:data_80030A94 |
+| 800314B8 | 29:06:36 | 7.24 | 1.00 | 512 | data:data_80030A94/data:data_80030A94/data:data_80030A94/asm:func_80031564 |
+| 80031DE8 | 29:06:37 | 7.28 | 1.00 | 508 | asm:func_80031564/data:data_80031D30/data:data_80031D30/data:data_80031D30 |
+| 80032718 | 29:06:38 | 7.23 | 1.00 | 508 | data:data_80031D30/data:data_80031D30/data:data_80031D30/data:data_80032D88 |
+| 80033048 | 29:06:39 | 7.27 | 1.00 | 509 | data:data_80032D88/data:data_80032D88/asm:func_80033054/asm:func_800332C8 |
+| 80033978 | 29:06:40 | 7.23 | 1.00 | 511 | asm:func_800332C8/data:data_8003386C/data:data_8003386C/data:data_80033B40 |
+| 800342A8 | 29:06:41 | 7.19 | 1.00 | 501 | data:data_80033B40/data:data_8003425C/asm:func_800342B8/asm:func_80034590 |
+| 80034BD8 | 29:06:42 | 7.32 | 1.00 | 495 | asm:func_80034590/data:data_80034B2C/data:data_80034B2C/data:data_80034B2C |
+| 80035508 | 29:06:43 | 7.28 | 1.00 | 483 | data:data_80034B2C/data:data_80034B2C/data:data_80034B2C/asm:func_80035904 |
+| 80035E38 | 29:06:44 | 7.26 | 1.00 | 496 | asm:func_80035904/data:data_80035D6C/data:data_80035D6C/asm:func_80035E74 |
+| 80036768 | 29:06:45 | 7.21 | 1.00 | 511 | asm:func_80035E74/data:data_8003666C/data:data_8003666C/asm:func_80036D98 |
+| 80037098 | 29:06:46 | 7.26 | 1.00 | 504 | asm:func_80036D98/data:data_80036FD4/data:data_80036FD4/data:data_80036FD4 |
+| 800379C8 | 29:06:47 | 7.24 | 1.00 | 500 | data:data_80036FD4/asm:func_800379BC/asm:func_800379BC/data:data_80037E9C |
+| 800382F8 | 29:06:48 | 7.26 | 1.00 | 507 | data:data_80037E9C/data:data_80037E9C/data:data_80037E9C/asm:func_80038934 |
+| 80038C28 | 29:06:49 | 7.24 | 1.00 | 503 | asm:func_80038934/data:data_80038B80/asm:func_80038C34/asm:func_80038C34 |
+| 80039558 | 29:06:50 | 7.19 | 1.00 | 503 | asm:func_80038C34/data:data_80039550/data:data_80039550/asm:func_800398A0 |
+| 80039E88 | 29:06:51 | 7.24 | 1.00 | 498 | asm:func_800398A0/data:data_80039DA8/data:data_80039DA8/data:data_8003A2C4 |
+| 8003A7B8 | 29:06:52 | 7.22 | 1.00 | 497 | data:data_8003A2C4/data:data_8003A2C4/data:data_8003A2C4/data:data_8003A2C4 |
+| 8003B0E8 | 29:06:53 | 7.27 | 1.00 | 500 | data:data_8003A2C4/data:data_8003A2C4/data:data_8003A2C4/asm:func_8003B170 |
+| 8003BA18 | 29:06:54 | 7.23 | 1.00 | 508 | asm:func_8003B170/data:data_8003B930/data:data_8003B930/asm:func_8003BA48 |
+| 8003C348 | 29:06:55 | 7.19 | 1.00 | 502 | asm:func_8003BA48/asm:func_8003BA48/asm:func_8003BA48/asm:func_8003BA48 |
+| 8003CC78 | 29:06:56 | 7.25 | 1.00 | 509 | asm:func_8003BA48/data:data_8003CB70/asm:func_8003CC88/data:data_8003D0D4 |
+| 8003D5A8 | 29:06:57 | 7.28 | 1.00 | 508 | data:data_8003D0D4/asm:func_8003D56C/data:data_8003D5B4/data:data_8003DCA4 |
+| 8003DED8 | 29:06:58 | 7.29 | 1.00 | 506 | data:data_8003DCA4/data:data_8003DCA4/data:data_8003DCA4/asm:func_8003DF54 |
+| 8003E808 | 29:06:59 | 7.25 | 1.00 | 504 | asm:func_8003DF54/data:data_8003E6FC/asm:func_8003E814/data:data_8003EF30 |
+| 8003F138 | 29:06:60 | 7.31 | 1.00 | 506 | data:data_8003EF30/data:data_8003F0EC/data:data_8003F0EC/asm:func_8003F170 |
+| 8003FA68 | 29:06:61 | 7.21 | 1.00 | 507 | asm:func_8003F170/data:data_8003F96C/data:data_8003F96C/data:data_8003F96C |
+| 80040398 | 29:06:62 | 7.18 | 1.00 | 503 | data:data_8003F96C/data:data_8003F96C/asm:func_800403A4/asm:func_800403A4 |
+| 80040CC8 | 29:06:63 | 7.25 | 1.00 | 499 | asm:func_800403A4/data:data_80040BBC/data:data_80040BBC/data:data_800410DC |
+| 800415F8 | 29:06:64 | 7.22 | 1.00 | 501 | data:data_800410DC/data:data_800410DC/data:data_800410DC/data:data_800410DC |
+| 80041F28 | 29:06:65 | 7.25 | 1.00 | 488 | data:data_800410DC/asm:func_80041F08/data:data_80041F34/data:data_800425F4 |
+| 80042858 | 29:06:66 | 7.18 | 1.00 | 494 | data:data_800425F4/data:data_800425F4/asm:func_80042864/asm:func_80042864 |
+| 80043188 | 29:06:67 | 7.27 | 1.00 | 490 | asm:func_80042864/data:data_8004312C/asm:func_80043194/data:data_80043934 |
+| 80043AB8 | 29:06:68 | 7.20 | 1.00 | 498 | data:data_80043934/data:data_80043934/data:data_80043934/data:data_800440BC |
+| 800443E8 | 29:06:69 | 7.27 | 1.00 | 486 | data:data_800440BC/asm:func_8004438C/data:data_800443F4/asm:func_80044AC0 |
+| 80044D18 | 29:06:70 | 7.24 | 1.00 | 493 | asm:func_80044AC0/asm:func_80044CF4/data:data_80044D24/asm:func_80044DC4 |
+| 80045648 | 29:06:71 | 7.23 | 1.00 | 503 | asm:func_80044DC4/data:data_80045580/data:data_80045580/data:data_80045580 |
+| 80045F78 | 29:06:72 | 7.27 | 1.00 | 501 | data:data_80045580/data:data_80045580/data:data_80045580/data:data_80046458 |
+| 800468A8 | 29:06:73 | 7.27 | 1.00 | 500 | data:data_80046458/data:data_80046458/data:data_80046458/asm:func_80046AA0 |
+| 800471D8 | 29:06:74 | 7.24 | 1.00 | 505 | asm:func_80046AA0/data:data_80047100/data:data_80047100/asm:func_800478E8 |
+| 80047B08 | 29:07:00 | 7.18 | 1.00 | 503 | asm:func_800478E8/asm:func_80047AB4/asm:func_80047B14/asm:func_80047C30 |
+| 80048438 | 29:07:01 | 7.21 | 1.00 | 505 | asm:func_80047C30/data:data_80048368/asm:func_8004844C/asm:func_8004844C |
+| 80048D68 | 29:07:02 | 7.31 | 1.00 | 511 | asm:func_8004844C/data:data_80048CA0/asm:func_80048D78/data:data_80048E88 |
+| 80049698 | 29:07:03 | 7.14 | 1.00 | 508 | data:data_80048E88/data:data_80048E88/data:data_80048E88/data:data_800497B4 |
+| 80049FC8 | 29:07:04 | 7.25 | 1.00 | 511 | data:data_800497B4/data:data_800497B4/data:data_800497B4/data:data_800497B4 |
+| 8004A8F8 | 29:07:05 | 7.27 | 0.99 | 510 | data:data_800497B4/data:data_800497B4/data:data_800497B4/data:data_8004ACC8 |
+| 8004B228 | 29:07:06 | 7.31 | 1.00 | 507 | data:data_8004ACC8/data:data_8004ACC8/data:data_8004ACC8/data:data_8004ACC8 |
+| 8004BB58 | 29:07:07 | 7.23 | 1.00 | 499 | data:data_8004ACC8/data:data_8004ACC8/asm:func_8004BB6C/data:data_8004C30C |
+| 8004C488 | 29:07:08 | 7.24 | 0.92 | 507 | data:data_8004C30C/data:data_8004C488/data:data_8004C488/data:data_8004C5DC |
+| 8004CDB8 | 29:07:09 | 7.25 | 0.84 | 438 | data:data_8004C5DC/data:data_8004C5DC/asm:func_8004CDC8/asm:func_8004D13C |
+| 8004D6E8 | 29:07:10 | 7.23 | 0.99 | 503 | data:data_8004D5D0/data:data_8004D6BC/data:data_8004D6BC/data:data_8004D9B0 |
+| 8004E018 | 29:07:11 | 7.27 | 1.00 | 493 | data:data_8004D9B0/data:data_8004D9B0/data:data_8004D9B0/asm:func_8004E26C |
+| 8004E948 | 29:07:12 | 7.31 | 1.00 | 499 | asm:func_8004E26C/data:data_8004E844/data:data_8004E844/data:data_8004E844 |
+| 8004F278 | 29:07:13 | 7.34 | 1.00 | 506 | data:data_8004E844/data:data_8004E844/data:data_8004E844/asm:func_8004F2B0 |
+| 8004FBA8 | 29:07:14 | 7.24 | 1.00 | 508 | asm:func_8004F2B0/data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8 |
+| 800504D8 | 29:07:15 | 7.27 | 1.00 | 505 | data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8 |
+| 80050E08 | 29:07:16 | 7.24 | 1.00 | 496 | data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8 |
+| 80051738 | 29:07:17 | 7.20 | 1.00 | 507 | data:data_8004FBA8/data:data_8004FBA8/data:data_8004FBA8/data:data_80051D80 |
+| 80052068 | 29:07:18 | 7.31 | 0.97 | 508 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 80052998 | 29:07:19 | 7.30 | 1.00 | 510 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 800532C8 | 29:07:20 | 7.24 | 1.00 | 507 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 80053BF8 | 29:07:21 | 7.25 | 1.00 | 508 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 80054528 | 29:07:22 | 7.23 | 1.00 | 510 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 80054E58 | 29:07:23 | 7.26 | 1.00 | 504 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 80055788 | 29:07:24 | 7.18 | 0.94 | 507 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 800560B8 | 29:07:25 | 7.24 | 0.96 | 511 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80051D80 |
+| 800569E8 | 29:07:26 | 7.24 | 1.00 | 508 | data:data_80051D80/data:data_80051D80/data:data_80051D80/data:data_80056C38 |
+| 80057318 | 29:07:27 | 7.21 | 1.00 | 511 | data:data_80056C38/data:data_80056C38/asm:func_80057320/asm:func_80057320 |
+| 80057C48 | 29:07:28 | 7.28 | 1.00 | 508 | asm:func_80057320/data:data_80057B3C/data:data_80057B3C/asm:func_80057D68 |
+| 80058578 | 29:07:29 | 7.35 | 1.00 | 512 | asm:func_80057D68/data:data_8005847C/data:data_8005847C/data:data_8005847C |
+| 80058EA8 | 29:07:30 | 7.18 | 1.00 | 510 | data:data_8005847C/data:data_8005847C/data:data_8005847C/asm:func_80058FB4 |
+| 800597D8 | 29:07:31 | 7.22 | 0.95 | 510 | asm:func_80058FB4/data:data_800596E4/data:data_800596E4/data:data_80059CC0 |
+| 8005A108 | 29:07:32 | 7.29 | 0.93 | 486 | data:data_80059CC0/data:data_80059CC0/data:data_80059CC0/data:data_80059CC0 |
+| 8005AA38 | 29:07:33 | 7.27 | 0.93 | 507 | data:data_80059CC0/data:data_80059CC0/data:data_80059CC0/asm:func_8005B22C |
+| 8005B368 | 29:07:34 | 7.33 | 0.99 | 512 | asm:func_8005B22C/data:data_8005B278/data:data_8005B278/data:data_8005B44C |
+| 8005BC98 | 29:07:35 | 7.12 | 1.00 | 510 | data:data_8005B44C/asm:func_8005BC60/data:data_8005BCA0/data:data_8005BCA0 |
+| 8005C5C8 | 29:07:36 | 7.26 | 0.98 | 511 | data:data_8005BCA0/data:data_8005BCA0/data:data_8005BCA0/data:data_8005BCA0 |
+| 8005CEF8 | 29:07:37 | 7.30 | 0.95 | 506 | data:data_8005BCA0/data:data_8005BCA0/data:data_8005BCA0/data:data_8005D2CC |
+| 8005D828 | 29:07:38 | 7.30 | 0.94 | 508 | data:data_8005D2CC/data:data_8005D2CC/data:data_8005D2CC/data:data_8005DA74 |
+| 8005E158 | 29:07:39 | 7.27 | 0.94 | 510 | data:data_8005DA74/data:data_8005DA74/asm:func_8005E170/data:data_8005E878 |
+| 8005EA88 | 29:07:40 | 7.22 | 1.00 | 506 | data:data_8005E878/data:data_8005E878/data:data_8005E878/asm:func_8005EAE4 |
+| 8005F3B8 | 29:07:41 | 7.30 | 0.95 | 504 | asm:func_8005EAE4/data:data_8005F2F4/data:data_8005F2F4/data:data_8005FB74 |
+| 8005FCE8 | 29:07:42 | 7.17 | 0.98 | 510 | data:data_8005FB74/data:data_8005FB74/data:data_8005FB74/data:data_800602BC |
+| 80060618 | 29:07:43 | 7.22 | 0.98 | 500 | data:data_800602BC/data:data_800602BC/data:data_800602BC/data:data_80060DB8 |
+| 80060F48 | 29:07:44 | 7.27 | 0.97 | 510 | data:data_80060DB8/data:data_80060DB8/data:data_80060DB8/data:data_80061680 |
+| 80061878 | 29:07:45 | 7.28 | 0.99 | 504 | data:data_80061680/data:data_80061680/data:data_80061680/data:data_80061C44 |
+| 800621A8 | 29:07:46 | 7.29 | 1.00 | 511 | data:data_80061C44/data:data_80061C44/data:data_80061C44/asm:func_80062670 |
+| 80062AD8 | 29:07:47 | 7.25 | 1.00 | 512 | asm:func_80062670/data:data_800629D0/data:data_800629D0/data:data_800629D0 |
+| 80063408 | 29:07:48 | 7.28 | 0.98 | 507 | data:data_800629D0/data:data_800629D0/data:data_800629D0/data:data_80063AC4 |
+| 80063D38 | 29:07:49 | 7.23 | 0.99 | 499 | data:data_80063AC4/data:data_80063AC4/data:data_80063AC4/data:data_80063F34 |
+| 80064668 | 29:07:50 | 7.20 | 1.00 | 503 | data:data_80063F34/data:data_80063F34/data:data_80063F34/asm:func_80064780 |
+| 80064F98 | 29:07:51 | 7.06 | 1.00 | 507 | asm:func_80064780/asm:func_80064F90/data:data_80064FA4/data:data_80064FA4 |
+| 800658C8 | 29:07:52 | 7.17 | 1.00 | 509 | data:data_80064FA4/data:data_80064FA4/data:data_80064FA4/asm:func_800658E8 |
+| 800661F8 | 29:07:53 | 7.20 | 1.00 | 507 | asm:func_800658E8/data:data_8006610C/data:data_8006610C/data:data_8006610C |
+| 80066B28 | 29:07:54 | 7.25 | 1.00 | 506 | data:data_8006610C/data:data_8006610C/data:data_8006610C/data:data_8006610C |
+| 80067458 | 29:07:55 | 7.13 | 1.00 | 503 | data:data_8006610C/asm:func_8006741C/data:data_80067464/data:data_80067464 |
+| 80067D88 | 29:07:56 | 7.23 | 1.00 | 504 | data:data_80067464/data:data_80067464/data:data_80067464/data:data_80067464 |
+| 800686B8 | 29:07:57 | 7.14 | 1.00 | 496 | data:data_80067464/data:data_80067464/data:data_80067464/data:data_80068A08 |
+| 80068FE8 | 29:07:58 | 7.23 | 1.00 | 505 | data:data_80068A08/data:data_80068A08/data:data_80068A08/asm:func_80069110 |
+| 80069918 | 29:07:59 | 7.22 | 1.00 | 505 | asm:func_80069110/data:data_8006982C/data:data_8006982C/data:data_8006982C |
+| 8006A248 | 29:07:60 | 7.23 | 1.00 | 504 | data:data_8006982C/data:data_8006982C/data:data_8006982C/data:data_8006A768 |
+| 8006AB78 | 29:07:61 | 7.25 | 1.00 | 497 | data:data_8006A768/data:data_8006A768/data:data_8006A768/data:data_8006A768 |
+| 8006B4A8 | 29:07:62 | 7.22 | 1.00 | 500 | data:data_8006A768/data:data_8006A768/data:data_8006A768/asm:func_8006B4F8 |
+| 8006BDD8 | 29:07:63 | 7.07 | 1.00 | 504 | asm:func_8006B4F8/data:data_8006BDCC/data:data_8006BDCC/asm:func_8006BE7C |
+| 8006C708 | 29:07:64 | 7.22 | 1.00 | 509 | asm:func_8006BE7C/data:data_8006C62C/data:data_8006C62C/data:data_8006C62C |
+| 8006D038 | 29:07:65 | 7.19 | 1.00 | 509 | data:data_8006C62C/data:data_8006C62C/data:data_8006C62C/asm:func_8006D2F8 |
+| 8006D968 | 29:07:66 | 7.24 | 1.00 | 508 | asm:func_8006D2F8/data:data_8006D964/data:data_8006D964/data:data_8006D964 |
+| 8006E298 | 29:07:67 | 7.29 | 1.00 | 508 | data:data_8006D964/data:data_8006D964/data:data_8006D964/asm:func_8006E46C |
+| 8006EBC8 | 29:07:68 | 7.24 | 1.00 | 510 | asm:func_8006E46C/asm:func_8006EB8C/data:data_8006EBD4/data:data_8006EBD4 |
+| 8006F4F8 | 29:07:69 | 7.25 | 1.00 | 507 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
+| 8006FE28 | 29:07:70 | 7.29 | 1.00 | 510 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
+| 80070758 | 29:07:71 | 7.27 | 1.00 | 509 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
+| 80071088 | 29:07:72 | 7.32 | 1.00 | 509 | data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4/data:data_8006EBD4 |
+| 800719B8 | 29:07:73 | 7.26 | 1.00 | 508 | data:data_8006EBD4/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 800722E8 | 29:07:74 | 7.15 | 1.00 | 508 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80072C18 | 29:08:00 | 7.25 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80073548 | 29:08:01 | 7.26 | 1.00 | 506 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80073E78 | 29:08:02 | 7.24 | 1.00 | 500 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 800747A8 | 29:08:03 | 7.25 | 1.00 | 505 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 800750D8 | 29:08:04 | 7.29 | 1.00 | 508 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80075A08 | 29:08:05 | 7.26 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80076338 | 29:08:06 | 7.16 | 1.00 | 512 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80076C68 | 29:08:07 | 7.22 | 1.00 | 509 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80077598 | 29:08:08 | 7.28 | 1.00 | 506 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80077EC8 | 29:08:09 | 7.22 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 800787F8 | 29:08:10 | 7.33 | 1.00 | 507 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80079128 | 29:08:11 | 7.20 | 1.00 | 504 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 80079A58 | 29:08:12 | 7.33 | 1.00 | 494 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 8007A388 | 29:08:13 | 7.29 | 0.92 | 496 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 8007ACB8 | 29:08:14 | 7.20 | 0.66 | 383 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 8007B5E8 | 29:08:15 | 7.00 | 0.68 | 248 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 8007BF18 | 29:08:16 | 6.89 | 0.67 | 240 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 8007C848 | 29:08:17 | 7.19 | 0.86 | 336 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007197C |
+| 8007D178 | 29:08:18 | 7.16 | 0.91 | 238 | data:data_8007197C/data:data_8007197C/data:data_8007197C/data:data_8007D5D0 |
+| 8007DAA8 | 29:08:19 | 7.06 | 0.89 | 201 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8007E3D8 | 29:08:20 | 7.13 | 0.86 | 213 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8007ED08 | 29:08:21 | 7.16 | 0.88 | 216 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8007F638 | 29:08:22 | 7.15 | 0.92 | 220 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8007FF68 | 29:08:23 | 7.10 | 0.89 | 177 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80080898 | 29:08:24 | 7.14 | 0.88 | 228 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800811C8 | 29:08:25 | 7.18 | 0.71 | 366 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80081AF8 | 29:08:26 | 7.21 | 0.92 | 453 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80082428 | 29:08:27 | 7.27 | 0.77 | 448 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80082D58 | 29:08:28 | 7.22 | 0.62 | 446 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80083688 | 29:08:29 | 7.30 | 0.53 | 485 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80083FB8 | 29:08:30 | 7.24 | 0.56 | 462 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800848E8 | 29:08:31 | 7.13 | 0.53 | 380 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80085218 | 29:08:32 | 7.17 | 0.58 | 393 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80085B48 | 29:08:33 | 7.20 | 0.59 | 383 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80086478 | 29:08:34 | 7.13 | 0.59 | 360 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80086DA8 | 29:08:35 | 7.25 | 0.58 | 382 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800876D8 | 29:08:36 | 7.25 | 0.56 | 381 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80088008 | 29:08:37 | 7.20 | 0.54 | 372 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80088938 | 29:08:38 | 7.22 | 0.59 | 380 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80089268 | 29:08:39 | 7.26 | 0.59 | 373 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80089B98 | 29:08:40 | 7.16 | 0.63 | 349 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008A4C8 | 29:08:41 | 7.26 | 0.61 | 317 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008ADF8 | 29:08:42 | 7.23 | 0.60 | 339 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008B728 | 29:08:43 | 7.20 | 0.58 | 377 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008C058 | 29:08:44 | 7.25 | 0.63 | 360 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008C988 | 29:08:45 | 7.27 | 0.64 | 352 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008D2B8 | 29:08:46 | 7.20 | 0.57 | 366 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008DBE8 | 29:08:47 | 7.19 | 0.61 | 358 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008E518 | 29:08:48 | 7.10 | 0.65 | 329 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008EE48 | 29:08:49 | 7.32 | 0.60 | 341 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8008F778 | 29:08:50 | 7.25 | 0.67 | 354 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800900A8 | 29:08:51 | 7.28 | 0.59 | 359 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800909D8 | 29:08:52 | 7.24 | 0.56 | 386 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80091308 | 29:08:53 | 7.36 | 0.60 | 392 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80091C38 | 29:08:54 | 7.32 | 0.56 | 375 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80092568 | 29:08:55 | 7.26 | 0.63 | 377 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80092E98 | 29:08:56 | 7.19 | 0.62 | 354 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800937C8 | 29:08:57 | 7.32 | 0.62 | 367 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800940F8 | 29:08:58 | 7.26 | 0.65 | 377 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80094A28 | 29:08:59 | 7.21 | 0.51 | 403 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80095358 | 29:08:60 | 7.26 | 0.54 | 410 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80095C88 | 29:08:61 | 7.23 | 0.56 | 373 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800965B8 | 29:08:62 | 7.18 | 0.59 | 384 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80096EE8 | 29:08:63 | 7.21 | 0.61 | 379 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80097818 | 29:08:64 | 7.24 | 0.56 | 372 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80098148 | 29:08:65 | 7.32 | 0.56 | 364 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80098A78 | 29:08:66 | 7.24 | 0.63 | 481 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800993A8 | 29:08:67 | 7.18 | 0.68 | 508 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 80099CD8 | 29:08:68 | 7.13 | 0.71 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009A608 | 29:08:69 | 7.22 | 0.71 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009AF38 | 29:08:70 | 7.19 | 0.66 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009B868 | 29:08:71 | 7.23 | 0.69 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009C198 | 29:08:72 | 7.18 | 0.70 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009CAC8 | 29:08:73 | 7.16 | 0.69 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009D3F8 | 29:08:74 | 7.34 | 0.66 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009DD28 | 29:09:00 | 7.19 | 0.59 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009E658 | 29:09:01 | 7.25 | 0.68 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009EF88 | 29:09:02 | 7.26 | 0.65 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 8009F8B8 | 29:09:03 | 7.21 | 0.71 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A01E8 | 29:09:04 | 7.35 | 0.68 | 510 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A0B18 | 29:09:05 | 7.24 | 0.67 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A1448 | 29:09:06 | 7.22 | 0.66 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A1D78 | 29:09:07 | 7.36 | 0.59 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A26A8 | 29:09:08 | 7.30 | 0.64 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A2FD8 | 29:09:09 | 7.24 | 0.61 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A3908 | 29:09:10 | 7.26 | 0.65 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A4238 | 29:09:11 | 7.16 | 0.60 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A4B68 | 29:09:12 | 7.12 | 0.65 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A5498 | 29:09:13 | 7.20 | 0.59 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A5DC8 | 29:09:14 | 7.18 | 0.45 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A66F8 | 29:09:15 | 7.14 | 0.57 | 505 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A7028 | 29:09:16 | 7.15 | 0.80 | 475 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A7958 | 29:09:17 | 6.94 | 0.43 | 499 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A8288 | 29:09:18 | 7.22 | 0.54 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A8BB8 | 29:09:19 | 7.04 | 0.81 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A94E8 | 29:09:20 | 7.28 | 0.65 | 507 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800A9E18 | 29:09:21 | 7.23 | 0.39 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AA748 | 29:09:22 | 7.17 | 0.87 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AB078 | 29:09:23 | 6.70 | 1.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AB9A8 | 29:09:24 | 6.51 | 0.14 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AC2D8 | 29:09:25 | 6.65 | 0.35 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800ACC08 | 29:09:26 | 6.91 | 0.69 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AD538 | 29:09:27 | 6.79 | 0.95 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800ADE68 | 29:09:28 | 6.83 | 0.21 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AE798 | 29:09:29 | 6.99 | 0.33 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AF0C8 | 29:09:30 | 7.02 | 0.01 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800AF9F8 | 29:09:31 | 6.97 | 0.56 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B0328 | 29:09:32 | 6.69 | 0.13 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B0C58 | 29:09:33 | 6.71 | 0.15 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B1588 | 29:09:34 | 7.20 | 0.42 | 511 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B1EB8 | 29:09:35 | 7.24 | 0.96 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B27E8 | 29:09:36 | 7.24 | 0.67 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B3118 | 29:09:37 | 6.89 | 0.56 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B3A48 | 29:09:38 | 6.77 | 0.23 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B4378 | 29:09:39 | 6.71 | 0.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B4CA8 | 29:09:40 | 6.80 | 0.76 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B55D8 | 29:09:41 | 6.81 | 0.47 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B5F08 | 29:09:42 | 6.70 | 1.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B6838 | 29:09:43 | 6.86 | 1.00 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B7168 | 29:09:44 | 6.75 | 1.00 | 68 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B7A98 | 29:09:45 | 1.36 | 0.67 | 336 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B83C8 | 29:09:46 | 7.23 | 0.99 | 512 | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0 |
+| 800B8CF8 | 29:09:47 | 7.19 | n/a | n/a | data:data_8007D5D0/data:data_8007D5D0/data:data_8007D5D0/? |
 
 ## mainmenu_eu
 
-297 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+297 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 564 | 0x19 | 6.13 | 0.53 | 93 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 565 | 0x19 | 7.25 | 0.58 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 566 | 0x19 | 7.18 | 0.56 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021CA8 | 567 | 0x19 | 7.28 | 0.58 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800225D8 | 568 | 0x19 | 7.27 | 0.51 | 503 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80022F08 | 569 | 0x19 | 7.31 | 0.56 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80023838 | 576 | 0x19 | 7.16 | 0.58 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80024168 | 577 | 0x19 | 7.31 | 1.00 | 505 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80024A98 | 578 | 0x19 | 7.25 | 1.00 | 482 | data:data_80020000/data:data_80020000/data:data_80020000/asm:func_80024FAC |
-| 800253C8 | 579 | 0x19 | 7.16 | 1.00 | 503 | asm:func_80024FAC/asm:func_80025314/asm:func_80025314/asm:func_80025314 |
-| 80025CF8 | 580 | 0x19 | 7.26 | 1.00 | 508 | asm:func_80025314/asm:func_80025CEC/asm:func_80025CEC/data:data_800264EC |
-| 80026628 | 581 | 0x19 | 7.17 | 1.00 | 501 | data:data_800264EC/data:data_800264EC/data:data_800264EC/data:data_800268C4 |
-| 80026F58 | 582 | 0x19 | 7.22 | 1.00 | 507 | data:data_800268C4/data:data_800268C4/data:data_800268C4/data:data_80027644 |
-| 80027888 | 583 | 0x19 | 7.19 | 1.00 | 510 | data:data_80027644/asm:func_80027868/asm:func_80027868/asm:func_80027868 |
-| 800281B8 | 584 | 0x19 | 7.25 | 1.00 | 505 | asm:func_80027868/data:data_800280D0/data:data_800280D0/data:data_800280D0 |
-| 80028AE8 | 585 | 0x19 | 7.21 | 1.00 | 491 | data:data_800280D0/data:data_800280D0/data:data_800280D0/asm:func_80028B68 |
-| 80029418 | 592 | 0x19 | 7.22 | 1.00 | 512 | asm:func_80028B68/data:data_800293CC/data:data_800293CC/data:data_800293CC |
-| 80029D48 | 593 | 0x19 | 7.24 | 1.00 | 506 | data:data_800293CC/data:data_800293CC/data:data_800293CC/data:data_800293CC |
-| 8002A678 | 594 | 0x19 | 7.15 | 1.00 | 499 | data:data_800293CC/data:data_800293CC/data:data_800293CC/asm:func_8002AB64 |
-| 8002AFA8 | 595 | 0x19 | 7.24 | 1.00 | 490 | asm:func_8002AB64/data:data_8002AF18/data:data_8002AF18/asm:func_8002B06C |
-| 8002B8D8 | 596 | 0x19 | 7.27 | 1.00 | 501 | data:data_8002B7C0/data:data_8002B8D8/asm:func_8002B8F0/asm:func_8002B8F0 |
-| 8002C208 | 597 | 0x19 | 7.27 | 1.00 | 503 | data:data_8002C0F0/data:data_8002C208/asm:func_8002C220/asm:func_8002C220 |
-| 8002CB38 | 598 | 0x19 | 7.20 | 1.00 | 234 | data:data_8002CA20/data:data_8002CB38/asm:func_8002CB50/asm:func_8002CC5C |
-| 8002D468 | 599 | 0x19 | 7.20 | 1.00 | 142 | asm:func_8002CC5C/data:data_8002D398/data:data_8002D398/data:data_8002D398 |
-| 8002DD98 | 600 | 0x19 | 7.29 | 1.00 | 120 | data:data_8002D398/data:data_8002D398/data:data_8002D398/asm:func_8002DE00 |
-| 8002E6C8 | 601 | 0x19 | 7.26 | 1.00 | 131 | asm:func_8002DE00/data:data_8002E62C/data:data_8002E62C/asm:func_8002EB64 |
-| 8002EFF8 | 608 | 0x19 | 7.19 | 1.00 | 144 | asm:func_8002EB64/data:data_8002EF10/data:data_8002EF10/asm:func_8002F368 |
-| 8002F928 | 609 | 0x19 | 7.17 | 1.00 | 137 | asm:func_8002F368/data:data_8002F834/data:data_8002F834/data:data_8002F834 |
-| 80030258 | 610 | 0x19 | 7.29 | 1.00 | 132 | data:data_8002F834/data:data_8002F834/data:data_8002F834/data:data_8002F834 |
-| 80030B88 | 611 | 0x19 | 7.31 | 1.00 | 167 | data:data_8002F834/data:data_8002F834/data:data_8002F834/asm:func_80030BB0 |
-| 800314B8 | 612 | 0x19 | 7.22 | 1.00 | 166 | asm:func_80030BB0/data:data_800313D0/data:data_800313D0/asm:func_800314D8 |
-| 80031DE8 | 613 | 0x19 | 7.25 | 1.00 | 163 | asm:func_800314D8/data:data_80031D00/data:data_80031D00/asm:func_80031EEC |
-| 80032718 | 614 | 0x19 | 7.17 | 1.00 | 158 | asm:func_80031EEC/asm:func_80031EEC/asm:func_80031EEC/asm:func_80031EEC |
-| 80033048 | 615 | 0x19 | 7.23 | 1.00 | 152 | asm:func_80031EEC/asm:func_80033048/asm:func_80033048/asm:func_80033048 |
-| 80033978 | 616 | 0x19 | 7.30 | 1.00 | 162 | asm:func_80033048/asm:func_80033948/asm:func_80033948/asm:func_80033948 |
-| 800342A8 | 617 | 0x19 | 7.20 | 1.00 | 164 | asm:func_80033948/asm:func_80033948/asm:func_80033948/asm:func_80033948 |
-| 80034BD8 | 624 | 0x19 | 7.30 | 1.00 | 168 | asm:func_80033948/data:data_80034AD0/data:data_80034AD0/data:data_80034AD0 |
-| 80035508 | 625 | 0x19 | 7.29 | 1.00 | 167 | data:data_80034AD0/data:data_80034AD0/data:data_80034AD0/data:data_80035654 |
-| 80035E38 | 626 | 0x19 | 7.31 | 1.00 | 157 | data:data_80035654/data:data_80035654/data:data_80035654/data:data_80035654 |
-| 80036768 | 627 | 0x19 | 7.29 | 1.00 | 123 | data:data_80035654/data:data_800366D4/data:data_800366D4/data:data_800366D4 |
-| 80037098 | 628 | 0x19 | 7.23 | 1.00 | 470 | data:data_800366D4/data:data_800366D4/data:data_800366D4/asm:func_8003712C |
-| 800379C8 | 512 | 0x20 | 7.24 | 1.00 | 482 | data:data_800378B0/data:data_800378B0/data:data_800378B0/asm:func_8003818C |
-| 800382F8 | 513 | 0x20 | 7.24 | 1.00 | 483 | data:data_800381E0/data:data_800381E0/asm:func_80038310/asm:func_80038310 |
-| 80038C28 | 514 | 0x20 | 7.28 | 1.00 | 487 | asm:func_80038310/data:data_80038B38/data:data_80038B38/data:data_80038B38 |
-| 80039558 | 515 | 0x20 | 7.20 | 1.00 | 511 | data:data_80038B38/data:data_80038B38/data:data_80038B38/data:data_80038B38 |
-| 80039E88 | 516 | 0x20 | 7.32 | 1.00 | 502 | data:data_80038B38/data:data_80038B38/data:data_80038B38/data:data_8003A554 |
-| 8003A7B8 | 517 | 0x20 | 7.29 | 1.00 | 497 | data:data_8003A554/data:data_8003A554/data:data_8003A554/data:data_8003A554 |
-| 8003B0E8 | 518 | 0x20 | 7.21 | 1.00 | 507 | data:data_8003A554/data:data_8003A554/data:data_8003A554/asm:func_8003B14C |
-| 8003BA18 | 519 | 0x20 | 7.26 | 1.00 | 499 | asm:func_8003B14C/asm:func_8003B9DC/asm:func_8003B9DC/asm:func_8003C0F0 |
-| 8003C348 | 520 | 0x20 | 7.26 | 1.00 | 507 | asm:func_8003C0F0/asm:func_8003C25C/asm:func_8003C25C/asm:func_8003CA3C |
-| 8003CC78 | 521 | 0x20 | 7.28 | 1.00 | 508 | asm:func_8003CA3C/data:data_8003CC6C/data:data_8003CC6C/asm:func_8003D3F4 |
-| 8003D5A8 | 528 | 0x20 | 7.17 | 1.00 | 501 | asm:func_8003D3F4/data:data_8003D594/data:data_8003D594/asm:func_8003D5F0 |
-| 8003DED8 | 529 | 0x20 | 7.22 | 1.00 | 510 | asm:func_8003D5F0/data:data_8003DED8/data:data_8003DED8/asm:func_8003DEFC |
-| 8003E808 | 530 | 0x20 | 7.24 | 1.00 | 507 | asm:func_8003DEFC/data:data_8003E780/data:data_8003E780/asm:func_8003E8D8 |
-| 8003F138 | 531 | 0x20 | 7.25 | 1.00 | 509 | asm:func_8003E8D8/data:data_8003F03C/data:data_8003F03C/asm:func_8003F1CC |
-| 8003FA68 | 532 | 0x20 | 7.25 | 1.00 | 494 | asm:func_8003F1CC/data:data_8003F960/data:data_8003F960/asm:func_8003FAA0 |
-| 80040398 | 533 | 0x20 | 7.21 | 1.00 | 505 | asm:func_8003FAA0/asm:func_80040398/asm:func_80040398/asm:func_80040398 |
-| 80040CC8 | 534 | 0x20 | 7.33 | 1.00 | 499 | data:data_80040BB0/asm:func_80040CC4/asm:func_80040CC4/data:data_80040F80 |
-| 800415F8 | 535 | 0x20 | 7.25 | 1.00 | 512 | data:data_80040F80/data:data_80040F80/data:data_80040F80/data:data_80041794 |
-| 80041F28 | 536 | 0x20 | 7.23 | 1.00 | 495 | data:data_80041794/data:data_80041794/data:data_80041794/data:data_800425C4 |
-| 80042858 | 537 | 0x20 | 7.27 | 1.00 | 511 | data:data_800425C4/data:data_800425C4/data:data_800425C4/data:data_800425C4 |
-| 80043188 | 544 | 0x20 | 7.28 | 1.00 | 510 | data:data_800425C4/data:data_800425C4/data:data_800425C4/asm:func_80043734 |
-| 80043AB8 | 545 | 0x20 | 7.28 | 1.00 | 510 | asm:func_80043734/data:data_80043A18/data:data_80043A18/data:data_80043A18 |
-| 800443E8 | 546 | 0x20 | 7.26 | 1.00 | 507 | data:data_80043A18/data:data_80043A18/data:data_80043A18/data:data_80043A18 |
-| 80044D18 | 547 | 0x20 | 7.24 | 1.00 | 512 | data:data_80043A18/data:data_80044CFC/data:data_80044CFC/data:data_80044CFC |
-| 80045648 | 548 | 0x20 | 7.26 | 1.00 | 508 | data:data_80044CFC/data:data_80044CFC/data:data_80044CFC/data:data_80044CFC |
-| 80045F78 | 549 | 0x20 | 7.12 | 1.00 | 509 | data:data_80044CFC/data:data_80044CFC/data:data_80044CFC/asm:func_800466B4 |
-| 800468A8 | 550 | 0x20 | 7.28 | 1.00 | 506 | asm:func_800466B4/data:data_80046858/data:data_80046858/data:data_80046858 |
-| 800471D8 | 551 | 0x20 | 7.22 | 1.00 | 501 | data:data_80046858/data:data_80046858/data:data_80046858/asm:func_800472AC |
-| 80047B08 | 552 | 0x20 | 7.20 | 1.00 | 498 | asm:func_800472AC/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
-| 80048438 | 553 | 0x20 | 7.29 | 1.00 | 499 | data:data_80047B08/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
-| 80048D68 | 560 | 0x20 | 7.25 | 1.00 | 495 | data:data_80047B08/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
-| 80049698 | 561 | 0x20 | 7.16 | 1.00 | 488 | data:data_80047B08/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
-| 80049FC8 | 562 | 0x20 | 7.27 | 1.00 | 505 | data:data_80047B08/asm:func_80049F9C/asm:func_80049F9C/data:data_8004A41C |
-| 8004A8F8 | 563 | 0x20 | 7.28 | 1.00 | 506 | data:data_8004A41C/data:data_8004A41C/data:data_8004A41C/asm:func_8004A938 |
-| 8004B228 | 564 | 0x20 | 7.30 | 1.00 | 502 | asm:func_8004A938/data:data_8004B158/data:data_8004B158/data:data_8004B9B8 |
-| 8004BB58 | 565 | 0x20 | 7.27 | 1.00 | 500 | data:data_8004B9B8/data:data_8004B9B8/data:data_8004B9B8/asm:func_8004BB7C |
-| 8004C488 | 566 | 0x20 | 7.22 | 1.00 | 507 | asm:func_8004BB7C/data:data_8004C468/data:data_8004C468/data:data_8004C468 |
-| 8004CDB8 | 567 | 0x20 | 7.30 | 1.00 | 503 | data:data_8004C468/data:data_8004C468/data:data_8004C468/data:data_8004C468 |
-| 8004D6E8 | 568 | 0x20 | 7.23 | 1.00 | 497 | data:data_8004C468/data:data_8004C468/data:data_8004C468/data:data_8004DD84 |
-| 8004E018 | 569 | 0x20 | 7.21 | 1.00 | 500 | data:data_8004DD84/data:data_8004DD84/data:data_8004DD84/asm:func_8004E08C |
-| 8004E948 | 576 | 0x20 | 7.24 | 1.00 | 499 | asm:func_8004E08C/asm:func_8004E08C/data:data_8004E94C/data:data_8004EAD0 |
-| 8004F278 | 577 | 0x20 | 7.25 | 1.00 | 507 | data:data_8004EAD0/asm:func_8004F268/data:data_8004F27C/asm:func_8004F2A0 |
-| 8004FBA8 | 578 | 0x20 | 7.25 | 1.00 | 504 | asm:func_8004F2A0/data:data_8004FB44/data:data_8004FB44/asm:func_8004FFF8 |
-| 800504D8 | 579 | 0x20 | 7.17 | 1.00 | 498 | asm:func_8004FFF8/asm:func_8004FFF8/asm:func_8004FFF8/asm:func_80050A40 |
-| 80050E08 | 580 | 0x20 | 7.21 | 1.00 | 506 | asm:func_80050A40/data:data_80050E08/data:data_80050E08/data:data_80050E08 |
-| 80051738 | 581 | 0x20 | 7.30 | 1.00 | 499 | data:data_80050E08/data:data_80051700/data:data_80051700/data:data_80051700 |
-| 80052068 | 582 | 0x20 | 7.30 | 1.00 | 504 | data:data_80051700/data:data_80051700/data:data_80051700/asm:func_80052134 |
-| 80052998 | 583 | 0x20 | 7.17 | 1.00 | 502 | asm:func_80052134/data:data_8005293C/data:data_8005293C/data:data_8005293C |
-| 800532C8 | 584 | 0x20 | 7.21 | 1.00 | 507 | data:data_8005293C/data:data_8005293C/data:data_8005293C/data:data_8005293C |
-| 80053BF8 | 585 | 0x20 | 7.21 | 1.00 | 506 | data:data_8005293C/data:data_8005293C/data:data_8005293C/asm:func_80053C9C |
-| 80054528 | 592 | 0x20 | 7.20 | 1.00 | 507 | asm:func_80053C9C/data:data_80054434/data:data_80054434/data:data_80054434 |
-| 80054E58 | 593 | 0x20 | 7.19 | 1.00 | 497 | data:data_80054434/asm:func_80054E4C/asm:func_80054E4C/asm:func_8005546C |
-| 80055788 | 594 | 0x20 | 7.21 | 1.00 | 500 | asm:func_8005546C/asm:func_800556FC/asm:func_800556FC/asm:func_80055A38 |
-| 800560B8 | 595 | 0x20 | 7.17 | 1.00 | 503 | asm:func_80055A38/asm:func_800560B0/asm:func_800560B0/asm:func_800560B0 |
-| 800569E8 | 596 | 0x20 | 7.30 | 1.00 | 505 | asm:func_800560B0/data:data_800568E4/data:data_800568E4/data:data_800568E4 |
-| 80057318 | 597 | 0x20 | 7.30 | 1.00 | 509 | data:data_800568E4/data:data_800568E4/data:data_800568E4/data:data_800568E4 |
-| 80057C48 | 598 | 0x20 | 7.27 | 1.00 | 506 | data:data_800568E4/asm:func_80057BA0/data:data_80057C50/data:data_80058090 |
-| 80058578 | 599 | 0x20 | 7.21 | 1.00 | 496 | data:data_80058090/data:data_80058538/data:data_80058538/asm:func_80058718 |
-| 80058EA8 | 600 | 0x20 | 7.28 | 1.00 | 501 | asm:func_80058718/data:data_80058DF4/data:data_80058DF4/asm:func_80058EF8 |
-| 800597D8 | 601 | 0x20 | 7.18 | 1.00 | 499 | asm:func_80058EF8/data:data_80059758/data:data_80059758/asm:func_80059E2C |
-| 8005A108 | 608 | 0x20 | 7.23 | 1.00 | 490 | asm:func_80059E2C/data:data_80059FFC/data:data_80059FFC/asm:func_8005A344 |
-| 8005AA38 | 609 | 0x20 | 7.22 | 1.00 | 484 | asm:func_8005A344/data:data_8005A944/data:data_8005A944/asm:func_8005B05C |
-| 8005B368 | 610 | 0x20 | 7.26 | 1.00 | 489 | asm:func_8005B05C/data:data_8005B2DC/data:data_8005B2DC/asm:func_8005B39C |
-| 8005BC98 | 611 | 0x20 | 7.28 | 1.00 | 485 | asm:func_8005B39C/asm:func_8005BC3C/asm:func_8005BC3C/data:data_8005C298 |
-| 8005C5C8 | 612 | 0x20 | 7.29 | 1.00 | 478 | data:data_8005C298/data:data_8005C298/data:data_8005C298/data:data_8005C298 |
-| 8005CEF8 | 613 | 0x20 | 7.25 | 1.00 | 474 | data:data_8005C298/asm:func_8005CE7C/data:data_8005CF00/data:data_8005CF00 |
-| 8005D828 | 614 | 0x20 | 7.20 | 1.00 | 492 | data:data_8005CF00/data:data_8005CF00/data:data_8005CF00/data:data_8005CF00 |
-| 8005E158 | 615 | 0x20 | 7.20 | 1.00 | 488 | data:data_8005CF00/data:data_8005CF00/data:data_8005CF00/data:data_8005E5C0 |
-| 8005EA88 | 616 | 0x20 | 7.31 | 1.00 | 495 | data:data_8005E5C0/data:data_8005E5C0/data:data_8005E5C0/data:data_8005EEC8 |
-| 8005F3B8 | 617 | 0x20 | 7.27 | 1.00 | 493 | data:data_8005EEC8/asm:func_8005F370/data:data_8005F3C0/data:data_8005F3C0 |
-| 8005FCE8 | 624 | 0x20 | 7.22 | 1.00 | 501 | data:data_8005F3C0/asm:func_8005FCAC/data:data_8005FCEC/asm:func_8005FD74 |
-| 80060618 | 625 | 0x20 | 7.25 | 1.00 | 496 | asm:func_8005FD74/data:data_80060550/asm:func_80060630/asm:func_80060630 |
-| 80060F48 | 626 | 0x20 | 7.20 | 1.00 | 493 | asm:func_80060630/data:data_80060E48/data:data_80060E48/asm:func_8006107C |
-| 80061878 | 627 | 0x20 | 7.32 | 1.00 | 509 | asm:func_8006107C/data:data_800617E0/data:data_800617E0/asm:func_800618D0 |
-| 800621A8 | 628 | 0x20 | 7.23 | 1.00 | 496 | asm:func_800618D0/data:data_800620A8/data:data_800620A8/data:data_800620A8 |
-| 80062AD8 | 512 | 0x21 | 7.29 | 1.00 | 507 | data:data_800620A8/data:data_800620A8/asm:func_80062AE8/asm:func_80062AE8 |
-| 80063408 | 513 | 0x21 | 7.21 | 1.00 | 511 | asm:func_80062AE8/asm:func_800633AC/data:data_80063410/data:data_800637E4 |
-| 80063D38 | 514 | 0x21 | 7.23 | 1.00 | 496 | data:data_800637E4/data:data_800637E4/data:data_800637E4/data:data_800640EC |
-| 80064668 | 515 | 0x21 | 7.19 | 1.00 | 508 | data:data_800640EC/data:data_800640EC/data:data_800640EC/asm:func_80064BE8 |
-| 80064F98 | 516 | 0x21 | 7.16 | 0.99 | 507 | asm:func_80064BE8/data:data_80064EB8/data:data_80064EB8/asm:func_8006540C |
-| 800658C8 | 517 | 0x21 | 7.14 | 1.00 | 507 | asm:func_8006540C/asm:func_8006540C/asm:func_8006540C/data:data_80065F50 |
-| 800661F8 | 518 | 0x21 | 7.17 | 0.95 | 505 | data:data_80065F50/data:data_80065F50/data:data_80065F50/data:data_800665A4 |
-| 80066B28 | 519 | 0x21 | 7.30 | 0.85 | 510 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 80067458 | 520 | 0x21 | 7.28 | 0.95 | 502 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 80067D88 | 521 | 0x21 | 7.36 | 1.00 | 501 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 800686B8 | 528 | 0x21 | 7.26 | 1.00 | 490 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 80068FE8 | 529 | 0x21 | 7.26 | 1.00 | 497 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 80069918 | 530 | 0x21 | 7.34 | 1.00 | 503 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006A248 | 531 | 0x21 | 7.24 | 1.00 | 505 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006AB78 | 532 | 0x21 | 7.24 | 1.00 | 507 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006B4A8 | 533 | 0x21 | 7.31 | 1.00 | 498 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006BDD8 | 534 | 0x21 | 7.21 | 1.00 | 505 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006C708 | 535 | 0x21 | 7.17 | 0.97 | 506 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006D038 | 536 | 0x21 | 7.16 | 1.00 | 509 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006D968 | 537 | 0x21 | 7.15 | 1.00 | 506 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006E298 | 544 | 0x21 | 7.23 | 1.00 | 507 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
-| 8006EBC8 | 545 | 0x21 | 7.20 | 1.00 | 509 | data:data_800665A4/data:data_800665A4/data:data_800665A4/asm:func_8006F130 |
-| 8006F4F8 | 546 | 0x21 | 7.14 | 0.97 | 509 | asm:func_8006F130/data:data_8006F454/data:data_8006F454/data:data_8006FCF8 |
-| 8006FE28 | 547 | 0x21 | 7.28 | 0.95 | 503 | data:data_8006FCF8/data:data_8006FCF8/data:data_8006FCF8/asm:func_80070070 |
-| 80070758 | 548 | 0x21 | 7.22 | 0.99 | 508 | asm:func_80070070/data:data_80070650/data:data_80070650/data:data_80070650 |
-| 80071088 | 549 | 0x21 | 7.18 | 1.00 | 512 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
-| 800719B8 | 550 | 0x21 | 7.21 | 1.00 | 512 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
-| 800722E8 | 551 | 0x21 | 7.19 | 1.00 | 508 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
-| 80072C18 | 552 | 0x21 | 7.30 | 1.00 | 509 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
-| 80073548 | 553 | 0x21 | 7.22 | 0.96 | 510 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80073B6C |
-| 80073E78 | 560 | 0x21 | 7.28 | 0.94 | 501 | data:data_80073B6C/data:data_80073DA8/data:data_80073DA8/data:data_80074608 |
-| 800747A8 | 561 | 0x21 | 7.27 | 0.93 | 485 | data:data_80074608/data:data_80074608/data:data_80074608/data:data_80074EB8 |
-| 800750D8 | 562 | 0x21 | 7.19 | 0.96 | 506 | data:data_80074EB8/data:data_80074EB8/data:data_80074EB8/data:data_80075264 |
-| 80075A08 | 563 | 0x21 | 7.22 | 1.00 | 511 | data:data_80075264/data:data_80075264/data:data_80075264/asm:func_80075CE4 |
-| 80076338 | 564 | 0x21 | 7.26 | 0.99 | 511 | asm:func_80075CE4/asm:func_80076330/asm:func_80076330/asm:func_80076330 |
-| 80076C68 | 565 | 0x21 | 7.22 | 0.96 | 510 | asm:func_80076330/data:data_80076BD0/data:data_80076BD0/data:data_8007736C |
-| 80077598 | 566 | 0x21 | 7.21 | 0.95 | 493 | data:data_8007736C/data:data_8007736C/data:data_8007736C/data:data_800777A0 |
-| 80077EC8 | 567 | 0x21 | 7.22 | 0.93 | 503 | data:data_800777A0/data:data_800777A0/data:data_800777A0/data:data_800777A0 |
-| 800787F8 | 568 | 0x21 | 7.29 | 0.98 | 509 | data:data_800777A0/data:data_800777A0/data:data_800777A0/data:data_800777A0 |
-| 80079128 | 569 | 0x21 | 7.26 | 0.97 | 512 | data:data_800777A0/data:data_800777A0/data:data_800777A0/data:data_8007991C |
-| 80079A58 | 576 | 0x21 | 7.30 | 0.97 | 506 | data:data_8007991C/data:data_8007991C/data:data_8007991C/data:data_8007A0D0 |
-| 8007A388 | 577 | 0x21 | 7.20 | 0.98 | 506 | data:data_8007A0D0/data:data_8007A0D0/data:data_8007A0D0/data:data_8007AB08 |
-| 8007ACB8 | 578 | 0x21 | 7.24 | 0.97 | 510 | data:data_8007AB08/data:data_8007AB08/asm:func_8007ACC4/asm:func_8007B4A8 |
-| 8007B5E8 | 579 | 0x21 | 7.20 | 0.99 | 507 | asm:func_8007B4A8/data:data_8007B504/data:data_8007B504/data:data_8007BDC4 |
-| 8007BF18 | 580 | 0x21 | 7.25 | 0.99 | 508 | data:data_8007BDC4/data:data_8007BDC4/data:data_8007BDC4/asm:func_8007C678 |
-| 8007C848 | 581 | 0x21 | 7.24 | 1.00 | 512 | asm:func_8007C678/data:data_8007C760/data:data_8007C760/data:data_8007C760 |
-| 8007D178 | 582 | 0x21 | 7.28 | 1.00 | 512 | data:data_8007C760/data:data_8007C760/data:data_8007C760/data:data_8007C760 |
-| 8007DAA8 | 583 | 0x21 | 7.16 | 0.88 | 507 | data:data_8007C760/data:data_8007C760/data:data_8007C760/asm:func_8007E208 |
-| 8007E3D8 | 584 | 0x21 | 7.25 | 0.96 | 501 | asm:func_8007E208/data:data_8007E2F0/data:data_8007E2F0/data:data_8007E884 |
-| 8007ED08 | 585 | 0x21 | 7.27 | 1.00 | 501 | data:data_8007E884/data:data_8007ED08/data:data_8007ED08/asm:func_8007EF48 |
-| 8007F638 | 592 | 0x21 | 7.17 | 0.99 | 505 | asm:func_8007EF48/data:data_8007F55C/data:data_8007F55C/data:data_8007F55C |
-| 8007FF68 | 593 | 0x21 | 7.25 | 1.00 | 500 | data:data_8007F55C/data:data_8007F55C/data:data_8007F55C/data:data_8007F55C |
-| 80080898 | 594 | 0x21 | 7.22 | 1.00 | 508 | data:data_8007F55C/data:data_8007F55C/data:data_8007F55C/asm:func_800808C8 |
-| 800811C8 | 595 | 0x21 | 7.29 | 1.00 | 506 | asm:func_800808C8/asm:func_800808C8/asm:func_800808C8/asm:func_800808C8 |
-| 80081AF8 | 596 | 0x21 | 7.27 | 1.00 | 507 | asm:func_800808C8/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
-| 80082428 | 597 | 0x21 | 7.23 | 1.00 | 501 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
-| 80082D58 | 598 | 0x21 | 7.24 | 1.00 | 506 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
-| 80083688 | 599 | 0x21 | 7.28 | 1.00 | 510 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
-| 80083FB8 | 600 | 0x21 | 7.28 | 1.00 | 502 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
-| 800848E8 | 601 | 0x21 | 7.23 | 1.00 | 504 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80084CA4 |
-| 80085218 | 608 | 0x21 | 7.22 | 1.00 | 503 | data:data_80084CA4/data:data_80084CA4/data:data_80084CA4/data:data_80084CA4 |
-| 80085B48 | 609 | 0x21 | 7.26 | 1.00 | 504 | data:data_80084CA4/data:data_80084CA4/data:data_80084CA4/asm:func_80085B64 |
-| 80086478 | 610 | 0x21 | 7.24 | 1.00 | 509 | asm:func_80085B64/data:data_80086424/data:data_80086424/data:data_80086424 |
-| 80086DA8 | 611 | 0x21 | 7.22 | 1.00 | 500 | data:data_80086424/data:data_80086424/data:data_80086424/asm:func_80086EBC |
-| 800876D8 | 612 | 0x21 | 7.24 | 1.00 | 502 | asm:func_80086EBC/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80088008 | 613 | 0x21 | 7.19 | 1.00 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80088938 | 614 | 0x21 | 7.24 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80089268 | 615 | 0x21 | 7.29 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80089B98 | 616 | 0x21 | 7.25 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008A4C8 | 617 | 0x21 | 7.18 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008ADF8 | 624 | 0x21 | 7.28 | 1.00 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008B728 | 625 | 0x21 | 7.28 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008C058 | 626 | 0x21 | 7.23 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008C988 | 627 | 0x21 | 7.27 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008D2B8 | 628 | 0x21 | 7.24 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008DBE8 | 512 | 0x22 | 7.25 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008E518 | 513 | 0x22 | 7.25 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008EE48 | 514 | 0x22 | 7.21 | 1.00 | 500 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8008F778 | 515 | 0x22 | 7.21 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800900A8 | 516 | 0x22 | 7.29 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800909D8 | 517 | 0x22 | 7.29 | 1.00 | 506 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80091308 | 518 | 0x22 | 7.22 | 1.00 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80091C38 | 519 | 0x22 | 7.35 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80092568 | 520 | 0x22 | 7.34 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80092E98 | 521 | 0x22 | 7.31 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800937C8 | 528 | 0x22 | 7.24 | 1.00 | 503 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800940F8 | 529 | 0x22 | 7.21 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80094A28 | 530 | 0x22 | 7.31 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80095358 | 531 | 0x22 | 7.18 | 1.00 | 503 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80095C88 | 532 | 0x22 | 7.26 | 1.00 | 493 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800965B8 | 533 | 0x22 | 7.19 | 0.93 | 465 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80096EE8 | 534 | 0x22 | 7.17 | 0.76 | 370 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80097818 | 535 | 0x22 | 7.27 | 0.75 | 396 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80098148 | 536 | 0x22 | 7.20 | 0.76 | 387 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80098A78 | 537 | 0x22 | 7.27 | 0.76 | 386 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800993A8 | 544 | 0x22 | 7.21 | 0.77 | 327 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 80099CD8 | 545 | 0x22 | 7.17 | 0.76 | 399 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009A608 | 546 | 0x22 | 7.23 | 0.82 | 399 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009AF38 | 547 | 0x22 | 7.21 | 0.80 | 379 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009B868 | 548 | 0x22 | 7.27 | 0.80 | 367 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009C198 | 549 | 0x22 | 7.27 | 0.83 | 278 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009CAC8 | 550 | 0x22 | 7.22 | 0.81 | 273 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009D3F8 | 551 | 0x22 | 7.17 | 0.80 | 338 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009DD28 | 552 | 0x22 | 7.33 | 0.78 | 378 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009E658 | 553 | 0x22 | 7.22 | 0.75 | 404 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009EF88 | 560 | 0x22 | 7.30 | 0.76 | 407 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 8009F8B8 | 561 | 0x22 | 7.34 | 0.85 | 349 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A01E8 | 562 | 0x22 | 7.25 | 0.93 | 171 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A0B18 | 563 | 0x22 | 7.12 | 0.91 | 199 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A1448 | 564 | 0x22 | 7.13 | 0.90 | 329 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A1D78 | 565 | 0x22 | 7.02 | 0.77 | 327 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A26A8 | 566 | 0x22 | 6.95 | 0.92 | 213 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A2FD8 | 567 | 0x22 | 7.00 | 0.89 | 235 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A3908 | 568 | 0x22 | 7.09 | 0.88 | 261 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A4238 | 569 | 0x22 | 7.12 | 0.88 | 251 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A4B68 | 576 | 0x22 | 7.14 | 0.89 | 208 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A5498 | 577 | 0x22 | 7.10 | 0.91 | 286 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A5DC8 | 578 | 0x22 | 7.17 | 0.81 | 392 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A66F8 | 579 | 0x22 | 7.08 | 0.68 | 441 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A7028 | 580 | 0x22 | 7.00 | 0.67 | 415 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A7958 | 581 | 0x22 | 6.92 | 0.67 | 362 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A8288 | 582 | 0x22 | 7.15 | 0.92 | 215 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A8BB8 | 583 | 0x22 | 7.04 | 0.90 | 238 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A94E8 | 584 | 0x22 | 7.09 | 0.88 | 257 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800A9E18 | 585 | 0x22 | 7.00 | 0.86 | 256 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AA748 | 592 | 0x22 | 7.15 | 0.89 | 216 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AB078 | 593 | 0x22 | 7.18 | 0.92 | 189 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AB9A8 | 594 | 0x22 | 7.17 | 0.88 | 384 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AC2D8 | 595 | 0x22 | 7.18 | 0.66 | 471 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800ACC08 | 596 | 0x22 | 7.21 | 0.76 | 469 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AD538 | 597 | 0x22 | 7.20 | 0.59 | 477 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800ADE68 | 598 | 0x22 | 7.27 | 0.58 | 439 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AE798 | 599 | 0x22 | 7.22 | 0.64 | 435 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AF0C8 | 600 | 0x22 | 7.24 | 0.61 | 487 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800AF9F8 | 601 | 0x22 | 7.24 | 0.68 | 511 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B0328 | 608 | 0x22 | 7.24 | 0.65 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B0C58 | 609 | 0x22 | 7.21 | 0.73 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B1588 | 610 | 0x22 | 7.27 | 0.63 | 461 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B1EB8 | 611 | 0x22 | 7.30 | 0.55 | 353 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B27E8 | 612 | 0x22 | 7.19 | 0.58 | 354 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B3118 | 613 | 0x22 | 7.23 | 0.59 | 270 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B3A48 | 614 | 0x22 | 7.24 | 0.55 | 376 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B4378 | 615 | 0x22 | 7.22 | 0.54 | 356 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B4CA8 | 616 | 0x22 | 7.25 | 0.60 | 402 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B55D8 | 617 | 0x22 | 7.26 | 0.61 | 339 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B5F08 | 624 | 0x22 | 7.23 | 0.62 | 488 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B6838 | 625 | 0x22 | 7.25 | 0.70 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B7168 | 626 | 0x22 | 7.27 | 0.71 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B7A98 | 627 | 0x22 | 7.28 | 0.66 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B83C8 | 628 | 0x22 | 7.23 | 0.68 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B8CF8 | 512 | 0x23 | 7.17 | 0.57 | 506 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B9628 | 513 | 0x23 | 7.22 | 0.49 | 483 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800B9F58 | 514 | 0x23 | 7.10 | 0.56 | 500 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BA888 | 515 | 0x23 | 7.03 | 0.78 | 482 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BB1B8 | 516 | 0x23 | 7.11 | 0.38 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BBAE8 | 517 | 0x23 | 7.19 | 0.64 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BC418 | 518 | 0x23 | 7.28 | 0.78 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BCD48 | 519 | 0x23 | 7.25 | 0.63 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BD678 | 520 | 0x23 | 7.25 | 0.51 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BDFA8 | 521 | 0x23 | 7.25 | 0.57 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BE8D8 | 528 | 0x23 | 6.82 | 1.00 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BF208 | 529 | 0x23 | 6.76 | 0.53 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800BFB38 | 530 | 0x23 | 6.66 | 0.07 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C0468 | 531 | 0x23 | 6.81 | 0.72 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C0D98 | 532 | 0x23 | 7.07 | 0.86 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C16C8 | 533 | 0x23 | 6.45 | 0.43 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C1FF8 | 534 | 0x23 | 7.03 | 0.45 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C2928 | 535 | 0x23 | 6.99 | 0.01 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C3258 | 536 | 0x23 | 6.90 | 0.37 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C3B88 | 537 | 0x23 | 6.67 | 0.30 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C44B8 | 544 | 0x23 | 6.56 | 0.07 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C4DE8 | 545 | 0x23 | 7.29 | 0.22 | 511 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C5718 | 546 | 0x23 | 7.25 | 0.86 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C6048 | 547 | 0x23 | 7.18 | 0.95 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C6978 | 548 | 0x23 | 7.02 | 0.29 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C72A8 | 549 | 0x23 | 6.75 | 0.63 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C7BD8 | 550 | 0x23 | 7.03 | 0.00 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C8508 | 551 | 0x23 | 6.65 | 0.53 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C8E38 | 552 | 0x23 | 6.94 | 0.41 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800C9768 | 553 | 0x23 | 6.79 | 0.89 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
-| 800CA098 | 560 | 0x23 | 7.02 | n/a | n/a | data:data_8008765C/data:data_8008765C/data:data_8008765C/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 00:19:34 | 6.13 | 0.53 | 93 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 00:19:35 | 7.25 | 0.58 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 00:19:36 | 7.18 | 0.56 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021CA8 | 00:19:37 | 7.28 | 0.58 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800225D8 | 00:19:38 | 7.27 | 0.51 | 503 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80022F08 | 00:19:39 | 7.31 | 0.56 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80023838 | 00:19:40 | 7.16 | 0.58 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80024168 | 00:19:41 | 7.31 | 1.00 | 505 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80024A98 | 00:19:42 | 7.25 | 1.00 | 482 | data:data_80020000/data:data_80020000/data:data_80020000/asm:func_80024FAC |
+| 800253C8 | 00:19:43 | 7.16 | 1.00 | 503 | asm:func_80024FAC/asm:func_80025314/asm:func_80025314/asm:func_80025314 |
+| 80025CF8 | 00:19:44 | 7.26 | 1.00 | 508 | asm:func_80025314/asm:func_80025CEC/asm:func_80025CEC/data:data_800264EC |
+| 80026628 | 00:19:45 | 7.17 | 1.00 | 501 | data:data_800264EC/data:data_800264EC/data:data_800264EC/data:data_800268C4 |
+| 80026F58 | 00:19:46 | 7.22 | 1.00 | 507 | data:data_800268C4/data:data_800268C4/data:data_800268C4/data:data_80027644 |
+| 80027888 | 00:19:47 | 7.19 | 1.00 | 510 | data:data_80027644/asm:func_80027868/asm:func_80027868/asm:func_80027868 |
+| 800281B8 | 00:19:48 | 7.25 | 1.00 | 505 | asm:func_80027868/data:data_800280D0/data:data_800280D0/data:data_800280D0 |
+| 80028AE8 | 00:19:49 | 7.21 | 1.00 | 491 | data:data_800280D0/data:data_800280D0/data:data_800280D0/asm:func_80028B68 |
+| 80029418 | 00:19:50 | 7.22 | 1.00 | 512 | asm:func_80028B68/data:data_800293CC/data:data_800293CC/data:data_800293CC |
+| 80029D48 | 00:19:51 | 7.24 | 1.00 | 506 | data:data_800293CC/data:data_800293CC/data:data_800293CC/data:data_800293CC |
+| 8002A678 | 00:19:52 | 7.15 | 1.00 | 499 | data:data_800293CC/data:data_800293CC/data:data_800293CC/asm:func_8002AB64 |
+| 8002AFA8 | 00:19:53 | 7.24 | 1.00 | 490 | asm:func_8002AB64/data:data_8002AF18/data:data_8002AF18/asm:func_8002B06C |
+| 8002B8D8 | 00:19:54 | 7.27 | 1.00 | 501 | data:data_8002B7C0/data:data_8002B8D8/asm:func_8002B8F0/asm:func_8002B8F0 |
+| 8002C208 | 00:19:55 | 7.27 | 1.00 | 503 | data:data_8002C0F0/data:data_8002C208/asm:func_8002C220/asm:func_8002C220 |
+| 8002CB38 | 00:19:56 | 7.20 | 1.00 | 234 | data:data_8002CA20/data:data_8002CB38/asm:func_8002CB50/asm:func_8002CC5C |
+| 8002D468 | 00:19:57 | 7.20 | 1.00 | 142 | data:data_8002D350/data:data_8002D468/asm:func_8002D480/asm:func_8002D480 |
+| 8002DD98 | 00:19:58 | 7.29 | 1.00 | 120 | data:data_8002DC80/data:data_8002DD98/data:data_8002DDB0/asm:func_8002DE00 |
+| 8002E6C8 | 00:19:59 | 7.26 | 1.00 | 131 | asm:func_8002DE00/data:data_8002E6C8/asm:func_8002E6E0/asm:func_8002EB64 |
+| 8002EFF8 | 00:19:60 | 7.19 | 1.00 | 144 | asm:func_8002EB64/data:data_8002EF10/data:data_8002EF10/asm:func_8002F368 |
+| 8002F928 | 00:19:61 | 7.17 | 1.00 | 137 | asm:func_8002F368/data:data_8002F834/data:data_8002F834/data:data_8002F834 |
+| 80030258 | 00:19:62 | 7.29 | 1.00 | 132 | data:data_8002F834/data:data_8002F834/data:data_8002F834/data:data_8002F834 |
+| 80030B88 | 00:19:63 | 7.31 | 1.00 | 167 | data:data_8002F834/data:data_8002F834/data:data_8002F834/asm:func_80030BB0 |
+| 800314B8 | 00:19:64 | 7.22 | 1.00 | 166 | asm:func_80030BB0/data:data_800313D0/data:data_800313D0/asm:func_800314D8 |
+| 80031DE8 | 00:19:65 | 7.25 | 1.00 | 163 | asm:func_800314D8/data:data_80031D00/data:data_80031D00/asm:func_80031EEC |
+| 80032718 | 00:19:66 | 7.17 | 1.00 | 158 | asm:func_80031EEC/asm:func_80031EEC/asm:func_80031EEC/asm:func_80031EEC |
+| 80033048 | 00:19:67 | 7.23 | 1.00 | 152 | asm:func_80031EEC/asm:func_80033048/asm:func_80033048/asm:func_80033048 |
+| 80033978 | 00:19:68 | 7.30 | 1.00 | 162 | asm:func_80033048/asm:func_80033948/asm:func_80033948/asm:func_80033948 |
+| 800342A8 | 00:19:69 | 7.20 | 1.00 | 164 | asm:func_80033948/asm:func_80033948/asm:func_80033948/asm:func_80033948 |
+| 80034BD8 | 00:19:70 | 7.30 | 1.00 | 168 | asm:func_80033948/data:data_80034AD0/data:data_80034AD0/data:data_80034AD0 |
+| 80035508 | 00:19:71 | 7.29 | 1.00 | 167 | data:data_80034AD0/data:data_80034AD0/data:data_80034AD0/data:data_80035654 |
+| 80035E38 | 00:19:72 | 7.31 | 1.00 | 157 | data:data_80035654/data:data_80035654/data:data_80035654/data:data_80035654 |
+| 80036768 | 00:19:73 | 7.29 | 1.00 | 123 | data:data_80035654/data:data_800366D4/data:data_800366D4/data:data_800366D4 |
+| 80037098 | 00:19:74 | 7.23 | 1.00 | 470 | data:data_800366D4/data:data_800366D4/data:data_800366D4/asm:func_8003712C |
+| 800379C8 | 00:20:00 | 7.24 | 1.00 | 482 | data:data_800378B0/data:data_800378B0/data:data_800378B0/asm:func_8003818C |
+| 800382F8 | 00:20:01 | 7.24 | 1.00 | 483 | data:data_800381E0/data:data_800381E0/asm:func_80038310/asm:func_80038310 |
+| 80038C28 | 00:20:02 | 7.28 | 1.00 | 487 | asm:func_80038310/data:data_80038B38/data:data_80038B38/data:data_80038B38 |
+| 80039558 | 00:20:03 | 7.20 | 1.00 | 511 | data:data_80038B38/data:data_80038B38/data:data_80038B38/data:data_80038B38 |
+| 80039E88 | 00:20:04 | 7.32 | 1.00 | 502 | data:data_80038B38/data:data_80038B38/data:data_80038B38/data:data_8003A554 |
+| 8003A7B8 | 00:20:05 | 7.29 | 1.00 | 497 | data:data_8003A554/data:data_8003A554/data:data_8003A554/data:data_8003A554 |
+| 8003B0E8 | 00:20:06 | 7.21 | 1.00 | 507 | data:data_8003A554/data:data_8003A554/data:data_8003A554/asm:func_8003B14C |
+| 8003BA18 | 00:20:07 | 7.26 | 1.00 | 499 | asm:func_8003B14C/asm:func_8003B9DC/asm:func_8003B9DC/asm:func_8003C0F0 |
+| 8003C348 | 00:20:08 | 7.26 | 1.00 | 507 | asm:func_8003C0F0/asm:func_8003C25C/asm:func_8003C25C/asm:func_8003CA3C |
+| 8003CC78 | 00:20:09 | 7.28 | 1.00 | 508 | asm:func_8003CA3C/data:data_8003CC6C/data:data_8003CC6C/asm:func_8003D3F4 |
+| 8003D5A8 | 00:20:10 | 7.17 | 1.00 | 501 | asm:func_8003D3F4/data:data_8003D594/data:data_8003D594/asm:func_8003D5F0 |
+| 8003DED8 | 00:20:11 | 7.22 | 1.00 | 510 | asm:func_8003D5F0/data:data_8003DED8/data:data_8003DED8/asm:func_8003DEFC |
+| 8003E808 | 00:20:12 | 7.24 | 1.00 | 507 | asm:func_8003DEFC/data:data_8003E780/data:data_8003E780/asm:func_8003E8D8 |
+| 8003F138 | 00:20:13 | 7.25 | 1.00 | 509 | asm:func_8003E8D8/data:data_8003F03C/data:data_8003F03C/asm:func_8003F1CC |
+| 8003FA68 | 00:20:14 | 7.25 | 1.00 | 494 | asm:func_8003F1CC/data:data_8003F960/data:data_8003F960/asm:func_8003FAA0 |
+| 80040398 | 00:20:15 | 7.21 | 1.00 | 505 | asm:func_8003FAA0/asm:func_80040398/asm:func_80040398/asm:func_80040398 |
+| 80040CC8 | 00:20:16 | 7.33 | 1.00 | 499 | data:data_80040BB0/asm:func_80040CC4/asm:func_80040CC4/data:data_80040F80 |
+| 800415F8 | 00:20:17 | 7.25 | 1.00 | 512 | data:data_80040F80/data:data_80040F80/data:data_80040F80/data:data_80041794 |
+| 80041F28 | 00:20:18 | 7.23 | 1.00 | 495 | data:data_80041794/data:data_80041794/data:data_80041794/data:data_800425C4 |
+| 80042858 | 00:20:19 | 7.27 | 1.00 | 511 | data:data_800425C4/data:data_800425C4/data:data_800425C4/data:data_800425C4 |
+| 80043188 | 00:20:20 | 7.28 | 1.00 | 510 | data:data_800425C4/data:data_800425C4/data:data_800425C4/asm:func_80043734 |
+| 80043AB8 | 00:20:21 | 7.28 | 1.00 | 510 | asm:func_80043734/data:data_80043A18/data:data_80043A18/data:data_80043A18 |
+| 800443E8 | 00:20:22 | 7.26 | 1.00 | 507 | data:data_80043A18/data:data_80043A18/data:data_80043A18/data:data_80043A18 |
+| 80044D18 | 00:20:23 | 7.24 | 1.00 | 512 | data:data_80043A18/data:data_80044CFC/data:data_80044CFC/data:data_80044CFC |
+| 80045648 | 00:20:24 | 7.26 | 1.00 | 508 | data:data_80044CFC/data:data_80044CFC/data:data_80044CFC/data:data_80044CFC |
+| 80045F78 | 00:20:25 | 7.12 | 1.00 | 509 | data:data_80044CFC/data:data_80044CFC/data:data_80044CFC/asm:func_800466B4 |
+| 800468A8 | 00:20:26 | 7.28 | 1.00 | 506 | asm:func_800466B4/data:data_80046858/data:data_80046858/data:data_80046858 |
+| 800471D8 | 00:20:27 | 7.22 | 1.00 | 501 | data:data_80046858/data:data_80046858/data:data_80046858/asm:func_800472AC |
+| 80047B08 | 00:20:28 | 7.20 | 1.00 | 498 | asm:func_800472AC/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
+| 80048438 | 00:20:29 | 7.29 | 1.00 | 499 | data:data_80047B08/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
+| 80048D68 | 00:20:30 | 7.25 | 1.00 | 495 | data:data_80047B08/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
+| 80049698 | 00:20:31 | 7.16 | 1.00 | 488 | data:data_80047B08/data:data_80047B08/data:data_80047B08/data:data_80047B08 |
+| 80049FC8 | 00:20:32 | 7.27 | 1.00 | 505 | data:data_80047B08/asm:func_80049F9C/asm:func_80049F9C/data:data_8004A41C |
+| 8004A8F8 | 00:20:33 | 7.28 | 1.00 | 506 | data:data_8004A41C/data:data_8004A41C/data:data_8004A41C/asm:func_8004A938 |
+| 8004B228 | 00:20:34 | 7.30 | 1.00 | 502 | asm:func_8004A938/data:data_8004B158/data:data_8004B158/data:data_8004B9B8 |
+| 8004BB58 | 00:20:35 | 7.27 | 1.00 | 500 | data:data_8004B9B8/data:data_8004B9B8/data:data_8004B9B8/asm:func_8004BB7C |
+| 8004C488 | 00:20:36 | 7.22 | 1.00 | 507 | asm:func_8004BB7C/data:data_8004C468/data:data_8004C468/data:data_8004C468 |
+| 8004CDB8 | 00:20:37 | 7.30 | 1.00 | 503 | data:data_8004C468/data:data_8004C468/data:data_8004C468/data:data_8004C468 |
+| 8004D6E8 | 00:20:38 | 7.23 | 1.00 | 497 | data:data_8004C468/data:data_8004C468/data:data_8004C468/data:data_8004DD84 |
+| 8004E018 | 00:20:39 | 7.21 | 1.00 | 500 | data:data_8004DD84/data:data_8004DD84/data:data_8004DD84/asm:func_8004E08C |
+| 8004E948 | 00:20:40 | 7.24 | 1.00 | 499 | asm:func_8004E08C/asm:func_8004E08C/data:data_8004E94C/data:data_8004EAD0 |
+| 8004F278 | 00:20:41 | 7.25 | 1.00 | 507 | data:data_8004EAD0/asm:func_8004F268/data:data_8004F27C/asm:func_8004F2A0 |
+| 8004FBA8 | 00:20:42 | 7.25 | 1.00 | 504 | asm:func_8004F2A0/data:data_8004FB44/data:data_8004FB44/asm:func_8004FFF8 |
+| 800504D8 | 00:20:43 | 7.17 | 1.00 | 498 | asm:func_8004FFF8/asm:func_8004FFF8/asm:func_8004FFF8/asm:func_80050A40 |
+| 80050E08 | 00:20:44 | 7.21 | 1.00 | 506 | asm:func_80050A40/data:data_80050E08/data:data_80050E08/data:data_80050E08 |
+| 80051738 | 00:20:45 | 7.30 | 1.00 | 499 | data:data_80050E08/data:data_80051700/data:data_80051700/data:data_80051700 |
+| 80052068 | 00:20:46 | 7.30 | 1.00 | 504 | data:data_80051700/data:data_80051700/data:data_80051700/asm:func_80052134 |
+| 80052998 | 00:20:47 | 7.17 | 1.00 | 502 | asm:func_80052134/data:data_8005293C/data:data_8005293C/data:data_8005293C |
+| 800532C8 | 00:20:48 | 7.21 | 1.00 | 507 | data:data_8005293C/data:data_8005293C/data:data_8005293C/data:data_8005293C |
+| 80053BF8 | 00:20:49 | 7.21 | 1.00 | 506 | data:data_8005293C/data:data_8005293C/data:data_8005293C/asm:func_80053C9C |
+| 80054528 | 00:20:50 | 7.20 | 1.00 | 507 | asm:func_80053C9C/data:data_80054434/data:data_80054434/data:data_80054434 |
+| 80054E58 | 00:20:51 | 7.19 | 1.00 | 497 | data:data_80054434/asm:func_80054E4C/asm:func_80054E4C/asm:func_8005546C |
+| 80055788 | 00:20:52 | 7.21 | 1.00 | 500 | asm:func_8005546C/asm:func_800556FC/asm:func_800556FC/asm:func_80055A38 |
+| 800560B8 | 00:20:53 | 7.17 | 1.00 | 503 | asm:func_80055A38/asm:func_800560B0/asm:func_800560B0/asm:func_800560B0 |
+| 800569E8 | 00:20:54 | 7.30 | 1.00 | 505 | asm:func_800560B0/data:data_800568E4/data:data_800568E4/data:data_800568E4 |
+| 80057318 | 00:20:55 | 7.30 | 1.00 | 509 | data:data_800568E4/data:data_800568E4/data:data_800568E4/data:data_800568E4 |
+| 80057C48 | 00:20:56 | 7.27 | 1.00 | 506 | data:data_800568E4/asm:func_80057BA0/data:data_80057C50/data:data_80058090 |
+| 80058578 | 00:20:57 | 7.21 | 1.00 | 496 | data:data_80058090/data:data_80058538/data:data_80058538/asm:func_80058718 |
+| 80058EA8 | 00:20:58 | 7.28 | 1.00 | 501 | asm:func_80058718/data:data_80058DF4/data:data_80058DF4/asm:func_80058EF8 |
+| 800597D8 | 00:20:59 | 7.18 | 1.00 | 499 | asm:func_80058EF8/data:data_80059758/data:data_80059758/asm:func_80059E2C |
+| 8005A108 | 00:20:60 | 7.23 | 1.00 | 490 | asm:func_80059E2C/data:data_80059FFC/data:data_80059FFC/asm:func_8005A344 |
+| 8005AA38 | 00:20:61 | 7.22 | 1.00 | 484 | asm:func_8005A344/data:data_8005A944/data:data_8005A944/asm:func_8005B05C |
+| 8005B368 | 00:20:62 | 7.26 | 1.00 | 489 | asm:func_8005B05C/data:data_8005B2DC/data:data_8005B2DC/asm:func_8005B39C |
+| 8005BC98 | 00:20:63 | 7.28 | 1.00 | 485 | asm:func_8005B39C/asm:func_8005BC3C/asm:func_8005BC3C/data:data_8005C298 |
+| 8005C5C8 | 00:20:64 | 7.29 | 1.00 | 478 | data:data_8005C298/data:data_8005C298/data:data_8005C298/data:data_8005C298 |
+| 8005CEF8 | 00:20:65 | 7.25 | 1.00 | 474 | data:data_8005C298/asm:func_8005CE7C/data:data_8005CF00/data:data_8005CF00 |
+| 8005D828 | 00:20:66 | 7.20 | 1.00 | 492 | data:data_8005CF00/data:data_8005CF00/data:data_8005CF00/data:data_8005CF00 |
+| 8005E158 | 00:20:67 | 7.20 | 1.00 | 488 | data:data_8005CF00/data:data_8005CF00/data:data_8005CF00/data:data_8005E5C0 |
+| 8005EA88 | 00:20:68 | 7.31 | 1.00 | 495 | data:data_8005E5C0/data:data_8005E5C0/data:data_8005E5C0/data:data_8005EEC8 |
+| 8005F3B8 | 00:20:69 | 7.27 | 1.00 | 493 | data:data_8005EEC8/asm:func_8005F370/data:data_8005F3C0/data:data_8005F3C0 |
+| 8005FCE8 | 00:20:70 | 7.22 | 1.00 | 501 | data:data_8005F3C0/asm:func_8005FCAC/data:data_8005FCEC/asm:func_8005FD74 |
+| 80060618 | 00:20:71 | 7.25 | 1.00 | 496 | asm:func_8005FD74/data:data_80060550/asm:func_80060630/asm:func_80060630 |
+| 80060F48 | 00:20:72 | 7.20 | 1.00 | 493 | asm:func_80060630/data:data_80060E48/data:data_80060E48/asm:func_8006107C |
+| 80061878 | 00:20:73 | 7.32 | 1.00 | 509 | asm:func_8006107C/data:data_800617E0/data:data_800617E0/asm:func_800618D0 |
+| 800621A8 | 00:20:74 | 7.23 | 1.00 | 496 | asm:func_800618D0/data:data_800620A8/data:data_800620A8/data:data_800620A8 |
+| 80062AD8 | 00:21:00 | 7.29 | 1.00 | 507 | data:data_800620A8/data:data_800620A8/asm:func_80062AE8/asm:func_80062AE8 |
+| 80063408 | 00:21:01 | 7.21 | 1.00 | 511 | asm:func_80062AE8/asm:func_800633AC/data:data_80063410/data:data_800637E4 |
+| 80063D38 | 00:21:02 | 7.23 | 1.00 | 496 | data:data_800637E4/data:data_800637E4/data:data_800637E4/data:data_800640EC |
+| 80064668 | 00:21:03 | 7.19 | 1.00 | 508 | data:data_800640EC/data:data_800640EC/data:data_800640EC/asm:func_80064BE8 |
+| 80064F98 | 00:21:04 | 7.16 | 0.99 | 507 | asm:func_80064BE8/data:data_80064EB8/data:data_80064EB8/asm:func_8006540C |
+| 800658C8 | 00:21:05 | 7.14 | 1.00 | 507 | asm:func_8006540C/asm:func_8006540C/asm:func_8006540C/data:data_80065F50 |
+| 800661F8 | 00:21:06 | 7.17 | 0.95 | 505 | data:data_80065F50/data:data_80065F50/data:data_80065F50/data:data_800665A4 |
+| 80066B28 | 00:21:07 | 7.30 | 0.85 | 510 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 80067458 | 00:21:08 | 7.28 | 0.95 | 502 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 80067D88 | 00:21:09 | 7.36 | 1.00 | 501 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 800686B8 | 00:21:10 | 7.26 | 1.00 | 490 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 80068FE8 | 00:21:11 | 7.26 | 1.00 | 497 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 80069918 | 00:21:12 | 7.34 | 1.00 | 503 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006A248 | 00:21:13 | 7.24 | 1.00 | 505 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006AB78 | 00:21:14 | 7.24 | 1.00 | 507 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006B4A8 | 00:21:15 | 7.31 | 1.00 | 498 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006BDD8 | 00:21:16 | 7.21 | 1.00 | 505 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006C708 | 00:21:17 | 7.17 | 0.97 | 506 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006D038 | 00:21:18 | 7.16 | 1.00 | 509 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006D968 | 00:21:19 | 7.15 | 1.00 | 506 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006E298 | 00:21:20 | 7.23 | 1.00 | 507 | data:data_800665A4/data:data_800665A4/data:data_800665A4/data:data_800665A4 |
+| 8006EBC8 | 00:21:21 | 7.20 | 1.00 | 509 | data:data_800665A4/data:data_800665A4/data:data_800665A4/asm:func_8006F130 |
+| 8006F4F8 | 00:21:22 | 7.14 | 0.97 | 509 | asm:func_8006F130/data:data_8006F454/data:data_8006F454/data:data_8006FCF8 |
+| 8006FE28 | 00:21:23 | 7.28 | 0.95 | 503 | data:data_8006FCF8/data:data_8006FCF8/data:data_8006FCF8/asm:func_80070070 |
+| 80070758 | 00:21:24 | 7.22 | 0.99 | 508 | asm:func_80070070/data:data_80070650/data:data_80070650/data:data_80070650 |
+| 80071088 | 00:21:25 | 7.18 | 1.00 | 512 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
+| 800719B8 | 00:21:26 | 7.21 | 1.00 | 512 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
+| 800722E8 | 00:21:27 | 7.19 | 1.00 | 508 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
+| 80072C18 | 00:21:28 | 7.30 | 1.00 | 509 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80070650 |
+| 80073548 | 00:21:29 | 7.22 | 0.96 | 510 | data:data_80070650/data:data_80070650/data:data_80070650/data:data_80073B6C |
+| 80073E78 | 00:21:30 | 7.28 | 0.94 | 501 | data:data_80073B6C/data:data_80073DA8/data:data_80073DA8/data:data_80074608 |
+| 800747A8 | 00:21:31 | 7.27 | 0.93 | 485 | data:data_80074608/data:data_80074608/data:data_80074608/data:data_80074EB8 |
+| 800750D8 | 00:21:32 | 7.19 | 0.96 | 506 | data:data_80074EB8/data:data_80074EB8/data:data_80074EB8/data:data_80075264 |
+| 80075A08 | 00:21:33 | 7.22 | 1.00 | 511 | data:data_80075264/data:data_80075264/data:data_80075264/asm:func_80075CE4 |
+| 80076338 | 00:21:34 | 7.26 | 0.99 | 511 | asm:func_80075CE4/asm:func_80076330/asm:func_80076330/asm:func_80076330 |
+| 80076C68 | 00:21:35 | 7.22 | 0.96 | 510 | asm:func_80076330/data:data_80076BD0/data:data_80076BD0/data:data_8007736C |
+| 80077598 | 00:21:36 | 7.21 | 0.95 | 493 | data:data_8007736C/data:data_8007736C/data:data_8007736C/data:data_800777A0 |
+| 80077EC8 | 00:21:37 | 7.22 | 0.93 | 503 | data:data_800777A0/data:data_800777A0/data:data_800777A0/data:data_800777A0 |
+| 800787F8 | 00:21:38 | 7.29 | 0.98 | 509 | data:data_800777A0/data:data_800777A0/data:data_800777A0/data:data_800777A0 |
+| 80079128 | 00:21:39 | 7.26 | 0.97 | 512 | data:data_800777A0/data:data_800777A0/data:data_800777A0/data:data_8007991C |
+| 80079A58 | 00:21:40 | 7.30 | 0.97 | 506 | data:data_8007991C/data:data_8007991C/data:data_8007991C/data:data_8007A0D0 |
+| 8007A388 | 00:21:41 | 7.20 | 0.98 | 506 | data:data_8007A0D0/data:data_8007A0D0/data:data_8007A0D0/data:data_8007AB08 |
+| 8007ACB8 | 00:21:42 | 7.24 | 0.97 | 510 | data:data_8007AB08/data:data_8007AB08/asm:func_8007ACC4/asm:func_8007B4A8 |
+| 8007B5E8 | 00:21:43 | 7.20 | 0.99 | 507 | asm:func_8007B4A8/data:data_8007B504/data:data_8007B504/data:data_8007BDC4 |
+| 8007BF18 | 00:21:44 | 7.25 | 0.99 | 508 | data:data_8007BDC4/data:data_8007BDC4/data:data_8007BDC4/asm:func_8007C678 |
+| 8007C848 | 00:21:45 | 7.24 | 1.00 | 512 | asm:func_8007C678/data:data_8007C760/data:data_8007C760/data:data_8007C760 |
+| 8007D178 | 00:21:46 | 7.28 | 1.00 | 512 | data:data_8007C760/data:data_8007C760/data:data_8007C760/data:data_8007C760 |
+| 8007DAA8 | 00:21:47 | 7.16 | 0.88 | 507 | data:data_8007C760/data:data_8007C760/data:data_8007C760/asm:func_8007E208 |
+| 8007E3D8 | 00:21:48 | 7.25 | 0.96 | 501 | asm:func_8007E208/data:data_8007E2F0/data:data_8007E2F0/data:data_8007E884 |
+| 8007ED08 | 00:21:49 | 7.27 | 1.00 | 501 | data:data_8007E884/data:data_8007ED08/data:data_8007ED08/asm:func_8007EF48 |
+| 8007F638 | 00:21:50 | 7.17 | 0.99 | 505 | asm:func_8007EF48/data:data_8007F55C/data:data_8007F55C/data:data_8007F55C |
+| 8007FF68 | 00:21:51 | 7.25 | 1.00 | 500 | data:data_8007F55C/data:data_8007F55C/data:data_8007F55C/data:data_8007F55C |
+| 80080898 | 00:21:52 | 7.22 | 1.00 | 508 | data:data_8007F55C/data:data_8007F55C/data:data_8007F55C/asm:func_800808C8 |
+| 800811C8 | 00:21:53 | 7.29 | 1.00 | 506 | asm:func_800808C8/asm:func_800808C8/asm:func_800808C8/asm:func_800808C8 |
+| 80081AF8 | 00:21:54 | 7.27 | 1.00 | 507 | asm:func_800808C8/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
+| 80082428 | 00:21:55 | 7.23 | 1.00 | 501 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
+| 80082D58 | 00:21:56 | 7.24 | 1.00 | 506 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
+| 80083688 | 00:21:57 | 7.28 | 1.00 | 510 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
+| 80083FB8 | 00:21:58 | 7.28 | 1.00 | 502 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80081A70 |
+| 800848E8 | 00:21:59 | 7.23 | 1.00 | 504 | data:data_80081A70/data:data_80081A70/data:data_80081A70/data:data_80084CA4 |
+| 80085218 | 00:21:60 | 7.22 | 1.00 | 503 | data:data_80084CA4/data:data_80084CA4/data:data_80084CA4/data:data_80084CA4 |
+| 80085B48 | 00:21:61 | 7.26 | 1.00 | 504 | data:data_80084CA4/data:data_80084CA4/data:data_80084CA4/asm:func_80085B64 |
+| 80086478 | 00:21:62 | 7.24 | 1.00 | 509 | asm:func_80085B64/data:data_80086424/data:data_80086424/data:data_80086424 |
+| 80086DA8 | 00:21:63 | 7.22 | 1.00 | 500 | data:data_80086424/data:data_80086424/data:data_80086424/asm:func_80086EBC |
+| 800876D8 | 00:21:64 | 7.24 | 1.00 | 502 | asm:func_80086EBC/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80088008 | 00:21:65 | 7.19 | 1.00 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80088938 | 00:21:66 | 7.24 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80089268 | 00:21:67 | 7.29 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80089B98 | 00:21:68 | 7.25 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008A4C8 | 00:21:69 | 7.18 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008ADF8 | 00:21:70 | 7.28 | 1.00 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008B728 | 00:21:71 | 7.28 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008C058 | 00:21:72 | 7.23 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008C988 | 00:21:73 | 7.27 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008D2B8 | 00:21:74 | 7.24 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008DBE8 | 00:22:00 | 7.25 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008E518 | 00:22:01 | 7.25 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008EE48 | 00:22:02 | 7.21 | 1.00 | 500 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8008F778 | 00:22:03 | 7.21 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800900A8 | 00:22:04 | 7.29 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800909D8 | 00:22:05 | 7.29 | 1.00 | 506 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80091308 | 00:22:06 | 7.22 | 1.00 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80091C38 | 00:22:07 | 7.35 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80092568 | 00:22:08 | 7.34 | 1.00 | 510 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80092E98 | 00:22:09 | 7.31 | 1.00 | 505 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800937C8 | 00:22:10 | 7.24 | 1.00 | 503 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800940F8 | 00:22:11 | 7.21 | 1.00 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80094A28 | 00:22:12 | 7.31 | 1.00 | 509 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80095358 | 00:22:13 | 7.18 | 1.00 | 503 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80095C88 | 00:22:14 | 7.26 | 1.00 | 493 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800965B8 | 00:22:15 | 7.19 | 0.93 | 465 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80096EE8 | 00:22:16 | 7.17 | 0.76 | 370 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80097818 | 00:22:17 | 7.27 | 0.75 | 396 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80098148 | 00:22:18 | 7.20 | 0.76 | 387 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80098A78 | 00:22:19 | 7.27 | 0.76 | 386 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800993A8 | 00:22:20 | 7.21 | 0.77 | 327 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 80099CD8 | 00:22:21 | 7.17 | 0.76 | 399 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009A608 | 00:22:22 | 7.23 | 0.82 | 399 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009AF38 | 00:22:23 | 7.21 | 0.80 | 379 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009B868 | 00:22:24 | 7.27 | 0.80 | 367 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009C198 | 00:22:25 | 7.27 | 0.83 | 278 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009CAC8 | 00:22:26 | 7.22 | 0.81 | 273 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009D3F8 | 00:22:27 | 7.17 | 0.80 | 338 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009DD28 | 00:22:28 | 7.33 | 0.78 | 378 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009E658 | 00:22:29 | 7.22 | 0.75 | 404 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009EF88 | 00:22:30 | 7.30 | 0.76 | 407 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 8009F8B8 | 00:22:31 | 7.34 | 0.85 | 349 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A01E8 | 00:22:32 | 7.25 | 0.93 | 171 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A0B18 | 00:22:33 | 7.12 | 0.91 | 199 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A1448 | 00:22:34 | 7.13 | 0.90 | 329 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A1D78 | 00:22:35 | 7.02 | 0.77 | 327 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A26A8 | 00:22:36 | 6.95 | 0.92 | 213 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A2FD8 | 00:22:37 | 7.00 | 0.89 | 235 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A3908 | 00:22:38 | 7.09 | 0.88 | 261 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A4238 | 00:22:39 | 7.12 | 0.88 | 251 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A4B68 | 00:22:40 | 7.14 | 0.89 | 208 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A5498 | 00:22:41 | 7.10 | 0.91 | 286 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A5DC8 | 00:22:42 | 7.17 | 0.81 | 392 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A66F8 | 00:22:43 | 7.08 | 0.68 | 441 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A7028 | 00:22:44 | 7.00 | 0.67 | 415 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A7958 | 00:22:45 | 6.92 | 0.67 | 362 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A8288 | 00:22:46 | 7.15 | 0.92 | 215 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A8BB8 | 00:22:47 | 7.04 | 0.90 | 238 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A94E8 | 00:22:48 | 7.09 | 0.88 | 257 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800A9E18 | 00:22:49 | 7.00 | 0.86 | 256 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AA748 | 00:22:50 | 7.15 | 0.89 | 216 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AB078 | 00:22:51 | 7.18 | 0.92 | 189 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AB9A8 | 00:22:52 | 7.17 | 0.88 | 384 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AC2D8 | 00:22:53 | 7.18 | 0.66 | 471 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800ACC08 | 00:22:54 | 7.21 | 0.76 | 469 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AD538 | 00:22:55 | 7.20 | 0.59 | 477 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800ADE68 | 00:22:56 | 7.27 | 0.58 | 439 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AE798 | 00:22:57 | 7.22 | 0.64 | 435 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AF0C8 | 00:22:58 | 7.24 | 0.61 | 487 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800AF9F8 | 00:22:59 | 7.24 | 0.68 | 511 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B0328 | 00:22:60 | 7.24 | 0.65 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B0C58 | 00:22:61 | 7.21 | 0.73 | 507 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B1588 | 00:22:62 | 7.27 | 0.63 | 461 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B1EB8 | 00:22:63 | 7.30 | 0.55 | 353 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B27E8 | 00:22:64 | 7.19 | 0.58 | 354 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B3118 | 00:22:65 | 7.23 | 0.59 | 270 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B3A48 | 00:22:66 | 7.24 | 0.55 | 376 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B4378 | 00:22:67 | 7.22 | 0.54 | 356 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B4CA8 | 00:22:68 | 7.25 | 0.60 | 402 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B55D8 | 00:22:69 | 7.26 | 0.61 | 339 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B5F08 | 00:22:70 | 7.23 | 0.62 | 488 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B6838 | 00:22:71 | 7.25 | 0.70 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B7168 | 00:22:72 | 7.27 | 0.71 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B7A98 | 00:22:73 | 7.28 | 0.66 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B83C8 | 00:22:74 | 7.23 | 0.68 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B8CF8 | 00:23:00 | 7.17 | 0.57 | 506 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B9628 | 00:23:01 | 7.22 | 0.49 | 483 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800B9F58 | 00:23:02 | 7.10 | 0.56 | 500 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BA888 | 00:23:03 | 7.03 | 0.78 | 482 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BB1B8 | 00:23:04 | 7.11 | 0.38 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BBAE8 | 00:23:05 | 7.19 | 0.64 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BC418 | 00:23:06 | 7.28 | 0.78 | 508 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BCD48 | 00:23:07 | 7.25 | 0.63 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BD678 | 00:23:08 | 7.25 | 0.51 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BDFA8 | 00:23:09 | 7.25 | 0.57 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BE8D8 | 00:23:10 | 6.82 | 1.00 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BF208 | 00:23:11 | 6.76 | 0.53 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800BFB38 | 00:23:12 | 6.66 | 0.07 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C0468 | 00:23:13 | 6.81 | 0.72 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C0D98 | 00:23:14 | 7.07 | 0.86 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C16C8 | 00:23:15 | 6.45 | 0.43 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C1FF8 | 00:23:16 | 7.03 | 0.45 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C2928 | 00:23:17 | 6.99 | 0.01 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C3258 | 00:23:18 | 6.90 | 0.37 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C3B88 | 00:23:19 | 6.67 | 0.30 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C44B8 | 00:23:20 | 6.56 | 0.07 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C4DE8 | 00:23:21 | 7.29 | 0.22 | 511 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C5718 | 00:23:22 | 7.25 | 0.86 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C6048 | 00:23:23 | 7.18 | 0.95 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C6978 | 00:23:24 | 7.02 | 0.29 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C72A8 | 00:23:25 | 6.75 | 0.63 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C7BD8 | 00:23:26 | 7.03 | 0.00 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C8508 | 00:23:27 | 6.65 | 0.53 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C8E38 | 00:23:28 | 6.94 | 0.41 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800C9768 | 00:23:29 | 6.79 | 0.89 | 512 | data:data_8008765C/data:data_8008765C/data:data_8008765C/data:data_8008765C |
+| 800CA098 | 00:23:30 | 7.02 | n/a | n/a | data:data_8008765C/data:data_8008765C/data:data_8008765C/? |
 
 ## mainmenu_jp
 
-296 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+296 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 562 | 0x17 | 6.10 | 0.54 | 93 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 563 | 0x17 | 7.20 | 0.56 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 564 | 0x17 | 7.23 | 0.57 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021CA8 | 565 | 0x17 | 7.31 | 0.58 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800225D8 | 566 | 0x17 | 7.14 | 0.52 | 503 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80022F08 | 567 | 0x17 | 7.20 | 0.54 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80023838 | 568 | 0x17 | 7.28 | 0.58 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80024168 | 569 | 0x17 | 7.19 | 1.00 | 505 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80024A98 | 576 | 0x17 | 7.22 | 1.00 | 482 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 800253C8 | 577 | 0x17 | 7.26 | 1.00 | 503 | data:data_80020000/asm:func_800253C4/data:data_800253D0/asm:func_800253F8 |
-| 80025CF8 | 578 | 0x17 | 7.17 | 1.00 | 508 | asm:func_800253F8/data:data_80025C08/data:data_80025C08/data:data_80026250 |
-| 80026628 | 579 | 0x17 | 7.23 | 1.00 | 501 | data:data_80026250/data:data_80026250/data:data_80026250/data:data_80026974 |
-| 80026F58 | 580 | 0x17 | 7.31 | 1.00 | 507 | data:data_80026974/data:data_80026974/data:data_80026974/asm:func_800270B4 |
-| 80027888 | 581 | 0x17 | 7.20 | 1.00 | 510 | asm:func_800270B4/data:data_8002777C/data:data_8002777C/asm:func_80027918 |
-| 800281B8 | 582 | 0x17 | 7.21 | 1.00 | 505 | asm:func_80027918/data:data_800280E8/data:data_800280E8/asm:func_80028284 |
-| 80028AE8 | 583 | 0x17 | 7.28 | 1.00 | 491 | asm:func_80028284/data:data_800289DC/data:data_800289DC/data:data_800289DC |
-| 80029418 | 584 | 0x17 | 7.24 | 1.00 | 512 | data:data_800289DC/data:data_800289DC/data:data_800289DC/asm:func_80029518 |
-| 80029D48 | 585 | 0x17 | 7.23 | 1.00 | 506 | asm:func_80029518/data:data_80029D38/data:data_80029D38/data:data_80029D38 |
-| 8002A678 | 592 | 0x17 | 7.22 | 1.00 | 499 | data:data_80029D38/data:data_80029D38/data:data_80029D38/asm:func_8002ABC4 |
-| 8002AFA8 | 593 | 0x17 | 7.17 | 1.00 | 490 | asm:func_8002ABC4/data:data_8002AEB8/data:data_8002AEB8/asm:func_8002B0CC |
-| 8002B8D8 | 594 | 0x17 | 7.27 | 1.00 | 501 | data:data_8002B7C0/data:data_8002B8D8/asm:func_8002B8F0/asm:func_8002B8F0 |
-| 8002C208 | 595 | 0x17 | 7.18 | 1.00 | 503 | data:data_8002C0F0/data:data_8002C208/asm:func_8002C220/asm:func_8002C220 |
-| 8002CB38 | 596 | 0x17 | 7.26 | 1.00 | 234 | data:data_8002CA20/data:data_8002CB38/asm:func_8002CB50/asm:func_8002CB50 |
-| 8002D468 | 597 | 0x17 | 7.24 | 1.00 | 142 | data:data_8002D350/data:data_8002D468/asm:func_8002D480/asm:func_8002D480 |
-| 8002DD98 | 598 | 0x17 | 7.38 | 1.00 | 120 | data:data_8002DC80/data:data_8002DD98/data:data_8002DDB0/asm:func_8002DE00 |
-| 8002E6C8 | 599 | 0x17 | 7.21 | 1.00 | 131 | asm:func_8002DE00/data:data_8002E600/data:data_8002E600/data:data_8002E600 |
-| 8002EFF8 | 600 | 0x17 | 7.21 | 1.00 | 144 | data:data_8002E600/data:data_8002E600/data:data_8002E600/data:data_8002E600 |
-| 8002F928 | 601 | 0x17 | 7.25 | 1.00 | 137 | data:data_8002E600/data:data_8002E600/data:data_8002E600/data:data_8002E600 |
-| 80030258 | 608 | 0x17 | 7.20 | 1.00 | 132 | data:data_8002E600/data:data_8002E600/data:data_8002E600/asm:func_80030348 |
-| 80030B88 | 609 | 0x17 | 7.32 | 1.00 | 167 | asm:func_80030348/data:data_80030A88/data:data_80030A88/asm:func_80030BB0 |
-| 800314B8 | 610 | 0x17 | 7.20 | 1.00 | 166 | asm:func_80030BB0/data:data_800313C0/data:data_800313C0/data:data_800313C0 |
-| 80031DE8 | 611 | 0x17 | 7.20 | 1.00 | 163 | data:data_800313C0/data:data_800313C0/data:data_800313C0/data:data_800313C0 |
-| 80032718 | 612 | 0x17 | 7.27 | 1.00 | 158 | data:data_800313C0/data:data_800313C0/data:data_800313C0/data:data_800313C0 |
-| 80033048 | 613 | 0x17 | 7.34 | 1.00 | 152 | data:data_800313C0/data:data_800313C0/data:data_800313C0/asm:func_8003312C |
-| 80033978 | 614 | 0x17 | 7.22 | 1.00 | 162 | asm:func_8003312C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
-| 800342A8 | 615 | 0x17 | 7.24 | 1.00 | 164 | data:data_8003386C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
-| 80034BD8 | 616 | 0x17 | 7.24 | 1.00 | 168 | data:data_8003386C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
-| 80035508 | 617 | 0x17 | 7.28 | 1.00 | 167 | data:data_8003386C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
-| 80035E38 | 624 | 0x17 | 7.29 | 1.00 | 157 | data:data_8003386C/data:data_8003386C/data:data_8003386C/asm:func_8003636C |
-| 80036768 | 625 | 0x17 | 7.23 | 1.00 | 123 | asm:func_8003636C/asm:func_80036718/asm:func_80036718/asm:func_80036718 |
-| 80037098 | 626 | 0x17 | 7.26 | 1.00 | 470 | asm:func_80036718/data:data_80036F9C/data:data_80036F9C/asm:func_800370DC |
-| 800379C8 | 627 | 0x17 | 7.18 | 1.00 | 482 | asm:func_800370DC/data:data_800378F8/data:data_800378F8/asm:func_800380FC |
-| 800382F8 | 628 | 0x17 | 7.22 | 1.00 | 483 | asm:func_800380FC/data:data_800381EC/data:data_800381EC/asm:func_80038318 |
-| 80038C28 | 512 | 0x18 | 7.20 | 1.00 | 487 | asm:func_80038318/asm:func_80038BBC/data:data_80038C2C/data:data_80038C2C |
-| 80039558 | 513 | 0x18 | 7.14 | 1.00 | 511 | data:data_80038C2C/data:data_80038C2C/data:data_80038C2C/data:data_80038C2C |
-| 80039E88 | 514 | 0x18 | 7.26 | 1.00 | 502 | data:data_80038C2C/asm:func_80039E7C/data:data_80039E90/data:data_80039E90 |
-| 8003A7B8 | 515 | 0x18 | 7.20 | 1.00 | 497 | data:data_80039E90/asm:func_8003A774/asm:func_8003A774/asm:func_8003A774 |
-| 8003B0E8 | 516 | 0x18 | 7.15 | 1.00 | 507 | asm:func_8003A774/data:data_8003AFDC/data:data_8003AFDC/asm:func_8003B1A8 |
-| 8003BA18 | 517 | 0x18 | 7.16 | 1.00 | 499 | asm:func_8003B1A8/data:data_8003B970/data:data_8003B970/data:data_8003B970 |
-| 8003C348 | 518 | 0x18 | 7.25 | 1.00 | 507 | data:data_8003B970/data:data_8003B970/data:data_8003B970/data:data_8003B970 |
-| 8003CC78 | 519 | 0x18 | 7.20 | 1.00 | 508 | data:data_8003B970/data:data_8003B970/asm:func_8003CC7C/asm:func_8003CC7C |
-| 8003D5A8 | 520 | 0x18 | 7.27 | 1.00 | 501 | asm:func_8003CC7C/asm:func_8003D59C/asm:func_8003D59C/asm:func_8003D59C |
-| 8003DED8 | 521 | 0x18 | 7.23 | 1.00 | 510 | asm:func_8003D59C/data:data_8003DE78/data:data_8003DE78/data:data_8003DE78 |
-| 8003E808 | 528 | 0x18 | 7.23 | 1.00 | 507 | data:data_8003DE78/data:data_8003E7FC/data:data_8003E7FC/asm:func_8003E840 |
-| 8003F138 | 529 | 0x18 | 7.26 | 1.00 | 509 | asm:func_8003E840/data:data_8003F044/data:data_8003F044/data:data_8003F044 |
-| 8003FA68 | 530 | 0x18 | 7.23 | 1.00 | 494 | data:data_8003F044/data:data_8003F044/data:data_8003F044/asm:func_8003FB98 |
-| 80040398 | 531 | 0x18 | 7.15 | 1.00 | 505 | asm:func_8003FB98/data:data_8004029C/asm:func_800403AC/asm:func_800403AC |
-| 80040CC8 | 532 | 0x18 | 7.23 | 1.00 | 499 | asm:func_800403AC/data:data_80040BD0/data:data_80040BD0/data:data_80040BD0 |
-| 800415F8 | 533 | 0x18 | 7.36 | 1.00 | 512 | data:data_80040BD0/data:data_80040BD0/data:data_80040BD0/data:data_80040BD0 |
-| 80041F28 | 534 | 0x18 | 7.27 | 1.00 | 495 | data:data_80040BD0/data:data_80040BD0/asm:func_80041F40/data:data_80042594 |
-| 80042858 | 535 | 0x18 | 7.24 | 1.00 | 511 | data:data_80042594/data:data_80042594/data:data_80042594/data:data_80042594 |
-| 80043188 | 536 | 0x18 | 7.19 | 1.00 | 510 | data:data_80042594/data:data_80042594/data:data_80042594/asm:func_80043744 |
-| 80043AB8 | 537 | 0x18 | 7.11 | 1.00 | 510 | asm:func_80043744/data:data_800439BC/data:data_800439BC/data:data_80043CA0 |
-| 800443E8 | 544 | 0x18 | 7.28 | 1.00 | 507 | data:data_80043CA0/data:data_80043CA0/data:data_80043CA0/asm:func_80044430 |
-| 80044D18 | 545 | 0x18 | 7.18 | 1.00 | 512 | asm:func_80044430/data:data_80044C4C/asm:func_80044D24/asm:func_8004533C |
-| 80045648 | 546 | 0x18 | 7.16 | 1.00 | 508 | asm:func_8004533C/data:data_800455E8/data:data_800455E8/data:data_800455E8 |
-| 80045F78 | 547 | 0x18 | 7.28 | 1.00 | 509 | data:data_800455E8/data:data_800455E8/data:data_800455E8/data:data_800455E8 |
-| 800468A8 | 548 | 0x18 | 7.27 | 1.00 | 506 | data:data_800455E8/asm:func_800468A8/asm:func_800468A8/asm:func_80046C08 |
-| 800471D8 | 549 | 0x18 | 7.22 | 1.00 | 501 | asm:func_80046C08/asm:func_80046C08/asm:func_80046C08/asm:func_80046C08 |
-| 80047B08 | 550 | 0x18 | 7.31 | 1.00 | 498 | asm:func_80046C08/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
-| 80048438 | 551 | 0x18 | 7.22 | 1.00 | 499 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
-| 80048D68 | 552 | 0x18 | 7.17 | 1.00 | 495 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
-| 80049698 | 553 | 0x18 | 7.23 | 1.00 | 488 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
-| 80049FC8 | 560 | 0x18 | 7.16 | 1.00 | 505 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/asm:func_8004A38C |
-| 8004A8F8 | 561 | 0x18 | 7.22 | 1.00 | 506 | asm:func_8004A38C/data:data_8004A8BC/data:data_8004A8BC/data:data_8004A8BC |
-| 8004B228 | 562 | 0x18 | 7.30 | 1.00 | 502 | data:data_8004A8BC/data:data_8004A8BC/data:data_8004A8BC/data:data_8004B9E4 |
-| 8004BB58 | 563 | 0x18 | 7.18 | 1.00 | 500 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
-| 8004C488 | 564 | 0x18 | 7.15 | 1.00 | 507 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
-| 8004CDB8 | 565 | 0x18 | 7.20 | 1.00 | 503 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
-| 8004D6E8 | 566 | 0x18 | 7.28 | 1.00 | 497 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
-| 8004E018 | 567 | 0x18 | 7.23 | 1.00 | 500 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004E454 |
-| 8004E948 | 568 | 0x18 | 7.18 | 1.00 | 499 | data:data_8004E454/data:data_8004E454/data:data_8004E454/data:data_8004EEA0 |
-| 8004F278 | 569 | 0x18 | 7.24 | 1.00 | 507 | data:data_8004EEA0/data:data_8004EEA0/data:data_8004EEA0/asm:func_8004F2E4 |
-| 8004FBA8 | 576 | 0x18 | 7.21 | 1.00 | 504 | asm:func_8004F2E4/data:data_8004FAA0/data:data_8004FAA0/data:data_8004FAA0 |
-| 800504D8 | 577 | 0x18 | 7.13 | 1.00 | 498 | data:data_8004FAA0/data:data_8004FAA0/asm:func_800504F0/asm:func_800504F0 |
-| 80050E08 | 578 | 0x18 | 7.24 | 1.00 | 506 | asm:func_800504F0/data:data_80050D18/asm:func_80050E10/data:data_800510E8 |
-| 80051738 | 579 | 0x18 | 7.24 | 1.00 | 499 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
-| 80052068 | 580 | 0x18 | 7.23 | 1.00 | 504 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
-| 80052998 | 581 | 0x18 | 7.33 | 1.00 | 502 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
-| 800532C8 | 582 | 0x18 | 7.27 | 1.00 | 507 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
-| 80053BF8 | 583 | 0x18 | 7.19 | 1.00 | 506 | data:data_800510E8/data:data_800510E8/asm:func_80053C10/asm:func_80053C10 |
-| 80054528 | 584 | 0x18 | 7.21 | 1.00 | 507 | asm:func_80053C10/data:data_80054478/data:data_80054478/data:data_80054478 |
-| 80054E58 | 585 | 0x18 | 7.18 | 1.00 | 497 | data:data_80054478/asm:func_80054E50/data:data_80054E5C/data:data_80055218 |
-| 80055788 | 592 | 0x18 | 7.27 | 1.00 | 500 | data:data_80055218/data:data_80055218/data:data_80055218/data:data_80055218 |
-| 800560B8 | 593 | 0x18 | 7.25 | 1.00 | 503 | data:data_80055218/data:data_80055218/data:data_80055218/data:data_80055218 |
-| 800569E8 | 594 | 0x18 | 7.24 | 1.00 | 505 | data:data_80055218/data:data_80055218/data:data_80055218/asm:func_80056A30 |
-| 80057318 | 595 | 0x18 | 7.18 | 1.00 | 509 | asm:func_80056A30/data:data_8005726C/data:data_8005726C/data:data_8005726C |
-| 80057C48 | 596 | 0x18 | 7.33 | 1.00 | 506 | data:data_8005726C/data:data_8005726C/data:data_8005726C/data:data_8005726C |
-| 80058578 | 597 | 0x18 | 7.21 | 1.00 | 496 | data:data_8005726C/data:data_8005726C/data:data_8005726C/asm:func_800588D4 |
-| 80058EA8 | 598 | 0x18 | 7.22 | 1.00 | 501 | asm:func_800588D4/data:data_80058DA8/data:data_80058DA8/data:data_80058DA8 |
-| 800597D8 | 599 | 0x18 | 7.24 | 1.00 | 499 | data:data_80058DA8/data:data_80058DA8/data:data_80058DA8/data:data_80058DA8 |
-| 8005A108 | 600 | 0x18 | 7.29 | 1.00 | 490 | data:data_80058DA8/data:data_80058DA8/data:data_80058DA8/asm:func_8005A714 |
-| 8005AA38 | 601 | 0x18 | 7.26 | 1.00 | 484 | asm:func_8005A714/data:data_8005A978/data:data_8005A978/asm:func_8005AA54 |
-| 8005B368 | 608 | 0x18 | 7.33 | 1.00 | 489 | asm:func_8005AA54/data:data_8005B318/asm:func_8005B370/data:data_8005B9EC |
-| 8005BC98 | 609 | 0x18 | 7.22 | 1.00 | 485 | data:data_8005B9EC/data:data_8005B9EC/data:data_8005B9EC/data:data_8005C2FC |
-| 8005C5C8 | 610 | 0x18 | 7.28 | 1.00 | 478 | data:data_8005C2FC/data:data_8005C2FC/data:data_8005C2FC/asm:func_8005C5EC |
-| 8005CEF8 | 611 | 0x18 | 7.32 | 1.00 | 474 | asm:func_8005C5EC/data:data_8005CDEC/data:data_8005CDEC/asm:func_8005D67C |
-| 8005D828 | 612 | 0x18 | 7.23 | 1.00 | 492 | asm:func_8005D67C/asm:func_8005D81C/asm:func_8005D81C/asm:func_8005D81C |
-| 8005E158 | 613 | 0x18 | 7.11 | 1.00 | 488 | asm:func_8005D81C/data:data_8005E04C/data:data_8005E04C/data:data_8005E248 |
-| 8005EA88 | 614 | 0x18 | 7.24 | 1.00 | 495 | data:data_8005E248/data:data_8005E248/data:data_8005E248/asm:func_8005EAC0 |
-| 8005F3B8 | 615 | 0x18 | 7.30 | 1.00 | 493 | asm:func_8005EAC0/data:data_8005F2B4/data:data_8005F2B4/data:data_8005FA50 |
-| 8005FCE8 | 616 | 0x18 | 7.28 | 1.00 | 501 | data:data_8005FA50/data:data_8005FA50/data:data_8005FA50/data:data_80060368 |
-| 80060618 | 617 | 0x18 | 7.19 | 1.00 | 496 | data:data_80060368/data:data_80060618/data:data_80060618/asm:func_800607CC |
-| 80060F48 | 624 | 0x18 | 7.13 | 1.00 | 493 | data:data_80060E30/data:data_80060EC8/data:data_80060EC8/data:data_80060EC8 |
-| 80061878 | 625 | 0x18 | 7.21 | 1.00 | 509 | data:data_80060EC8/data:data_80060EC8/data:data_80060EC8/data:data_80060EC8 |
-| 800621A8 | 626 | 0x18 | 7.21 | 1.00 | 496 | data:data_80060EC8/data:data_80062178/data:data_80062178/data:data_800626E0 |
-| 80062AD8 | 627 | 0x18 | 7.26 | 1.00 | 507 | data:data_800626E0/data:data_800626E0/data:data_800626E0/asm:func_80062B04 |
-| 80063408 | 628 | 0x18 | 7.25 | 1.00 | 511 | asm:func_80062B04/data:data_80063330/data:data_80063330/data:data_80063330 |
-| 80063D38 | 512 | 0x19 | 7.13 | 1.00 | 496 | data:data_80063330/data:data_80063330/data:data_80063330/data:data_800641D8 |
-| 80064668 | 513 | 0x19 | 7.13 | 1.00 | 508 | data:data_800641D8/data:data_800641D8/data:data_800641D8/asm:func_800646BC |
-| 80064F98 | 514 | 0x19 | 7.20 | 0.99 | 507 | asm:func_800646BC/data:data_80064E94/data:data_80064E94/data:data_8006550C |
-| 800658C8 | 515 | 0x19 | 7.23 | 1.00 | 507 | data:data_8006550C/asm:func_800658C8/asm:func_800658C8/asm:func_800658C8 |
-| 800661F8 | 516 | 0x19 | 7.30 | 1.00 | 505 | asm:func_800658C8/asm:func_800658C8/asm:func_800658C8/data:data_80066884 |
-| 80066B28 | 517 | 0x19 | 7.26 | 0.92 | 510 | data:data_80066884/data:data_80066884/data:data_80066884/data:data_80066CF4 |
-| 80067458 | 518 | 0x19 | 7.28 | 0.86 | 502 | data:data_80066CF4/data:data_80066CF4/data:data_80066CF4/data:data_80066CF4 |
-| 80067D88 | 519 | 0x19 | 7.28 | 0.97 | 501 | data:data_80066CF4/asm:func_80067D88/asm:func_80067D88/data:data_80067E38 |
-| 800686B8 | 520 | 0x19 | 7.27 | 1.00 | 490 | data:data_80067E38/data:data_80067E38/data:data_80067E38/data:data_8006891C |
-| 80068FE8 | 521 | 0x19 | 7.12 | 1.00 | 497 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
-| 80069918 | 528 | 0x19 | 7.12 | 1.00 | 503 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
-| 8006A248 | 529 | 0x19 | 7.27 | 1.00 | 505 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
-| 8006AB78 | 530 | 0x19 | 7.25 | 1.00 | 507 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
-| 8006B4A8 | 531 | 0x19 | 7.16 | 1.00 | 498 | data:data_8006891C/asm:func_8006B4A0/asm:func_8006B4A0/asm:func_8006B4A0 |
-| 8006BDD8 | 532 | 0x19 | 7.25 | 1.00 | 505 | asm:func_8006B4A0/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
-| 8006C708 | 533 | 0x19 | 7.22 | 0.97 | 506 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
-| 8006D038 | 534 | 0x19 | 7.19 | 1.00 | 509 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
-| 8006D968 | 535 | 0x19 | 7.23 | 1.00 | 506 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
-| 8006E298 | 536 | 0x19 | 7.22 | 1.00 | 507 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
-| 8006EBC8 | 537 | 0x19 | 7.28 | 1.00 | 509 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
-| 8006F4F8 | 544 | 0x19 | 7.28 | 1.00 | 509 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/asm:func_8006F940 |
-| 8006FE28 | 545 | 0x19 | 7.22 | 0.96 | 503 | asm:func_8006F940/data:data_8006FD54/data:data_8006FD54/data:data_80070524 |
-| 80070758 | 546 | 0x19 | 7.20 | 0.95 | 508 | data:data_80070524/asm:func_80070700/asm:func_80070700/data:data_80070E94 |
-| 80071088 | 547 | 0x19 | 7.32 | 1.00 | 512 | data:data_80070E94/data:data_80070E94/data:data_80070E94/data:data_80070E94 |
-| 800719B8 | 548 | 0x19 | 7.29 | 1.00 | 512 | data:data_80070E94/data:data_80070E94/data:data_80070E94/data:data_80070E94 |
-| 800722E8 | 549 | 0x19 | 7.23 | 1.00 | 508 | data:data_80070E94/asm:func_800722B4/asm:func_800722B4/asm:func_800722B4 |
-| 80072C18 | 550 | 0x19 | 7.36 | 1.00 | 509 | asm:func_800722B4/data:data_80072B20/data:data_80072B20/data:data_80072B20 |
-| 80073548 | 551 | 0x19 | 7.23 | 1.00 | 510 | data:data_80072B20/data:data_80072B20/data:data_80072B20/data:data_80072B20 |
-| 80073E78 | 552 | 0x19 | 7.29 | 0.95 | 501 | data:data_80072B20/asm:func_80073DB4/data:data_80073E7C/data:data_800743D8 |
-| 800747A8 | 553 | 0x19 | 7.29 | 0.94 | 485 | data:data_800743D8/asm:func_80074740/data:data_800747B0/data:data_80074BC0 |
-| 800750D8 | 560 | 0x19 | 7.26 | 0.93 | 506 | data:data_80074BC0/asm:func_80075084/asm:func_80075084/data:data_800757BC |
-| 80075A08 | 561 | 0x19 | 7.21 | 0.98 | 511 | data:data_800757BC/data:data_800757BC/data:data_800757BC/data:data_800757BC |
-| 80076338 | 562 | 0x19 | 7.10 | 1.00 | 511 | data:data_800757BC/data:data_800757BC/data:data_800757BC/asm:func_80076368 |
-| 80076C68 | 563 | 0x19 | 7.28 | 0.98 | 510 | asm:func_80076368/data:data_80076B68/data:data_80076B68/data:data_800772FC |
-| 80077598 | 564 | 0x19 | 7.27 | 0.95 | 493 | data:data_800772FC/data:data_800772FC/data:data_800772FC/data:data_80077D94 |
-| 80077EC8 | 565 | 0x19 | 7.24 | 0.95 | 503 | data:data_80077D94/data:data_80077D94/data:data_80077D94/data:data_80077D94 |
-| 800787F8 | 566 | 0x19 | 7.26 | 0.93 | 509 | data:data_80077D94/data:data_80077D94/data:data_80077D94/data:data_80078F90 |
-| 80079128 | 567 | 0x19 | 7.29 | 1.00 | 512 | data:data_80078F90/data:data_80078F90/data:data_80078F90/data:data_800791B0 |
-| 80079A58 | 568 | 0x19 | 7.26 | 0.96 | 506 | data:data_800791B0/data:data_800791B0/data:data_800791B0/asm:func_8007A26C |
-| 8007A388 | 569 | 0x19 | 7.28 | 0.98 | 506 | asm:func_8007A26C/data:data_8007A298/data:data_8007A298/data:data_8007A8DC |
-| 8007ACB8 | 576 | 0x19 | 7.25 | 0.98 | 510 | data:data_8007A8DC/data:data_8007A8DC/data:data_8007A8DC/data:data_8007B468 |
-| 8007B5E8 | 577 | 0x19 | 7.25 | 0.97 | 507 | data:data_8007B468/asm:func_8007B5DC/asm:func_8007B5DC/data:data_8007BB30 |
-| 8007BF18 | 578 | 0x19 | 7.28 | 0.98 | 508 | data:data_8007BB30/data:data_8007BB30/data:data_8007BB30/data:data_8007C4E8 |
-| 8007C848 | 579 | 0x19 | 7.22 | 1.00 | 512 | data:data_8007C4E8/data:data_8007C4E8/data:data_8007C4E8/asm:func_8007CDA8 |
-| 8007D178 | 580 | 0x19 | 7.25 | 1.00 | 512 | asm:func_8007CDA8/data:data_8007D08C/data:data_8007D08C/asm:func_8007D3C0 |
-| 8007DAA8 | 581 | 0x19 | 7.22 | 0.98 | 507 | asm:func_8007D3C0/data:data_8007D9B4/data:data_8007D9B4/data:data_8007E1DC |
-| 8007E3D8 | 582 | 0x19 | 7.23 | 1.00 | 501 | data:data_8007E1DC/data:data_8007E1DC/data:data_8007E1DC/data:data_8007E1DC |
-| 8007ED08 | 583 | 0x19 | 7.21 | 0.99 | 501 | data:data_8007E1DC/data:data_8007E1DC/data:data_8007E1DC/asm:func_8007F0E0 |
-| 8007F638 | 584 | 0x19 | 7.33 | 1.00 | 505 | asm:func_8007F0E0/data:data_8007F554/data:data_8007F554/asm:func_8007F728 |
-| 8007FF68 | 585 | 0x19 | 7.24 | 1.00 | 500 | asm:func_8007F728/data:data_8007FE5C/data:data_8007FE5C/asm:func_8007FFAC |
-| 80080898 | 592 | 0x19 | 7.23 | 1.00 | 508 | asm:func_8007FFAC/data:data_800807DC/data:data_800807DC/asm:func_800808F4 |
-| 800811C8 | 593 | 0x19 | 7.26 | 1.00 | 506 | asm:func_800808F4/data:data_8008110C/data:data_8008110C/asm:func_80081318 |
-| 80081AF8 | 594 | 0x19 | 7.22 | 1.00 | 507 | asm:func_80081318/data:data_80081A2C/data:data_80081A2C/asm:func_80081CCC |
-| 80082428 | 595 | 0x19 | 7.21 | 1.00 | 501 | asm:func_80081CCC/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
-| 80082D58 | 596 | 0x19 | 7.23 | 1.00 | 506 | data:data_800823B4/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
-| 80083688 | 597 | 0x19 | 7.16 | 1.00 | 510 | data:data_800823B4/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
-| 80083FB8 | 598 | 0x19 | 7.32 | 1.00 | 502 | data:data_800823B4/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
-| 800848E8 | 599 | 0x19 | 7.31 | 1.00 | 504 | data:data_800823B4/data:data_800823B4/data:data_800823B4/asm:func_80084924 |
-| 80085218 | 600 | 0x19 | 7.26 | 1.00 | 503 | asm:func_80084924/data:data_8008510C/data:data_8008510C/asm:func_80085478 |
-| 80085B48 | 601 | 0x19 | 7.24 | 1.00 | 504 | asm:func_80085478/asm:func_80085B2C/data:data_80085B50/data:data_80085B50 |
-| 80086478 | 608 | 0x19 | 7.23 | 1.00 | 509 | data:data_80085B50/data:data_80085B50/data:data_80085B50/asm:func_80086504 |
-| 80086DA8 | 609 | 0x19 | 7.26 | 1.00 | 500 | asm:func_80086504/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800876D8 | 610 | 0x19 | 7.33 | 1.00 | 502 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80088008 | 611 | 0x19 | 7.26 | 1.00 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80088938 | 612 | 0x19 | 7.21 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80089268 | 613 | 0x19 | 7.23 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80089B98 | 614 | 0x19 | 7.19 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008A4C8 | 615 | 0x19 | 7.15 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008ADF8 | 616 | 0x19 | 7.32 | 1.00 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008B728 | 617 | 0x19 | 7.16 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008C058 | 624 | 0x19 | 7.26 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008C988 | 625 | 0x19 | 7.24 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008D2B8 | 626 | 0x19 | 7.14 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008DBE8 | 627 | 0x19 | 7.16 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008E518 | 628 | 0x19 | 7.32 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008EE48 | 512 | 0x20 | 7.23 | 1.00 | 500 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8008F778 | 513 | 0x20 | 7.27 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800900A8 | 514 | 0x20 | 7.36 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800909D8 | 515 | 0x20 | 7.27 | 1.00 | 506 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80091308 | 516 | 0x20 | 7.37 | 1.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80091C38 | 517 | 0x20 | 7.28 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80092568 | 518 | 0x20 | 7.26 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80092E98 | 519 | 0x20 | 7.16 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800937C8 | 520 | 0x20 | 7.26 | 1.00 | 503 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800940F8 | 521 | 0x20 | 7.22 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80094A28 | 528 | 0x20 | 7.30 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80095358 | 529 | 0x20 | 7.16 | 1.00 | 503 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80095C88 | 530 | 0x20 | 7.26 | 0.93 | 493 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800965B8 | 531 | 0x20 | 7.21 | 0.76 | 465 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80096EE8 | 532 | 0x20 | 7.15 | 0.75 | 370 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80097818 | 533 | 0x20 | 7.22 | 0.76 | 396 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80098148 | 534 | 0x20 | 7.30 | 0.76 | 387 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80098A78 | 535 | 0x20 | 7.28 | 0.78 | 386 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800993A8 | 536 | 0x20 | 7.30 | 0.76 | 327 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 80099CD8 | 537 | 0x20 | 7.32 | 0.82 | 399 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009A608 | 544 | 0x20 | 7.15 | 0.80 | 399 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009AF38 | 545 | 0x20 | 7.28 | 0.80 | 379 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009B868 | 546 | 0x20 | 7.29 | 0.83 | 367 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009C198 | 547 | 0x20 | 7.35 | 0.81 | 278 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009CAC8 | 548 | 0x20 | 7.14 | 0.80 | 273 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009D3F8 | 549 | 0x20 | 7.20 | 0.78 | 338 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009DD28 | 550 | 0x20 | 7.14 | 0.74 | 378 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009E658 | 551 | 0x20 | 7.24 | 0.76 | 404 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009EF88 | 552 | 0x20 | 7.17 | 0.86 | 407 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 8009F8B8 | 553 | 0x20 | 7.19 | 0.93 | 349 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A01E8 | 560 | 0x20 | 7.16 | 0.91 | 171 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A0B18 | 561 | 0x20 | 7.07 | 0.91 | 199 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A1448 | 562 | 0x20 | 6.97 | 0.75 | 329 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A1D78 | 563 | 0x20 | 6.94 | 0.92 | 327 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A26A8 | 564 | 0x20 | 7.13 | 0.88 | 213 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A2FD8 | 565 | 0x20 | 7.13 | 0.91 | 235 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A3908 | 566 | 0x20 | 7.12 | 0.91 | 261 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A4238 | 567 | 0x20 | 7.12 | 0.87 | 251 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A4B68 | 568 | 0x20 | 7.19 | 0.89 | 208 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A5498 | 569 | 0x20 | 7.11 | 0.81 | 286 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A5DC8 | 576 | 0x20 | 7.06 | 0.67 | 392 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A66F8 | 577 | 0x20 | 7.01 | 0.67 | 441 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A7028 | 578 | 0x20 | 6.85 | 0.67 | 415 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A7958 | 579 | 0x20 | 7.04 | 0.93 | 362 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A8288 | 580 | 0x20 | 7.07 | 0.90 | 215 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A8BB8 | 581 | 0x20 | 7.12 | 0.88 | 238 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A94E8 | 582 | 0x20 | 7.10 | 0.86 | 257 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800A9E18 | 583 | 0x20 | 7.16 | 0.89 | 256 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AA748 | 584 | 0x20 | 6.97 | 0.92 | 216 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AB078 | 585 | 0x20 | 7.05 | 0.88 | 189 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AB9A8 | 592 | 0x20 | 7.28 | 0.65 | 384 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AC2D8 | 593 | 0x20 | 7.27 | 0.76 | 471 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800ACC08 | 594 | 0x20 | 7.31 | 0.59 | 469 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AD538 | 595 | 0x20 | 7.22 | 0.59 | 477 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800ADE68 | 596 | 0x20 | 7.15 | 0.64 | 439 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AE798 | 597 | 0x20 | 7.18 | 0.61 | 435 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AF0C8 | 598 | 0x20 | 7.30 | 0.68 | 487 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800AF9F8 | 599 | 0x20 | 7.34 | 0.65 | 511 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B0328 | 600 | 0x20 | 7.29 | 0.73 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B0C58 | 601 | 0x20 | 7.26 | 0.63 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B1588 | 608 | 0x20 | 7.35 | 0.55 | 461 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B1EB8 | 609 | 0x20 | 7.19 | 0.58 | 353 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B27E8 | 610 | 0x20 | 7.29 | 0.59 | 354 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B3118 | 611 | 0x20 | 7.19 | 0.56 | 270 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B3A48 | 612 | 0x20 | 7.13 | 0.54 | 376 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B4378 | 613 | 0x20 | 7.30 | 0.61 | 356 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B4CA8 | 614 | 0x20 | 7.26 | 0.61 | 402 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B55D8 | 615 | 0x20 | 7.21 | 0.62 | 339 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B5F08 | 616 | 0x20 | 7.26 | 0.70 | 488 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B6838 | 617 | 0x20 | 7.27 | 0.71 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B7168 | 624 | 0x20 | 7.18 | 0.66 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B7A98 | 625 | 0x20 | 7.25 | 0.67 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B83C8 | 626 | 0x20 | 7.21 | 0.56 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B8CF8 | 627 | 0x20 | 7.18 | 0.50 | 506 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B9628 | 628 | 0x20 | 7.11 | 0.56 | 483 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800B9F58 | 512 | 0x21 | 7.01 | 0.77 | 500 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BA888 | 513 | 0x21 | 7.10 | 0.38 | 482 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BB1B8 | 514 | 0x21 | 7.12 | 0.64 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BBAE8 | 515 | 0x21 | 7.20 | 0.78 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BC418 | 516 | 0x21 | 7.28 | 0.63 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BCD48 | 517 | 0x21 | 7.27 | 0.51 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BD678 | 518 | 0x21 | 7.25 | 0.58 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BDFA8 | 519 | 0x21 | 6.87 | 1.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BE8D8 | 520 | 0x21 | 6.81 | 0.52 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BF208 | 521 | 0x21 | 6.67 | 0.07 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800BFB38 | 528 | 0x21 | 6.72 | 0.72 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C0468 | 529 | 0x21 | 7.13 | 0.87 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C0D98 | 530 | 0x21 | 6.75 | 0.43 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C16C8 | 531 | 0x21 | 6.99 | 0.45 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C1FF8 | 532 | 0x21 | 6.83 | 0.01 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C2928 | 533 | 0x21 | 6.86 | 0.38 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C3258 | 534 | 0x21 | 6.75 | 0.30 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C3B88 | 535 | 0x21 | 6.55 | 0.08 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C44B8 | 536 | 0x21 | 7.35 | 0.21 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C4DE8 | 537 | 0x21 | 7.29 | 0.87 | 511 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C5718 | 544 | 0x21 | 7.22 | 0.94 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C6048 | 545 | 0x21 | 6.91 | 0.29 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C6978 | 546 | 0x21 | 6.73 | 0.63 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C72A8 | 547 | 0x21 | 6.92 | 0.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C7BD8 | 548 | 0x21 | 6.74 | 0.53 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C8508 | 549 | 0x21 | 6.82 | 0.41 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C8E38 | 550 | 0x21 | 6.65 | 0.89 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
-| 800C9768 | 551 | 0x21 | 6.96 | 1.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 00:17:32 | 6.10 | 0.54 | 93 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 00:17:33 | 7.20 | 0.56 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 00:17:34 | 7.23 | 0.57 | 511 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021CA8 | 00:17:35 | 7.31 | 0.58 | 504 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800225D8 | 00:17:36 | 7.14 | 0.52 | 503 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80022F08 | 00:17:37 | 7.20 | 0.54 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80023838 | 00:17:38 | 7.28 | 0.58 | 506 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80024168 | 00:17:39 | 7.19 | 1.00 | 505 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80024A98 | 00:17:40 | 7.22 | 1.00 | 482 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 800253C8 | 00:17:41 | 7.26 | 1.00 | 503 | data:data_80020000/asm:func_800253C4/data:data_800253D0/asm:func_800253F8 |
+| 80025CF8 | 00:17:42 | 7.17 | 1.00 | 508 | asm:func_800253F8/data:data_80025C08/data:data_80025C08/data:data_80026250 |
+| 80026628 | 00:17:43 | 7.23 | 1.00 | 501 | data:data_80026250/data:data_80026250/data:data_80026250/data:data_80026974 |
+| 80026F58 | 00:17:44 | 7.31 | 1.00 | 507 | data:data_80026974/data:data_80026974/data:data_80026974/asm:func_800270B4 |
+| 80027888 | 00:17:45 | 7.20 | 1.00 | 510 | asm:func_800270B4/data:data_8002777C/data:data_8002777C/asm:func_80027918 |
+| 800281B8 | 00:17:46 | 7.21 | 1.00 | 505 | asm:func_80027918/data:data_800280E8/data:data_800280E8/asm:func_80028284 |
+| 80028AE8 | 00:17:47 | 7.28 | 1.00 | 491 | asm:func_80028284/data:data_800289DC/data:data_800289DC/data:data_800289DC |
+| 80029418 | 00:17:48 | 7.24 | 1.00 | 512 | data:data_800289DC/data:data_800289DC/data:data_800289DC/asm:func_80029518 |
+| 80029D48 | 00:17:49 | 7.23 | 1.00 | 506 | asm:func_80029518/data:data_80029D38/data:data_80029D38/data:data_80029D38 |
+| 8002A678 | 00:17:50 | 7.22 | 1.00 | 499 | data:data_80029D38/data:data_80029D38/data:data_80029D38/asm:func_8002ABC4 |
+| 8002AFA8 | 00:17:51 | 7.17 | 1.00 | 490 | asm:func_8002ABC4/data:data_8002AEB8/data:data_8002AEB8/asm:func_8002B0CC |
+| 8002B8D8 | 00:17:52 | 7.27 | 1.00 | 501 | data:data_8002B7C0/data:data_8002B8D8/asm:func_8002B8F0/asm:func_8002B8F0 |
+| 8002C208 | 00:17:53 | 7.18 | 1.00 | 503 | data:data_8002C0F0/data:data_8002C208/asm:func_8002C220/asm:func_8002C220 |
+| 8002CB38 | 00:17:54 | 7.26 | 1.00 | 234 | data:data_8002CA20/data:data_8002CB38/asm:func_8002CB50/asm:func_8002CB50 |
+| 8002D468 | 00:17:55 | 7.24 | 1.00 | 142 | data:data_8002D350/data:data_8002D468/asm:func_8002D480/asm:func_8002D480 |
+| 8002DD98 | 00:17:56 | 7.38 | 1.00 | 120 | data:data_8002DC80/data:data_8002DD98/data:data_8002DDB0/asm:func_8002DE00 |
+| 8002E6C8 | 00:17:57 | 7.21 | 1.00 | 131 | asm:func_8002DE00/data:data_8002E600/data:data_8002E600/data:data_8002E600 |
+| 8002EFF8 | 00:17:58 | 7.21 | 1.00 | 144 | data:data_8002E600/data:data_8002E600/data:data_8002E600/data:data_8002E600 |
+| 8002F928 | 00:17:59 | 7.25 | 1.00 | 137 | data:data_8002E600/data:data_8002E600/data:data_8002E600/data:data_8002E600 |
+| 80030258 | 00:17:60 | 7.20 | 1.00 | 132 | data:data_8002E600/data:data_8002E600/data:data_8002E600/asm:func_80030348 |
+| 80030B88 | 00:17:61 | 7.32 | 1.00 | 167 | asm:func_80030348/data:data_80030A88/data:data_80030A88/asm:func_80030BB0 |
+| 800314B8 | 00:17:62 | 7.20 | 1.00 | 166 | asm:func_80030BB0/data:data_800313C0/data:data_800313C0/data:data_800313C0 |
+| 80031DE8 | 00:17:63 | 7.20 | 1.00 | 163 | data:data_800313C0/data:data_800313C0/data:data_800313C0/data:data_800313C0 |
+| 80032718 | 00:17:64 | 7.27 | 1.00 | 158 | data:data_800313C0/data:data_800313C0/data:data_800313C0/data:data_800313C0 |
+| 80033048 | 00:17:65 | 7.34 | 1.00 | 152 | data:data_800313C0/data:data_800313C0/data:data_800313C0/asm:func_8003312C |
+| 80033978 | 00:17:66 | 7.22 | 1.00 | 162 | asm:func_8003312C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
+| 800342A8 | 00:17:67 | 7.24 | 1.00 | 164 | data:data_8003386C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
+| 80034BD8 | 00:17:68 | 7.24 | 1.00 | 168 | data:data_8003386C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
+| 80035508 | 00:17:69 | 7.28 | 1.00 | 167 | data:data_8003386C/data:data_8003386C/data:data_8003386C/data:data_8003386C |
+| 80035E38 | 00:17:70 | 7.29 | 1.00 | 157 | data:data_8003386C/data:data_8003386C/data:data_8003386C/asm:func_8003636C |
+| 80036768 | 00:17:71 | 7.23 | 1.00 | 123 | asm:func_8003636C/asm:func_80036718/asm:func_80036718/asm:func_80036718 |
+| 80037098 | 00:17:72 | 7.26 | 1.00 | 470 | asm:func_80036718/data:data_80036F9C/data:data_80036F9C/asm:func_800370DC |
+| 800379C8 | 00:17:73 | 7.18 | 1.00 | 482 | asm:func_800370DC/data:data_800378F8/data:data_800378F8/asm:func_800380FC |
+| 800382F8 | 00:17:74 | 7.22 | 1.00 | 483 | asm:func_800380FC/data:data_800381EC/data:data_800381EC/asm:func_80038318 |
+| 80038C28 | 00:18:00 | 7.20 | 1.00 | 487 | asm:func_80038318/asm:func_80038BBC/data:data_80038C2C/data:data_80038C2C |
+| 80039558 | 00:18:01 | 7.14 | 1.00 | 511 | data:data_80038C2C/data:data_80038C2C/data:data_80038C2C/data:data_80038C2C |
+| 80039E88 | 00:18:02 | 7.26 | 1.00 | 502 | data:data_80038C2C/asm:func_80039E7C/data:data_80039E90/data:data_80039E90 |
+| 8003A7B8 | 00:18:03 | 7.20 | 1.00 | 497 | data:data_80039E90/asm:func_8003A774/asm:func_8003A774/asm:func_8003A774 |
+| 8003B0E8 | 00:18:04 | 7.15 | 1.00 | 507 | asm:func_8003A774/data:data_8003AFDC/data:data_8003AFDC/asm:func_8003B1A8 |
+| 8003BA18 | 00:18:05 | 7.16 | 1.00 | 499 | asm:func_8003B1A8/data:data_8003B970/data:data_8003B970/data:data_8003B970 |
+| 8003C348 | 00:18:06 | 7.25 | 1.00 | 507 | data:data_8003B970/data:data_8003B970/data:data_8003B970/data:data_8003B970 |
+| 8003CC78 | 00:18:07 | 7.20 | 1.00 | 508 | data:data_8003B970/data:data_8003B970/asm:func_8003CC7C/asm:func_8003CC7C |
+| 8003D5A8 | 00:18:08 | 7.27 | 1.00 | 501 | asm:func_8003CC7C/asm:func_8003D59C/asm:func_8003D59C/asm:func_8003D59C |
+| 8003DED8 | 00:18:09 | 7.23 | 1.00 | 510 | asm:func_8003D59C/data:data_8003DE78/data:data_8003DE78/data:data_8003DE78 |
+| 8003E808 | 00:18:10 | 7.23 | 1.00 | 507 | data:data_8003DE78/data:data_8003E7FC/data:data_8003E7FC/asm:func_8003E840 |
+| 8003F138 | 00:18:11 | 7.26 | 1.00 | 509 | asm:func_8003E840/data:data_8003F044/data:data_8003F044/data:data_8003F044 |
+| 8003FA68 | 00:18:12 | 7.23 | 1.00 | 494 | data:data_8003F044/data:data_8003F044/data:data_8003F044/asm:func_8003FB98 |
+| 80040398 | 00:18:13 | 7.15 | 1.00 | 505 | asm:func_8003FB98/data:data_8004029C/asm:func_800403AC/asm:func_800403AC |
+| 80040CC8 | 00:18:14 | 7.23 | 1.00 | 499 | asm:func_800403AC/data:data_80040BD0/data:data_80040BD0/data:data_80040BD0 |
+| 800415F8 | 00:18:15 | 7.36 | 1.00 | 512 | data:data_80040BD0/data:data_80040BD0/data:data_80040BD0/data:data_80040BD0 |
+| 80041F28 | 00:18:16 | 7.27 | 1.00 | 495 | data:data_80040BD0/data:data_80040BD0/asm:func_80041F40/data:data_80042594 |
+| 80042858 | 00:18:17 | 7.24 | 1.00 | 511 | data:data_80042594/data:data_80042594/data:data_80042594/data:data_80042594 |
+| 80043188 | 00:18:18 | 7.19 | 1.00 | 510 | data:data_80042594/data:data_80042594/data:data_80042594/asm:func_80043744 |
+| 80043AB8 | 00:18:19 | 7.11 | 1.00 | 510 | asm:func_80043744/data:data_800439BC/data:data_800439BC/data:data_80043CA0 |
+| 800443E8 | 00:18:20 | 7.28 | 1.00 | 507 | data:data_80043CA0/data:data_80043CA0/data:data_80043CA0/asm:func_80044430 |
+| 80044D18 | 00:18:21 | 7.18 | 1.00 | 512 | asm:func_80044430/data:data_80044C4C/asm:func_80044D24/asm:func_8004533C |
+| 80045648 | 00:18:22 | 7.16 | 1.00 | 508 | asm:func_8004533C/data:data_800455E8/data:data_800455E8/data:data_800455E8 |
+| 80045F78 | 00:18:23 | 7.28 | 1.00 | 509 | data:data_800455E8/data:data_800455E8/data:data_800455E8/data:data_800455E8 |
+| 800468A8 | 00:18:24 | 7.27 | 1.00 | 506 | data:data_800455E8/asm:func_800468A8/asm:func_800468A8/asm:func_80046C08 |
+| 800471D8 | 00:18:25 | 7.22 | 1.00 | 501 | asm:func_80046C08/asm:func_80046C08/asm:func_80046C08/asm:func_80046C08 |
+| 80047B08 | 00:18:26 | 7.31 | 1.00 | 498 | asm:func_80046C08/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
+| 80048438 | 00:18:27 | 7.22 | 1.00 | 499 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
+| 80048D68 | 00:18:28 | 7.17 | 1.00 | 495 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
+| 80049698 | 00:18:29 | 7.23 | 1.00 | 488 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/data:data_80047AAC |
+| 80049FC8 | 00:18:30 | 7.16 | 1.00 | 505 | data:data_80047AAC/data:data_80047AAC/data:data_80047AAC/asm:func_8004A38C |
+| 8004A8F8 | 00:18:31 | 7.22 | 1.00 | 506 | asm:func_8004A38C/data:data_8004A8BC/data:data_8004A8BC/data:data_8004A8BC |
+| 8004B228 | 00:18:32 | 7.30 | 1.00 | 502 | data:data_8004A8BC/data:data_8004A8BC/data:data_8004A8BC/data:data_8004B9E4 |
+| 8004BB58 | 00:18:33 | 7.18 | 1.00 | 500 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
+| 8004C488 | 00:18:34 | 7.15 | 1.00 | 507 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
+| 8004CDB8 | 00:18:35 | 7.20 | 1.00 | 503 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
+| 8004D6E8 | 00:18:36 | 7.28 | 1.00 | 497 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4 |
+| 8004E018 | 00:18:37 | 7.23 | 1.00 | 500 | data:data_8004B9E4/data:data_8004B9E4/data:data_8004B9E4/data:data_8004E454 |
+| 8004E948 | 00:18:38 | 7.18 | 1.00 | 499 | data:data_8004E454/data:data_8004E454/data:data_8004E454/data:data_8004EEA0 |
+| 8004F278 | 00:18:39 | 7.24 | 1.00 | 507 | data:data_8004EEA0/data:data_8004EEA0/data:data_8004EEA0/asm:func_8004F2E4 |
+| 8004FBA8 | 00:18:40 | 7.21 | 1.00 | 504 | asm:func_8004F2E4/data:data_8004FAA0/data:data_8004FAA0/data:data_8004FAA0 |
+| 800504D8 | 00:18:41 | 7.13 | 1.00 | 498 | data:data_8004FAA0/data:data_8004FAA0/asm:func_800504F0/asm:func_800504F0 |
+| 80050E08 | 00:18:42 | 7.24 | 1.00 | 506 | asm:func_800504F0/data:data_80050D18/asm:func_80050E10/data:data_800510E8 |
+| 80051738 | 00:18:43 | 7.24 | 1.00 | 499 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
+| 80052068 | 00:18:44 | 7.23 | 1.00 | 504 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
+| 80052998 | 00:18:45 | 7.33 | 1.00 | 502 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
+| 800532C8 | 00:18:46 | 7.27 | 1.00 | 507 | data:data_800510E8/data:data_800510E8/data:data_800510E8/data:data_800510E8 |
+| 80053BF8 | 00:18:47 | 7.19 | 1.00 | 506 | data:data_800510E8/data:data_800510E8/asm:func_80053C10/asm:func_80053C10 |
+| 80054528 | 00:18:48 | 7.21 | 1.00 | 507 | asm:func_80053C10/data:data_80054478/data:data_80054478/data:data_80054478 |
+| 80054E58 | 00:18:49 | 7.18 | 1.00 | 497 | data:data_80054478/asm:func_80054E50/data:data_80054E5C/data:data_80055218 |
+| 80055788 | 00:18:50 | 7.27 | 1.00 | 500 | data:data_80055218/data:data_80055218/data:data_80055218/data:data_80055218 |
+| 800560B8 | 00:18:51 | 7.25 | 1.00 | 503 | data:data_80055218/data:data_80055218/data:data_80055218/data:data_80055218 |
+| 800569E8 | 00:18:52 | 7.24 | 1.00 | 505 | data:data_80055218/data:data_80055218/data:data_80055218/asm:func_80056A30 |
+| 80057318 | 00:18:53 | 7.18 | 1.00 | 509 | asm:func_80056A30/data:data_8005726C/data:data_8005726C/data:data_8005726C |
+| 80057C48 | 00:18:54 | 7.33 | 1.00 | 506 | data:data_8005726C/data:data_8005726C/data:data_8005726C/data:data_8005726C |
+| 80058578 | 00:18:55 | 7.21 | 1.00 | 496 | data:data_8005726C/data:data_8005726C/data:data_8005726C/asm:func_800588D4 |
+| 80058EA8 | 00:18:56 | 7.22 | 1.00 | 501 | asm:func_800588D4/data:data_80058DA8/data:data_80058DA8/data:data_80058DA8 |
+| 800597D8 | 00:18:57 | 7.24 | 1.00 | 499 | data:data_80058DA8/data:data_80058DA8/data:data_80058DA8/data:data_80058DA8 |
+| 8005A108 | 00:18:58 | 7.29 | 1.00 | 490 | data:data_80058DA8/data:data_80058DA8/data:data_80058DA8/asm:func_8005A714 |
+| 8005AA38 | 00:18:59 | 7.26 | 1.00 | 484 | asm:func_8005A714/data:data_8005A978/data:data_8005A978/asm:func_8005AA54 |
+| 8005B368 | 00:18:60 | 7.33 | 1.00 | 489 | asm:func_8005AA54/data:data_8005B318/asm:func_8005B370/data:data_8005B9EC |
+| 8005BC98 | 00:18:61 | 7.22 | 1.00 | 485 | data:data_8005B9EC/data:data_8005B9EC/data:data_8005B9EC/data:data_8005C2FC |
+| 8005C5C8 | 00:18:62 | 7.28 | 1.00 | 478 | data:data_8005C2FC/data:data_8005C2FC/data:data_8005C2FC/asm:func_8005C5EC |
+| 8005CEF8 | 00:18:63 | 7.32 | 1.00 | 474 | asm:func_8005C5EC/data:data_8005CDEC/data:data_8005CDEC/asm:func_8005D67C |
+| 8005D828 | 00:18:64 | 7.23 | 1.00 | 492 | asm:func_8005D67C/asm:func_8005D81C/asm:func_8005D81C/asm:func_8005D81C |
+| 8005E158 | 00:18:65 | 7.11 | 1.00 | 488 | asm:func_8005D81C/data:data_8005E04C/data:data_8005E04C/data:data_8005E248 |
+| 8005EA88 | 00:18:66 | 7.24 | 1.00 | 495 | data:data_8005E248/data:data_8005E248/data:data_8005E248/asm:func_8005EAC0 |
+| 8005F3B8 | 00:18:67 | 7.30 | 1.00 | 493 | asm:func_8005EAC0/data:data_8005F2B4/data:data_8005F2B4/data:data_8005FA50 |
+| 8005FCE8 | 00:18:68 | 7.28 | 1.00 | 501 | data:data_8005FA50/data:data_8005FA50/data:data_8005FA50/data:data_80060368 |
+| 80060618 | 00:18:69 | 7.19 | 1.00 | 496 | data:data_80060368/data:data_80060618/data:data_80060618/asm:func_800607CC |
+| 80060F48 | 00:18:70 | 7.13 | 1.00 | 493 | data:data_80060E30/data:data_80060EC8/data:data_80060EC8/data:data_80060EC8 |
+| 80061878 | 00:18:71 | 7.21 | 1.00 | 509 | data:data_80060EC8/data:data_80060EC8/data:data_80060EC8/data:data_80060EC8 |
+| 800621A8 | 00:18:72 | 7.21 | 1.00 | 496 | data:data_80060EC8/data:data_80062178/data:data_80062178/data:data_800626E0 |
+| 80062AD8 | 00:18:73 | 7.26 | 1.00 | 507 | data:data_800626E0/data:data_800626E0/data:data_800626E0/asm:func_80062B04 |
+| 80063408 | 00:18:74 | 7.25 | 1.00 | 511 | asm:func_80062B04/data:data_80063330/data:data_80063330/data:data_80063330 |
+| 80063D38 | 00:19:00 | 7.13 | 1.00 | 496 | data:data_80063330/data:data_80063330/data:data_80063330/data:data_800641D8 |
+| 80064668 | 00:19:01 | 7.13 | 1.00 | 508 | data:data_800641D8/data:data_800641D8/data:data_800641D8/asm:func_800646BC |
+| 80064F98 | 00:19:02 | 7.20 | 0.99 | 507 | asm:func_800646BC/data:data_80064E94/data:data_80064E94/data:data_8006550C |
+| 800658C8 | 00:19:03 | 7.23 | 1.00 | 507 | data:data_8006550C/asm:func_800658C8/asm:func_800658C8/asm:func_800658C8 |
+| 800661F8 | 00:19:04 | 7.30 | 1.00 | 505 | asm:func_800658C8/asm:func_800658C8/asm:func_800658C8/data:data_80066884 |
+| 80066B28 | 00:19:05 | 7.26 | 0.92 | 510 | data:data_80066884/data:data_80066884/data:data_80066884/data:data_80066CF4 |
+| 80067458 | 00:19:06 | 7.28 | 0.86 | 502 | data:data_80066CF4/data:data_80066CF4/data:data_80066CF4/data:data_80066CF4 |
+| 80067D88 | 00:19:07 | 7.28 | 0.97 | 501 | data:data_80066CF4/asm:func_80067D88/asm:func_80067D88/data:data_80067E38 |
+| 800686B8 | 00:19:08 | 7.27 | 1.00 | 490 | data:data_80067E38/data:data_80067E38/data:data_80067E38/data:data_8006891C |
+| 80068FE8 | 00:19:09 | 7.12 | 1.00 | 497 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
+| 80069918 | 00:19:10 | 7.12 | 1.00 | 503 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
+| 8006A248 | 00:19:11 | 7.27 | 1.00 | 505 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
+| 8006AB78 | 00:19:12 | 7.25 | 1.00 | 507 | data:data_8006891C/data:data_8006891C/data:data_8006891C/data:data_8006891C |
+| 8006B4A8 | 00:19:13 | 7.16 | 1.00 | 498 | data:data_8006891C/asm:func_8006B4A0/asm:func_8006B4A0/asm:func_8006B4A0 |
+| 8006BDD8 | 00:19:14 | 7.25 | 1.00 | 505 | asm:func_8006B4A0/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
+| 8006C708 | 00:19:15 | 7.22 | 0.97 | 506 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
+| 8006D038 | 00:19:16 | 7.19 | 1.00 | 509 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
+| 8006D968 | 00:19:17 | 7.23 | 1.00 | 506 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
+| 8006E298 | 00:19:18 | 7.22 | 1.00 | 507 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
+| 8006EBC8 | 00:19:19 | 7.28 | 1.00 | 509 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8 |
+| 8006F4F8 | 00:19:20 | 7.28 | 1.00 | 509 | data:data_8006BCE8/data:data_8006BCE8/data:data_8006BCE8/asm:func_8006F940 |
+| 8006FE28 | 00:19:21 | 7.22 | 0.96 | 503 | asm:func_8006F940/data:data_8006FD54/data:data_8006FD54/data:data_80070524 |
+| 80070758 | 00:19:22 | 7.20 | 0.95 | 508 | data:data_80070524/asm:func_80070700/asm:func_80070700/data:data_80070E94 |
+| 80071088 | 00:19:23 | 7.32 | 1.00 | 512 | data:data_80070E94/data:data_80070E94/data:data_80070E94/data:data_80070E94 |
+| 800719B8 | 00:19:24 | 7.29 | 1.00 | 512 | data:data_80070E94/data:data_80070E94/data:data_80070E94/data:data_80070E94 |
+| 800722E8 | 00:19:25 | 7.23 | 1.00 | 508 | data:data_80070E94/asm:func_800722B4/asm:func_800722B4/asm:func_800722B4 |
+| 80072C18 | 00:19:26 | 7.36 | 1.00 | 509 | asm:func_800722B4/data:data_80072B20/data:data_80072B20/data:data_80072B20 |
+| 80073548 | 00:19:27 | 7.23 | 1.00 | 510 | data:data_80072B20/data:data_80072B20/data:data_80072B20/data:data_80072B20 |
+| 80073E78 | 00:19:28 | 7.29 | 0.95 | 501 | data:data_80072B20/asm:func_80073DB4/data:data_80073E7C/data:data_800743D8 |
+| 800747A8 | 00:19:29 | 7.29 | 0.94 | 485 | data:data_800743D8/asm:func_80074740/data:data_800747B0/data:data_80074BC0 |
+| 800750D8 | 00:19:30 | 7.26 | 0.93 | 506 | data:data_80074BC0/asm:func_80075084/asm:func_80075084/data:data_800757BC |
+| 80075A08 | 00:19:31 | 7.21 | 0.98 | 511 | data:data_800757BC/data:data_800757BC/data:data_800757BC/data:data_800757BC |
+| 80076338 | 00:19:32 | 7.10 | 1.00 | 511 | data:data_800757BC/data:data_800757BC/data:data_800757BC/asm:func_80076368 |
+| 80076C68 | 00:19:33 | 7.28 | 0.98 | 510 | asm:func_80076368/data:data_80076B68/data:data_80076B68/data:data_800772FC |
+| 80077598 | 00:19:34 | 7.27 | 0.95 | 493 | data:data_800772FC/data:data_800772FC/data:data_800772FC/data:data_80077D94 |
+| 80077EC8 | 00:19:35 | 7.24 | 0.95 | 503 | data:data_80077D94/data:data_80077D94/data:data_80077D94/data:data_80077D94 |
+| 800787F8 | 00:19:36 | 7.26 | 0.93 | 509 | data:data_80077D94/data:data_80077D94/data:data_80077D94/data:data_80078F90 |
+| 80079128 | 00:19:37 | 7.29 | 1.00 | 512 | data:data_80078F90/data:data_80078F90/data:data_80078F90/data:data_800791B0 |
+| 80079A58 | 00:19:38 | 7.26 | 0.96 | 506 | data:data_800791B0/data:data_800791B0/data:data_800791B0/asm:func_8007A26C |
+| 8007A388 | 00:19:39 | 7.28 | 0.98 | 506 | asm:func_8007A26C/data:data_8007A298/data:data_8007A298/data:data_8007A8DC |
+| 8007ACB8 | 00:19:40 | 7.25 | 0.98 | 510 | data:data_8007A8DC/data:data_8007A8DC/data:data_8007A8DC/data:data_8007B468 |
+| 8007B5E8 | 00:19:41 | 7.25 | 0.97 | 507 | data:data_8007B468/asm:func_8007B5DC/asm:func_8007B5DC/data:data_8007BB30 |
+| 8007BF18 | 00:19:42 | 7.28 | 0.98 | 508 | data:data_8007BB30/data:data_8007BB30/data:data_8007BB30/data:data_8007C4E8 |
+| 8007C848 | 00:19:43 | 7.22 | 1.00 | 512 | data:data_8007C4E8/data:data_8007C4E8/data:data_8007C4E8/asm:func_8007CDA8 |
+| 8007D178 | 00:19:44 | 7.25 | 1.00 | 512 | asm:func_8007CDA8/data:data_8007D08C/data:data_8007D08C/asm:func_8007D3C0 |
+| 8007DAA8 | 00:19:45 | 7.22 | 0.98 | 507 | asm:func_8007D3C0/data:data_8007D9B4/data:data_8007D9B4/data:data_8007E1DC |
+| 8007E3D8 | 00:19:46 | 7.23 | 1.00 | 501 | data:data_8007E1DC/data:data_8007E1DC/data:data_8007E1DC/data:data_8007E1DC |
+| 8007ED08 | 00:19:47 | 7.21 | 0.99 | 501 | data:data_8007E1DC/data:data_8007E1DC/data:data_8007E1DC/asm:func_8007F0E0 |
+| 8007F638 | 00:19:48 | 7.33 | 1.00 | 505 | asm:func_8007F0E0/data:data_8007F554/data:data_8007F554/asm:func_8007F728 |
+| 8007FF68 | 00:19:49 | 7.24 | 1.00 | 500 | asm:func_8007F728/data:data_8007FE5C/data:data_8007FE5C/asm:func_8007FFAC |
+| 80080898 | 00:19:50 | 7.23 | 1.00 | 508 | asm:func_8007FFAC/data:data_800807DC/data:data_800807DC/asm:func_800808F4 |
+| 800811C8 | 00:19:51 | 7.26 | 1.00 | 506 | asm:func_800808F4/data:data_8008110C/data:data_8008110C/asm:func_80081318 |
+| 80081AF8 | 00:19:52 | 7.22 | 1.00 | 507 | asm:func_80081318/data:data_80081A2C/data:data_80081A2C/asm:func_80081CCC |
+| 80082428 | 00:19:53 | 7.21 | 1.00 | 501 | asm:func_80081CCC/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
+| 80082D58 | 00:19:54 | 7.23 | 1.00 | 506 | data:data_800823B4/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
+| 80083688 | 00:19:55 | 7.16 | 1.00 | 510 | data:data_800823B4/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
+| 80083FB8 | 00:19:56 | 7.32 | 1.00 | 502 | data:data_800823B4/data:data_800823B4/data:data_800823B4/data:data_800823B4 |
+| 800848E8 | 00:19:57 | 7.31 | 1.00 | 504 | data:data_800823B4/data:data_800823B4/data:data_800823B4/asm:func_80084924 |
+| 80085218 | 00:19:58 | 7.26 | 1.00 | 503 | asm:func_80084924/data:data_8008510C/data:data_8008510C/asm:func_80085478 |
+| 80085B48 | 00:19:59 | 7.24 | 1.00 | 504 | asm:func_80085478/asm:func_80085B2C/data:data_80085B50/data:data_80085B50 |
+| 80086478 | 00:19:60 | 7.23 | 1.00 | 509 | data:data_80085B50/data:data_80085B50/data:data_80085B50/asm:func_80086504 |
+| 80086DA8 | 00:19:61 | 7.26 | 1.00 | 500 | asm:func_80086504/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800876D8 | 00:19:62 | 7.33 | 1.00 | 502 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80088008 | 00:19:63 | 7.26 | 1.00 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80088938 | 00:19:64 | 7.21 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80089268 | 00:19:65 | 7.23 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80089B98 | 00:19:66 | 7.19 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008A4C8 | 00:19:67 | 7.15 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008ADF8 | 00:19:68 | 7.32 | 1.00 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008B728 | 00:19:69 | 7.16 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008C058 | 00:19:70 | 7.26 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008C988 | 00:19:71 | 7.24 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008D2B8 | 00:19:72 | 7.14 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008DBE8 | 00:19:73 | 7.16 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008E518 | 00:19:74 | 7.32 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008EE48 | 00:20:00 | 7.23 | 1.00 | 500 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8008F778 | 00:20:01 | 7.27 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800900A8 | 00:20:02 | 7.36 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800909D8 | 00:20:03 | 7.27 | 1.00 | 506 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80091308 | 00:20:04 | 7.37 | 1.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80091C38 | 00:20:05 | 7.28 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80092568 | 00:20:06 | 7.26 | 1.00 | 510 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80092E98 | 00:20:07 | 7.16 | 1.00 | 505 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800937C8 | 00:20:08 | 7.26 | 1.00 | 503 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800940F8 | 00:20:09 | 7.22 | 1.00 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80094A28 | 00:20:10 | 7.30 | 1.00 | 509 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80095358 | 00:20:11 | 7.16 | 1.00 | 503 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80095C88 | 00:20:12 | 7.26 | 0.93 | 493 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800965B8 | 00:20:13 | 7.21 | 0.76 | 465 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80096EE8 | 00:20:14 | 7.15 | 0.75 | 370 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80097818 | 00:20:15 | 7.22 | 0.76 | 396 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80098148 | 00:20:16 | 7.30 | 0.76 | 387 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80098A78 | 00:20:17 | 7.28 | 0.78 | 386 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800993A8 | 00:20:18 | 7.30 | 0.76 | 327 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 80099CD8 | 00:20:19 | 7.32 | 0.82 | 399 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009A608 | 00:20:20 | 7.15 | 0.80 | 399 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009AF38 | 00:20:21 | 7.28 | 0.80 | 379 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009B868 | 00:20:22 | 7.29 | 0.83 | 367 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009C198 | 00:20:23 | 7.35 | 0.81 | 278 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009CAC8 | 00:20:24 | 7.14 | 0.80 | 273 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009D3F8 | 00:20:25 | 7.20 | 0.78 | 338 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009DD28 | 00:20:26 | 7.14 | 0.74 | 378 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009E658 | 00:20:27 | 7.24 | 0.76 | 404 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009EF88 | 00:20:28 | 7.17 | 0.86 | 407 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 8009F8B8 | 00:20:29 | 7.19 | 0.93 | 349 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A01E8 | 00:20:30 | 7.16 | 0.91 | 171 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A0B18 | 00:20:31 | 7.07 | 0.91 | 199 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A1448 | 00:20:32 | 6.97 | 0.75 | 329 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A1D78 | 00:20:33 | 6.94 | 0.92 | 327 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A26A8 | 00:20:34 | 7.13 | 0.88 | 213 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A2FD8 | 00:20:35 | 7.13 | 0.91 | 235 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A3908 | 00:20:36 | 7.12 | 0.91 | 261 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A4238 | 00:20:37 | 7.12 | 0.87 | 251 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A4B68 | 00:20:38 | 7.19 | 0.89 | 208 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A5498 | 00:20:39 | 7.11 | 0.81 | 286 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A5DC8 | 00:20:40 | 7.06 | 0.67 | 392 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A66F8 | 00:20:41 | 7.01 | 0.67 | 441 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A7028 | 00:20:42 | 6.85 | 0.67 | 415 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A7958 | 00:20:43 | 7.04 | 0.93 | 362 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A8288 | 00:20:44 | 7.07 | 0.90 | 215 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A8BB8 | 00:20:45 | 7.12 | 0.88 | 238 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A94E8 | 00:20:46 | 7.10 | 0.86 | 257 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800A9E18 | 00:20:47 | 7.16 | 0.89 | 256 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AA748 | 00:20:48 | 6.97 | 0.92 | 216 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AB078 | 00:20:49 | 7.05 | 0.88 | 189 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AB9A8 | 00:20:50 | 7.28 | 0.65 | 384 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AC2D8 | 00:20:51 | 7.27 | 0.76 | 471 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800ACC08 | 00:20:52 | 7.31 | 0.59 | 469 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AD538 | 00:20:53 | 7.22 | 0.59 | 477 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800ADE68 | 00:20:54 | 7.15 | 0.64 | 439 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AE798 | 00:20:55 | 7.18 | 0.61 | 435 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AF0C8 | 00:20:56 | 7.30 | 0.68 | 487 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800AF9F8 | 00:20:57 | 7.34 | 0.65 | 511 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B0328 | 00:20:58 | 7.29 | 0.73 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B0C58 | 00:20:59 | 7.26 | 0.63 | 507 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B1588 | 00:20:60 | 7.35 | 0.55 | 461 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B1EB8 | 00:20:61 | 7.19 | 0.58 | 353 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B27E8 | 00:20:62 | 7.29 | 0.59 | 354 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B3118 | 00:20:63 | 7.19 | 0.56 | 270 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B3A48 | 00:20:64 | 7.13 | 0.54 | 376 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B4378 | 00:20:65 | 7.30 | 0.61 | 356 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B4CA8 | 00:20:66 | 7.26 | 0.61 | 402 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B55D8 | 00:20:67 | 7.21 | 0.62 | 339 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B5F08 | 00:20:68 | 7.26 | 0.70 | 488 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B6838 | 00:20:69 | 7.27 | 0.71 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B7168 | 00:20:70 | 7.18 | 0.66 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B7A98 | 00:20:71 | 7.25 | 0.67 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B83C8 | 00:20:72 | 7.21 | 0.56 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B8CF8 | 00:20:73 | 7.18 | 0.50 | 506 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B9628 | 00:20:74 | 7.11 | 0.56 | 483 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800B9F58 | 00:21:00 | 7.01 | 0.77 | 500 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BA888 | 00:21:01 | 7.10 | 0.38 | 482 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BB1B8 | 00:21:02 | 7.12 | 0.64 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BBAE8 | 00:21:03 | 7.20 | 0.78 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BC418 | 00:21:04 | 7.28 | 0.63 | 508 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BCD48 | 00:21:05 | 7.27 | 0.51 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BD678 | 00:21:06 | 7.25 | 0.58 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BDFA8 | 00:21:07 | 6.87 | 1.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BE8D8 | 00:21:08 | 6.81 | 0.52 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BF208 | 00:21:09 | 6.67 | 0.07 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800BFB38 | 00:21:10 | 6.72 | 0.72 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C0468 | 00:21:11 | 7.13 | 0.87 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C0D98 | 00:21:12 | 6.75 | 0.43 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C16C8 | 00:21:13 | 6.99 | 0.45 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C1FF8 | 00:21:14 | 6.83 | 0.01 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C2928 | 00:21:15 | 6.86 | 0.38 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C3258 | 00:21:16 | 6.75 | 0.30 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C3B88 | 00:21:17 | 6.55 | 0.08 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C44B8 | 00:21:18 | 7.35 | 0.21 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C4DE8 | 00:21:19 | 7.29 | 0.87 | 511 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C5718 | 00:21:20 | 7.22 | 0.94 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C6048 | 00:21:21 | 6.91 | 0.29 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C6978 | 00:21:22 | 6.73 | 0.63 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C72A8 | 00:21:23 | 6.92 | 0.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C7BD8 | 00:21:24 | 6.74 | 0.53 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C8508 | 00:21:25 | 6.82 | 0.41 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C8E38 | 00:21:26 | 6.65 | 0.89 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
+| 800C9768 | 00:21:27 | 6.96 | 1.00 | 512 | data:data_80086D3C/data:data_80086D3C/data:data_80086D3C/data:data_80086D3C |
 
 ## sces_00269
 
-123 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+123 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 549 | 0x02 | 6.06 | 0.63 | 500 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 550 | 0x02 | 7.26 | 0.54 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 551 | 0x02 | 7.29 | 0.66 | 507 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_8002181C |
-| 80021CA8 | 552 | 0x02 | 7.26 | 1.00 | 506 | data:data_8002181C/data:data_8002181C/data:data_8002181C/data:data_8002181C |
-| 800225D8 | 553 | 0x02 | 7.26 | 1.00 | 501 | data:data_8002181C/data:data_8002181C/data:data_8002181C/data:data_8002287C |
-| 80022F08 | 560 | 0x02 | 7.24 | 1.00 | 512 | data:data_8002287C/data:data_8002287C/data:data_8002287C/asm:func_80022F58 |
-| 80023838 | 561 | 0x02 | 7.24 | 1.00 | 508 | asm:func_80022F58/asm:func_80022F58/data:data_80023840/asm:func_8002392C |
-| 80024168 | 562 | 0x02 | 7.32 | 1.00 | 511 | asm:func_8002392C/data:data_80024080/data:data_80024080/data:data_80024080 |
-| 80024A98 | 563 | 0x02 | 7.21 | 1.00 | 508 | data:data_80024080/data:data_80024080/data:data_80024080/asm:func_80024C24 |
-| 800253C8 | 564 | 0x02 | 7.23 | 1.00 | 509 | asm:func_80024C24/data:data_800252EC/data:data_800252EC/data:data_800252EC |
-| 80025CF8 | 565 | 0x02 | 7.21 | 1.00 | 507 | data:data_800252EC/data:data_80025C78/data:data_80025C78/data:data_80025C78 |
-| 80026628 | 566 | 0x02 | 7.29 | 1.00 | 508 | data:data_80025C78/data:data_80025C78/data:data_80025C78/data:data_80026874 |
-| 80026F58 | 567 | 0x02 | 7.28 | 1.00 | 509 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
-| 80027888 | 568 | 0x02 | 7.22 | 1.00 | 507 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
-| 800281B8 | 569 | 0x02 | 7.22 | 1.00 | 509 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
-| 80028AE8 | 576 | 0x02 | 7.27 | 1.00 | 494 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
-| 80029418 | 577 | 0x02 | 7.17 | 1.00 | 509 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
-| 80029D48 | 578 | 0x02 | 7.23 | 1.00 | 499 | data:data_80026874/data:data_80026874/data:data_80026874/asm:func_80029DB4 |
-| 8002A678 | 579 | 0x02 | 7.24 | 1.00 | 509 | asm:func_80029DB4/data:data_8002A570/data:data_8002A570/data:data_8002A9C4 |
-| 8002AFA8 | 580 | 0x02 | 7.25 | 1.00 | 511 | data:data_8002A9C4/data:data_8002A9C4/data:data_8002A9C4/data:data_8002A9C4 |
-| 8002B8D8 | 581 | 0x02 | 7.24 | 1.00 | 511 | data:data_8002A9C4/data:data_8002A9C4/data:data_8002A9C4/asm:func_8002BA60 |
-| 8002C208 | 582 | 0x02 | 7.14 | 1.00 | 458 | asm:func_8002BA60/data:data_8002C17C/data:data_8002C17C/data:data_8002C4A4 |
-| 8002CB38 | 583 | 0x02 | 7.16 | 1.00 | 503 | data:data_8002C4A4/data:data_8002C4A4/asm:func_8002CB40/asm:func_8002CB40 |
-| 8002D468 | 584 | 0x02 | 7.26 | 1.00 | 507 | asm:func_8002CB40/data:data_8002D380/data:data_8002D380/asm:func_8002D4D0 |
-| 8002DD98 | 585 | 0x02 | 7.23 | 1.00 | 508 | asm:func_8002D4D0/data:data_8002DCBC/data:data_8002DCBC/asm:func_8002DEE4 |
-| 8002E6C8 | 592 | 0x02 | 7.15 | 1.00 | 511 | asm:func_8002DEE4/data:data_8002E5E0/data:data_8002E5E0/asm:func_8002E910 |
-| 8002EFF8 | 593 | 0x02 | 7.22 | 1.00 | 507 | asm:func_8002E910/asm:func_8002E910/asm:func_8002E910/data:data_8002F778 |
-| 8002F928 | 594 | 0x02 | 7.25 | 0.99 | 509 | data:data_8002F778/asm:func_8002F890/data:data_8002F930/data:data_8002FB50 |
-| 80030258 | 595 | 0x02 | 7.19 | 1.00 | 507 | data:data_8002FB50/data:data_8002FB50/data:data_8002FB50/asm:func_80030914 |
-| 80030B88 | 596 | 0x02 | 7.37 | 1.00 | 503 | asm:func_80030914/asm:func_80030B60/asm:func_80030B60/data:data_8003115C |
-| 800314B8 | 597 | 0x02 | 7.18 | 1.00 | 499 | data:data_8003115C/data:data_8003115C/data:data_8003115C/data:data_800318F4 |
-| 80031DE8 | 598 | 0x02 | 7.28 | 1.00 | 495 | data:data_800318F4/data:data_800318F4/data:data_800318F4/asm:func_80031E6C |
-| 80032718 | 599 | 0x02 | 7.26 | 1.00 | 504 | asm:func_80031E6C/asm:func_80031E6C/asm:func_80031E6C/asm:func_80031E6C |
-| 80033048 | 600 | 0x02 | 7.18 | 1.00 | 507 | asm:func_80031E6C/data:data_80032F54/data:data_80032F54/data:data_80032F54 |
-| 80033978 | 601 | 0x02 | 7.31 | 1.00 | 505 | data:data_80032F54/data:data_80032F54/data:data_80032F54/data:data_80032F54 |
-| 800342A8 | 608 | 0x02 | 7.25 | 1.00 | 495 | data:data_80032F54/asm:func_8003429C/asm:func_8003429C/asm:func_8003429C |
-| 80034BD8 | 609 | 0x02 | 7.10 | 1.00 | 498 | asm:func_8003429C/data:data_80034AD4/data:data_80034AD4/data:data_80034AD4 |
-| 80035508 | 610 | 0x02 | 7.30 | 0.97 | 504 | data:data_80034AD4/data:data_80034AD4/data:data_80034AD4/asm:func_800357A0 |
-| 80035E38 | 611 | 0x02 | 7.23 | 1.00 | 510 | asm:func_800357A0/data:data_80035D2C/data:data_80035D2C/data:data_80035D2C |
-| 80036768 | 612 | 0x02 | 7.29 | 0.93 | 506 | data:data_80035D2C/data:data_80035D2C/data:data_80035D2C/asm:func_80036A98 |
-| 80037098 | 613 | 0x02 | 7.28 | 0.85 | 509 | asm:func_80036A98/data:data_80036FCC/data:data_80036FCC/data:data_80037564 |
-| 800379C8 | 614 | 0x02 | 7.32 | 0.96 | 510 | data:data_80037564/data:data_80037564/asm:func_800379D0/data:data_80037B5C |
-| 800382F8 | 615 | 0x02 | 7.28 | 1.00 | 504 | data:data_80037B5C/data:data_80037B5C/data:data_80037B5C/data:data_800387A0 |
-| 80038C28 | 616 | 0x02 | 7.23 | 0.96 | 507 | data:data_800387A0/data:data_800387A0/data:data_800387A0/data:data_80039344 |
-| 80039558 | 617 | 0x02 | 7.16 | 0.96 | 496 | data:data_80039344/data:data_80039344/data:data_80039344/data:data_80039730 |
-| 80039E88 | 624 | 0x02 | 7.28 | 0.99 | 510 | data:data_80039730/data:data_80039730/data:data_80039730/data:data_8003A4B4 |
-| 8003A7B8 | 625 | 0x02 | 7.34 | 0.99 | 505 | data:data_8003A4B4/asm:func_8003A77C/asm:func_8003A77C/data:data_8003AB94 |
-| 8003B0E8 | 626 | 0x02 | 7.16 | 1.00 | 502 | data:data_8003AB94/data:data_8003AB94/data:data_8003AB94/asm:func_8003B130 |
-| 8003BA18 | 627 | 0x02 | 7.18 | 1.00 | 507 | asm:func_8003B130/data:data_8003B928/data:data_8003B928/data:data_8003B928 |
-| 8003C348 | 628 | 0x02 | 7.26 | 1.00 | 511 | data:data_8003B928/data:data_8003B928/data:data_8003B928/data:data_8003B928 |
-| 8003CC78 | 512 | 0x03 | 7.22 | 1.00 | 504 | data:data_8003B928/data:data_8003B928/data:data_8003B928/data:data_8003B928 |
-| 8003D5A8 | 513 | 0x03 | 7.26 | 1.00 | 504 | data:data_8003B928/data:data_8003B928/data:data_8003B928/asm:func_8003D624 |
-| 8003DED8 | 514 | 0x03 | 7.26 | 1.00 | 504 | asm:func_8003D624/asm:func_8003DEC4/data:data_8003DEDC/asm:func_8003DF04 |
-| 8003E808 | 515 | 0x03 | 7.24 | 1.00 | 506 | asm:func_8003DF04/data:data_8003E704/data:data_8003E704/data:data_8003E704 |
-| 8003F138 | 516 | 0x03 | 7.28 | 1.00 | 493 | data:data_8003E704/data:data_8003E704/data:data_8003E704/data:data_8003F39C |
-| 8003FA68 | 517 | 0x03 | 7.31 | 1.00 | 506 | data:data_8003F39C/data:data_8003F39C/data:data_8003F39C/data:data_8003F39C |
-| 80040398 | 518 | 0x03 | 7.25 | 1.00 | 499 | data:data_8003F39C/data:data_8003F39C/data:data_8003F39C/asm:func_80040534 |
-| 80040CC8 | 519 | 0x03 | 7.26 | 1.00 | 507 | asm:func_80040534/data:data_80040C30/data:data_80040C30/data:data_80040C30 |
-| 800415F8 | 520 | 0x03 | 7.24 | 1.00 | 496 | data:data_80040C30/data:data_80040C30/data:data_80040C30/data:data_80040C30 |
-| 80041F28 | 521 | 0x03 | 7.26 | 1.00 | 489 | data:data_80040C30/data:data_80040C30/data:data_80040C30/asm:func_80041F74 |
-| 80042858 | 528 | 0x03 | 7.26 | 1.00 | 508 | asm:func_80041F74/data:data_800427DC/data:data_800427DC/data:data_800427DC |
-| 80043188 | 529 | 0x03 | 7.21 | 1.00 | 511 | data:data_800427DC/data:data_800427DC/data:data_800427DC/data:data_800427DC |
-| 80043AB8 | 530 | 0x03 | 7.31 | 1.00 | 511 | data:data_800427DC/data:data_800427DC/data:data_800427DC/data:data_800427DC |
-| 800443E8 | 531 | 0x03 | 7.28 | 1.00 | 508 | data:data_800427DC/data:data_800427DC/data:data_800427DC/asm:func_800444C0 |
-| 80044D18 | 532 | 0x03 | 7.19 | 1.00 | 510 | data:data_80044C00/asm:func_80044CFC/data:data_80044D1C/asm:func_80044E44 |
-| 80045648 | 533 | 0x03 | 7.28 | 1.00 | 507 | asm:func_80044E44/data:data_80045560/data:data_80045560/data:data_80045560 |
-| 80045F78 | 534 | 0x03 | 7.28 | 1.00 | 506 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
-| 800468A8 | 535 | 0x03 | 7.24 | 1.00 | 508 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
-| 800471D8 | 536 | 0x03 | 7.24 | 1.00 | 489 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
-| 80047B08 | 537 | 0x03 | 7.24 | 1.00 | 390 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
-| 80048438 | 544 | 0x03 | 7.29 | 1.00 | 418 | data:data_80045560/data:data_80045560/data:data_80045560/asm:func_80048470 |
-| 80048D68 | 545 | 0x03 | 7.26 | 1.00 | 503 | asm:func_80048470/data:data_80048CAC/data:data_80048CAC/data:data_80048CAC |
-| 80049698 | 546 | 0x03 | 7.27 | 1.00 | 506 | data:data_80048CAC/data:data_8004964C/data:data_8004964C/data:data_8004977C |
-| 80049FC8 | 547 | 0x03 | 7.24 | 1.00 | 457 | data:data_8004977C/data:data_8004977C/data:data_8004977C/data:data_8004977C |
-| 8004A8F8 | 548 | 0x03 | 7.28 | 1.00 | 496 | data:data_8004977C/data:data_8004977C/data:data_8004977C/asm:func_8004A928 |
-| 8004B228 | 549 | 0x03 | 7.29 | 1.00 | 508 | asm:func_8004A928/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004BB58 | 550 | 0x03 | 7.16 | 1.00 | 511 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004C488 | 551 | 0x03 | 7.27 | 1.00 | 505 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004CDB8 | 552 | 0x03 | 7.23 | 1.00 | 510 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004D6E8 | 553 | 0x03 | 7.21 | 1.00 | 510 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004E018 | 560 | 0x03 | 7.27 | 1.00 | 458 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004E948 | 561 | 0x03 | 7.21 | 1.00 | 504 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004F278 | 562 | 0x03 | 7.19 | 1.00 | 508 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8004FBA8 | 563 | 0x03 | 7.20 | 1.00 | 501 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800504D8 | 564 | 0x03 | 7.20 | 1.00 | 494 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80050E08 | 565 | 0x03 | 7.28 | 0.75 | 481 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80051738 | 566 | 0x03 | 7.26 | 0.76 | 466 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80052068 | 567 | 0x03 | 7.19 | 0.83 | 413 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80052998 | 568 | 0x03 | 7.22 | 0.72 | 423 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800532C8 | 569 | 0x03 | 7.26 | 0.79 | 443 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80053BF8 | 576 | 0x03 | 7.17 | 1.00 | 106 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80054528 | 577 | 0x03 | 1.36 | 1.00 | 12 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80054E58 | 578 | 0x03 | 4.97 | 0.68 | 383 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80055788 | 579 | 0x03 | 7.24 | 0.95 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800560B8 | 580 | 0x03 | 7.06 | 1.00 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800569E8 | 581 | 0x03 | 6.77 | 0.52 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80057318 | 582 | 0x03 | 6.87 | 0.71 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80057C48 | 583 | 0x03 | 6.90 | 0.05 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80058578 | 584 | 0x03 | 6.83 | 0.11 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80058EA8 | 585 | 0x03 | 6.81 | 0.67 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800597D8 | 592 | 0x03 | 6.88 | 0.63 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005A108 | 593 | 0x03 | 6.72 | 0.99 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005AA38 | 594 | 0x03 | 7.24 | 0.96 | 508 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005B368 | 595 | 0x03 | 7.25 | 1.00 | 508 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005BC98 | 596 | 0x03 | 4.46 | 0.77 | 451 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005C5C8 | 597 | 0x03 | 7.24 | 0.75 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005CEF8 | 598 | 0x03 | 7.31 | 0.36 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005D828 | 599 | 0x03 | 7.22 | 0.58 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005E158 | 600 | 0x03 | 7.28 | 0.78 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005EA88 | 601 | 0x03 | 7.26 | 0.64 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005F3B8 | 608 | 0x03 | 7.21 | 0.72 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 8005FCE8 | 609 | 0x03 | 7.18 | 0.76 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80060618 | 610 | 0x03 | 7.33 | 0.73 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80060F48 | 611 | 0x03 | 7.25 | 0.69 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80061878 | 612 | 0x03 | 7.30 | 0.73 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800621A8 | 613 | 0x03 | 7.27 | 0.75 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80062AD8 | 614 | 0x03 | 7.21 | 0.64 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80063408 | 615 | 0x03 | 7.24 | 0.85 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80063D38 | 616 | 0x03 | 7.11 | 0.64 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80064668 | 617 | 0x03 | 7.30 | 0.85 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 80064F98 | 624 | 0x03 | 7.07 | 0.51 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800658C8 | 625 | 0x03 | 6.75 | 0.50 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
-| 800661F8 | 626 | 0x03 | 5.36 | n/a | n/a | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 00:02:25 | 6.06 | 0.63 | 500 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 00:02:26 | 7.26 | 0.54 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 00:02:27 | 7.29 | 0.66 | 507 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_8002181C |
+| 80021CA8 | 00:02:28 | 7.26 | 1.00 | 506 | data:data_8002181C/data:data_8002181C/data:data_8002181C/data:data_8002181C |
+| 800225D8 | 00:02:29 | 7.26 | 1.00 | 501 | data:data_8002181C/data:data_8002181C/data:data_8002181C/data:data_8002287C |
+| 80022F08 | 00:02:30 | 7.24 | 1.00 | 512 | data:data_8002287C/data:data_8002287C/data:data_8002287C/asm:func_80022F58 |
+| 80023838 | 00:02:31 | 7.24 | 1.00 | 508 | asm:func_80022F58/asm:func_80022F58/data:data_80023840/asm:func_8002392C |
+| 80024168 | 00:02:32 | 7.32 | 1.00 | 511 | asm:func_8002392C/data:data_80024080/data:data_80024080/data:data_80024080 |
+| 80024A98 | 00:02:33 | 7.21 | 1.00 | 508 | data:data_80024080/data:data_80024080/data:data_80024080/asm:func_80024C24 |
+| 800253C8 | 00:02:34 | 7.23 | 1.00 | 509 | asm:func_80024C24/data:data_800252EC/data:data_800252EC/data:data_800252EC |
+| 80025CF8 | 00:02:35 | 7.21 | 1.00 | 507 | data:data_800252EC/data:data_80025C78/data:data_80025C78/data:data_80025C78 |
+| 80026628 | 00:02:36 | 7.29 | 1.00 | 508 | data:data_80025C78/data:data_80025C78/data:data_80025C78/data:data_80026874 |
+| 80026F58 | 00:02:37 | 7.28 | 1.00 | 509 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
+| 80027888 | 00:02:38 | 7.22 | 1.00 | 507 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
+| 800281B8 | 00:02:39 | 7.22 | 1.00 | 509 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
+| 80028AE8 | 00:02:40 | 7.27 | 1.00 | 494 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
+| 80029418 | 00:02:41 | 7.17 | 1.00 | 509 | data:data_80026874/data:data_80026874/data:data_80026874/data:data_80026874 |
+| 80029D48 | 00:02:42 | 7.23 | 1.00 | 499 | data:data_80026874/data:data_80026874/data:data_80026874/asm:func_80029DB4 |
+| 8002A678 | 00:02:43 | 7.24 | 1.00 | 509 | asm:func_80029DB4/data:data_8002A570/data:data_8002A570/data:data_8002A9C4 |
+| 8002AFA8 | 00:02:44 | 7.25 | 1.00 | 511 | data:data_8002A9C4/data:data_8002A9C4/data:data_8002A9C4/data:data_8002A9C4 |
+| 8002B8D8 | 00:02:45 | 7.24 | 1.00 | 511 | data:data_8002A9C4/data:data_8002A9C4/data:data_8002A9C4/asm:func_8002BA60 |
+| 8002C208 | 00:02:46 | 7.14 | 1.00 | 458 | asm:func_8002BA60/data:data_8002C17C/data:data_8002C17C/data:data_8002C4A4 |
+| 8002CB38 | 00:02:47 | 7.16 | 1.00 | 503 | data:data_8002C4A4/data:data_8002C4A4/asm:func_8002CB40/asm:func_8002CB40 |
+| 8002D468 | 00:02:48 | 7.26 | 1.00 | 507 | asm:func_8002CB40/data:data_8002D380/data:data_8002D380/asm:func_8002D4D0 |
+| 8002DD98 | 00:02:49 | 7.23 | 1.00 | 508 | asm:func_8002D4D0/data:data_8002DCBC/data:data_8002DCBC/asm:func_8002DEE4 |
+| 8002E6C8 | 00:02:50 | 7.15 | 1.00 | 511 | asm:func_8002DEE4/data:data_8002E5E0/data:data_8002E5E0/asm:func_8002E910 |
+| 8002EFF8 | 00:02:51 | 7.22 | 1.00 | 507 | asm:func_8002E910/asm:func_8002E910/asm:func_8002E910/data:data_8002F778 |
+| 8002F928 | 00:02:52 | 7.25 | 0.99 | 509 | data:data_8002F778/asm:func_8002F890/data:data_8002F930/data:data_8002FB50 |
+| 80030258 | 00:02:53 | 7.19 | 1.00 | 507 | data:data_8002FB50/data:data_8002FB50/data:data_8002FB50/asm:func_80030914 |
+| 80030B88 | 00:02:54 | 7.37 | 1.00 | 503 | asm:func_80030914/asm:func_80030B60/asm:func_80030B60/data:data_8003115C |
+| 800314B8 | 00:02:55 | 7.18 | 1.00 | 499 | data:data_8003115C/data:data_8003115C/data:data_8003115C/data:data_800318F4 |
+| 80031DE8 | 00:02:56 | 7.28 | 1.00 | 495 | data:data_800318F4/data:data_800318F4/data:data_800318F4/asm:func_80031E6C |
+| 80032718 | 00:02:57 | 7.26 | 1.00 | 504 | asm:func_80031E6C/asm:func_80031E6C/asm:func_80031E6C/asm:func_80031E6C |
+| 80033048 | 00:02:58 | 7.18 | 1.00 | 507 | asm:func_80031E6C/data:data_80032F54/data:data_80032F54/data:data_80032F54 |
+| 80033978 | 00:02:59 | 7.31 | 1.00 | 505 | data:data_80032F54/data:data_80032F54/data:data_80032F54/data:data_80032F54 |
+| 800342A8 | 00:02:60 | 7.25 | 1.00 | 495 | data:data_80032F54/asm:func_8003429C/asm:func_8003429C/asm:func_8003429C |
+| 80034BD8 | 00:02:61 | 7.10 | 1.00 | 498 | asm:func_8003429C/data:data_80034AD4/data:data_80034AD4/data:data_80034AD4 |
+| 80035508 | 00:02:62 | 7.30 | 0.97 | 504 | data:data_80034AD4/data:data_80034AD4/data:data_80034AD4/asm:func_800357A0 |
+| 80035E38 | 00:02:63 | 7.23 | 1.00 | 510 | asm:func_800357A0/data:data_80035D2C/data:data_80035D2C/data:data_80035D2C |
+| 80036768 | 00:02:64 | 7.29 | 0.93 | 506 | data:data_80035D2C/data:data_80035D2C/data:data_80035D2C/asm:func_80036A98 |
+| 80037098 | 00:02:65 | 7.28 | 0.85 | 509 | asm:func_80036A98/data:data_80036FCC/data:data_80036FCC/data:data_80037564 |
+| 800379C8 | 00:02:66 | 7.32 | 0.96 | 510 | data:data_80037564/data:data_80037564/asm:func_800379D0/data:data_80037B5C |
+| 800382F8 | 00:02:67 | 7.28 | 1.00 | 504 | data:data_80037B5C/data:data_80037B5C/data:data_80037B5C/data:data_800387A0 |
+| 80038C28 | 00:02:68 | 7.23 | 0.96 | 507 | data:data_800387A0/data:data_800387A0/data:data_800387A0/data:data_80039344 |
+| 80039558 | 00:02:69 | 7.16 | 0.96 | 496 | data:data_80039344/data:data_80039344/data:data_80039344/data:data_80039730 |
+| 80039E88 | 00:02:70 | 7.28 | 0.99 | 510 | data:data_80039730/data:data_80039730/data:data_80039730/data:data_8003A4B4 |
+| 8003A7B8 | 00:02:71 | 7.34 | 0.99 | 505 | data:data_8003A4B4/asm:func_8003A77C/asm:func_8003A77C/data:data_8003AB94 |
+| 8003B0E8 | 00:02:72 | 7.16 | 1.00 | 502 | data:data_8003AB94/data:data_8003AB94/data:data_8003AB94/asm:func_8003B130 |
+| 8003BA18 | 00:02:73 | 7.18 | 1.00 | 507 | asm:func_8003B130/data:data_8003B928/data:data_8003B928/data:data_8003B928 |
+| 8003C348 | 00:02:74 | 7.26 | 1.00 | 511 | data:data_8003B928/data:data_8003B928/data:data_8003B928/data:data_8003B928 |
+| 8003CC78 | 00:03:00 | 7.22 | 1.00 | 504 | data:data_8003B928/data:data_8003B928/data:data_8003B928/data:data_8003B928 |
+| 8003D5A8 | 00:03:01 | 7.26 | 1.00 | 504 | data:data_8003B928/data:data_8003B928/data:data_8003B928/asm:func_8003D624 |
+| 8003DED8 | 00:03:02 | 7.26 | 1.00 | 504 | asm:func_8003D624/asm:func_8003DEC4/data:data_8003DEDC/asm:func_8003DF04 |
+| 8003E808 | 00:03:03 | 7.24 | 1.00 | 506 | asm:func_8003DF04/data:data_8003E704/data:data_8003E704/data:data_8003E704 |
+| 8003F138 | 00:03:04 | 7.28 | 1.00 | 493 | data:data_8003E704/data:data_8003E704/data:data_8003E704/data:data_8003F39C |
+| 8003FA68 | 00:03:05 | 7.31 | 1.00 | 506 | data:data_8003F39C/data:data_8003F39C/data:data_8003F39C/data:data_8003F39C |
+| 80040398 | 00:03:06 | 7.25 | 1.00 | 499 | data:data_8003F39C/data:data_8003F39C/data:data_8003F39C/asm:func_80040534 |
+| 80040CC8 | 00:03:07 | 7.26 | 1.00 | 507 | asm:func_80040534/data:data_80040C30/data:data_80040C30/data:data_80040C30 |
+| 800415F8 | 00:03:08 | 7.24 | 1.00 | 496 | data:data_80040C30/data:data_80040C30/data:data_80040C30/data:data_80040C30 |
+| 80041F28 | 00:03:09 | 7.26 | 1.00 | 489 | data:data_80040C30/data:data_80040C30/data:data_80040C30/asm:func_80041F74 |
+| 80042858 | 00:03:10 | 7.26 | 1.00 | 508 | asm:func_80041F74/data:data_800427DC/data:data_800427DC/data:data_800427DC |
+| 80043188 | 00:03:11 | 7.21 | 1.00 | 511 | data:data_800427DC/data:data_800427DC/data:data_800427DC/data:data_800427DC |
+| 80043AB8 | 00:03:12 | 7.31 | 1.00 | 511 | data:data_800427DC/data:data_800427DC/data:data_800427DC/data:data_800427DC |
+| 800443E8 | 00:03:13 | 7.28 | 1.00 | 508 | data:data_800427DC/data:data_800427DC/data:data_800427DC/asm:func_800444C0 |
+| 80044D18 | 00:03:14 | 7.19 | 1.00 | 510 | data:data_80044C00/asm:func_80044CFC/data:data_80044D1C/asm:func_80044E44 |
+| 80045648 | 00:03:15 | 7.28 | 1.00 | 507 | asm:func_80044E44/data:data_80045560/data:data_80045560/data:data_80045560 |
+| 80045F78 | 00:03:16 | 7.28 | 1.00 | 506 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
+| 800468A8 | 00:03:17 | 7.24 | 1.00 | 508 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
+| 800471D8 | 00:03:18 | 7.24 | 1.00 | 489 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
+| 80047B08 | 00:03:19 | 7.24 | 1.00 | 390 | data:data_80045560/data:data_80045560/data:data_80045560/data:data_80045560 |
+| 80048438 | 00:03:20 | 7.29 | 1.00 | 418 | data:data_80045560/data:data_80045560/data:data_80045560/asm:func_80048470 |
+| 80048D68 | 00:03:21 | 7.26 | 1.00 | 503 | asm:func_80048470/data:data_80048CAC/data:data_80048CAC/data:data_80048CAC |
+| 80049698 | 00:03:22 | 7.27 | 1.00 | 506 | data:data_80048CAC/data:data_8004964C/data:data_8004964C/data:data_8004977C |
+| 80049FC8 | 00:03:23 | 7.24 | 1.00 | 457 | data:data_8004977C/data:data_8004977C/data:data_8004977C/data:data_8004977C |
+| 8004A8F8 | 00:03:24 | 7.28 | 1.00 | 496 | data:data_8004977C/data:data_8004977C/data:data_8004977C/asm:func_8004A928 |
+| 8004B228 | 00:03:25 | 7.29 | 1.00 | 508 | asm:func_8004A928/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004BB58 | 00:03:26 | 7.16 | 1.00 | 511 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004C488 | 00:03:27 | 7.27 | 1.00 | 505 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004CDB8 | 00:03:28 | 7.23 | 1.00 | 510 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004D6E8 | 00:03:29 | 7.21 | 1.00 | 510 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004E018 | 00:03:30 | 7.27 | 1.00 | 458 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004E948 | 00:03:31 | 7.21 | 1.00 | 504 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004F278 | 00:03:32 | 7.19 | 1.00 | 508 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8004FBA8 | 00:03:33 | 7.20 | 1.00 | 501 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800504D8 | 00:03:34 | 7.20 | 1.00 | 494 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80050E08 | 00:03:35 | 7.28 | 0.75 | 481 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80051738 | 00:03:36 | 7.26 | 0.76 | 466 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80052068 | 00:03:37 | 7.19 | 0.83 | 413 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80052998 | 00:03:38 | 7.22 | 0.72 | 423 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800532C8 | 00:03:39 | 7.26 | 0.79 | 443 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80053BF8 | 00:03:40 | 7.17 | 1.00 | 106 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80054528 | 00:03:41 | 1.36 | 1.00 | 12 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80054E58 | 00:03:42 | 4.97 | 0.68 | 383 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80055788 | 00:03:43 | 7.24 | 0.95 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800560B8 | 00:03:44 | 7.06 | 1.00 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800569E8 | 00:03:45 | 6.77 | 0.52 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80057318 | 00:03:46 | 6.87 | 0.71 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80057C48 | 00:03:47 | 6.90 | 0.05 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80058578 | 00:03:48 | 6.83 | 0.11 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80058EA8 | 00:03:49 | 6.81 | 0.67 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800597D8 | 00:03:50 | 6.88 | 0.63 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005A108 | 00:03:51 | 6.72 | 0.99 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005AA38 | 00:03:52 | 7.24 | 0.96 | 508 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005B368 | 00:03:53 | 7.25 | 1.00 | 508 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005BC98 | 00:03:54 | 4.46 | 0.77 | 451 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005C5C8 | 00:03:55 | 7.24 | 0.75 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005CEF8 | 00:03:56 | 7.31 | 0.36 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005D828 | 00:03:57 | 7.22 | 0.58 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005E158 | 00:03:58 | 7.28 | 0.78 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005EA88 | 00:03:59 | 7.26 | 0.64 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005F3B8 | 00:03:60 | 7.21 | 0.72 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 8005FCE8 | 00:03:61 | 7.18 | 0.76 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80060618 | 00:03:62 | 7.33 | 0.73 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80060F48 | 00:03:63 | 7.25 | 0.69 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80061878 | 00:03:64 | 7.30 | 0.73 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800621A8 | 00:03:65 | 7.27 | 0.75 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80062AD8 | 00:03:66 | 7.21 | 0.64 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80063408 | 00:03:67 | 7.24 | 0.85 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80063D38 | 00:03:68 | 7.11 | 0.64 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80064668 | 00:03:69 | 7.30 | 0.85 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 80064F98 | 00:03:70 | 7.07 | 0.51 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800658C8 | 00:03:71 | 6.75 | 0.50 | 512 | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/data:data_8004B11C |
+| 800661F8 | 00:03:72 | 5.36 | n/a | n/a | data:data_8004B11C/data:data_8004B11C/data:data_8004B11C/? |
 
 ## slps_00270
 
-123 descriptors found. Columns: payload entropy (bits/B),
-code-half decode ratio, word diffs vs the region twin across the
-code half, and the yaml zones the four probe points fall in
-(payload start / descriptor / code start / code end).
+123 sector headers found. Columns: BCD MSF address, payload
+entropy (bits/B), code-half decode ratio, word diffs vs the region
+twin across the user-data half, and the yaml zones the four probe
+points fall in (overhead start / header / data start / data end).
 
-| descriptor vram | idx | flags | payload H | code decode | twin diffs | zones |
-| --- | --- | --- | --- | --- | --- | --- |
-| 80020118 | 549 | 0x02 | 6.14 | 0.63 | 500 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80020A48 | 550 | 0x02 | 7.23 | 0.55 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
-| 80021378 | 551 | 0x02 | 7.19 | 0.66 | 507 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80021810 |
-| 80021CA8 | 552 | 0x02 | 7.26 | 1.00 | 506 | data:data_80021810/data:data_80021810/data:data_80021810/data:data_80021810 |
-| 800225D8 | 553 | 0x02 | 7.27 | 1.00 | 501 | data:data_80021810/data:data_80021810/data:data_80021810/data:data_80021810 |
-| 80022F08 | 560 | 0x02 | 7.24 | 1.00 | 512 | data:data_80021810/data:data_80021810/data:data_80021810/asm:func_80022F30 |
-| 80023838 | 561 | 0x02 | 7.28 | 1.00 | 508 | asm:func_80022F30/data:data_8002376C/data:data_8002376C/data:data_8002376C |
-| 80024168 | 562 | 0x02 | 7.23 | 1.00 | 511 | data:data_8002376C/data:data_8002376C/data:data_8002376C/data:data_8002376C |
-| 80024A98 | 563 | 0x02 | 7.19 | 1.00 | 508 | data:data_8002376C/data:data_8002376C/data:data_8002376C/asm:func_80024BFC |
-| 800253C8 | 564 | 0x02 | 7.29 | 1.00 | 509 | asm:func_80024BFC/data:data_80025374/data:data_80025374/asm:func_80025AF0 |
-| 80025CF8 | 565 | 0x02 | 7.20 | 1.00 | 507 | asm:func_80025AF0/data:data_80025C50/data:data_80025C50/asm:func_80025F20 |
-| 80026628 | 566 | 0x02 | 7.14 | 1.00 | 508 | asm:func_80025F20/data:data_80026524/data:data_80026524/data:data_80026524 |
-| 80026F58 | 567 | 0x02 | 7.32 | 1.00 | 509 | data:data_80026524/data:data_80026524/data:data_80026524/asm:func_80026FB8 |
-| 80027888 | 568 | 0x02 | 7.31 | 1.00 | 507 | asm:func_80026FB8/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 800281B8 | 569 | 0x02 | 7.24 | 1.00 | 509 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 80028AE8 | 576 | 0x02 | 7.36 | 1.00 | 494 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 80029418 | 577 | 0x02 | 7.28 | 1.00 | 509 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 80029D48 | 578 | 0x02 | 7.21 | 1.00 | 499 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 8002A678 | 579 | 0x02 | 7.21 | 1.00 | 509 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 8002AFA8 | 580 | 0x02 | 7.25 | 1.00 | 511 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
-| 8002B8D8 | 581 | 0x02 | 7.27 | 1.00 | 511 | data:data_800277D0/data:data_800277D0/data:data_800277D0/asm:func_8002BC38 |
-| 8002C208 | 582 | 0x02 | 7.26 | 1.00 | 458 | asm:func_8002BC38/data:data_8002C124/data:data_8002C124/data:data_8002C7C0 |
-| 8002CB38 | 583 | 0x02 | 7.24 | 1.00 | 503 | data:data_8002C7C0/data:data_8002C7C0/data:data_8002C7C0/asm:func_8002CBF8 |
-| 8002D468 | 584 | 0x02 | 7.25 | 1.00 | 507 | asm:func_8002CBF8/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
-| 8002DD98 | 585 | 0x02 | 7.16 | 1.00 | 508 | data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
-| 8002E6C8 | 592 | 0x02 | 7.22 | 1.00 | 511 | data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
-| 8002EFF8 | 593 | 0x02 | 7.27 | 1.00 | 507 | data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
-| 8002F928 | 594 | 0x02 | 7.37 | 0.99 | 509 | data:data_8002D3F4/data:data_8002D3F4/asm:func_8002F93C/data:data_8002FD9C |
-| 80030258 | 595 | 0x02 | 7.24 | 1.00 | 507 | data:data_8002FD9C/data:data_8002FD9C/data:data_8002FD9C/data:data_8002FD9C |
-| 80030B88 | 596 | 0x02 | 7.22 | 1.00 | 503 | data:data_8002FD9C/data:data_8002FD9C/data:data_8002FD9C/asm:func_80030E78 |
-| 800314B8 | 597 | 0x02 | 7.26 | 1.00 | 499 | asm:func_80030E78/data:data_800313F4/data:data_800313F4/asm:func_80031708 |
-| 80031DE8 | 598 | 0x02 | 7.17 | 1.00 | 495 | asm:func_80031708/asm:func_80031DE8/asm:func_80031DE8/data:data_80031E68 |
-| 80032718 | 599 | 0x02 | 7.24 | 1.00 | 504 | data:data_80031E68/data:data_80031E68/data:data_80031E68/asm:func_800328B0 |
-| 80033048 | 600 | 0x02 | 7.23 | 1.00 | 507 | asm:func_800328B0/data:data_80032F4C/data:data_80032F4C/data:data_80032F4C |
-| 80033978 | 601 | 0x02 | 7.23 | 1.00 | 505 | data:data_80032F4C/data:data_80032F4C/data:data_80032F4C/data:data_80032F4C |
-| 800342A8 | 608 | 0x02 | 7.27 | 1.00 | 495 | data:data_80032F4C/data:data_80032F4C/data:data_80032F4C/data:data_80032F4C |
-| 80034BD8 | 609 | 0x02 | 7.35 | 1.00 | 498 | data:data_80032F4C/asm:func_80034BBC/asm:func_80034BBC/data:data_8003523C |
-| 80035508 | 610 | 0x02 | 7.18 | 0.97 | 504 | data:data_8003523C/data:data_8003523C/data:data_8003523C/data:data_80035CCC |
-| 80035E38 | 611 | 0x02 | 7.24 | 1.00 | 510 | data:data_80035CCC/data:data_80035CCC/data:data_80035CCC/data:data_80035CCC |
-| 80036768 | 612 | 0x02 | 7.15 | 0.99 | 506 | data:data_80035CCC/data:data_80035CCC/data:data_80035CCC/data:data_80036F50 |
-| 80037098 | 613 | 0x02 | 7.25 | 0.92 | 509 | data:data_80036F50/data:data_80036F50/data:data_80036F50/data:data_80036F50 |
-| 800379C8 | 614 | 0x02 | 7.24 | 0.83 | 510 | data:data_80036F50/asm:func_8003799C/data:data_800379D0/data:data_80038094 |
-| 800382F8 | 615 | 0x02 | 7.25 | 1.00 | 504 | data:data_80038094/data:data_80038094/data:data_80038094/data:data_80038094 |
-| 80038C28 | 616 | 0x02 | 7.34 | 1.00 | 507 | data:data_80038094/data:data_80038094/data:data_80038094/asm:func_80038E08 |
-| 80039558 | 617 | 0x02 | 7.24 | 0.91 | 496 | asm:func_80038E08/data:data_80039450/data:data_80039450/asm:func_80039C68 |
-| 80039E88 | 624 | 0x02 | 7.12 | 1.00 | 510 | asm:func_80039C68/asm:func_80039DFC/asm:func_80039DFC/asm:func_80039DFC |
-| 8003A7B8 | 625 | 0x02 | 7.28 | 0.99 | 505 | asm:func_80039DFC/data:data_8003A6D4/data:data_8003A6D4/asm:func_8003ADF4 |
-| 8003B0E8 | 626 | 0x02 | 7.13 | 0.99 | 502 | asm:func_8003ADF4/data:data_8003B018/data:data_8003B018/asm:func_8003B244 |
-| 8003BA18 | 627 | 0x02 | 7.26 | 1.00 | 507 | asm:func_8003B244/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
-| 8003C348 | 628 | 0x02 | 7.26 | 1.00 | 511 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
-| 8003CC78 | 512 | 0x03 | 7.21 | 1.00 | 504 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
-| 8003D5A8 | 513 | 0x03 | 7.23 | 1.00 | 504 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
-| 8003DED8 | 514 | 0x03 | 7.28 | 1.00 | 504 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
-| 8003E808 | 515 | 0x03 | 7.23 | 1.00 | 506 | data:data_8003B968/data:data_8003B968/data:data_8003B968/asm:func_8003EA24 |
-| 8003F138 | 516 | 0x03 | 7.27 | 1.00 | 493 | asm:func_8003EA24/data:data_8003F064/data:data_8003F064/data:data_8003F598 |
-| 8003FA68 | 517 | 0x03 | 7.25 | 1.00 | 506 | data:data_8003F598/data:data_8003F598/data:data_8003F598/asm:func_8003FAA0 |
-| 80040398 | 518 | 0x03 | 7.33 | 1.00 | 499 | asm:func_8003FAA0/asm:func_800402DC/data:data_800403A0/data:data_800403A0 |
-| 80040CC8 | 519 | 0x03 | 7.19 | 1.00 | 507 | data:data_800403A0/asm:func_80040C40/asm:func_80040C40/asm:func_80040FFC |
-| 800415F8 | 520 | 0x03 | 7.26 | 1.00 | 496 | asm:func_80040FFC/asm:func_80040FFC/asm:func_80040FFC/asm:func_80041694 |
-| 80041F28 | 521 | 0x03 | 7.24 | 1.00 | 489 | asm:func_80041694/data:data_80041E24/data:data_80041E24/data:data_80041E24 |
-| 80042858 | 528 | 0x03 | 7.26 | 1.00 | 508 | data:data_80041E24/data:data_80041E24/data:data_80041E24/data:data_80041E24 |
-| 80043188 | 529 | 0x03 | 7.26 | 1.00 | 511 | data:data_80041E24/data:data_80041E24/data:data_80041E24/asm:func_80043234 |
-| 80043AB8 | 530 | 0x03 | 7.20 | 1.00 | 511 | asm:func_80043234/data:data_800439AC/data:data_800439AC/data:data_800439AC |
-| 800443E8 | 531 | 0x03 | 7.19 | 1.00 | 508 | data:data_800439AC/data:data_800439AC/data:data_800439AC/asm:func_8004446C |
-| 80044D18 | 532 | 0x03 | 7.26 | 1.00 | 510 | asm:func_8004446C/data:data_80044C60/data:data_80044C60/asm:func_80044F20 |
-| 80045648 | 533 | 0x03 | 7.27 | 1.00 | 507 | data:data_80045530/data:data_8004557C/data:data_8004557C/data:data_8004557C |
-| 80045F78 | 534 | 0x03 | 7.27 | 1.00 | 506 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
-| 800468A8 | 535 | 0x03 | 7.27 | 1.00 | 508 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
-| 800471D8 | 536 | 0x03 | 7.25 | 1.00 | 489 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
-| 80047B08 | 537 | 0x03 | 7.26 | 1.00 | 390 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
-| 80048438 | 544 | 0x03 | 7.25 | 1.00 | 418 | data:data_8004557C/data:data_8004557C/data:data_8004557C/asm:func_800487B4 |
-| 80048D68 | 545 | 0x03 | 7.17 | 1.00 | 503 | asm:func_800487B4/data:data_80048C84/data:data_80048C84/data:data_80048C84 |
-| 80049698 | 546 | 0x03 | 7.19 | 1.00 | 506 | data:data_80048C84/data:data_80048C84/data:data_80048C84/data:data_80049750 |
-| 80049FC8 | 547 | 0x03 | 7.26 | 1.00 | 457 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004A8F8 | 548 | 0x03 | 7.29 | 1.00 | 496 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004B228 | 549 | 0x03 | 7.27 | 1.00 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004BB58 | 550 | 0x03 | 7.28 | 1.00 | 511 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004C488 | 551 | 0x03 | 7.34 | 1.00 | 505 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004CDB8 | 552 | 0x03 | 7.16 | 1.00 | 510 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004D6E8 | 553 | 0x03 | 7.23 | 1.00 | 510 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004E018 | 560 | 0x03 | 7.30 | 1.00 | 458 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004E948 | 561 | 0x03 | 7.25 | 1.00 | 504 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004F278 | 562 | 0x03 | 7.36 | 1.00 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8004FBA8 | 563 | 0x03 | 7.22 | 1.00 | 501 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800504D8 | 564 | 0x03 | 7.27 | 1.00 | 494 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80050E08 | 565 | 0x03 | 7.14 | 0.87 | 481 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80051738 | 566 | 0x03 | 7.24 | 0.73 | 466 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80052068 | 567 | 0x03 | 7.18 | 0.80 | 413 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80052998 | 568 | 0x03 | 7.26 | 0.78 | 423 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800532C8 | 569 | 0x03 | 7.29 | 0.73 | 443 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80053BF8 | 576 | 0x03 | 7.22 | 0.95 | 106 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80054528 | 577 | 0x03 | 6.86 | 1.00 | 12 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80054E58 | 578 | 0x03 | 1.36 | 0.89 | 383 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80055788 | 579 | 0x03 | 7.22 | 0.73 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800560B8 | 580 | 0x03 | 7.18 | 1.00 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800569E8 | 581 | 0x03 | 7.04 | 0.87 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80057318 | 582 | 0x03 | 6.93 | 0.37 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80057C48 | 583 | 0x03 | 6.87 | 0.49 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80058578 | 584 | 0x03 | 6.93 | 0.00 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80058EA8 | 585 | 0x03 | 6.68 | 0.67 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800597D8 | 592 | 0x03 | 6.80 | 0.34 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005A108 | 593 | 0x03 | 6.70 | 0.96 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005AA38 | 594 | 0x03 | 6.95 | 0.95 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005B368 | 595 | 0x03 | 7.21 | 1.00 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005BC98 | 596 | 0x03 | 4.16 | 0.95 | 451 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005C5C8 | 597 | 0x03 | 7.19 | 0.68 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005CEF8 | 598 | 0x03 | 7.14 | 0.57 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005D828 | 599 | 0x03 | 7.13 | 0.41 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005E158 | 600 | 0x03 | 7.09 | 0.75 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005EA88 | 601 | 0x03 | 7.29 | 0.71 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005F3B8 | 608 | 0x03 | 7.33 | 0.66 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 8005FCE8 | 609 | 0x03 | 7.24 | 0.76 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80060618 | 610 | 0x03 | 7.20 | 0.70 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80060F48 | 611 | 0x03 | 7.24 | 0.69 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80061878 | 612 | 0x03 | 7.08 | 0.71 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800621A8 | 613 | 0x03 | 7.23 | 0.75 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80062AD8 | 614 | 0x03 | 7.18 | 0.75 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80063408 | 615 | 0x03 | 7.20 | 0.78 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80063D38 | 616 | 0x03 | 7.17 | 0.71 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80064668 | 617 | 0x03 | 7.09 | 0.78 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 80064F98 | 624 | 0x03 | 7.15 | 0.64 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800658C8 | 625 | 0x03 | 7.08 | 0.50 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
-| 800661F8 | 626 | 0x03 | 5.44 | n/a | n/a | data:data_80049750/data:data_80049750/data:data_80049750/? |
+| sector vram | MSF (mm:ss:ff) | payload H | code decode | twin diffs | zones |
+| --- | --- | --- | --- | --- | --- |
+| 80020118 | 00:02:25 | 6.14 | 0.63 | 500 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80020A48 | 00:02:26 | 7.23 | 0.55 | 509 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80020000 |
+| 80021378 | 00:02:27 | 7.19 | 0.66 | 507 | data:data_80020000/data:data_80020000/data:data_80020000/data:data_80021810 |
+| 80021CA8 | 00:02:28 | 7.26 | 1.00 | 506 | data:data_80021810/data:data_80021810/data:data_80021810/data:data_80021810 |
+| 800225D8 | 00:02:29 | 7.27 | 1.00 | 501 | data:data_80021810/data:data_80021810/data:data_80021810/data:data_80021810 |
+| 80022F08 | 00:02:30 | 7.24 | 1.00 | 512 | data:data_80021810/data:data_80021810/data:data_80021810/asm:func_80022F30 |
+| 80023838 | 00:02:31 | 7.28 | 1.00 | 508 | asm:func_80022F30/data:data_8002376C/data:data_8002376C/data:data_8002376C |
+| 80024168 | 00:02:32 | 7.23 | 1.00 | 511 | data:data_8002376C/data:data_8002376C/data:data_8002376C/data:data_8002376C |
+| 80024A98 | 00:02:33 | 7.19 | 1.00 | 508 | data:data_8002376C/data:data_8002376C/data:data_8002376C/asm:func_80024BFC |
+| 800253C8 | 00:02:34 | 7.29 | 1.00 | 509 | asm:func_80024BFC/data:data_80025374/data:data_80025374/asm:func_80025AF0 |
+| 80025CF8 | 00:02:35 | 7.20 | 1.00 | 507 | asm:func_80025AF0/data:data_80025C50/data:data_80025C50/asm:func_80025F20 |
+| 80026628 | 00:02:36 | 7.14 | 1.00 | 508 | asm:func_80025F20/data:data_80026524/data:data_80026524/data:data_80026524 |
+| 80026F58 | 00:02:37 | 7.32 | 1.00 | 509 | data:data_80026524/data:data_80026524/data:data_80026524/asm:func_80026FB8 |
+| 80027888 | 00:02:38 | 7.31 | 1.00 | 507 | asm:func_80026FB8/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 800281B8 | 00:02:39 | 7.24 | 1.00 | 509 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 80028AE8 | 00:02:40 | 7.36 | 1.00 | 494 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 80029418 | 00:02:41 | 7.28 | 1.00 | 509 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 80029D48 | 00:02:42 | 7.21 | 1.00 | 499 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 8002A678 | 00:02:43 | 7.21 | 1.00 | 509 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 8002AFA8 | 00:02:44 | 7.25 | 1.00 | 511 | data:data_800277D0/data:data_800277D0/data:data_800277D0/data:data_800277D0 |
+| 8002B8D8 | 00:02:45 | 7.27 | 1.00 | 511 | data:data_800277D0/data:data_800277D0/data:data_800277D0/asm:func_8002BC38 |
+| 8002C208 | 00:02:46 | 7.26 | 1.00 | 458 | asm:func_8002BC38/data:data_8002C124/data:data_8002C124/data:data_8002C7C0 |
+| 8002CB38 | 00:02:47 | 7.24 | 1.00 | 503 | data:data_8002C7C0/data:data_8002C7C0/data:data_8002C7C0/asm:func_8002CBF8 |
+| 8002D468 | 00:02:48 | 7.25 | 1.00 | 507 | asm:func_8002CBF8/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
+| 8002DD98 | 00:02:49 | 7.16 | 1.00 | 508 | data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
+| 8002E6C8 | 00:02:50 | 7.22 | 1.00 | 511 | data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
+| 8002EFF8 | 00:02:51 | 7.27 | 1.00 | 507 | data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4/data:data_8002D3F4 |
+| 8002F928 | 00:02:52 | 7.37 | 0.99 | 509 | data:data_8002D3F4/data:data_8002D3F4/asm:func_8002F93C/data:data_8002FD9C |
+| 80030258 | 00:02:53 | 7.24 | 1.00 | 507 | data:data_8002FD9C/data:data_8002FD9C/data:data_8002FD9C/data:data_8002FD9C |
+| 80030B88 | 00:02:54 | 7.22 | 1.00 | 503 | data:data_8002FD9C/data:data_8002FD9C/data:data_8002FD9C/asm:func_80030E78 |
+| 800314B8 | 00:02:55 | 7.26 | 1.00 | 499 | asm:func_80030E78/data:data_800313F4/data:data_800313F4/asm:func_80031708 |
+| 80031DE8 | 00:02:56 | 7.17 | 1.00 | 495 | asm:func_80031708/asm:func_80031DE8/asm:func_80031DE8/data:data_80031E68 |
+| 80032718 | 00:02:57 | 7.24 | 1.00 | 504 | data:data_80031E68/data:data_80031E68/data:data_80031E68/asm:func_800328B0 |
+| 80033048 | 00:02:58 | 7.23 | 1.00 | 507 | asm:func_800328B0/data:data_80032F4C/data:data_80032F4C/data:data_80032F4C |
+| 80033978 | 00:02:59 | 7.23 | 1.00 | 505 | data:data_80032F4C/data:data_80032F4C/data:data_80032F4C/data:data_80032F4C |
+| 800342A8 | 00:02:60 | 7.27 | 1.00 | 495 | data:data_80032F4C/data:data_80032F4C/data:data_80032F4C/data:data_80032F4C |
+| 80034BD8 | 00:02:61 | 7.35 | 1.00 | 498 | data:data_80032F4C/asm:func_80034BBC/asm:func_80034BBC/data:data_8003523C |
+| 80035508 | 00:02:62 | 7.18 | 0.97 | 504 | data:data_8003523C/data:data_8003523C/data:data_8003523C/data:data_80035CCC |
+| 80035E38 | 00:02:63 | 7.24 | 1.00 | 510 | data:data_80035CCC/data:data_80035CCC/data:data_80035CCC/data:data_80035CCC |
+| 80036768 | 00:02:64 | 7.15 | 0.99 | 506 | data:data_80035CCC/data:data_80035CCC/data:data_80035CCC/data:data_80036F50 |
+| 80037098 | 00:02:65 | 7.25 | 0.92 | 509 | data:data_80036F50/data:data_80036F50/data:data_80036F50/data:data_80036F50 |
+| 800379C8 | 00:02:66 | 7.24 | 0.83 | 510 | data:data_80036F50/asm:func_8003799C/data:data_800379D0/data:data_80038094 |
+| 800382F8 | 00:02:67 | 7.25 | 1.00 | 504 | data:data_80038094/data:data_80038094/data:data_80038094/data:data_80038094 |
+| 80038C28 | 00:02:68 | 7.34 | 1.00 | 507 | data:data_80038094/data:data_80038094/data:data_80038094/asm:func_80038E08 |
+| 80039558 | 00:02:69 | 7.24 | 0.91 | 496 | asm:func_80038E08/data:data_80039450/data:data_80039450/asm:func_80039C68 |
+| 80039E88 | 00:02:70 | 7.12 | 1.00 | 510 | asm:func_80039C68/asm:func_80039DFC/asm:func_80039DFC/asm:func_80039DFC |
+| 8003A7B8 | 00:02:71 | 7.28 | 0.99 | 505 | asm:func_80039DFC/data:data_8003A6D4/data:data_8003A6D4/asm:func_8003ADF4 |
+| 8003B0E8 | 00:02:72 | 7.13 | 0.99 | 502 | asm:func_8003ADF4/data:data_8003B018/data:data_8003B018/asm:func_8003B244 |
+| 8003BA18 | 00:02:73 | 7.26 | 1.00 | 507 | asm:func_8003B244/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
+| 8003C348 | 00:02:74 | 7.26 | 1.00 | 511 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
+| 8003CC78 | 00:03:00 | 7.21 | 1.00 | 504 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
+| 8003D5A8 | 00:03:01 | 7.23 | 1.00 | 504 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
+| 8003DED8 | 00:03:02 | 7.28 | 1.00 | 504 | data:data_8003B968/data:data_8003B968/data:data_8003B968/data:data_8003B968 |
+| 8003E808 | 00:03:03 | 7.23 | 1.00 | 506 | data:data_8003B968/data:data_8003B968/data:data_8003B968/asm:func_8003EA24 |
+| 8003F138 | 00:03:04 | 7.27 | 1.00 | 493 | asm:func_8003EA24/data:data_8003F064/data:data_8003F064/data:data_8003F598 |
+| 8003FA68 | 00:03:05 | 7.25 | 1.00 | 506 | data:data_8003F598/data:data_8003F598/data:data_8003F598/asm:func_8003FAA0 |
+| 80040398 | 00:03:06 | 7.33 | 1.00 | 499 | asm:func_8003FAA0/asm:func_800402DC/data:data_800403A0/data:data_800403A0 |
+| 80040CC8 | 00:03:07 | 7.19 | 1.00 | 507 | data:data_800403A0/asm:func_80040C40/asm:func_80040C40/asm:func_80040FFC |
+| 800415F8 | 00:03:08 | 7.26 | 1.00 | 496 | asm:func_80040FFC/asm:func_80040FFC/asm:func_80040FFC/asm:func_80041694 |
+| 80041F28 | 00:03:09 | 7.24 | 1.00 | 489 | asm:func_80041694/data:data_80041E24/data:data_80041E24/data:data_80041E24 |
+| 80042858 | 00:03:10 | 7.26 | 1.00 | 508 | data:data_80041E24/data:data_80041E24/data:data_80041E24/data:data_80041E24 |
+| 80043188 | 00:03:11 | 7.26 | 1.00 | 511 | data:data_80041E24/data:data_80041E24/data:data_80041E24/asm:func_80043234 |
+| 80043AB8 | 00:03:12 | 7.20 | 1.00 | 511 | asm:func_80043234/data:data_800439AC/data:data_800439AC/data:data_800439AC |
+| 800443E8 | 00:03:13 | 7.19 | 1.00 | 508 | data:data_800439AC/data:data_800439AC/data:data_800439AC/asm:func_8004446C |
+| 80044D18 | 00:03:14 | 7.26 | 1.00 | 510 | asm:func_8004446C/data:data_80044C60/data:data_80044C60/asm:func_80044F20 |
+| 80045648 | 00:03:15 | 7.27 | 1.00 | 507 | data:data_80045530/data:data_8004557C/data:data_8004557C/data:data_8004557C |
+| 80045F78 | 00:03:16 | 7.27 | 1.00 | 506 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
+| 800468A8 | 00:03:17 | 7.27 | 1.00 | 508 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
+| 800471D8 | 00:03:18 | 7.25 | 1.00 | 489 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
+| 80047B08 | 00:03:19 | 7.26 | 1.00 | 390 | data:data_8004557C/data:data_8004557C/data:data_8004557C/data:data_8004557C |
+| 80048438 | 00:03:20 | 7.25 | 1.00 | 418 | data:data_8004557C/data:data_8004557C/data:data_8004557C/asm:func_800487B4 |
+| 80048D68 | 00:03:21 | 7.17 | 1.00 | 503 | asm:func_800487B4/data:data_80048C84/data:data_80048C84/data:data_80048C84 |
+| 80049698 | 00:03:22 | 7.19 | 1.00 | 506 | data:data_80048C84/data:data_80048C84/data:data_80048C84/data:data_80049750 |
+| 80049FC8 | 00:03:23 | 7.26 | 1.00 | 457 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004A8F8 | 00:03:24 | 7.29 | 1.00 | 496 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004B228 | 00:03:25 | 7.27 | 1.00 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004BB58 | 00:03:26 | 7.28 | 1.00 | 511 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004C488 | 00:03:27 | 7.34 | 1.00 | 505 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004CDB8 | 00:03:28 | 7.16 | 1.00 | 510 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004D6E8 | 00:03:29 | 7.23 | 1.00 | 510 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004E018 | 00:03:30 | 7.30 | 1.00 | 458 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004E948 | 00:03:31 | 7.25 | 1.00 | 504 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004F278 | 00:03:32 | 7.36 | 1.00 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8004FBA8 | 00:03:33 | 7.22 | 1.00 | 501 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800504D8 | 00:03:34 | 7.27 | 1.00 | 494 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80050E08 | 00:03:35 | 7.14 | 0.87 | 481 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80051738 | 00:03:36 | 7.24 | 0.73 | 466 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80052068 | 00:03:37 | 7.18 | 0.80 | 413 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80052998 | 00:03:38 | 7.26 | 0.78 | 423 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800532C8 | 00:03:39 | 7.29 | 0.73 | 443 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80053BF8 | 00:03:40 | 7.22 | 0.95 | 106 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80054528 | 00:03:41 | 6.86 | 1.00 | 12 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80054E58 | 00:03:42 | 1.36 | 0.89 | 383 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80055788 | 00:03:43 | 7.22 | 0.73 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800560B8 | 00:03:44 | 7.18 | 1.00 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800569E8 | 00:03:45 | 7.04 | 0.87 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80057318 | 00:03:46 | 6.93 | 0.37 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80057C48 | 00:03:47 | 6.87 | 0.49 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80058578 | 00:03:48 | 6.93 | 0.00 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80058EA8 | 00:03:49 | 6.68 | 0.67 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800597D8 | 00:03:50 | 6.80 | 0.34 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005A108 | 00:03:51 | 6.70 | 0.96 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005AA38 | 00:03:52 | 6.95 | 0.95 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005B368 | 00:03:53 | 7.21 | 1.00 | 508 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005BC98 | 00:03:54 | 4.16 | 0.95 | 451 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005C5C8 | 00:03:55 | 7.19 | 0.68 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005CEF8 | 00:03:56 | 7.14 | 0.57 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005D828 | 00:03:57 | 7.13 | 0.41 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005E158 | 00:03:58 | 7.09 | 0.75 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005EA88 | 00:03:59 | 7.29 | 0.71 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005F3B8 | 00:03:60 | 7.33 | 0.66 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 8005FCE8 | 00:03:61 | 7.24 | 0.76 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80060618 | 00:03:62 | 7.20 | 0.70 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80060F48 | 00:03:63 | 7.24 | 0.69 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80061878 | 00:03:64 | 7.08 | 0.71 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800621A8 | 00:03:65 | 7.23 | 0.75 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80062AD8 | 00:03:66 | 7.18 | 0.75 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80063408 | 00:03:67 | 7.20 | 0.78 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80063D38 | 00:03:68 | 7.17 | 0.71 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80064668 | 00:03:69 | 7.09 | 0.78 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 80064F98 | 00:03:70 | 7.15 | 0.64 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800658C8 | 00:03:71 | 7.08 | 0.50 | 512 | data:data_80049750/data:data_80049750/data:data_80049750/data:data_80049750 |
+| 800661F8 | 00:03:72 | 5.44 | n/a | n/a | data:data_80049750/data:data_80049750/data:data_80049750/? |
 
