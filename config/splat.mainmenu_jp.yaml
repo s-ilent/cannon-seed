@@ -82,12 +82,6 @@ segments:
       # (func_8002B918-analog prologue at 0x8002B978); block 2/3 deltas
       # drift (-0x8fc/-0x7e4 measured on EU side) - the grid is shared,
       # the function placement inside code halves is not.
-      # The remainder 0x8002CB50..0x8002DE00 holds the state-pool code twin
-      # of EU func_8002CC5C (delta 0, twin-proven), the D_8002D358-analog
-      # 0x40 blob, and further grid blocks (desc at D468/DD98) - carve next
-      # session with the grid analysis; EU's stub rows j INTO payload 1 with
-      # real store delay slots, so some payload bytes only exist after
-      # runtime decryption.
       - [0xBFC0, data, data_8002B7C0]   # 0x118 payload 1
       - [0xC0D8, data, data_8002B8D8]   # 0x18 descriptor 1
       - [0xC0F0, asm, func_8002B8F0]   # 0x800 code block 1
@@ -96,7 +90,31 @@ segments:
       - [0xCA20, asm, func_8002C220]   # 0x800 code block 2
       - [0xD220, data, data_8002CA20]   # 0x118 payload 3
       - [0xD338, data, data_8002CB38]   # 0x18 descriptor 3
-      - [0xD350, data, data_8002CB50]   # 0x12b0 remainder: state-pool twin + grid blocks (next session)
+      # Carve of the old data_8002CB50 (0x12b0, recon scripts/jp_cb50_recon1-3.py):
+      # - func_8002CB50 (0x800 = CB50..D350, exactly one grid code-half):
+      #   JP's own function(s) in the head (jr ra at CCB4/D088; EU holds two
+      #   different functions there - the head diverges), then the state-pool
+      #   body CD18..D350, a relocation twin of EU's pool (delta 0, jal/imm/
+      #   mem diffs only; EU's twin runs 8 bytes further, to D358 - EU's
+      #   func_8002CC5C includes payload 4's first 8 bytes, an 8-byte
+      #   imprecision vs the grid that JP does not have).
+      # - Grid blocks 4/5 at the same vrams as EU (desc D468 idx 0x255 /
+      #   DD98 idx 0x256; EU 0x257/0x258 at the same addresses - JP base runs
+      #   2 lower, low byte 0x17 vs EU 0x19). Payloads 4/5 high-entropy
+      #   (7.24/7.38 bits/byte), 70-word diff blocks vs EU; code block 4
+      #   D480..DC80 all-decodes, scattered twin diffs.
+      # - Tail DDB0..DE00 (0x50): stub row, relocation twin of EU's (only
+      #   pointer/gp words differ), full lw ra/s0-s7 + jr ra epilogue; block
+      #   5's code half is truncated by func_8002DE00 (real code, not grid).
+      # A further JP descriptor sits at 0x8002E6D8 (idx 0x257), past this
+      # span - for the exe-wide grid walk.
+      - [0xD350, asm, func_8002CB50]   # 0x800 JP head functions + state-pool twin body
+      - [0xDB50, data, data_8002D350]   # 0x118 payload 4
+      - [0xDC68, data, data_8002D468]   # 0x18 descriptor 4 (idx 0x255)
+      - [0xDC80, asm, func_8002D480]   # 0x800 code block 4
+      - [0xE480, data, data_8002DC80]   # 0x118 payload 5
+      - [0xE598, data, data_8002DD98]   # 0x18 descriptor 5 (idx 0x256)
+      - [0xE5B0, data, data_8002DDB0]   # 0x50 stub row
       - [0xE600, asm, func_8002DE00]   # 0x800
       - [0xEE00, data, data_8002E600]   # 0x1d48
       - [0x10B48, asm, func_80030348]   # 0x740
