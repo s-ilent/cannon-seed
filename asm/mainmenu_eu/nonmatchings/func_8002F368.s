@@ -121,7 +121,7 @@ glabel func_8002F424
     /* FCDC 8002F4DC EC0FA524 */  addiu      $a1, $a1, %lo(D_80020FEC)
     /* FCE0 8002F4E0 4499000C */  jal        func_80026510
     /* FCE4 8002F4E4 00000000 */   nop
-    /* FCE8 8002F4E8 4AB50008 */  j          D_8002D528
+    /* FCE8 8002F4E8 4AB50008 */  j          .L8002D528
     /* FCEC 8002F4EC 00000000 */   nop
 endlabel func_8002F424
 
@@ -190,7 +190,7 @@ glabel func_8002F4F0
     /* FDDC 8002F5DC EBD6000C */  jal        func_80035BAC
     /* FDE0 8002F5E0 21280002 */   addu      $a1, $s0, $zero
     /* FDE4 8002F5E4 1200A687 */  lh         $a2, 0x12($sp)
-    /* FDE8 8002F5E8 85B50008 */  j          D_8002D614
+    /* FDE8 8002F5E8 85B50008 */  j          .L8002D614
     /* FDEC 8002F5EC 51000434 */   ori       $a0, $zero, 0x51
 endlabel func_8002F4F0
 
@@ -212,7 +212,7 @@ glabel func_8002F5F0
     /* FE20 8002F620 56000434 */  ori        $a0, $zero, 0x56
     /* FE24 8002F624 EBD6000C */  jal        func_80035BAC
     /* FE28 8002F628 21280002 */   addu      $a1, $s0, $zero
-    /* FE2C 8002F62C 1BB60008 */  j          D_8002D86C
+    /* FE2C 8002F62C 1BB60008 */  j          .L8002D86C
     /* FE30 8002F630 2118A002 */   addu      $v1, $s5, $zero
 endlabel func_8002F5F0
 
@@ -283,7 +283,7 @@ glabel func_8002F634
     /* FF28 8002F728 EBD6000C */  jal        func_80035BAC
     /* FF2C 8002F72C 21280002 */   addu      $a1, $s0, $zero
     /* FF30 8002F730 1200A687 */  lh         $a2, 0x12($sp)
-    /* FF34 8002F734 D8B50008 */  j          D_8002D760
+    /* FF34 8002F734 D8B50008 */  j          .L8002D760
     /* FF38 8002F738 52000434 */   ori       $a0, $zero, 0x52
 endlabel func_8002F634
 
@@ -323,7 +323,7 @@ glabel func_8002F7A0
     /* FFA0 8002F7A0 21280002 */  addu       $a1, $s0, $zero
     /* FFA4 8002F7A4 50EB000C */  jal        func_8003AD40
     /* FFA8 8002F7A8 21300000 */   addu      $a2, $zero, $zero
-    /* FFAC 8002F7AC 1BB60008 */  j          D_8002D86C
+    /* FFAC 8002F7AC 1BB60008 */  j          .L8002D86C
     /* FFB0 8002F7B0 2118A002 */   addu      $v1, $s5, $zero
 endlabel func_8002F7A0
 

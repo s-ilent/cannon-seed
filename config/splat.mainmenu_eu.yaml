@@ -107,13 +107,25 @@ segments:
       # mid-stream entries tail-jumping into D_8002B904 (now inside
       # func_8002B8F0) and func_8002B710/B728 (inside func_8002B06C)). Stays
       # asm: every entry is a jump or indirect-jump target, never a call. Byte-twin proof vs JP (same vram,
-      # delta 0): body 0x8002CD18..0x8002D358 is a pure relocation twin (jal/
-      # imm/mem diffs only); the head 0x8002CC5C..CD18 and the data tail
-      # genuinely diverge. The tail (D_8002D358, 0x40, high-entropy, passed
-      # as a pointer by func_8002F368) is carved off as data below.
-      - [0xD45C, asm, func_8002CC5C]   # 0x6fc
-      - [0xDB58, data, data_8002D358]  # 0x40
-      - [0xDB98, data, data_8002D398]   # 0xa68
+      # delta 0): body 0x8002CD18..0x8002D350 is a pure relocation twin (jal/
+      # imm/mem diffs only); the head 0x8002CC5C..CD18 genuinely diverges.
+      # Grid carve (recon 2026-10-12, scripts/eu_d398_recon1.py): 0x8002D350..
+      # 0x8002DE00 decomposes per the 0x930 grid (desc4 0x8002D468 idx 0x257,
+      # desc5 0x8002DD98 idx 0x258) as [payload4 0x118|desc4|code4 0x800|
+      # payload5 0x118|desc5|pool epilogue 0x50]. Code half 4 is fully
+      # decodable (512 insns, prologues 0x8002D62C/D978, 80 jals) and a pure
+      # relocation twin of JP func_8002D480 (142/512 words, 0 opcode-class).
+      # The old 0x40 "encrypted tail" D_8002D358 (H=5.74) is mid-payload-4
+      # and merges into it; func_8002F368's %hi/%lo pointer regenerates as
+      # data_8002D350+0x8. data_8002DDB0 (0x50) is the shared 0x50-frame
+      # pool epilogue (lw ra..jr ra), 3/20 words off JP's same-vram twin.
+      - [0xD45C, asm, func_8002CC5C]   # 0x6f4 (code half 3 ends D350, grid-exact)
+      - [0xDB50, data, data_8002D350]  # 0x118 payload 4
+      - [0xDC68, data, data_8002D468]  # 0x18 descriptor 4
+      - [0xDC80, asm, func_8002D480]   # 0x800 code block 4
+      - [0xE480, data, data_8002DC80]  # 0x118 payload 5
+      - [0xE598, data, data_8002DD98]  # 0x18 descriptor 5
+      - [0xE5B0, data, data_8002DDB0]  # 0x50 pool epilogue
       - [0xE600, asm, func_8002DE00]   # 0x82c
       - [0xEE2C, data, data_8002E62C]   # 0x538
       - [0xF364, asm, func_8002EB64]   # 0x3ac
