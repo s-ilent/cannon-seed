@@ -4,9 +4,11 @@
  * void functions, the JP twin of the mainmenu_eu family at 0x800379E4.
  * Each arms the menu-state flag D_800C8B38 (first two functions) and/or
  * drives the sequence helper func_800356C4(N, M), then calls the
- * unprototyped menu primitive func_80025DAC(). JP carries 19 more
- * variants than EU: single wrappers over N = 8, 10, 11, 13, 14, 15 and
- * multi-sequence functions repeating (7, M) runs up to five calls.
+ * unprototyped menu primitive func_80025DAC(). Functions 17-35 here
+ * (func_80037D0C..func_800380D0) were once described as JP-only
+ * variants; EU carries the same 19 - they hid in mainmenu_eu's
+ * data_80037CAC until the cron-20261011-1156 carve and are now matched
+ * as src/func_80037CAC.c.
  *
  * func_8003800C is the one stateful member: it snapshots the counter
  * helper func_80035A78(0) into a callee-saved local, replays the

@@ -100,12 +100,13 @@ segments:
       # Byte-proven JP twins (cron-20261011-1157): this former data blob is
       # JP vram -0x60 throughout the first 0x4e0. [0x184AC,0x3f0) = the 19
       # remaining wrapper-family twins (JP func_80037D0C..func_800380D0;
-      # 52 differing words, all jal targets). [0x1889C,0xf0) = twin of JP's
-      # switch dispatch func_800380FC (stays asm: its jump tables are
+      # 52 differing words, all jal targets) - C-matched as
+      # src/func_80037CAC.c (cron-20261011-1311). [0x1889C,0xf0) = twin of
+      # JP's switch dispatch func_800380FC (stays asm: its jump tables are
       # string-clobbered at rest in BOTH exes and nothing references it).
       # Tail 0x2e0 genuinely diverges from JP (extra EU stubs + junk) and
       # stays data pending its own carve analysis.
-      - [0x184AC, asm, func_80037CAC]   # 0x3f0
+      - [0x184AC, c, func_80037CAC]     # 0x3f0
       - [0x1889C, asm, func_8003809C]   # 0xf0
       - [0x1898C, data, data_8003818C]  # 0x2e0
       - [0x18C6C, asm, func_8003846C]   # 0x6cc
