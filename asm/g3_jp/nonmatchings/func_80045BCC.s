@@ -37,14 +37,19 @@ glabel func_80045C10
     /* 26418 80045C18 00000000 */   nop
 endlabel func_80045C10
 
-nonmatching func_80045C1C, 0x10
+nonmatching func_80045C1C, 0x4
 
 glabel func_80045C1C
     /* 2641C 80045C1C 1000BF8F */  lw         $ra, 0x10($sp)
+endlabel func_80045C1C
+
+nonmatching func_80045C20, 0xC
+
+glabel func_80045C20
     /* 26420 80045C20 00000000 */  nop
     /* 26424 80045C24 0800E003 */  jr         $ra
     /* 26428 80045C28 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_80045C1C
+endlabel func_80045C20
 
 nonmatching func_80045C2C, 0x50
 

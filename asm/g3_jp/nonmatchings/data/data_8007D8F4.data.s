@@ -77102,22 +77102,52 @@ nonmatching D_800AB280
 dlabel D_800AB280
     /* 8BA80 800AB280 00000000 */ .word 0x00000000
     /* 8BA84 800AB284 03000300 */ .word 0x00030003
+enddlabel D_800AB280
+
+nonmatching D_800AB288
+
+dlabel D_800AB288
     /* 8BA88 800AB288 00000000 */ .word 0x00000000
     /* 8BA8C 800AB28C 03000300 */ .word 0x00030003
+enddlabel D_800AB288
+
+nonmatching D_800AB290
+
+dlabel D_800AB290
     /* 8BA90 800AB290 00000000 */ .word 0x00000000
     /* 8BA94 800AB294 03000300 */ .word 0x00030003
+enddlabel D_800AB290
+
+nonmatching D_800AB298
+
+dlabel D_800AB298
     /* 8BA98 800AB298 00000000 */ .word 0x00000000
     /* 8BA9C 800AB29C 03000300 */ .word 0x00030003
+enddlabel D_800AB298
+
+nonmatching D_800AB2A0
+
+dlabel D_800AB2A0
     /* 8BAA0 800AB2A0 00000000 */ .word 0x00000000
     /* 8BAA4 800AB2A4 03000300 */ .word 0x00030003
+enddlabel D_800AB2A0
+
+nonmatching D_800AB2A8
+
+dlabel D_800AB2A8
     /* 8BAA8 800AB2A8 00000000 */ .word 0x00000000
     /* 8BAAC 800AB2AC 03000300 */ .word 0x00030003
+enddlabel D_800AB2A8
+
+nonmatching D_800AB2B0
+
+dlabel D_800AB2B0
     /* 8BAB0 800AB2B0 00000000 */ .word 0x00000000
     /* 8BAB4 800AB2B4 03000300 */ .word 0x00030003
     /* 8BAB8 800AB2B8 00000000 */ .word 0x00000000
     /* 8BABC 800AB2BC 03000300 */ .word 0x00030003
     /* 8BAC0 800AB2C0 00000000 */ .word 0x00000000
-enddlabel D_800AB280
+enddlabel D_800AB2B0
 
 nonmatching D_800AB2C4
 
@@ -79036,13 +79066,23 @@ nonmatching D_800ABB84
 dlabel D_800ABB84
     /* 8C384 800ABB84 06001F7C */ .word 0x7C1F0006
     /* 8C388 800ABB88 00000000 */ .word 0x00000000
+enddlabel D_800ABB84
+
+nonmatching D_800ABB8C
+
+dlabel D_800ABB8C
     /* 8C38C 800ABB8C 06001F7C */ .word 0x7C1F0006
     /* 8C390 800ABB90 00000000 */ .word 0x00000000
+enddlabel D_800ABB8C
+
+nonmatching D_800ABB94
+
+dlabel D_800ABB94
     /* 8C394 800ABB94 06001F7C */ .word 0x7C1F0006
     /* 8C398 800ABB98 00000000 */ .word 0x00000000
     /* 8C39C 800ABB9C 06001F7C */ .word 0x7C1F0006
     /* 8C3A0 800ABBA0 00000000 */ .word 0x00000000
-enddlabel D_800ABB84
+enddlabel D_800ABB94
 
 nonmatching D_800ABBA4
 
@@ -79771,11 +79811,14 @@ dlabel D_800ABFAC
     /* 8C7AE 800ABFAE */ .short 0x2401
     /* 8C7B0 800ABFB0 */ .short 0x0000
     /* 8C7B2 800ABFB2 */ .short 0x0000
-    /* 8C7B4 800ABFB4 */ .short 0x0008
-    /* 8C7B6 800ABFB6 */ .short 0x2401
-    /* 8C7B8 800ABFB8 */ .short 0x0000
-    /* 8C7BA 800ABFBA */ .short 0x0000
 enddlabel D_800ABFAC
+
+nonmatching D_800ABFB4
+
+dlabel D_800ABFB4
+    /* 8C7B4 800ABFB4 08000124 */ .word 0x24010008
+    /* 8C7B8 800ABFB8 00000000 */ .word 0x00000000
+enddlabel D_800ABFB4
 
 nonmatching D_800ABFBC
 

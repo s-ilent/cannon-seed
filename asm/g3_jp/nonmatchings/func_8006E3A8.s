@@ -463,7 +463,7 @@ glabel func_8006E874
     /* 4F0D0 8006E8D0 0D000234 */  ori        $v0, $zero, 0xD
     /* 4F0D4 8006E8D4 0400A2AF */  sw         $v0, 0x4($sp)
     /* 4F0D8 8006E8D8 0000A0AF */  sw         $zero, 0x0($sp)
-    /* 4F0DC 8006E8DC 97910108 */  j          D_8006465C
+    /* 4F0DC 8006E8DC 97910108 */  j          func_8006465C
     /* 4F0E0 8006E8E0 00000000 */   nop
 endlabel func_8006E874
 

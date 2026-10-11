@@ -378,7 +378,7 @@ glabel func_8003101C
     /* 11860 80031060 28003026 */  addiu      $s0, $s1, 0x28
 endlabel func_8003101C
 
-nonmatching func_80031064, 0xA0
+nonmatching func_80031064, 0x88
 
 glabel func_80031064
     /* 11864 80031064 1C000296 */  lhu        $v0, 0x1C($s0)
@@ -415,13 +415,18 @@ glabel func_80031064
     /* 118E0 800310E0 00000000 */  nop
     /* 118E4 800310E4 18004300 */  mult       $v0, $v1
     /* 118E8 800310E8 12100000 */  mflo       $v0
+endlabel func_80031064
     /* 118EC 800310EC 00000000 */  nop
     /* 118F0 800310F0 00000000 */  nop
+
+nonmatching func_800310F4, 0x10
+
+glabel func_800310F4
     /* 118F4 800310F4 1A004400 */  div        $zero, $v0, $a0
     /* 118F8 800310F8 02008014 */  bnez       $a0, func_80031104
     /* 118FC 800310FC 00000000 */   nop
     /* 11900 80031100 0D000700 */  break      7
-endlabel func_80031064
+endlabel func_800310F4
 
 nonmatching func_80031104, 0x18
 
@@ -454,6 +459,7 @@ nonmatching func_80031148, 0x18
 
 glabel func_80031148
     /* 11948 80031148 FFFF0124 */  addiu      $at, $zero, -0x1
+  alabel func_8003114C
     /* 1194C 8003114C 04008114 */  bne        $a0, $at, func_80031160
     /* 11950 80031150 0080013C */   lui       $at, (0x80000000 >> 16)
     /* 11954 80031154 02004114 */  bne        $v0, $at, func_80031160
@@ -485,6 +491,7 @@ nonmatching func_80031184, 0x18
 glabel func_80031184
     /* 11984 80031184 05006004 */  bltz       $v1, func_8003119C
     /* 11988 80031188 60006228 */   slti      $v0, $v1, 0x60
+  alabel func_8003118C
     /* 1198C 8003118C 07004014 */  bnez       $v0, func_800311AC
     /* 11990 80031190 00000000 */   nop
     /* 11994 80031194 83BB0008 */  j          func_8002EE0C
@@ -512,6 +519,7 @@ glabel func_800311AC
     /* 119C4 800311C4 A800A28F */  lw         $v0, 0xA8($sp)
     /* 119C8 800311C8 40230300 */  sll        $a0, $v1, 13
     /* 119CC 800311CC 1A008200 */  div        $zero, $a0, $v0
+  alabel func_800311D0
     /* 119D0 800311D0 02004014 */  bnez       $v0, func_800311DC
     /* 119D4 800311D4 00000000 */   nop
     /* 119D8 800311D8 0D000700 */  break      7

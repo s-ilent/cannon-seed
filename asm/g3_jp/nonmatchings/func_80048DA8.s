@@ -79,15 +79,20 @@ glabel func_80048E7C
     /* 29688 80048E88 8B0F010C */  jal        func_80043E2C
 endlabel func_80048E7C
 
-nonmatching func_80048E8C, 0x14
+nonmatching func_80048E8C, 0x10
 
 glabel func_80048E8C
     /* 2968C 80048E8C 00000000 */  nop
     /* 29690 80048E90 480E0108 */  j          func_80043920
     /* 29694 80048E94 00000000 */   nop
     /* 29698 80048E98 BB0F010C */  jal        func_80043EEC
-    /* 2969C 80048E9C 00000000 */   nop
 endlabel func_80048E8C
+
+nonmatching func_80048E9C, 0x4
+
+glabel func_80048E9C
+    /* 2969C 80048E9C 00000000 */  nop
+endlabel func_80048E9C
 
 nonmatching func_80048EA0, 0x10
 

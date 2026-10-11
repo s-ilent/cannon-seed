@@ -33,6 +33,7 @@ glabel func_8005C6F4
     /* 3CF44 8005C744 030063AA */  swl        $v1, 0x3($s3)
     /* 3CF48 8005C748 000063BA */  swr        $v1, 0x0($s3)
     /* 3CF4C 8005C74C 070066AA */  swl        $a2, 0x7($s3)
+  alabel func_8005C750
     /* 3CF50 8005C750 040066BA */  swr        $a2, 0x4($s3)
     /* 3CF54 8005C754 18000296 */  lhu        $v0, 0x18($s0)
     /* 3CF58 8005C758 21304002 */  addu       $a2, $s2, $zero
