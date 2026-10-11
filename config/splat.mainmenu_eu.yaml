@@ -70,7 +70,7 @@ segments:
       - [0x9BCC, data, data_800293CC]   # 0x1798
       - [0xB364, asm, func_8002AB64]   # 0x3b4
       - [0xB718, data, data_8002AF18]   # 0x154
-      - [0xB86C, asm, func_8002B06C]   # 0x758 (tail 0x30 = payload 1 head, carved below)
+      - [0xB86C, asm, func_8002B06C]   # 0x6b4 (tail = payload 1 head, carved below)
       # Three [encrypted payload | 6-word descriptor | plaintext code] blocks
       # spanning 0x8002B7C4..0x8002CC5C (recon 2026-10-11, scripts/eu_b7f4_recon*.py).
       # Payloads: high-entropy (4.0 bits/byte), no masked-shape twin anywhere in
@@ -93,7 +93,7 @@ segments:
       # (1 opcode-level), tail 0x8002CC00..CC5C vs JP 0x8002C41C = relocation
       # twin (6 diffs, all address-class) - JP has a stub row where EU has
       # this function, delta drifts from +0x60 to -0x7e4 across the blob.
-      - [0xBFC4, data, data_8002B7C4]   # 0x114 payload 1
+      - [0xBFC0, data, data_8002B7C0]   # 0x118 payload 1 (grid-aligned: last 0x118 before each descriptor)
       - [0xC0D8, data, data_8002B8D8]   # 0x18 descriptor 1
       - [0xC0F0, asm, func_8002B8F0]   # 0x800 code block 1
       - [0xC8F0, data, data_8002C0F0]   # 0x118 payload 2

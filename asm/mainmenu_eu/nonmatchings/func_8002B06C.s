@@ -639,7 +639,7 @@ glabel func_8002B774
     /* BF9C 8002B79C 00000000 */   nop
 endlabel func_8002B774
 
-nonmatching func_8002B7A0, 0x24
+nonmatching func_8002B7A0, 0x20
 
 glabel func_8002B7A0
     /* BFA0 8002B7A0 0880043C */  lui        $a0, %hi(D_80087E10)
@@ -650,5 +650,4 @@ glabel func_8002B7A0
     /* BFB4 8002B7B4 05A80008 */  j          D_8002A014
     /* BFB8 8002B7B8 00000000 */   nop
     /* BFBC 8002B7BC 0280043C */  lui        $a0, (0x80020000 >> 16)
-    /* BFC0 8002B7C0 4434B327 */  addiu      $s3, $sp, 0x3444
 endlabel func_8002B7A0
