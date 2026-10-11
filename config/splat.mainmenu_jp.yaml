@@ -316,7 +316,7 @@ segments:
       - [0x5963C, data, data_80078E3C]   # 0x1c
       - [0x59658, asm, func_80078E58]   # 0x138
       - [0x59790, data, data_80078F90]   # 0x214
-      - [0x599A4, asm, func_800791A4]   # 0xc
+      - [0x599A4, c, func_800791A4]   # 0xc
       - [0x599B0, data, data_800791B0]   # 0xe14
       - [0x5A7C4, asm, func_80079FC4]   # 0x10
       - [0x5A7D4, data, data_80079FD4]   # 0x298
