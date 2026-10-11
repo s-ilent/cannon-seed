@@ -145,7 +145,6 @@ glabel func_80037B24
     /* 18378 80037B78 7FD2000C */  jal        func_800349FC
     /* 1837C 80037B7C 21202002 */   addu      $a0, $s1, $zero
     /* 18380 80037B80 75D20008 */  j          D_800349D4
-  alabel func_80037B84
     /* 18384 80037B84 21200000 */   addu      $a0, $zero, $zero
 endlabel func_80037B24
 

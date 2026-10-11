@@ -969,11 +969,6 @@ dlabel D_80020D24
     /* 1530 80020D30 44DE0280 */ .word 0x8002DE44
     /* 1534 80020D34 58DE0280 */ .word 0x8002DE58
     /* 1538 80020D38 04DF0280 */ .word 0x8002DF04
-enddlabel D_80020D24
-
-nonmatching jtbl_80020D3C
-
-dlabel jtbl_80020D3C
     /* 153C 80020D3C 6CDE0280 */ .word 0x8002DE6C
     /* 1540 80020D40 80DE0280 */ .word 0x8002DE80
     /* 1544 80020D44 94DE0280 */ .word 0x8002DE94
@@ -985,7 +980,7 @@ dlabel jtbl_80020D3C
     /* 155C 80020D5C 04DF0280 */ .word 0x8002DF04
     /* 1560 80020D60 04DF0280 */ .word 0x8002DF04
     /* 1564 80020D64 04DF0280 */ .word 0x8002DF04
-enddlabel jtbl_80020D3C
+enddlabel D_80020D24
 
 nonmatching jtbl_80020D68
 
@@ -1163,7 +1158,7 @@ dlabel D_80020F80
     /* 1784 80020F84 */ .asciz "Error in crt in stdmv.c"
     /* 4572726F7220696E2063727420696E207374646D762E6300 */
 .align 2
-    /* 179C 80020F9C 84510380 */ .word D_80035184
+    /* 179C 80020F9C 84510380 */ .word 0x80035184
     /* 17A0 80020FA0 EC500380 */ .word 0x800350EC
     /* 17A4 80020FA4 FC500380 */ .word 0x800350FC
     /* 17A8 80020FA8 0C510380 */ .word 0x8003510C
@@ -1229,12 +1224,17 @@ dlabel D_8002100C
     /* 180C 8002100C F0940380 */ .word 0x800394F0
     /* 1810 80021010 F0940380 */ .word 0x800394F0
     /* 1814 80021014 F0940380 */ .word 0x800394F0
+enddlabel D_8002100C
+
+nonmatching D_80021018
+
+dlabel D_80021018
     /* 1818 80021018 F0940380 */ .word 0x800394F0
     /* 181C 8002101C F0940380 */ .word 0x800394F0
     /* 1820 80021020 F0940380 */ .word 0x800394F0
     /* 1824 80021024 4572726F */ .word 0x6F727245
     /* 1828 80021028 7220696E */ .word 0x6E692072
-enddlabel D_8002100C
+enddlabel D_80021018
 
 nonmatching D_8002102C
 
@@ -1280,10 +1280,15 @@ dlabel D_8002106C
     /* 186C 8002106C 9CA20380 */ .word 0x8003A29C
     /* 1870 80021070 74A40380 */ .word 0x8003A474
     /* 1874 80021074 B8A40380 */ .word 0x8003A4B8
+enddlabel D_8002106C
+
+nonmatching D_80021078
+
+dlabel D_80021078
     /* 1878 80021078 45727220 */ .word 0x20727245
     /* 187C 8002107C 696E2063 */ .word 0x63206E69
     /* 1880 80021080 656E7467 */ .word 0x67746E65
-enddlabel D_8002106C
+enddlabel D_80021078
 
 .align 2
 nonmatching D_80021084
@@ -1338,10 +1343,15 @@ dlabel D_800210C8
     /* 18C8 800210C8 20B00380 */ .word 0x8003B020
     /* 18CC 800210CC 20B00380 */ .word 0x8003B020
     /* 18D0 800210D0 20B00380 */ .word 0x8003B020
+enddlabel D_800210C8
+
+nonmatching D_800210D4
+
+dlabel D_800210D4
     /* 18D4 800210D4 20B00380 */ .word 0x8003B020
     /* 18D8 800210D8 20B00380 */ .word 0x8003B020
     /* 18DC 800210DC 20B00380 */ .word 0x8003B020
-enddlabel D_800210C8
+enddlabel D_800210D4
 
 nonmatching D_800210E0
 
@@ -1459,18 +1469,27 @@ dlabel D_80021198
     /* 19A8 800211A8 6D6F6465 */ .word 0x65646F6D
 enddlabel D_80021198
 
-.align 2
 nonmatching D_800211AC
 
 dlabel D_800211AC
-    /* 19AC 800211AC */ .asciz "=%d (plaser() in mylaser.c)"
-    /* 3D25642028706C61736572282920696E206D796C617365722E632900 */
+    /* 19AC 800211AC 3D256420 */ .word 0x2064253D
+    /* 19B0 800211B0 28706C61 */ .word 0x616C7028
+    /* 19B4 800211B4 73657228 */ .word 0x28726573
+    /* 19B8 800211B8 2920696E */ .word 0x6E692029
+enddlabel D_800211AC
+
+.align 2
+nonmatching D_800211BC
+
+dlabel D_800211BC
+    /* 19BC 800211BC */ .asciz " mylaser.c)"
+    /* 206D796C617365722E632900 */
 .align 2
 .align 2
     /* 19C8 800211C8 */ .asciz ""
     /* 00000000 */
 .align 2
-enddlabel D_800211AC
+enddlabel D_800211BC
 
 nonmatching D_800211CC
 
@@ -1490,83 +1509,34 @@ dlabel D_800211CC
     /* 19FC 800211FC 20726F75 */ .word 0x756F7220
     /* 1A00 80021200 74696E65 */ .word 0x656E6974
     /* 1A04 80021204 0A000000 */ .word 0x0000000A
-enddlabel D_800211CC
-
-nonmatching D_80021208
-
-dlabel D_80021208
     /* 1A08 80021208 F0FC0380 */ .word 0x8003FCF0
     /* 1A0C 8002120C FCFC0380 */ .word 0x8003FCFC
     /* 1A10 80021210 1CFD0380 */ .word 0x8003FD1C
     /* 1A14 80021214 1CFD0380 */ .word 0x8003FD1C
-enddlabel D_80021208
-
-nonmatching D_80021218
-
-dlabel D_80021218
     /* 1A18 80021218 FCFC0380 */ .word 0x8003FCFC
     /* 1A1C 8002121C 494E4954 */ .word 0x54494E49
     /* 1A20 80021220 5F484153 */ .word 0x5341485F
     /* 1A24 80021224 5348494E */ .word 0x4E494853
-enddlabel D_80021218
-
-nonmatching D_80021228
-
-dlabel D_80021228
     /* 1A28 80021228 00000000 */ .word 0x00000000
     /* 1A2C 8002122C 48415353 */ .word 0x53534148
     /* 1A30 80021230 48494E32 */ .word 0x324E4948
     /* 1A34 80021234 00000000 */ .word 0x00000000
-enddlabel D_80021228
-
-.align 2
-nonmatching D_80021238
-
-dlabel D_80021238
-    /* 1A38 80021238 */ .asciz "HASSHIN3"
-    /* 4841535348494E3300000000 */
-.align 2
+    /* 1A38 80021238 48415353 */ .word 0x53534148
+    /* 1A3C 8002123C 48494E33 */ .word 0x334E4948
+    /* 1A40 80021240 00000000 */ .word 0x00000000
     /* 1A44 80021244 57415250 */ .word 0x50524157
-enddlabel D_80021238
-
-.align 2
-nonmatching D_80021248
-
-dlabel D_80021248
-    /* 1A48 80021248 */ .asciz "_CHU"
-    /* 5F43485500000000 */
-.align 2
+    /* 1A48 80021248 5F434855 */ .word 0x5548435F
+    /* 1A4C 8002124C 00000000 */ .word 0x00000000
     /* 1A50 80021250 57415250 */ .word 0x50524157
-enddlabel D_80021248
-
-.align 2
-nonmatching D_80021254
-
-dlabel D_80021254
-    /* 1A54 80021254 */ .asciz "_AFTER_INIT"
-    /* 5F41465445525F494E495400 */
-.align 2
-enddlabel D_80021254
-
-nonmatching D_80021260
-
-dlabel D_80021260
+    /* 1A54 80021254 5F414654 */ .word 0x5446415F
+    /* 1A58 80021258 45525F49 */ .word 0x495F5245
+    /* 1A5C 8002125C 4E495400 */ .word 0x0054494E
     /* 1A60 80021260 C8C16BC6 */ .word 0xC66BC1C8
     /* 1A64 80021264 681677BC */ .word 0xBC771668
     /* 1A68 80021268 97104003 */ .word 0x03401097
-enddlabel D_80021260
-
-nonmatching D_8002126C
-
-dlabel D_8002126C
     /* 1A6C 8002126C C4B41C14 */ .word 0x141CB4C4
     /* 1A70 80021270 B82FA4B8 */ .word 0xB8A42FB8
     /* 1A74 80021274 8CE58775 */ .word 0x7587E58C
-enddlabel D_8002126C
-
-nonmatching D_80021278
-
-dlabel D_80021278
     /* 1A78 80021278 8B8C1290 */ .word 0x90128C8B
     /* 1A7C 8002127C B96FFB07 */ .word 0x07FB6FB9
     /* 1A80 80021280 6A927D8C */ .word 0x8C7D926A
@@ -1677,7 +1647,7 @@ dlabel D_80021278
     /* 1C24 80021424 00000000 */ .word 0x00000000
     /* 1C28 80021428 48414D4D */ .word 0x4D4D4148
     /* 1C2C 8002142C 5F424546 */ .word 0x4645425F
-enddlabel D_80021278
+enddlabel D_800211CC
 
 .align 2
 nonmatching D_80021430
@@ -1719,13 +1689,20 @@ dlabel D_80021454
     /* 1C54 80021454 */ .asciz "L2"
     /* 4C320000 */
 .align 2
+    /* 1C58 80021458 48414D4D */ .word 0x4D4D4148
+    /* 1C5C 8002145C 5F48414B */ .word 0x4B41485F
+enddlabel D_80021454
+
 .align 2
-    /* 1C58 80021458 */ .asciz "HAMM_HAKAI"
-    /* 48414D4D5F48414B41490000 */
+nonmatching D_80021460
+
+dlabel D_80021460
+    /* 1C60 80021460 */ .asciz "AI"
+    /* 41490000 */
 .align 2
     /* 1C64 80021464 48414D4D */ .word 0x4D4D4148
     /* 1C68 80021468 5F535543 */ .word 0x4355535F
-enddlabel D_80021454
+enddlabel D_80021460
 
 .align 2
 nonmatching D_8002146C

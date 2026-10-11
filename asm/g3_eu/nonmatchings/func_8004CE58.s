@@ -700,3 +700,19 @@ glabel func_8004D594
     /* 2DDA4 8004D5A4 0800E003 */  jr         $ra
     /* 2DDA8 8004D5A8 2000BD27 */   addiu     $sp, $sp, 0x20
 endlabel func_8004D594
+
+nonmatching func_8004D5AC, 0x28
+
+glabel func_8004D5AC
+    /* 2DDAC 8004D5AC E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2DDB0 8004D5B0 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 2DDB4 8004D5B4 44010434 */  ori        $a0, $zero, 0x144
+  alabel func_8004D5B8
+    /* 2DDB8 8004D5B8 8CFF0524 */  addiu      $a1, $zero, -0x74
+    /* 2DDBC 8004D5BC 9F10010C */  jal        func_8004427C
+    /* 2DDC0 8004D5C0 9EFF0624 */   addiu     $a2, $zero, -0x62
+    /* 2DDC4 8004D5C4 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 2DDC8 8004D5C8 00000000 */  nop
+    /* 2DDCC 8004D5CC 0800E003 */  jr         $ra
+    /* 2DDD0 8004D5D0 6E9A0EE5 */   swc1      $f14, -0x6592($t0)
+endlabel func_8004D5AC
