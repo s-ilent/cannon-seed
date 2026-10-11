@@ -313,7 +313,7 @@ glabel func_800766C0
     /* 56F9C 8007679C 39004018 */  blez       $v0, func_80076884
     /* 56FA0 800767A0 14006426 */   addiu     $a0, $s3, 0x14
     /* 56FA4 800767A4 14004526 */  addiu      $a1, $s2, 0x14
-    /* 56FA8 800767A8 28AD0108 */  j          D_8006B4A0
+    /* 56FA8 800767A8 28AD0108 */  j          func_8006B4A0
     /* 56FAC 800767AC 14002626 */   addiu     $a2, $s1, 0x14
 endlabel func_800766C0
 

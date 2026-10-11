@@ -432,6 +432,7 @@ glabel func_8005F918
     /* 4014C 8005F94C 5E63010C */  jal        func_80058D78
     /* 40150 8005F950 01001034 */   ori       $s0, $zero, 0x1
     /* 40154 8005F954 0465010C */  jal        func_80059410
+  alabel func_8005F958
     /* 40158 8005F958 00000000 */   nop
     /* 4015C 8005F95C 0D80013C */  lui        $at, %hi(D_800CA27C)
     /* 40160 8005F960 7CA220AC */  sw         $zero, %lo(D_800CA27C)($at)
@@ -471,6 +472,7 @@ glabel func_8005F998
     /* 401AC 8005F9AC 2CA123A4 */  sh         $v1, %lo(D_800CA12C)($at)
     /* 401B0 8005F9B0 0D80013C */  lui        $at, %hi(D_800C9F74)
     /* 401B4 8005F9B4 749F30A4 */  sh         $s0, %lo(D_800C9F74)($at)
+  alabel func_8005F9B8
     /* 401B8 8005F9B8 0D80013C */  lui        $at, %hi(D_800CA094)
     /* 401BC 8005F9BC 94A020A4 */  sh         $zero, %lo(D_800CA094)($at)
     /* 401C0 8005F9C0 0D80013C */  lui        $at, %hi(D_800C9F94)

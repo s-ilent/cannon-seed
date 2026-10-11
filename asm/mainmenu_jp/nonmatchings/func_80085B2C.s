@@ -11,7 +11,7 @@
 nonmatching func_80085B2C, 0x24
 
 glabel func_80085B2C
-    /* 6632C 80085B2C 4CCBB956 */  bnel       $s5, $t9, D_80078860
+    /* 6632C 80085B2C 4CCBB956 */  bnel       $s5, $t9, .L80078860
     /* 66330 80085B30 D81D09E5 */   swc1      $f9, 0x1DD8($t0)
     /* 66334 80085B34 8D59D9FE */  sd         $t9, 0x598D($s6)
     /* 66338 80085B38 924C1AD8 */  ldc2       $26, 0x4C92($zero) /* handwritten instruction */
