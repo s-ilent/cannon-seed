@@ -1315,12 +1315,17 @@ dlabel jtbl_8002123C
     /* 1A50 80021250 4B20414E */ .word 0x4E41204B
     /* 1A54 80021254 44205052 */ .word 0x52502044
     /* 1A58 80021258 45535320 */ .word 0x20535345
+enddlabel jtbl_8002123C
+
+nonmatching jtbl_8002125C
+
+dlabel jtbl_8002125C
     /* 1A5C 8002125C 26204255 */ .word 0x55422026
     /* 1A60 80021260 CD5FED16 */ .word 0x16ED5FCD
     /* 1A64 80021264 381D184D */ .word 0x4D181D38
     /* 1A68 80021268 52135393 */ .word 0x93531352
     /* 1A6C 8002126C F3AD229B */ .word 0x9B22ADF3
-enddlabel jtbl_8002123C
+enddlabel jtbl_8002125C
 
 nonmatching D_80021270
 

@@ -114,12 +114,21 @@ segments:
       # src/func_80037CAC.c (cron-20261011-1311). [0x1889C,0xf0) = twin of
       # JP's switch dispatch func_800380FC (stays asm: its jump tables are
       # string-clobbered at rest in BOTH exes and nothing references it).
-      # Tail 0x2e0 genuinely diverges from JP (extra EU stubs + junk) and
-      # stays data pending its own carve analysis.
+      # The tail after the switch gets its own carve below.
       - [0x184AC, c, func_80037CAC]     # 0x3f0
       - [0x1889C, asm, func_8003809C]   # 0xf0
-      - [0x1898C, data, data_8003818C]  # 0x2e0
-      - [0x18C6C, asm, func_8003846C]   # 0x6cc
+      # Tail carve (cron-20261011-1412): the 0x2e0 blob decomposes as
+      # [0x54 dispatch stub row][0x130 encrypted junk][0x15c body head].
+      # The stub row (5x "lui v0,D_8008E0xx; j D_80034FEC", 5th stores
+      # D_8008E2D0 + jal func_80035A18(7)) is the positional twin-analog of
+      # JP's row inside func_80038318 - JP placed the same [row|junk|body]
+      # blocks in the opposite order (JP: junk 0x800381EC..0x80038318, row
+      # inside func_80038318, body 0x80038370..). The body head is a pure
+      # relocation twin of JP 0x80038370..0x800384CC at +0x60 (27 diffs, all
+      # address-class) and merges into the following stub-pool subseg.
+      - [0x1898C, asm, func_8003818C]   # 0x54
+      - [0x189E0, data, data_800381E0]  # 0x130
+      - [0x18B10, asm, func_80038310]   # 0x828
       - [0x19338, data, data_80038B38]   # 0x13fc
       - [0x1A734, asm, func_80039F34]   # 0x620
       - [0x1AD54, data, data_8003A554]   # 0xbf8
