@@ -9,7 +9,7 @@ Keep this file short. Focus on rules and the loop. Do not write project state or
 1. **Never edit `config/sha1/**`.** These files contain retail SHA-1 hashes. Editing a hash file invalidates the oracle. Git hooks block edits.
 2. **Run all builds through `make verify`.** A bare `make` command does not check byte matching and is blocked. Permitted non-build targets: `extract`, `progress`, `nonmatchings`, `ratchets`, `hooks`, `clean`.
 3. **Never commit game executables, disc images, or Sony files.** Keep `disk/`, `sdk/`, `lib/`, `include/psyq/`, `assets/`, and `baselines/` in `.gitignore`. Users supply these files locally.
-4. **Never edit `asm/`.** Splat regenerates assembly files. Rename symbols in `config/symbols.*.txt` with rename tools. Update segmentation in `config/splat.*.yaml`.
+4. **Never edit `asm/`.** Splat regenerates assembly files. Curate symbol names in `config/symbols.curated.txt` — the scanner rewrites the per-target symbols files, so only a curated name survives. Update segmentation in `config/splat.*.yaml`.
 5. **Keep the toolchain pinned.** Use the exact compiler version, binutils, flags, and maspsx. Current baseline: Psy-Q GCC 2.6.3 (SDK strings dated 1995-10).
 6. **No register pinning.** Do not use `register T v asm("$N")` or extended asm constraints to force register choices. Use `__asm__("")` only as a scheduling barrier. Place direct COP2/GTE assembly instructions in approved macro headers.
 

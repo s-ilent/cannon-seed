@@ -34,7 +34,7 @@ The original compiler requires strict historical standards.
 | Do not use register pinning or extended asm | They hide program logic and add debt. | Ratchet (`make ratchets`) |
 | Restrict inline assembly to evidenced macros (GTE/COP2) | Non-standard instructions have no C form. Document each use. | Review |
 | Reference code and data by symbol name | Fixed addresses break shiftability. Use macros for hardware registers and scratchpad memory. | Shift audit; review |
-| Use tools to rename symbols | Automated renaming tools update all references consistently. | Review |
+| Curate names in `config/symbols.curated.txt`; never hand-edit `asm/` or a yaml subsegment | The scanner rewrites the per-target symbols file and splat takes each output file's name from the yaml subsegment, which `tools/build.sh` then parses for the section address. | Review; `make extract` + `make verify` |
 | Update structures globally | Changing a field without updating adjacent padding shifts offsets across files. | Clean rebuild |
 | Mark matching anomalies with `/* MATCHING: */` | Prevents subsequent refactors from breaking matching output. | Review |
 
