@@ -365,3 +365,26 @@ glabel func_8003F53C
     /* 1FD5C 8003F55C 0800E003 */  jr         $ra
     /* 1FD60 8003F560 00000000 */   nop
 endlabel func_8003F53C
+
+nonmatching func_8003F564, 0x28
+
+glabel func_8003F564
+    /* 1FD64 8003F564 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 1FD68 8003F568 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 1FD6C 8003F56C 00F0043C */  lui        $a0, (0xF0000003 >> 16)
+    /* 1FD70 8003F570 03008434 */  ori        $a0, $a0, (0xF0000003 & 0xFFFF)
+    /* 1FD74 8003F574 0FED000C */  jal        func_8003B43C
+    /* 1FD78 8003F578 40000534 */   ori       $a1, $zero, 0x40
+    /* 1FD7C 8003F57C 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 1FD80 8003F580 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 1FD84 8003F584 0800E003 */  jr         $ra
+    /* 1FD88 8003F588 00000000 */   nop
+endlabel func_8003F564
+
+nonmatching func_8003F58C, 0xC
+
+glabel func_8003F58C
+    /* 1FD8C 8003F58C B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 1FD90 8003F590 08004001 */  jr         $t2
+    /* 1FD94 8003F594 07000924 */   addiu     $t1, $zero, 0x7
+endlabel func_8003F58C
