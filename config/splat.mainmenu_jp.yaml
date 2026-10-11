@@ -88,7 +88,8 @@ segments:
       - [0x1779C, data, data_80036F9C]   # 0x140
       - [0x178DC, asm, func_800370DC]   # 0x81c
       - [0x180F8, data, data_800378F8]   # 0x14c
-      - [0x18244, asm, func_80037A44]   # 0x7a8
+      - [0x18244, c, func_80037A44]     # 0x6b8
+      - [0x188FC, asm, func_800380FC]   # 0xf0
       - [0x189EC, data, data_800381EC]   # 0x12c
       - [0x18B18, asm, func_80038318]   # 0x81c
       - [0x19334, data, data_80038B34]   # 0x8
