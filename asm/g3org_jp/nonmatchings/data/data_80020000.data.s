@@ -1805,15 +1805,23 @@ dlabel D_8002190C
     /* 2114 80021914 6D6D756E */ .word 0x6E756D6D
 enddlabel D_8002190C
 
-.align 2
 nonmatching D_80021918
 
 dlabel D_80021918
-    /* 2118 80021918 */ .asciz "ication Buffer !\n"
-    /* 69636174696F6E2042756666657220210A000000 */
+    /* 2118 80021918 69636174 */ .word 0x74616369
+    /* 211C 8002191C 696F6E20 */ .word 0x206E6F69
+    /* 2120 80021920 42756666 */ .word 0x66667542
+enddlabel D_80021918
+
+.align 2
+nonmatching D_80021924
+
+dlabel D_80021924
+    /* 2124 80021924 */ .asciz "er !\n"
+    /* 657220210A000000 */
 .align 2
     /* 212C 8002192C 4572726F */ .word 0x6F727245
-enddlabel D_80021918
+enddlabel D_80021924
 
 nonmatching D_80021930
 
@@ -1854,10 +1862,15 @@ dlabel D_8002194C
     /* 217C 8002197C E83A0380 */ .word 0x80033AE8
     /* 2180 80021980 4572726F */ .word 0x6F727245
     /* 2184 80021984 7220696E */ .word 0x6E692072
+enddlabel D_8002194C
+
+nonmatching D_80021988
+
+dlabel D_80021988
     /* 2188 80021988 20696E20 */ .word 0x206E6920
     /* 218C 8002198C 7374645F */ .word 0x5F647473
     /* 2190 80021990 62616E6B */ .word 0x6B6E6162
-enddlabel D_8002194C
+enddlabel D_80021988
 
 .align 2
 nonmatching D_80021994
@@ -2041,10 +2054,15 @@ dlabel D_80021AA8
     /* 22AC 80021AAC 2064616D */ .word 0x6D616420
     /* 22B0 80021AB0 6167655F */ .word 0x5F656761
     /* 22B4 80021AB4 64697220 */ .word 0x20726964
+enddlabel D_80021AA8
+
+nonmatching D_80021AB8
+
+dlabel D_80021AB8
     /* 22B8 80021AB8 696E2067 */ .word 0x67206E69
     /* 22BC 80021ABC 616D656D */ .word 0x6D656D61
     /* 22C0 80021AC0 6174682E */ .word 0x2E687461
-enddlabel D_80021AA8
+enddlabel D_80021AB8
 
 .align 2
 nonmatching D_80021AC4
@@ -2221,10 +2239,15 @@ dlabel D_80021C00
     /* 2400 80021C00 F5AEA01B */ .word 0x1BA0AEF5
     /* 2404 80021C04 7721F9A7 */ .word 0xA7F92177
     /* 2408 80021C08 577EE1EA */ .word 0xEAE17E57
+enddlabel D_80021C00
+
+nonmatching D_80021C0C
+
+dlabel D_80021C0C
     /* 240C 80021C0C 22F13FFA */ .word 0xFA3FF122
     /* 2410 80021C10 476B27AB */ .word 0xAB276B47
     /* 2414 80021C14 C9FE01A7 */ .word 0xA701FEC9
-enddlabel D_80021C00
+enddlabel D_80021C0C
 
 nonmatching D_80021C18
 
