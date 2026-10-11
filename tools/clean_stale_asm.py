@@ -10,6 +10,10 @@ yaml's asm_path whose name is not listed in ANY target yaml (union rule:
 a name shared by two targets in the same directory survives).
 
 Usage: python3 tools/clean_stale_asm.py
+       python3 tools/clean_stale_asm.py --filter-status   (pre-commit mode:
+           reads `git diff --cached --name-status` lines on stdin, passes
+           through every line except deletions of stale paths, which are
+           dropped so the hook can allow legitimate cleanups)
 """
 import os
 import re
@@ -30,7 +34,61 @@ def stem(path: str) -> str:
     return name
 
 
+def yaml_ref_dirs() -> dict:
+    """{asm_path: set of segment names referenced by any yaml}."""
+    dirs = {}
+    for y in sorted(REPO.glob("config/splat.*.yaml")):
+        text = y.read_text()
+        m = re.search(r"^\s*asm_path:\s*(\S+)", text, re.M)
+        if not m:
+            continue
+        d = m.group(1).rstrip("/")
+        names = dirs.setdefault(d, set())
+        for ln in text.splitlines():
+            em = ENTRY.search(ln)
+            if em:
+                names.add(em.group(3))
+    return dirs
+
+
+def stale_names() -> set:
+    """Union rule: every .s file under any yaml asm_path that no yaml lists."""
+    dirs = yaml_ref_dirs()
+    stale = set()
+    for d, names in sorted(dirs.items()):
+        base = REPO / d
+        if not base.exists():
+            continue
+        for p in base.rglob("*.s"):
+            rel = p.relative_to(REPO).as_posix()
+            if stem(rel) not in names:
+                stale.add(rel)
+    return stale
+
+
+def filter_status() -> int:
+    """Pass through name-status lines except stale-path deletions.
+
+    Staged deletions are already gone from the working tree, so the
+    check compares each deleted path's stem against its directory's
+    yaml references directly (the union rule) instead of enumerating
+    files on disk.
+    """
+    dirs = yaml_ref_dirs()
+    for ln in sys.stdin.read().splitlines():
+        parts = ln.split("\t", 1)
+        if len(parts) == 2 and parts[0] == "D":
+            p = parts[1]
+            d = next((k for k in dirs if p.startswith(k.rstrip("/") + "/")), None)
+            if d is not None and stem(p) not in dirs[d]:
+                continue
+        print(ln)
+    return 0
+
+
 def main() -> int:
+    if "--filter-status" in sys.argv:
+        return filter_status()
     dirs = {}  # asm_path -> set of names referenced by any yaml
     for y in sorted(REPO.glob("config/splat.*.yaml")):
         text = y.read_text()

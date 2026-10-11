@@ -37,6 +37,13 @@ fi
 # --- 2. Generated disassembly is never edited, only regenerated -------------
 asm_hits="$(git diff --cached --name-status | grep -E '^[MD]\s+asm/' || true)"
 if [ -n "$asm_hits" ]; then
+    # Deletions of files that no yaml references any more are legitimate
+    # cleanups (tools/clean_stale_asm.py's union rule), not hand edits:
+    # drop them from the check. Modifications and live-file deletions stay.
+    asm_hits="$(printf '%s\n' "$asm_hits" | \
+               python3 tools/clean_stale_asm.py --filter-status || true)"
+fi
+if [ -n "$asm_hits" ]; then
     # A commit that also changes the generator or the segmentation config is
     # a regeneration commit (scan/split refinement) - allowed. A commit that
     # touches asm/ alone is a hand edit - blocked.
