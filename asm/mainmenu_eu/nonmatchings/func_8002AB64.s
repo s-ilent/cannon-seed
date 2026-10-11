@@ -14,7 +14,6 @@ glabel func_8002AB64
     /* B368 8002AB68 1000BFAF */  sw         $ra, 0x10($sp)
     /* B36C 8002AB6C 4000848C */  lw         $a0, 0x40($a0)
     /* B370 8002AB70 4499000C */  jal        func_80026510
-  .L8002AB74:
     /* B374 8002AB74 00000000 */   nop
     /* B378 8002AB78 1000BF8F */  lw         $ra, 0x10($sp)
     /* B37C 8002AB7C 00000000 */  nop
@@ -258,7 +257,6 @@ glabel func_8002ADA0
     /* B5E0 8002ADE0 07000534 */   ori       $a1, $zero, 0x7
     /* B5E4 8002ADE4 00140200 */  sll        $v0, $v0, 16
     /* B5E8 8002ADE8 03140200 */  sra        $v0, $v0, 16
-  .L8002ADEC:
     /* B5EC 8002ADEC 07000334 */  ori        $v1, $zero, 0x7
     /* B5F0 8002ADF0 06004314 */  bne        $v0, $v1, func_8002AE0C
     /* B5F4 8002ADF4 20000234 */   ori       $v0, $zero, 0x20

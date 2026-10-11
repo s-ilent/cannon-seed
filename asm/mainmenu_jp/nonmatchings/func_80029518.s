@@ -210,7 +210,6 @@ glabel func_80029754
     /* 9F64 80029764 5C00248E */  lw         $a0, 0x5C($s1)
     /* 9F68 80029768 21280000 */  addu       $a1, $zero, $zero
     /* 9F6C 8002976C 0599000C */  jal        func_80026414
-  alabel func_80029770
     /* 9F70 80029770 FFFF0624 */   addiu     $a2, $zero, -0x1
     /* 9F74 80029774 6000248E */  lw         $a0, 0x60($s1)
     /* 9F78 80029778 21280000 */  addu       $a1, $zero, $zero

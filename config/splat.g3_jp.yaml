@@ -48,9 +48,9 @@ segments:
     subsegments:
     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
       - [0x800, data, data_80020000]   # 0x24c0
-      - [0x2CC0, asm, func_800224C0]   # 0xc
+      - [0x2CC0, data, data_800224C0]   # 0xc pinned
       - [0x2CCC, data, data_800224CC]   # 0x3ac
-      - [0x3078, asm, func_80022878]   # 0x5d0
+      - [0x3078, data, data_80022878]   # 0x5d0 pinned
       - [0x3648, data, data_80022E48]   # 0x19c
       - [0x37E4, asm, func_80022FE4]   # 0x4d8
       - [0x3CBC, data, data_800234BC]   # 0x1500
@@ -166,7 +166,7 @@ segments:
       - [0x2BF38, data, data_8004B738]   # 0x4
       - [0x2BF3C, asm, func_8004B73C]   # 0x310
       - [0x2C24C, data, data_8004BA4C]   # 0x14
-      - [0x2C260, asm, func_8004BA60]   # 0xc
+      - [0x2C260, data, data_8004BA60]   # 0xc pinned
       - [0x2C26C, data, data_8004BA6C]   # 0xcc
       - [0x2C338, asm, func_8004BB38]   # 0x878
       - [0x2CBB0, data, data_8004C3B0]   # 0x244
@@ -266,7 +266,7 @@ segments:
       - [0x45BF4, data, data_800653F4]   # 0x1bc
       - [0x45DB0, asm, func_800655B0]   # 0x1fc
       - [0x45FAC, data, data_800657AC]   # 0x10
-      - [0x45FBC, asm, func_800657BC]   # 0x14
+      - [0x45FBC, data, data_800657BC]   # 0x14 pinned
       - [0x45FD0, data, data_800657D0]   # 0x168c
       - [0x4765C, asm, func_80066E5C]   # 0x22c
       - [0x47888, data, data_80067088]   # 0x3a0

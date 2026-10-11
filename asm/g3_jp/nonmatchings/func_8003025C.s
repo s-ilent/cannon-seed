@@ -134,7 +134,7 @@ glabel func_800303BC
     /* 10BF0 800303F0 4800BD27 */   addiu     $sp, $sp, 0x48
 endlabel func_800303BC
 
-nonmatching func_800303F4, 0x54
+nonmatching func_800303F4, 0x74
 
 glabel func_800303F4
     /* 10BF4 800303F4 D8FFBD27 */  addiu      $sp, $sp, -0x28
@@ -158,12 +158,7 @@ glabel func_800303F4
     /* 10C3C 8003043C 00000000 */  nop
     /* 10C40 80030440 1400A2AF */  sw         $v0, 0x14($sp)
     /* 10C44 80030444 12008284 */  lh         $v0, 0x12($a0)
-endlabel func_800303F4
     /* 10C48 80030448 00000000 */  nop
-
-nonmatching func_8003044C, 0x1C
-
-glabel func_8003044C
     /* 10C4C 8003044C 1800A2AF */  sw         $v0, 0x18($sp)
     /* 10C50 80030450 14008284 */  lh         $v0, 0x14($a0)
   alabel func_80030454
@@ -172,7 +167,7 @@ glabel func_8003044C
     /* 10C5C 8003045C 21200001 */  addu       $a0, $t0, $zero
     /* 10C60 80030460 2EB9000C */  jal        func_8002E4B8
     /* 10C64 80030464 1C00A2AF */   sw        $v0, 0x1C($sp)
-endlabel func_8003044C
+endlabel func_800303F4
 
 nonmatching func_80030468, 0x14
 
@@ -466,7 +461,7 @@ glabel func_800307F4
     /* 11010 80030810 0F004224 */  addiu      $v0, $v0, 0xF
 endlabel func_800307F4
 
-nonmatching func_80030814, 0x24
+nonmatching func_80030814, 0x9C
 
 glabel func_80030814
     /* 11014 80030814 03110200 */  sra        $v0, $v0, 4
@@ -479,11 +474,6 @@ glabel func_80030814
     /* 1102C 8003082C 2000A28F */  lw         $v0, 0x20($sp)
     /* 11030 80030830 2400A38F */  lw         $v1, 0x24($sp)
     /* 11034 80030834 21284002 */  addu       $a1, $s2, $zero
-endlabel func_80030814
-
-nonmatching func_80030838, 0x78
-
-glabel func_80030838
     /* 11038 80030838 40100200 */  sll        $v0, $v0, 1
     /* 1103C 8003083C 2C0022AE */  sw         $v0, 0x2C($s1)
     /* 11040 80030840 2800A28F */  lw         $v0, 0x28($sp)
@@ -514,7 +504,7 @@ glabel func_80030838
     /* 110A4 800308A4 3000B08F */  lw         $s0, 0x30($sp)
     /* 110A8 800308A8 0800E003 */  jr         $ra
     /* 110AC 800308AC 5800BD27 */   addiu     $sp, $sp, 0x58
-endlabel func_80030838
+endlabel func_80030814
 
 nonmatching func_800308B0, 0x68
 

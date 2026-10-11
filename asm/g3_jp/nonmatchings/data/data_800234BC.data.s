@@ -155,11 +155,6 @@ dlabel D_800234BC
     /* 3F00 80023700 2800BD27 */ .word 0x27BD0028
     /* 3F04 80023704 E0FFBD27 */ .word 0x27BDFFE0
     /* 3F08 80023708 1C00BFAF */ .word 0xAFBF001C
-enddlabel D_800234BC
-
-nonmatching D_8002370C
-
-dlabel D_8002370C
     /* 3F0C 8002370C C118010C */ .word 0x0C0118C1
     /* 3F10 80023710 1800B0AF */ .word 0xAFB00018
     /* 3F14 80023714 0B80043C */ .word 0x3C04800B
@@ -571,7 +566,7 @@ dlabel D_8002370C
     /* 456C 80023D6C 21884000 */ .word 0x00408821
     /* 4570 80023D70 0000238E */ .word 0x8E230000
     /* 4574 80023D74 00000000 */ .word 0x00000000
-enddlabel D_8002370C
+enddlabel D_800234BC
 
 nonmatching func_80023D78
 
@@ -880,11 +875,6 @@ dlabel func_80023DCC
     /* 4A18 80024218 000020A6 */ .word 0xA6200000
     /* 4A1C 8002421C FFFF0224 */ .word 0x2402FFFF
     /* 4A20 80024220 1480013C */ .word 0x3C018014
-enddlabel func_80023DCC
-
-nonmatching func_80024224
-
-dlabel func_80024224
     /* 4A24 80024224 E4742124 */ .word 0x242174E4
     /* 4A28 80024228 21083000 */ .word 0x00300821
     /* 4A2C 8002422C 000022A4 */ .word 0xA4220000
@@ -931,7 +921,7 @@ dlabel func_80024224
     /* 4AD0 800242D0 21083000 */ .word 0x00300821
     /* 4AD4 800242D4 00002284 */ .word 0x84220000
     /* 4AD8 800242D8 00000000 */ .word 0x00000000
-enddlabel func_80024224
+enddlabel func_80023DCC
 
 nonmatching func_800242DC
 
@@ -1265,11 +1255,6 @@ nonmatching func_80024730
 dlabel func_80024730
     /* 4F30 80024730 F8FF4014 */ .word 0x1440FFF8
     /* 4F34 80024734 00000000 */ .word 0x00000000
-enddlabel func_80024730
-
-nonmatching func_80024738
-
-dlabel func_80024738
     /* 4F38 80024738 1800BF8F */ .word 0x8FBF0018
     /* 4F3C 8002473C 1400B18F */ .word 0x8FB10014
     /* 4F40 80024740 1000B08F */ .word 0x8FB00010
@@ -1280,11 +1265,6 @@ dlabel func_80024738
     /* 4F54 80024754 2C00B5AF */ .word 0xAFB5002C
     /* 4F58 80024758 2800B4AF */ .word 0xAFB40028
     /* 4F5C 8002475C 2400B3AF */ .word 0xAFB30024
-enddlabel func_80024738
-
-nonmatching func_80024760
-
-dlabel func_80024760
     /* 4F60 80024760 2000B2AF */ .word 0xAFB20020
     /* 4F64 80024764 1C00B1AF */ .word 0xAFB1001C
     /* 4F68 80024768 A09A000C */ .word 0x0C009AA0
@@ -1311,7 +1291,7 @@ dlabel func_80024760
     /* 4FBC 800247BC B9A0000C */ .word 0x0C00A0B9
     /* 4FC0 800247C0 03000634 */ .word 0x34060003
     /* 4FC4 800247C4 0B80043C */ .word 0x3C04800B
-enddlabel func_80024760
+enddlabel func_80024730
 
 nonmatching func_800247C8
 

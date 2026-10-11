@@ -482,7 +482,7 @@ glabel func_80037F4C
     /* 18770 80037F70 3000BD27 */   addiu     $sp, $sp, 0x30
 endlabel func_80037F4C
 
-nonmatching func_80037F74, 0x70
+nonmatching func_80037F74, 0x78
 
 glabel func_80037F74
     /* 18774 80037F74 003C0500 */  sll        $a3, $a1, 16
@@ -513,14 +513,9 @@ glabel func_80037F74
     /* 187D8 80037FD8 002C0500 */  sll        $a1, $a1, 16
     /* 187DC 80037FDC 032C0500 */  sra        $a1, $a1, 16
     /* 187E0 80037FE0 2128A200 */  addu       $a1, $a1, $v0
-endlabel func_80037F74
-
-nonmatching func_80037FE4, 0x8
-
-glabel func_80037FE4
     /* 187E4 80037FE4 0800E003 */  jr         $ra
     /* 187E8 80037FE8 340085AC */   sw        $a1, 0x34($a0)
-endlabel func_80037FE4
+endlabel func_80037F74
 
 nonmatching func_80037FEC, 0x34
 

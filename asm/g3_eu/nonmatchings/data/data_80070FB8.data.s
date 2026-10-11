@@ -1063,28 +1063,19 @@ dlabel D_80071FD0
     /* 527D6 80071FD6 */ .short 0x8463
     /* 527D8 80071FD8 */ .short 0x0001
     /* 527DA 80071FDA */ .short 0x3402
+    /* 527DC 80071FDC */ .short 0x0009
+    /* 527DE 80071FDE */ .short 0x1462
+    /* 527E0 80071FE0 */ .short 0x2400
+    /* 527E2 80071FE2 */ .short 0x0009
+    /* 527E4 80071FE4 */ .short 0xFFFF
+    /* 527E6 80071FE6 */ .short 0x30C3
+    /* 527E8 80071FE8 */ .short 0xFFFF
+    /* 527EA 80071FEA */ .short 0x30A2
+    /* 527EC 80071FEC */ .short 0x102B
+    /* 527EE 80071FEE */ .short 0x0043
+    /* 527F0 80071FF0 */ .short 0x0003
+    /* 527F2 80071FF2 */ .short 0x1040
 enddlabel D_80071FD0
-
-nonmatching D_80071FDC
-
-dlabel D_80071FDC
-    /* 527DC 80071FDC 09006214 */ .word 0x14620009
-enddlabel D_80071FDC
-
-nonmatching D_80071FE0
-
-dlabel D_80071FE0
-    /* 527E0 80071FE0 00240900 */ .word 0x00092400
-enddlabel D_80071FE0
-
-nonmatching D_80071FE4
-
-dlabel D_80071FE4
-    /* 527E4 80071FE4 FFFFC330 */ .word 0x30C3FFFF
-    /* 527E8 80071FE8 FFFFA230 */ .word 0x30A2FFFF
-    /* 527EC 80071FEC 2B104300 */ .word 0x0043102B
-    /* 527F0 80071FF0 03004010 */ .word 0x10400003
-enddlabel D_80071FE4
 
 nonmatching D_80071FF4
 
@@ -1093,11 +1084,6 @@ dlabel D_80071FF4
     /* 527F8 80071FF8 8D9D0108 */ .word 0x08019D8D
     /* 527FC 80071FFC 2128C000 */ .word 0x00C02821
     /* 52800 80072000 2130A000 */ .word 0x00A03021
-enddlabel D_80071FF4
-
-nonmatching D_80072004
-
-dlabel D_80072004
     /* 52804 80072004 C3230400 */ .word 0x000423C3
     /* 52808 80072008 001C0800 */ .word 0x00081C00
     /* 5280C 8007200C 031C0300 */ .word 0x00031C03
@@ -2638,11 +2624,6 @@ dlabel D_80072004
     /* 54008 80073808 00000000 */ .word 0x00000000
     /* 5400C 8007380C FFFF6430 */ .word 0x3064FFFF
     /* 54010 80073810 1000822C */ .word 0x2C820010
-enddlabel D_80072004
-
-nonmatching D_80073814
-
-dlabel D_80073814
     /* 54014 80073814 03004010 */ .word 0x10400003
     /* 54018 80073818 04308A00 */ .word 0x008A3004
     /* 5401C 8007381C B4A20108 */ .word 0x0801A2B4
@@ -6205,7 +6186,7 @@ dlabel D_80073814
     /* 577B0 80076FB0 2110F000 */ .word 0x00F01021
     /* 577B4 80076FB4 C2100200 */ .word 0x000210C2
     /* 577B8 80076FB8 D7AE0108 */ .word 0x0801AED7
-enddlabel D_80073814
+enddlabel D_80071FF4
 
 nonmatching D_80076FBC
 

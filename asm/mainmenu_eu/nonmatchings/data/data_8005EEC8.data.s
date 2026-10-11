@@ -287,25 +287,15 @@ dlabel func_8005F290
     /* 3FAA4 8005F2A4 24922BD3 */ .word 0xD32B9224
     /* 3FAA8 8005F2A8 52DC71B9 */ .word 0xB971DC52
     /* 3FAAC 8005F2AC 3FFA2E0B */ .word 0x0B2EFA3F
-enddlabel func_8005F290
-
-nonmatching func_8005F2B0
-
-dlabel func_8005F2B0
     /* 3FAB0 8005F2B0 C57387D2 */ .word 0xD28773C5
     /* 3FAB4 8005F2B4 26DFFE50 */ .word 0x50FEDF26
     /* 3FAB8 8005F2B8 CE35B04A */ .word 0x4AB035CE
     /* 3FABC 8005F2BC 078B2F0F */ .word 0x0F2F8B07
-enddlabel func_8005F2B0
-
-nonmatching func_8005F2C0
-
-dlabel func_8005F2C0
     /* 3FAC0 8005F2C0 61E8B7CD */ .word 0xCDB7E861
     /* 3FAC4 8005F2C4 07D5FC4A */ .word 0x4AFCD507
     /* 3FAC8 8005F2C8 590DAE97 */ .word 0x97AE0D59
     /* 3FACC 8005F2CC CAA305E2 */ .word 0xE205A3CA
-enddlabel func_8005F2C0
+enddlabel func_8005F290
 
 nonmatching func_8005F2D0
 

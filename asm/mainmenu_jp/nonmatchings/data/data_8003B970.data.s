@@ -1222,15 +1222,10 @@ dlabel func_8003C950
     /* 1D2D0 8003CAD0 1900A3A3 */ .word 0xA3A30019
     /* 1D2D4 8003CAD4 4CD4010C */ .word 0x0C01D44C
     /* 1D2D8 8003CAD8 1A00A5A3 */ .word 0xA3A5001A
-enddlabel func_8003C950
-
-nonmatching func_8003CADC
-
-dlabel func_8003CADC
     /* 1D2DC 8003CADC 80201100 */ .word 0x00112080
     /* 1D2E0 8003CAE0 21209100 */ .word 0x00912021
     /* 1D2E4 8003CAE4 40200400 */ .word 0x00042040
-enddlabel func_8003CADC
+enddlabel func_8003C950
 
 nonmatching func_8003CAE8
 

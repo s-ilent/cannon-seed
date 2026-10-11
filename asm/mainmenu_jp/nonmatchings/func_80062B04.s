@@ -188,7 +188,7 @@ glabel func_80062CEC
     /* 434F8 80062CF8 00000000 */   nop
 endlabel func_80062CEC
 
-nonmatching func_80062CFC, 0x18
+nonmatching func_80062CFC, 0x20
 
 glabel func_80062CFC
     /* 434FC 80062CFC E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -197,14 +197,9 @@ glabel func_80062CFC
     /* 43508 80062D08 04008214 */  bne        $a0, $v0, func_80062D1C
     /* 4350C 80062D0C FFFF8324 */   addiu     $v1, $a0, -0x1
     /* 43510 80062D10 9ED6000C */  jal        func_80035A78
-endlabel func_80062CFC
-
-nonmatching func_80062D14, 0x8
-
-glabel func_80062D14
-    /* 43514 80062D14 21200000 */  addu       $a0, $zero, $zero
+    /* 43514 80062D14 21200000 */   addu      $a0, $zero, $zero
     /* 43518 80062D18 21184000 */  addu       $v1, $v0, $zero
-endlabel func_80062D14
+endlabel func_80062CFC
 
 nonmatching func_80062D1C, 0xC
 

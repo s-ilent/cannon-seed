@@ -41,16 +41,11 @@ glabel func_80042858
     /* 230C8 800428C8 1780013C */ .word 0x3C018017
     /* 230CC 800428CC 48AD2AAC */ .word 0xAC2AAD48
     /* 230D0 800428D0 23100201 */ .word 0x01021023
+    /* 230D4 800428D4 1780013C */ .word 0x3C018017
+    /* 230D8 800428D8 60AD22A4 */ .word 0xA422AD60
+    /* 230DC 800428DC 23182301 */ .word 0x01231823
+    /* 230E0 800428E0 1780013C */ .word 0x3C018017
 enddlabel func_80042858
-
-nonmatching func_800428D4, 0x10
-
-glabel func_800428D4
-    /* 230D4 800428D4 1780013C */  lui        $at, %hi(D_8016AD60)
-    /* 230D8 800428D8 60AD22A4 */  sh         $v0, %lo(D_8016AD60)($at)
-    /* 230DC 800428DC 23182301 */  subu       $v1, $t1, $v1
-    /* 230E0 800428E0 1780013C */  lui        $at, (0x80170000 >> 16)
-endlabel func_800428D4
 
 nonmatching func_800428E4, 0x48
 

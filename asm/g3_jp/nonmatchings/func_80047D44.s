@@ -122,7 +122,7 @@ glabel func_80047E94
     /* 286BC 80047EBC 0CC122A4 */  sh         $v0, %lo(D_800AC10C)($at)
 endlabel func_80047E94
 
-nonmatching func_80047EC0, 0x28
+nonmatching func_80047EC0, 0x38
 
 glabel func_80047EC0
     /* 286C0 80047EC0 0B80033C */  lui        $v1, %hi(D_800AC10C)
@@ -135,16 +135,11 @@ glabel func_80047EC0
     /* 286DC 80047EDC 6CC030A4 */  sh         $s0, %lo(D_800AC06C)($at)
     /* 286E0 80047EE0 031C0200 */  sra        $v1, $v0, 16
     /* 286E4 80047EE4 1F000234 */  ori        $v0, $zero, 0x1F
-endlabel func_80047EC0
-
-nonmatching func_80047EE8, 0x10
-
-glabel func_80047EE8
     /* 286E8 80047EE8 03006210 */  beq        $v1, $v0, func_80047EF8
     /* 286EC 80047EEC 0F000234 */   ori       $v0, $zero, 0xF
     /* 286F0 80047EF0 07006214 */  bne        $v1, $v0, func_80047F10
     /* 286F4 80047EF4 00000000 */   nop
-endlabel func_80047EE8
+endlabel func_80047EC0
 
 nonmatching func_80047EF8, 0x10
 

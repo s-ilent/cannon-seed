@@ -697,21 +697,16 @@ glabel func_800309D4
     /* 11240 80030A40 0C0180AF */  sw         $zero, 0x10C($gp)
 endlabel func_800309D4
 
-nonmatching func_80030A44, 0x1C
+nonmatching func_80030A44
 
 glabel func_80030A44
-    /* 11244 80030A44 5000BE27 */  addiu      $fp, $sp, 0x50
-    /* 11248 80030A48 5400B727 */  addiu      $s7, $sp, 0x54
-    /* 1124C 80030A4C 5800B627 */  addiu      $s6, $sp, 0x58
-    /* 11250 80030A50 1580113C */  lui        $s1, %hi(D_80151678)
-    /* 11254 80030A54 78163126 */  addiu      $s1, $s1, %lo(D_80151678)
-    /* 11258 80030A58 21A80000 */  addu       $s5, $zero, $zero
-    /* 1125C 80030A5C 90001434 */  ori        $s4, $zero, 0x90
-endlabel func_80030A44
-
-nonmatching func_80030A60
-
-dlabel func_80030A60
+    /* 11244 80030A44 5000BE27 */ .word 0x27BE0050
+    /* 11248 80030A48 5400B727 */ .word 0x27B70054
+    /* 1124C 80030A4C 5800B627 */ .word 0x27B60058
+    /* 11250 80030A50 1580113C */ .word 0x3C118015
+    /* 11254 80030A54 78163126 */ .word 0x26311678
+    /* 11258 80030A58 21A80000 */ .word 0x0000A821
+    /* 1125C 80030A5C 90001434 */ .word 0x34140090
     /* 11260 80030A60 21802002 */ .word 0x02208021
     /* 11264 80030A64 21900000 */ .word 0x00009021
     /* 11268 80030A68 0C80023C */ .word 0x3C02800C
@@ -725,4 +720,4 @@ dlabel func_80030A60
     /* 11288 80030A88 A5136ECD */ .word 0xCD6E13A5
     /* 1128C 80030A8C A1F3D4FE */ .word 0xFED4F3A1
     /* 11290 80030A90 188F91B0 */ .word 0xB0918F18
-enddlabel func_80030A60
+enddlabel func_80030A44

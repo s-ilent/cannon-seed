@@ -98,7 +98,7 @@ glabel func_80030C48
     /* 114C8 80030CC8 00000000 */   nop
     /* 114CC 80030CCC 1E000234 */  ori        $v0, $zero, 0x1E
     /* 114D0 80030CD0 C80382AF */  sw         $v0, 0x3C8($gp)
-    /* 114D4 80030CD4 51BA0008 */  j          .L8002E944
+    /* 114D4 80030CD4 51BA0008 */  j          D_8002E944
     /* 114D8 80030CD8 00000000 */   nop
 endlabel func_80030C48
 

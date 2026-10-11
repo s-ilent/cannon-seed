@@ -52,7 +52,6 @@ glabel func_8002B0D0
     /* B8E0 8002B0E0 05004014 */  bnez       $v0, func_8002B0F8
     /* B8E4 8002B0E4 00000000 */   nop
     /* B8E8 8002B0E8 0880023C */  lui        $v0, %hi(D_800876C0)
-  .L8002B0EC:
     /* B8EC 8002B0EC C0764224 */  addiu      $v0, $v0, %lo(D_800876C0)
     /* B8F0 8002B0F0 50A60008 */  j          D_80029940
     /* B8F4 8002B0F4 00000000 */   nop
@@ -639,15 +638,28 @@ glabel func_8002B774
     /* BF9C 8002B79C 00000000 */   nop
 endlabel func_8002B774
 
-nonmatching func_8002B7A0, 0x20
+nonmatching func_8002B7A0
 
 glabel func_8002B7A0
-    /* BFA0 8002B7A0 0880043C */  lui        $a0, %hi(D_80087E10)
-    /* BFA4 8002B7A4 107E8424 */  addiu      $a0, $a0, %lo(D_80087E10)
-    /* BFA8 8002B7A8 02000534 */  ori        $a1, $zero, 0x2
-    /* BFAC 8002B7AC D998000C */  jal        func_80026364
-    /* BFB0 8002B7B0 FFFF0624 */   addiu     $a2, $zero, -0x1
-    /* BFB4 8002B7B4 05A80008 */  j          D_8002A014
-    /* BFB8 8002B7B8 00000000 */   nop
-    /* BFBC 8002B7BC 0280043C */  lui        $a0, (0x80020000 >> 16)
-endlabel func_8002B7A0
+    /* BFA0 8002B7A0 0880043C */ .word 0x3C048008
+    /* BFA4 8002B7A4 107E8424 */ .word 0x24847E10
+    /* BFA8 8002B7A8 02000534 */ .word 0x34050002
+    /* BFAC 8002B7AC D998000C */ .word 0x0C0098D9
+    /* BFB0 8002B7B0 FFFF0624 */ .word 0x2406FFFF
+    /* BFB4 8002B7B4 05A80008 */ .word 0x0800A805
+    /* BFB8 8002B7B8 00000000 */ .word 0x00000000
+    /* BFBC 8002B7BC 0280043C */ .word 0x3C048002
+    /* BFC0 8002B7C0 4434B327 */ .word 0x27B33444
+    /* BFC4 8002B7C4 006DEF22 */ .word 0x22EF6D00
+    /* BFC8 8002B7C8 E35E2467 */ .word 0x67245EE3
+    /* BFCC 8002B7CC 58B34044 */ .word 0x4440B358 /* invalid instruction */
+    /* BFD0 8002B7D0 AB374D18 */ .word 0x184D37AB /* invalid instruction */
+    /* BFD4 8002B7D4 D55A8D88 */ .word 0x888D5AD5
+    /* BFD8 8002B7D8 B37A864B */ .word 0x4B867AB3 /* invalid instruction */
+    /* BFDC 8002B7DC 66F5595A */ .word 0x5A59F566 /* invalid instruction */
+    /* BFE0 8002B7E0 BD651B7E */ .word 0x7E1B65BD /* invalid instruction */
+    /* BFE4 8002B7E4 D3567B16 */ .word 0x167B56D3
+    /* BFE8 8002B7E8 1F0EA160 */ .word 0x60A10E1F
+    /* BFEC 8002B7EC 52B50DB1 */ .word 0xB10DB552
+    /* BFF0 8002B7F0 8C0288CE */ .word 0xCE88028C
+enddlabel func_8002B7A0

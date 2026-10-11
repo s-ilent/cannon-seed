@@ -1,6 +1,5 @@
 
 // BEGIN GENERATED FUNCTION SYMBOLS (tools/scan_functions.py)
-func_80023118 = 0x80023118; // type:func
 func_800237B0 = 0x800237B0; // type:func
 func_80023968 = 0x80023968; // type:func
 func_80024B7C = 0x80024B7C; // type:func
@@ -19,7 +18,6 @@ func_8002949C = 0x8002949C; // type:func
 func_80029750 = 0x80029750; // type:func
 func_80029D5C = 0x80029D5C; // type:func
 func_8002A698 = 0x8002A698; // type:func
-func_8002AFA4 = 0x8002AFA4; // type:func
 func_8002B924 = 0x8002B924; // type:func
 func_8002C170 = 0x8002C170; // type:func
 func_8002C2A0 = 0x8002C2A0; // type:func
@@ -76,10 +74,8 @@ func_8004434C = 0x8004434C; // type:func
 func_8004443C = 0x8004443C; // type:func
 func_80044478 = 0x80044478; // type:func
 func_800446E0 = 0x800446E0; // type:func
-func_80044C98 = 0x80044C98; // type:func
 func_80044D88 = 0x80044D88; // type:func
 func_80045744 = 0x80045744; // type:func
-func_80047170 = 0x80047170; // type:func
 func_800471A0 = 0x800471A0; // type:func
 func_800471F4 = 0x800471F4; // type:func
 func_8004750C = 0x8004750C; // type:func

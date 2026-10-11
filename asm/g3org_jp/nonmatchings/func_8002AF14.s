@@ -40,10 +40,6 @@ nonmatching func_8002AF64
 alabel func_8002AF64
     /* B764 8002AF64 AB4E1AD0 */ .word 0xD01A4EAB
     /* B768 8002AF68 BFEFFB32 */ .word 0x32FBEFBF
-
-nonmatching func_8002AF6C
-
-alabel func_8002AF6C
     /* B76C 8002AF6C C73EB1BC */ .word 0xBCB13EC7
     /* B770 8002AF70 F5241106 */ .word 0x061124F5
     /* B774 8002AF74 AEBAD657 */ .word 0x57D6BAAE

@@ -15,7 +15,7 @@ glabel func_80047B14
     /* 2831C 80047B1C 00000800 */ .word 0x00080000
 enddlabel func_80047B14
 
-nonmatching func_80047B20, 0x24
+nonmatching func_80047B20, 0x2C
 
 glabel func_80047B20
     /* 28320 80047B20 0280013C */  lui        $at, %hi(jtbl_80021E20)
@@ -27,14 +27,9 @@ glabel func_80047B20
     /* 28338 80047B38 00000000 */   nop
     /* 2833C 80047B3C 420A010C */  jal        func_80042908
     /* 28340 80047B40 00000000 */   nop
-endlabel func_80047B20
-
-nonmatching func_80047B44, 0x8
-
-glabel func_80047B44
     /* 28344 80047B44 190A0108 */  j          func_80042864
     /* 28348 80047B48 00000000 */   nop
-endlabel func_80047B44
+endlabel func_80047B20
 
 nonmatching func_80047B4C, 0x10
 

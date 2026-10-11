@@ -18,10 +18,6 @@ nonmatching func_8004A02C
 
 alabel func_8004A02C
     /* 2A82C 8004A02C 1480063C */ .word 0x3C068014
-
-nonmatching func_8004A030
-
-alabel func_8004A030
     /* 2A830 8004A030 FC4FC624 */ .word 0x24C64FFC
     /* 2A834 8004A034 15000005 */ .word 0x05000015
     /* 2A838 8004A038 21380001 */ .word 0x01003821
@@ -96,10 +92,6 @@ nonmatching func_8004A0E4
 
 alabel func_8004A0E4
     /* 2A8E4 8004A0E4 0400C384 */ .word 0x84C30004
-
-nonmatching func_8004A0E8
-
-alabel func_8004A0E8
     /* 2A8E8 8004A0E8 0800C624 */ .word 0x24C60008
     /* 2A8EC 8004A0EC FFFF8424 */ .word 0x2484FFFF
     /* 2A8F0 8004A0F0 C0100300 */ .word 0x000310C0
@@ -129,10 +121,6 @@ alabel func_8004A12C
     /* 2A940 8004A140 01004230 */ .word 0x30420001
     /* 2A944 8004A144 02004014 */ .word 0x14400002
     /* 2A948 8004A148 08002925 */ .word 0x25290008
-
-nonmatching func_8004A14C
-
-alabel func_8004A14C
     /* 2A94C 8004A14C 21280000 */ .word 0x00002821
 
 nonmatching func_8004A150

@@ -195,7 +195,7 @@ glabel func_80049004
     /* 29810 80049010 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80049004
 
-nonmatching func_80049014, 0x50
+nonmatching func_80049014, 0x58
 
 glabel func_80049014
     /* 29814 80049014 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -219,14 +219,9 @@ glabel func_80049014
     /* 29858 80049058 0B80013C */  lui        $at, %hi(D_800AC6CC)
     /* 2985C 8004905C CCC623A4 */  sh         $v1, %lo(D_800AC6CC)($at)
     /* 29860 80049060 02004014 */  bnez       $v0, func_8004906C
-endlabel func_80049014
-
-nonmatching func_80049064, 0x8
-
-glabel func_80049064
-    /* 29864 80049064 DDFF6224 */  addiu      $v0, $v1, -0x23
+    /* 29864 80049064 DDFF6224 */   addiu     $v0, $v1, -0x23
     /* 29868 80049068 06006224 */  addiu      $v0, $v1, 0x6
-endlabel func_80049064
+endlabel func_80049014
 
 nonmatching func_8004906C, 0x38
 

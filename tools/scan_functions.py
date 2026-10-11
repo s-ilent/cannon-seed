@@ -200,9 +200,21 @@ def load_curated(target):
     return out
 
 
-def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
+def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
+         pin_spans=()):
     n = len(payload) // 4
     words = struct.unpack(f"<{n}I", payload[: n * 4])
+
+    # Pinned data spans (hand-verified data rows) are no-walk zones: no
+    # walk may start inside one or consume a word of one. hard_stops alone
+    # only blocks seeds AT the pinned START offset - a j-target landing a
+    # few words into the span still seeded a walk that swallowed the rest
+    # of the pin (witnessed: g3_eu func_80022A1C carved out of the pinned
+    # data_80022A18's first four bytes onward).
+    pin_mask = bytearray(n)
+    for ps, pe in pin_spans:
+        for w in range(ps // 4, min((pe + 3) // 4, n)):
+            pin_mask[w] = 1
 
     def v2o(v):  # vram -> offset (or None)
         return v - BASE if 0 <= v - BASE < len(payload) else None
@@ -237,6 +249,8 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
         prologue boundary. Returns (start, end) with end exclusive, or
         None."""
         a = start_off
+        if pin_mask[a // 4]:
+            return None  # pinned data: never start a walk inside a pin
         end = a
         bad = 0
         zeros = 0
@@ -246,6 +260,9 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             # an already-covered range — the walk ends at its boundary so
             # rescued runs cannot swallow covered functions.
             if barrier is not None and i != a // 4 and barrier[i]:
+                return (a, i * 4) if i * 4 > a else None
+            # pinned data: stop BEFORE consuming the first pin word
+            if i != a // 4 and pin_mask[i]:
                 return (a, i * 4) if i * 4 > a else None
             w = words[i]
             if w == 0:
@@ -333,7 +350,9 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             if t is None:
                 continue
             o = v2o(t)
-            if o is not None and not in_covered(o & ~3) and (o & ~3) not in hard_stops:
+            if o is not None and not in_covered(o & ~3) \
+                    and (o & ~3) not in hard_stops \
+                    and not pin_mask[(o & ~3) // 4]:
                 seeds.add(o & ~3)
     for a in sorted(seeds):
         if in_covered(a):
@@ -373,7 +392,9 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
                 if (words[i] >> 26) != 0x02:
                     continue
                 o = v2o(((words[i] & 0x3FFFFFF) << 2) | (BASE & 0xF0000000))
-                if o is not None and not in_covered(o & ~3) and (o & ~3) not in hard_stops:
+                if o is not None and not in_covered(o & ~3) \
+                        and (o & ~3) not in hard_stops \
+                        and not pin_mask[(o & ~3) // 4]:
                     strong.add(o & ~3)
         mask = build_mask()
         grew = False
@@ -418,7 +439,7 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
         accepted = False
         for i in range(n):
             off = i * 4
-            if mask[i]:
+            if mask[i] or pin_mask[i]:
                 continue
             frame = prologue_frame(words, i, n)
             if frame is None:
@@ -710,13 +731,16 @@ def data_gaps(code_ranges, payload_len):
 
 def preserved_types(yaml_path: Path):
     """Offsets the tree carries with a HAND-set type: `c` for C-matched
-    functions. Returns {offset: (type, name, size)} and the set of offsets
-    as hard walk-stop boundaries.
+    functions. Returns {offset: (type, name, size)}, the set of offsets
+    as hard walk-stop boundaries, and the set of `pinned` data offsets
+    whose marker must be re-emitted into the generated block.
 
-    v3 note: only `c` entries are preserved. `data` subsegments are the
-    scanner's own auto-named output and get regenerated wholesale — and
-    since v3 rescues real code out of data gaps, treating old data starts
-    as immutable types would re-type rescued functions back to data.
+    v3 note: `c` entries are always preserved, and a `data` entry carrying a
+    `pinned` marker is preserved too (a range verified by hand to be data).
+    Unmarked `data` subsegments are the scanner's own auto-named output and
+    get regenerated wholesale — since v3 rescues real code out of data gaps,
+    treating old data starts as immutable types would re-type rescued
+    functions back to data.
     The recorded SIZE matters as much as the type: the C file was matched
     against a subsegment of exactly that size, so the defensive split in
     main() must carve the c-range out at that size, not to the end of the
@@ -724,8 +748,9 @@ def preserved_types(yaml_path: Path):
     not swallow — witnessed with the 0x10-byte func_80025AE0 stub).
     """
     kept = {}
+    pinned = set()
     if not yaml_path.exists():
-        return kept
+        return kept, pinned
     in_block = False
     for ln in yaml_path.read_text().splitlines():
         if "# BEGIN GENERATED SUBSEGMENTS" in ln:
@@ -736,10 +761,18 @@ def preserved_types(yaml_path: Path):
         if not in_block:
             continue
         m = re.match(r"\s*- \[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]\s*#\s*(0x[0-9A-Fa-f]+)", ln)
-        if m and m.group(2) == "c":
-            kept[int(m.group(1), 16) - HDR] = (
-                m.group(2), m.group(3), int(m.group(4), 16))
-    return kept
+        if not m:
+            continue
+        # `c` is hand-set and always preserved. A `data` line marked `pinned`
+        # is a hand-verified data range: keep it too, or the sweep re-types it
+        # back to code. Blanket-preserving data stays wrong (v3 rescues real
+        # code from data gaps); only the explicit marker counts.
+        if m.group(2) == "c" or (m.group(2) == "data" and "pinned" in ln):
+            off = int(m.group(1), 16) - HDR
+            kept[off] = (m.group(2), m.group(3), int(m.group(4), 16))
+            if m.group(2) == "data":
+                pinned.add(off)
+    return kept, pinned
 
 
 def main(argv):
@@ -753,10 +786,14 @@ def main(argv):
     pc0 = header_words[0]
     entry_off = pc0 - BASE
 
-    kept = preserved_types(yaml_path := REPO / "config" / f"splat.{target}.yaml")
+    kept, pinned = preserved_types(
+        yaml_path := REPO / "config" / f"splat.{target}.yaml")
     hard_stops = frozenset(kept)
+    # pinned data rows are hard no-walk spans, not just stop offsets
+    pin_spans = [(off, off + kept[off][2]) for off in pinned]
 
-    ranges, cross_targets = scan(payload, entry_off, hard_stops)
+    ranges, cross_targets = scan(payload, entry_off, hard_stops,
+                                 pin_spans=pin_spans)
     gaps = data_gaps(ranges, len(payload))
 
     # Defensive: a preserved c-function must START its own subsegment at
@@ -781,6 +818,28 @@ def main(argv):
                 ranges[i:i + 1] = [[s, s + csize], [s + csize, e]]
                 break
 
+    # Kept rows inside a GAP: pin enforcement keeps code ranges from
+    # covering a pinned span, so the surrounding gap would swallow it
+    # (witnessed: mainmenu_jp data_800253C4 and the g3 pins absorbed into
+    # the leading data row when no walk started at the pin). Carve every
+    # kept row that sits fully inside a gap out as its own subsegment
+    # piece; the leftovers stay data gaps.
+    kept_gap_rows = []
+    carved_gaps = []
+    for gs, ge in gaps:
+        cur = gs
+        for off in sorted(kept):
+            typ, name, ksize = kept[off]
+            if off < cur or off + ksize > ge:
+                continue
+            if cur < off:
+                carved_gaps.append((cur, off))
+            kept_gap_rows.append((off, typ, name, ksize))
+            cur = off + ksize
+        if cur < ge:
+            carved_gaps.append((cur, ge))
+    gaps = carved_gaps
+
     curated = load_curated(target)
     subsegs = []
     for s, e in ranges:
@@ -793,12 +852,15 @@ def main(argv):
         # name (`func_XXXXXXXX`). Curated names go into the symbols file
         # only, where the linker resolves them by address.
         subsegs.append((s, typ, name, e - s))
+    for off, typ, name, ksize in kept_gap_rows:
+        subsegs.append((off, typ, name, ksize))
     for s, e in gaps:
         subsegs.append((s, "data", f"data_{BASE + s:08X}", e - s))
     subsegs.sort()
 
     code_bytes = sum(e - s for s, e in ranges)
-    data_bytes = sum(e - s for s, e in gaps)
+    data_bytes = sum(e - s for s, e in gaps) + sum(
+        k for _, typ, _, k in kept_gap_rows if typ == "data")
     print(f"scan {target}: {len(ranges)} code ranges "
           f"({code_bytes:,} B, {100.0 * code_bytes / len(payload):.1f}%), "
           f"{len(gaps)} data gaps ({data_bytes:,} B)")
@@ -819,7 +881,10 @@ def main(argv):
     ytext = yaml_path.read_text()
     gen = ["    # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)"]
     for off, typ, name, size in subsegs:
-        gen.append(f"      - [0x{HDR + off:X}, {typ}, {name}]   # {size:#x}")
+        # Re-emit the `pinned` marker or the NEXT scan reads an unmarked
+        # data row, drops it from kept, and re-types the range to code.
+        mark = " pinned" if off in pinned else ""
+        gen.append(f"      - [0x{HDR + off:X}, {typ}, {name}]   # {size:#x}{mark}")
     gen.append("    # END GENERATED SUBSEGMENTS")
     block = "\n".join(gen)
     new_ytext, count = re.subn(

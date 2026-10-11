@@ -70,118 +70,16 @@ segments:
       - [0x9BCC, data, data_800293CC]   # 0x1798
       - [0xB364, asm, func_8002AB64]   # 0x3b4
       - [0xB718, data, data_8002AF18]   # 0x154
-      - [0xB86C, asm, func_8002B06C]   # 0x6b4 (tail = payload 1 head, carved below)
-      # Three [encrypted payload | 6-word descriptor | plaintext code] blocks
-      # spanning 0x8002B7C4..0x8002CC5C (recon 2026-10-11, scripts/eu_b7f4_recon*.py).
-      # Payloads: high-entropy (4.0 bits/byte), no masked-shape twin anywhere in
-      # JP (+/-0x900 slide) -> encrypted at rest; both discs carry them at
-      # overlapping vrams with different boundaries. Descriptors: byte-static
-      # 6-word records ffffff00 ffffffff 00ffffff 0254/0255/02561900
-      # 00080000 00080000 (block indices increment; EU-only, no JP twin).
-      # Code halves: real MIPS-I. Prologues (sw ra,N(sp) after addiu sp) at
-      # 0x8002B918/BAFC/BB1C/BF20 (block 1) and C420/C5B0/C830 (block 2);
-      # stub rows lui a0,0x8009/addiu/addu/jal func_80026364 close blocks 1-2.
-      # Live entries: jal func_8002B970/B98C from func_8003712C; j's from
-      # func_8002DE00 into C350/C45C/C4C0/C4DC/C50C/C5E0/C6CC/CC34; callbacks
-      # stored by data_8008765C tables (B9A8/BCF4/C050/C610/C618/C620/C658).
-      # Tail stubs also j INTO payload 1 (j 0x8002B854/B86C from
-      # data_8002D398's stub row with real store delay slots) -> some payload
-      # bytes execute only after runtime decryption; those j targets stay
-      # uncarved data.
-      # Twin status: block 1 vs JP +0x60 = 194 positional diffs (scheduled/
-      # diverged twin, C-match candidate); block 3 head vs JP -0x8fc = 19 diffs
-      # (1 opcode-level), tail 0x8002CC00..CC5C vs JP 0x8002C41C = relocation
-      # twin (6 diffs, all address-class) - JP has a stub row where EU has
-      # this function, delta drifts from +0x60 to -0x7e4 across the blob.
-      - [0xBFC0, data, data_8002B7C0]   # 0x118 payload 1 (grid-aligned: last 0x118 before each descriptor)
-      - [0xC0D8, data, data_8002B8D8]   # 0x18 descriptor 1
-      - [0xC0F0, asm, func_8002B8F0]   # 0x800 code block 1
-      - [0xC8F0, data, data_8002C0F0]   # 0x118 payload 2
-      - [0xCA08, data, data_8002C208]   # 0x18 descriptor 2
-      - [0xCA20, asm, func_8002C220]   # 0x800 code block 2
-      - [0xD220, data, data_8002CA20]   # 0x118 payload 3
-      - [0xD338, data, data_8002CB38]   # 0x18 descriptor 3
-      - [0xD350, asm, func_8002CB50]   # 0x10c code block 3
-      # State-machine stub pool for func_8002EB64's tail-js and the first
-      # switch's jr table (jtbl_80021224 -> 0x8002D2A0/C0/E0/300/320, all
-      # mid-stream entries tail-jumping into D_8002B904 (now inside
-      # func_8002B8F0) and func_8002B710/B728 (inside func_8002B06C)). Stays
-      # asm: every entry is a jump or indirect-jump target, never a call. Byte-twin proof vs JP (same vram,
-      # delta 0): body 0x8002CD18..0x8002D350 is a pure relocation twin (jal/
-      # imm/mem diffs only); the head 0x8002CC5C..CD18 genuinely diverges.
-      # Grid carve (recon 2026-10-12, scripts/eu_d398_recon1.py): 0x8002D350..
-      # 0x8002DE00 decomposes per the 0x930 grid (desc4 0x8002D468 idx 0x257,
-      # desc5 0x8002DD98 idx 0x258) as [payload4 0x118|desc4|code4 0x800|
-      # payload5 0x118|desc5|pool epilogue 0x50]. Code half 4 is fully
-      # decodable (512 insns, prologues 0x8002D62C/D978, 80 jals) and a pure
-      # relocation twin of JP func_8002D480 (142/512 words, 0 opcode-class).
-      # The old 0x40 "encrypted tail" D_8002D358 (H=5.74) is mid-payload-4
-      # and merges into it; func_8002F368's %hi/%lo pointer regenerates as
-      # data_8002D350+0x8. data_8002DDB0 (0x50) is the shared 0x50-frame
-      # pool epilogue (lw ra..jr ra), 3/20 words off JP's same-vram twin.
-      - [0xD45C, asm, func_8002CC5C]   # 0x6f4 (code half 3 ends D350, grid-exact)
-      - [0xDB50, data, data_8002D350]  # 0x118 payload 4
-      - [0xDC68, data, data_8002D468]  # 0x18 descriptor 4
-      - [0xDC80, asm, func_8002D480]   # 0x800 code block 4
-      - [0xE480, data, data_8002DC80]  # 0x118 payload 5
-      - [0xE598, data, data_8002DD98]  # 0x18 descriptor 5
-      - [0xE5B0, data, data_8002DDB0]  # 0x50 pool epilogue
+      - [0xB86C, asm, func_8002B06C]   # 0x788
+      - [0xBFF4, data, data_8002B7F4]   # 0x1468
+      - [0xD45C, asm, func_8002CC5C]   # 0x73c
+      - [0xDB98, data, data_8002D398]   # 0xa68
       - [0xE600, asm, func_8002DE00]   # 0x82c
-      # Grid carve (recon 2026-10-12, scripts/eu_e62c_recon2.py): data_8002E62C
-      # splits at descriptor 6 (0x8002E6C8, idx 0x259): payload-6 tail 0x9c
-      # (high-entropy junk) | desc6 0x18 | code fabric 0x484. The fabric is
-      # real code from E6E0 (lw v0,(s7) continuation head, no prologue) to
-      # EB64, flowing into func_8002EB64: entry points E728/E760/E78C/E7B8/
-      # E7E4/E810/E83C/E868/E8A8/E97C arrive via data_8008765C callback
-      # tables; island EAB0..EAE8 (state transitions j 0x8002cc34) is part
-      # of the same body. Pure relocation twin of JP same-vram bytes (71/289
-      # words, 0 opcode-class). The grid's payload-6 window (E5B0..E6C8)
-      # overlaps real code (pool epilogue + func_8002DE00 head) - per-block
-      # measurement wins; only the tail inside this zone is junk.
-      - [0xEE2C, data, data_8002E62C]   # 0x9c payload 6 tail
-      - [0xEEC8, data, data_8002E6C8]  # 0x18 descriptor 6
-      - [0xEEE0, asm, func_8002E6E0]   # 0x484 dispatcher fabric
+      - [0xEE2C, data, data_8002E62C]   # 0x538
       - [0xF364, asm, func_8002EB64]   # 0x3ac
-      # EF10 carve (recon 2026-10-12, scripts/ef10_carve_recon1.py), JP twin
-      # commit: the row decomposes as [sector-26 EDC tail 0xe8 (H=7.06) |
-      # sector-7 header 0x18 (sync 00 ff*10 00, MSF 00:19:60, mode 02,
-      # subheader 00080000 x2) | continuation code 0x358]. 214/214 words
-      # decodable; pure relocation twin of JP (156 eq, 24 jal, 33 lo, 1
-      # other, 0 opcode-class diffs): state-id switch chains, calls to
-      # 80026414/80026668/8005C62C/80035D50, the jr-v0 dispatch thunk over
-      # the 80020F98 table, and the shared frame epilogue at the row end
-      # (FABRIC.md misclassified-rows table, row 1). External refs identical
-      # to JP: root-table-4 words 8002F314/F334/F354 (@1d4c, data_80020000),
-      # callback word 8002F168 (@7a028, inside data_8008765C), and three
-      # j-shaped words @11dd8/11dec/11e04 inside data_800313D0 (still data).
-      - [0xF710, data, data_8002EF10]   # 0xe8 sector-26 EDC/ECC tail
-      - [0xF7F8, data, data_8002EFF8]  # 0x18 sector 7 header (MSF 00:19:60)
-      - [0xF810, asm, func_8002F010]   # 0x358 switch-chain continuation code
+      - [0xF710, data, data_8002EF10]   # 0x458
       - [0xFB68, asm, func_8002F368]   # 0x4cc
-      # F834 carve (recon 2026-10-12, scripts/f834_carve_recon1.py), JP twin
-      # commit; the EU row runs 0x137c (no func_80030348 row - the EU image
-      # runs on to 30BB0), so window 9 is one full asm row and the sector-10
-      # boundary lands inside this yaml span: [sector-7 overhead tail 0xf4
-      # (H=7.04) | sector-8 header 0x18 (MSF 00:19:61) | user window 8
-      # func_8002F940 0x800 (GRID decode 1.00; pure relocation twin of JP:
-      # 375/512 eq, 68 lo + 65 jal + 4 other, 0 opcode-class diffs) |
-      # sector-8 overhead 0x118 | sector-9 header 0x18 (00:19:62) | user
-      # window 9 func_80030270 0x800 (GRID decode 1.00; twin 380/512 eq,
-      # 43 lo + 89 jal, 0 opcode-class) | sector-9 overhead 0x118 |
-      # sector-10 header 0x18 (00:19:63) | user window-10 head
-      # func_80030BA0 0x10 (lw ra/nop/jr ra/addiu sp,0x18 epilogue,
-      # byte-identical to the JP twin inside data_80030A88) | func_80030BB0
-      # continues at 0x113B0]. The old whole-row census was an artifact -
-      # the user windows ARE the code (FABRIC.md misclassified-rows row 2).
-      - [0x10034, data, data_8002F834]   # 0xf4 sector-7 overhead tail
-      - [0x10128, data, data_8002F928]  # 0x18 sector 8 header (MSF 00:19:61)
-      - [0x10140, asm, func_8002F940]   # 0x800 window 8: switch-chain code
-      - [0x10940, data, data_80030140]  # 0x118 sector-8 overhead
-      - [0x10A58, data, data_80030258]  # 0x18 sector 9 header (MSF 00:19:62)
-      - [0x10A70, asm, func_80030270]   # 0x800 window 9: continuation code
-      - [0x11270, data, data_80030A70]  # 0x118 sector-9 overhead
-      - [0x11388, data, data_80030B88]  # 0x18 sector 10 header (MSF 00:19:63)
-      - [0x113A0, asm, func_80030BA0]   # 0x10 window-10 head epilogue
+      - [0x10034, data, data_8002F834]   # 0x137c
       - [0x113B0, asm, func_80030BB0]   # 0x820
       - [0x11BD0, data, data_800313D0]   # 0x108
       - [0x11CD8, asm, func_800314D8]   # 0x828
@@ -194,33 +92,14 @@ segments:
       - [0x152D0, data, data_80034AD0]   # 0xad4
       - [0x15DA4, asm, func_800355A4]   # 0xb0
       - [0x15E54, data, data_80035654]   # 0x1064
-      - [0x16EB8, asm, func_800366B8]   # 0x1c
+      - [0x16EB8, data, data_800366B8]   # 0x1c pinned
       - [0x16ED4, data, data_800366D4]   # 0xa58
       - [0x1792C, asm, func_8003712C]   # 0x784
       - [0x180B0, data, data_800378B0]   # 0x134
-      - [0x181E4, c, func_800379E4]     # 0x2c8
-      # Byte-proven JP twins (cron-20261011-1157): this former data blob is
-      # JP vram -0x60 throughout the first 0x4e0. [0x184AC,0x3f0) = the 19
-      # remaining wrapper-family twins (JP func_80037D0C..func_800380D0;
-      # 52 differing words, all jal targets) - C-matched as
-      # src/func_80037CAC.c (cron-20261011-1311). [0x1889C,0xf0) = twin of
-      # JP's switch dispatch func_800380FC (stays asm: its jump tables are
-      # string-clobbered at rest in BOTH exes and nothing references it).
-      # The tail after the switch gets its own carve below.
-      - [0x184AC, c, func_80037CAC]     # 0x3f0
-      - [0x1889C, asm, func_8003809C]   # 0xf0
-      # Tail carve (cron-20261011-1412): the 0x2e0 blob decomposes as
-      # [0x54 dispatch stub row][0x130 encrypted junk][0x15c body head].
-      # The stub row (5x "lui v0,D_8008E0xx; j D_80034FEC", 5th stores
-      # D_8008E2D0 + jal func_80035A18(7)) is the positional twin-analog of
-      # JP's row inside func_80038318 - JP placed the same [row|junk|body]
-      # blocks in the opposite order (JP: junk 0x800381EC..0x80038318, row
-      # inside func_80038318, body 0x80038370..). The body head is a pure
-      # relocation twin of JP 0x80038370..0x800384CC at +0x60 (27 diffs, all
-      # address-class) and merges into the following stub-pool subseg.
-      - [0x1898C, asm, func_8003818C]   # 0x54
-      - [0x189E0, data, data_800381E0]  # 0x130
-      - [0x18B10, asm, func_80038310]   # 0x828
+      - [0x181E4, c, func_800379E4]   # 0x2c8
+      - [0x184AC, c, func_80037CAC]   # 0x3f0
+      - [0x1889C, data, data_8003809C]   # 0x3d0
+      - [0x18C6C, asm, func_8003846C]   # 0x6cc
       - [0x19338, data, data_80038B38]   # 0x13fc
       - [0x1A734, asm, func_80039F34]   # 0x620
       - [0x1AD54, data, data_8003A554]   # 0xbf8
@@ -238,7 +117,7 @@ segments:
       - [0x1D238, data, data_8003CA38]   # 0x4
       - [0x1D23C, asm, func_8003CA3C]   # 0x138
       - [0x1D374, data, data_8003CB74]   # 0xe0
-      - [0x1D454, asm, func_8003CC54]   # 0x18
+      - [0x1D454, data, data_8003CC54]   # 0x18 pinned
       - [0x1D46C, data, data_8003CC6C]   # 0x5c
       - [0x1D4C8, asm, func_8003CCC8]   # 0x724
       - [0x1DBEC, data, data_8003D3EC]   # 0x8
@@ -274,7 +153,7 @@ segments:
       - [0x241C8, data, data_800439C8]   # 0x4
       - [0x241CC, asm, func_800439CC]   # 0x4c
       - [0x24218, data, data_80043A18]   # 0x1294
-      - [0x254AC, asm, func_80044CAC]   # 0x10
+      - [0x254AC, data, data_80044CAC]   # 0x10 pinned
       - [0x254BC, data, data_80044CBC]   # 0x2c
       - [0x254E8, asm, func_80044CE8]   # 0x14
       - [0x254FC, data, data_80044CFC]   # 0x13fc
@@ -286,7 +165,7 @@ segments:
       - [0x27058, data, data_80046858]   # 0xa54
       - [0x27AAC, asm, func_800472AC]   # 0x77c
       - [0x28228, data, data_80047A28]   # 0xc0
-      - [0x282E8, asm, func_80047AE8]   # 0x20
+      - [0x282E8, data, data_80047AE8]   # 0x20 pinned
       - [0x28308, data, data_80047B08]   # 0x2494
       - [0x2A79C, asm, func_80049F9C]   # 0x480
       - [0x2AC1C, data, data_8004A41C]   # 0x51c

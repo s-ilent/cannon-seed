@@ -155,7 +155,6 @@ glabel func_800283F0
     /* 8C2C 8002842C FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 8C30 80028430 08006210 */  beq        $v1, $v0, func_80028454
     /* 8C34 80028434 21200002 */   addu      $a0, $s0, $zero
-  alabel func_80028438
     /* 8C38 80028438 21906000 */  addu       $s2, $v1, $zero
     /* 8C3C 8002843C AEDB000C */  jal        func_80036EB8
     /* 8C40 80028440 04000534 */   ori       $a1, $zero, 0x4

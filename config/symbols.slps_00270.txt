@@ -2,7 +2,6 @@
 // entry point pc0 — proven by tools/exe_map.py (docs/LOADMAP.md)
 entry = 0x8002DB14; // type:func
 // BEGIN GENERATED FUNCTION SYMBOLS (tools/scan_functions.py)
-func_80021800 = 0x80021800; // type:func
 func_80022F30 = 0x80022F30; // type:func
 func_80024BFC = 0x80024BFC; // type:func
 func_80025480 = 0x80025480; // type:func

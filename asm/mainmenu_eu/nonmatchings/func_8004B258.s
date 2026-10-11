@@ -468,22 +468,17 @@ glabel func_8004B78C
     /* 2BFA8 8004B7A8 442F0434 */  ori        $a0, $zero, 0x2F44
 endlabel func_8004B78C
 
-nonmatching func_8004B7AC, 0x8
+nonmatching func_8004B7AC, 0x1C
 
 glabel func_8004B7AC
     /* 2BFAC 8004B7AC 2B104400 */  sltu       $v0, $v0, $a0
     /* 2BFB0 8004B7B0 07004010 */  beqz       $v0, func_8004B7D0
-endlabel func_8004B7AC
-
-nonmatching func_8004B7B4, 0x14
-
-glabel func_8004B7B4
-    /* 2BFB4 8004B7B4 00000000 */  nop
+    /* 2BFB4 8004B7B4 00000000 */   nop
     /* 2BFB8 8004B7B8 6F17010C */  jal        func_80045DBC
     /* 2BFBC 8004B7BC 21200002 */   addu      $a0, $s0, $zero
     /* 2BFC0 8004B7C0 6A170108 */  j          D_80045DA8
     /* 2BFC4 8004B7C4 00000000 */   nop
-endlabel func_8004B7B4
+endlabel func_8004B7AC
 
 nonmatching func_8004B7C8, 0x8
 

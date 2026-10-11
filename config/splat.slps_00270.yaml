@@ -47,7 +47,7 @@ segments:
     subsegments:
     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
       - [0x800, data, data_80020000]   # 0x1800
-      - [0x2000, asm, func_80021800]   # 0x10
+      - [0x2000, data, data_80021800]   # 0x10 pinned
       - [0x2010, data, data_80021810]   # 0x1720
       - [0x3730, asm, func_80022F30]   # 0x83c
       - [0x3F6C, data, data_8002376C]   # 0x1490

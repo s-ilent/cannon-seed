@@ -48,7 +48,7 @@ segments:
     subsegments:
     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
       - [0x800, data, data_80020000]   # 0x53c4
-      - [0x5BC4, asm, func_800253C4]   # 0xc
+      - [0x5BC4, data, data_800253C4]   # 0xc pinned
       - [0x5BD0, data, data_800253D0]   # 0x28
       - [0x5BF8, asm, func_800253F8]   # 0x810
       - [0x6408, data, data_80025C08]   # 0x194
@@ -68,119 +68,10 @@ segments:
       - [0xA538, data, data_80029D38]   # 0xe8c
       - [0xB3C4, asm, func_8002ABC4]   # 0x2f4
       - [0xB6B8, data, data_8002AEB8]   # 0x214
-      - [0xB8CC, asm, func_8002B0CC]   # 0x6f4 (tail = payload 1 head, carved below)
-      # Mirror of the EU carve (commit 8159794/1fd69db): the 0x930-byte block
-      # grid is byte-proven on both discs at IDENTICAL vrams - descriptors
-      # ffffff00 ffffffff 00ffffff <idx> 00080000 00080000 every 0x930
-      # (JP idx base runs 2 lower than EU at the same address: 0x252 vs
-      # 0x254 at 0x8002B8D8). Per block: [0x18 descriptor][0x800 plaintext
-      # code][0x118 encrypted payload]. JP payload boundaries measured at
-      # the same addresses as EU (junk from B7C0/C0F0/CA20; code halves
-      # B8F0..C0F0 / C220..CA20, both opening with stub rows). Payloads:
-      # high-entropy, no twin in EU (+/-0x900 slide) - encrypted at rest.
-      # Code halves: block-1 functions sit at JP vram = EU vram + 0x60
-      # (func_8002B918-analog prologue at 0x8002B978); block 2/3 deltas
-      # drift (-0x8fc/-0x7e4 measured on EU side) - the grid is shared,
-      # the function placement inside code halves is not.
-      - [0xBFC0, data, data_8002B7C0]   # 0x118 payload 1
-      - [0xC0D8, data, data_8002B8D8]   # 0x18 descriptor 1
-      - [0xC0F0, asm, func_8002B8F0]   # 0x800 code block 1
-      - [0xC8F0, data, data_8002C0F0]   # 0x118 payload 2
-      - [0xCA08, data, data_8002C208]   # 0x18 descriptor 2
-      - [0xCA20, asm, func_8002C220]   # 0x800 code block 2
-      - [0xD220, data, data_8002CA20]   # 0x118 payload 3
-      - [0xD338, data, data_8002CB38]   # 0x18 descriptor 3
-      # Carve of the old data_8002CB50 (0x12b0, recon scripts/jp_cb50_recon1-3.py):
-      # - func_8002CB50 (0x800 = CB50..D350, exactly one grid code-half):
-      #   JP's own function(s) in the head (jr ra at CCB4/D088; EU holds two
-      #   different functions there - the head diverges), then the state-pool
-      #   body CD18..D350, a relocation twin of EU's pool (delta 0, jal/imm/
-      #   mem diffs only; EU's twin runs 8 bytes further, to D358 - EU's
-      #   func_8002CC5C includes payload 4's first 8 bytes, an 8-byte
-      #   imprecision vs the grid that JP does not have).
-      # - Grid blocks 4/5 at the same vrams as EU (desc D468 idx 0x255 /
-      #   DD98 idx 0x256; EU 0x257/0x258 at the same addresses - JP base runs
-      #   2 lower, low byte 0x17 vs EU 0x19). Payloads 4/5 high-entropy
-      #   (7.24/7.38 bits/byte), 70-word diff blocks vs EU; code block 4
-      #   D480..DC80 all-decodes, scattered twin diffs.
-      # - Tail DDB0..DE00 (0x50): stub row, relocation twin of EU's (only
-      #   pointer/gp words differ), full lw ra/s0-s7 + jr ra epilogue; block
-      #   5's code half is truncated by func_8002DE00 (real code, not grid).
-      # The next descriptor (0x8002E6C8) is carved below.
-      - [0xD350, asm, func_8002CB50]   # 0x800 JP head functions + state-pool twin body
-      - [0xDB50, data, data_8002D350]   # 0x118 payload 4
-      - [0xDC68, data, data_8002D468]   # 0x18 descriptor 4 (idx 0x255)
-      - [0xDC80, asm, func_8002D480]   # 0x800 code block 4
-      - [0xE480, data, data_8002DC80]   # 0x118 payload 5
-      - [0xE598, data, data_8002DD98]   # 0x18 descriptor 5 (idx 0x256)
-      - [0xE5B0, data, data_8002DDB0]   # 0x50 stub row
+      - [0xB8CC, asm, func_8002B0CC]   # 0x700
+      - [0xBFCC, data, data_8002B7CC]   # 0x2634
       - [0xE600, asm, func_8002DE00]   # 0x800
-      # Grid carve (recon 2026-10-12, scripts/jp_e600_recon3-4.py): JP mirror
-      # of the EU data_8002E62C/data_8002D398 carves. data_8002E600 keeps only
-      # the sector-5 overhead tail 0xc8 (H=7.02, 0/50 decode, no JP/EU twin).
-      # desc6 at 0x8002E6C8 is a raw CD sector header: sync 00 ff*10 00 + MSF
-      # 00:17:57 BCD + mode 02 + subheader (EU twin reads 00:19:59). The
-      # dispatcher fabric func_8002E6E0 (0x484) is a pure relocation twin of
-      # EU func_8002E6E0: 289/289 decode, 218 words equal + 71 hi-half
-      # relocation diffs + 0 opcode-class; head is the continuation
-      # lw v0,(s3) / beqz entry (EU bytes identical - the EU commit note said
-      # (s7), a typo). func_8002EB64 (0x3ac, frame -0x20) and func_8002F368
-      # (0x4cc, frame -0x18) open with real prologues. data_8002F834 (0xb14,
-      # JP ends at func_80030348 where EU runs to 30BB0) is data at the row
-      # level but holds continuation code islands (docs/FABRIC.md); the old
-      # "6/278 words decode" census was a whole-row artifact. Sector headers
-      # for sectors 7/8/9 sit embedded inside the data spans (vram 8002EFF8
-      # 00:17:58, 8002F928 00:17:59, 80030258 00:17:60) and stay data.
-      - [0xEE00, data, data_8002E600]   # 0xc8 sector-5 overhead tail
-      - [0xEEC8, data, data_8002E6C8]  # 0x18 descriptor 6 (MSF 00:17:57)
-      - [0xEEE0, asm, func_8002E6E0]   # 0x484 dispatcher fabric
-      - [0xF364, asm, func_8002EB64]   # 0x3ac
-      # EF10 carve (recon 2026-10-12, scripts/ef10_carve_recon1.py): the row
-      # decomposes as [sector-26 EDC tail 0xe8 (H=7.09) | sector-7 header
-      # 0x18 (sync 00 ff*10 00, MSF 00:17:58, mode 02, subheader 00080000 x2)
-      # | continuation code 0x358]. The code is 214/214 words decodable on
-      # BOTH discs and a pure relocation twin JP/EU (156 eq, 24 jal, 33 lo,
-      # 1 other, 0 opcode-class diffs): the state-id switch chains
-      # (ori v0,N; beq v0,v1; nop; j <pool entry>), call sequences to
-      # 80026414/80026668/8005C62C/80035D50, the 8002F294 jr-v0 dispatch
-      # thunk reading the table at 80020F98, and the shared frame epilogue
-      # (lw ra/s4..s0 + jr ra) at the row end - FABRIC.md misclassified-rows
-      # table, row 1. External refs identical on JP/EU: root-table-4 words
-      # 8002F314/F334/F354 (@1d20, data_80020000), callback word 8002F168
-      # (@796e4, inside data_80086D3C), and three j-shaped words @11dd8/
-      # 11dec/11e04 inside data_800313C0 (still data -> raw words, no labels
-      # needed until the 313C0 carve).
-      - [0xF710, data, data_8002EF10]   # 0xe8 sector-26 EDC/ECC tail
-      - [0xF7F8, data, data_8002EFF8]  # 0x18 sector 7 header (MSF 00:17:58)
-      - [0xF810, asm, func_8002F010]   # 0x358 switch-chain continuation code
-      - [0xFB68, asm, func_8002F368]   # 0x4cc
-      # F834 carve (recon 2026-10-12, scripts/f834_carve_recon1.py): the row
-      # decomposes per the raw-sector grid (docs/GRID.md: [0x18 header]
-      # [0x800 user][0x118 overhead]) as [sector-7 overhead tail 0xf4
-      # (H=7.15, parity entropy) | sector-8 header 0x18 (MSF 00:17:59) |
-      # user window 8 func_8002F940 0x800 | sector-8 overhead 0x118 |
-      # sector-9 header 0x18 (00:17:60) | user window 9 head func_80030270
-      # 0xd8, flowing into func_80030348]. Window 8 is code from word 0
-      # (addu a2,zero,zero + jal 80026414 idiom at F940, state-id switch
-      # chains from F9C8, calls 8005C62C/80035D50/80026668/80026414, j into
-      # D480 mid-body D8BC/D8D4/D930/DA0C/DA58 and the DDB4 tail store);
-      # GRID decode 1.00 for both windows. The old whole-row census
-      # "0/709 words decode" was an artifact - the user windows ARE the
-      # code (FABRIC.md misclassified-rows row 2). Twin: window 8 = pure
-      # relocation twin of EU (375/512 eq, 68 lo + 65 jal + 4 other, 0
-      # opcode-class diffs; GRID twin col 137). The capture-linear callback
-      # pointer 8002F8EC lands inside the overhead tail (GRID consequence 3:
-      # retail linked the ISO image without overhead; the capture inserts
-      # it - the raw word is preserved as-is). External refs identical JP/EU:
-      # callback words 8002FA2C/FD30/FDB4/FE38/FEBC/300E0 (data_80086D3C
-      # range) and the 8002FFC8 lui/addiu pair @13164 (inside
-      # data_800313C0, still data -> raw words).
-      - [0x10034, data, data_8002F834]  # 0xf4 sector-7 overhead tail
-      - [0x10128, data, data_8002F928]  # 0x18 sector 8 header (MSF 00:17:59)
-      - [0x10140, asm, func_8002F940]   # 0x800 window 8: switch-chain code
-      - [0x10940, data, data_80030140]  # 0x118 sector-8 overhead
-      - [0x10A58, data, data_80030258]  # 0x18 sector 9 header (MSF 00:17:60)
-      - [0x10A70, asm, func_80030270]   # 0xd8 window-9 head
+      - [0xEE00, data, data_8002E600]   # 0x1d48
       - [0x10B48, asm, func_80030348]   # 0x740
       - [0x11288, data, data_80030A88]   # 0x128
       - [0x113B0, asm, func_80030BB0]   # 0x810
@@ -191,19 +82,13 @@ segments:
       - [0x16B64, data, data_80036364]   # 0x8
       - [0x16B6C, asm, func_8003636C]   # 0x320
       - [0x16E8C, data, data_8003668C]   # 0x34
-      - [0x16EC0, asm, func_800366C0]   # 0xc
+      - [0x16EC0, data, data_800366C0]   # 0xc pinned
       - [0x16ECC, data, data_800366CC]   # 0x4c
       - [0x16F18, asm, func_80036718]   # 0x884
       - [0x1779C, data, data_80036F9C]   # 0x140
       - [0x178DC, asm, func_800370DC]   # 0x81c
       - [0x180F8, data, data_800378F8]   # 0x14c
-      - [0x18244, c, func_80037A44]     # 0x6b8
-      # Switch dispatch twin of EU func_8003809C (cron-20261011-1157).
-      # Stays asm, not C: both its jump tables (jtbl_80021244/jtbl_8002125C)
-      # hold string data at rest in the retail image (jr into garbage), and
-      # nothing in either exe references this region. A C switch would emit
-      # a real table and could never match. Twin check: EU span is
-      # address-class-identical (jal/j/imm) except its last 3 words.
+      - [0x18244, c, func_80037A44]   # 0x6b8
       - [0x188FC, asm, func_800380FC]   # 0xf0
       - [0x189EC, data, data_800381EC]   # 0x12c
       - [0x18B18, asm, func_80038318]   # 0x81c
@@ -212,7 +97,7 @@ segments:
       - [0x19394, data, data_80038B94]   # 0x28
       - [0x193BC, asm, func_80038BBC]   # 0x70
       - [0x1942C, data, data_80038C2C]   # 0x1250
-      - [0x1A67C, asm, func_80039E7C]   # 0x14
+      - [0x1A67C, data, data_80039E7C]   # 0x14 pinned
       - [0x1A690, data, data_80039E90]   # 0x8e4
       - [0x1AF74, asm, func_8003A774]   # 0x868
       - [0x1B7DC, data, data_8003AFDC]   # 0x1cc
@@ -248,7 +133,7 @@ segments:
       - [0x27404, data, data_80046C04]   # 0x4
       - [0x27408, asm, func_80046C08]   # 0xdf4
       - [0x281FC, data, data_800479FC]   # 0xa0
-      - [0x2829C, asm, func_80047A9C]   # 0x10
+      - [0x2829C, data, data_80047A9C]   # 0x10 pinned
       - [0x282AC, data, data_80047AAC]   # 0x2818
       - [0x2AAC4, asm, func_8004A2C4]   # 0xbc
       - [0x2AB80, data, data_8004A380]   # 0xc
@@ -272,7 +157,7 @@ segments:
       - [0x318E8, data, data_800510E8]   # 0x2b28
       - [0x34410, asm, func_80053C10]   # 0x868
       - [0x34C78, data, data_80054478]   # 0x9d8
-      - [0x35650, asm, func_80054E50]   # 0xc
+      - [0x35650, data, data_80054E50]   # 0xc pinned
       - [0x3565C, data, data_80054E5C]   # 0x60
       - [0x356BC, asm, func_80054EBC]   # 0x35c
       - [0x35A18, data, data_80055218]   # 0x1818
@@ -316,7 +201,7 @@ segments:
       - [0x41630, data, data_80060E30]   # 0x64
       - [0x41694, asm, func_80060E94]   # 0x34
       - [0x416C8, data, data_80060EC8]   # 0x12a4
-      - [0x4296C, asm, func_8006216C]   # 0xc
+      - [0x4296C, data, data_8006216C]   # 0xc pinned
       - [0x42978, data, data_80062178]   # 0xe4
       - [0x42A5C, asm, func_8006225C]   # 0x484
       - [0x42EE0, data, data_800626E0]   # 0x424
@@ -350,7 +235,7 @@ segments:
       - [0x50554, data, data_8006FD54]   # 0x1d4
       - [0x50728, asm, func_8006FF28]   # 0x5fc
       - [0x50D24, data, data_80070524]   # 0x140
-      - [0x50E64, asm, func_80070664]   # 0x10
+      - [0x50E64, data, data_80070664]   # 0x10 pinned
       - [0x50E74, data, data_80070674]   # 0x8c
       - [0x50F00, asm, func_80070700]   # 0x164
       - [0x51064, data, data_80070864]   # 0x1b8

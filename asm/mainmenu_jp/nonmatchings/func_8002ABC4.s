@@ -14,7 +14,6 @@ glabel func_8002ABC4
     /* B3C8 8002ABC8 1000BFAF */  sw         $ra, 0x10($sp)
     /* B3CC 8002ABCC 4000848C */  lw         $a0, 0x40($a0)
     /* B3D0 8002ABD0 7099000C */  jal        func_800265C0
-  .L8002ABD4:
     /* B3D4 8002ABD4 00000000 */   nop
     /* B3D8 8002ABD8 1000BF8F */  lw         $ra, 0x10($sp)
     /* B3DC 8002ABDC 00000000 */  nop
@@ -258,7 +257,6 @@ glabel func_8002AE00
     /* B640 8002AE40 07000534 */   ori       $a1, $zero, 0x7
     /* B644 8002AE44 00140200 */  sll        $v0, $v0, 16
     /* B648 8002AE48 03140200 */  sra        $v0, $v0, 16
-  .L8002AE4C:
     /* B64C 8002AE4C 07000334 */  ori        $v1, $zero, 0x7
     /* B650 8002AE50 06004314 */  bne        $v0, $v1, func_8002AE6C
     /* B654 8002AE54 20000234 */   ori       $v0, $zero, 0x20
