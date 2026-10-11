@@ -1,70 +1,48 @@
 # Contributing
 
-This is a matching decompilation intended to remain workable for years. A
-retail byte match is required, but it is only one part of accepting a
-change. The rules live in [docs/RULES.md](docs/RULES.md); this file is the
-contract for how a change moves through the tree.
+This project reconstructs retail executables byte for byte while keeping the source maintainable. A retail byte match is required. Changes must also satisfy code structure rules. Core rules live in [docs/RULES.md](docs/RULES.md). This file describes the contribution workflow.
 
 ## Daily loop
 
-1. Keep experiments and non-matching reconstructions out of the tracked
-   tree.
-2. Add C to `src/` only together with the config entry that wires it in, so
-   a fresh clone can never diverge from CI.
-3. Keep functions within a file in ROM-address order; C89 only
-   (`/* */` comments, declarations at block top).
-4. Use subsystem headers for cross-unit declarations; do not add file-local
-   `extern` debt.
-5. Run the narrow per-function diff while iterating.
-6. Run `make verify` before handing work off — and commit only on green.
+1. Keep experiments and non-matching drafts out of the tracked tree.
+2. Add C files to `src/` only when wired into the active build configuration.
+3. Keep functions within a file in ROM-address order. Use C89 syntax (`/* */` comments, declarations at block tops).
+4. Use subsystem headers for cross-unit declarations. Do not add file-scope `extern` definitions in C files.
+5. Use narrow per-function diffs while iterating.
+6. Run `make verify` before submitting work. Commit only on green builds.
 
-For a shared header, compiler wrapper, Makefile, manifest, source move or
-translation-unit boundary change, run `make clean verify` instead: structural
-work must be proven without stale objects.
+Run `make clean verify` after you update shared headers, compiler wrappers, Makefiles, manifests, or translation boundaries.
 
 ## State your claim
 
-Every change declares which claim it makes, because the byte check validates
-only the first of these:
+Declare the claim for each change in your commit message:
 
-| claim | meaning |
+| Claim | Meaning |
 | --- | --- |
-| **binary match** | the linked image is byte-identical to retail (`make verify` green) |
-| **semantic recovery** | the C expresses the original logic, not just its bytes |
-| **typing** | a struct/prototype is now typed from evidence |
-| **naming** | a name is now backed by evidence (record the evidence) |
-| **organization** | a boundary/ownership change follows the evidence order |
+| **binary match** | The linked image matches the retail SHA-1 (`make verify` passes) |
+| **semantic recovery** | The C code accurately expresses the original program logic |
+| **typing** | A struct or prototype is defined with evidence |
+| **naming** | An identifier is named based on evidence (cite the source) |
+| **organization** | A file or boundary change follows layout evidence |
 
-A green build proves only the first. Reviewers reject changes whose stated
-claim outruns what was shown.
+A passing build verifies binary equivalence only. Reviewers will reject patches if claims exceed what the author proved.
 
 ## Definition of done
 
-A change is done when:
+A change is complete when:
 
-- the function is semantic C under the assembly policy (docs/RULES.md §3);
-- its stock-compiler object diff is exact;
-- `make verify` (or `make clean verify`) passes;
-- any debt reduction is captured by lowering `config/ratchets.json` in the
-  same PR;
-- naming, typing or source-boundary claims have evidence, not only a byte
-  match.
+- The function uses semantic C that follows the assembly policy (docs/RULES.md §3).
+- The stock compiler produces an exact object match.
+- `make verify` (or `make clean verify`) passes.
+- The pull request lowers baselines in `config/ratchets.json` for any debt reduction.
+- Naming, typing, or boundary claims include supporting evidence.
 
-A file is **finished**, not only matched, when it is byte-matched *and*
-fully named, typed, free of hidden fixed addresses, and placed in its
-subsystem (docs/GUIDELINES.md).
+A file is finished when it matches byte for byte, uses typed structures, uses verified names, avoids hard-coded addresses, and resides in its target subsystem (docs/GUIDELINES.md).
 
 ## Ratchet discipline
 
-`config/ratchets.json` baselines must equal the current tree. CI fails when
-debt increases **and** when an improvement leaves a stale higher baseline —
-every cleanup is therefore permanent: later work cannot silently spend it.
-Baseline raises are policy changes and require explicit review in the PR
-description; they are not a normal way to go green.
+Baselines in `config/ratchets.json` must match the current tree. CI fails if debt increases or if an improvement leaves behind an outdated higher baseline. Every cleanup is permanent. Raising a baseline requires an explicit review.
 
 ## Measurement over transcription
 
-Progress lives in tools, not prose: `make progress`, `make nonmatchings`,
-`make ratchets`. Do not paste numbers into documents — they are stale within
-a round. Lessons go into `docs/` with evidence attached or into commit
-messages.
+Track progress using tools: `make progress`, `make nonmatchings`, and `make ratchets`. Do not paste numbers into documentation. Record lessons in `docs/` with evidence or inside commit messages.

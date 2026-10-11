@@ -50,7 +50,7 @@ Track ongoing progress, rules, and technical findings in the documentation tree:
 | [docs/MATCHING.md](docs/MATCHING.md) | Matching loop ladder, non-matching parking policy, and false matches |
 | [docs/CHECKLIST.md](docs/CHECKLIST.md) | Setup checklist from disc dump to matching build |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide: stating claims, ratchets, and definition of done |
-| [CLAUDE.md](CLAUDE.md) | Operational rules and loop for AI agents |
+| [AGENTS.md](AGENTS.md) | Operational rules and loop for AI agents |
 
 ## License
 

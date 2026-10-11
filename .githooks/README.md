@@ -1,29 +1,25 @@
 # Git hooks
 
-Installed with:
+Install the hooks with this command:
 
 ```sh
 make hooks        # = git config core.hooksPath .githooks
 ```
 
-They exist because someone — usually an agent under deadline pressure —
-broke each rule once and the tree suffered. Enforcement is mechanical so
-that it never depends on a reviewer catching it.
+These hooks protect the repository against broken commits. Contributors broke each rule in past work. Mechanical checks prevent these errors.
 
 | hook check | protects | rule |
 | --- | --- | --- |
-| blocks edits to `config/sha1/**` | the retail hash, i.e. the oracle | "Never edit the hash files" (LSD rule 1) |
-| blocks modifications/deletions under `asm/` (additions allowed) | generated disassembly | "Never edit `asm/`, splat regenerates it" (LSD rule 4) |
-| blocks commits under `disk/`, `sdk/`, `lib/`, `include/psyq/`, `assets/`, `baselines/` | the source-only policy | "Never commit anything of Sony's or the game's" (LSD rule 3) |
+| blocks edits to `config/sha1/**` | retail hash oracle | "Never edit the hash files" (LSD rule 1) |
+| blocks edits to `asm/` (additions allowed) | generated disassembly | "Never edit `asm/`, splat regenerates it" (LSD rule 4) |
+| blocks commits to `disk/`, `sdk/`, `lib/`, `include/psyq/`, `assets/`, `baselines/` | source-only policy | "Never commit anything of Sony's or the game's" (LSD rule 3) |
 
-The hooks guard the obvious escape routes; they are not a security
-boundary. `--no-verify` exists for the one legitimate case (recording your
-retail hash at setup) and for deliberate policy changes, which should be
-rare and reviewed.
+The hooks block common errors. They do not supply a full security boundary.
 
-What the hooks do NOT check — the reviewer's job:
+Use `--no-verify` only when you record the initial retail hash. Also use it for approved policy changes.
 
-* commits happen only on green (`make verify` — the whole-image SHA-1);
-* every change states which claim it makes (binary match, semantic
-  recovery, typing, naming, organization) — see CONTRIBUTING.md;
-* ratchet baselines equal the current tree (`make ratchets`).
+Reviewers must check these items manually:
+
+* Commits occur only after `make verify` succeeds.
+* Each commit declares its claim in the commit message.
+* Ratchet baselines match the current tree (`make ratchets`).

@@ -1,122 +1,51 @@
-# The Workflow
+# The workflow
 
-Six phases, synthesised from four matching PSX decompilation projects
-([tenchu-decomp], [lsddecomp], [parasite-eve-decomp], [rage-racer-decomp]).
-The numbering is chronological, but only phase 3 is a true loop — everything
-else is traversed once per project (and re-run per binary or per region where
-a game has several targets).
+This workflow summarizes steps from four reference projects ([tenchu-decomp], [lsddecomp], [parasite-eve-decomp], [rage-racer-decomp]). Phase 3 runs as a loop. Other phases run once per project or once per target binary.
 
 ![The six-phase PSX decompilation workflow](img/workflow.png)
 
-The goal that shapes all of it is a **matching decompilation**: C source
-that, compiled with the original toolchain, reproduces the retail executable
-byte for byte. A paraphrase of a program can be subtly wrong without anyone
-noticing; a byte-exact rebuild cannot. That single target settles every
-debate downstream.
+The project goal is a **matching decompilation**: C source that compiles with the original toolchain to reproduce the retail executable byte for byte.
 
-## Phase 0 — Groundwork and legal setup
+## Phase 0: Groundwork and legal setup
 
-Decide what the repository will and will not contain, and the answer is
-identical in all four projects: **source only**. No disc images, no extracted
-assets, no FMV, no Sony Psy-Q SDK files, no compiler binaries, and no retail
-executables are ever committed. Contributors supply legally obtained copies,
-and the build reads them from git-ignored directories (`disk/`, `sdk/`,
-`baselines/`, `assets/`). This posture is what keeps the project publishable:
-CI must be able to clone and audit the tree without ever touching copyrighted
-material. (LSD reads its private dependencies from a separate private
-repository at CI time, so the public pipeline still runs end to end.)
+The repository contains source code only. Do not commit disc images, extracted assets, FMV video, Sony Psy-Q SDK files, compiler binaries, or retail executables. Contributors supply legal retail copies. Build tools read them from git-ignored directories (`disk/`, `sdk/`, `baselines/`, `assets/`). This policy keeps the project publishable.
 
-This template ships that policy already wired: `.gitignore`, the pre-commit
-hook, and the `LICENSE` scope note. Record your target revision's executable
-name, SHA-1 and entry point in the README as the definition of success —
-every address in every config is valid for exactly one revision.
+This repository includes `.gitignore`, pre-commit hooks, and license documentation. Record the target executable name, entry point, and SHA-1 in the README.
 
-## Phase 1 — Reconnaissance and toolchain identification
+## Phase 1: Reconnaissance and toolchain identification
 
-Turn a retail disc into a fully characterised build target. Map the memory
-layout first, because it drives the entire build architecture: a single plain
-executable (LSD) splits and rebuilds trivially; a resident executable plus
-overlays loaded into fixed RAM windows (Parasite Eve, 162 room overlays and
-22 scene sets) needs per-overlay manifests and checks.
-
-Then identify the **exact** toolchain, because PSX compilers left
-fingerprints:
+Examine the retail executable to determine the memory layout and toolchain:
 
 | Project | Compiler | Notes |
 | --- | --- | --- |
-| lsddecomp | Psy-Q GCC 2.6.3 | maspsx, binutils, splat, pinned |
+| lsddecomp | Psy-Q GCC 2.6.3 | maspsx, binutils, splat |
 | parasite-eve-decomp | GCC 2.7.2 cc1 | maspsx, Psy-Q 4.0, binutils |
-| tenchu-decomp | GCC 2.8.1 cc1 | maspsx, GNU ld, nix-pinned, Shake driver |
+| tenchu-decomp | GCC 2.8.1 cc1 | maspsx, GNU ld, pinned, Shake driver |
 | rage-racer-decomp | Old PSX GCC variants | maspsx, binutils |
 
-Never a modern compiler; never an unpinned one. [maspsx] reproduces Sony's
-ASPSX assembler macro expansion for GNU `as`; [splat] splits the executable.
-Where luck provides extra evidence, mine it systematically: Tenchu recovered
-original file names, prototypes and struct layouts from a demo disc's
-`PSX.SYM`, then audited its own declarations against those records before
-trusting them. The phase ends with a written statement of facts (flags, load
-address, `$gp`, SDK object list) that later phases treat as fixed.
+Use pinned historical compilers. [maspsx] translates Sony ASPSX macros for GNU `as`. [splat] splits the target executable. Extract debug symbols and header details from demo discs to recover names and prototypes. Phase 1 ends with documented build flags, memory layouts, `$gp` values, and library object lists.
 
-## Phase 2 — Bootstrap the byte-exact oracle
+## Phase 2: Bootstrap the byte-exact oracle
 
-Before anyone writes a line of C, prove the project can rebuild the game
-from its own disassembly. `splat` splits the executable into per-function
-assembly, data, a linker script and symbol lists; the pinned toolchain
-reassembles everything; the build asserts the result is **byte-identical to
-retail**. LSD's setup script refuses to finish unless the first build already
-matches. Tenchu's docs call this round trip the foundation of the whole
-project.
+Prove the disassembly round trip before you write C code. `splat` splits the binary into per-function assembly, data sections, linker scripts, and symbol maps. Reassemble the split files with the pinned toolchain. Verify that the output matches the retail binary byte for byte.
 
-Only against this green base does C work begin, and it proceeds one function
-at a time, so any regression is attributable to exactly one change. Phase 2
-also installs the verification gate the rest of the project lives inside —
-here, `make verify`, the single build entrance, ending in
-`OK: build matches retail ...`. See `docs/RULES.md` §1 for why nothing may
-bypass it.
+Once the disassembly matches, start decompilation one function at a time. Phase 2 installs `make verify` as the primary build entrance.
 
-## Phase 3 — The matching loop
+## Phase 3: The matching loop
 
-The heart of the project and the only phase that repeats thousands of times.
-Selection is a tool job, not a taste job: pick small, clean-seam functions
-first; map a new subsystem's shared structs once so whole families become
-cheap; prefer functions with already-matched twins. The draft is seeded
-mechanically (Ghidra + [m2c]), then shaped by hand against the compiler's
-known idioms, iterating **length-first** — see `docs/MATCHING.md` for the
-full ladder, the ways a score lies, and the honest NON_MATCHING parking
-policy.
+Repeat this phase for every target function. Start with short, self-contained functions. Map shared structures early. Reference matched sibling functions to find compiler idioms. Draft C source with Ghidra and [m2c]. Match code length first. Refer to `docs/MATCHING.md` for iteration steps and parking policies.
 
-The loop closes with the only acceptance test that matters: the whole-image
-checksum. A per-function diff may say MATCH, but only the linked image
-promotes the result.
+The loop ends when `make verify` succeeds.
 
-## Phase 4 — Quality beyond matching
+## Phase 4: Quality beyond matching
 
-Matching is one quality level, not the finish line. **Matched ≠ finished.**
-A file is finished when it is byte-matched *and* fully named, typed, free of
-hidden fixed addresses, and placed in its subsystem. This phase is deliberate
-cleanup: replace `func_`/`D_` placeholders with evidence-backed names,
-convert raw offsets into typed struct fields, define data tables as C, and
-drive readability debt (magic numbers, raw offsets, unknown fields) toward
-zero under the ratchets. Organisation gets the same evidentiary care as the
-bytes — translation-unit boundaries follow the evidence order in
-`docs/GUIDELINES.md` §2, never aesthetics.
+A function is finished when it matches byte for byte, uses clear names, uses typed structures, avoids raw numeric addresses, and resides in its subsystem. Replace `func_` and `D_` placeholders with verified names. Map raw offsets to structured types. Track remaining debt with ratchets. Base file boundaries on structural evidence (`docs/GUIDELINES.md` §2).
 
-## Phase 5 — Continuous verification and publishing
+## Phase 5: Continuous verification and publishing
 
-Keep the project honest for years. CI on every push rebuilds, checks the
-retail hash, and publishes an [objdiff] report that [decomp.dev] renders as
-per-function progress. Ratchets make regressions impossible to hide: debt
-and placeholder counts go down or hold, never up, and raising a baseline is
-a reviewed policy change. Badges are regenerated from measured data, not
-typed in — a hand-written number goes stale within a round. This template's
-`.github/workflows/ci.yml` has the skeleton of all three jobs.
+Automate checks to protect code quality:
 
-[tenchu-decomp]: https://github.com/Fuuzetsu/tenchu-decomp
-[lsddecomp]: https://github.com/brian-oblivion/lsddecomp
-[parasite-eve-decomp]: https://github.com/khasinski/parasite-eve-decomp
-[rage-racer-decomp]: https://github.com/khasinski/rage-racer-decomp
-[splat]: https://github.com/ethteck/splat
-[maspsx]: https://github.com/mkst/maspsx
-[m2c]: https://github.com/matt-kempster/m2c
-[objdiff]: https://github.com/encounter/objdiff
-[decomp.dev]: https://decomp.dev
+* CI rebuilds on each commit.
+* CI verifies the retail SHA-1 hash.
+* CI generates an [objdiff] report rendered through [decomp.dev].
+* Ratchets prevent debt regressions so placeholder counts decrease over time.

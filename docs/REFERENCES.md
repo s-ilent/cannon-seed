@@ -1,40 +1,26 @@
 # References
 
-The projects and tools this template is distilled from. All accessed
-October 2026. The full comparative survey is in
-[PSX-Decompilation-Methodology-Report.pdf](PSX-Decompilation-Methodology-Report.pdf)
-— the narrative behind every rule in this repository.
+This template collects tools and methods from four reference projects. The comparative report is in [PSX-Decompilation-Methodology-Report.pdf](PSX-Decompilation-Methodology-Report.pdf).
 
 ## Source projects
 
-* **[tenchu-decomp]** — Tenchu: Stealth Assassins (Fuuzetsu).
-  Byte-exact rebuild with a dual exact/shiftability lane; the matching
-  cookbook (`docs/matching-cookbook.md`) and the AI orchestration runbook
-  (`docs/orchestration.md`) are the deepest process docs in the field.
-* **[lsddecomp]** — LSD: Dream Emulator (brian-oblivion). Completed:
-  1,446/1,446 game functions, retail byte-identical, driven end-to-end by AI
-  agents in 106 rounds. Its hook-enforced hard rules are the ancestor of
-  this template's `.githooks/` and `CLAUDE.md`.
-* **[parasite-eve-decomp]** — Parasite Eve USA (khasinski). The most
-  systematic documentation contract: CONVENTIONS, CODE_ORGANIZATION,
-  ASM_AND_GTE_POLICY, debt ratchets and the claim-stating review process
-  behind `CONTRIBUTING.md` here.
-* **[rage-racer-decomp]** — Rage Racer PAL/USA/JP (khasinski). Completion
-  scale across regions: 1,200/1,200 functions, 423,420 code bytes on PAL,
-  with the cleanest naming-evidence discipline.
+* **[tenchu-decomp]**: Tenchu: Stealth Assassins (Fuuzetsu). Byte-exact rebuild with parallel exact and shiftable build lanes. Includes a matching cookbook (`docs/matching-cookbook.md`) and AI orchestration runbook (`docs/orchestration.md`).
+* **[lsddecomp]**: LSD: Dream Emulator (brian-oblivion). Completed 1,446 of 1,446 functions with full retail byte matching. Provided the hook-enforced hard rules used in `.githooks/` and `AGENTS.md`.
+* **[parasite-eve-decomp]**: Parasite Eve USA (khasinski). Systematic rules covering documentation, assembly, GTE policies, and debt ratchets.
+* **[rage-racer-decomp]**: Rage Racer PAL/USA/JP (khasinski). Multi-region project covering 1,200 of 1,200 functions (423,420 code bytes on PAL) with structured naming evidence.
 
 ## Toolchain
 
 | Tool | Role |
 | --- | --- |
-| [splat] | splits the retail executable into per-function asm, data, linker script and symbol lists |
-| [maspsx] | MIPS assembler translation layer reproducing Sony's ASPSX behaviour |
-| [m2c] | MIPS assembly to C decompiler (first drafts) |
-| [asm-differ] | per-function byte diffs against retail during iteration |
-| [decomp-permuter] | automated source-shaping search for residual register-allocation ties (bounded runs, last resort) |
-| [objdiff] / [decomp.dev] | whole-tree progress reports, badges and per-function status |
-| [decompme/compilers] | prebuilt historical compiler collection |
-| [decompals/old-gcc] | prebuilt old GCC toolchains |
+| [splat] | Splits retail executables into assembly, data, linker scripts, and symbol lists |
+| [maspsx] | Translates Sony ASPSX assembly macros for GNU as |
+| [m2c] | Decompiles MIPS assembly into C code drafts |
+| [asm-differ] | Compares per-function assembly with retail binary |
+| [decomp-permuter] | Searches for source variations to resolve register differences |
+| [objdiff] / [decomp.dev] | Tracks project progress and displays per-function status |
+| [decompme/compilers] | Stores historical compiler binaries |
+| [decompals/old-gcc] | Stores historical GCC builds |
 
 [tenchu-decomp]: https://github.com/Fuuzetsu/tenchu-decomp
 [lsddecomp]: https://github.com/brian-oblivion/lsddecomp

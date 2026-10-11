@@ -1,54 +1,26 @@
-# Starter Checklist
+# Starter checklist
 
-Ten steps from "I have a disc" to a running matching decompilation —
-compressing the [workflow](WORKFLOW.md), [rules](RULES.md) and
-[guidelines](GUIDELINES.md) into the order the four source projects actually
-followed. Tool names in parentheses are the community defaults.
+Follow these ten steps to set up a matching decompilation project. The sequence reflects the workflow of the reference projects. Tool names in parentheses are community defaults.
 
-- [ ] **1. Pick one retail revision** and record its executable name, SHA-1
-      and entry point. Every address in every config is wrong for any other
-      revision. (Put the executable in `baselines/`, hash in
-      `config/sha1/<target>.sha1`, `git commit --no-verify` for that one
-      setup commit.)
+- [ ] **1. Select one retail revision.** Record its executable name, SHA-1, and entry point. Addresses in configuration files do not match other revisions. Put the executable in `baselines/`. Write the hash to `config/sha1/<target>.sha1`. Use `git commit --no-verify` for this setup commit.
 
-- [ ] **2. Confirm the source-only policy.** Disc dump, SDK files and all
-      generated output stay git-ignored; document what contributors must
-      supply. (This template ships the `.gitignore`, hook and licence scope
-      note — adapt names, keep the posture.)
+- [ ] **2. Enforce the source-only policy.** Keep disc dumps, SDK files, and generated files out of git. Document all files that contributors must supply. This repository supplies `.gitignore`, hook scripts, and license notes.
 
-- [ ] **3. Identify the original compiler and Psy-Q library versions** and
-      pin them exactly — old GCC cc1 plus [maspsx] and binutils. Prebuilt
-      compilers exist in [decompme/compilers] and [decompals/old-gcc].
+- [ ] **3. Identify original compiler and Psy-Q versions.** Pin the tools to exact versions. Use the GCC cc1 binary, [maspsx], and binutils. Find prebuilt compilers in [decompme/compilers] and [decompals/old-gcc].
 
-- [ ] **4. Configure splat and split the executable.** Commit the config and
-      symbol lists, and the generated `asm/`; never the binary.
+- [ ] **4. Configure splat and split the executable.** Commit configuration files, symbol lists, and generated `asm/` files. Do not commit binary files.
 
-- [ ] **5. Prove the disassemble-to-reassemble round trip is byte-identical
-      before writing any C.** Do not proceed until this gate is green. This
-      is the foundation of the whole project.
+- [ ] **5. Assemble the disassembly back into a binary.** Make sure the reassembled binary matches the retail binary byte for byte. Do not write C code before this check passes.
 
-- [ ] **6. Install the verification gate**: `make verify` (build + compare
-      the whole image with retail) as the only build entrance, plus
-      `make hooks` so the bypass routes are blocked.
+- [ ] **6. Add the verification gate.** Use `make verify` as the only build entrance. Run `make hooks` to block bypass paths.
 
-- [ ] **7. Adopt the loop** (docs/MATCHING.md): pick easy targets with
-      matched twins first, map a subsystem's structs before its functions,
-      iterate length-first, park honest NON_MATCHING stubs.
+- [ ] **7. Follow the matching loop.** Start with small functions that have matched twins. Map subsystem structures before you write function code. Match instruction count first. Record difficult functions with honest NON_MATCHING stubs.
 
-- [ ] **8. Write the rules file early** — oracle, toolchain, source, process
-      — and keep it short; move measurements into tools and lessons into
-      commit messages. (`CLAUDE.md` and `docs/RULES.md` are the starting
-      corpus, distilled from all four projects.)
+- [ ] **8. Write the rules file early.** Document the oracle, toolchain, source policy, and process. Keep the file short. Record measurements with tools. Record lessons in commit messages.
 
-- [ ] **9. Set up CI** that rebuilds, verifies the SHA-1 and publishes an
-      objdiff report ([objdiff], [decomp.dev]); add debt ratchets the day
-      the first placeholder name is introduced. (`.github/workflows/ci.yml`
-      and `config/ratchets.json` are the skeleton.)
+- [ ] **9. Set up CI.** Configure CI to rebuild, check the SHA-1, and publish an objdiff report. Add debt ratchets when you add the first placeholder name.
 
-- [ ] **10. Plan the cleanup phase from the start.** Naming evidence, typed
-      structures, subsystem organisation and shiftability are what turn a
-      matched binary into a finished, readable reconstruction. Matched is
-      not finished.
+- [ ] **10. Plan the cleanup phase.** Collect naming evidence. Create typed structures. Organize code by subsystem. Make the code shiftable. A matching build is only the start of the project.
 
 [maspsx]: https://github.com/mkst/maspsx
 [decompme/compilers]: https://github.com/decompme/compilers
