@@ -234,7 +234,7 @@ nonmatching func_800320D4, 0x10
 glabel func_800320D4
     /* 128D4 800320D4 0280043C */  lui        $a0, %hi(D_80020C78)
     /* 128D8 800320D8 780C8424 */  addiu      $a0, $a0, %lo(D_80020C78)
-    /* 128DC 800320DC BBBE0008 */  j          D_8002FAEC
+    /* 128DC 800320DC BBBE0008 */  j          func_8002FAEC
     /* 128E0 800320E0 00000000 */   nop
 endlabel func_800320D4
 

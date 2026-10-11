@@ -36252,6 +36252,11 @@ dlabel D_80066544
     /* 46EFE 800666FE */ .short 0x0000
     /* 46F00 80066700 */ .short 0x0002
     /* 46F02 80066702 */ .short 0xFE00
+enddlabel D_80066544
+
+nonmatching D_80066704
+
+dlabel D_80066704
     /* 46F04 80066704 */ .short 0x0000
     /* 46F06 80066706 */ .short 0x0000
     /* 46F08 80066708 */ .short 0x0002
@@ -36378,4 +36383,4 @@ dlabel D_80066544
     /* 46FFA 800667FA */ .short 0xFE00
     /* 46FFC 800667FC */ .short 0x0000
     /* 46FFE 800667FE */ .short 0x0000
-enddlabel D_80066544
+enddlabel D_80066704
