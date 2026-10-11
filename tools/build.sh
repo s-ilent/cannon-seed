@@ -216,14 +216,27 @@ if grep -q "undefined reference" build/ld.err; then
     "$PY" - <<EOF
 import re, sys
 errs = open("build/ld.err", errors="replace").read()
-names = sorted(set(re.findall(r"undefined reference to \`([A-Za-z_][A-Za-z0-9_]*)'", errs)))
+names = sorted(set(re.findall(r"undefined reference to \`([A-Za-z_.][A-Za-z0-9_.]*)'", errs)))
 out, bad = [], []
 for n in names:
     # spimdisasm names unresolved references after their runtime value;
     # values may be real addresses (8 hex) or address-like constants
     # (e.g. the 0x7FFFFF bitmask via lui/addiu) with fewer digits.
     m = re.match(r"^[A-Za-z_]+_([0-9A-Fa-f]{1,8})$", n)
-    (out.append(f"{n} = 0x{m.group(1)};") if m else bad.append(n))
+    if m:
+        out.append(f"{n} = 0x{m.group(1)};")
+        continue
+    # .L<8hex> local labels are spimdisasm's intra-body jump targets;
+    # maspsx promotes them to linkable symbols, and after an asm->c flip
+    # their definition is gone while the jumpers (other asm files) remain.
+    # The address is in the name, so define it there - same principle as
+    # the func_/D_ forms above (first exercised by func_8003B568's
+    # j .L80037CB0 into the C-matched func_80037CAC).
+    m = re.match(r"^\.L([0-9A-Fa-f]{8})$", n)
+    if m:
+        out.append(f"{n} = 0x{m.group(1)};")
+        continue
+    bad.append(n)
 if bad:
     sys.stderr.write("build: unresolved symbols without address-encoded names:\\n"
                      + "\\n".join(bad) + "\\n")
