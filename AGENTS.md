@@ -2,7 +2,7 @@
 
 This project builds C source that compiles byte for byte to the retail executables in `config/sha1/`. Read README.md for setup instructions and layout.
 
-Keep this file short. Focus on rules and the loop. Do not write project state or progress numbers here. Check state with `python3 tools/progress.py` and `python3 tools/check_ratchets.py`. Full conventions live in `docs/RULES.md`, `docs/GUIDELINES.md`, and `docs/MATCHING.md`. Queued tasks live in `docs/WORKLOG.md`.
+Keep this file short. Focus on rules and the loop. Do not write project state or progress numbers here. Check state with `python3 tools/progress.py` and `python3 tools/check_ratchets.py`. Full conventions live in `docs/RULES.md`, `docs/GUIDELINES.md`, and `docs/MATCHING.md`. Queued tasks live in `docs/TASKS.md`.
 
 ## Hard rules
 

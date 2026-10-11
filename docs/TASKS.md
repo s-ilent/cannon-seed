@@ -1,8 +1,8 @@
-# WORKLOG
+# TASKS
 
-Running log of work in this repository and what is queued next. New entries on
-top. Queued tasks are written for whoever picks them up — usually the sandbox
-agent, which is where the build toolchain lives.
+Queued work for this repository, newest on top, with a record of what was done
+below. Queued tasks are written for whoever picks them up next — usually the
+sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
