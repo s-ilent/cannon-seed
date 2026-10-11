@@ -8,6 +8,11 @@ nonmatching D_8002FC20
 
 dlabel D_8002FC20
     /* 10420 8002FC20 E0FFBD27 */ .word 0x27BDFFE0
+enddlabel D_8002FC20
+
+nonmatching func_8002FC24
+
+dlabel func_8002FC24
     /* 10424 8002FC24 1800BFAF */ .word 0xAFBF0018
     /* 10428 8002FC28 1400B1AF */ .word 0xAFB10014
     /* 1042C 8002FC2C 1000B0AF */ .word 0xAFB00010
@@ -49,7 +54,7 @@ dlabel D_8002FC20
     /* 104BC 8002FCBC 1800BF8F */ .word 0x8FBF0018
     /* 104C0 8002FCC0 1400B18F */ .word 0x8FB10014
     /* 104C4 8002FCC4 1000B08F */ .word 0x8FB00010
-enddlabel D_8002FC20
+enddlabel func_8002FC24
 
 nonmatching D_8002FCC8
 

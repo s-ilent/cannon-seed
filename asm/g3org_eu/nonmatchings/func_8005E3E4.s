@@ -83,7 +83,7 @@ glabel func_8005E3E4
     /* 3ECF8 8005E4F8 1400A3AF */   sw        $v1, 0x14($sp)
     /* 3ECFC 8005E4FC 47004018 */  blez       $v0, func_8005E61C
     /* 3ED00 8005E500 14006426 */   addiu     $a0, $s3, 0x14
-    /* 3ED04 8005E504 04590108 */  j          D_80056410
+    /* 3ED04 8005E504 04590108 */  j          func_80056410
     /* 3ED08 8005E508 00000000 */   nop
 endlabel func_8005E3E4
 

@@ -52,7 +52,7 @@ glabel func_80043AF0
     /* 2436C 80043B6C CC9B23A4 */  sh         $v1, %lo(D_800B9BCC)($at)
     /* 24370 80043B70 1912010C */  jal        func_80044864
     /* 24374 80043B74 00000000 */   nop
-    /* 24378 80043B78 5DFC0008 */  j          D_8003F174
+    /* 24378 80043B78 5DFC0008 */  j          func_8003F174
     /* 2437C 80043B7C 00000000 */   nop
 endlabel func_80043AF0
 
@@ -72,7 +72,7 @@ glabel func_80043B80
     /* 243A8 80043BA8 01000234 */  ori        $v0, $zero, 0x1
     /* 243AC 80043BAC 0C80013C */  lui        $at, %hi(D_800B9BC4)
     /* 243B0 80043BB0 C49B22A4 */  sh         $v0, %lo(D_800B9BC4)($at)
-    /* 243B4 80043BB4 5DFC0008 */  j          D_8003F174
+    /* 243B4 80043BB4 5DFC0008 */  j          func_8003F174
     /* 243B8 80043BB8 00000000 */   nop
 endlabel func_80043B80
 
