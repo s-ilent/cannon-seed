@@ -36,7 +36,7 @@ This script restores git configuration, credentials, the virtual environment (`t
    If the build fails without a compiler error, isolate differences:
    `cmp -l build/<target>.bin baselines/<target>.bin | head`
    Convert the byte offset to a VRAM address per instructions in `tools/verify.sh`. Verify each target touched.
-3. Check progress and ratchets: `make progress`, `make ratchets`. Rename symbols by editing `config/symbols.*.txt`, not by search and replace across the tree — `asm/` is regenerated, and a rename must survive the next scan (see "Naming what you find").
+3. Check progress and ratchets: `make progress`, `make ratchets`. Rename symbols by curating them in `config/symbols.curated.txt`, not by search and replace across the tree — `asm/` is regenerated and the per-target symbols file is rewritten by the scanner, so only a curated name survives (see "Naming what you find").
 4. Non-matching C code must not remain active. Put near-matches in `#ifdef NON_MATCHING` with the `INCLUDE_ASM` stub in the `#else` block. Mark matching quirks with a `/* MATCHING: */` comment.
 
 ## Naming what you find
