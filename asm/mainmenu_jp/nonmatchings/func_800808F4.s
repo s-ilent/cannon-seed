@@ -528,16 +528,11 @@ glabel func_80080E88
     /* 616A8 80080EA8 00000000 */   nop
 endlabel func_80080E88
 
-nonmatching func_80080EAC, 0x8
+nonmatching func_80080EAC, 0x40
 
 glabel func_80080EAC
     /* 616AC 80080EAC 1980023C */  lui        $v0, %hi(D_8018DBCC)
     /* 616B0 80080EB0 CCDB428C */  lw         $v0, %lo(D_8018DBCC)($v0)
-endlabel func_80080EAC
-
-nonmatching func_80080EB4, 0x38
-
-glabel func_80080EB4
     /* 616B4 80080EB4 00000000 */  nop
     /* 616B8 80080EB8 821D0200 */  srl        $v1, $v0, 22
     /* 616BC 80080EBC FF030234 */  ori        $v0, $zero, 0x3FF
@@ -552,7 +547,7 @@ glabel func_80080EB4
     /* 616E0 80080EE0 80221100 */   sll       $a0, $s1, 10
     /* 616E4 80080EE4 15D10108 */  j          D_80074454
     /* 616E8 80080EE8 00046224 */   addiu     $v0, $v1, 0x400
-endlabel func_80080EB4
+endlabel func_80080EAC
 
 nonmatching func_80080EEC, 0x34
 

@@ -36,7 +36,7 @@ glabel func_8003C7E4
     /* 1CFF8 8003C7F8 FFFF1026 */   addiu     $s0, $s0, -0x1
     /* 1CFFC 8003C7FC F9FF0016 */  bnez       $s0, func_8003C7E4
     /* 1D000 8003C800 21100000 */   addu      $v0, $zero, $zero
-    /* 1D004 8003C804 86E30008 */  j          func_80038E18
+    /* 1D004 8003C804 86E30008 */  j          D_80038E18
     /* 1D008 8003C808 00000000 */   nop
 endlabel func_8003C7E4
 
@@ -60,7 +60,7 @@ glabel func_8003C80C
     /* 1D044 8003C844 24A48424 */  addiu      $a0, $a0, %lo(D_800CA424)
     /* 1D048 8003C848 D8E2000C */  jal        func_80038B60
     /* 1D04C 8003C84C 01000534 */   ori       $a1, $zero, 0x1
-    /* 1D050 8003C850 40E30008 */  j          func_80038D00
+    /* 1D050 8003C850 40E30008 */  j          D_80038D00
     /* 1D054 8003C854 02000234 */   ori       $v0, $zero, 0x2
 endlabel func_8003C80C
 
@@ -125,22 +125,18 @@ glabel func_8003C8DC
     /* 1D0E4 8003C8E4 1000C624 */  addiu      $a2, $a2, 0x10
     /* 1D0E8 8003C8E8 EEFFC814 */  bne        $a2, $t0, func_8003C8A4
     /* 1D0EC 8003C8EC 1000E724 */   addiu     $a3, $a3, 0x10
-    /* 1D0F0 8003C8F0 71E30008 */  j          func_80038DC4
+    /* 1D0F0 8003C8F0 71E30008 */  j          D_80038DC4
     /* 1D0F4 8003C8F4 00000000 */   nop
 endlabel func_8003C8DC
 
-nonmatching func_8003C8F8, 0x10
+nonmatching func_8003C8F8, 0x2C
 
 glabel func_8003C8F8
     /* 1D0F8 8003C8F8 0000C28C */  lw         $v0, 0x0($a2)
     /* 1D0FC 8003C8FC 0400C38C */  lw         $v1, 0x4($a2)
     /* 1D100 8003C900 0800C48C */  lw         $a0, 0x8($a2)
     /* 1D104 8003C904 0C00C58C */  lw         $a1, 0xC($a2)
-endlabel func_8003C8F8
-
-nonmatching func_8003C908, 0x1C
-
-glabel func_8003C908
+  alabel func_8003C908
     /* 1D108 8003C908 0000E2AC */  sw         $v0, 0x0($a3)
     /* 1D10C 8003C90C 0400E3AC */  sw         $v1, 0x4($a3)
     /* 1D110 8003C910 0800E4AC */  sw         $a0, 0x8($a3)
@@ -148,7 +144,7 @@ glabel func_8003C908
     /* 1D118 8003C918 1000C624 */  addiu      $a2, $a2, 0x10
     /* 1D11C 8003C91C F6FFC814 */  bne        $a2, $t0, func_8003C8F8
     /* 1D120 8003C920 1000E724 */   addiu     $a3, $a3, 0x10
-endlabel func_8003C908
+endlabel func_8003C8F8
 
 nonmatching func_8003C924, 0x30
 

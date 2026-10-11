@@ -48,7 +48,7 @@ glabel func_8005A398
     /* 3ABBC 8005A3BC 01000334 */   ori       $v1, $zero, 0x1
     /* 3ABC0 8005A3C0 AD48010C */  jal        func_800522B4
     /* 3ABC4 8005A3C4 00000000 */   nop
-    /* 3ABC8 8005A3C8 B84A0108 */  j          func_80052AE0
+    /* 3ABC8 8005A3C8 B84A0108 */  j          D_80052AE0
     /* 3ABCC 8005A3CC 00000000 */   nop
 endlabel func_8005A398
 

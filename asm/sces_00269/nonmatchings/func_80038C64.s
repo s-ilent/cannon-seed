@@ -68,7 +68,6 @@ nonmatching func_80038CF8, 0x10
 
 glabel func_80038CF8
     /* 194F8 80038CF8 0000628C */  lw         $v0, 0x0($v1)
-  .L80038CFC:
     /* 194FC 80038CFC 00000000 */  nop
     /* 19500 80038D00 04004104 */  bgez       $v0, func_80038D14
     /* 19504 80038D04 01008424 */   addiu     $a0, $a0, 0x1

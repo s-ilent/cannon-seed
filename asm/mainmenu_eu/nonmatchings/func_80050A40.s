@@ -100,7 +100,7 @@ glabel func_80050B20
     /* 31360 80050B60 D717023C */   lui       $v0, (0x17D70000 >> 16)
     /* 31364 80050B64 CC29010C */  jal        func_8004A730
     /* 31368 80050B68 21200002 */   addu      $a0, $s0, $zero
-    /* 3136C 80050B6C B9290108 */  j          func_8004A6E4
+    /* 3136C 80050B6C B9290108 */  j          D_8004A6E4
     /* 31370 80050B70 00000000 */   nop
 endlabel func_80050B20
 
@@ -116,7 +116,7 @@ endlabel func_80050B74
 nonmatching func_80050B84, 0x8
 
 glabel func_80050B84
-    /* 31384 80050B84 B9290108 */  j          func_8004A6E4
+    /* 31384 80050B84 B9290108 */  j          D_8004A6E4
     /* 31388 80050B88 000000A6 */   sh        $zero, 0x0($s0)
 endlabel func_80050B84
 

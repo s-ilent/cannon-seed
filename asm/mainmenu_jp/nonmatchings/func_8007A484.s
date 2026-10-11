@@ -25,7 +25,6 @@ glabel func_8007A484
     /* 5ACB4 8007A4B4 D8FFED24 */  addiu      $t5, $a3, -0x28
     /* 5ACB8 8007A4B8 C0FFEE24 */  addiu      $t6, $a3, -0x40
     /* 5ACBC 8007A4BC 4800ECAC */  sw         $t4, 0x48($a3)
-  alabel func_8007A4C0
     /* 5ACC0 8007A4C0 4C00EDAC */  sw         $t5, 0x4C($a3)
     /* 5ACC4 8007A4C4 5000EEAC */  sw         $t6, 0x50($a3)
     /* 5ACC8 8007A4C8 94B9010C */  jal        func_8006E650
@@ -41,7 +40,6 @@ glabel func_8007A484
     /* 5ACF0 8007A4F0 5400FF8C */  lw         $ra, 0x54($a3)
     /* 5ACF4 8007A4F4 A8FFE724 */  addiu      $a3, $a3, -0x58
     /* 5ACF8 8007A4F8 FFFFC624 */  addiu      $a2, $a2, -0x1
-  alabel func_8007A4FC
     /* 5ACFC 8007A4FC 21108000 */  addu       $v0, $a0, $zero
     /* 5AD00 8007A500 0800E003 */  jr         $ra
     /* 5AD04 8007A504 00000000 */   nop

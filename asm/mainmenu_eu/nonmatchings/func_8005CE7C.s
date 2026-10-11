@@ -38,10 +38,6 @@ alabel func_8005CEAC
     /* 3D6B0 8005CEB0 66C3B682 */ .word 0x82B6C366
     /* 3D6B4 8005CEB4 B43A2346 */ .word 0x46233AB4 /* invalid instruction */
     /* 3D6B8 8005CEB8 B8529C6F */ .word 0x6F9C52B8
-
-nonmatching func_8005CEBC
-
-alabel func_8005CEBC
     /* 3D6BC 8005CEBC ED7B84D7 */ .word 0xD7847BED
     /* 3D6C0 8005CEC0 DFDF3778 */ .word 0x7837DFDF /* invalid instruction */
     /* 3D6C4 8005CEC4 1D370ADB */ .word 0xDB0A371D

@@ -24,7 +24,7 @@ glabel func_8005A2C4
     /* 3AAD8 8005A2D8 01000234 */   ori       $v0, $zero, 0x1
     /* 3AADC 8005A2DC AD48010C */  jal        func_800522B4
     /* 3AAE0 8005A2E0 00000000 */   nop
-    /* 3AAE4 8005A2E4 844A0108 */  j          func_80052A10
+    /* 3AAE4 8005A2E4 844A0108 */  j          D_80052A10
     /* 3AAE8 8005A2E8 00000000 */   nop
 endlabel func_8005A2C4
 

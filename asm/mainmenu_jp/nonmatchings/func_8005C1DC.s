@@ -85,7 +85,7 @@ glabel func_8005C280
     /* 3CAD0 8005C2D0 44A522A4 */  sh         $v0, %lo(D_800CA544)($at)
     /* 3CAD4 8005C2D4 BD51010C */  jal        func_800546F4
     /* 3CAD8 8005C2D8 00000000 */   nop
-    /* 3CADC 8005C2DC 8F510108 */  j          func_8005463C
+    /* 3CADC 8005C2DC 8F510108 */  j          D_8005463C
     /* 3CAE0 8005C2E0 00000000 */   nop
 endlabel func_8005C280
 

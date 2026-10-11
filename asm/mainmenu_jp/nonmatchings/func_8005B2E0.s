@@ -23,9 +23,5 @@ glabel func_8005B2E0
     /* 3BB08 8005B308 F4BAFEA7 */ .word 0xA7FEBAF4
     /* 3BB0C 8005B30C B1F3FEEE */ .word 0xEEFEF3B1 /* invalid instruction */
     /* 3BB10 8005B310 195D88EA */ .word 0xEA885D19
-
-nonmatching func_8005B314
-
-alabel func_8005B314
     /* 3BB14 8005B314 C6C37ECE */ .word 0xCE7EC3C6
 enddlabel func_8005B2E0

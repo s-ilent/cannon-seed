@@ -18,7 +18,7 @@ glabel func_8002A6A8
     /* AEBC 8002A6BC 1000A293 */  lbu        $v0, 0x10($sp)
     /* AEC0 8002A6C0 01005226 */  addiu      $s2, $s2, 0x1
     /* AEC4 8002A6C4 2A104202 */  slt        $v0, $s2, $v0
-    /* AEC8 8002A6C8 B1FF4014 */  bnez       $v0, func_8002A590
+    /* AEC8 8002A6C8 B1FF4014 */  bnez       $v0, D_8002A590
     /* AECC 8002A6CC 04007326 */   addiu     $s3, $s3, 0x4
     /* AED0 8002A6D0 80101500 */  sll        $v0, $s5, 2
     /* AED4 8002A6D4 0780013C */  lui        $at, %hi(D_8006907C)
@@ -56,7 +56,7 @@ glabel func_8002A6A8
     /* AF48 8002A748 01000234 */  ori        $v0, $zero, 0x1
     /* AF4C 8002A74C 03000215 */  bne        $t0, $v0, func_8002A75C
     /* AF50 8002A750 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* AF54 8002A754 38A40008 */  j          func_800290E0
+    /* AF54 8002A754 38A40008 */  j          D_800290E0
     /* AF58 8002A758 2BF01500 */   sltu      $fp, $zero, $s5
   alabel func_8002A75C
     /* AF5C 8002A75C 1800A98F */  lw         $t1, 0x18($sp)
@@ -73,7 +73,6 @@ glabel func_8002A6A8
     /* AF84 8002A784 6400B58F */  lw         $s5, 0x64($sp)
     /* AF88 8002A788 6000B48F */  lw         $s4, 0x60($sp)
     /* AF8C 8002A78C 5C00B38F */  lw         $s3, 0x5C($sp)
-  .L8002A790:
     /* AF90 8002A790 5800B28F */  lw         $s2, 0x58($sp)
     /* AF94 8002A794 5400B18F */  lw         $s1, 0x54($sp)
     /* AF98 8002A798 5000B08F */  lw         $s0, 0x50($sp)

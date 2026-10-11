@@ -394,7 +394,6 @@ glabel func_80061D04
     /* 4250C 80061D0C 14006228 */  slti       $v0, $v1, 0x14
     /* 42510 80061D10 05004014 */  bnez       $v0, func_80061D28
     /* 42514 80061D14 64006228 */   slti      $v0, $v1, 0x64
-  alabel func_80061D18
     /* 42518 80061D18 04004014 */  bnez       $v0, func_80061D2C
     /* 4251C 80061D1C 14000334 */   ori       $v1, $zero, 0x14
     /* 42520 80061D20 27650108 */  j          func_8005949C
@@ -423,7 +422,6 @@ glabel func_80061D3C
     /* 42540 80061D40 E0AC4294 */  lhu        $v0, %lo(D_800CACE0)($v0)
     /* 42544 80061D44 00000000 */  nop
     /* 42548 80061D48 21108200 */  addu       $v0, $a0, $v0
-  alabel func_80061D4C
     /* 4254C 80061D4C 0D80013C */  lui        $at, %hi(D_800CACE0)
     /* 42550 80061D50 E0AC22A4 */  sh         $v0, %lo(D_800CACE0)($at)
 endlabel func_80061D3C
@@ -514,7 +512,7 @@ glabel func_80061E20
     /* 42644 80061E44 00000000 */   nop
 endlabel func_80061E20
 
-nonmatching func_80061E48, 0x2C
+nonmatching func_80061E48, 0x80
 
 glabel func_80061E48
     /* 42648 80061E48 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -524,16 +522,11 @@ glabel func_80061E48
     /* 42658 80061E58 2B104300 */  sltu       $v0, $v0, $v1
     /* 4265C 80061E5C 1A004014 */  bnez       $v0, func_80061EC8
     /* 42660 80061E60 80100300 */   sll       $v0, $v1, 2
-    /* 42664 80061E64 0280013C */  lui        $at, %hi(D_80022A44)
-    /* 42668 80061E68 442A2124 */  addiu      $at, $at, %lo(D_80022A44)
+    /* 42664 80061E64 0280013C */  lui        $at, %hi(jtbl_80022A44)
+    /* 42668 80061E68 442A2124 */  addiu      $at, $at, %lo(jtbl_80022A44)
     /* 4266C 80061E6C 21082200 */  addu       $at, $at, $v0
     /* 42670 80061E70 0000228C */  lw         $v0, 0x0($at)
-endlabel func_80061E48
     /* 42674 80061E74 00000000 */  nop
-
-nonmatching func_80061E78, 0x50
-
-glabel func_80061E78
     /* 42678 80061E78 08004000 */  jr         $v0
     /* 4267C 80061E7C 00000000 */   nop
     /* 42680 80061E80 B765010C */  jal        func_800596DC
@@ -554,7 +547,7 @@ glabel func_80061E78
     /* 426BC 80061EBC 00000000 */   nop
     /* 426C0 80061EC0 7466010C */  jal        func_800599D0
     /* 426C4 80061EC4 00000000 */   nop
-endlabel func_80061E78
+endlabel func_80061E48
 
 nonmatching func_80061EC8, 0x10
 
@@ -612,19 +605,14 @@ glabel func_80061F34
     /* 42740 80061F40 00000000 */   nop
 endlabel func_80061F34
 
-nonmatching func_80061F44, 0x4
+nonmatching func_80061F44, 0x10
 
 glabel func_80061F44
     /* 42744 80061F44 3366010C */  jal        func_800598CC
-endlabel func_80061F44
-
-nonmatching func_80061F48, 0xC
-
-glabel func_80061F48
-    /* 42748 80061F48 00000000 */  nop
+    /* 42748 80061F48 00000000 */   nop
     /* 4274C 80061F4C B3650108 */  j          func_800596CC
     /* 42750 80061F50 00000000 */   nop
-endlabel func_80061F48
+endlabel func_80061F44
 
 nonmatching func_80061F54, 0x18
 

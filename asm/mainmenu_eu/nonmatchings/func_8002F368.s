@@ -125,7 +125,7 @@ glabel func_8002F424
     /* FCEC 8002F4EC 00000000 */   nop
 endlabel func_8002F424
 
-nonmatching func_8002F4F0, 0x78
+nonmatching func_8002F4F0, 0x100
 
 glabel func_8002F4F0
     /* FCF0 8002F4F0 0980043C */  lui        $a0, %hi(D_8008AD10)
@@ -158,11 +158,6 @@ glabel func_8002F4F0
     /* FD5C 8002F55C 21105000 */  addu       $v0, $v0, $s0
     /* FD60 8002F560 80100200 */  sll        $v0, $v0, 2
     /* FD64 8002F564 21104202 */  addu       $v0, $s2, $v0
-endlabel func_8002F4F0
-
-nonmatching func_8002F568, 0x88
-
-glabel func_8002F568
     /* FD68 8002F568 1000428C */  lw         $v0, 0x10($v0)
     /* FD6C 8002F56C 00000000 */  nop
     /* FD70 8002F570 20004230 */  andi       $v0, $v0, 0x20
@@ -197,7 +192,7 @@ glabel func_8002F568
     /* FDE4 8002F5E4 1200A687 */  lh         $a2, 0x12($sp)
     /* FDE8 8002F5E8 85B50008 */  j          D_8002D614
     /* FDEC 8002F5EC 51000434 */   ori       $a0, $zero, 0x51
-endlabel func_8002F568
+endlabel func_8002F4F0
 
 nonmatching func_8002F5F0, 0x44
 
@@ -217,7 +212,7 @@ glabel func_8002F5F0
     /* FE20 8002F620 56000434 */  ori        $a0, $zero, 0x56
     /* FE24 8002F624 EBD6000C */  jal        func_80035BAC
     /* FE28 8002F628 21280002 */   addu      $a1, $s0, $zero
-    /* FE2C 8002F62C 1BB60008 */  j          func_8002D86C
+    /* FE2C 8002F62C 1BB60008 */  j          D_8002D86C
     /* FE30 8002F630 2118A002 */   addu      $v1, $s5, $zero
 endlabel func_8002F5F0
 
@@ -288,7 +283,7 @@ glabel func_8002F634
     /* FF28 8002F728 EBD6000C */  jal        func_80035BAC
     /* FF2C 8002F72C 21280002 */   addu      $a1, $s0, $zero
     /* FF30 8002F730 1200A687 */  lh         $a2, 0x12($sp)
-    /* FF34 8002F734 D8B50008 */  j          func_8002D760
+    /* FF34 8002F734 D8B50008 */  j          D_8002D760
     /* FF38 8002F738 52000434 */   ori       $a0, $zero, 0x52
 endlabel func_8002F634
 
@@ -328,7 +323,7 @@ glabel func_8002F7A0
     /* FFA0 8002F7A0 21280002 */  addu       $a1, $s0, $zero
     /* FFA4 8002F7A4 50EB000C */  jal        func_8003AD40
     /* FFA8 8002F7A8 21300000 */   addu      $a2, $zero, $zero
-    /* FFAC 8002F7AC 1BB60008 */  j          func_8002D86C
+    /* FFAC 8002F7AC 1BB60008 */  j          D_8002D86C
     /* FFB0 8002F7B0 2118A002 */   addu      $v1, $s5, $zero
 endlabel func_8002F7A0
 

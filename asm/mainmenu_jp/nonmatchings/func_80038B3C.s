@@ -26,16 +26,11 @@ glabel func_80038B3C
     /* 19370 80038B70 40A6D323 */ .word 0x23D3A640
     /* 19374 80038B74 815AB8CB */ .word 0xCBB85A81
     /* 19378 80038B78 425B61CD */ .word 0xCD615B42
-enddlabel func_80038B3C
-
-nonmatching func_80038B7C
-
-glabel func_80038B7C
     /* 1937C 80038B7C F51950D9 */ .word 0xD95019F5
     /* 19380 80038B80 48EE88F7 */ .word 0xF788EE48
     /* 19384 80038B84 237F3541 */ .word 0x41357F23 /* invalid instruction */
     /* 19388 80038B88 5251B5D9 */ .word 0xD9B55152
-enddlabel func_80038B7C
+enddlabel func_80038B3C
 
 nonmatching func_80038B8C
 

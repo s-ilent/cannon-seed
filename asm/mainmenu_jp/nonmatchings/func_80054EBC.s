@@ -313,15 +313,10 @@ glabel func_80055140
     /* 359D4 800551D4 FFFF0324 */   addiu     $v1, $zero, -0x1
 endlabel func_80055140
 
-nonmatching func_800551D8, 0x4
+nonmatching func_800551D8, 0x20
 
 glabel func_800551D8
     /* 359D8 800551D8 21180000 */  addu       $v1, $zero, $zero
-endlabel func_800551D8
-
-nonmatching func_800551DC, 0x1C
-
-glabel func_800551DC
     /* 359DC 800551DC 0A002296 */  lhu        $v0, 0xA($s1)
     /* 359E0 800551E0 26208300 */  xor        $a0, $a0, $v1
     /* 359E4 800551E4 23208300 */  subu       $a0, $a0, $v1
@@ -329,7 +324,7 @@ glabel func_800551DC
     /* 359EC 800551EC 06FF033C */  lui        $v1, (0xFF060000 >> 16)
     /* 359F0 800551F0 01004224 */  addiu      $v0, $v0, 0x1
     /* 359F4 800551F4 0A0022A6 */  sh         $v0, 0xA($s1)
-endlabel func_800551DC
+endlabel func_800551D8
 
 nonmatching func_800551F8, 0x14
 

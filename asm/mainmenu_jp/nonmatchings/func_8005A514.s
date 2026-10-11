@@ -58,7 +58,7 @@ nonmatching func_8005A5A4, 0x10
 glabel func_8005A5A4
     /* 3ADA4 8005A5A4 7C4B010C */  jal        func_80052DF0
     /* 3ADA8 8005A5A8 00000000 */   nop
-    /* 3ADAC 8005A5AC 2D4B0108 */  j          func_80052CB4
+    /* 3ADAC 8005A5AC 2D4B0108 */  j          D_80052CB4
     /* 3ADB0 8005A5B0 00000000 */   nop
 endlabel func_8005A5A4
 

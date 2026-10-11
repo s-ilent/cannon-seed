@@ -21,7 +21,6 @@ glabel func_8005B0CC
     /* 3B8EC 8005B0EC 02000334 */   ori       $v1, $zero, 0x2
     /* 3B8F0 8005B0F0 0D80023C */  lui        $v0, %hi(D_800C9F94)
     /* 3B8F4 8005B0F4 949F4294 */  lhu        $v0, %lo(D_800C9F94)($v0)
-  alabel func_8005B0F8
     /* 3B8F8 8005B0F8 0D80013C */  lui        $at, %hi(D_800CA544)
     /* 3B8FC 8005B0FC 44A523A4 */  sh         $v1, %lo(D_800CA544)($at)
     /* 3B900 8005B100 01004224 */  addiu      $v0, $v0, 0x1
@@ -38,7 +37,6 @@ nonmatching func_8005B11C, 0x10
 glabel func_8005B11C
     /* 3B91C 8005B11C 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3B920 8005B120 00000000 */  nop
-  alabel func_8005B124
     /* 3B924 8005B124 0800E003 */  jr         $ra
     /* 3B928 8005B128 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005B11C
@@ -73,38 +71,27 @@ glabel func_8005B174
     /* 3B978 8005B178 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3B97C 8005B17C 00000000 */  nop
     /* 3B980 8005B180 0800E003 */  jr         $ra
-  alabel func_8005B184
     /* 3B984 8005B184 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005B174
 
-nonmatching func_8005B188, 0x10
+nonmatching func_8005B188, 0x38
 
 glabel func_8005B188
     /* 3B988 8005B188 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 3B98C 8005B18C 1000BFAF */  sw         $ra, 0x10($sp)
     /* 3B990 8005B190 0280043C */  lui        $a0, %hi(D_80022390)
     /* 3B994 8005B194 90238424 */  addiu      $a0, $a0, %lo(D_80022390)
-endlabel func_8005B188
-
-nonmatching func_8005B198, 0x18
-
-glabel func_8005B198
     /* 3B998 8005B198 04DD000C */  jal        func_80037410
     /* 3B99C 8005B19C 00000000 */   nop
     /* 3B9A0 8005B1A0 3366010C */  jal        func_800598CC
     /* 3B9A4 8005B1A4 00000000 */   nop
     /* 3B9A8 8005B1A8 05004014 */  bnez       $v0, func_8005B1C0
     /* 3B9AC 8005B1AC 00000000 */   nop
-endlabel func_8005B198
-
-nonmatching func_8005B1B0, 0x10
-
-glabel func_8005B1B0
     /* 3B9B0 8005B1B0 A149010C */  jal        func_80052684
     /* 3B9B4 8005B1B4 00000000 */   nop
-    /* 3B9B8 8005B1B8 EB4D0108 */  j          func_800537AC
+    /* 3B9B8 8005B1B8 EB4D0108 */  j          D_800537AC
     /* 3B9BC 8005B1BC 00000000 */   nop
-endlabel func_8005B1B0
+endlabel func_8005B188
 
 nonmatching func_8005B1C0, 0x4C
 
@@ -126,7 +113,6 @@ glabel func_8005B1C0
     /* 3B9F8 8005B1F8 00000000 */   nop
     /* 3B9FC 8005B1FC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3BA00 8005B200 00000000 */  nop
-  alabel func_8005B204
     /* 3BA04 8005B204 0800E003 */  jr         $ra
     /* 3BA08 8005B208 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005B1C0
@@ -147,10 +133,6 @@ dlabel D_8005B20C
     /* 3BA34 8005B234 0C004014 */ .word 0x1440000C
     /* 3BA38 8005B238 02000334 */ .word 0x34030002
     /* 3BA3C 8005B23C 0D80023C */ .word 0x3C02800D
-
-nonmatching func_8005B240
-
-alabel func_8005B240
     /* 3BA40 8005B240 949F4294 */ .word 0x94429F94
     /* 3BA44 8005B244 0D80013C */ .word 0x3C01800D
     /* 3BA48 8005B248 44A523A4 */ .word 0xA423A544

@@ -39,7 +39,7 @@ nonmatching func_8005A1CC, 0xC
 
 glabel func_8005A1CC
     /* 3A9CC 8005A1CC 00000000 */  nop
-    /* 3A9D0 8005A1D0 3A4A0108 */  j          func_800528E8
+    /* 3A9D0 8005A1D0 3A4A0108 */  j          D_800528E8
     /* 3A9D4 8005A1D4 00000000 */   nop
 endlabel func_8005A1CC
 

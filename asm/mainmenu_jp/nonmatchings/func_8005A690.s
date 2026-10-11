@@ -19,7 +19,7 @@ glabel func_8005A690
     /* 3AEA8 8005A6A8 01000234 */   ori       $v0, $zero, 0x1
     /* 3AEAC 8005A6AC A149010C */  jal        func_80052684
     /* 3AEB0 8005A6B0 00000000 */   nop
-    /* 3AEB4 8005A6B4 784B0108 */  j          func_80052DE0
+    /* 3AEB4 8005A6B4 784B0108 */  j          D_80052DE0
     /* 3AEB8 8005A6B8 00000000 */   nop
 endlabel func_8005A690
 

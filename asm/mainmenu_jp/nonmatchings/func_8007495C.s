@@ -115,26 +115,16 @@ glabel func_80074A98
     /* 5529C 80074A9C 1400F6E8 */  swc2       $22, 0x14($a3)
 endlabel func_80074A98
 
-nonmatching func_80074AA0, 0x4
+nonmatching func_80074AA0, 0x18
 
 glabel func_80074AA0
     /* 552A0 80074AA0 1C00E724 */  addiu      $a3, $a3, 0x1C
-endlabel func_80074AA0
-
-nonmatching func_80074AA4, 0x8
-
-glabel func_80074AA4
     /* 552A4 80074AA4 FFFF1827 */  addiu      $t8, $t8, -0x1
     /* 552A8 80074AA8 AFFF0017 */  bnez       $t8, func_80074968
-endlabel func_80074AA4
-
-nonmatching func_80074AAC, 0xC
-
-glabel func_80074AAC
-    /* 552AC 80074AAC 00000000 */  nop
+    /* 552AC 80074AAC 00000000 */   nop
     /* 552B0 80074AB0 05000010 */  b          func_80074AC8
     /* 552B4 80074AB4 00000000 */   nop
-endlabel func_80074AAC
+endlabel func_80074AA0
 
 nonmatching func_80074AB8, 0x10
 

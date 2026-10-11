@@ -21,7 +21,7 @@ glabel func_8005B05C
     /* 3B87C 8005B07C 00000000 */   nop
     /* 3B880 8005B080 AD48010C */  jal        func_800522B4
     /* 3B884 8005B084 00000000 */   nop
-    /* 3B888 8005B088 A14D0108 */  j          func_80053684
+    /* 3B888 8005B088 A14D0108 */  j          D_80053684
     /* 3B88C 8005B08C 00000000 */   nop
 endlabel func_8005B05C
 
@@ -136,7 +136,7 @@ glabel func_8005B1B0
     /* 3B9D4 8005B1D4 23000234 */   ori       $v0, $zero, 0x23
     /* 3B9D8 8005B1D8 AD48010C */  jal        func_800522B4
     /* 3B9DC 8005B1DC 00000000 */   nop
-    /* 3B9E0 8005B1E0 F44D0108 */  j          func_800537D0
+    /* 3B9E0 8005B1E0 F44D0108 */  j          D_800537D0
     /* 3B9E4 8005B1E4 00000000 */   nop
 endlabel func_8005B1B0
 

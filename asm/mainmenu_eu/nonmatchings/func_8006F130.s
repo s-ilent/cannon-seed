@@ -44,7 +44,6 @@ glabel func_8006F154
     /* 4F998 8006F198 00000000 */  nop
     /* 4F99C 8006F19C 1400A8A7 */  sh         $t0, 0x14($sp)
     /* 4F9A0 8006F1A0 06008994 */  lhu        $t1, 0x6($a0)
-  alabel func_8006F1A4
     /* 4F9A4 8006F1A4 21B0A000 */  addu       $s6, $a1, $zero
     /* 4F9A8 8006F1A8 1600A9A7 */  sh         $t1, 0x16($sp)
     /* 4F9AC 8006F1AC 08008594 */  lhu        $a1, 0x8($a0)
@@ -97,7 +96,6 @@ glabel func_8006F154
     /* 4FA68 8006F268 03340600 */  sra        $a2, $a2, 16
     /* 4FA6C 8006F26C 1800C400 */  mult       $a2, $a0
     /* 4FA70 8006F270 12200000 */  mflo       $a0
-  alabel func_8006F274
     /* 4FA74 8006F274 1800C200 */  mult       $a2, $v0
     /* 4FA78 8006F278 12600000 */  mflo       $t4
     /* 4FA7C 8006F27C 18004301 */  mult       $t2, $v1

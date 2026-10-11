@@ -32,7 +32,7 @@ glabel func_8007EF64
 endlabel func_8007EF64
 
 /* Handwritten function */
-nonmatching func_8007EFB0, 0x2C
+nonmatching func_8007EFB0, 0x80
 
 glabel func_8007EFB0
     /* 5F7B0 8007EFB0 0B80013C */  lui        $at, %hi(D_800B5AF8)
@@ -46,12 +46,6 @@ glabel func_8007EFB0
     /* 5F7D0 8007EFD0 0040033C */  lui        $v1, (0x40000000 >> 16)
     /* 5F7D4 8007EFD4 25104300 */  or         $v0, $v0, $v1
     /* 5F7D8 8007EFD8 00608240 */  mtc0       $v0, $12 /* handwritten instruction */
-endlabel func_8007EFB0
-
-/* Handwritten function */
-nonmatching func_8007EFDC, 0x54
-
-glabel func_8007EFDC
     /* 5F7DC 8007EFDC 00000000 */  nop
     /* 5F7E0 8007EFE0 55010824 */  addiu      $t0, $zero, 0x155
     /* 5F7E4 8007EFE4 00E8C848 */  ctc2       $t0, $29 /* handwritten instruction */
@@ -73,7 +67,7 @@ glabel func_8007EFDC
     /* 5F824 8007F024 00000000 */  nop
     /* 5F828 8007F028 0800E003 */  jr         $ra
     /* 5F82C 8007F02C 00000000 */   nop
-endlabel func_8007EFDC
+endlabel func_8007EFB0
 
 nonmatching func_8007F030, 0x30
 

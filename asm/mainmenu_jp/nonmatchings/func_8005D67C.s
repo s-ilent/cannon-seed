@@ -49,7 +49,7 @@ glabel func_8005D6D4
     /* 3DEF8 8005D6F8 01000334 */   ori       $v1, $zero, 0x1
     /* 3DEFC 8005D6FC F752010C */  jal        func_80054BDC
     /* 3DF00 8005D700 00000000 */   nop
-    /* 3DF04 8005D704 0B560108 */  j          func_8005582C
+    /* 3DF04 8005D704 0B560108 */  j          D_8005582C
     /* 3DF08 8005D708 00000000 */   nop
 endlabel func_8005D6D4
 

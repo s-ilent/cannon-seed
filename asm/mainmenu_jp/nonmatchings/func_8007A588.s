@@ -13,7 +13,6 @@ glabel func_8007A588
     /* 5AD88 8007A588 2B089801 */  sltu       $at, $t4, $t8
     /* 5AD8C 8007A58C 0A002010 */  beqz       $at, func_8007A5B8
     /* 5AD90 8007A590 2B08B801 */   sltu      $at, $t5, $t8
-  .L8007A594:
     /* 5AD94 8007A594 08002010 */  beqz       $at, func_8007A5B8
     /* 5AD98 8007A598 2B08D801 */   sltu      $at, $t6, $t8
     /* 5AD9C 8007A59C 06002010 */  beqz       $at, func_8007A5B8

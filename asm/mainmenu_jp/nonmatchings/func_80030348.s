@@ -655,7 +655,7 @@ glabel func_80030A54
     /* 11268 80030A68 6B97000C */  jal        func_80025DAC
     /* 1126C 80030A6C 00000000 */   nop
     /* 11270 80030A70 1CEF46E7 */  swc1       $f6, -0x10E4($k0)
-    /* 11274 80030A74 5CCF1D11 */  beq        $t0, $sp, func_800247E8
+    /* 11274 80030A74 5CCF1D11 */  beq        $t0, $sp, D_800247E8
     /* 11278 80030A78 0D2AB603 */   break     950, 168
     /* 1127C 80030A7C EB2E33DD */  ld         $s3, 0x2EEB($t1)
     /* 11280 80030A80 B48C53F1 */  scd        $s3, -0x734C($t2) /* handwritten instruction */

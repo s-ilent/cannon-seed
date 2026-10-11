@@ -216,7 +216,7 @@ glabel func_8008710C
     /* 67948 80087148 00000000 */   nop
 endlabel func_8008710C
 
-nonmatching func_8008714C, 0x18
+nonmatching func_8008714C, 0x2C
 
 glabel func_8008714C
     /* 6794C 8008714C 0D80023C */  lui        $v0, %hi(D_800C8DA4)
@@ -225,17 +225,12 @@ glabel func_8008714C
     /* 67958 80087158 800140A4 */  sh         $zero, 0x180($v0)
     /* 6795C 8008715C 820140A4 */  sh         $zero, 0x182($v0)
     /* 67960 80087160 AE014294 */  lhu        $v0, 0x1AE($v0)
-endlabel func_8008714C
-
-nonmatching func_80087164, 0x14
-
-glabel func_80087164
     /* 67964 80087164 0D80013C */  lui        $at, %hi(D_800C8D9C)
     /* 67968 80087168 9C8D20AC */  sw         $zero, %lo(D_800C8D9C)($at)
     /* 6796C 8008716C FF074230 */  andi       $v0, $v0, 0x7FF
     /* 67970 80087170 1A004010 */  beqz       $v0, func_800871DC
     /* 67974 80087174 00000000 */   nop
-endlabel func_80087164
+endlabel func_8008714C
 
 nonmatching func_80087178, 0x44
 
@@ -612,15 +607,7 @@ nonmatching D_800875C4
 
 dlabel D_800875C4
     /* 67DC4 800875C4 E45AB9D9 */ .word 0xD9B95AE4
-
-nonmatching D_800875C8
-
-dlabel D_800875C8
     /* 67DC8 800875C8 F1B9EC17 */ .word 0x17ECB9F1
-
-nonmatching D_800875CC
-
-dlabel D_800875CC
     /* 67DCC 800875CC B6E567FE */ .word 0xFE67E5B6
     /* 67DD0 800875D0 E6CE2E47 */ .word 0x472ECEE6 /* invalid instruction */
     /* 67DD4 800875D4 739D5555 */ .word 0x55559D73
@@ -654,13 +641,7 @@ dlabel D_800875CC
     /* 67E44 80087644 A50614FB */ .word 0xFB1406A5
     /* 67E48 80087648 23CC67C0 */ .word 0xC067CC23
     /* 67E4C 8008764C 7B2B0208 */ .word 0x08022B7B
-    /* 67E50 80087650 */ .short 0x5E57
-enddlabel func_800875A0
-
-nonmatching D_80087652
-
-dlabel D_80087652
-    /* 67E52 80087652 */ .short 0xB191
+    /* 67E50 80087650 575E91B1 */ .word 0xB1915E57
     /* 67E54 80087654 324894C0 */ .word 0xC0944832
     /* 67E58 80087658 180CF9EB */ .word 0xEBF90C18
-enddlabel D_80087652
+enddlabel func_800875A0

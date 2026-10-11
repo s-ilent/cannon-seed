@@ -32,28 +32,22 @@ glabel func_80040CDC
     /* 214E8 80040CE8 68A26324 */  addiu      $v1, $v1, %lo(D_8009A268)
 endlabel func_80040CDC
 
-nonmatching func_80040CEC, 0x18
+nonmatching func_80040CEC, 0x30
 
 glabel func_80040CEC
     /* 214EC 80040CEC 83130200 */  sra        $v0, $v0, 14
     /* 214F0 80040CF0 21184300 */  addu       $v1, $v0, $v1
     /* 214F4 80040CF4 0D80053C */  lui        $a1, %hi(D_800CAEEA)
-  alabel func_80040CF8
     /* 214F8 80040CF8 EAAEA594 */  lhu        $a1, %lo(D_800CAEEA)($a1)
     /* 214FC 80040CFC 0D80073C */  lui        $a3, %hi(D_800CAEE8)
     /* 21500 80040D00 E8AEE794 */  lhu        $a3, %lo(D_800CAEE8)($a3)
-endlabel func_80040CEC
-
-nonmatching func_80040D04, 0x18
-
-glabel func_80040D04
     /* 21504 80040D04 0000628C */  lw         $v0, 0x0($v1)
     /* 21508 80040D08 00000000 */  nop
     /* 2150C 80040D0C 03004010 */  beqz       $v0, func_80040D1C
     /* 21510 80040D10 21300000 */   addu      $a2, $zero, $zero
     /* 21514 80040D14 01004224 */  addiu      $v0, $v0, 0x1
     /* 21518 80040D18 000062AC */  sw         $v0, 0x0($v1)
-endlabel func_80040D04
+endlabel func_80040CEC
 
 nonmatching func_80040D1C, 0x30
 
@@ -100,16 +94,11 @@ glabel func_80040D6C
     /* 21590 80040D90 08000634 */   ori       $a2, $zero, 0x8
 endlabel func_80040D6C
 
-nonmatching func_80040D94, 0x8
+nonmatching func_80040D94, 0x28
 
 glabel func_80040D94
     /* 21594 80040D94 09004014 */  bnez       $v0, func_80040DBC
     /* 21598 80040D98 00140400 */   sll       $v0, $a0, 16
-endlabel func_80040D94
-
-nonmatching func_80040D9C, 0x20
-
-glabel func_80040D9C
     /* 2159C 80040D9C 0000628C */  lw         $v0, 0x0($v1)
     /* 215A0 80040DA0 00000000 */  nop
     /* 215A4 80040DA4 05004014 */  bnez       $v0, func_80040DBC
@@ -118,7 +107,7 @@ glabel func_80040D9C
     /* 215B0 80040DB0 01000234 */  ori        $v0, $zero, 0x1
     /* 215B4 80040DB4 000062AC */  sw         $v0, 0x0($v1)
     /* 215B8 80040DB8 00140400 */  sll        $v0, $a0, 16
-endlabel func_80040D9C
+endlabel func_80040D94
 
 nonmatching func_80040DBC, 0x24
 
@@ -182,7 +171,6 @@ glabel func_80040E5C
     /* 21660 80040E60 00000000 */   nop
     /* 21664 80040E64 B2F0000C */  jal        func_8003C2C8
     /* 21668 80040E68 00000000 */   nop
-  alabel func_80040E6C
     /* 2166C 80040E6C 67F20008 */  j          func_8003C99C
     /* 21670 80040E70 00000000 */   nop
 endlabel func_80040E5C

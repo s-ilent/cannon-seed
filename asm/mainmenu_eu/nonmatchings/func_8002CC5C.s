@@ -176,7 +176,7 @@ glabel func_8002CE50
     /* D698 8002CE98 0980043C */  lui        $a0, (0x80090000 >> 16)
 endlabel func_8002CE50
 
-nonmatching func_8002CE9C, 0x9C
+nonmatching func_8002CE9C, 0x10C
 
 glabel func_8002CE9C
     /* D69C 8002CE9C 2CB78424 */  addiu      $a0, $a0, -0x48D4
@@ -218,11 +218,6 @@ glabel func_8002CE9C
     /* D72C 8002CF2C 21280000 */  addu       $a1, $zero, $zero
     /* D730 8002CF30 D998000C */  jal        func_80026364
     /* D734 8002CF34 21300000 */   addu      $a2, $zero, $zero
-endlabel func_8002CE9C
-
-nonmatching func_8002CF38, 0x70
-
-glabel func_8002CF38
     /* D738 8002CF38 0980043C */  lui        $a0, %hi(D_8008AEC8)
     /* D73C 8002CF3C C8AE8424 */  addiu      $a0, $a0, %lo(D_8008AEC8)
     /* D740 8002CF40 02000534 */  ori        $a1, $zero, 0x2
@@ -251,7 +246,7 @@ glabel func_8002CF38
     /* D79C 8002CF9C 0980043C */  lui        $a0, %hi(D_8008BA2C)
     /* D7A0 8002CFA0 2CBA8424 */  addiu      $a0, $a0, %lo(D_8008BA2C)
     /* D7A4 8002CFA4 21280000 */  addu       $a1, $zero, $zero
-endlabel func_8002CF38
+endlabel func_8002CE9C
 
 nonmatching func_8002CFA8, 0xC0
 
@@ -493,18 +488,13 @@ glabel func_8002D26C
     /* DAB0 8002D2B0 00000000 */   nop
 endlabel func_8002D26C
 
-nonmatching func_8002D2B4, 0x10
+nonmatching func_8002D2B4
 
 glabel func_8002D2B4
-    /* DAB4 8002D2B4 0980043C */  lui        $a0, %hi(D_80088E14)
-    /* DAB8 8002D2B8 148E8424 */  addiu      $a0, $a0, %lo(D_80088E14)
-    /* DABC 8002D2BC D998000C */  jal        func_80026364
-    /* DAC0 8002D2C0 FFFF0624 */   addiu     $a2, $zero, -0x1
-endlabel func_8002D2B4
-
-nonmatching func_8002D2C4
-
-glabel func_8002D2C4
+    /* DAB4 8002D2B4 0980043C */ .word 0x3C048009
+    /* DAB8 8002D2B8 148E8424 */ .word 0x24848E14
+    /* DABC 8002D2BC D998000C */ .word 0x0C0098D9
+    /* DAC0 8002D2C0 FFFF0624 */ .word 0x2406FFFF
     /* DAC4 8002D2C4 0980043C */ .word 0x3C048009
     /* DAC8 8002D2C8 548E8424 */ .word 0x24848E54
     /* DACC 8002D2CC 21280000 */ .word 0x00002821
@@ -562,4 +552,4 @@ dlabel D_8002D358
     /* DB8C 8002D38C 88E45F76 */ .word 0x765FE488 /* invalid instruction */
     /* DB90 8002D390 8BA9BEBF */ .word 0xBFBEA98B
     /* DB94 8002D394 0199A9FB */ .word 0xFBA99901
-enddlabel func_8002D2C4
+enddlabel func_8002D2B4

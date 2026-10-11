@@ -263,7 +263,7 @@ glabel func_8002ADA0
     /* B5F8 8002ADF8 21200002 */  addu       $a0, $s0, $zero
     /* B5FC 8002ADFC A370010C */  jal        func_8005C28C
     /* B600 8002AE00 1000A527 */   addiu     $a1, $sp, 0x10
-    /* B604 8002AE04 F0A50008 */  j          func_800297C0
+    /* B604 8002AE04 F0A50008 */  j          D_800297C0
     /* B608 8002AE08 00000000 */   nop
 endlabel func_8002ADA0
 
@@ -275,7 +275,7 @@ glabel func_8002AE0C
     /* B614 8002AE14 01000426 */  addiu      $a0, $s0, 0x1
     /* B618 8002AE18 9370010C */  jal        func_8005C24C
     /* B61C 8002AE1C 1000A527 */   addiu     $a1, $sp, 0x10
-    /* B620 8002AE20 F0A50008 */  j          func_800297C0
+    /* B620 8002AE20 F0A50008 */  j          D_800297C0
     /* B624 8002AE24 00000000 */   nop
 endlabel func_8002AE0C
 

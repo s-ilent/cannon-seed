@@ -53,7 +53,7 @@ nonmatching func_8005A5F0, 0x10
 glabel func_8005A5F0
     /* 3ADF0 8005A5F0 904B010C */  jal        func_80052E40
     /* 3ADF4 8005A5F4 00000000 */   nop
-    /* 3ADF8 8005A5F8 404B0108 */  j          func_80052D00
+    /* 3ADF8 8005A5F8 404B0108 */  j          D_80052D00
     /* 3ADFC 8005A5FC 00000000 */   nop
 endlabel func_8005A5F0
 

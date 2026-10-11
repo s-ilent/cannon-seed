@@ -29,11 +29,10 @@ glabel func_80038BBC
     /* 193FC 80038BFC 4E6CDC9D */ .word 0x9DDC6C4E
     /* 19400 80038C00 D20D3F7F */ .word 0x7F3F0DD2 /* invalid instruction */
     /* 19404 80038C04 15EE2335 */ .word 0x3523EE15
-enddlabel func_80038BBC
 
 nonmatching func_80038C08
 
-dlabel func_80038C08
+alabel func_80038C08
     /* 19408 80038C08 1BBE3579 */ .word 0x7935BE1B /* invalid instruction */
     /* 1940C 80038C0C F03BE35F */ .word 0x5FE33BF0 /* invalid instruction */
     /* 19410 80038C10 C3A167C6 */ .word 0xC667A1C3
@@ -43,4 +42,4 @@ dlabel func_80038C08
     /* 19420 80038C20 EB91E8EF */ .word 0xEFE891EB /* invalid instruction */
     /* 19424 80038C24 04CEBBFA */ .word 0xFABBCE04
     /* 19428 80038C28 00FFFFFF */ .word 0xFFFFFF00
-enddlabel func_80038C08
+enddlabel func_80038BBC

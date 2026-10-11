@@ -67,7 +67,7 @@ glabel func_8005EB50
     /* 3F384 8005EB84 01000234 */   ori       $v0, $zero, 0x1
     /* 3F388 8005EB88 E359010C */  jal        func_8005678C
     /* 3F38C 8005EB8C 00000000 */   nop
-    /* 3F390 8005EB90 555A0108 */  j          func_80056954
+    /* 3F390 8005EB90 555A0108 */  j          D_80056954
     /* 3F394 8005EB94 00000000 */   nop
 endlabel func_8005EB50
 
@@ -129,7 +129,7 @@ glabel func_8005EC04
     /* 3F454 8005EC54 70A722A4 */  sh         $v0, %lo(D_800CA770)($at)
     /* 3F458 8005EC58 F559010C */  jal        func_800567D4
     /* 3F45C 8005EC5C 00000000 */   nop
-    /* 3F460 8005EC60 865A0108 */  j          func_80056A18
+    /* 3F460 8005EC60 865A0108 */  j          D_80056A18
     /* 3F464 8005EC64 00000000 */   nop
 endlabel func_8005EC04
 
@@ -177,7 +177,7 @@ glabel func_8005ECC8
     /* 3F4EC 8005ECEC 00000000 */   nop
     /* 3F4F0 8005ECF0 0352010C */  jal        func_8005480C
     /* 3F4F4 8005ECF4 00000000 */   nop
-    /* 3F4F8 8005ECF8 A25A0108 */  j          func_80056A88
+    /* 3F4F8 8005ECF8 A25A0108 */  j          D_80056A88
     /* 3F4FC 8005ECFC 00000000 */   nop
 endlabel func_8005ECC8
 
@@ -215,7 +215,7 @@ glabel func_8005ED38
     /* 3F55C 8005ED5C 00000000 */   nop
     /* 3F560 8005ED60 0352010C */  jal        func_8005480C
     /* 3F564 8005ED64 00000000 */   nop
-    /* 3F568 8005ED68 C05A0108 */  j          func_80056B00
+    /* 3F568 8005ED68 C05A0108 */  j          D_80056B00
     /* 3F56C 8005ED6C 00000000 */   nop
 endlabel func_8005ED38
 
@@ -259,7 +259,7 @@ glabel func_8005EDB0
     /* 3F5E4 8005EDE4 00000000 */   nop
     /* 3F5E8 8005EDE8 F559010C */  jal        func_800567D4
     /* 3F5EC 8005EDEC 00000000 */   nop
-    /* 3F5F0 8005EDF0 E75A0108 */  j          func_80056B9C
+    /* 3F5F0 8005EDF0 E75A0108 */  j          D_80056B9C
     /* 3F5F4 8005EDF4 00000000 */   nop
 endlabel func_8005EDB0
 
@@ -308,7 +308,7 @@ glabel func_8005EE4C
     /* 3F680 8005EE80 00000000 */   nop
     /* 3F684 8005EE84 3763010C */  jal        func_80058CDC
     /* 3F688 8005EE88 00000000 */   nop
-    /* 3F68C 8005EE8C 065B0108 */  j          func_80056C18
+    /* 3F68C 8005EE8C 065B0108 */  j          D_80056C18
     /* 3F690 8005EE90 00000000 */   nop
 endlabel func_8005EE4C
 

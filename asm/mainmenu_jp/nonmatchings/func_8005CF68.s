@@ -174,7 +174,6 @@ glabel func_8005D11C
     /* 3D960 8005D160 ACA64284 */  lh         $v0, %lo(D_800CA6AC)($v0)
     /* 3D964 8005D164 00000000 */  nop
     /* 3D968 8005D168 03004014 */  bnez       $v0, func_8005D178
-  .L8005D16C:
     /* 3D96C 8005D16C 08000234 */   ori       $v0, $zero, 0x8
     /* 3D970 8005D170 0D80013C */  lui        $at, %hi(D_800CA6AC)
     /* 3D974 8005D174 ACA622A4 */  sh         $v0, %lo(D_800CA6AC)($at)
@@ -226,7 +225,7 @@ glabel func_8005D1CC
     /* 3D9F0 8005D1F0 01000234 */   ori       $v0, $zero, 0x1
     /* 3D9F4 8005D1F4 F752010C */  jal        func_80054BDC
     /* 3D9F8 8005D1F8 00000000 */   nop
-    /* 3D9FC 8005D1FC CE540108 */  j          func_80055338
+    /* 3D9FC 8005D1FC CE540108 */  j          D_80055338
     /* 3DA00 8005D200 00000000 */   nop
 endlabel func_8005D1CC
 
@@ -298,11 +297,11 @@ glabel func_8005D2B0
     /* 3DAD4 8005D2D4 01000334 */   ori       $v1, $zero, 0x1
     /* 3DAD8 8005D2D8 F752010C */  jal        func_80054BDC
     /* 3DADC 8005D2DC 00000000 */   nop
-    /* 3DAE0 8005D2E0 02550108 */  j          func_80055408
+    /* 3DAE0 8005D2E0 02550108 */  j          D_80055408
     /* 3DAE4 8005D2E4 00000000 */   nop
 endlabel func_8005D2B0
 
-nonmatching func_8005D2E8, 0x28
+nonmatching func_8005D2E8, 0x40
 
 glabel func_8005D2E8
     /* 3DAE8 8005D2E8 0D80023C */  lui        $v0, %hi(D_800CA544)
@@ -315,18 +314,13 @@ glabel func_8005D2E8
     /* 3DB04 8005D304 01004224 */  addiu      $v0, $v0, 0x1
     /* 3DB08 8005D308 0D80013C */  lui        $at, %hi(D_800CA544)
     /* 3DB0C 8005D30C 44A522A4 */  sh         $v0, %lo(D_800CA544)($at)
-endlabel func_8005D2E8
-
-nonmatching func_8005D310, 0x18
-
-glabel func_8005D310
     /* 3DB10 8005D310 0655010C */  jal        func_80055418
     /* 3DB14 8005D314 00000000 */   nop
     /* 3DB18 8005D318 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3DB1C 8005D31C 00000000 */  nop
     /* 3DB20 8005D320 0800E003 */  jr         $ra
     /* 3DB24 8005D324 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_8005D310
+endlabel func_8005D2E8
 
 nonmatching func_8005D328, 0x5C
 

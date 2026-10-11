@@ -71,7 +71,7 @@ glabel func_80037144
 endlabel func_80037144
 
 /* Handwritten function */
-nonmatching func_80037164, 0x20
+nonmatching func_80037164, 0x2C
 
 glabel func_80037164
     /* 17964 80037164 00488848 */  mtc2       $t0, $9 /* handwritten instruction */
@@ -82,15 +82,10 @@ glabel func_80037164
     /* 17978 80037178 05006105 */  bgez       $t3, func_80037190
     /* 1797C 8003717C 00000000 */   nop
     /* 17980 80037180 23580B00 */  negu       $t3, $t3
-endlabel func_80037164
-
-nonmatching func_80037184, 0xC
-
-glabel func_80037184
     /* 17984 80037184 C0580B00 */  sll        $t3, $t3, 3
     /* 17988 80037188 02000010 */  b          func_80037194
     /* 1798C 8003718C 23580B00 */   negu      $t3, $t3
-endlabel func_80037184
+endlabel func_80037164
 
 nonmatching func_80037190, 0x4
 

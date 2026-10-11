@@ -135,7 +135,7 @@ glabel func_8005D97C
     /* 3E1A0 8005D9A0 00000000 */   nop
     /* 3E1A4 8005D9A4 F752010C */  jal        func_80054BDC
     /* 3E1A8 8005D9A8 00000000 */   nop
-    /* 3E1AC 8005D9AC 6E560108 */  j          func_800559B8
+    /* 3E1AC 8005D9AC 6E560108 */  j          D_800559B8
     /* 3E1B0 8005D9B0 00000000 */   nop
 endlabel func_8005D97C
 
@@ -197,7 +197,7 @@ nonmatching func_8005DA60, 0x10
 glabel func_8005DA60
     /* 3E260 8005DA60 B356010C */  jal        func_80055ACC
     /* 3E264 8005DA64 00000000 */   nop
-    /* 3E268 8005DA68 94560108 */  j          func_80055A50
+    /* 3E268 8005DA68 94560108 */  j          D_80055A50
     /* 3E26C 8005DA6C 00000000 */   nop
 endlabel func_8005DA60
 

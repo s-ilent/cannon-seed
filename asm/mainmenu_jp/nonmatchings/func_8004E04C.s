@@ -22,7 +22,6 @@ glabel func_8004E04C
     /* 2E870 8004E070 EA000534 */  ori        $a1, $zero, 0xEA
     /* 2E874 8004E074 02006014 */  bnez       $v1, func_8004E080
     /* 2E878 8004E078 460002A6 */   sh        $v0, 0x46($s0)
-  alabel func_8004E07C
     /* 2E87C 8004E07C 6E000534 */  ori        $a1, $zero, 0x6E
 endlabel func_8004E04C
 
@@ -52,7 +51,6 @@ glabel func_8004E080
     /* 2E8D0 8004E0D0 00140200 */  sll        $v0, $v0, 16
     /* 2E8D4 8004E0D4 C3140200 */  sra        $v0, $v0, 19
     /* 2E8D8 8004E0D8 720D010C */  jal        func_800435C8
-  alabel func_8004E0DC
     /* 2E8DC 8004E0DC 780002A6 */   sh        $v0, 0x78($s0)
     /* 2E8E0 8004E0E0 0D80023C */  lui        $v0, %hi(D_800CA614)
     /* 2E8E4 8004E0E4 14A64294 */  lhu        $v0, %lo(D_800CA614)($v0)
@@ -111,7 +109,7 @@ glabel func_8004E148
     /* 2E988 8004E188 0D80033C */  lui        $v1, %hi(D_800CA044)
     /* 2E98C 8004E18C 44A06394 */  lhu        $v1, %lo(D_800CA044)($v1)
     /* 2E990 8004E190 780002A6 */  sh         $v0, 0x78($s0)
-    /* 2E994 8004E194 61200108 */  j          func_80048184
+    /* 2E994 8004E194 61200108 */  j          D_80048184
     /* 2E998 8004E198 7A0003A6 */   sh        $v1, 0x7A($s0)
 endlabel func_8004E148
 
@@ -207,7 +205,7 @@ glabel func_8004E284
     /* 2EAA4 8004E2A4 21202002 */   addu      $a0, $s1, $zero
     /* 2EAA8 8004E2A8 CA1D010C */  jal        func_80047728
     /* 2EAAC 8004E2AC 00000000 */   nop
-    /* 2EAB0 8004E2B0 D7200108 */  j          func_8004835C
+    /* 2EAB0 8004E2B0 D7200108 */  j          D_8004835C
     /* 2EAB4 8004E2B4 00000000 */   nop
 endlabel func_8004E284
 
@@ -285,7 +283,7 @@ glabel func_8004E36C
     /* 2EB9C 8004E39C 2000BD27 */   addiu     $sp, $sp, 0x20
 endlabel func_8004E36C
 
-nonmatching func_8004E3A0, 0xA4
+nonmatching func_8004E3A0, 0xB4
 
 glabel func_8004E3A0
     /* 2EBA0 8004E3A0 6000828C */  lw         $v0, 0x60($a0)
@@ -330,13 +328,8 @@ glabel func_8004E3A0
     /* 2EC38 8004E438 00000000 */  nop
     /* 2EC3C 8004E43C 1C00A3A4 */  sh         $v1, 0x1C($a1)
     /* 2EC40 8004E440 C4004394 */  lhu        $v1, 0xC4($v0)
-endlabel func_8004E3A0
     /* 2EC44 8004E444 00000000 */  nop
-
-nonmatching func_8004E448, 0xC
-
-glabel func_8004E448
     /* 2EC48 8004E448 23180300 */  negu       $v1, $v1
     /* 2EC4C 8004E44C 0800E003 */  jr         $ra
     /* 2EC50 8004E450 1A00A3A4 */   sh        $v1, 0x1A($a1)
-endlabel func_8004E448
+endlabel func_8004E3A0

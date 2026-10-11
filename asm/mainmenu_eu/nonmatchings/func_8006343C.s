@@ -163,7 +163,7 @@ glabel func_80063490
     /* 43E64 80063664 01000234 */   ori       $v0, $zero, 0x1
     /* 43E68 80063668 0A006210 */  beq        $v1, $v0, func_80063694
     /* 43E6C 8006366C 04071034 */   ori       $s0, $zero, 0x704
-    /* 43E70 80063670 A76A0108 */  j          func_8005AA9C
+    /* 43E70 80063670 A76A0108 */  j          D_8005AA9C
     /* 43E74 80063674 FFFF1024 */   addiu     $s0, $zero, -0x1
   alabel func_80063678
     /* 43E78 80063678 04000234 */  ori        $v0, $zero, 0x4
@@ -171,21 +171,21 @@ glabel func_80063490
     /* 43E80 80063680 08000234 */   ori       $v0, $zero, 0x8
     /* 43E84 80063684 0B006210 */  beq        $v1, $v0, func_800636B4
     /* 43E88 80063688 01071034 */   ori       $s0, $zero, 0x701
-    /* 43E8C 8006368C A76A0108 */  j          func_8005AA9C
+    /* 43E8C 8006368C A76A0108 */  j          D_8005AA9C
     /* 43E90 80063690 FFFF1024 */   addiu     $s0, $zero, -0x1
   alabel func_80063694
-    /* 43E94 80063694 A86A0108 */  j          func_8005AAA0
+    /* 43E94 80063694 A86A0108 */  j          D_8005AAA0
     /* 43E98 80063698 05071134 */   ori       $s1, $zero, 0x705
   alabel func_8006369C
     /* 43E9C 8006369C 02071034 */  ori        $s0, $zero, 0x702
-    /* 43EA0 800636A0 A86A0108 */  j          func_8005AAA0
+    /* 43EA0 800636A0 A86A0108 */  j          D_8005AAA0
     /* 43EA4 800636A4 06071134 */   ori       $s1, $zero, 0x706
   alabel func_800636A8
     /* 43EA8 800636A8 03071034 */  ori        $s0, $zero, 0x703
-    /* 43EAC 800636AC A86A0108 */  j          func_8005AAA0
+    /* 43EAC 800636AC A86A0108 */  j          D_8005AAA0
     /* 43EB0 800636B0 05071134 */   ori       $s1, $zero, 0x705
   alabel func_800636B4
-    /* 43EB4 800636B4 A86A0108 */  j          func_8005AAA0
+    /* 43EB4 800636B4 A86A0108 */  j          D_8005AAA0
     /* 43EB8 800636B8 05071134 */   ori       $s1, $zero, 0x705
     /* 43EBC 800636BC FFFF1124 */  addiu      $s1, $zero, -0x1
     /* 43EC0 800636C0 00240500 */  sll        $a0, $a1, 16

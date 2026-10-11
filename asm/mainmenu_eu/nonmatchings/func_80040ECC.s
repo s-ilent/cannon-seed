@@ -39,7 +39,7 @@ glabel func_80040EFC
     /* 2170C 80040F0C 08000434 */   ori       $a0, $zero, 0x8
 endlabel func_80040EFC
 
-nonmatching func_80040F10, 0x14
+nonmatching func_80040F10, 0x1C
 
 glabel func_80040F10
     /* 21710 80040F10 06006214 */  bne        $v1, $v0, func_80040F2C
@@ -47,14 +47,9 @@ glabel func_80040F10
     /* 21718 80040F18 02000434 */  ori        $a0, $zero, 0x2
     /* 2171C 80040F1C 49F1000C */  jal        func_8003C524
     /* 21720 80040F20 21280000 */   addu      $a1, $zero, $zero
-endlabel func_80040F10
-
-nonmatching func_80040F24, 0x8
-
-glabel func_80040F24
     /* 21724 80040F24 9AF20008 */  j          func_8003CA68
     /* 21728 80040F28 21204000 */   addu      $a0, $v0, $zero
-endlabel func_80040F24
+endlabel func_80040F10
 
 nonmatching func_80040F2C, 0x1C
 

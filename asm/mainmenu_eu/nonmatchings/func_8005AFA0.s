@@ -20,7 +20,6 @@ glabel func_8005AFA0
     /* 3B7BC 8005AFBC 02000334 */   ori       $v1, $zero, 0x2
     /* 3B7C0 8005AFC0 0D80023C */  lui        $v0, %hi(D_800CA7D8)
     /* 3B7C4 8005AFC4 D8A74294 */  lhu        $v0, %lo(D_800CA7D8)($v0)
-  alabel func_8005AFC8
     /* 3B7C8 8005AFC8 0D80013C */  lui        $at, %hi(D_800CAD88)
     /* 3B7CC 8005AFCC 88AD23A4 */  sh         $v1, %lo(D_800CAD88)($at)
     /* 3B7D0 8005AFD0 01004224 */  addiu      $v0, $v0, 0x1
@@ -36,7 +35,6 @@ nonmatching func_8005AFEC, 0x10
 
 glabel func_8005AFEC
     /* 3B7EC 8005AFEC 1000BF8F */  lw         $ra, 0x10($sp)
-  alabel func_8005AFF0
     /* 3B7F0 8005AFF0 00000000 */  nop
     /* 3B7F4 8005AFF4 0800E003 */  jr         $ra
     /* 3B7F8 8005AFF8 1800BD27 */   addiu     $sp, $sp, 0x18

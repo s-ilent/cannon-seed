@@ -28,7 +28,7 @@ glabel func_8003D3F4
     /* 1DC30 8003D430 841A8424 */  addiu      $a0, $a0, %lo(D_80021A84)
     /* 1DC34 8003D434 9770010C */  jal        func_8005C25C
     /* 1DC38 8003D438 00000000 */   nop
-    /* 1DC3C 8003D43C 44E60008 */  j          func_80039910
+    /* 1DC3C 8003D43C 44E60008 */  j          D_80039910
     /* 1DC40 8003D440 FFFF0224 */   addiu     $v0, $zero, -0x1
 endlabel func_8003D3F4
 
@@ -56,7 +56,7 @@ glabel func_8003D460
     /* 1DC78 8003D478 C01A8424 */  addiu      $a0, $a0, %lo(D_80021AC0)
     /* 1DC7C 8003D47C 9770010C */  jal        func_8005C25C
     /* 1DC80 8003D480 00000000 */   nop
-    /* 1DC84 8003D484 44E60008 */  j          func_80039910
+    /* 1DC84 8003D484 44E60008 */  j          D_80039910
     /* 1DC88 8003D488 21100000 */   addu      $v0, $zero, $zero
 endlabel func_8003D460
 
