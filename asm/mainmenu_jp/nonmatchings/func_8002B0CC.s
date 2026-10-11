@@ -589,19 +589,10 @@ glabel func_8002B798
     /* BFB0 8002B7B0 00000000 */   nop
 endlabel func_8002B798
 
-nonmatching func_8002B7B4, 0x10
+nonmatching func_8002B7B4, 0xC
 
 glabel func_8002B7B4
     /* BFB4 8002B7B4 0880043C */  lui        $a0, %hi(D_800874B4)
     /* BFB8 8002B7B8 B4748424 */  addiu      $a0, $a0, %lo(D_800874B4)
     /* BFBC 8002B7BC 13A80008 */  j          D_8002A04C
-    /* BFC0 8002B7C0 55302E64 */   daddiu    $t6, $at, 0x3055
 endlabel func_8002B7B4
-
-/* Handwritten function */
-nonmatching func_8002B7C4, 0x8
-
-glabel func_8002B7C4
-    /* BFC4 8002B7C4 17A4BDBC */  cache      0x1D, -0x5BE9($a1) /* handwritten instruction */
-    /* BFC8 8002B7C8 620D52CD */  pref       0x12, 0xD62($t2)
-endlabel func_8002B7C4

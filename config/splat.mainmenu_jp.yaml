@@ -68,8 +68,35 @@ segments:
       - [0xA538, data, data_80029D38]   # 0xe8c
       - [0xB3C4, asm, func_8002ABC4]   # 0x2f4
       - [0xB6B8, data, data_8002AEB8]   # 0x214
-      - [0xB8CC, asm, func_8002B0CC]   # 0x700
-      - [0xBFCC, data, data_8002B7CC]   # 0x2634
+      - [0xB8CC, asm, func_8002B0CC]   # 0x6f4 (tail = payload 1 head, carved below)
+      # Mirror of the EU carve (commit 8159794/1fd69db): the 0x930-byte block
+      # grid is byte-proven on both discs at IDENTICAL vrams - descriptors
+      # ffffff00 ffffffff 00ffffff <idx> 00080000 00080000 every 0x930
+      # (JP idx base runs 2 lower than EU at the same address: 0x252 vs
+      # 0x254 at 0x8002B8D8). Per block: [0x18 descriptor][0x800 plaintext
+      # code][0x118 encrypted payload]. JP payload boundaries measured at
+      # the same addresses as EU (junk from B7C0/C0F0/CA20; code halves
+      # B8F0..C0F0 / C220..CA20, both opening with stub rows). Payloads:
+      # high-entropy, no twin in EU (+/-0x900 slide) - encrypted at rest.
+      # Code halves: block-1 functions sit at JP vram = EU vram + 0x60
+      # (func_8002B918-analog prologue at 0x8002B978); block 2/3 deltas
+      # drift (-0x8fc/-0x7e4 measured on EU side) - the grid is shared,
+      # the function placement inside code halves is not.
+      # The remainder 0x8002CB50..0x8002DE00 holds the state-pool code twin
+      # of EU func_8002CC5C (delta 0, twin-proven), the D_8002D358-analog
+      # 0x40 blob, and further grid blocks (desc at D468/DD98) - carve next
+      # session with the grid analysis; EU's stub rows j INTO payload 1 with
+      # real store delay slots, so some payload bytes only exist after
+      # runtime decryption.
+      - [0xBFC0, data, data_8002B7C0]   # 0x118 payload 1
+      - [0xC0D8, data, data_8002B8D8]   # 0x18 descriptor 1
+      - [0xC0F0, asm, func_8002B8F0]   # 0x800 code block 1
+      - [0xC8F0, data, data_8002C0F0]   # 0x118 payload 2
+      - [0xCA08, data, data_8002C208]   # 0x18 descriptor 2
+      - [0xCA20, asm, func_8002C220]   # 0x800 code block 2
+      - [0xD220, data, data_8002CA20]   # 0x118 payload 3
+      - [0xD338, data, data_8002CB38]   # 0x18 descriptor 3
+      - [0xD350, data, data_8002CB50]   # 0x12b0 remainder: state-pool twin + grid blocks (next session)
       - [0xE600, asm, func_8002DE00]   # 0x800
       - [0xEE00, data, data_8002E600]   # 0x1d48
       - [0x10B48, asm, func_80030348]   # 0x740
