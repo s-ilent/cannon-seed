@@ -127,7 +127,20 @@ segments:
       - [0xE598, data, data_8002DD98]  # 0x18 descriptor 5
       - [0xE5B0, data, data_8002DDB0]  # 0x50 pool epilogue
       - [0xE600, asm, func_8002DE00]   # 0x82c
-      - [0xEE2C, data, data_8002E62C]   # 0x538
+      # Grid carve (recon 2026-10-12, scripts/eu_e62c_recon2.py): data_8002E62C
+      # splits at descriptor 6 (0x8002E6C8, idx 0x259): payload-6 tail 0x9c
+      # (high-entropy junk) | desc6 0x18 | code fabric 0x484. The fabric is
+      # real code from E6E0 (lw v0,(s7) continuation head, no prologue) to
+      # EB64, flowing into func_8002EB64: entry points E728/E760/E78C/E7B8/
+      # E7E4/E810/E83C/E868/E8A8/E97C arrive via data_8008765C callback
+      # tables; island EAB0..EAE8 (state transitions j 0x8002cc34) is part
+      # of the same body. Pure relocation twin of JP same-vram bytes (71/289
+      # words, 0 opcode-class). The grid's payload-6 window (E5B0..E6C8)
+      # overlaps real code (pool epilogue + func_8002DE00 head) - per-block
+      # measurement wins; only the tail inside this zone is junk.
+      - [0xEE2C, data, data_8002E62C]   # 0x9c payload 6 tail
+      - [0xEEC8, data, data_8002E6C8]  # 0x18 descriptor 6
+      - [0xEEE0, asm, func_8002E6E0]   # 0x484 dispatcher fabric
       - [0xF364, asm, func_8002EB64]   # 0x3ac
       - [0xF710, data, data_8002EF10]   # 0x458
       - [0xFB68, asm, func_8002F368]   # 0x4cc
