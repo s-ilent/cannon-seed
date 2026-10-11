@@ -555,7 +555,7 @@ glabel func_8003B730
     /* 1BF3C 8003B73C 21988000 */   addu      $s3, $a0, $zero
   alabel func_8003B740
     /* 1BF40 8003B740 6000638E */  lw         $v1, 0x60($s3)
-    /* 1BF44 8003B744 94DF0008 */  j          D_80037E50
+    /* 1BF44 8003B744 94DF0008 */  j          func_80037E50
     /* 1BF48 8003B748 00000000 */   nop
 endlabel func_8003B730
 

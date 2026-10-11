@@ -100,7 +100,7 @@ glabel func_8005EB18
     /* 3F42C 8005EC2C 1400A3AF */   sw        $v1, 0x14($sp)
     /* 3F430 8005EC30 47004018 */  blez       $v0, func_8005ED50
     /* 3F434 8005EC34 14006426 */   addiu     $a0, $s3, 0x14
-    /* 3F438 8005EC38 855A0108 */  j          D_80056A14
+    /* 3F438 8005EC38 855A0108 */  j          func_80056A14
     /* 3F43C 8005EC3C 00000000 */   nop
 endlabel func_8005EB18
 
