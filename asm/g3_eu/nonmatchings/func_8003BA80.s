@@ -31,7 +31,6 @@ nonmatching func_8003BAA4, 0x28
 glabel func_8003BAA4
     /* 1C2A4 8003BAA4 000060A6 */  sh         $zero, 0x0($s3)
     /* 1C2A8 8003BAA8 2800BF8F */  lw         $ra, 0x28($sp)
-  alabel func_8003BAAC
     /* 1C2AC 8003BAAC 2400B58F */  lw         $s5, 0x24($sp)
     /* 1C2B0 8003BAB0 2000B48F */  lw         $s4, 0x20($sp)
     /* 1C2B4 8003BAB4 1C00B38F */  lw         $s3, 0x1C($sp)
@@ -97,7 +96,6 @@ glabel func_8003BB18
     /* 1C378 8003BB78 00140200 */  sll        $v0, $v0, 16
     /* 1C37C 8003BB7C 34004004 */  bltz       $v0, func_8003BC50
     /* 1C380 8003BB80 00000000 */   nop
-  alabel func_8003BB84
     /* 1C384 8003BB84 ECD0000C */  jal        func_800343B0
     /* 1C388 8003BB88 21200002 */   addu      $a0, $s0, $zero
     /* 1C38C 8003BB8C A400038E */  lw         $v1, 0xA4($s0)
@@ -182,7 +180,6 @@ glabel func_8003BC58
   alabel func_8003BC60
     /* 1C460 8003BC60 00140200 */  sll        $v0, $v0, 16
     /* 1C464 8003BC64 03140200 */  sra        $v0, $v0, 16
-  alabel func_8003BC68
     /* 1C468 8003BC68 FFFF0324 */  addiu      $v1, $zero, -0x1
     /* 1C46C 8003BC6C F0FF4310 */  beq        $v0, $v1, func_8003BC30
     /* 1C470 8003BC70 31000234 */   ori       $v0, $zero, 0x31
@@ -222,24 +219,18 @@ glabel func_8003BC8C
     /* 1C4E4 8003BCE4 00000000 */   nop
 endlabel func_8003BC8C
 
-nonmatching func_8003BCE8, 0x4
+nonmatching func_8003BCE8, 0x20
 
 glabel func_8003BCE8
     /* 1C4E8 8003BCE8 24000386 */  lh         $v1, 0x24($s0)
-endlabel func_8003BCE8
-
-nonmatching func_8003BCEC, 0x1C
-
-glabel func_8003BCEC
     /* 1C4EC 8003BCEC 00000000 */  nop
     /* 1C4F0 8003BCF0 05006010 */  beqz       $v1, func_8003BD08
     /* 1C4F4 8003BCF4 01000234 */   ori       $v0, $zero, 0x1
     /* 1C4F8 8003BCF8 07006210 */  beq        $v1, $v0, func_8003BD18
-  alabel func_8003BCFC
     /* 1C4FC 8003BCFC 00000000 */   nop
     /* 1C500 8003BD00 BCE00008 */  j          func_800382F0
     /* 1C504 8003BD04 00000000 */   nop
-endlabel func_8003BCEC
+endlabel func_8003BCE8
 
 nonmatching func_8003BD08, 0x10
 
@@ -292,7 +283,6 @@ glabel func_8003BD6C
     /* 1C580 8003BD80 2A104300 */  slt        $v0, $v0, $v1
     /* 1C584 8003BD84 07004014 */  bnez       $v0, func_8003BDA4
     /* 1C588 8003BD88 02002336 */   ori       $v1, $s1, 0x2
-  alabel func_8003BD8C
     /* 1C58C 8003BD8C 03000234 */  ori        $v0, $zero, 0x3
     /* 1C590 8003BD90 04006214 */  bne        $v1, $v0, func_8003BDA4
     /* 1C594 8003BD94 01000234 */   ori       $v0, $zero, 0x1

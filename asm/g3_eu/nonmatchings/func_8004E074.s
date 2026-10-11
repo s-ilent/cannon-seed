@@ -323,7 +323,6 @@ nonmatching func_8004E358, 0x20
 glabel func_8004E358
     /* 2EB58 8004E358 5400B98F */  lw         $t9, 0x54($sp)
     /* 2EB5C 8004E35C 00000000 */  nop
-  alabel func_8004E360
     /* 2EB60 8004E360 80761900 */  sll        $t6, $t9, 26
     /* 2EB64 8004E364 C27F0E00 */  srl        $t7, $t6, 31
     /* 2EB68 8004E368 0300E011 */  beqz       $t7, func_8004E378
@@ -386,7 +385,6 @@ glabel func_8004E3D8
     /* 2EBE8 8004E3E8 FFFFE724 */  addiu      $a3, $a3, -0x1
     /* 2EBEC 8004E3EC 0100C624 */  addiu      $a2, $a2, 0x1
     /* 2EBF0 8004E3F0 F9FF6014 */  bnez       $v1, func_8004E3D8
-  alabel func_8004E3F4
     /* 2EBF4 8004E3F4 0000EFA0 */   sb        $t7, 0x0($a3)
     /* 2EBF8 8004E3F8 5C00B98F */  lw         $t9, 0x5C($sp)
 endlabel func_8004E3D8

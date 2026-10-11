@@ -363,7 +363,7 @@ glabel func_80037DC8
     /* 185E0 80037DE0 00000000 */   nop
 endlabel func_80037DC8
 
-nonmatching func_80037DE4, 0x50
+nonmatching func_80037DE4, 0xA0
 
 glabel func_80037DE4
     /* 185E4 80037DE4 3A00E284 */  lh         $v0, 0x3A($a3)
@@ -386,11 +386,6 @@ glabel func_80037DE4
     /* 18628 80037E28 23180300 */  negu       $v1, $v1
     /* 1862C 80037E2C 1800A3AF */  sw         $v1, 0x18($sp)
     /* 18630 80037E30 23100200 */  negu       $v0, $v0
-endlabel func_80037DE4
-
-nonmatching func_80037E34, 0x50
-
-glabel func_80037E34
     /* 18634 80037E34 1400A2AF */  sw         $v0, 0x14($sp)
     /* 18638 80037E38 000024A6 */  sh         $a0, 0x0($s1)
     /* 1863C 80037E3C 1800A597 */  lhu        $a1, 0x18($sp)
@@ -411,7 +406,7 @@ glabel func_80037E34
     /* 18678 80037E78 000045A6 */  sh         $a1, 0x0($s2)
     /* 1867C 80037E7C 00002486 */  lh         $a0, 0x0($s1)
     /* 18680 80037E80 002C0500 */  sll        $a1, $a1, 16
-endlabel func_80037E34
+endlabel func_80037DE4
 
 nonmatching func_80037E84, 0x2C
 
