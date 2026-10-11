@@ -71,4 +71,39 @@ if [ -n "$copyright_hits" ]; then
     violations=1
 fi
 
+# --- 4. Agent sessions commit as the agent, never as the owner ---------------
+# The owner's GitHub noreply address links a commit to their account, and the
+# ambient global git config hands it to every session that sets no identity of
+# its own. ZCode exports the markers below to every process it spawns, so an
+# agent-driven commit carries them and the owner's own terminal does not.
+#
+# CAVEAT: if ZCode ever renames these markers the check stops firing, and agent
+# commits silently revert to the owner's identity. AGENTS.md rule 7 is the
+# backstop; re-verify this list when the client is upgraded.
+OWNER_EMAIL='16026653+s-ilent@users.noreply.github.com'
+agent_session=0
+for marker in "$ZCODE_ENV" "$ZCODE_APP_VERSION" "$ZCODE_BASE_URL" "$ZCODE_PROCESS_LABEL"; do
+    if [ -n "$marker" ]; then agent_session=1; fi
+done
+case "${APPIMAGE:-}${APPDIR:-}" in *ZCode*) agent_session=1 ;; esac
+if [ "$agent_session" = 1 ] && [ "${ALLOW_OWNER_IDENT:-}" != "1" ]; then
+    owner_hit=0
+    for ident in "$(git var GIT_AUTHOR_IDENT)" "$(git var GIT_COMMITTER_IDENT)"; do
+        case "$ident" in *"$OWNER_EMAIL"*) owner_hit=1 ;; esac
+    done
+    if [ "$owner_hit" = 1 ]; then
+        echo "ERROR: an agent session is committing under the repository owner's name:" >&2
+        echo "  author:    $(git var GIT_AUTHOR_IDENT)" >&2
+        echo "  committer: $(git var GIT_COMMITTER_IDENT)" >&2
+        echo "" >&2
+        echo "Agent commits carry the agent identity; the owner's name must never" >&2
+        echo "appear on work an agent performed. Commit with:" >&2
+        echo "  sh tools/agent_git.sh commit -m '<message>'" >&2
+        echo "" >&2
+        echo "Only if the owner is the one committing from inside this session:" >&2
+        echo "  ALLOW_OWNER_IDENT=1 git commit ..." >&2
+        violations=1
+    fi
+fi
+
 exit $violations
