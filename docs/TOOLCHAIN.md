@@ -25,16 +25,19 @@ The `mips64` target architecture prevents GNU `as` from expanding 64-bit pseudo-
 
 ## Compiler fingerprint: measured on the matched asm
 
-Measurements from `asm/nonmatchings/` (target `slps_00270`):
+Measurements from `asm/nonmatchings/` (target `slps_00270`). The counts are a
+snapshot of the carve and fall as carving changes — upstream removed 217 orphaned
+`.s` files on 2026-10-12, and the numbers below were re-derived after that.
+Re-derive any row with `grep -rhoE '\bOP\b' asm/nonmatchings/ | wc -l`.
 
 | Signal | Measurement | Interpretation |
 | --- | --- | --- |
 | Psy-Q kernel RCS strings | `intr.c` 1995-08-29, `sys.c` 1995-10-26 (docs/RECON.md) | SDK release dated October 1995 |
-| Instruction set | 61 `mult`, 35 `multu`, 93 `mflo`, 22 `mfhi`; 0 MIPS32 `mul` | MIPS1 architecture; multiplication compiled as mult/mflo pairs |
-| Division traps | 13 `div`, 33 `break`; e.g., `0x80028D74`: `bnez $a3,+7; nop; break 7` followed by `addiu $at,$zero,-1; bne/lui 0x80000000; break 6` | Inline divide-by-zero and overflow trap sequences standard in GCC MIPS1 output |
+| Instruction set | 48 `mult`, 34 `multu`, 77 `mflo`, 22 `mfhi`; 0 MIPS32 `mul` | MIPS1 architecture; multiplication compiled as mult/mflo pairs |
+| Division traps | 8 `div`, 9 `divu`, 25 `break`; e.g. `break 7` at `0x80023388` in `func_80022F30` | Inline divide-by-zero and overflow trap sequences standard in GCC MIPS1 output |
 | Arithmetic library calls | 0 calls to `__divsi3`, `__mulsi3` | Integer arithmetic inlined by compiler |
-| Default character type | 184 `lbu` vs 13 `lb` | Default `unsigned char` (`-funsigned-char`) with specific signed exceptions |
-| Small data model | 0 `%gp_rel` in stubs, but direct `$gp` offset loads/stores throughout (e.g. `0x3C($gp)`, `0x68($gp)`); gp base `0x8006322C` set at `0x800304D4` (`lui $gp,0x8006; addiu $gp,$gp,0x632C`) | Small data model active (`-G8` default); external small data requires `%gp_rel` handling in `build.sh` |
+| Default character type | 88 `lbu` vs 5 `lb` | Default `unsigned char` (`-funsigned-char`) with specific signed exceptions |
+| Small data model | Access through `%gp_rel(D_8006325x..7x)($gp)`; the small-data block sits around `0x80063258`. The raw-offset form quoted earlier is not what the current carve contains | Small data model active (`-G8` default); external small data requires `%gp_rel` handling in `build.sh` |
 | Delay slots | `.set noreorder` with scheduled `nop` instructions | Delay slots scheduled by compiler |
 
 ## Working hypothesis (until pinned per-function)
