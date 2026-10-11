@@ -205,12 +205,13 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
     n = len(payload) // 4
     words = struct.unpack(f"<{n}I", payload[: n * 4])
 
-    # Pinned data spans (hand-verified data rows) are no-walk zones: no
-    # walk may start inside one or consume a word of one. hard_stops alone
-    # only blocks seeds AT the pinned START offset - a j-target landing a
-    # few words into the span still seeded a walk that swallowed the rest
-    # of the pin (witnessed: g3_eu func_80022A1C carved out of the pinned
-    # data_80022A18's first four bytes onward).
+    # Pinned spans (hand-verified rows: audited data AND hand-carved code
+    # islands) are no-walk zones: no walk may start inside one or consume a
+    # word of one. hard_stops alone only blocks seeds AT the pinned START
+    # offset - a j-target landing a few words into the span still seeded a
+    # walk that swallowed the rest of the pin (witnessed: g3_eu
+    # func_80022A1C carved out of the pinned data_80022A18's first four
+    # bytes onward).
     pin_mask = bytearray(n)
     for ps, pe in pin_spans:
         for w in range(ps // 4, min((pe + 3) // 4, n)):
@@ -763,14 +764,19 @@ def preserved_types(yaml_path: Path):
         m = re.match(r"\s*- \[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]\s*#\s*(0x[0-9A-Fa-f]+)", ln)
         if not m:
             continue
-        # `c` is hand-set and always preserved. A `data` line marked `pinned`
-        # is a hand-verified data range: keep it too, or the sweep re-types it
-        # back to code. Blanket-preserving data stays wrong (v3 rescues real
-        # code from data gaps); only the explicit marker counts.
-        if m.group(2) == "c" or (m.group(2) == "data" and "pinned" in ln):
+        # `c` is hand-set and always preserved. A row carrying a `pinned`
+        # marker is a hand-verified row of the type written on the line:
+        # `data` pins are hand-audited data (code_data_screen DATA verdicts),
+        # `asm` pins are hand-carved code islands (FABRIC honesty carves).
+        # Both become exact-size hard rows below. Blanket-preserving
+        # unmarked rows stays wrong (v3 rescues real code from data gaps);
+        # only the explicit marker counts. A `c` row never joins the
+        # no-walk pin set: the walk may flow into a matched C function and
+        # the defensive split in main() owns its exact-size carve-out.
+        if m.group(2) == "c" or "pinned" in ln:
             off = int(m.group(1), 16) - HDR
             kept[off] = (m.group(2), m.group(3), int(m.group(4), 16))
-            if m.group(2) == "data":
+            if m.group(2) != "c":
                 pinned.add(off)
     return kept, pinned
 
@@ -823,7 +829,9 @@ def main(argv):
     # (witnessed: mainmenu_jp data_800253C4 and the g3 pins absorbed into
     # the leading data row when no walk started at the pin). Carve every
     # kept row that sits fully inside a gap out as its own subsegment
-    # piece; the leftovers stay data gaps.
+    # piece; the leftovers stay data gaps. This is also the path every
+    # hand-carved asm pin takes: its span is a no-walk zone, so the walk
+    # never rediscovers it and the carve's own bytes are authoritative.
     kept_gap_rows = []
     carved_gaps = []
     for gs, ge in gaps:
@@ -859,8 +867,12 @@ def main(argv):
     subsegs.sort()
 
     code_bytes = sum(e - s for s, e in ranges)
-    data_bytes = sum(e - s for s, e in gaps) + sum(
-        k for _, typ, _, k in kept_gap_rows if typ == "data")
+    data_bytes = sum(e - s for s, e in gaps)
+    for _, typ, _, k in kept_gap_rows:
+        if typ == "data":
+            data_bytes += k
+        else:
+            code_bytes += k
     print(f"scan {target}: {len(ranges)} code ranges "
           f"({code_bytes:,} B, {100.0 * code_bytes / len(payload):.1f}%), "
           f"{len(gaps)} data gaps ({data_bytes:,} B)")

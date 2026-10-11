@@ -36,23 +36,18 @@ glabel func_80038318
     /* 18B74 80038374 07106400 */  srav       $v0, $a0, $v1
 endlabel func_80038318
 
-nonmatching func_80038378, 0x8
+nonmatching func_80038378, 0x20
 
 glabel func_80038378
     /* 18B78 80038378 01004230 */  andi       $v0, $v0, 0x1
     /* 18B7C 8003837C 06004010 */  beqz       $v0, func_80038398
-endlabel func_80038378
-
-nonmatching func_80038380, 0x18
-
-glabel func_80038380
-    /* 18B80 80038380 04000234 */  ori        $v0, $zero, 0x4
+    /* 18B80 80038380 04000234 */   ori       $v0, $zero, 0x4
     /* 18B84 80038384 01006324 */  addiu      $v1, $v1, 0x1
     /* 18B88 80038388 04006228 */  slti       $v0, $v1, 0x4
     /* 18B8C 8003838C FAFF4014 */  bnez       $v0, func_80038378
     /* 18B90 80038390 07106400 */   srav      $v0, $a0, $v1
     /* 18B94 80038394 04000234 */  ori        $v0, $zero, 0x4
-endlabel func_80038380
+endlabel func_80038378
 
 nonmatching func_80038398, 0x28
 

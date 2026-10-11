@@ -396,8 +396,8 @@ glabel func_800335AC
     /* 13DB8 800335B8 D998000C */  jal        func_80026364
     /* 13DBC 800335BC FFFF0624 */   addiu     $a2, $zero, -0x1
     /* 13DC0 800335C0 3800A38E */  lw         $v1, 0x38($s5)
-    /* 13DC4 800335C4 0380023C */  lui        $v0, %hi(func_8002E250 + 0x70)
-    /* 13DC8 800335C8 C0E24224 */  addiu      $v0, $v0, %lo(func_8002E250 + 0x70)
+    /* 13DC4 800335C4 0380023C */  lui        $v0, %hi(D_8002E2C0)
+    /* 13DC8 800335C8 C0E24224 */  addiu      $v0, $v0, %lo(D_8002E2C0)
     /* 13DCC 800335CC 0C0062AC */  sw         $v0, 0xC($v1)
     /* 13DD0 800335D0 5800BF8F */  lw         $ra, 0x58($sp)
     /* 13DD4 800335D4 5400B58F */  lw         $s5, 0x54($sp)

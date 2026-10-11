@@ -447,7 +447,7 @@ glabel func_80047740
     /* 27F90 80047790 23180300 */  negu       $v1, $v1
 endlabel func_80047740
 
-nonmatching func_80047794, 0x18
+nonmatching func_80047794, 0x24
 
 glabel func_80047794
     /* 27F94 80047794 40100200 */  sll        $v0, $v0, 1
@@ -456,15 +456,10 @@ glabel func_80047794
     /* 27FA0 800477A0 00000000 */  nop
     /* 27FA4 800477A4 21106200 */  addu       $v0, $v1, $v0
     /* 27FA8 800477A8 00140200 */  sll        $v0, $v0, 16
-endlabel func_80047794
-
-nonmatching func_800477AC, 0xC
-
-glabel func_800477AC
     /* 27FAC 800477AC 03140200 */  sra        $v0, $v0, 16
     /* 27FB0 800477B0 0800E003 */  jr         $ra
     /* 27FB4 800477B4 0800BD27 */   addiu     $sp, $sp, 0x8
-endlabel func_800477AC
+endlabel func_80047794
 
 nonmatching func_800477B8, 0xA8
 
