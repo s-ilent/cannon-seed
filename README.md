@@ -1,104 +1,59 @@
-# cannon-seed — Galaxian³ (PSX) matching decompilation
+# Galaxian³ (PSX) matching decompilation
 
-C source that compiles, with the game's original pinned toolchain, into
-executables byte-for-byte identical to the retail Galaxian³: Project
-Dragoon discs. Methodology distilled from tenchu-decomp, lsddecomp,
-parasite-eve-decomp and rage-racer-decomp; the full survey is
-[docs/PSX-Decompilation-Methodology-Report.pdf](docs/PSX-Decompilation-Methodology-Report.pdf).
+A matching decompilation of Galaxian³: Project Dragoon for the PlayStation. The project reconstructs the original C source code to produce byte-identical binaries when compiled with the original toolchain.
 
-> A paraphrase of a program can be subtly wrong without anyone noticing.
-> A byte-exact rebuild can't be. — lsddecomp
+The game uses eight executable targets across two regional releases:
 
-**Targets (8 — this is a multi-EXE game):** the boot executables
-SLPS-00270 (JP) / SCES-00269 (EU), plus three payloads per region:
-`MAINMENU.EXE`, `DRAGOON/G3.EXE` (the main game) and `GOURB/G3ORG.EXE`.
-All hashes, sizes and header facts are measured in
-[docs/RECON.md](docs/RECON.md); the committed oracles live in
-`config/sha1/`.
+* Boot executables: `slps_00270` (Japan) and `sces_00269` (Europe)
+* Payloads: `mainmenu_jp` / `mainmenu_eu`, `g3_jp` / `g3_eu` (the main game), and `g3org_jp` / `g3org_eu`
 
-## What is and is not in this repository
+Header details, memory maps, and SHA-1 checksums are documented in [docs/RECON.md](docs/RECON.md). Target hashes are stored in `config/sha1/`.
 
-**No game data and no Sony files.** No disc image, CHD, executable,
-asset, SDK library or SDK header is committed, and none ever will be.
-You bring your own legally obtained copies (this project started from the
-owner's redump-style CHDs); the build reads them from git-ignored
-directories.
-
-| you provide | where | what the build does with it |
-| --- | --- | --- |
-| retail CHDs / exes | `baselines/` | split (splat) + whole-image verification |
-| pinned toolchain | system / venv | compiles `src/` with the exact original compiler |
-| Sony Psy-Q SDK | `sdk/` | converted to `lib/` + `include/psyq/` — generated and ignored |
-
-What *is* committed: the reconstruction (`src/`, `include/`), splat
-configs and symbol lists (`config/`), generated `asm/` (never edit it),
-the tools — including `tools/chd_extract.py`, a self-contained CHD v5
-CD-ROM reader (port of MAME's algorithms) so anyone can verify the
-extraction from their own CHDs — and the docs.
-
-## Status
-
-The repo owns a byte-exact build machine: splat split → maspsx → mipsel
-as → per-subsegment linker script → objcopy → generated PS-X EXE header.
-The round-trip oracle is GREEN for **all 8 targets** — every retail
-executable in both regions (`slps_00270`/`sces_00269` boots, both
-`MAINMENU.EXE`, both `DRAGOON/G3.EXE`, both `GOURB/G3ORG.EXE`) reproduces
-byte-for-byte from committed asm via `make verify TARGET=<t>`. This is an
-asm round-trip, not decompiled source: every function is still
-nonmatching. Next: compiler pinning (docs/TOOLCHAIN.md), GCC 2.6.3
-acquisition, then the first C function match.
-Live facts: [docs/RECON.md](docs/RECON.md). Measure, don't transcribe:
-`make progress`, `make nonmatchings`, `make ratchets`.
-
-## The one command that matters
+## Verification
 
 ```sh
 make verify
 ```
 
-Builds and compares the whole image with retail; ends
-`OK: build matches retail ...` on success. It is the only build entrance —
-a bare `make` is deliberately blocked, because a bare build says nothing
-about whether the bytes are right.
+`make verify` builds the image and checks its checksum against retail, printing `OK: build matches retail ...` on success. A bare `make` command is blocked intentionally to prevent unverified builds from running.
 
-| command | what it does |
+| Command | Action |
 | --- | --- |
-| `make verify TARGET=<t>` | oracle gate: build + whole-image SHA-1 vs retail |
-| `make extract TARGET=<t>` | split the target executable with [splat] |
-| `make progress` | matched / nonmatching function report |
-| `make nonmatchings` | list the functions that do not match yet |
-| `make ratchets` | placeholder / debt ratchet audit |
-| `make hooks` | install oracle-protecting git hooks |
-| `make clean` | remove the build directory |
+| `make verify TARGET=<t>` | Build and verify image SHA-1 against retail |
+| `make extract TARGET=<t>` | Split target executable with [splat] |
+| `make progress` | Report current matched function counts |
+| `make nonmatchings` | List functions that do not match yet |
+| `make ratchets` | Audit placeholder and debt ratchets |
+| `make hooks` | Install git safety hooks |
+| `make clean` | Remove build artifacts |
 
-Targets: `slps_00270`, `sces_00269`, `mainmenu_jp`, `mainmenu_eu`,
-`g3_jp`, `g3_eu`, `g3org_jp`, `g3org_eu`.
+Targets: `slps_00270`, `sces_00269`, `mainmenu_jp`, `mainmenu_eu`, `g3_jp`, `g3_eu`, `g3org_jp`, `g3org_eu`.
 
-Extracting the executables from your own CHDs:
+Extracting executables from CHD disc images:
 
 ```sh
 python3 tools/chd_extract.py Galaxian3_Japan.chd japan.bin      # 2352 B/sector
 python3 tools/iso9660_extract.py japan.bin out/ 'SLPS_002.70;1' ...
 ```
 
-## Methodology in the tree
+## Documentation
 
-| document | holds |
+Track ongoing progress, rules, and technical findings in the documentation tree:
+
+| Document | Description |
 | --- | --- |
-| [docs/RECON.md](docs/RECON.md) | measured facts: discs, executables, headers, fingerprints, open questions |
-| [docs/WORKFLOW.md](docs/WORKFLOW.md) | the six-phase lifecycle, with the figure |
-| [docs/RULES.md](docs/RULES.md) | the hard rules with rationale — oracle, toolchain, source, process |
-| [docs/GUIDELINES.md](docs/GUIDELINES.md) | naming scheme, evidence order, shiftability, AI orchestration |
-| [docs/MATCHING.md](docs/MATCHING.md) | the matching loop: ladder, parking policy, how a score lies |
-| [docs/CHECKLIST.md](docs/CHECKLIST.md) | the starter checklist (steps 1-4 done — see RECON) |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | the review contract: state your claim, ratchets, definition of done |
-| [CLAUDE.md](CLAUDE.md) | the short agent contract (rules + loop, never state) |
+| [docs/RECON.md](docs/RECON.md) | Measured facts: disc layouts, executables, headers, and toolchain fingerprints |
+| [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md) | Compiler version evidence, build pipeline, and assembly quirks |
+| [docs/WORKFLOW.md](docs/WORKFLOW.md) | Six-phase decompilation lifecycle |
+| [docs/RULES.md](docs/RULES.md) | Hard rules for oracle integrity, toolchains, source layout, and reviews |
+| [docs/GUIDELINES.md](docs/GUIDELINES.md) | Naming conventions, evidence hierarchy, and shiftability |
+| [docs/MATCHING.md](docs/MATCHING.md) | Matching loop ladder, non-matching parking policy, and false matches |
+| [docs/CHECKLIST.md](docs/CHECKLIST.md) | Setup checklist from disc dump to matching build |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide: stating claims, ratchets, and definition of done |
+| [CLAUDE.md](CLAUDE.md) | Operational rules and loop for AI agents |
 
-## Licence
+## License
 
-The project's own work is MIT (see [LICENSE](LICENSE)) — covering the
-reconstructed source, headers, configuration and tools *only*. Galaxian³,
-its assets and Sony's Psy-Q SDK remain the property of Namco / Sony and
-are not, and will not be, in this repository.
+Source code, headers, build scripts, and configurations are licensed under the MIT License ([LICENSE](LICENSE)). Galaxian³, game assets, and the Sony Psy-Q SDK are the property of Namco and Sony.
 
 [splat]: https://github.com/ethteck/splat
