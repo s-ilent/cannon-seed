@@ -52,6 +52,8 @@ Method (v2, documented and re-runnable):
    emits the same bytes however it decodes them; verify is the gate).
    Guarded: never merges a range other code enters (shared tail), never
    across a preserved c-function, never one starting a fresh prologue.
+   (applies to rule 11's rescues too: a strong rescue is merged into a
+   branching predecessor only when the guards hold)
 10. v3d image-integrity rejection: real code never jal/j's outside the
    executable's own image (or the BIOS call regions A0/B0/C0); packed
    and encrypted data blobs that walk as plausible code do it constantly
@@ -59,6 +61,26 @@ Method (v2, documented and re-runnable):
    decode through sdc1/jal-to-0x802F8978/bgezall $ra/cache until GAS
    hard-fails on the bgezall). Such ranges are rejected wholesale and
    their bytes return to the data side, where they belong.
+11. v4 strong anchors: a bare `j` (op 2) inside a covered code range is
+   a tail call/dispatch, and a tail call only ever targets code. Its
+   target is a function entry that has NO frame (leaf, so v3's prologue
+   rescue never fires) and NO jal pointing at it (so v1 never anchors
+   it) - without this rule such functions hide in data gaps forever
+   (witnessed: g3_eu data_8004712C swallowed three of them; the j from
+   func_8004D744 enters at 0x80047924, two more at 0x8004899C/0x80048A44).
+   A j-seeded walk is accepted when it ends at a jr boundary (the shape
+   of a function end), is at least 0x14 B, and is an ISLAND - it never
+   overlaps or touches covered code. The island rule matters: a rescue
+   glued to a covered range joins it in the final merge, and one bad
+   jump inside the rescue then makes v3d reject the glued whole,
+   taking verified code down with it (witnessed on slps_00270:
+   0x8003F9EC..0x800402B8 swallowed 0x818 B of verified code; on
+   g3_eu the rescues even reached the matched C functions). The seed
+   set is recomputed and the strong rescue iterated, so dispatch chains
+   resolve. Branch targets keep the strict v2 connection rule with the
+   original single-pass semantics (they are intra-function flow or
+   pool words - far weaker evidence). v3d still vetts integrity
+   downstream; blobs that walk far die on it.
 
 Outputs (regenerated wholesale):
   - config/splat.slps_00270.yaml  subsegments section (between markers)
@@ -242,6 +264,31 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
     def in_covered(o):
         return any(s <= o < e for s, e in covered.items())
 
+    def jr_end(e):
+        """True if a walk ending at e terminated on a jr(+delay) boundary
+        (shape A: jr at e-8 with its delay slot consumed; shape B: jr at
+        e-4, delay slot implausible and unconsumed). The end shape of a
+        real function return or tail jump."""
+        if e < 8:
+            return False
+        return ((words[(e // 4) - 2] & 0xFC00003F) == JR
+                or (words[(e // 4) - 1] & 0xFC00003F) == JR)
+
+    def bad_jump_target(s, e):
+        """v3d image-integrity (docstring 10): the first j/jal target in
+        [s, e) outside the image and the BIOS call regions, else None."""
+        for j in range(s // 4, e // 4):
+            op = words[j] >> 26
+            if op == 2 or op == 3:  # j / jal
+                tgt = ((words[j] & 0x3FFFFFF) << 2) | (BASE & 0xF0000000)
+                if not (BASE <= tgt < BASE + len(payload)) and not (
+                        0xA0000000 <= tgt < 0xC0003000):
+                    return tgt
+        return None
+
+    # v2 branch-target rescue for the remaining gaps - ORIGINAL single-pass
+    # semantics, unchanged: seeds from the initial covered set only,
+    # barrier-less walks, connection-only acceptance.
     seeds = set()
     for s, e in list(covered.items()):
         for i in range(s // 4, e // 4):
@@ -266,6 +313,56 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             s2 == e for s2, e2 in covered.items()
         ):
             covered[s] = e
+
+    # v4 strong-anchor rescue (docstring 11): iterated `j`-target islands.
+    def build_mask():
+        m = bytearray(n)
+        for s2, e2 in covered.items():
+            for o in range(s2 // 4, min(e2 // 4, n)):
+                m[o] = 1
+        return m
+
+    def island(s, e):
+        """True if [s, e) neither overlaps nor touches covered code."""
+        if any(s < e2 and e > s2 for s2, e2 in covered.items()):
+            return False
+        return not any(e2 == s or s2 == e for s2, e2 in covered.items())
+
+    rescued_strong = 0
+    while True:
+        strong = set()
+        for s, e in list(covered.items()):
+            for i in range(s // 4, e // 4):
+                if (words[i] >> 26) != 0x02:
+                    continue
+                o = v2o(((words[i] & 0x3FFFFFF) << 2) | (BASE & 0xF0000000))
+                if o is not None and not in_covered(o & ~3) and (o & ~3) not in hard_stops:
+                    strong.add(o & ~3)
+        mask = build_mask()
+        grew = False
+        for a in sorted(strong):
+            if in_covered(a):
+                continue
+            r = walk(a, barrier=mask)
+            if not r:
+                continue
+            s, e = r
+            # image-integrity at acceptance time: a rescue carrying an
+            # out-of-image jump must never become code at all. Letting it
+            # through glues it to whatever v3/merge put next to it and the
+            # v3d wholesale kill then takes the NEIGHBOR down too
+            # (witnessed on sces_00269: [0xD40C,0xD4E8) doomed the verified
+            # 0x7D4 B at 0xD4E8 in the merged range).
+            if e - s >= 0x14 and jr_end(e) and island(s, e) \
+                    and bad_jump_target(s, e) is None:
+                covered[s] = e
+                rescued_strong += 1
+                grew = True
+        if not grew:
+            break
+    if rescued_strong:
+        print(f"scan: v4 strong-anchor rescue recovered "
+              f"{rescued_strong} j-target range(s) from data gaps")
 
     # v3 prologue rescue: pointer-called functions are never jal targets,
     # so their prologues hide in data gaps. Seed a walk at every prologue
@@ -346,15 +443,7 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             if s in hard_stops:
                 keep.append([s, e])
                 continue
-            bad_tgt = None
-            for j in range(s // 4, e // 4):
-                op = words[j] >> 26
-                if op == 2 or op == 3:  # j / jal
-                    tgt = ((words[j] & 0x3FFFFFF) << 2) | (BASE & 0xF0000000)
-                    if not (BASE <= tgt < BASE + len(payload)) and not (
-                            0xA0000000 <= tgt < 0xC0003000):
-                        bad_tgt = tgt
-                        break
+            bad_tgt = bad_jump_target(s, e)
             if bad_tgt is None:
                 keep.append([s, e])
                 continue
