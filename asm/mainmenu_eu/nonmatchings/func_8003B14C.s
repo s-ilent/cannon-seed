@@ -422,7 +422,7 @@ glabel func_8003B568
     /* 1BD94 8003B594 01004224 */  addiu      $v0, $v0, 0x1
     /* 1BD98 8003B598 0D80013C */  lui        $at, %hi(D_800CAC70)
     /* 1BD9C 8003B59C 70AC22A4 */  sh         $v0, %lo(D_800CAC70)($at)
-    /* 1BDA0 8003B5A0 2CDF0008 */  j          D_80037CB0
+    /* 1BDA0 8003B5A0 2CDF0008 */  j          .L80037CB0
     /* 1BDA4 8003B5A4 00000000 */   nop
 endlabel func_8003B568
 

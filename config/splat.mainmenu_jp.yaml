@@ -89,6 +89,12 @@ segments:
       - [0x178DC, asm, func_800370DC]   # 0x81c
       - [0x180F8, data, data_800378F8]   # 0x14c
       - [0x18244, c, func_80037A44]     # 0x6b8
+      # Switch dispatch twin of EU func_8003809C (cron-20261011-1157).
+      # Stays asm, not C: both its jump tables (jtbl_80021244/jtbl_8002125C)
+      # hold string data at rest in the retail image (jr into garbage), and
+      # nothing in either exe references this region. A C switch would emit
+      # a real table and could never match. Twin check: EU span is
+      # address-class-identical (jal/j/imm) except its last 3 words.
       - [0x188FC, asm, func_800380FC]   # 0xf0
       - [0x189EC, data, data_800381EC]   # 0x12c
       - [0x18B18, asm, func_80038318]   # 0x81c
