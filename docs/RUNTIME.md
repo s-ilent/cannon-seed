@@ -68,6 +68,27 @@ the union of several stages' entries plus a marker at each entry.
 * A `jr`/`jalr` site may be an SDK veneer (`$t2 = 0xA0`) or a library dispatcher,
   not a dispatch table; the consumer filters targets to the payload range.
 
+## Measured limits (pcsx-redux-git r7505.d1bc093f)
+
+Probed directly; these bound what runtime evidence can do here:
+
+* **Only exact-address Exec breakpoints fire.** A range Exec breakpoint
+  (`addBreakpoint(base, "Exec", size)`) never fires; only a 4-byte address does.
+* **Read/Write watchpoints barely fire.** A 0x46800-wide Write window over the
+  image fired once in 60 s; a Read window never fired, and neither did a 0x100
+  window on the live stack region. The memory-check path is largely bypassed,
+  so watchpoints cannot supply field-width or signedness evidence.
+* **The exe entry is not caught.** The loader sets PC directly, so an Exec
+  breakpoint on pc0 does not fire at the handoff; the first hit at that PC
+  arrives later, when another stage occupies the same RAM.
+* **The GDB stub is not an alternative.** `gdb-server.cc` inserts its
+  breakpoints through the same `m_debug` store (`bpActionExec`), with software
+  breakpoints unimplemented, so it inherits every limitation above.
+
+Net: this build can log exact-address Exec hits (auto-pad reaches MAINMENU),
+but it is not a trustworthy carve oracle. The static checks
+(`tools/code_data_screen.py`, `tools/fragment_report.py`) are the reliable route.
+
 ## Reading the output
 
 `!!` marks a real refutation (`REFUTED`); everything else is `not reached`:
