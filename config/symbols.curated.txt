@@ -7,6 +7,28 @@
 // same VRAM address holds different code in different builds. A name must
 // only be listed under the target whose split actually contains it.
 //
+// BEFORE ADDING A NAME: check the entry names the function you think it
+// does. The scanner will apply any name here to whatever function starts at
+// that address, with no further validation - a wrong line silently renames
+// an innocent function and, once extracted, spreads into every caller.
+//
+//   grep -m1 -A6 '^glabel' asm/<target>/nonmatchings/func_<ADDR>.s
+//
+// For an SDK veneer the address must be a function whose ENTIRE body is the
+// three-instruction stub (addiu $t2,$zero,0xA0|0xB0; jr $t2; addiu $t1,$zero,
+// <index>). A framed function that happens to CONTAIN a BIOS call is game
+// code, not a library member, and must keep its func_XXXXXXXX name - the
+// index alone does not identify it. tools/sdk_symbols.py enforces this and
+// lists only pure veneers; take names from its report, not from an index you
+// spotted by eye.
+//
+// The trap, live in this tree: the file asm/sces_00269/nonmatchings/
+// func_800496C0.s contains a B0/0x09 veneer, so an eye matching on index
+// names 0x800496C0 "CloseEvent". That address is a framed function that
+// calls func_8003CD28. The veneer is really at 0x80049760, which is a
+// different subsegment in the same file. Both the wrong and the right answer
+// look plausible from an index alone.
+//
 // Entries are facts established outside the scan. The SDK veneer names were
 // derived with tools/sdk_symbols.py (see config/sdk_symbols.txt for the
 // full evidence report).

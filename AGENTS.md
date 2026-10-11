@@ -36,17 +36,25 @@ This script restores git configuration, credentials, the virtual environment (`t
    If the build fails without a compiler error, isolate differences:
    `cmp -l build/<target>.bin baselines/<target>.bin | head`
    Convert the byte offset to a VRAM address per instructions in `tools/verify.sh`. Verify each target touched.
-3. Check progress and ratchets: `make progress`, `make ratchets`. Use automated renaming tools instead of manual search and replace.
+3. Check progress and ratchets: `make progress`, `make ratchets`. Rename symbols by editing `config/symbols.*.txt`, not by search and replace across the tree — `asm/` is regenerated, and a rename must survive the next scan (see "Naming what you find").
 4. Non-matching C code must not remain active. Put near-matches in `#ifdef NON_MATCHING` with the `INCLUDE_ASM` stub in the `#else` block. Mark matching quirks with a `/* MATCHING: */` comment.
 
 ## Naming what you find
 
-Two classes of function have names you can recover rather than guess:
+Names are recovered, not guessed, and they are authored in one place:
+`config/symbols.curated.txt`, one line per name under a `// target: <name>`
+header. `tools/scan_functions.py` reads it and writes the real
+`config/symbols.<target>.txt`, so a curated name survives every re-scan
+instead of reverting to `func_XXXXXXXX`. There is no rename command to run:
+edit the curated file, then `make extract` and `make verify` the target.
 
-* **PSY-Q library veneers** — a three-instruction body (`addiu $t2,$zero,0xA0|0xB0`, `jr $t2`, `addiu $t1,$zero,<index>`). These are SDK assembly the original build linked in; they match as `INCLUDE_ASM`, never from C. Their names come from the SDK archives: `tools/sdk_symbols.py --libs <psyq lib dir>` writes `config/sdk_symbols.txt`, and adopted names go in `config/symbols.curated.txt`, which the scanner preserves across re-scans. `docs/MATCHING.md` §3b has the SDK setup and the traps.
-* **GTE and hand-written routines** — leave the assembly; name them when the evidence is clear.
+* **PSY-Q library veneers** — a three-instruction body (`addiu $t2,$zero,0xA0|0xB0`, `jr $t2`, `addiu $t1,$zero,<index>`). SDK assembly the original build linked in; match as `INCLUDE_ASM`, never from C. `tools/sdk_symbols.py --libs <psyq lib dir>` reports every one with its SDK member; `docs/MATCHING.md` §3b has the SDK setup.
+* **GTE and hand-written routines** — leave the assembly; curate a name when the evidence is clear.
 
-A name goes in the `config/symbols.*.txt` file, never in a yaml subsegment: `tools/build.sh` reads each section's address out of the file name.
+Curate into `config/symbols.curated.txt`, never straight into
+`config/symbols.<target>.txt` (the scanner overwrites it) and never into a
+yaml subsegment (`tools/build.sh` reads each section's address out of the
+file name, so a renamed subsegment breaks the link).
 
 ## How a score lies
 
