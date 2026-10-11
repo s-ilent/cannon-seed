@@ -121,6 +121,72 @@ Four traps, all hit while building this:
 After adopting names, `make verify` on the affected targets is the gate: the
 rename must leave the image byte-identical.
 
+### 3c. Whole library members: the linking integration
+
+§3b names three-instruction veneers. It cannot name anything else, and most SDK
+code in these binaries is *not* a veneer: `SetVideoMode`, `SpuInitMalloc`,
+`_SsSndPlay`, `StSetRing` and the rest are ordinary framed functions that the
+original build pulled out of the archives. That is what
+`tools/sdk_members.py` is for — the same clone, a different integration:
+
+```sh
+python3 tools/sdk_members.py --libs ~/psyq/4.0/PSX/LIB
+python3 tools/sdk_members.py --libs ~/psyq/4.0/PSX/LIB \
+    --sigs <psy-q-decomp>/psx_psyq_signatures/400      # optional second opinion
+```
+
+It parses the archives properly — Sony LNK object records: section directory,
+section data, relocation expressions, symbol table — then slides each member's
+`.text` over the retail payload. Relocated fields are zero in an unlinked
+object, so those bytes are wildcards and every other byte must match exactly.
+
+A byte match alone is not evidence, so each placement is also put through the
+link:
+
+* an `anchored` placement reconstructs the member's own relocations — a
+  reference into its `.text` lands exactly on one of its symbols, or every
+  reference into one of its sections agrees on a single link base. A wrong
+  placement does not reproduce that agreement;
+* a `unique` placement has no relocation evidence but is the only member whose
+  bytes cover that address, and no other member claims it;
+* an `ambiguous` placement shares its bytes with another member. Library stubs
+  come in near-identical families — the 32-byte SYSCALL veneers especially, and
+  pairs like `GsDrawOt`/`GsDrawOtIO` — so these are **not** evidence on their
+  own. §3b's tool resolves the ones that are pure stubs, by vector and index.
+
+Output is `config/sdk_members.txt`: per target, per placement, the address, the
+archive and member, the mark, and every symbol the member defines with its
+offset. A name marked `adoptable` also starts an `asm` or `c` subsegment in the
+target's splat yaml, i.e. the scanner could apply it; a name that ends inside
+another function is evidence about that region but cannot be applied as it
+stands. Adoption is the §3b path — a line in `config/symbols.curated.txt`,
+then `make extract` and `make verify`.
+
+Two things this does **not** do, both measured, both worth knowing:
+
+* **Section-relative jump targets do not reduce to `member + offset`.** An
+  object's `j`/`jal` to a label of its own section records an expression
+  `section + N`, and the address the retail image holds differs from
+  `member_address + N` by a constant that varies per member (for MATRIX3's
+  `GsGetLw`, `0x36A0`; for S_M_INIT, `0x5450`). Every reference inside one
+  member agrees on that constant, which is why it still verifies, but what the
+  linker's arithmetic actually was is unresolved — do not treat
+  `member_address + N` as a recovered label address.
+* **Sibling members are indistinguishable by bytes.** `LIBSND` carries several
+  objects from one source file, and two of them can both be `_SsSndPlay`. The
+  report lists both; which archive member the game linked is decided by the
+  link map, not by the bytes.
+
+As a second opinion the tool can consume
+`lab313ru/psx_psyq_signatures` (the signature database `psy-q-decomp` uses,
+also generated from these archives, version `400` = 4.0). Rows then carry
+`sig-db agree` when that database independently puts the same member at the
+same address. On slps_00270 every `unique` placement that the database covers
+agrees except the `CDROM` trio, where its signature matches `StSetRing` at
+`0x80040ff8` but also lands on its siblings — the same ambiguity, seen from the
+other side. Treat a disagreement as a signal to read the bytes, not as a
+verdict.
+
 ## 4. Parking: NON_MATCHING is a state, not a defeat
 
 Some compiler patterns resist matching from C source. Put readable near-matches in `#ifdef NON_MATCHING` blocks. Put the `INCLUDE_ASM` stub in the `#else` block. The linked binary stays byte-identical. The source tracks progress clearly. Record attempted approaches in the header comment of the function.

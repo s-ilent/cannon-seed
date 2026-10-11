@@ -43,3 +43,9 @@ InitHeap = 0x80051BE4; // SDK veneer: vector 0xa0, index 0x39
 // target: sces_00269
 _96_init = 0x800318E8; // SDK veneer: vector 0xa0, index 0x71
 DisableEvent = 0x80049770; // SDK veneer: vector 0xb0, index 0x0d
+
+// target: g3org_jp
+StSetRing = 0x8006A468; // LIBCD CDROM member; tools/sdk_members.py, unique placement + signature DB agrees
+
+// target: mainmenu_jp
+gte_init = 0x8007EF64; // LIBGS SCLIB member; tools/sdk_members.py, unique placement

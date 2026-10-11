@@ -49,6 +49,7 @@ instead of reverting to `func_XXXXXXXX`. There is no rename command to run:
 edit the curated file, then `make extract` and `make verify` the target.
 
 * **PSY-Q library veneers** — a three-instruction body (`addiu $t2,$zero,0xA0|0xB0`, `jr $t2`, `addiu $t1,$zero,<index>`). SDK assembly the original build linked in; match as `INCLUDE_ASM`, never from C. `tools/sdk_symbols.py --libs <psyq lib dir>` reports every one with its SDK member; `docs/MATCHING.md` §3b has the SDK setup.
+* **Framed SDK members** — whole library functions the original link pulled in (`SetVideoMode`, `SpuInitMalloc`, `_SsSndPlay`). `tools/sdk_members.py --libs <psyq lib dir>` locates them in the retail image and reports the names they define, marking each placement by how strongly it is proven; `docs/MATCHING.md` §3c.
 * **GTE and hand-written routines** — leave the assembly; curate a name when the evidence is clear.
 
 Curate into `config/symbols.curated.txt`, never straight into
