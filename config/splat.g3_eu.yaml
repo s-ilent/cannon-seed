@@ -194,7 +194,7 @@ segments:
       - [0x29DB8, data, data_800495B8]   # 0xa68
       - [0x2A820, asm, func_8004A020]   # 0x808
       - [0x2B028, data, data_8004A828]   # 0x1ca4
-      - [0x2CCCC, asm, func_8004C4CC]   # 0xdc
+      - [0x2CCCC, c, func_8004C4CC]   # 0xdc
       - [0x2CDA8, data, data_8004C5A8]   # 0x920
       - [0x2D6C8, asm, func_8004CEC8]   # 0x6e4
       - [0x2DDAC, data, data_8004D5AC]   # 0xc

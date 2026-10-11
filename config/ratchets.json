@@ -5,23 +5,30 @@
     "regression, lower means the baseline goes down in the same PR. A raise",
     "is a policy change and needs explicit review.",
     "Add your own patterns (e.g. raw-address debt, magic numbers) the day",
-    "you introduce them — ratchets go up the day the first placeholder appears.",
+    "you introduce them \u2014 ratchets go up the day the first placeholder appears.",
     "unknown_function 0->1 (2026-10-10): first C match, src/func_80036CFC.c,",
     "matched but the original symbol name is still unidentified.",
     "unknown_function 1->3 (2026-10-10): two more C matches through the",
-    "round-trip oracle (slps_00270 gp-store leaves), auto names retained —",
+    "round-trip oracle (slps_00270 gp-store leaves), auto names retained \u2014",
     "one mention per file per the counting rule.",
     "unknown_data 0->4 (2026-10-10): extern declarations + uses of the two",
     "small-data globals those matches write (2 mentions per file: extern",
     "plus store). Names are spimdisasm address names; no Psy-Q headers exist",
-    "to give them real identities yet."
+    "to give them real identities yet.",
+    "unknown_function 3->14 (2026-10-11): first real compiler-output C match through the round-trip oracle - the g3_eu wrapper cluster (4 short-arg void wrappers over the palette-fade helper). 14 = 3 prior stub files + 4 auto-named definitions (real symbol names unidentified) + 1 extern declaration + 6 call sites of the still-asm callee. Auto names retained; rename when the helper's identity is evidenced."
   ],
   "patterns": [
-    { "name": "unknown_function", "regex": "\\bfunc_[0-9A-Fa-f]{8}\\b" },
-    { "name": "unknown_data", "regex": "\\bD_[0-9A-Fa-f]{8}\\b" }
+    {
+      "name": "unknown_function",
+      "regex": "\\bfunc_[0-9A-Fa-f]{8}\\b"
+    },
+    {
+      "name": "unknown_data",
+      "regex": "\\bD_[0-9A-Fa-f]{8}\\b"
+    }
   ],
   "baselines": {
-    "unknown_function": 3,
+    "unknown_function": 14,
     "unknown_data": 4
   }
 }
