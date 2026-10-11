@@ -610,6 +610,10 @@ alabel func_8003AF14
     /* 1B748 8003AF48 E3E2000C */ .word 0x0C00E2E3
     /* 1B74C 8003AF4C 00000000 */ .word 0x00000000
     /* 1B750 8003AF50 26DE0008 */ .word 0x0800DE26
+
+nonmatching func_8003AF54
+
+alabel func_8003AF54
     /* 1B754 8003AF54 00000000 */ .word 0x00000000
 
 nonmatching func_8003AF58

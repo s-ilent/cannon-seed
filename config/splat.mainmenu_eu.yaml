@@ -142,7 +142,21 @@ segments:
       - [0xEEC8, data, data_8002E6C8]  # 0x18 descriptor 6
       - [0xEEE0, asm, func_8002E6E0]   # 0x484 dispatcher fabric
       - [0xF364, asm, func_8002EB64]   # 0x3ac
-      - [0xF710, data, data_8002EF10]   # 0x458
+      # EF10 carve (recon 2026-10-12, scripts/ef10_carve_recon1.py), JP twin
+      # commit: the row decomposes as [sector-26 EDC tail 0xe8 (H=7.06) |
+      # sector-7 header 0x18 (sync 00 ff*10 00, MSF 00:19:60, mode 02,
+      # subheader 00080000 x2) | continuation code 0x358]. 214/214 words
+      # decodable; pure relocation twin of JP (156 eq, 24 jal, 33 lo, 1
+      # other, 0 opcode-class diffs): state-id switch chains, calls to
+      # 80026414/80026668/8005C62C/80035D50, the jr-v0 dispatch thunk over
+      # the 80020F98 table, and the shared frame epilogue at the row end
+      # (FABRIC.md misclassified-rows table, row 1). External refs identical
+      # to JP: root-table-4 words 8002F314/F334/F354 (@1d4c, data_80020000),
+      # callback word 8002F168 (@7a028, inside data_8008765C), and three
+      # j-shaped words @11dd8/11dec/11e04 inside data_800313D0 (still data).
+      - [0xF710, data, data_8002EF10]   # 0xe8 sector-26 EDC/ECC tail
+      - [0xF7F8, data, data_8002EFF8]  # 0x18 sector 7 header (MSF 00:19:60)
+      - [0xF810, asm, func_8002F010]   # 0x358 switch-chain continuation code
       - [0xFB68, asm, func_8002F368]   # 0x4cc
       - [0x10034, data, data_8002F834]   # 0x137c
       - [0x113B0, asm, func_80030BB0]   # 0x820

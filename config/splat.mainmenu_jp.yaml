@@ -125,16 +125,34 @@ segments:
       # relocation diffs + 0 opcode-class; head is the continuation
       # lw v0,(s3) / beqz entry (EU bytes identical - the EU commit note said
       # (s7), a typo). func_8002EB64 (0x3ac, frame -0x20) and func_8002F368
-      # (0x4cc, frame -0x18) open with real prologues. data_8002EF10 (0x458)
-      # and data_8002F834 (0xb14, JP ends at func_80030348 where EU runs to
-      # 30BB0) are data: 6/278 and 0/709 words decode. Sector headers for
-      # sectors 7/8/9 sit embedded inside the data spans (EFF8 00:17:58,
-      # F928 00:17:59, 30258 00:17:60) and stay there, as on EU.
+      # (0x4cc, frame -0x18) open with real prologues. data_8002F834 (0xb14,
+      # JP ends at func_80030348 where EU runs to 30BB0) is data at the row
+      # level but holds continuation code islands (docs/FABRIC.md); the old
+      # "6/278 words decode" census was a whole-row artifact. Sector headers
+      # for sectors 7/8/9 sit embedded inside the data spans (vram 8002EFF8
+      # 00:17:58, 8002F928 00:17:59, 80030258 00:17:60) and stay data.
       - [0xEE00, data, data_8002E600]   # 0xc8 sector-5 overhead tail
       - [0xEEC8, data, data_8002E6C8]  # 0x18 descriptor 6 (MSF 00:17:57)
       - [0xEEE0, asm, func_8002E6E0]   # 0x484 dispatcher fabric
       - [0xF364, asm, func_8002EB64]   # 0x3ac
-      - [0xF710, data, data_8002EF10]   # 0x458
+      # EF10 carve (recon 2026-10-12, scripts/ef10_carve_recon1.py): the row
+      # decomposes as [sector-26 EDC tail 0xe8 (H=7.09) | sector-7 header
+      # 0x18 (sync 00 ff*10 00, MSF 00:17:58, mode 02, subheader 00080000 x2)
+      # | continuation code 0x358]. The code is 214/214 words decodable on
+      # BOTH discs and a pure relocation twin JP/EU (156 eq, 24 jal, 33 lo,
+      # 1 other, 0 opcode-class diffs): the state-id switch chains
+      # (ori v0,N; beq v0,v1; nop; j <pool entry>), call sequences to
+      # 80026414/80026668/8005C62C/80035D50, the 8002F294 jr-v0 dispatch
+      # thunk reading the table at 80020F98, and the shared frame epilogue
+      # (lw ra/s4..s0 + jr ra) at the row end - FABRIC.md misclassified-rows
+      # table, row 1. External refs identical on JP/EU: root-table-4 words
+      # 8002F314/F334/F354 (@1d20, data_80020000), callback word 8002F168
+      # (@796e4, inside data_80086D3C), and three j-shaped words @11dd8/
+      # 11dec/11e04 inside data_800313C0 (still data -> raw words, no labels
+      # needed until the 313C0 carve).
+      - [0xF710, data, data_8002EF10]   # 0xe8 sector-26 EDC/ECC tail
+      - [0xF7F8, data, data_8002EFF8]  # 0x18 sector 7 header (MSF 00:17:58)
+      - [0xF810, asm, func_8002F010]   # 0x358 switch-chain continuation code
       - [0xFB68, asm, func_8002F368]   # 0x4cc
       - [0x10034, data, data_8002F834]  # 0xb14
       - [0x10B48, asm, func_80030348]   # 0x740
