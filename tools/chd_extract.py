@@ -396,6 +396,32 @@ class Chd:
                 yield hunk[fr * self.frame_size:fr * self.frame_size + self.main_size]
 
 
+# ---------------------------------------------------------------- cue
+CUE_TYPE = {"MODE1_RAW": "MODE1/2352", "MODE2_RAW": "MODE2/2352",
+            "AUDIO": "AUDIO", "MODE1": "MODE1/2048", "MODE2": "MODE2/2336"}
+
+
+def msf(frames: int) -> str:
+    m, rem = divmod(frames, 75 * 60)
+    s, f = divmod(rem, 75)
+    return f"{m:02d}:{s:02d}:{f:02d}"
+
+
+def write_cue(path: Path, binname: str, tracks) -> None:
+    """Write a single-BIN cue from the CHD's CHT2 track table. Audio pregaps
+    are virtual (the CHD stores no pregap frames), so each track's INDEX 01 is
+    its data start. PCSX-Redux reads the cue, not the CHD, and needs the audio
+    tracks to report a full TOC to the game."""
+    lines = [f'FILE "{binname}" BINARY']
+    off = 0
+    for t in tracks:
+        kind = CUE_TYPE.get(t["TYPE"], t["TYPE"])
+        lines.append(f"  TRACK {int(t['TRACK']):02d} {kind}")
+        lines.append(f"    INDEX 01 {msf(off)}")
+        off += int(t["FRAMES"])
+    path.write_text("\n".join(lines) + "\n")
+
+
 # ---------------------------------------------------------------- main
 def main():
     import argparse
@@ -403,6 +429,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("chd", type=Path)
     ap.add_argument("out", type=Path, help="output .bin (2352 bytes/sector)")
+    ap.add_argument("--cue", action="store_true", help="also write a .cue next to the bin")
+    ap.add_argument("--cue-only", action="store_true", help="write the .cue and exit, no extraction")
     args = ap.parse_args()
 
     chd = Chd(args.chd)
@@ -419,6 +447,13 @@ def main():
     if not tracks:
         for tag, flags, data in metas:
             print(f"meta {tag} flags={flags}: {data[:120]!r}")
+
+    if args.cue or args.cue_only:
+        cue_path = args.out.with_suffix(".cue")
+        write_cue(cue_path, args.out.name, tracks)
+        print(f"wrote {cue_path}")
+    if args.cue_only:
+        return
 
     chd.open_map()
     from collections import Counter

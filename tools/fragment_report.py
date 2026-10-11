@@ -87,8 +87,9 @@ def end_shape(words, e, n):
     return "data_stop"
 
 
-def main(argv):
-    target = argv[1] if len(argv) > 1 else "slps_00270"
+def build_rows(target):
+    """Parse the yaml layout and baseline, and classify every prologue-less
+    code subsegment. Returns (code_ranges, rows)."""
     blob = (REPO / "baselines" / f"{target}.bin").read_bytes()
     payload = blob[HDR:]
     n = len(payload) // 4
@@ -184,6 +185,30 @@ def main(argv):
                          prev_over=prev_over, out=out, ptrs_into=ptrs_into,
                          interior=interior, end=end_shape(words, e, n)))
         prev_code = this_code
+
+    return code, rows
+
+
+def main(argv):
+    args = [a for a in argv[1:] if not a.startswith("--")]
+    as_json = "--json" in argv
+    target = args[0] if args else "slps_00270"
+    code, rows = build_rows(target)
+
+    if as_json:
+        import json
+
+        def ser(r):
+            return dict(s=r["s"], e=r["e"], size=r["size"], cls=r["cls"],
+                        end=r["end"], prev=list(r["prev"]) if r["prev"] else None,
+                        gap=list(r["gap"]) if r["gap"] else None,
+                        prev_into=r["prev_into"], prev_over=r["prev_over"],
+                        refs=r["refs"], ptrs=r["ptrs"], out=r["out"],
+                        ptrs_into=r["ptrs_into"], srcs=sorted(r["srcs"]),
+                        interior={str(k): v for k, v in r["interior"].items()})
+
+        print(json.dumps(dict(target=target, rows=[ser(r) for r in rows])))
+        return 0
 
     print(f"== {target}: {len(code)} code subsegs, {len(rows)} prologue-less ==")
     print("   classes:", dict(Counter(r["cls"] for r in rows)))

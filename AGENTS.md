@@ -39,6 +39,21 @@ This script restores git configuration, credentials, the virtual environment (`t
 3. Check progress and ratchets: `make progress`, `make ratchets`. Rename symbols by curating them in `config/symbols.curated.txt`, not by search and replace across the tree — `asm/` is regenerated and the per-target symbols file is rewritten by the scanner, so only a curated name survives (see "Naming what you find").
 4. Non-matching C code must not remain active. Put near-matches in `#ifdef NON_MATCHING` with the `INCLUDE_ASM` stub in the `#else` block. Mark matching quirks with a `/* MATCHING: */` comment.
 
+## Runtime evidence (optional)
+
+PCSX-Redux can cross-check the static fragment classification against what the CPU actually executed. Full loop in `docs/RUNTIME.md`:
+
+```sh
+python3 tools/gen_watchlist.py <target>
+SDL_AUDIODRIVER=dummy pcsx-redux -no-ui -run -interpreter -debugger \
+    -bios <BIOS.bin> -iso build/work/japan.bin \
+    -dofile build/cov.<target>.lua > /tmp/trace.log 2>&1
+grep '^COV|' /tmp/trace.log > build/coverage.<target>.txt
+python3 tools/coverage_vs_fragments.py <target>
+```
+
+Needs a region-matched PSX BIOS and the raw-BIN disc (`build/work/*.bin`; PCSX-Redux does not read CHD). `-debugger` is required — exec breakpoints are off by default. Output is evidence for a classification, never proof: an unexercised run reaches only part of the code.
+
 ## Naming what you find
 
 Names are recovered, not guessed, and they are authored in one place:
