@@ -265,9 +265,14 @@ dlabel func_800369D4
     /* 17258 80036A58 0980043C */ .word 0x3C048009
     /* 1725C 80036A5C 288C8424 */ .word 0x24848C28
     /* 17260 80036A60 D998000C */ .word 0x0C0098D9
+enddlabel func_800369D4
+
+nonmatching func_80036A64
+
+dlabel func_80036A64
     /* 17264 80036A64 FFFF0624 */ .word 0x2406FFFF
     /* 17268 80036A68 1400BF8F */ .word 0x8FBF0014
-enddlabel func_800369D4
+enddlabel func_80036A64
 
 nonmatching func_80036A6C
 

@@ -110,6 +110,7 @@ glabel func_8003F2AC
     /* 1FAEC 8003F2EC 1980013C */  lui        $at, %hi(D_80188224)
     /* 1FAF0 8003F2F0 24822124 */  addiu      $at, $at, %lo(D_80188224)
     /* 1FAF4 8003F2F4 21082300 */  addu       $at, $at, $v1
+  alabel func_8003F2F8
     /* 1FAF8 8003F2F8 00002294 */  lhu        $v0, 0x0($at)
     /* 1FAFC 8003F2FC 00000000 */  nop
     /* 1FB00 8003F300 81FF4224 */  addiu      $v0, $v0, -0x7F

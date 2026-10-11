@@ -237,21 +237,31 @@ glabel func_80058978
     /* 39178 80058978 0D80033C */  lui        $v1, (0x800D0000 >> 16)
 endlabel func_80058978
 
-nonmatching func_8005897C, 0x2C
+nonmatching func_8005897C, 0x10
 
 glabel func_8005897C
     /* 3917C 8005897C E0AD6384 */  lh         $v1, -0x5220($v1)
     /* 39180 80058980 01000234 */  ori        $v0, $zero, 0x1
     /* 39184 80058984 15006214 */  bne        $v1, $v0, func_800589DC
     /* 39188 80058988 00000000 */   nop
+endlabel func_8005897C
+
+nonmatching func_8005898C, 0xC
+
+glabel func_8005898C
     /* 3918C 8005898C 8367010C */  jal        func_80059E0C
     /* 39190 80058990 00000000 */   nop
     /* 39194 80058994 00140200 */  sll        $v0, $v0, 16
+endlabel func_8005898C
+
+nonmatching func_80058998, 0x10
+
+glabel func_80058998
     /* 39198 80058998 03140200 */  sra        $v0, $v0, 16
     /* 3919C 8005899C 02000334 */  ori        $v1, $zero, 0x2
     /* 391A0 800589A0 0E004314 */  bne        $v0, $v1, func_800589DC
     /* 391A4 800589A4 00000000 */   nop
-endlabel func_8005897C
+endlabel func_80058998
 
 nonmatching func_800589A8, 0x34
 

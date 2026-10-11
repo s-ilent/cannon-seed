@@ -20,7 +20,7 @@ glabel func_8005E1C8
     /* 3E9E4 8005E1E4 24000334 */   ori       $v1, $zero, 0x24
     /* 3E9E8 8005E1E8 0352010C */  jal        func_8005480C
     /* 3E9EC 8005E1EC 00000000 */   nop
-    /* 3E9F0 8005E1F0 2C580108 */  j          D_800560B0
+    /* 3E9F0 8005E1F0 2C580108 */  j          func_800560B0
     /* 3E9F4 8005E1F4 00000000 */   nop
 endlabel func_8005E1C8
 

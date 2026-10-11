@@ -255,7 +255,7 @@ glabel func_80062D80
     /* 435AC 80062DAC 020086A4 */   sh        $a2, 0x2($a0)
 endlabel func_80062D80
 
-nonmatching func_80062DB0, 0x38
+nonmatching func_80062DB0, 0x2C
 
 glabel func_80062DB0
     /* 435B0 80062DB0 00140400 */  sll        $v0, $a0, 16
@@ -269,10 +269,15 @@ glabel func_80062DB0
     /* 435D0 80062DD0 02006284 */  lh         $v0, 0x2($v1)
     /* 435D4 80062DD4 00000000 */  nop
     /* 435D8 80062DD8 03004614 */  bne        $v0, $a2, func_80062DE8
-    /* 435DC 80062DDC 00140400 */   sll       $v0, $a0, 16
+endlabel func_80062DB0
+
+nonmatching func_80062DDC, 0xC
+
+glabel func_80062DDC
+    /* 435DC 80062DDC 00140400 */  sll        $v0, $a0, 16
     /* 435E0 80062DE0 CF680108 */  j          func_8005A33C
     /* 435E4 80062DE4 21100000 */   addu      $v0, $zero, $zero
-endlabel func_80062DB0
+endlabel func_80062DDC
 
 nonmatching func_80062DE8, 0x10
 
