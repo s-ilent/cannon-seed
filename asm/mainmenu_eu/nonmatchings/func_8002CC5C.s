@@ -484,7 +484,7 @@ glabel func_8002D26C
     /* DAA0 8002D2A0 02000534 */  ori        $a1, $zero, 0x2
     /* DAA4 8002D2A4 D998000C */  jal        func_80026364
     /* DAA8 8002D2A8 FFFF0624 */   addiu     $a2, $zero, -0x1
-    /* DAAC 8002D2AC 41AE0008 */  j          D_8002B904
+    /* DAAC 8002D2AC 41AE0008 */  j          .L8002B904
     /* DAB0 8002D2B0 00000000 */   nop
 endlabel func_8002D26C
 

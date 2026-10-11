@@ -70,13 +70,43 @@ segments:
       - [0x9BCC, data, data_800293CC]   # 0x1798
       - [0xB364, asm, func_8002AB64]   # 0x3b4
       - [0xB718, data, data_8002AF18]   # 0x154
-      - [0xB86C, asm, func_8002B06C]   # 0x788
-      - [0xBFF4, data, data_8002B7F4]   # 0x1468
+      - [0xB86C, asm, func_8002B06C]   # 0x758 (tail 0x30 = payload 1 head, carved below)
+      # Three [encrypted payload | 6-word descriptor | plaintext code] blocks
+      # spanning 0x8002B7C4..0x8002CC5C (recon 2026-10-11, scripts/eu_b7f4_recon*.py).
+      # Payloads: high-entropy (4.0 bits/byte), no masked-shape twin anywhere in
+      # JP (+/-0x900 slide) -> encrypted at rest; both discs carry them at
+      # overlapping vrams with different boundaries. Descriptors: byte-static
+      # 6-word records ffffff00 ffffffff 00ffffff 0254/0255/02561900
+      # 00080000 00080000 (block indices increment; EU-only, no JP twin).
+      # Code halves: real MIPS-I. Prologues (sw ra,N(sp) after addiu sp) at
+      # 0x8002B918/BAFC/BB1C/BF20 (block 1) and C420/C5B0/C830 (block 2);
+      # stub rows lui a0,0x8009/addiu/addu/jal func_80026364 close blocks 1-2.
+      # Live entries: jal func_8002B970/B98C from func_8003712C; j's from
+      # func_8002DE00 into C350/C45C/C4C0/C4DC/C50C/C5E0/C6CC/CC34; callbacks
+      # stored by data_8008765C tables (B9A8/BCF4/C050/C610/C618/C620/C658).
+      # Tail stubs also j INTO payload 1 (j 0x8002B854/B86C from
+      # data_8002D398's stub row with real store delay slots) -> some payload
+      # bytes execute only after runtime decryption; those j targets stay
+      # uncarved data.
+      # Twin status: block 1 vs JP +0x60 = 194 positional diffs (scheduled/
+      # diverged twin, C-match candidate); block 3 head vs JP -0x8fc = 19 diffs
+      # (1 opcode-level), tail 0x8002CC00..CC5C vs JP 0x8002C41C = relocation
+      # twin (6 diffs, all address-class) - JP has a stub row where EU has
+      # this function, delta drifts from +0x60 to -0x7e4 across the blob.
+      - [0xBFC4, data, data_8002B7C4]   # 0x114 payload 1
+      - [0xC0D8, data, data_8002B8D8]   # 0x18 descriptor 1
+      - [0xC0F0, asm, func_8002B8F0]   # 0x800 code block 1
+      - [0xC8F0, data, data_8002C0F0]   # 0x118 payload 2
+      - [0xCA08, data, data_8002C208]   # 0x18 descriptor 2
+      - [0xCA20, asm, func_8002C220]   # 0x800 code block 2
+      - [0xD220, data, data_8002CA20]   # 0x118 payload 3
+      - [0xD338, data, data_8002CB38]   # 0x18 descriptor 3
+      - [0xD350, asm, func_8002CB50]   # 0x10c code block 3
       # State-machine stub pool for func_8002EB64's tail-js and the first
       # switch's jr table (jtbl_80021224 -> 0x8002D2A0/C0/E0/300/320, all
-      # mid-stream entries tail-jumping into D_8002B904/B710/B728 code that
-      # lives inside data_8002B7F4). Stays asm: every entry is a jump or
-      # indirect-jump target, never a call. Byte-twin proof vs JP (same vram,
+      # mid-stream entries tail-jumping into D_8002B904 (now inside
+      # func_8002B8F0) and func_8002B710/B728 (inside func_8002B06C)). Stays
+      # asm: every entry is a jump or indirect-jump target, never a call. Byte-twin proof vs JP (same vram,
       # delta 0): body 0x8002CD18..0x8002D358 is a pure relocation twin (jal/
       # imm/mem diffs only); the head 0x8002CC5C..CD18 and the data tail
       # genuinely diverge. The tail (D_8002D358, 0x40, high-entropy, passed
