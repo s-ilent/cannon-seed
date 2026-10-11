@@ -57,9 +57,7 @@ segments:
       - [0x4040, data, data_80023840]   # 0xec
       - [0x412C, asm, func_8002392C]   # 0x754
       - [0x4880, data, data_80024080]   # 0xba4
-      - [0x5424, asm, func_80024C24]   # 0x2d8
-      - [0x56FC, data, data_80024EFC]   # 0xc
-      - [0x5708, asm, func_80024F08]   # 0x3e4
+      - [0x5424, asm, func_80024C24]   # 0x6c8
       - [0x5AEC, data, data_800252EC]   # 0x970
       - [0x645C, asm, func_80025C5C]   # 0x1c
       - [0x6478, data, data_80025C78]   # 0xa04
@@ -80,8 +78,8 @@ segments:
       - [0xDCD0, asm, func_8002D4D0]   # 0x7ec
       - [0xE4BC, data, data_8002DCBC]   # 0x228
       - [0xE6E4, asm, func_8002DEE4]   # 0x6fc
-      - [0xEDE0, data, data_8002E5E0]   # 0x1b0
-      - [0xEF90, asm, func_8002E790]   # 0x178
+      - [0xEDE0, data, data_8002E5E0]   # 0x1a0
+      - [0xEF80, asm, func_8002E780]   # 0x188
       - [0xF108, data, data_8002E908]   # 0x8
       - [0xF110, asm, func_8002E910]   # 0xe68
       - [0xFF78, data, data_8002F778]   # 0x118
@@ -107,11 +105,7 @@ segments:
       - [0x120F4, data, data_800318F4]   # 0x578
       - [0x1266C, asm, func_80031E6C]   # 0x10e8
       - [0x13754, data, data_80032F54]   # 0x1348
-      - [0x14A9C, asm, func_8003429C]   # 0x6a4
-      - [0x15140, data, data_80034940]   # 0x10
-      - [0x15150, asm, func_80034950]   # 0x24
-      - [0x15174, data, data_80034974]   # 0xc
-      - [0x15180, asm, func_80034980]   # 0x154
+      - [0x14A9C, asm, func_8003429C]   # 0x838
       - [0x152D4, data, data_80034AD4]   # 0xc6c
       - [0x15F40, asm, func_80035740]   # 0x54
       - [0x15F94, data, data_80035794]   # 0xc
@@ -142,10 +136,8 @@ segments:
       - [0x1AF7C, asm, func_8003A77C]   # 0x134
       - [0x1B0B0, data, data_8003A8B0]   # 0xc
       - [0x1B0BC, asm, func_8003A8BC]   # 0x2d8
-      - [0x1B394, data, data_8003AB94]   # 0x5a4
-      - [0x1B938, asm, func_8003B138]   # 0x530
-      - [0x1BE68, data, data_8003B668]   # 0x10
-      - [0x1BE78, asm, func_8003B678]   # 0x2b0
+      - [0x1B394, data, data_8003AB94]   # 0x59c
+      - [0x1B930, asm, func_8003B130]   # 0x7f8
       - [0x1C128, data, data_8003B928]   # 0x1cfc
       - [0x1DE24, asm, func_8003D624]   # 0x7e0
       - [0x1E604, data, data_8003DE04]   # 0xc0

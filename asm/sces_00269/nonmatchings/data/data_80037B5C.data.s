@@ -191,6 +191,11 @@ dlabel func_80037D88
     /* 185CC 80037DCC 04000486 */ .word 0x86040004
     /* 185D0 80037DD0 F8D4000C */ .word 0x0C00D4F8
     /* 185D4 80037DD4 21A04000 */ .word 0x0040A021
+enddlabel func_80037D88
+
+nonmatching func_80037DD8
+
+dlabel func_80037DD8
     /* 185D8 80037DD8 00000486 */ .word 0x86040000
     /* 185DC 80037DDC C1D4000C */ .word 0x0C00D4C1
     /* 185E0 80037DE0 21904000 */ .word 0x00409021
@@ -199,7 +204,7 @@ dlabel func_80037D88
     /* 185EC 80037DEC 21884000 */ .word 0x00408821
     /* 185F0 80037DF0 04000486 */ .word 0x86040004
     /* 185F4 80037DF4 C1D4000C */ .word 0x0C00D4C1
-enddlabel func_80037D88
+enddlabel func_80037DD8
 
 nonmatching D_80037DF8
 
