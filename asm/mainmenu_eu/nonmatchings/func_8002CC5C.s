@@ -532,24 +532,4 @@ glabel func_8002D2B4
     /* DB4C 8002D34C 2118E002 */ .word 0x02E01821
     /* DB50 8002D350 D0B48D8C */ .word 0x8C8DB4D0
     /* DB54 8002D354 48723841 */ .word 0x41387248 /* invalid instruction */
-
-nonmatching D_8002D358
-
-dlabel D_8002D358
-    /* DB58 8002D358 B7AEADF3 */ .word 0xF3ADAEB7
-    /* DB5C 8002D35C 58D7DF98 */ .word 0x98DFD758
-    /* DB60 8002D360 5843938A */ .word 0x8A934358
-    /* DB64 8002D364 52F91467 */ .word 0x6714F952
-    /* DB68 8002D368 1E0714A8 */ .word 0xA814071E
-    /* DB6C 8002D36C B014F4AB */ .word 0xABF414B0
-    /* DB70 8002D370 D010FD70 */ .word 0x70FD10D0 /* invalid instruction */
-    /* DB74 8002D374 6F878FF3 */ .word 0xF38F876F
-    /* DB78 8002D378 A195A73B */ .word 0x3BA795A1
-    /* DB7C 8002D37C 2A04C7DF */ .word 0xDFC7042A
-    /* DB80 8002D380 51F8FC59 */ .word 0x59FCF851 /* invalid instruction */
-    /* DB84 8002D384 1BD59906 */ .word 0x0699D51B /* invalid instruction */
-    /* DB88 8002D388 E7D40588 */ .word 0x8805D4E7
-    /* DB8C 8002D38C 88E45F76 */ .word 0x765FE488 /* invalid instruction */
-    /* DB90 8002D390 8BA9BEBF */ .word 0xBFBEA98B
-    /* DB94 8002D394 0199A9FB */ .word 0xFBA99901
 enddlabel func_8002D2B4

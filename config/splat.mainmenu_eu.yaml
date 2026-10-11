@@ -72,7 +72,17 @@ segments:
       - [0xB718, data, data_8002AF18]   # 0x154
       - [0xB86C, asm, func_8002B06C]   # 0x788
       - [0xBFF4, data, data_8002B7F4]   # 0x1468
-      - [0xD45C, asm, func_8002CC5C]   # 0x73c
+      # State-machine stub pool for func_8002EB64's tail-js and the first
+      # switch's jr table (jtbl_80021224 -> 0x8002D2A0/C0/E0/300/320, all
+      # mid-stream entries tail-jumping into D_8002B904/B710/B728 code that
+      # lives inside data_8002B7F4). Stays asm: every entry is a jump or
+      # indirect-jump target, never a call. Byte-twin proof vs JP (same vram,
+      # delta 0): body 0x8002CD18..0x8002D358 is a pure relocation twin (jal/
+      # imm/mem diffs only); the head 0x8002CC5C..CD18 and the data tail
+      # genuinely diverge. The tail (D_8002D358, 0x40, high-entropy, passed
+      # as a pointer by func_8002F368) is carved off as data below.
+      - [0xD45C, asm, func_8002CC5C]   # 0x6fc
+      - [0xDB58, data, data_8002D358]  # 0x40
       - [0xDB98, data, data_8002D398]   # 0xa68
       - [0xE600, asm, func_8002DE00]   # 0x82c
       - [0xEE2C, data, data_8002E62C]   # 0x538
