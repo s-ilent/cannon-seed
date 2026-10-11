@@ -1,0 +1,379 @@
+diff --git a/config/splat.g3_eu.yaml b/config/splat.g3_eu.yaml
+index be466ad..a189243 100644
+--- a/config/splat.g3_eu.yaml
++++ b/config/splat.g3_eu.yaml
+@@ -48,9 +48,9 @@ segments:
+     subsegments:
+     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
+       - [0x800, data, data_80020000]   # 0x27ec
+-      - [0x2FEC, asm, func_800227EC]   # 0xc
++      - [0x2FEC, data, data_800227EC]   # 0xc pinned
+       - [0x2FF8, data, data_800227F8]   # 0x220
+-      - [0x3218, asm, func_80022A18]   # 0x3f0
++      - [0x3218, data, data_80022A18]   # 0x3f0 pinned
+       - [0x3608, data, data_80022E08]   # 0x204
+       - [0x380C, asm, func_8002300C]   # 0x510
+       - [0x3D1C, data, data_8002351C]   # 0xc98
+@@ -74,7 +74,7 @@ segments:
+       - [0xBFCC, data, data_8002B7CC]   # 0x2b8
+       - [0xC284, asm, func_8002BA84]   # 0x704
+       - [0xC988, data, data_8002C188]   # 0x28
+-      - [0xC9B0, asm, func_8002C1B0]   # 0x10
++      - [0xC9B0, data, data_8002C1B0]   # 0x10 pinned
+       - [0xC9C0, data, data_8002C1C0]   # 0xd8
+       - [0xCA98, asm, func_8002C298]   # 0x518
+       - [0xCFB0, data, data_8002C7B0]   # 0xc
+@@ -102,13 +102,13 @@ segments:
+       - [0x14120, data, data_80033920]   # 0x8
+       - [0x14128, asm, func_80033928]   # 0x18
+       - [0x14140, data, data_80033940]   # 0x34
+-      - [0x14174, asm, func_80033974]   # 0xc
++      - [0x14174, data, data_80033974]   # 0xc pinned
+       - [0x14180, data, data_80033980]   # 0x914
+       - [0x14A94, asm, func_80034294]   # 0x2f4
+       - [0x14D88, data, data_80034588]   # 0x101c
+       - [0x15DA4, asm, func_800355A4]   # 0x794
+       - [0x16538, data, data_80035D38]   # 0x24
+-      - [0x1655C, asm, func_80035D5C]   # 0xc
++      - [0x1655C, data, data_80035D5C]   # 0xc pinned
+       - [0x16568, data, data_80035D68]   # 0x110
+       - [0x16678, asm, func_80035E78]   # 0x438
+       - [0x16AB0, data, data_800362B0]   # 0x8
+@@ -144,7 +144,7 @@ segments:
+       - [0x21DF8, data, data_800415F8]   # 0x60
+       - [0x21E58, asm, func_80041658]   # 0x7d4
+       - [0x2262C, data, data_80041E2C]   # 0xb4
+-      - [0x226E0, asm, func_80041EE0]   # 0x1c
++      - [0x226E0, data, data_80041EE0]   # 0x1c pinned
+       - [0x226FC, data, data_80041EFC]   # 0x48
+       - [0x22744, asm, func_80041F44]   # 0x828
+       - [0x22F6C, data, data_8004276C]   # 0xec
+@@ -270,7 +270,7 @@ segments:
+       - [0x45FC4, data, data_800657C4]   # 0xe94
+       - [0x46E58, asm, func_80066658]   # 0xa4
+       - [0x46EFC, data, data_800666FC]   # 0x4c8
+-      - [0x473C4, asm, func_80066BC4]   # 0xc
++      - [0x473C4, data, data_80066BC4]   # 0xc pinned
+       - [0x473D0, data, data_80066BD0]   # 0x1c4
+       - [0x47594, asm, func_80066D94]   # 0x190
+       - [0x47724, data, data_80066F24]   # 0xd80
+diff --git a/config/splat.g3_jp.yaml b/config/splat.g3_jp.yaml
+index 47b6018..c91616f 100644
+--- a/config/splat.g3_jp.yaml
++++ b/config/splat.g3_jp.yaml
+@@ -48,9 +48,9 @@ segments:
+     subsegments:
+     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
+       - [0x800, data, data_80020000]   # 0x24c0
+-      - [0x2CC0, asm, func_800224C0]   # 0xc
++      - [0x2CC0, data, data_800224C0]   # 0xc pinned
+       - [0x2CCC, data, data_800224CC]   # 0x3ac
+-      - [0x3078, asm, func_80022878]   # 0x5d0
++      - [0x3078, data, data_80022878]   # 0x5d0 pinned
+       - [0x3648, data, data_80022E48]   # 0x19c
+       - [0x37E4, asm, func_80022FE4]   # 0x4d8
+       - [0x3CBC, data, data_800234BC]   # 0x1500
+@@ -166,7 +166,7 @@ segments:
+       - [0x2BF38, data, data_8004B738]   # 0x4
+       - [0x2BF3C, asm, func_8004B73C]   # 0x310
+       - [0x2C24C, data, data_8004BA4C]   # 0x14
+-      - [0x2C260, asm, func_8004BA60]   # 0xc
++      - [0x2C260, data, data_8004BA60]   # 0xc pinned
+       - [0x2C26C, data, data_8004BA6C]   # 0xcc
+       - [0x2C338, asm, func_8004BB38]   # 0x878
+       - [0x2CBB0, data, data_8004C3B0]   # 0x244
+@@ -266,7 +266,7 @@ segments:
+       - [0x45BF4, data, data_800653F4]   # 0x1bc
+       - [0x45DB0, asm, func_800655B0]   # 0x1fc
+       - [0x45FAC, data, data_800657AC]   # 0x10
+-      - [0x45FBC, asm, func_800657BC]   # 0x14
++      - [0x45FBC, data, data_800657BC]   # 0x14 pinned
+       - [0x45FD0, data, data_800657D0]   # 0x168c
+       - [0x4765C, asm, func_80066E5C]   # 0x22c
+       - [0x47888, data, data_80067088]   # 0x3a0
+diff --git a/config/splat.g3org_eu.yaml b/config/splat.g3org_eu.yaml
+index cc1fc1b..a95df61 100644
+--- a/config/splat.g3org_eu.yaml
++++ b/config/splat.g3org_eu.yaml
+@@ -48,7 +48,7 @@ segments:
+     subsegments:
+     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
+       - [0x800, data, data_80020000]   # 0x3118
+-      - [0x3918, asm, func_80023118]   # 0x34
++      - [0x3918, data, data_80023118]   # 0x34 pinned
+       - [0x394C, data, data_8002314C]   # 0x664
+       - [0x3FB0, asm, func_800237B0]   # 0x10
+       - [0x3FC0, data, data_800237C0]   # 0x1a8
+@@ -86,7 +86,7 @@ segments:
+       - [0xAD60, data, data_8002A560]   # 0x138
+       - [0xAE98, asm, func_8002A698]   # 0x818
+       - [0xB6B0, data, data_8002AEB0]   # 0xf4
+-      - [0xB7A4, asm, func_8002AFA4]   # 0x10
++      - [0xB7A4, data, data_8002AFA4]   # 0x10 pinned
+       - [0xB7B4, data, data_8002AFB4]   # 0x970
+       - [0xC124, asm, func_8002B924]   # 0x814
+       - [0xC938, data, data_8002C138]   # 0x38
+@@ -200,13 +200,13 @@ segments:
+       - [0x24EDC, data, data_800446DC]   # 0x4
+       - [0x24EE0, asm, func_800446E0]   # 0x3ec
+       - [0x252CC, data, data_80044ACC]   # 0x1cc
+-      - [0x25498, asm, func_80044C98]   # 0xc
++      - [0x25498, data, data_80044C98]   # 0xc pinned
+       - [0x254A4, data, data_80044CA4]   # 0xe4
+       - [0x25588, asm, func_80044D88]   # 0x2f4
+       - [0x2587C, data, data_8004507C]   # 0x6c8
+       - [0x25F44, asm, func_80045744]   # 0x604
+       - [0x26548, data, data_80045D48]   # 0x1428
+-      - [0x27970, asm, func_80047170]   # 0x10
++      - [0x27970, data, data_80047170]   # 0x10 pinned
+       - [0x27980, data, data_80047180]   # 0x20
+       - [0x279A0, asm, func_800471A0]   # 0x38
+       - [0x279D8, data, data_800471D8]   # 0x1c
+diff --git a/config/splat.g3org_jp.yaml b/config/splat.g3org_jp.yaml
+index bca0991..a30a93a 100644
+--- a/config/splat.g3org_jp.yaml
++++ b/config/splat.g3org_jp.yaml
+@@ -50,9 +50,9 @@ segments:
+       - [0x800, data, data_80020000]   # 0x2df8
+       - [0x35F8, asm, func_80022DF8]   # 0x18
+       - [0x3610, data, data_80022E10]   # 0x2dc
+-      - [0x38EC, asm, func_800230EC]   # 0x2c
++      - [0x38EC, data, data_800230EC]   # 0x2c pinned
+       - [0x3918, data, data_80023118]   # 0x214
+-      - [0x3B2C, asm, func_8002332C]   # 0x40c
++      - [0x3B2C, data, data_8002332C]   # 0x40c pinned
+       - [0x3F38, data, data_80023738]   # 0x218
+       - [0x4150, asm, func_80023950]   # 0x71c
+       - [0x486C, data, data_8002406C]   # 0x1314
+@@ -112,7 +112,7 @@ segments:
+       - [0xF800, data, data_8002F000]   # 0x98
+       - [0xF898, asm, func_8002F098]   # 0x378
+       - [0xFC10, data, data_8002F410]   # 0x514
+-      - [0x10124, asm, func_8002F924]   # 0xc
++      - [0x10124, data, data_8002F924]   # 0xc pinned
+       - [0x10130, data, data_8002F930]   # 0x28
+       - [0x10158, asm, func_8002F958]   # 0x540
+       - [0x10698, data, data_8002FE98]   # 0x4
+@@ -148,7 +148,7 @@ segments:
+       - [0x17590, data, data_80036D90]   # 0x8
+       - [0x17598, asm, func_80036D98]   # 0x23c
+       - [0x177D4, data, data_80036FD4]   # 0x968
+-      - [0x1813C, asm, func_8003793C]   # 0x10
++      - [0x1813C, data, data_8003793C]   # 0x10 pinned
+       - [0x1814C, data, data_8003794C]   # 0x70
+       - [0x181BC, asm, func_800379BC]   # 0x398
+       - [0x18554, data, data_80037D54]   # 0x4
+@@ -214,7 +214,7 @@ segments:
+       - [0x252BC, data, data_80044ABC]   # 0x4
+       - [0x252C0, asm, func_80044AC0]   # 0x174
+       - [0x25434, data, data_80044C34]   # 0x10
+-      - [0x25444, asm, func_80044C44]   # 0xc
++      - [0x25444, data, data_80044C44]   # 0xc pinned
+       - [0x25450, data, data_80044C50]   # 0xa4
+       - [0x254F4, asm, func_80044CF4]   # 0x30
+       - [0x25524, data, data_80044D24]   # 0xa0
+@@ -350,7 +350,7 @@ segments:
+       - [0x44734, data, data_80063F34]   # 0x84c
+       - [0x44F80, asm, func_80064780]   # 0x70c
+       - [0x4568C, data, data_80064E8C]   # 0x104
+-      - [0x45790, asm, func_80064F90]   # 0x14
++      - [0x45790, data, data_80064F90]   # 0x14 pinned
+       - [0x457A4, data, data_80064FA4]   # 0x944
+       - [0x460E8, asm, func_800658E8]   # 0x824
+       - [0x4690C, data, data_8006610C]   # 0x1310
+@@ -370,7 +370,7 @@ segments:
+       - [0x4CE2C, data, data_8006C62C]   # 0xccc
+       - [0x4DAF8, asm, func_8006D2F8]   # 0x590
+       - [0x4E088, data, data_8006D888]   # 0xc4
+-      - [0x4E14C, asm, func_8006D94C]   # 0x18
++      - [0x4E14C, data, data_8006D94C]   # 0x18 pinned
+       - [0x4E164, data, data_8006D964]   # 0xb08
+       - [0x4EC6C, asm, func_8006E46C]   # 0x684
+       - [0x4F2F0, data, data_8006EAF0]   # 0x10
+@@ -378,7 +378,7 @@ segments:
+       - [0x4F334, data, data_8006EB34]   # 0x58
+       - [0x4F38C, asm, func_8006EB8C]   # 0x48
+       - [0x4F3D4, data, data_8006EBD4]   # 0x2d9c
+-      - [0x52170, asm, func_80071970]   # 0xc
++      - [0x52170, data, data_80071970]   # 0xc pinned
+       - [0x5217C, data, data_8007197C]   # 0xbc44
+       - [0x5DDC0, asm, func_8007D5C0]   # 0x10
+       - [0x5DDD0, data, data_8007D5D0]   # 0x3ba30
+diff --git a/config/splat.mainmenu_eu.yaml b/config/splat.mainmenu_eu.yaml
+index 19d849e..32f568f 100644
+--- a/config/splat.mainmenu_eu.yaml
++++ b/config/splat.mainmenu_eu.yaml
+@@ -194,7 +194,7 @@ segments:
+       - [0x152D0, data, data_80034AD0]   # 0xad4
+       - [0x15DA4, asm, func_800355A4]   # 0xb0
+       - [0x15E54, data, data_80035654]   # 0x1064
+-      - [0x16EB8, asm, func_800366B8]   # 0x1c
++      - [0x16EB8, data, data_800366B8]   # 0x1c pinned
+       - [0x16ED4, data, data_800366D4]   # 0xa58
+       - [0x1792C, asm, func_8003712C]   # 0x784
+       - [0x180B0, data, data_800378B0]   # 0x134
+@@ -238,7 +238,7 @@ segments:
+       - [0x1D238, data, data_8003CA38]   # 0x4
+       - [0x1D23C, asm, func_8003CA3C]   # 0x138
+       - [0x1D374, data, data_8003CB74]   # 0xe0
+-      - [0x1D454, asm, func_8003CC54]   # 0x18
++      - [0x1D454, data, data_8003CC54]   # 0x18 pinned
+       - [0x1D46C, data, data_8003CC6C]   # 0x5c
+       - [0x1D4C8, asm, func_8003CCC8]   # 0x724
+       - [0x1DBEC, data, data_8003D3EC]   # 0x8
+@@ -274,7 +274,7 @@ segments:
+       - [0x241C8, data, data_800439C8]   # 0x4
+       - [0x241CC, asm, func_800439CC]   # 0x4c
+       - [0x24218, data, data_80043A18]   # 0x1294
+-      - [0x254AC, asm, func_80044CAC]   # 0x10
++      - [0x254AC, data, data_80044CAC]   # 0x10 pinned
+       - [0x254BC, data, data_80044CBC]   # 0x2c
+       - [0x254E8, asm, func_80044CE8]   # 0x14
+       - [0x254FC, data, data_80044CFC]   # 0x13fc
+@@ -286,7 +286,7 @@ segments:
+       - [0x27058, data, data_80046858]   # 0xa54
+       - [0x27AAC, asm, func_800472AC]   # 0x77c
+       - [0x28228, data, data_80047A28]   # 0xc0
+-      - [0x282E8, asm, func_80047AE8]   # 0x20
++      - [0x282E8, data, data_80047AE8]   # 0x20 pinned
+       - [0x28308, data, data_80047B08]   # 0x2494
+       - [0x2A79C, asm, func_80049F9C]   # 0x480
+       - [0x2AC1C, data, data_8004A41C]   # 0x51c
+diff --git a/config/splat.mainmenu_jp.yaml b/config/splat.mainmenu_jp.yaml
+index 2dae522..36f8e66 100644
+--- a/config/splat.mainmenu_jp.yaml
++++ b/config/splat.mainmenu_jp.yaml
+@@ -48,7 +48,7 @@ segments:
+     subsegments:
+     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
+       - [0x800, data, data_80020000]   # 0x53c4
+-      - [0x5BC4, asm, func_800253C4]   # 0xc
++      - [0x5BC4, data, data_800253C4]   # 0xc pinned
+       - [0x5BD0, data, data_800253D0]   # 0x28
+       - [0x5BF8, asm, func_800253F8]   # 0x810
+       - [0x6408, data, data_80025C08]   # 0x194
+@@ -191,7 +191,7 @@ segments:
+       - [0x16B64, data, data_80036364]   # 0x8
+       - [0x16B6C, asm, func_8003636C]   # 0x320
+       - [0x16E8C, data, data_8003668C]   # 0x34
+-      - [0x16EC0, asm, func_800366C0]   # 0xc
++      - [0x16EC0, data, data_800366C0]   # 0xc pinned
+       - [0x16ECC, data, data_800366CC]   # 0x4c
+       - [0x16F18, asm, func_80036718]   # 0x884
+       - [0x1779C, data, data_80036F9C]   # 0x140
+@@ -212,7 +212,7 @@ segments:
+       - [0x19394, data, data_80038B94]   # 0x28
+       - [0x193BC, asm, func_80038BBC]   # 0x70
+       - [0x1942C, data, data_80038C2C]   # 0x1250
+-      - [0x1A67C, asm, func_80039E7C]   # 0x14
++      - [0x1A67C, data, data_80039E7C]   # 0x14 pinned
+       - [0x1A690, data, data_80039E90]   # 0x8e4
+       - [0x1AF74, asm, func_8003A774]   # 0x868
+       - [0x1B7DC, data, data_8003AFDC]   # 0x1cc
+@@ -248,7 +248,7 @@ segments:
+       - [0x27404, data, data_80046C04]   # 0x4
+       - [0x27408, asm, func_80046C08]   # 0xdf4
+       - [0x281FC, data, data_800479FC]   # 0xa0
+-      - [0x2829C, asm, func_80047A9C]   # 0x10
++      - [0x2829C, data, data_80047A9C]   # 0x10 pinned
+       - [0x282AC, data, data_80047AAC]   # 0x2818
+       - [0x2AAC4, asm, func_8004A2C4]   # 0xbc
+       - [0x2AB80, data, data_8004A380]   # 0xc
+@@ -272,7 +272,7 @@ segments:
+       - [0x318E8, data, data_800510E8]   # 0x2b28
+       - [0x34410, asm, func_80053C10]   # 0x868
+       - [0x34C78, data, data_80054478]   # 0x9d8
+-      - [0x35650, asm, func_80054E50]   # 0xc
++      - [0x35650, data, data_80054E50]   # 0xc pinned
+       - [0x3565C, data, data_80054E5C]   # 0x60
+       - [0x356BC, asm, func_80054EBC]   # 0x35c
+       - [0x35A18, data, data_80055218]   # 0x1818
+@@ -316,7 +316,7 @@ segments:
+       - [0x41630, data, data_80060E30]   # 0x64
+       - [0x41694, asm, func_80060E94]   # 0x34
+       - [0x416C8, data, data_80060EC8]   # 0x12a4
+-      - [0x4296C, asm, func_8006216C]   # 0xc
++      - [0x4296C, data, data_8006216C]   # 0xc pinned
+       - [0x42978, data, data_80062178]   # 0xe4
+       - [0x42A5C, asm, func_8006225C]   # 0x484
+       - [0x42EE0, data, data_800626E0]   # 0x424
+@@ -350,7 +350,7 @@ segments:
+       - [0x50554, data, data_8006FD54]   # 0x1d4
+       - [0x50728, asm, func_8006FF28]   # 0x5fc
+       - [0x50D24, data, data_80070524]   # 0x140
+-      - [0x50E64, asm, func_80070664]   # 0x10
++      - [0x50E64, data, data_80070664]   # 0x10 pinned
+       - [0x50E74, data, data_80070674]   # 0x8c
+       - [0x50F00, asm, func_80070700]   # 0x164
+       - [0x51064, data, data_80070864]   # 0x1b8
+diff --git a/config/splat.sces_00269.yaml b/config/splat.sces_00269.yaml
+index 3f26828..42ffb58 100644
+--- a/config/splat.sces_00269.yaml
++++ b/config/splat.sces_00269.yaml
+@@ -49,7 +49,7 @@ segments:
+     subsegments:
+     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
+       - [0x800, data, data_80020000]   # 0x180c
+-      - [0x200C, asm, func_8002180C]   # 0x10
++      - [0x200C, data, data_8002180C]   # 0x10 pinned
+       - [0x201C, data, data_8002181C]   # 0x101c
+       - [0x3038, asm, func_80022838]   # 0x44
+       - [0x307C, data, data_8002287C]   # 0x6dc
+@@ -59,7 +59,7 @@ segments:
+       - [0x4880, data, data_80024080]   # 0xba4
+       - [0x5424, asm, func_80024C24]   # 0x6c8
+       - [0x5AEC, data, data_800252EC]   # 0x970
+-      - [0x645C, asm, func_80025C5C]   # 0x1c
++      - [0x645C, data, data_80025C5C]   # 0x1c pinned
+       - [0x6478, data, data_80025C78]   # 0xa04
+       - [0x6E7C, asm, func_8002667C]   # 0x1f8
+       - [0x7074, data, data_80026874]   # 0x3540
+diff --git a/config/splat.slps_00270.yaml b/config/splat.slps_00270.yaml
+index 1329fc6..03fb6d9 100644
+--- a/config/splat.slps_00270.yaml
++++ b/config/splat.slps_00270.yaml
+@@ -47,7 +47,7 @@ segments:
+     subsegments:
+     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
+       - [0x800, data, data_80020000]   # 0x1800
+-      - [0x2000, asm, func_80021800]   # 0x10
++      - [0x2000, data, data_80021800]   # 0x10 pinned
+       - [0x2010, data, data_80021810]   # 0x1720
+       - [0x3730, asm, func_80022F30]   # 0x83c
+       - [0x3F6C, data, data_8002376C]   # 0x1490
+diff --git a/tools/scan_functions.py b/tools/scan_functions.py
+index f2fd6ad..ca82ec1 100644
+--- a/tools/scan_functions.py
++++ b/tools/scan_functions.py
+@@ -713,10 +713,12 @@ def preserved_types(yaml_path: Path):
+     functions. Returns {offset: (type, name, size)} and the set of offsets
+     as hard walk-stop boundaries.
+ 
+-    v3 note: only `c` entries are preserved. `data` subsegments are the
+-    scanner's own auto-named output and get regenerated wholesale — and
+-    since v3 rescues real code out of data gaps, treating old data starts
+-    as immutable types would re-type rescued functions back to data.
++    v3 note: `c` entries are always preserved, and a `data` entry carrying a
++    `pinned` marker is preserved too (a range verified by hand to be data).
++    Unmarked `data` subsegments are the scanner's own auto-named output and
++    get regenerated wholesale — since v3 rescues real code out of data gaps,
++    treating old data starts as immutable types would re-type rescued
++    functions back to data.
+     The recorded SIZE matters as much as the type: the C file was matched
+     against a subsegment of exactly that size, so the defensive split in
+     main() must carve the c-range out at that size, not to the end of the
+@@ -736,7 +738,13 @@ def preserved_types(yaml_path: Path):
+         if not in_block:
+             continue
+         m = re.match(r"\s*- \[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]\s*#\s*(0x[0-9A-Fa-f]+)", ln)
+-        if m and m.group(2) == "c":
++        if not m:
++            continue
++        # `c` is hand-set and always preserved. A `data` line marked `pinned`
++        # is a hand-verified data range: keep it too, or the sweep re-types it
++        # back to code. Blanket-preserving data stays wrong (v3 rescues real
++        # code from data gaps); only the explicit marker counts.
++        if m.group(2) == "c" or (m.group(2) == "data" and "pinned" in ln):
+             kept[int(m.group(1), 16) - HDR] = (
+                 m.group(2), m.group(3), int(m.group(4), 16))
+     return kept
