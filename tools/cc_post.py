@@ -25,6 +25,22 @@ temporaries):
    semantics, different order - byte difference, so the swap must be
    reproduced. (The trailing nop maspsx appended is absorbed.)
 
+   Two-load variant (found 2026-10-11, mainmenu_jp func_8003800C,
+   the first unit member whose frame saves a callee-saved register
+   besides $ra): with an intermediate spill reload the release sits
+   one slot later, and retail emits NO extra nop - the jump lands
+   right after the second load and only the branch delay carries the
+   release:
+       lw   $31,20($sp)     lw   $31,20($sp)
+       lw   $16,16($sp)     lw   $16,16($sp)
+       addu $sp,$sp,24  ->  j    $31
+       j    $31             addu $sp,$sp,24  <- retail (branch delay)
+       nop
+   The shrink (5 instructions -> 4) is real: retail has no nop. Fires
+   only on [lw $ra][lw $rX,N($sp)][addu $sp][j $ra](nop) with
+   rX != $ra; the jump does not read $rX, so the reorder is
+   semantically a no-op.
+
 2. EXTEND-PAIR UNWEAVE. When two 16-bit sign extensions are scheduled
    together GCC interleaves them; retail emits each pair as a unit:
        sll $A,$B,16         sll $A,$B,16
@@ -61,9 +77,35 @@ temporaries):
    semantically a no-op. Keeps every other hoisted instruction
    (arguments, later loads) untouched.
 
+5. PROLOGUE CALL DELAY NORMALIZATION (found 2026-10-11, mainmenu_jp
+   func_8003800C, the first unit member whose frame saves two
+   registers). GCC hoists the first call's argument setup above the
+   $ra spill and fills the call's delay slot with the callee-saved
+   spill; retail keeps both spills adjacent after the frame alloc and
+   puts the argument setup in the delay slot:
+       subu $sp,$sp,24      subu $sp,$sp,24
+       addu $4,$0,$zero     sw   $31,20($sp)
+       sw   $31,20($sp) ->  sw   $16,16($sp)
+       jal  func_80035A78   jal  func_80035A78
+       sw   $16,16($sp)      addu $4,$0,$zero   <- retail (delay)
+   Fires only on [frame-alloc][register-only ALU][sw $ra][jal]
+   [sw $rS,N($sp)]. Guards: the ALU instruction must not reference
+   $sp, must not write $sp/$ra, and must not write the spill's source
+   register (the spill moves ahead of it). All five instructions are
+   mutually independent under those guards, so the reorder is
+   semantically a no-op. Rule 4 and this rule are disjoint: rule 4
+   fires on a v0 materialization at the same slot, rule 5 requires a
+   register-only ALU form, and after rule 4 rewrites, the shape no
+   longer matches rule 5.
+
 Every rule triggers on a narrow, byte-verified pattern; anything that
 does not match passes through untouched. The SHA-1 oracle gates the
 result either way.
+
+maspsx formatting note: it emits a blank line after every call's
+delay-slot instruction. Blank lines carry no bytes, so they are
+dropped on read - otherwise the prologue call pattern above would be
+split into two runs and never match.
 """
 
 import re
@@ -78,6 +120,16 @@ MOVE_V0 = re.compile(r"^addu\t\$2,\$(\w+),\$zero$")
 FRAME_ALLOC = re.compile(r"^(?:subu|addiu)\t\$sp,\$sp,(-?0x[0-9a-f]+|\d+)$")
 V0_IMM = re.compile(r"^(?:ori|addiu|li)\t\$(?:2|v0),(?:\$(?:0|zero),)?(-?0x[0-9a-f]+|\d+)$")
 SW_RA = re.compile(r"^sw\t\$(?:31|ra),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
+LW_SREG = re.compile(r"^lw\t\$(\w+),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
+JAL_CALL = re.compile(r"^jal\t\S+")
+SW_SREG = re.compile(r"^sw\t\$(\w+),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
+# Register-only ALU op for the prologue hoist (rule 5): captures the
+# destination register. Memory ops, branches and frame allocs excluded
+# by construction (memory ops are never safe to reorder around stores;
+# frame allocs are matched separately).
+ALU_X = re.compile(
+    r"^(?:addu|addiu|or|ori|and|andi|xor|xori|subu|sub|sll|srl|sra|li|lui|move)"
+    r"\t\$(\w+),")
 
 NOP = re.compile(r"^nop(\s*#.*)?$")
 # maspsx marks its load-delay decisions as '#nop # DEBUG: ...' comments;
@@ -100,6 +152,23 @@ def is_instruction(line: str) -> bool:
 def apply_rules(insns: list[str]) -> list[str]:
     """Replace instruction subsequences in place; return new list."""
     res = list(insns)
+
+    # Rule 1 (two-load variant): [lw $ra][lw $rX,N($sp)][addu $sp]
+    # [j $ra](nop)? -> [lw $ra][lw $rX][j $ra][addu $sp] (nop absorbed).
+    # Checked first: the plain variant below cannot fire on this shape
+    # (the frame release is not adjacent to the $ra reload).
+    i = 0
+    while i < len(res) - 3:
+        m_ra, m_sx = LW_RA.match(res[i]), LW_SREG.match(res[i + 1])
+        if (m_ra and m_sx and m_sx.group(1) not in ("31", "ra", "29", "sp")
+                and ADDU_SP.match(res[i + 2]) and JUMP_RA.match(res[i + 3])):
+            tail_nop = (i + 4 < len(res) and NOP.match(res[i + 4]))
+            res[i : i + (5 if tail_nop else 4)] = [
+                res[i], res[i + 1], res[i + 3], res[i + 2]
+            ]
+            i += 4
+            continue
+        i += 1
 
     # Rule 1: [lw $ra][addu $sp][j $ra](nop)? -> [lw][nop][j][addu]
     i = 0
@@ -150,6 +219,29 @@ def apply_rules(insns: list[str]) -> list[str]:
             continue
         i += 1
 
+    # Rule 5: [frame-alloc][ALU X][sw $ra][jal T][sw $rS,N($sp)] ->
+    #         [frame-alloc][sw $ra][sw $rS][jal T][X]
+    # (the call's delay slot gets X; the spill moves next to the $ra
+    # save). Guards below make the five instructions mutually
+    # independent: X must not touch $sp or the spill's source register,
+    # and must not itself be a spill of $ra.
+    i = 0
+    while i < len(res) - 4:
+        if (FRAME_ALLOC.match(res[i]) and ALU_X.match(res[i + 1])
+                and SW_RA.match(res[i + 2]) and JAL_CALL.match(res[i + 3])):
+            m_x = ALU_X.match(res[i + 1])
+            m_sx = SW_SREG.match(res[i + 4])
+            if (m_sx and m_sx.group(1) not in ("31", "ra", "29", "sp")
+                    and "sp" not in res[i + 1]
+                    and m_x.group(1) not in ("29", "sp", "31", "ra")
+                    and m_x.group(1) != m_sx.group(1)):
+                res[i : i + 5] = [
+                    res[i], res[i + 2], res[i + 4], res[i + 3], res[i + 1]
+                ]
+                i += 5
+                continue
+        i += 1
+
     return res
 
 
@@ -167,10 +259,13 @@ def main() -> None:
     def flush() -> None:
         if run:
             fixed = apply_rules([out[i].strip() for i in run])
-            # map: run positions up to len(run) stay in place; grown tail after
+            # map: run positions up to len(run) stay in place; grown tail
+            # after. A rule may also SHRINK the run (rule 1 two-load variant
+            # absorbs the trailing nop): blank the surplus slots - blank
+            # lines carry no bytes for the assembler.
             last = run[-1]
             for pos, i in enumerate(run):
-                out[i] = fixed[pos]
+                out[i] = fixed[pos] if pos < len(fixed) else ""
             grow = fixed[len(run):]
             if grow:
                 out[last + 1 : last + 1] = grow
@@ -183,6 +278,8 @@ def main() -> None:
         stripped = line.strip()
         if NOPLIKE.match(stripped):
             continue  # maspsx 'decided not to insert' marker - no bytes
+        if not stripped:
+            continue  # maspsx blank after each call delay slot - no bytes
         if NOP.match(stripped):
             line = "\tnop"
         if is_instruction(line):
