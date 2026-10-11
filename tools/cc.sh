@@ -76,6 +76,11 @@ CC1FLAGS="-quiet -mips1 -O2 -G8 -funsigned-char -fno-builtin $INCS"
 # disassembly shows exactly this sequence (e.g. func_80028B8C.s).
 python3 "$MASPSX" --expand-div < "$STEM.gcc.s" > "$STEM.mas.s"
 
+# Instruction-order fixups so cc1 output matches retail scheduling
+# (epilogue delay swap, extend-pair unweave). C path only - see
+# tools/cc_post.py header for the byte-verified rationale.
+python3 "$REPO/tools/cc_post.py" "$STEM.mas.s"
+
 if [ "$STOP_AT_ASM" = 1 ]; then
     # Hand the .mas.s to the caller (tools/build.sh rewrites the section
     # name to .r_<rom> and assembles with its own flags — it must, because
