@@ -35,6 +35,17 @@ temporaries):
    (dest,src) pairs - pure register shifts, side-effect free, so the
    reorder is semantically a no-op.
 
+3. RETURN-MOVE UN-FILL (found 2026-10-11, mainmenu_jp func_800791A4,
+   `return d;` getter). GCC fills the return jump's delay slot with the
+   value move; retail keeps the move before the jump with an empty
+   (nop) delay slot:
+       j    $31             addu $2,$7,$zero
+       addu $2,$7,$zero ->  j    $31
+                            nop
+   Fires only on a jump-to-$ra immediately followed by a
+   move-to-$v0 (`addu $2,$X,$zero`, X != $2). Pure register move,
+   side-effect free; the grown nop reproduces the retail delay slot.
+
 Both rules trigger on narrow, byte-verified patterns; anything that
 does not match passes through untouched. The SHA-1 oracle gates the
 result either way.
@@ -48,6 +59,7 @@ ADDU_SP = re.compile(r"^addu\t\$sp,\$sp,(-?0x[0-9a-f]+|\d+)$")
 JUMP_RA = re.compile(r"^j(?:r)?\t\$(?:31|ra)$")
 SLL16 = re.compile(r"^sll\t\$(\w+),\$(\w+),16$")
 SRA16 = re.compile(r"^sra\t\$(\w+),\$(\w+),16$")
+MOVE_V0 = re.compile(r"^addu\t\$2,\$(\w+),\$zero$")
 
 NOP = re.compile(r"^nop(\s*#.*)?$")
 # maspsx marks its load-delay decisions as '#nop # DEBUG: ...' comments;
@@ -96,6 +108,17 @@ def apply_rules(insns: list[str]) -> list[str]:
                     and pa != pc:
                 res[i : i + 4] = [res[i], res[i + 2], res[i + 1], res[i + 3]]
                 i += 4
+                continue
+        i += 1
+
+    # Rule 3: [j $ra][addu $2,$X,$zero] -> [addu][j $ra][nop]
+    i = 0
+    while i < len(res) - 1:
+        if JUMP_RA.match(res[i]):
+            m = MOVE_V0.match(res[i + 1])
+            if m and m.group(1) != "2":
+                res[i : i + 2] = [res[i + 1], res[i], "nop"]
+                i += 3
                 continue
         i += 1
 
