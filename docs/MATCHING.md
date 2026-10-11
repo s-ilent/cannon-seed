@@ -28,6 +28,32 @@ Fix differences in this order:
 | 5 | Bounded permuter run | Use the permuter only for small register differences in right-length code. |
 | 6 | Park non-matching code | Store residual mismatches under NON_MATCHING stubs. Do not spend excessive time on minor register differences. |
 
+### 3a. Seeding the permuter: registers are not free
+
+The permuter's MIPS scorer keeps `$a1` and `$v0` distinct. `$zero` and `$sp` are
+normalized away, but the general-purpose registers are compared literally, so a
+candidate that never materializes the retail register cannot be repaired by
+mutation: no amount of statement shuffling changes which register the allocator
+picks, because the base C already fixed that choice.
+
+This bites in a common shape — a function whose retail body stores a parameter
+through `$v0`. If the base C takes that value as an ordinary parameter, GCC 2.6.3
+keeps it in the argument register (`$a1`) and every candidate scores a register
+mismatch no matter how good its statement order is. Two idioms move the value
+into `$v0`:
+
+* an explicit `return` of the value, which copies it at entry — but that copy
+  costs an instruction the retail body may not contain; or
+* a local assigned *after* its uses, which lets the allocator settle on `$v0`
+  without emitting a copy.
+
+Establish which register the retail code uses before seeding. A base whose
+disassembly already shows the right register and merely the wrong order
+converges in minutes; a base with the wrong register plateaus.
+
+`tools/permuter/` holds the project template and a runner — see
+`tools/permuter/README.md`.
+
 ## 4. Parking: NON_MATCHING is a state, not a defeat
 
 Some compiler patterns resist matching from C source. Put readable near-matches in `#ifdef NON_MATCHING` blocks. Put the `INCLUDE_ASM` stub in the `#else` block. The linked binary stays byte-identical. The source tracks progress clearly. Record attempted approaches in the header comment of the function.

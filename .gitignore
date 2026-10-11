@@ -46,3 +46,8 @@ asm/header.s
 mipsel-root/
 tools-local/
 tools-src/
+
+# Permuter scratch (debug_source.c / debug_compiled_object.o are written
+# into the CWD by decomp-permuter --debug):
+/debug_source.c
+/debug_compiled_object.o
