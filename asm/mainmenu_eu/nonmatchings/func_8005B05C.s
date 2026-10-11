@@ -168,3 +168,23 @@ glabel func_8005B20C
     /* 3BA28 8005B228 0800E003 */  jr         $ra
     /* 3BA2C 8005B22C 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005B20C
+
+nonmatching D_8005B230
+
+dlabel D_8005B230
+    /* 3BA30 8005B230 E8FFBD27 */ .word 0x27BDFFE8
+    /* 3BA34 8005B234 1000BFAF */ .word 0xAFBF0010
+    /* 3BA38 8005B238 0280043C */ .word 0x3C048002
+    /* 3BA3C 8005B23C BC238424 */ .word 0x248423BC
+
+nonmatching func_8005B240
+
+alabel func_8005B240
+    /* 3BA40 8005B240 EDDC000C */ .word 0x0C00DCED
+    /* 3BA44 8005B244 00000000 */ .word 0x00000000
+    /* 3BA48 8005B248 4C63010C */ .word 0x0C01634C
+    /* 3BA4C 8005B24C 00000000 */ .word 0x00000000
+    /* 3BA50 8005B250 8FD86602 */ .word 0x0266D88F /* invalid instruction */
+    /* 3BA54 8005B254 2986B1BF */ .word 0xBFB18629
+    /* 3BA58 8005B258 3C78D1FC */ .word 0xFCD1783C
+enddlabel D_8005B230
