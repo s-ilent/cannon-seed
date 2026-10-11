@@ -81,6 +81,19 @@ Method (v2, documented and re-runnable):
    original single-pass semantics (they are intra-function flow or
    pool words - far weaker evidence). v3d still vetts integrity
    downstream; blobs that walk far die on it.
+12. v5 short-head reclaim: a gap that STARTS with a real prologue pair
+   is a function head even when the rescue walk is shorter than the
+   generic 0x14 minimum, provided the walk ends on a barrier (covered
+   code) or a clean epilogue teardown. The disease: noise words that
+   decode as jal create phantom v1 anchors whose walks claim the BODY
+   of a real function (anchored walks are unconditionally accepted),
+   the prologue rescue's walk from the true prologue is then
+   barrier-stopped after a few words and died on the 0x14 minimum,
+   and the prologue pair stayed data forever (witnessed: mainmenu_eu
+   data_80037B6C / data_80037B98, each a 0x8-0xC B prologue head of a
+   function whose body sat in the next subseg starting mid-instruction).
+   The short head is merged with the sliced body by the normal merge
+   pass; v3d still vets the joined range.
 
 Outputs (regenerated wholesale):
   - config/splat.slps_00270.yaml  subsegments section (between markers)
@@ -372,6 +385,7 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
     # expose the next one in the chain (the walk now stops at prologues,
     # see walk()), so iterate until nothing new is accepted.
     rescued_bytes = 0
+    short_heads = {}  # v5: s -> (e, frame), deferred to post-v3d
     mask = bytearray(n)  # 1 = word belongs to a covered/rescued range
     for s, e in covered.items():
         for o in range(s // 4, e // 4):
@@ -389,8 +403,6 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             if not r:
                 continue
             s, e = r
-            if e - s < 0x14:
-                continue
             ends_clean = (
                 e >= 8
                 and words[(e // 4) - 2] == 0x03E00008  # jr $ra
@@ -400,7 +412,47 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             connects = any(s < e2 and e > s2 for s2, e2 in covered.items()) or any(
                 e2 == s or s2 == e for s2, e2 in covered.items()
             )
-            if not (ends_clean or connects):
+            if e - s < 0x14:
+                # v5 short-head reclaim (docstring 12): a gap that STARTS
+                # with a real prologue is a function head even when the
+                # walk is shorter than the generic 0x14 minimum. Phantom
+                # anchors (noise words decoding as jal) slice real
+                # functions mid-body: the anchor walk claims the body, and
+                # this rescue's walk from the true prologue gets
+                # barrier-stopped after a few words and dies on the
+                # minimum, leaving the prologue as data (witnessed:
+                # mainmenu_eu data_80037B6C / data_80037B98, prologue
+                # pairs carved off while walks from noise-jal anchors
+                # carried the bodies at 0x80037B7C / 0x80037BA4).
+                # NOT accepted here: `covered` is pre-merge, pre-v3d
+                # state, and gluing the head forward can bridge a verified
+                # range into a junk-bound fragment that v3d then kills
+                # wholesale, taking the predecessor down with it
+                # (witnessed: mainmenu_eu 0x800264EC, an 8-save prologue
+                # sliced at its 4th save; 0x800268C4 / 0x800355A4 heads
+                # bridging into out-of-image-jump fragments). Cheap
+                # filters now - full prologue pair, the slice falls AFTER
+                # the save sequence (the neighbor must not open with
+                # another sp-relative save below the ra slot), and the
+                # walk ends on a barrier or a clean epilogue - and the
+                # real acceptance is DEFERRED until after v3d pass 1,
+                # when every doomed fragment is already back on the data
+                # side and the head can only rejoin a surviving body.
+                barrier_stop = e < len(payload) and mask[e // 4]
+                save_cont = False
+                if e < len(payload):
+                    nxt = words[e // 4]
+                    if (nxt >> 26) == 0x2B and ((nxt >> 21) & 0x1F) == 29:
+                        imm = nxt & 0xFFFF
+                        if imm >= 0x8000:
+                            imm -= 0x10000
+                        save_cont = 0 <= imm < frame
+                if e - s >= 8 and not save_cont \
+                        and (ends_clean or barrier_stop):
+                    if s not in short_heads or short_heads[s][0] < e:
+                        short_heads[s] = (e, frame)
+                continue
+            elif not (ends_clean or connects):
                 continue
             covered[s] = e
             rescued_bytes += e - s
@@ -458,6 +510,62 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
         return rts
 
     trimmed = v3d_reject(trimmed)
+
+    # v5 deferred short-head reclaim (docstring 12): the prologue heads
+    # collected during the v3 rescue are accepted HERE, against the
+    # post-v3d layout, so a head can only ever rejoin a body that
+    # survived image-integrity vetting - it can no longer bridge verified
+    # code into a doomed fragment. The head extends the surviving range
+    # that starts exactly at the head's walk end (its sliced body); a
+    # head whose body died with v3d stays data, honestly.
+    if short_heads:
+        reclaimed = 0
+        reclaimed_bytes = 0
+        changed = True
+        while changed:
+            changed = False
+            for s in sorted(short_heads):
+                e, frame = short_heads[s]
+                if any(s2 <= s < e2 for s2, e2 in trimmed):
+                    continue  # covered by some range already
+                if prologue_frame(words, s // 4, n) is None:
+                    continue
+                body_idx = next((k for k, (s2, _) in enumerate(trimmed)
+                                 if s2 == e), None)
+                ends_clean = (
+                    e >= 8
+                    and words[(e // 4) - 2] == 0x03E00008
+                    and (words[(e // 4) - 1] & 0xFFFF0000) == 0x27BD0000
+                    and (words[(e // 4) - 1] & 0xFFFF) == frame
+                )
+                if body_idx is not None:
+                    trimmed[body_idx][0] = s  # extend the body leftward
+                elif ends_clean and s not in hard_stops:
+                    trimmed.append([s, e])
+                    trimmed.sort(key=lambda r: r[0])
+                else:
+                    continue  # the sliced body did not survive v3d
+                reclaimed += 1
+                reclaimed_bytes += e - s
+                changed = True
+                break  # trimmed shifted; rescan from the smallest head
+        if reclaimed:
+            print(f"scan: v5 reclaimed {reclaimed} short prologue head(s) "
+                  f"({reclaimed_bytes:,} B) into their sliced bodies")
+            # re-merge (the head may now touch its predecessor) + re-trim
+            m2 = []
+            for s, e in trimmed:
+                if m2 and s <= m2[-1][1]:
+                    m2[-1][1] = max(m2[-1][1], e)
+                else:
+                    m2.append([s, e])
+            trimmed = []
+            for s, e in m2:
+                z = e
+                while (z - 8 >= s and words[(z // 4) - 1] == 0
+                       and words[(z // 4) - 2] == 0):
+                    z -= 4
+                trimmed.append([s, z])
 
     # v3c: merge prologue-less continuations back into their predecessor.
     # GCC 2.6.3 embeds literal pools / jump tables INSIDE functions; the
