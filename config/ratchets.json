@@ -15,7 +15,8 @@
     "small-data globals those matches write (2 mentions per file: extern",
     "plus store). Names are spimdisasm address names; no Psy-Q headers exist",
     "to give them real identities yet.",
-    "unknown_function 3->14 (2026-10-11): first real compiler-output C match through the round-trip oracle - the g3_eu wrapper cluster (4 short-arg void wrappers over the palette-fade helper). 14 = 3 prior stub files + 4 auto-named definitions (real symbol names unidentified) + 1 extern declaration + 6 call sites of the still-asm callee. Auto names retained; rename when the helper's identity is evidenced."
+    "unknown_function 3->14 (2026-10-11): first real compiler-output C match through the round-trip oracle - the g3_eu wrapper cluster (4 short-arg void wrappers over the palette-fade helper). 14 = 3 prior stub files + 4 auto-named definitions (real symbol names unidentified) + 1 extern declaration + 6 call sites of the still-asm callee. Auto names retained; rename when the helper's identity is evidenced.",
+    "unknown_function 14->20 (2026-10-11): sequence-reset wrapper matched (g3_eu, yaml entry split asm->c at 0x2DF04). 20 = 14 + 1 auto-named definition + 2 extern declarations (the reset helper, first reference anywhere; the palette-fade helper already externed per-file rule) + 3 call sites. The div-guard block after it stays asm on evidence: its final j leaves the frame allocated with $ra never reloaded - not C tail-call codegen."
   ],
   "patterns": [
     {
@@ -28,7 +29,7 @@
     }
   ],
   "baselines": {
-    "unknown_function": 14,
+    "unknown_function": 20,
     "unknown_data": 4
   }
 }
