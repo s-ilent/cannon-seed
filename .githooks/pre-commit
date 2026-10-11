@@ -99,6 +99,8 @@ if [ "$agent_session" = 1 ] && [ "${ALLOW_OWNER_IDENT:-}" != "1" ]; then
         echo "Agent commits carry the agent identity; the owner's name must never" >&2
         echo "appear on work an agent performed. Commit with:" >&2
         echo "  sh tools/agent_git.sh commit -m '<message>'" >&2
+        echo "Both identities are checked: setting only GIT_AUTHOR_NAME/EMAIL" >&2
+        echo "leaves the committer as the owner and still fails." >&2
         echo "" >&2
         echo "Only if the owner is the one committing from inside this session:" >&2
         echo "  ALLOW_OWNER_IDENT=1 git commit ..." >&2
