@@ -57,7 +57,7 @@ glabel func_8003A814
     /* 1B0C0 8003A8C0 00000000 */  nop
     /* 1B0C4 8003A8C4 21106200 */  addu       $v0, $v1, $v0
     /* 1B0C8 8003A8C8 FFFF4924 */  addiu      $t1, $v0, -0x1
-    /* 1B0CC 8003A8CC 46DC0008 */  j          func_80037118
+    /* 1B0CC 8003A8CC 46DC0008 */  j          D_80037118
     /* 1B0D0 8003A8D0 21606000 */   addu      $t4, $v1, $zero
 endlabel func_8003A814
 
@@ -83,7 +83,7 @@ nonmatching func_8003A908, 0xC
 
 glabel func_8003A908
     /* 1B108 8003A908 FFFF4A24 */  addiu      $t2, $v0, -0x1
-    /* 1B10C 8003A90C 56DC0008 */  j          func_80037158
+    /* 1B10C 8003A90C 56DC0008 */  j          D_80037158
     /* 1B110 8003A910 21586000 */   addu      $t3, $v1, $zero
 endlabel func_8003A908
 

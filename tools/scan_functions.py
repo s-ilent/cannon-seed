@@ -52,6 +52,13 @@ Method (v2, documented and re-runnable):
    emits the same bytes however it decodes them; verify is the gate).
    Guarded: never merges a range other code enters (shared tail), never
    across a preserved c-function, never one starting a fresh prologue.
+10. v3d image-integrity rejection: real code never jal/j's outside the
+   executable's own image (or the BIOS call regions A0/B0/C0); packed
+   and encrypted data blobs that walk as plausible code do it constantly
+   (witnessed: g3_eu 0x8004035C, a 0x46C compressed blob whose words
+   decode through sdc1/jal-to-0x802F8978/bgezall $ra/cache until GAS
+   hard-fails on the bgezall). Such ranges are rejected wholesale and
+   their bytes return to the data side, where they belong.
 
 Outputs (regenerated wholesale):
   - config/splat.slps_00270.yaml  subsegments section (between markers)
@@ -326,6 +333,43 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
             z -= 4
         trimmed.append([s, z])
 
+    # v3d: image-integrity rejection (see docstring item 10). Runs BEFORE
+    # the v3c merge so a doomed range can never serve as a merge
+    # predecessor, and AGAIN after it (a merge can reassemble pieces into
+    # a range containing a bad word none of the v3d-pass-1 parts tripped
+    # on). Rejected bytes fall back to the data side.
+    def v3d_reject(rts):
+        rejected = 0
+        rejected_bytes = 0
+        keep = []
+        for s, e in rts:
+            if s in hard_stops:
+                keep.append([s, e])
+                continue
+            bad_tgt = None
+            for j in range(s // 4, e // 4):
+                op = words[j] >> 26
+                if op == 2 or op == 3:  # j / jal
+                    tgt = ((words[j] & 0x3FFFFFF) << 2) | (BASE & 0xF0000000)
+                    if not (BASE <= tgt < BASE + len(payload)) and not (
+                            0xA0000000 <= tgt < 0xC0003000):
+                        bad_tgt = tgt
+                        break
+            if bad_tgt is None:
+                keep.append([s, e])
+                continue
+            print(f"scan: v3d REJECT {BASE + s:08X}..{BASE + e:08X} "
+                  f"({e - s:#x} B): jump to {bad_tgt:08X} outside image")
+            rejected += 1
+            rejected_bytes += e - s
+        if rejected:
+            print(f"scan: v3d rejected {rejected} ranges "
+                  f"({rejected_bytes:,} B) back to data")
+            return keep
+        return rts
+
+    trimmed = v3d_reject(trimmed)
+
     # v3c: merge prologue-less continuations back into their predecessor.
     # GCC 2.6.3 embeds literal pools / jump tables INSIDE functions; the
     # walk stops at the implausible words and the code after the pool
@@ -402,6 +446,9 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None):
                    and words[(z // 4) - 2] == 0):
                 z -= 4
             trimmed.append([s, z])
+        # v3d pass 2: a merged range can contain a bad word none of its
+        # parts tripped on alone — never let one through.
+        trimmed = v3d_reject(trimmed)
 
     # v3b: cross-range branch targets need NAMES, not boundaries. Each
     # subsegment is one spimdisasm file that defines only its start glabel;

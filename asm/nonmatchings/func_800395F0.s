@@ -240,7 +240,8 @@ glabel func_80039874
     /* 1A0C4 800398C4 00000000 */   nop
 endlabel func_80039874
 
-nonmatching func_800398C8, 0x18
+/* Handwritten function */
+nonmatching func_800398C8, 0xE4
 
 glabel func_800398C8
     /* 1A0C8 800398C8 00008884 */  lh         $t0, 0x0($a0)
@@ -249,12 +250,6 @@ glabel func_800398C8
     /* 1A0D4 800398D4 06008B84 */  lh         $t3, 0x6($a0)
     /* 1A0D8 800398D8 08008C84 */  lh         $t4, 0x8($a0)
     /* 1A0DC 800398DC 0A008D84 */  lh         $t5, 0xA($a0)
-endlabel func_800398C8
-
-/* Handwritten function */
-nonmatching func_800398E0, 0xCC
-
-glabel func_800398E0
     /* 1A0E0 800398E0 00004248 */  cfc2       $v0, $0 /* handwritten instruction */
     /* 1A0E4 800398E4 00104348 */  cfc2       $v1, $2 /* handwritten instruction */
     /* 1A0E8 800398E8 00204648 */  cfc2       $a2, $4 /* handwritten instruction */
@@ -307,4 +302,4 @@ glabel func_800398E0
     /* 1A1A0 800399A0 0E00A9A4 */  sh         $t1, 0xE($a1)
     /* 1A1A4 800399A4 0800E003 */  jr         $ra
     /* 1A1A8 800399A8 1000AAA4 */   sh        $t2, 0x10($a1)
-endlabel func_800398E0
+endlabel func_800398C8

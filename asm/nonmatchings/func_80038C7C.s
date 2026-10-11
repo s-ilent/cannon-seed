@@ -19,20 +19,15 @@ glabel func_80038C7C
     /* 19494 80038C94 00000000 */   nop
 endlabel func_80038C7C
 
-nonmatching func_80038C98, 0xC
+nonmatching func_80038C98, 0x14
 
 glabel func_80038C98
     /* 19498 80038C98 23200400 */  negu       $a0, $a0
     /* 1949C 80038C9C 1ED6000C */  jal        func_80035878
     /* 194A0 80038CA0 FF0F8430 */   andi      $a0, $a0, 0xFFF
-endlabel func_80038C98
-
-nonmatching func_80038CA4, 0x8
-
-glabel func_80038CA4
     /* 194A4 80038CA4 23100200 */  negu       $v0, $v0
     /* 194A8 80038CA8 1000BF8F */  lw         $ra, 0x10($sp)
-endlabel func_80038CA4
+endlabel func_80038C98
 
 nonmatching func_80038CAC, 0xC
 

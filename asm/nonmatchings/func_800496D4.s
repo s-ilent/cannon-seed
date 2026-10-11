@@ -14,7 +14,6 @@ glabel func_800496D4
     /* 29ED8 800496D8 16006214 */  bne        $v1, $v0, func_80049734
     /* 29EDC 800496DC 1000BFAF */   sw        $ra, 0x10($sp)
     /* 29EE0 800496E0 0680013C */  lui        $at, %hi(D_80065DA8)
-  alabel func_800496E4
     /* 29EE4 800496E4 A85D20AC */  sw         $zero, %lo(D_80065DA8)($at)
     /* 29EE8 800496E8 1FBE000C */  jal        func_8002F87C
     /* 29EEC 800496EC 00000000 */   nop

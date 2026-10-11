@@ -28,7 +28,6 @@ glabel func_80039B4C
     /* 1A360 80039B60 08008A8C */  lw         $t2, 0x8($a0)
     /* 1A364 80039B64 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
     /* 1A368 80039B68 0010C948 */  ctc2       $t1, $2 /* handwritten instruction */
-  alabel func_80039B6C
     /* 1A36C 80039B6C 0020CA48 */  ctc2       $t2, $4 /* handwritten instruction */
     /* 1A370 80039B70 0800ABC8 */  lwc2       $11, 0x8($a1)
     /* 1A374 80039B74 0000A9C8 */  lwc2       $9, 0x0($a1)
