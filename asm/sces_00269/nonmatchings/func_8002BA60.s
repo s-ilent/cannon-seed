@@ -264,7 +264,7 @@ glabel func_8002BD2C
     /* C540 8002BD40 00000000 */   nop
     /* C544 8002BD44 21200002 */  addu       $a0, $s0, $zero
     /* C548 8002BD48 21280000 */  addu       $a1, $zero, $zero
-    /* C54C 8002BD4C DC25010C */  jal        func_80049770
+    /* C54C 8002BD4C DC25010C */  jal        DisableEvent
     /* C550 8002BD50 1000A627 */   addiu     $a2, $sp, 0x10
     /* C554 8002BD54 C1AC000C */  jal        func_8002B304
     /* C558 8002BD58 00000000 */   nop
