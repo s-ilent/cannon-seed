@@ -143,7 +143,7 @@ glabel func_8003F2AC
     /* 1FAD8 8003F2D8 9029A524 */  addiu      $a1, $a1, %lo(D_800D2990)
     /* 1FADC 8003F2DC 09F86000 */  jalr       $v1
     /* 1FAE0 8003F2E0 00000000 */   nop
-    /* 1FAE4 8003F2E4 45EC0008 */  j          D_8003B114
+    /* 1FAE4 8003F2E4 45EC0008 */  j          func_8003B114
     /* 1FAE8 8003F2E8 00000000 */   nop
 endlabel func_8003F2AC
 

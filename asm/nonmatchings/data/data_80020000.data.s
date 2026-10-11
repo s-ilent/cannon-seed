@@ -823,12 +823,21 @@ dlabel D_80020B64
 .align 2
 enddlabel D_80020B64
 
-.align 2
 nonmatching D_80020B80
 
 dlabel D_80020B80
-    /* 1380 80020B80 */ .asciz "Cannot find file(%s) in snd_fload3_TransBody()\n,filename"
-    /* 43616E6E6F742066696E642066696C652825732920696E20736E645F666C6F6164335F5472616E73426F647928290A2C66696C656E616D6500000000 */
+    /* 1380 80020B80 43616E6E */ .word 0x6E6E6143
+    /* 1384 80020B84 6F742066 */ .word 0x6620746F
+    /* 1388 80020B88 696E6420 */ .word 0x20646E69
+    /* 138C 80020B8C 66696C65 */ .word 0x656C6966
+enddlabel D_80020B80
+
+.align 2
+nonmatching D_80020B90
+
+dlabel D_80020B90
+    /* 1390 80020B90 */ .asciz "(%s) in snd_fload3_TransBody()\n,filename"
+    /* 2825732920696E20736E645F666C6F6164335F5472616E73426F647928290A2C66696C656E616D6500000000 */
 .align 2
 .align 2
     /* 13BC 80020BBC */ .asciz "No enough memory in snd_fload3_TransBody()\n"
@@ -872,7 +881,7 @@ dlabel D_80020B80
     /* 14E0 80020CE0 72656374 */ .word 0x74636572
     /* 14E4 80020CE4 29202120 */ .word 0x20212029
     /* 14E8 80020CE8 28696E20 */ .word 0x206E6928
-enddlabel D_80020B80
+enddlabel D_80020B90
 
 nonmatching D_80020CEC
 

@@ -602,7 +602,7 @@ glabel func_8002D2E0
     /* DB10 8002D310 21280000 */  addu       $a1, $zero, $zero
     /* DB14 8002D314 42B0000C */  jal        func_8002C108
     /* DB18 8002D318 21300000 */   addu      $a2, $zero, $zero
-    /* DB1C 8002D31C 5DAE0008 */  j          D_8002B974
+    /* DB1C 8002D31C 5DAE0008 */  j          func_8002B974
     /* DB20 8002D320 21100000 */   addu      $v0, $zero, $zero
 endlabel func_8002D2E0
 
