@@ -24,12 +24,17 @@ the archives, read (vector, index) -> member name, then find the same pairs in
 the game -> every veneer gets the name of the SDK function it dispatches to.
 
 Usage:
-    python3 tools/sdk_symbols.py --libs <dir>     # emit config/sdk_symbols.txt
-    python3 tools/sdk_symbols.py --check <dir>   # report only, write nothing
+    python3 tools/sdk_symbols.py --libs <dir>            # write the report
+    python3 tools/sdk_symbols.py --libs <dir> --check    # report only
 
-<dir> is a directory holding the Psy-Q .LIB files (LIBAPI.LIB, LIBC.LIB, ...).
-The SDK is not committed; see docs/RULES.md. Without the archives the script
-exits 0 and writes nothing, so make/scan keep working in a bare checkout.
+<dir> is the directory holding the Psy-Q .LIB archives (LIBAPI.LIB, LIBC.LIB,
+...). Get them from https://github.com/sozud/psy-q - the version matching the
+pinned SDK is 4.0, so `<clone>/4.0/PSX/LIB`. The SDK is not committed (see
+docs/RULES.md); without the archives the script exits 0 and writes nothing,
+so make/scan keep working in a bare checkout.
+
+Verified against the full 4.0 library set: 122 (vector, index) names, and the
+same five function identifications as a minimal three-library subset.
 """
 import argparse
 import json
