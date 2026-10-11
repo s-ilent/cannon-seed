@@ -12,7 +12,6 @@ Keep this file short. Focus on rules and the loop. Do not write project state or
 4. **Never edit `asm/`.** Splat regenerates assembly files. Curate symbol names in `config/symbols.curated.txt` — the scanner rewrites the per-target symbols files, so only a curated name survives. Update segmentation in `config/splat.*.yaml`.
 5. **Keep the toolchain pinned.** Use the exact compiler version, binutils, flags, and maspsx. Current baseline: Psy-Q GCC 2.6.3 (SDK strings dated 1995-10).
 6. **No register pinning.** Do not use `register T v asm("$N")` or extended asm constraints to force register choices. Use `__asm__("")` only as a scheduling barrier. Place direct COP2/GTE assembly instructions in approved macro headers.
-7. **Never commit under the owner's name.** Agent commits carry the agent identity `Super Z <41898282+github-actions[bot]@users.noreply.github.com>`. The ambient global git config holds the owner's personal identity, so a plain `git commit` attributes agent work to the owner. Commit with `sh tools/agent_git.sh commit ...`. The pre-commit hook rejects the owner's identity in a session that carries a ZCode marker — fix the identity, never pass `--no-verify`.
 
 ## Sandbox re-provision recovery
 

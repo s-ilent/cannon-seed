@@ -78,8 +78,8 @@ fi
 # agent-driven commit carries them and the owner's own terminal does not.
 #
 # CAVEAT: if ZCode ever renames these markers the check stops firing, and agent
-# commits silently revert to the owner's identity. AGENTS.md rule 7 is the
-# backstop; re-verify this list when the client is upgraded.
+# commits silently revert to the owner's identity. Re-verify this list after a
+# client upgrade.
 OWNER_EMAIL='16026653+s-ilent@users.noreply.github.com'
 agent_session=0
 for marker in "$ZCODE_ENV" "$ZCODE_APP_VERSION" "$ZCODE_BASE_URL" "$ZCODE_PROCESS_LABEL"; do
