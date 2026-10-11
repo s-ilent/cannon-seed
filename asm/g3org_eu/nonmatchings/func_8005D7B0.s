@@ -33,12 +33,18 @@ glabel func_8005D7B0
     /* 3E000 8005D800 15A27FAF */ .word 0xAF7FA215
     /* 3E004 8005D804 C920C4F5 */ .word 0xF5C420C9
     /* 3E008 8005D808 CCBD9A81 */ .word 0x819ABDCC
-    /* 3E00C 8005D80C 0803E9FE */ .word 0xFEE90308
-    /* 3E010 8005D810 74EA762B */ .word 0x2B76EA74
-    /* 3E014 8005D814 83C3AA2F */ .word 0x2FAAC383
-    /* 3E018 8005D818 E6887E88 */ .word 0x887E88E6
-    /* 3E01C 8005D81C 4EE15D98 */ .word 0x985DE14E
-    /* 3E020 8005D820 BF518CF9 */ .word 0xF98C51BF
-    /* 3E024 8005D824 E6FCBC6A */ .word 0x6ABCFCE6
-    /* 3E028 8005D828 00FFFFFF */ .word 0xFFFFFF00
 enddlabel func_8005D7B0
+
+/* Handwritten function */
+nonmatching func_8005D80C, 0x20
+
+glabel func_8005D80C
+    /* 3E00C 8005D80C 0803E9FE */  sd         $t1, 0x308($s7)
+    /* 3E010 8005D810 74EA762B */  slti       $s6, $k1, -0x158C /* handwritten instruction */
+    /* 3E014 8005D814 83C3AA2F */  sltiu      $t2, $sp, -0x3C7D
+    /* 3E018 8005D818 E6887E88 */  lwl        $fp, -0x771A($v1)
+    /* 3E01C 8005D81C 4EE15D98 */  lwr        $sp, -0x1EB2($v0)
+    /* 3E020 8005D820 BF518CF9 */  sdc2       $12, 0x51BF($t4)
+    /* 3E024 8005D824 E6FCBC6A */  ldl        $gp, -0x31A($s5)
+    /* 3E028 8005D828 00FFFFFF */  sd         $ra, -0x100($ra)
+endlabel func_8005D80C

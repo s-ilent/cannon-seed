@@ -51,7 +51,7 @@ glabel func_80046938
     /* 2715C 8004695C 00000000 */   nop
     /* 27160 80046960 4901010C */  jal        func_80040524
     /* 27164 80046964 00000000 */   nop
-    /* 27168 80046968 3D060108 */  j          func_800418F4
+    /* 27168 80046968 3D060108 */  j          D_800418F4
     /* 2716C 8004696C 00000000 */   nop
 endlabel func_80046938
 
@@ -118,7 +118,7 @@ glabel func_80046A18
     /* 27224 80046A24 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80046A18
 
-nonmatching func_80046A28, 0x2C
+nonmatching func_80046A28, 0x68
 
 glabel func_80046A28
     /* 27228 80046A28 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -132,11 +132,6 @@ glabel func_80046A28
     /* 27248 80046A48 74BE22A4 */  sh         $v0, %lo(D_800ABE74)($at)
     /* 2724C 80046A4C 0B80013C */  lui        $at, %hi(D_800AC494)
     /* 27250 80046A50 94C420A4 */  sh         $zero, %lo(D_800AC494)($at)
-endlabel func_80046A28
-
-nonmatching func_80046A54, 0x3C
-
-glabel func_80046A54
     /* 27254 80046A54 02030234 */  ori        $v0, $zero, 0x302
     /* 27258 80046A58 0B80013C */  lui        $at, %hi(D_800ABFEC)
     /* 2725C 80046A5C ECBF22A4 */  sh         $v0, %lo(D_800ABFEC)($at)
@@ -153,7 +148,7 @@ glabel func_80046A54
     /* 27288 80046A88 0800E003 */  jr         $ra
   alabel func_80046A8C
     /* 2728C 80046A8C 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_80046A54
+endlabel func_80046A28
 
 nonmatching func_80046A90, 0x38
 
@@ -171,7 +166,7 @@ glabel func_80046A90
   alabel func_80046AB8
     /* 272B8 80046AB8 4901010C */  jal        func_80040524
     /* 272BC 80046ABC 00000000 */   nop
-    /* 272C0 80046AC0 90060108 */  j          func_80041A40
+    /* 272C0 80046AC0 90060108 */  j          D_80041A40
     /* 272C4 80046AC4 00000000 */   nop
 endlabel func_80046A90
 
@@ -250,7 +245,7 @@ glabel func_80046B70
     /* 27398 80046B98 00000000 */   nop
     /* 2739C 80046B9C E606010C */  jal        func_80041B98
     /* 273A0 80046BA0 00000000 */   nop
-    /* 273A4 80046BA4 E2060108 */  j          func_80041B88
+    /* 273A4 80046BA4 E2060108 */  j          D_80041B88
     /* 273A8 80046BA8 00000000 */   nop
 endlabel func_80046B70
 

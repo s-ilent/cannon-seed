@@ -52,7 +52,7 @@ glabel func_8004F5DC
 endlabel func_8004F5DC
     /* 2FE20 8004F620 00000000 */  nop
 
-nonmatching func_8004F624, 0xD8
+nonmatching func_8004F624, 0xE0
 
 glabel func_8004F624
     /* 2FE24 8004F624 00000000 */  nop
@@ -109,14 +109,9 @@ glabel func_8004F624
     /* 2FEF0 8004F6F0 03C31900 */  sra        $t8, $t9, 12
     /* 2FEF4 8004F6F4 19002C01 */  multu      $t1, $t4
     /* 2FEF8 8004F6F8 0800B8A4 */  sh         $t8, 0x8($a1)
-endlabel func_8004F624
     /* 2FEFC 8004F6FC 00000000 */  nop
-
-nonmatching func_8004F700, 0x4
-
-glabel func_8004F700
     /* 2FF00 8004F700 12C00000 */  mflo       $t8
-endlabel func_8004F700
+endlabel func_8004F624
     /* 2FF04 8004F704 00000000 */  nop
 
 nonmatching func_8004F708, 0x28

@@ -85,7 +85,6 @@ nonmatching func_8002F158, 0x18
 glabel func_8002F158
     /* F958 8002F158 05008214 */  bne        $a0, $v0, func_8002F170
     /* F95C 8002F15C 2F000234 */   ori       $v0, $zero, 0x2F
-  alabel func_8002F160
     /* F960 8002F160 000068A0 */  sb         $t0, 0x0($v1)
     /* F964 8002F164 01006324 */  addiu      $v1, $v1, 0x1
     /* F968 8002F168 5CB40008 */  j          func_8002D170
@@ -222,7 +221,7 @@ glabel func_8002F2BC
     /* FAC0 8002F2C0 4800BD27 */   addiu     $sp, $sp, 0x48
 endlabel func_8002F2BC
 
-nonmatching func_8002F2C4, 0x5C
+nonmatching func_8002F2C4, 0x7C
 
 glabel func_8002F2C4
     /* FAC4 8002F2C4 B8FFBD27 */  addiu      $sp, $sp, -0x48
@@ -234,7 +233,6 @@ glabel func_8002F2C4
     /* FADC 8002F2DC 3000B0AF */  sw         $s0, 0x30($sp)
     /* FAE0 8002F2E0 21988000 */  addu       $s3, $a0, $zero
     /* FAE4 8002F2E4 2190A000 */  addu       $s2, $a1, $zero
-  alabel func_8002F2E8
     /* FAE8 8002F2E8 2188C000 */  addu       $s1, $a2, $zero
     /* FAEC 8002F2EC 21A0E000 */  addu       $s4, $a3, $zero
     /* FAF0 8002F2F0 F000828F */  lw         $v0, 0xF0($gp)
@@ -249,11 +247,6 @@ glabel func_8002F2C4
     /* FB14 8002F314 21200002 */  addu       $a0, $s0, $zero
     /* FB18 8002F318 1E15010C */  jal        func_80045478
     /* FB1C 8002F31C 21282002 */   addu      $a1, $s1, $zero
-endlabel func_8002F2C4
-
-nonmatching func_8002F320, 0x20
-
-glabel func_8002F320
     /* FB20 8002F320 07004006 */  bltz       $s2, func_8002F340
     /* FB24 8002F324 9E550334 */   ori       $v1, $zero, 0x559E
     /* FB28 8002F328 0200422A */  slti       $v0, $s2, 0x2
@@ -262,7 +255,7 @@ glabel func_8002F320
     /* FB34 8002F334 02004010 */  beqz       $v0, func_8002F340
     /* FB38 8002F338 00000000 */   nop
     /* FB3C 8002F33C 380B0334 */  ori        $v1, $zero, 0xB38
-endlabel func_8002F320
+endlabel func_8002F2C4
 
 nonmatching func_8002F340, 0xC
 
@@ -276,7 +269,6 @@ nonmatching func_8002F34C, 0x14
 
 glabel func_8002F34C
     /* FB4C 8002F34C C3390700 */  sra        $a3, $a3, 7
-  alabel func_8002F350
     /* FB50 8002F350 21106000 */  addu       $v0, $v1, $zero
     /* FB54 8002F354 02004104 */  bgez       $v0, func_8002F360
     /* FB58 8002F358 C0390700 */   sll       $a3, $a3, 7
@@ -304,7 +296,6 @@ glabel func_8002F374
     /* FB88 8002F388 3C00B38F */  lw         $s3, 0x3C($sp)
     /* FB8C 8002F38C 3800B28F */  lw         $s2, 0x38($sp)
     /* FB90 8002F390 3400B18F */  lw         $s1, 0x34($sp)
-  alabel func_8002F394
     /* FB94 8002F394 3000B08F */  lw         $s0, 0x30($sp)
     /* FB98 8002F398 0800E003 */  jr         $ra
     /* FB9C 8002F39C 4800BD27 */   addiu     $sp, $sp, 0x48

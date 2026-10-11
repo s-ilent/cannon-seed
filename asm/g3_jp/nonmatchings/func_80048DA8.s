@@ -15,12 +15,10 @@ glabel func_80048DA8
     /* 295B0 80048DB0 0280043C */  lui        $a0, %hi(D_80021400)
     /* 295B4 80048DB4 00148424 */  addiu      $a0, $a0, %lo(D_80021400)
     /* 295B8 80048DB8 678B000C */  jal        func_80022D9C
-  alabel func_80048DBC
     /* 295BC 80048DBC 00000000 */   nop
     /* 295C0 80048DC0 0B80023C */  lui        $v0, %hi(D_800ABEDC)
     /* 295C4 80048DC4 DCBE4294 */  lhu        $v0, %lo(D_800ABEDC)($v0)
     /* 295C8 80048DC8 0B80033C */  lui        $v1, %hi(D_800ABEA4)
-  alabel func_80048DCC
     /* 295CC 80048DCC A4BE6394 */  lhu        $v1, %lo(D_800ABEA4)($v1)
     /* 295D0 80048DD0 0B80043C */  lui        $a0, %hi(D_800AC56C)
     /* 295D4 80048DD4 6CC58494 */  lhu        $a0, %lo(D_800AC56C)($a0)
@@ -59,23 +57,18 @@ glabel func_80048DA8
     /* 29658 80048E58 1A0F010C */  jal        func_80043C68
 endlabel func_80048DA8
 
-nonmatching func_80048E5C, 0x10
+nonmatching func_80048E5C, 0x20
 
 glabel func_80048E5C
     /* 2965C 80048E5C 00000000 */  nop
     /* 29660 80048E60 480E0108 */  j          func_80043920
     /* 29664 80048E64 00000000 */   nop
     /* 29668 80048E68 3F0F010C */  jal        func_80043CFC
-endlabel func_80048E5C
-
-nonmatching func_80048E6C, 0x10
-
-glabel func_80048E6C
-    /* 2966C 80048E6C 00000000 */  nop
+    /* 2966C 80048E6C 00000000 */   nop
     /* 29670 80048E70 480E0108 */  j          func_80043920
     /* 29674 80048E74 00000000 */   nop
     /* 29678 80048E78 640F010C */  jal        func_80043D90
-endlabel func_80048E6C
+endlabel func_80048E5C
 
 nonmatching func_80048E7C, 0x10
 
@@ -86,20 +79,15 @@ glabel func_80048E7C
     /* 29688 80048E88 8B0F010C */  jal        func_80043E2C
 endlabel func_80048E7C
 
-nonmatching func_80048E8C, 0x10
+nonmatching func_80048E8C, 0x14
 
 glabel func_80048E8C
     /* 2968C 80048E8C 00000000 */  nop
     /* 29690 80048E90 480E0108 */  j          func_80043920
     /* 29694 80048E94 00000000 */   nop
     /* 29698 80048E98 BB0F010C */  jal        func_80043EEC
+    /* 2969C 80048E9C 00000000 */   nop
 endlabel func_80048E8C
-
-nonmatching func_80048E9C, 0x4
-
-glabel func_80048E9C
-    /* 2969C 80048E9C 00000000 */  nop
-endlabel func_80048E9C
 
 nonmatching func_80048EA0, 0x10
 

@@ -25,10 +25,6 @@ glabel func_800394F0
     /* 19D20 80039520 B53B5752 */ .word 0x52573BB5
     /* 19D24 80039524 DB550483 */ .word 0x830455DB
     /* 19D28 80039528 EDFB7EEE */ .word 0xEE7EFBED /* invalid instruction */
-
-nonmatching func_8003952C
-
-alabel func_8003952C
     /* 19D2C 8003952C CF227641 */ .word 0x417622CF /* invalid instruction */
     /* 19D30 80039530 1468D7EF */ .word 0xEFD76814 /* invalid instruction */
     /* 19D34 80039534 140A398C */ .word 0x8C390A14

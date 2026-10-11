@@ -10,12 +10,12 @@
 nonmatching func_80044CF4, 0x30
 
 glabel func_80044CF4
-    /* 254F4 80044CF4 DA9A801C */  bgtz       $a0, func_8002B860
+    /* 254F4 80044CF4 DA9A801C */  bgtz       $a0, D_8002B860
     /* 254F8 80044CF8 F811E7AA */   swl       $a3, 0x11F8($s7)
-    /* 254FC 80044CFC FD7D295C */  .word      0x5C297DFD                    # bgtzl      $at, .L800644F4 # 00090000 <InstrIdType: CPU_NORMAL>
+    /* 254FC 80044CFC FD7D295C */  .word      0x5C297DFD                    # bgtzl      $at, D_800644F4 # 00090000 <InstrIdType: CPU_NORMAL>
     /* 25500 80044D00 FB9FFF8B */   lwl       $ra, -0x6005($ra)
     /* 25504 80044D04 BC20D925 */  addiu      $t9, $t6, 0x20BC
-    /* 25508 80044D08 C48E7256 */  bnel       $s3, $s2, .L8002881C
+    /* 25508 80044D08 C48E7256 */  bnel       $s3, $s2, D_8002881C
     /* 2550C 80044D0C FA38D414 */   bne       $a2, $s4, . + 4 + (0x38FA << 2)
     /* 25510 80044D10 A7FFB332 */   andi      $s3, $s5, 0xFFA7
     /* 25514 80044D14 D6A0E4A9 */  swl        $a0, -0x5F2A($t7)

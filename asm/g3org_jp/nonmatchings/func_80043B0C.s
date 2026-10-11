@@ -57,7 +57,6 @@ glabel func_80043B4C
     /* 243A8 80043BA8 00000000 */   nop
     /* 243AC 80043BAC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 243B0 80043BB0 00000000 */  nop
-  alabel func_80043BB4
     /* 243B4 80043BB4 0800E003 */  jr         $ra
     /* 243B8 80043BB8 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80043B4C

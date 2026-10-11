@@ -206,7 +206,6 @@ glabel func_80060FC8
     /* 41AB0 800612B0 1C00E3AC */  sw         $v1, 0x1C($a3)
     /* 41AB4 800612B4 2400EEAC */  sw         $t6, 0x24($a3)
     /* 41AB8 800612B8 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
-  alabel func_800612BC
     /* 41ABC 800612BC 00000000 */  nop
     /* 41AC0 800612C0 1A004004 */  bltz       $v0, func_8006132C
     /* 41AC4 800612C4 00000000 */   nop

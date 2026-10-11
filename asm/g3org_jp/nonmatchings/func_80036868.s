@@ -360,7 +360,7 @@ glabel func_80036C10
     /* 17438 80036C38 500002AE */  sw         $v0, 0x50($s0)
 endlabel func_80036C10
 
-nonmatching func_80036C3C, 0x1C
+nonmatching func_80036C3C, 0x54
 
 glabel func_80036C3C
     /* 1743C 80036C3C 4800028E */  lw         $v0, 0x48($s0)
@@ -370,11 +370,6 @@ glabel func_80036C3C
     /* 1744C 80036C4C 480002AE */  sw         $v0, 0x48($s0)
     /* 17450 80036C50 4C00028E */  lw         $v0, 0x4C($s0)
     /* 17454 80036C54 1000238E */  lw         $v1, 0x10($s1)
-endlabel func_80036C3C
-
-nonmatching func_80036C58, 0x38
-
-glabel func_80036C58
     /* 17458 80036C58 00000000 */  nop
     /* 1745C 80036C5C 21104300 */  addu       $v0, $v0, $v1
     /* 17460 80036C60 4C0002AE */  sw         $v0, 0x4C($s0)
@@ -389,9 +384,9 @@ glabel func_80036C58
     /* 17484 80036C84 2000B08F */  lw         $s0, 0x20($sp)
     /* 17488 80036C88 0800E003 */  jr         $ra
     /* 1748C 80036C8C 3000BD27 */   addiu     $sp, $sp, 0x30
-endlabel func_80036C58
+endlabel func_80036C3C
 
-nonmatching func_80036C90, 0x38
+nonmatching func_80036C90, 0x3C
 
 glabel func_80036C90
     /* 17490 80036C90 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -408,12 +403,12 @@ glabel func_80036C90
     /* 174BC 80036CBC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 174C0 80036CC0 00000000 */  nop
     /* 174C4 80036CC4 0800E003 */  jr         $ra
+    /* 174C8 80036CC8 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80036C90
 
-nonmatching func_80036CC8, 0x64
+nonmatching func_80036CCC, 0x60
 
-glabel func_80036CC8
-    /* 174C8 80036CC8 1800BD27 */  addiu      $sp, $sp, 0x18
+glabel func_80036CCC
     /* 174CC 80036CCC D8FFBD27 */  addiu      $sp, $sp, -0x28
     /* 174D0 80036CD0 2400BFAF */  sw         $ra, 0x24($sp)
     /* 174D4 80036CD4 2000B0AF */  sw         $s0, 0x20($sp)
@@ -436,9 +431,9 @@ glabel func_80036CC8
     /* 17518 80036D18 1800A4AF */  sw         $a0, 0x18($sp)
     /* 1751C 80036D1C 83CD000C */  jal        func_8003360C
     /* 17520 80036D20 1000A427 */   addiu     $a0, $sp, 0x10
-    /* 17524 80036D24 7ACF0008 */  j          func_80033DE8
+    /* 17524 80036D24 7ACF0008 */  j          D_80033DE8
     /* 17528 80036D28 00000000 */   nop
-endlabel func_80036CC8
+endlabel func_80036CCC
 
 nonmatching func_80036D2C, 0x54
 

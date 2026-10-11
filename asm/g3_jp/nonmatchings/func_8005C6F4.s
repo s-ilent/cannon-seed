@@ -158,18 +158,13 @@ glabel func_8005C8DC
     /* 3D124 8005C924 00000000 */   nop
 endlabel func_8005C8DC
 
-nonmatching func_8005C928, 0x10
+nonmatching func_8005C928, 0x48
 
 glabel func_8005C928
     /* 3D128 8005C928 1400B98F */  lw         $t9, 0x14($sp)
     /* 3D12C 8005C92C 1000AF8F */  lw         $t7, 0x10($sp)
     /* 3D130 8005C930 4900E010 */  beqz       $a3, D_8005CA58
     /* 3D134 8005C934 0400288F */   lw        $t0, 0x4($t9)
-endlabel func_8005C928
-
-nonmatching func_8005C938, 0x38
-
-glabel func_8005C938
     /* 3D138 8005C938 0800298F */  lw         $t1, 0x8($t9)
     /* 3D13C 8005C93C 08008A8C */  lw         $t2, 0x8($a0)
     /* 3D140 8005C940 0C008C94 */  lhu        $t4, 0xC($a0)
@@ -184,4 +179,4 @@ glabel func_8005C938
     /* 3D164 8005C964 000040C9 */  lwc2       $0, 0x0($t2)
     /* 3D168 8005C968 040041C9 */  lwc2       $1, 0x4($t2)
     /* 3D16C 8005C96C 000062C9 */  lwc2       $2, 0x0($t3)
-endlabel func_8005C938
+endlabel func_8005C928

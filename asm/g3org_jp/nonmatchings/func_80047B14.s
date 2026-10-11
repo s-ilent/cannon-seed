@@ -131,7 +131,6 @@ nonmatching func_80047C00, 0x10
 glabel func_80047C00
     /* 28400 80047C00 BE0A010C */  jal        func_80042AF8
     /* 28404 80047C04 00000000 */   nop
-  alabel func_80047C08
     /* 28408 80047C08 3E0A0108 */  j          func_800428F8
     /* 2840C 80047C0C 00000000 */   nop
 endlabel func_80047C00

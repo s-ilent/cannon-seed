@@ -21,10 +21,6 @@ glabel func_8002A61C
     /* AE3C 8002A63C 2538E5F7 */ .word 0xF7E53825
     /* AE40 8002A640 E1E8FA79 */ .word 0x79FAE8E1 /* invalid instruction */
     /* AE44 8002A644 3E5FDD82 */ .word 0x82DD5F3E
-
-nonmatching func_8002A648
-
-alabel func_8002A648
     /* AE48 8002A648 1C2402F7 */ .word 0xF702241C
     /* AE4C 8002A64C 5991F323 */ .word 0x23F39159
     /* AE50 8002A650 6492CDBB */ .word 0xBBCD9264

@@ -48,7 +48,6 @@ glabel func_800607D8
     /* 40FDC 800607DC 0C002D8D */  lw         $t5, 0xC($t1)
     /* 40FE0 800607E0 0C004E8D */  lw         $t6, 0xC($t2)
     /* 40FE4 800607E4 04008CAC */  sw         $t4, 0x4($a0)
-  alabel func_800607E8
     /* 40FE8 800607E8 0C008DAC */  sw         $t5, 0xC($a0)
     /* 40FEC 800607EC 14008EAC */  sw         $t6, 0x14($a0)
     /* 40FF0 800607F0 00008FAC */  sw         $t7, 0x0($a0)
@@ -68,7 +67,6 @@ glabel func_80060800
     /* 41010 80060810 8000EA8C */  lw         $t2, 0x80($a3)
     /* 41014 80060814 8400EB8C */  lw         $t3, 0x84($a3)
     /* 41018 80060818 00D05948 */  cfc2       $t9, $26 /* handwritten instruction */
-  alabel func_8006081C
     /* 4101C 8006081C 14000C8D */  lw         $t4, 0x14($t0)
     /* 41020 80060820 14002D8D */  lw         $t5, 0x14($t1)
     /* 41024 80060824 14004E8D */  lw         $t6, 0x14($t2)
@@ -213,7 +211,6 @@ glabel func_80060970
     /* 411DC 800609DC 3200F8A4 */  sh         $t8, 0x32($a3)
     /* 411E0 800609E0 1A00F9A4 */  sh         $t9, 0x1A($a3)
     /* 411E4 800609E4 20C08D01 */  add        $t8, $t4, $t5 /* handwritten instruction */
-  alabel func_800609E8
     /* 411E8 800609E8 20C8EE01 */  add        $t9, $t7, $t6 /* handwritten instruction */
     /* 411EC 800609EC 20181903 */  add        $v1, $t8, $t9 /* handwritten instruction */
     /* 411F0 800609F0 43C01800 */  sra        $t8, $t8, 1

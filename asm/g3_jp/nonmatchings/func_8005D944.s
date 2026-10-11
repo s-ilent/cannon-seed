@@ -65,7 +65,6 @@ glabel func_8005D948
     /* 3E1FC 8005D9FC 1000EEE8 */  swc2       $14, 0x10($a3)
     /* 3E200 8005DA00 00000000 */  nop
     /* 3E204 8005DA04 0100184A */  rtps
-  alabel func_8005DA08
     /* 3E208 8005DA08 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
     /* 3E20C 8005DA0C 00000000 */  nop
     /* 3E210 8005DA10 1A004004 */  bltz       $v0, func_8005DA7C

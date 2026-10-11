@@ -47,26 +47,16 @@ glabel func_8002674C
     /* 6F64 80026764 80180300 */   sll       $v1, $v1, 2
 endlabel func_8002674C
 
-nonmatching func_80026768, 0x4
+nonmatching func_80026768, 0x18
 
 glabel func_80026768
     /* 6F68 80026768 C0180200 */  sll        $v1, $v0, 3
-endlabel func_80026768
-
-nonmatching func_8002676C, 0x4
-
-glabel func_8002676C
     /* 6F6C 8002676C 21186200 */  addu       $v1, $v1, $v0
-endlabel func_8002676C
-
-nonmatching func_80026770, 0x10
-
-glabel func_80026770
     /* 6F70 80026770 80180300 */  sll        $v1, $v1, 2
     /* 6F74 80026774 0E80023C */  lui        $v0, %hi(D_800DA568)
     /* 6F78 80026778 68A54224 */  addiu      $v0, $v0, %lo(D_800DA568)
     /* 6F7C 8002677C 21206200 */  addu       $a0, $v1, $v0
-endlabel func_80026770
+endlabel func_80026768
 
 nonmatching func_80026780, 0x24
 

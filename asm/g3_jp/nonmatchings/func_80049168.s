@@ -385,7 +385,7 @@ glabel func_80049570
     /* 29D7C 8004957C 21280000 */  addu       $a1, $zero, $zero
     /* 29D80 80049580 89E08066 */  daddiu     $zero, $s4, -0x1F77
     /* 29D84 80049584 B5F1AE67 */  daddiu     $t6, $sp, -0xE4B
-    /* 29D88 80049588 EFE47553 */  beql       $k1, $s5, .L80042948 /* handwritten instruction */
+    /* 29D88 80049588 EFE47553 */  beql       $k1, $s5, D_80042948 /* handwritten instruction */
     /* 29D8C 8004958C 6ABBB8A6 */   sh        $t8, -0x4496($s5)
     /* 29D90 80049590 A8D54E2D */  sltiu      $t6, $t2, -0x2A58
     /* 29D94 80049594 D016BFDF */  ld         $ra, 0x16D0($sp)
@@ -400,6 +400,6 @@ glabel func_80049570
     /* 29DB8 800495B8 2539931A */  .word      0x1A933925                    # blez       $s4, D_80057A50 # 00130000 <InstrIdType: CPU_NORMAL>
     /* 29DBC 800495BC B06B4A88 */   lwl       $t2, 0x6BB0($v0)
     /* 29DC0 800495C0 A13DFBC2 */  ll         $k1, 0x3DA1($s7) /* handwritten instruction */
-    /* 29DC4 800495C4 DD0E6E5D */  .word      0x5D6E0EDD                    # bgtzl      $t3, .L8004D13C # 000E0000 <InstrIdType: CPU_NORMAL>
+    /* 29DC4 800495C4 DD0E6E5D */  .word      0x5D6E0EDD                    # bgtzl      $t3, D_8004D13C # 000E0000 <InstrIdType: CPU_NORMAL>
     /* 29DC8 800495C8 A0A012B5 */   sdr       $s2, -0x5F60($t0)
 endlabel func_80049570

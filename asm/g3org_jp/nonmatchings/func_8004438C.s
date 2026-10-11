@@ -39,10 +39,6 @@ nonmatching func_800443D4
 alabel func_800443D4
     /* 24BD4 800443D4 CBB3E564 */ .word 0x64E5B3CB
     /* 24BD8 800443D8 DF5B5079 */ .word 0x79505BDF /* invalid instruction */
-
-nonmatching func_800443DC
-
-alabel func_800443DC
     /* 24BDC 800443DC 5F19A535 */ .word 0x35A5195F
     /* 24BE0 800443E0 F8F69B10 */ .word 0x109BF6F8
     /* 24BE4 800443E4 257B4544 */ .word 0x44457B25 /* invalid instruction */

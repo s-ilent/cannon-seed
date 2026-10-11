@@ -38,7 +38,7 @@ glabel func_8005E170
     /* 3E9D0 8005E1D0 0400F6E8 */  swc2       $22, 0x4($a3)
     /* 3E9D4 8005E1D4 2800E724 */  addiu      $a3, $a3, 0x28
     /* 3E9D8 8005E1D8 FFFF1827 */  addiu      $t8, $t8, -0x1
-    /* 3E9DC 8005E1DC A4FF0017 */  bnez       $t8, func_8005E070
+    /* 3E9DC 8005E1DC A4FF0017 */  bnez       $t8, D_8005E070
     /* 3E9E0 8005E1E0 00000000 */   nop
     /* 3E9E4 8005E1E4 2110E000 */  addu       $v0, $a3, $zero
     /* 3E9E8 8005E1E8 0800E003 */  jr         $ra

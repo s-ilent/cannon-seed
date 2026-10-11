@@ -220,7 +220,7 @@ glabel func_80026238
     /* 6A4C 8002624C 0F008224 */  addiu      $v0, $a0, 0xF
 endlabel func_80026238
 
-nonmatching func_80026250, 0x1C
+nonmatching func_80026250, 0x94
 
 glabel func_80026250
     /* 6A50 80026250 F0004230 */  andi       $v0, $v0, 0xF0
@@ -230,11 +230,6 @@ glabel func_80026250
     /* 6A60 80026260 E8FF6BA4 */  sh         $t3, -0x18($v1)
     /* 6A64 80026264 EAFF6BA4 */  sh         $t3, -0x16($v1)
     /* 6A68 80026268 ECFF68A4 */  sh         $t0, -0x14($v1)
-endlabel func_80026250
-
-nonmatching func_8002626C, 0x78
-
-glabel func_8002626C
     /* 6A6C 8002626C EEFF65A0 */  sb         $a1, -0x12($v1)
     /* 6A70 80026270 EFFF62A0 */  sb         $v0, -0x11($v1)
     /* 6A74 80026274 00000296 */  lhu        $v0, 0x0($s0)
@@ -265,7 +260,7 @@ glabel func_8002626C
     /* 6AD8 800262D8 06000A34 */  ori        $t2, $zero, 0x6
     /* 6ADC 800262DC 00100934 */  ori        $t1, $zero, 0x1000
     /* 6AE0 800262E0 2000C324 */  addiu      $v1, $a2, 0x20
-endlabel func_8002626C
+endlabel func_80026250
 
 nonmatching func_800262E4, 0xC
 
@@ -455,7 +450,7 @@ glabel func_8002648C
     /* 6D04 80026504 0E80063C */  lui        $a2, %hi(D_800DC4E8)
     /* 6D08 80026508 E8C4C624 */  addiu      $a2, $a2, %lo(D_800DC4E8)
     /* 6D0C 8002650C 08000C34 */  ori        $t4, $zero, 0x8
-    /* 6D10 80026510 8F44DF50 */  beql       $a2, $ra, .L80037750
+    /* 6D10 80026510 8F44DF50 */  beql       $a2, $ra, D_80037750
     /* 6D14 80026514 09104C06 */   teqi      $s2, 0x1009 /* handwritten instruction */
     /* 6D18 80026518 33A3C0B1 */  sdl        $zero, -0x5CCD($t6)
 endlabel func_8002648C

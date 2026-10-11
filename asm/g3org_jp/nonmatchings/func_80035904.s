@@ -77,7 +77,7 @@ glabel func_80035980
     /* 161B4 800359B4 78158424 */  addiu      $a0, $a0, %lo(D_80021578)
     /* 161B8 800359B8 2215010C */  jal        func_80045488
     /* 161BC 800359BC 00000000 */   nop
-    /* 161C0 800359C0 6DCB0008 */  j          func_80032DB4
+    /* 161C0 800359C0 6DCB0008 */  j          D_80032DB4
     /* 161C4 800359C4 00000000 */   nop
 endlabel func_80035980
 
@@ -121,11 +121,11 @@ glabel func_80035A10
     /* 16238 80035A38 00000000 */  nop
     /* 1623C 80035A3C 1200C2A4 */  sh         $v0, 0x12($a2)
     /* 16240 80035A40 14008394 */  lhu        $v1, 0x14($a0)
-    /* 16244 80035A44 65CB0008 */  j          func_80032D94
+    /* 16244 80035A44 65CB0008 */  j          D_80032D94
     /* 16248 80035A48 0100E224 */   addiu     $v0, $a3, 0x1
 endlabel func_80035A10
 
-nonmatching func_80035A4C, 0x64
+nonmatching func_80035A4C, 0x88
 
 glabel func_80035A4C
     /* 1624C 80035A4C 0C80063C */  lui        $a2, %hi(D_800B9200)
@@ -153,11 +153,7 @@ glabel func_80035A4C
     /* 162A4 80035AA4 0C80023C */  lui        $v0, %hi(D_800B8F48)
     /* 162A8 80035AA8 488F4294 */  lhu        $v0, %lo(D_800B8F48)($v0)
     /* 162AC 80035AAC 14008394 */  lhu        $v1, 0x14($a0)
-endlabel func_80035A4C
-
-nonmatching func_80035AB0, 0x24
-
-glabel func_80035AB0
+  alabel func_80035AB0
     /* 162B0 80035AB0 01004224 */  addiu      $v0, $v0, 0x1
     /* 162B4 80035AB4 0C80013C */  lui        $at, %hi(D_800B8F48)
     /* 162B8 80035AB8 488F22A4 */  sh         $v0, %lo(D_800B8F48)($at)
@@ -167,7 +163,7 @@ glabel func_80035AB0
     /* 162C8 80035AC8 04000234 */  ori        $v0, $zero, 0x4
     /* 162CC 80035ACC 1600C2A4 */  sh         $v0, 0x16($a2)
     /* 162D0 80035AD0 1400C3A4 */  sh         $v1, 0x14($a2)
-endlabel func_80035AB0
+endlabel func_80035A4C
 
 nonmatching func_80035AD4, 0x30
 
@@ -399,11 +395,6 @@ alabel func_80035D0C
     /* 1652C 80035D2C 2456FA89 */ .word 0x89FA5624
     /* 16530 80035D30 7F4B0018 */ .word 0x18004B7F
     /* 16534 80035D34 272E1E9F */ .word 0x9F1E2E27
-enddlabel func_80035D00
-
-nonmatching func_80035D38
-
-glabel func_80035D38
     /* 16538 80035D38 8531FB1C */ .word 0x1CFB3185 /* invalid instruction */
     /* 1653C 80035D3C C7AA1C1A */ .word 0x1A1CAAC7 /* invalid instruction */
     /* 16540 80035D40 6C643D53 */ .word 0x533D646C
@@ -421,4 +412,4 @@ nonmatching func_80035D64
 alabel func_80035D64
     /* 16564 80035D64 82F5EFBD */ .word 0xBDEFF582
     /* 16568 80035D68 B8E6AF77 */ .word 0x77AFE6B8 /* invalid instruction */
-enddlabel func_80035D38
+enddlabel func_80035D00

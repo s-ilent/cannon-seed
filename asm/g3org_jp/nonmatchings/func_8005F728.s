@@ -21,7 +21,6 @@ glabel func_8005F728
     /* 3FF44 8005F744 1800AA8F */  lw         $t2, 0x18($sp)
     /* 3FF48 8005F748 1C00AB8F */  lw         $t3, 0x1C($sp)
     /* 3FF4C 8005F74C 0000ECE8 */  swc2       $12, 0x0($a3)
-  alabel func_8005F750
     /* 3FF50 8005F750 00000DE9 */  swc2       $13, 0x0($t0)
     /* 3FF54 8005F754 00002EE9 */  swc2       $14, 0x0($t1)
     /* 3FF58 8005F758 000048E9 */  swc2       $8, 0x0($t2)

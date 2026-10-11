@@ -18,7 +18,7 @@ glabel func_8004DF10
     /* 2E720 8004DF20 ADD2779E */  lwu        $s7, -0x2D53($s3)
     /* 2E724 8004DF24 CD7B8827 */  addiu      $t0, $gp, 0x7BCD
     /* 2E728 8004DF28 EDB00F39 */  xori       $t7, $t0, 0xB0ED
-    /* 2E72C 8004DF2C D0D2A815 */  bne        $t5, $t0, func_80042A70
+    /* 2E72C 8004DF2C D0D2A815 */  bne        $t5, $t0, D_80042A70
     /* 2E730 8004DF30 B2FA47C0 */   ll        $a3, -0x54E($v0) /* handwritten instruction */
     /* 2E734 8004DF34 EF8C7853 */  beql       $k1, $t8, .L800312F4 /* handwritten instruction */
     /* 2E738 8004DF38 DDD628E8 */   swc2      $8, -0x2923($at)

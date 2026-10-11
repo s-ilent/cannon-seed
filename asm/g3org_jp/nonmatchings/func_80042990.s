@@ -98,7 +98,7 @@ glabel func_80042A6C
     /* 232A0 80042AA0 00000000 */   nop
 endlabel func_80042A6C
 
-nonmatching func_80042AA4, 0x24
+nonmatching func_80042AA4, 0x40
 
 glabel func_80042AA4
     /* 232A4 80042AA4 0C80023C */  lui        $v0, %hi(D_800B9370)
@@ -109,20 +109,15 @@ glabel func_80042AA4
     /* 232B8 80042AB8 0C80013C */  lui        $at, %hi(D_800B8EE0)
     /* 232BC 80042ABC E08E23A4 */  sh         $v1, %lo(D_800B8EE0)($at)
     /* 232C0 80042AC0 01004224 */  addiu      $v0, $v0, 0x1
-    /* 232C4 80042AC4 0C80013C */  lui        $at, (0x800C0000 >> 16)
-endlabel func_80042AA4
-
-nonmatching func_80042AC8, 0x1C
-
-glabel func_80042AC8
-    /* 232C8 80042AC8 709322A4 */  sh         $v0, -0x6C90($at)
+    /* 232C4 80042AC4 0C80013C */  lui        $at, %hi(D_800B9370)
+    /* 232C8 80042AC8 709322A4 */  sh         $v0, %lo(D_800B9370)($at)
     /* 232CC 80042ACC 9DF8000C */  jal        func_8003E274
     /* 232D0 80042AD0 00000000 */   nop
     /* 232D4 80042AD4 1000BF8F */  lw         $ra, 0x10($sp)
     /* 232D8 80042AD8 00000000 */  nop
     /* 232DC 80042ADC 0800E003 */  jr         $ra
     /* 232E0 80042AE0 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_80042AC8
+endlabel func_80042AA4
 
 nonmatching func_80042AE4, 0x5C
 

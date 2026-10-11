@@ -14,10 +14,6 @@ glabel func_8003F06C
     /* 1F870 8003F070 50A159F0 */ .word 0xF059A150
     /* 1F874 8003F074 08AD0F76 */ .word 0x760FAD08 /* invalid instruction */
     /* 1F878 8003F078 B1A269CD */ .word 0xCD69A2B1
-
-nonmatching func_8003F07C
-
-alabel func_8003F07C
     /* 1F87C 8003F07C 1C7B1BC6 */ .word 0xC61B7B1C
     /* 1F880 8003F080 1E1D906B */ .word 0x6B901D1E
     /* 1F884 8003F084 8B6DBAB4 */ .word 0xB4BA6D8B

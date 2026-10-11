@@ -75,10 +75,6 @@ glabel func_80032634
     /* 12E84 80032684 226C7F1E */ .word 0x1E7F6C22 /* invalid instruction */
     /* 12E88 80032688 755EE324 */ .word 0x24E35E75
     /* 12E8C 8003268C B047596A */ .word 0x6A5947B0
-
-nonmatching func_80032690
-
-alabel func_80032690
     /* 12E90 80032690 2B4814A7 */ .word 0xA714482B
     /* 12E94 80032694 637D9687 */ .word 0x87967D63
     /* 12E98 80032698 6A8589DA */ .word 0xDA89856A

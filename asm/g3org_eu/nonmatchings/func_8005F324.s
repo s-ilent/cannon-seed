@@ -36,10 +36,6 @@ glabel func_8005F324
     /* 3FB80 8005F380 6379D73E */ .word 0x3ED77963 /* invalid instruction */
     /* 3FB84 8005F384 9A34F606 */ .word 0x06F6349A /* invalid instruction */
     /* 3FB88 8005F388 D72360F0 */ .word 0xF06023D7
-
-nonmatching .L8005F38C
-
-alabel .L8005F38C
     /* 3FB8C 8005F38C 262590BF */ .word 0xBF902526
     /* 3FB90 8005F390 BE7667A3 */ .word 0xA36776BE
     /* 3FB94 8005F394 2B2D28EF */ .word 0xEF282D2B /* invalid instruction */

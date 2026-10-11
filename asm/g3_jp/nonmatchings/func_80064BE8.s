@@ -12,7 +12,6 @@ nonmatching func_80064BE8, 0x2C
 glabel func_80064BE8
     /* 453E8 80064BE8 43C01900 */  sra        $t8, $t9, 1
     /* 453EC 80064BEC 2B089801 */  sltu       $at, $t4, $t8
-  alabel func_80064BF0
     /* 453F0 80064BF0 08002010 */  beqz       $at, func_80064C14
     /* 453F4 80064BF4 2B08B801 */   sltu      $at, $t5, $t8
     /* 453F8 80064BF8 06002010 */  beqz       $at, func_80064C14
@@ -67,7 +66,7 @@ glabel func_80064C64
 endlabel func_80064C64
 
 /* Handwritten function */
-nonmatching func_80064C90, 0x18
+nonmatching func_80064C90, 0x40
 
 glabel func_80064C90
     /* 45490 80064C90 00C85948 */  cfc2       $t9, $25 /* handwritten instruction */
@@ -76,11 +75,6 @@ glabel func_80064C90
     /* 4549C 80064C9C 12004E85 */  lh         $t6, 0x12($t2)
     /* 454A0 80064CA0 03CC1900 */  sra        $t9, $t9, 16
     /* 454A4 80064CA4 21C02303 */  addu       $t8, $t9, $v1
-endlabel func_80064C90
-
-nonmatching func_80064CA8, 0x28
-
-glabel func_80064CA8
     /* 454A8 80064CA8 2A080C03 */  slt        $at, $t8, $t4
     /* 454AC 80064CAC 08002010 */  beqz       $at, func_80064CD0
     /* 454B0 80064CB0 2A080D03 */   slt       $at, $t8, $t5
@@ -91,7 +85,7 @@ glabel func_80064CA8
     /* 454C4 80064CC4 21108000 */  addu       $v0, $a0, $zero
     /* 454C8 80064CC8 0800E003 */  jr         $ra
     /* 454CC 80064CCC 00000000 */   nop
-endlabel func_80064CA8
+endlabel func_80064C90
 
 nonmatching func_80064CD0, 0x2C
 
@@ -99,7 +93,6 @@ glabel func_80064CD0
     /* 454D0 80064CD0 23C02303 */  subu       $t8, $t9, $v1
     /* 454D4 80064CD4 2A089801 */  slt        $at, $t4, $t8
     /* 454D8 80064CD8 08002010 */  beqz       $at, func_80064CFC
-  alabel func_80064CDC
     /* 454DC 80064CDC 2A08B801 */   slt       $at, $t5, $t8
     /* 454E0 80064CE0 06002010 */  beqz       $at, func_80064CFC
     /* 454E4 80064CE4 2A08D801 */   slt       $at, $t6, $t8

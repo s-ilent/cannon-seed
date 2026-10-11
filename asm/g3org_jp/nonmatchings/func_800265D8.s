@@ -31,15 +31,10 @@ dlabel func_800265EC
     /* 6E0C 8002660C 11826063 */ .word 0x63608211
     /* 6E10 80026610 423768AA */ .word 0xAA683742
     /* 6E14 80026614 4D6CCACE */ .word 0xCECA6C4D
-enddlabel func_800265EC
-
-nonmatching func_80026618
-
-glabel func_80026618
     /* 6E18 80026618 5EBC76FB */ .word 0xFB76BC5E
     /* 6E1C 8002661C F3428F3F */ .word 0x3F8F42F3 /* invalid instruction */
     /* 6E20 80026620 D53AF6A2 */ .word 0xA2F63AD5
     /* 6E24 80026624 3378785A */ .word 0x5A787833 /* invalid instruction */
     /* 6E28 80026628 00FFFFFF */ .word 0xFFFFFF00
     /* 6E2C 8002662C FFFFFFFF */ .word 0xFFFFFFFF
-enddlabel func_80026618
+enddlabel func_800265EC

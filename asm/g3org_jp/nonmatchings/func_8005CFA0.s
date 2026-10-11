@@ -133,15 +133,10 @@ glabel func_8005D0F4
     /* 3D8FC 8005D0FC 00000000 */   nop
 endlabel func_8005D0F4
 
-nonmatching func_8005D100, 0x4
+nonmatching func_8005D100, 0x28
 
 glabel func_8005D100
     /* 3D900 8005D100 2110E000 */  addu       $v0, $a3, $zero
-endlabel func_8005D100
-
-nonmatching func_8005D104, 0x24
-
-glabel func_8005D104
     /* 3D904 8005D104 0800E003 */  jr         $ra
     /* 3D908 8005D108 00000000 */   nop
     /* 3D90C 8005D10C 1400B98F */  lw         $t9, 0x14($sp)
@@ -151,7 +146,7 @@ glabel func_8005D104
     /* 3D91C 8005D11C 0800298F */  lw         $t1, 0x8($t9)
     /* 3D920 8005D120 1C008A8C */  lw         $t2, 0x1C($a0)
     /* 3D924 8005D124 20008C94 */  lhu        $t4, 0x20($a0)
-endlabel func_8005D104
+endlabel func_8005D100
 
 nonmatching func_8005D128, 0x20
 
@@ -274,7 +269,6 @@ glabel func_8005D278
     /* 3DAA0 8005D2A0 16008B94 */  lhu        $t3, 0x16($a0)
     /* 3DAA4 8005D2A4 1A008C94 */  lhu        $t4, 0x1A($a0)
     /* 3DAA8 8005D2A8 C0500A00 */  sll        $t2, $t2, 3
-  alabel func_8005D2AC
     /* 3DAAC 8005D2AC C0580B00 */  sll        $t3, $t3, 3
     /* 3DAB0 8005D2B0 C0600C00 */  sll        $t4, $t4, 3
     /* 3DAB4 8005D2B4 21504501 */  addu       $t2, $t2, $a1

@@ -20,7 +20,6 @@ glabel func_8005FA40
     /* 4025C 8005FA5C 00000000 */   nop
     /* 40260 8005FA60 21108000 */  addu       $v0, $a0, $zero
     /* 40264 8005FA64 0800E003 */  jr         $ra
-  alabel func_8005FA68
     /* 40268 8005FA68 00000000 */   nop
 endlabel func_8005FA40
 
@@ -87,7 +86,6 @@ glabel func_8005FAF0
     /* 40308 8005FB08 02000C85 */  lh         $t4, 0x2($t0)
     /* 4030C 8005FB0C 02002D85 */  lh         $t5, 0x2($t1)
     /* 40310 8005FB10 02004E85 */  lh         $t6, 0x2($t2)
-  alabel func_8005FB14
     /* 40314 8005FB14 20788D01 */  add        $t7, $t4, $t5 /* handwritten instruction */
     /* 40318 8005FB18 20C0AE01 */  add        $t8, $t5, $t6 /* handwritten instruction */
     /* 4031C 8005FB1C 20C8CC01 */  add        $t9, $t6, $t4 /* handwritten instruction */

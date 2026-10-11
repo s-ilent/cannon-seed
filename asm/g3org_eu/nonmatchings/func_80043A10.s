@@ -49,8 +49,16 @@ glabel func_80043A10
     /* 242A0 80043AA0 2012065B */ .word 0x5B061220 /* invalid instruction */
     /* 242A4 80043AA4 8C885A12 */ .word 0x125A888C
     /* 242A8 80043AA8 4C63D855 */ .word 0x55D8634C
+
+nonmatching func_80043AAC
+
+alabel func_80043AAC
     /* 242AC 80043AAC 7C557ACC */ .word 0xCC7A557C
     /* 242B0 80043AB0 90D8157F */ .word 0x7F15D890 /* invalid instruction */
+
+nonmatching func_80043AB4
+
+alabel func_80043AB4
     /* 242B4 80043AB4 9F82E74B */ .word 0x4BE7829F /* invalid instruction */
     /* 242B8 80043AB8 00FFFFFF */ .word 0xFFFFFF00
     /* 242BC 80043ABC FFFFFFFF */ .word 0xFFFFFFFF

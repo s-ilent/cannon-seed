@@ -12,7 +12,6 @@ nonmatching func_8003D600, 0x20
 glabel func_8003D600
     /* 1DE00 8003D600 0C00078E */  lw         $a3, 0xC($s0)
     /* 1DE04 8003D604 21104500 */  addu       $v0, $v0, $a1
-  alabel func_8003D608
     /* 1DE08 8003D608 040002AE */  sw         $v0, 0x4($s0)
     /* 1DE0C 8003D60C 21186600 */  addu       $v1, $v1, $a2
     /* 1DE10 8003D610 080003AE */  sw         $v1, 0x8($s0)

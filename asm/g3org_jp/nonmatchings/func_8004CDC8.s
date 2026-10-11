@@ -150,7 +150,7 @@ glabel func_8004CF4C
     /* 2D7AC 8004CFAC 00000000 */   nop
 endlabel func_8004CF4C
 
-nonmatching func_8004CFB0, 0x2C
+nonmatching func_8004CFB0, 0x38
 
 glabel func_8004CFB0
     /* 2D7B0 8004CFB0 0A800E3C */  lui        $t6, %hi(D_8009EE30)
@@ -164,15 +164,10 @@ glabel func_8004CFB0
     /* 2D7D0 8004CFD0 E5F08424 */   addiu     $a0, $a0, %lo(D_8009F0E5)
     /* 2D7D4 8004CFD4 0A801F3C */  lui        $ra, %hi(D_8009EE24)
     /* 2D7D8 8004CFD8 24EEFF8F */  lw         $ra, %lo(D_8009EE24)($ra)
-endlabel func_8004CFB0
-
-nonmatching func_8004CFDC, 0xC
-
-glabel func_8004CFDC
     /* 2D7DC 8004CFDC 00000000 */  nop
     /* 2D7E0 8004CFE0 0800E003 */  jr         $ra
     /* 2D7E4 8004CFE4 00000000 */   nop
-endlabel func_8004CFDC
+endlabel func_8004CFB0
 
 /* Handwritten function */
 nonmatching func_8004CFE8, 0x68
@@ -231,16 +226,10 @@ glabel func_8004D050
 endlabel func_8004D050
 
 /* Handwritten function */
-nonmatching func_8004D098, 0x4
+nonmatching func_8004D098, 0x48
 
 glabel func_8004D098
     /* 2D898 8004D098 00404848 */  cfc2       $t0, $8 /* handwritten instruction */
-endlabel func_8004D098
-
-/* Handwritten function */
-nonmatching func_8004D09C, 0x44
-
-glabel func_8004D09C
     /* 2D89C 8004D09C 00484948 */  cfc2       $t1, $9 /* handwritten instruction */
     /* 2D8A0 8004D0A0 00504A48 */  cfc2       $t2, $10 /* handwritten instruction */
     /* 2D8A4 8004D0A4 00584B48 */  cfc2       $t3, $11 /* handwritten instruction */
@@ -258,7 +247,7 @@ glabel func_8004D09C
     /* 2D8D4 8004D0D4 1C008AAC */  sw         $t2, 0x1C($a0)
     /* 2D8D8 8004D0D8 0800E003 */  jr         $ra
     /* 2D8DC 8004D0DC 00000000 */   nop
-endlabel func_8004D09C
+endlabel func_8004D098
 
 /* Handwritten function */
 nonmatching func_8004D0E0, 0x48

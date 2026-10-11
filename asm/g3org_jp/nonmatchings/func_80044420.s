@@ -50,7 +50,7 @@ glabel func_8004447C
     /* 24C88 80044488 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8004447C
 
-nonmatching func_8004448C, 0x18
+nonmatching func_8004448C, 0x54
 
 glabel func_8004448C
     /* 24C8C 8004448C E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -59,11 +59,6 @@ glabel func_8004448C
     /* 24C98 80044498 E81B8424 */  addiu      $a0, $a0, %lo(D_80021BE8)
     /* 24C9C 8004449C D58D000C */  jal        func_80023754
     /* 24CA0 800444A0 00000000 */   nop
-endlabel func_8004448C
-
-nonmatching func_800444A4, 0x3C
-
-glabel func_800444A4
     /* 24CA4 800444A4 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 24CA8 800444A8 0C80013C */  lui        $at, %hi(D_800B91E8)
     /* 24CAC 800444AC E89122A4 */  sh         $v0, %lo(D_800B91E8)($at)
@@ -76,11 +71,10 @@ glabel func_800444A4
     /* 24CC8 800444C8 38FE000C */  jal        func_8003F8E0
     /* 24CCC 800444CC 00000000 */   nop
     /* 24CD0 800444D0 1000BF8F */  lw         $ra, 0x10($sp)
-  alabel func_800444D4
     /* 24CD4 800444D4 00000000 */  nop
     /* 24CD8 800444D8 0800E003 */  jr         $ra
     /* 24CDC 800444DC 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_800444A4
+endlabel func_8004448C
 
 nonmatching func_800444E0, 0x5C
 
@@ -92,7 +86,6 @@ glabel func_800444E0
     /* 24CF0 800444F0 D58D000C */  jal        func_80023754
     /* 24CF4 800444F4 00000000 */   nop
     /* 24CF8 800444F8 D707010C */  jal        func_80041F5C
-  alabel func_800444FC
     /* 24CFC 800444FC 00000000 */   nop
     /* 24D00 80044500 0C80023C */  lui        $v0, %hi(D_800B8E80)
     /* 24D04 80044504 808E4294 */  lhu        $v0, %lo(D_800B8E80)($v0)
@@ -138,7 +131,7 @@ glabel func_8004453C
     /* 24D8C 8004458C 709322A4 */  sh         $v0, %lo(D_800B9370)($at)
     /* 24D90 80044590 98FE000C */  jal        func_8003FA60
     /* 24D94 80044594 00000000 */   nop
-    /* 24D98 80044598 6AFE0008 */  j          func_8003F9A8
+    /* 24D98 80044598 6AFE0008 */  j          D_8003F9A8
     /* 24D9C 8004459C 00000000 */   nop
 endlabel func_8004453C
 

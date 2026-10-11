@@ -13,11 +13,6 @@ glabel func_8005BC60
     /* 3C460 8005BC60 060C5EF9 */ .word 0xF95E0C06
     /* 3C464 8005BC64 01FF1B86 */ .word 0x861BFF01
     /* 3C468 8005BC68 AF720E03 */ .word 0x030E72AF /* invalid instruction */
-enddlabel func_8005BC60
-
-nonmatching func_8005BC6C
-
-glabel func_8005BC6C
     /* 3C46C 8005BC6C 51C71B8E */ .word 0x8E1BC751
     /* 3C470 8005BC70 022924E6 */ .word 0xE6242902
     /* 3C474 8005BC74 8D544365 */ .word 0x6543548D
@@ -35,4 +30,4 @@ alabel func_8005BC84
     /* 3C494 8005BC94 72F74E51 */ .word 0x514EF772
     /* 3C498 8005BC98 00FFFFFF */ .word 0xFFFFFF00
     /* 3C49C 8005BC9C FFFFFFFF */ .word 0xFFFFFFFF
-enddlabel func_8005BC6C
+enddlabel func_8005BC60

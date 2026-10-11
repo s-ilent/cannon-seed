@@ -358,21 +358,16 @@ glabel func_8006C234
     /* 4CA78 8006C278 F47520AC */  sw         $zero, %lo(D_800B75F4)($at)
 endlabel func_8006C234
 
-nonmatching func_8006C27C, 0xC
+nonmatching func_8006C27C, 0x18
 
 glabel func_8006C27C
     /* 4CA7C 8006C27C 1800BF8F */  lw         $ra, 0x18($sp)
     /* 4CA80 8006C280 1400B18F */  lw         $s1, 0x14($sp)
     /* 4CA84 8006C284 1000B08F */  lw         $s0, 0x10($sp)
-endlabel func_8006C27C
-
-nonmatching func_8006C288, 0xC
-
-glabel func_8006C288
     /* 4CA88 8006C288 2000BD27 */  addiu      $sp, $sp, 0x20
     /* 4CA8C 8006C28C 0800E003 */  jr         $ra
     /* 4CA90 8006C290 00000000 */   nop
-endlabel func_8006C288
+endlabel func_8006C27C
 
 nonmatching func_8006C294, 0x4C
 

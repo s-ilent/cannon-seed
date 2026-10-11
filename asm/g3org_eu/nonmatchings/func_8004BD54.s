@@ -33,7 +33,6 @@ glabel func_8004BD54
     /* 2C5A4 8004BDA4 12C80000 */  mflo       $t9
     /* 2C5A8 8004BDA8 23C81903 */  subu       $t9, $t8, $t9
     /* 2C5AC 8004BDAC 03C31900 */  sra        $t8, $t9, 12
-  .L8004BDB0:
     /* 2C5B0 8004BDB0 19000C01 */  multu      $t0, $t4
     /* 2C5B4 8004BDB4 0200B8A4 */  sh         $t8, 0x2($a1)
     /* 2C5B8 8004BDB8 00000000 */  nop

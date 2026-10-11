@@ -50,10 +50,6 @@ alabel func_8002AF6C
     /* B778 8002AF78 77953B42 */ .word 0x423B9577 /* invalid instruction */
     /* B77C 8002AF7C 647596CE */ .word 0xCE967564
     /* B780 8002AF80 E9C3843A */ .word 0x3A84C3E9
-
-nonmatching func_8002AF84
-
-alabel func_8002AF84
     /* B784 8002AF84 E79C4C63 */ .word 0x634C9CE7
     /* B788 8002AF88 F7D11753 */ .word 0x5317D1F7
     /* B78C 8002AF8C 15F9E9E0 */ .word 0xE0E9F915
