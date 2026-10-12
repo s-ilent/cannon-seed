@@ -48,6 +48,8 @@ GsClearOt = 0x8003B244; // LIBGS SCLIB member; tools/sdk_members.py, unique plac
 SpuSetNoiseVoice = 0x800487B4; // LIBSPU S_SNV member; tools/sdk_members.py, unique placement + signature DB agrees
 SetVideoMode = 0x80035240; // LIBETC VMODE member .text+0x0 (extent 0x28); tools/sdk_members.py, unique placement + signature DB agrees
 GetVideoMode = 0x80035258; // LIBETC VMODE member .text+0x18; tools/sdk_members.py, unique placement + signature DB agrees
+gte_rotate_z_matrix = 0x80038098; // LIBGS SCLIB member .text+0x0 (extent 0xb8); tools/sdk_members.py, unique placement
+RotMatrixC = 0x800383F8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools/sdk_members.py, unique placement + signature DB agrees
 
 // target: sces_00269
 _96_init = 0x800318E8; // SDK veneer: vector 0xa0, index 0x71
