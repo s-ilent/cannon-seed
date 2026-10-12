@@ -526,3 +526,19 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   a future C-match pass will need as row splits; (2) data_80058D90 /
   data_800596C4 interpretation shares the $at runtime gate; (3)
   func_8005A014 still undecoded (5 jal sites).
+
+**2026-10-13 — gdb sessions against the stub unblocked.**
+- `tools/gdb_stub_proxy.py` — an RSP shim so gdb can attach at all: the stub
+  reports its thread as `p1.t1` (`qC` reply, threads-XML id) and gdb 18.1
+  aborts with `invalid remote ptid: p1.t1` before any command runs;
+  `set remote threads-packet off` does not save it (`qC` still kills the
+  session); upstream `gdb-server.cc` still emits `p1.t1`. Shim verified on
+  `r7505.d1bc093f`: threads, registers, disassembly, memory reads, `Z0` +
+  `continue` to a hit; one client at a time, `detach` unimplemented.
+- Corrections to the 10-12 runtime log: headless disc runs die mid-init
+  regardless of `-debugger` and with no client attached (3×, always after
+  the pad-driver banner) — not a debug-mode-specific crash; and stub exec
+  breakpoints fire WITHOUT `-debugger`, so the stub path is cheaper than
+  the Lua path for free-run breaking. Recipe in `docs/RUNTIME.md`.
+- Runtime evidence (queue item 1) is unblocked on this host: pcsx-redux,
+  region BIOS, raw-BIN disc + cue all present.

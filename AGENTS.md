@@ -54,6 +54,8 @@ python3 tools/coverage_vs_fragments.py <target>
 
 Needs a region-matched PSX BIOS and the raw-BIN disc (`build/work/*.bin`; PCSX-Redux does not read CHD). `-debugger` is required — exec breakpoints are off by default. Output is evidence for a classification, never proof: an unexercised run reaches only part of the code.
 
+Interactive gdb sessions work through a stub shim — `python3 tools/gdb_stub_proxy.py`, then `gdb -ex "target remote localhost:3334"` (gdb cannot attach to the stub directly; recipe and caveats in `docs/RUNTIME.md`).
+
 ## Naming what you find
 
 Names are recovered, not guessed, and they are authored in one place:

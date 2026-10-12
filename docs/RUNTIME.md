@@ -50,6 +50,37 @@ python3 tools/coverage_vs_fragments.py slps_00270
 stage is wanted. `gen_watchlist.py --merge a,b,c` builds a play-session probe:
 the union of several stages' entries plus a marker at each entry.
 
+## Interactive gdb sessions
+
+The Lua tracer is a batch probe. To stop the game and inspect it directly,
+drive the stub with a real gdb through the rewrite shim:
+
+```sh
+# disc sessions must run headed (see Constraints below)
+SDL_AUDIODRIVER=dummy pcsx-redux -run -interpreter -gdb-port 3333 \
+    -bios <BIOS.bin> -iso build/work/japan.cue > /tmp/emu.log 2>&1 &
+python3 tools/gdb_stub_proxy.py &        # 127.0.0.1:3334 -> 127.0.0.1:3333
+gdb -ex "target remote localhost:3334"   # break *0x8005C530, continue, ...
+```
+
+gdb 18.1 aborts at connect without the shim (`invalid remote ptid: p1.t1`):
+the stub reports its thread as `p1.t1` in the `qC` reply and as the
+`qXfer:threads` XML id, and gdb parses remote thread ids strictly as
+`p<pid>.<tid>` with numeric fields. `set remote threads-packet off` only
+removes the XML instance — `qC` still kills the session, so the knob is not
+enough. The shim rewrites the id in text replies only (hex payloads cannot
+contain the literal; binary/console `x`/`X`/`O` packets pass through
+untouched). Upstream `gdb-server.cc` still emits `p1.t1` (checked
+2026-10-13), and the stub serves `target.xml` over `qXfer:features`, so gdb
+sets `mips:3000` and the register layout itself; `Z0` exec breakpoints
+answer `OK`.
+
+Verified on `r7505.d1bc093f` (BIOS-only headless run): connect, `info
+threads` (`Thread 1.1 "MainThread"`), registers, `x/4i $pc`, memory reads,
+and `break *0xbfc0d950` + `continue` stopping with `T05`. The stub accepts
+one client at a time; `detach` is unimplemented ("Remote doesn't know how
+to detach") — use `disconnect`.
+
 ## Constraints (all of these cost real debugging time)
 
 * **`-debugger` is required.** Exec breakpoints run only on the interpreter's
@@ -60,8 +91,11 @@ the union of several stages' entries plus a marker at each entry.
   local table is not enough: the chunk's locals become collectible when it
   finishes, silently dropping every breakpoint after the first seconds. The
   tracer anchors them in `PCSXCOV`. (tenchu-decomp documents the same trap.)
-* **Run headed (`GUI`), not `-no-ui`.** Headless TUI plus debug mode segfaults
-  this title mid-init; the GUI path is stable. A window opens — expected.
+* **Run headed (`GUI`), not `-no-ui`, for disc sessions.** The title dies
+  mid-init headless — reproduced 3×, with and without `-debugger` and with
+  no gdb client attached, always right after the `PS-X Control PAD Driver`
+  banner. BIOS-only headless runs are stable; the GUI path is the one the
+  play sessions use. A window opens — expected.
 * **Do not depend on `GPU::Vsync`** for output; it does not fire headless.
   Emit on first hit instead.
 * **Read jump registers with `r.GPR.r[rs]`**; `r.GPR.n[name]` fails on `$zero`.
@@ -81,9 +115,11 @@ Probed directly; these bound what runtime evidence can do here:
 * **The exe entry is not caught.** The loader sets PC directly, so an Exec
   breakpoint on pc0 does not fire at the handoff; the first hit at that PC
   arrives later, when another stage occupies the same RAM.
-* **The GDB stub is not an alternative.** `gdb-server.cc` inserts its
-  breakpoints through the same `m_debug` store (`bpActionExec`), with software
-  breakpoints unimplemented, so it inherits every limitation above.
+* **The GDB stub is usable through a shim.** gdb 18.1 cannot connect to it
+  directly (see "Interactive gdb sessions"), but with
+  `tools/gdb_stub_proxy.py` in between an interactive session works, and
+  stub exec breakpoints fire **without** `-debugger` — the gate the Lua path
+  needs does not apply here (measured on a no-flag run).
 
 Net: this build can log exact-address Exec hits (auto-pad reaches MAINMENU),
 but it is not a trustworthy carve oracle. The static checks
@@ -115,6 +151,7 @@ primitive is confirmed, treat every `REFUTED` line as provisional. Use the
 | `tools/coverage_vs_fragments.py` | diffs a trace against `fragment_report` |
 | `tools/fragment_report.py` | static classifier (`--json` / `build_rows`) |
 | `tools/chd_extract.py` | extracts the disc BIN and writes the `.cue` |
+| `tools/gdb_stub_proxy.py` | RSP shim: gdb on 3334 -> stub on 3333 (`p1.t1` rewrite) |
 
 `Fuuzetsu/tenchu-decomp` (`tools/pcsx-*.lua` + `tools/pcsx_*.py`) is the same
 Lua-probe-plus-Python-driver pattern, and is worth copying further: it verifies
