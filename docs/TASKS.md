@@ -21,26 +21,27 @@ is measured, not suspected.
 
 A walk-stop rule symmetric to the pin — a `data` row whose bytes are a
 byte-verified SDK member, or carry a high instruction-validity density — would
-surface them. Sequence it after the SDK re-pin below: the strongest evidence is
-the 3.3 match set.
+surface them. The SDK re-pin is DONE (see Log): the 3.3 match set below is
+this task's evidence base.
 
 ### Re-pin the Psy-Q SDK to 3.3 and regenerate the SDK reports
 
-The game links Psy-Q ~3.3 (kernel RCS tags dated 1995-10, `docs/RECON.md`), but
-`docs/MATCHING.md` §3b/§3c pin release 4.0, and both `config/sdk_*.txt` reports
-were generated against it. `tools/libshare.py` measures how much that costs: on
-slps_00270 the member function bytes match 4.0 for 2.6% of the payload and 3.3
-for 23.7%.
-
-    git clone --depth 1 https://github.com/sozud/psy-q ~/psyq   # ships 3.3..4.0
-    python3 tools/sdk_members.py --libs ~/psyq/3.3/PSX/LIB
-    python3 tools/sdk_symbols.py --libs ~/psyq/3.3/PSX/LIB
-
-Both tools overwrite `config/sdk_*.txt` on every run (they have no dry-run), so
-review the diff before committing. Then update the pinned path in
-`docs/MATCHING.md` §3b/§3c and `docs/TOOLCHAIN.md`.
+DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
+897 sig agreements); docs/MATCHING.md §3b/§3c updated.
 
 ## Log
+
+**2026-10-12 — the SDK re-pin landed (3.3).**
+- `config/sdk_members.txt` regenerated against `~/psyq/3.3/PSX/LIB` with
+  `--sigs psx_psyq_signatures/330`: 968 placements (was 781), **144 anchored
+  (was 8 — one per target; now 16-23 each)**, 13 adoptable names (was 11),
+  897 signature-DB agreements. `config/sdk_symbols.txt` is UNCHANGED: the
+  same 5 veneer sites resolve at 3.3 and 4.0.
+- The 117 `sig-db elsewhere` rows concentrate exactly where §3c says sibling
+  families live: 60 LIBSND + 57 LIBCD. One `no-hit`.
+- docs/MATCHING.md §3b/§3c updated to the 3.3 path and the measured
+  agree/elsewhere census. The code-in-data carve below can now use the 3.3
+  match set as its evidence base.
 
 **2026-10-12 — the Psy-Q library share, calibrated.**
 - `tools/libshare.py` — matches each SDK member's *individual* functions (split

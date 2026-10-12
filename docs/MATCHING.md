@@ -76,8 +76,8 @@ extended: the names come from the Psy-Q SDK, which is not in this repo. Get it
 once, then the command is a straight run:
 
 ```sh
-git clone --depth 1 https://github.com/sozud/psy-q ~/psyq     # 4.0 is the pinned SDK
-python3 tools/sdk_symbols.py --libs ~/psyq/4.0/PSX/LIB        # writes the report
+git clone --depth 1 https://github.com/sozud/psy-q ~/psyq     # 3.3 is the pinned SDK (kernel RCS 1995-10)
+python3 tools/sdk_symbols.py --libs ~/psyq/3.3/PSX/LIB        # writes the report
 ```
 
 That parses the SDK's own archives and rewrites `config/sdk_symbols.txt`, a
@@ -130,9 +130,9 @@ original build pulled out of the archives. That is what
 `tools/sdk_members.py` is for — the same clone, a different integration:
 
 ```sh
-python3 tools/sdk_members.py --libs ~/psyq/4.0/PSX/LIB
-python3 tools/sdk_members.py --libs ~/psyq/4.0/PSX/LIB \
-    --sigs <psy-q-decomp>/psx_psyq_signatures/400      # optional second opinion
+python3 tools/sdk_members.py --libs ~/psyq/3.3/PSX/LIB
+python3 tools/sdk_members.py --libs ~/psyq/3.3/PSX/LIB \
+    --sigs <psy-q-decomp>/psx_psyq_signatures/330      # optional second opinion
 ```
 
 It parses the archives properly — Sony LNK object records: section directory,
@@ -179,13 +179,13 @@ Two things this does **not** do, both measured, both worth knowing:
 
 As a second opinion the tool can consume
 `lab313ru/psx_psyq_signatures` (the signature database `psy-q-decomp` uses,
-also generated from these archives, version `400` = 4.0). Rows then carry
-`sig-db agree` when that database independently puts the same member at the
-same address. On slps_00270 every `unique` placement that the database covers
-agrees except the `CDROM` trio, where its signature matches `StSetRing` at
-`0x80040ff8` but also lands on its siblings — the same ambiguity, seen from the
-other side. Treat a disagreement as a signal to read the bytes, not as a
-verdict.
+also generated from these archives; this repo pins version `330` = 3.3 to
+match). Rows then carry `sig-db agree` when that database independently puts
+the same member at the same address. The committed 3.3 report carries 897
+agreements across the eight targets; the 117 `elsewhere` rows concentrate in
+the sibling-heavy members (60 LIBSND, 57 LIBCD - several objects from one
+source file, near-identical), plus one `no-hit`. Treat a disagreement as a
+signal to read the bytes, not as a verdict.
 
 ## 4. Parking: NON_MATCHING is a state, not a defeat
 
