@@ -49,6 +49,7 @@ SpuSetNoiseVoice = 0x800487B4; // LIBSPU S_SNV member; tools/sdk_members.py, uni
 SetVideoMode = 0x80035240; // LIBETC VMODE member .text+0x0 (extent 0x28); tools/sdk_members.py, unique placement + signature DB agrees
 GetVideoMode = 0x80035258; // LIBETC VMODE member .text+0x18; tools/sdk_members.py, unique placement + signature DB agrees
 gte_rotate_z_matrix = 0x80038098; // LIBGS SCLIB member .text+0x0 (extent 0xb8); tools/sdk_members.py, unique placement
+scale_view_param = 0x80036C14; // LIBGS MATRIX3 member .text+0x0 (true extent 0xe8; the archive next-symbol extent 0xf0 overshoots into the empty function func_80036CFC); tools/sdk_members.py, unique placement
 RotMatrixC = 0x800383F8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools/sdk_members.py, unique placement + signature DB agrees
 
 // target: sces_00269
