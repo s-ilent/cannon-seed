@@ -152,6 +152,7 @@ honest C unit is the web itself - and only after two prerequisites:
 2. **Frame/state model**: identify the state object (`$s3`) field offsets
    and the 0x50 frame's s-register roles before writing C. The epilogue
    tells us the frame shape; the dispatcher tells us the state word.
+   DONE 2026-10-12 - see the field map below.
 
 Only then attempt family-level C: the smallest independent component first
 (the E1A8..E250 trampoline band plus its C45C/C4C0/C50C targets) as a probe
@@ -184,8 +185,70 @@ every idiom in the band from plain C:
   functions. Family-level C is therefore not just feasible but REQUIRED
   for these shapes, exactly as this document decided.
 
-Remaining known gap before any family C lands: the state-object field map
-(Next action 3).
+Both C-unit prerequisites are now measured: the honesty carves (Next
+action 1) and the frame/state model (field map below). The probe above is
+the gate the web's first real C component must clear.
+
+## State object field map (measured 2026-10-12)
+
+Source: scripts/fabric_fields.py (repo-external) over the fabric rows on
+both discs - every s0..s7/sp-relative load-store tallied by offset, width,
+and owner row. JP and EU aggregates are IDENTICAL for every s-register
+(the only deltas are the C220/CC5C region-divergent front half), so the
+frame/state contract below is region-independent.
+
+### Parent frames seen in the web
+
+| parent | frame | layout |
+| --- | --- | --- |
+| `func_8002C220` | 0x28 | outgoing args 0x00..0x0F; s0-s4 @ 0x10..0x20; ra @ 0x24; NO spill locals - fragments keep everything in s-regs (epilogue C45C) |
+| D930 (inside `func_8002D480` row) | 0x50 | outgoing args 0x00..0x0F; six spill locals @ 0x10..0x24; s0-s7 @ 0x28..0x44; ra @ 0x48 (epilogue in `func_8002DDB0`) |
+| `func_8002CB50` | 0x48 | (plus a small -0x18 prologue in the same row) |
+| `func_8002DE00` | 0x40 | (plus -0x30/-0x18 sub-prologues in the same row) |
+| `func_8002EB64` | 0x20 | (plus -0x18) |
+| `func_8002F368` | 0x38 | (plus -0x18) |
+
+The 0x50 frame is a textbook GCC MIPS layout: outgoing argument area
+0x00..0x0F (never touched by the tallied loads/stores), then locals
+0x10..0x24 (all six slots see paired lw/sw), then the saved s-regs and ra.
+Continuation fragments entered under a given parent run inside that
+parent's frame - which is why they have no prologues of their own.
+
+### The `$s3` state object (>= 0x18 bytes)
+
+| field | accesses | meaning as far as measured |
+| --- | --- | --- |
+| `+0x00` word | 12 lw, 1 sw (8002DA14) | flags/state word: dispatcher gate (`lw 0($s3); beqz`; `andi 0x20` test then `helper(s3, 0x20)` at E6E0), and the switch-chain input the predecessors hold in `$v1` |
+| `+0x04` word | 2 lw | word read in D480/E6E0 |
+| `+0x04` byte | 1 sb (8002DA18) | byte write paired with the +0x00 store in the same continuation |
+| `+0x08`, `+0x0C` word | 1 lw each | D480 |
+| `+0x10`, `+0x14`, `+0x16` half | 1 lh each | D480 (DB7C/DB88 area) - counter-like halfword fields |
+
+### s-register roles (all object pointers, word-0 heavy)
+
+| reg | deref census (aggregate JP==EU) | reading |
+| --- | --- | --- |
+| `$s3` | see table above | the state object |
+| `$s7` | sw 0x0 x2 (DDB0's next-state pointer + flag stores), lw 0x0 x2 (DE00), lw 0x4 x1 (D480) | the successor/next-state sink the DDB0 tail writes |
+| `$s5` | lw 0x0 x7 (E6E0 x4, DE00 x2, D480 x1) | another object, word-0 reader |
+| `$s4` | lw 0x0 x4 (E6E0), sw 0x0 x1 (D480) | object, word 0 |
+| `$s2` | sw 0x40 x2 (CB50/CC5C, D480) | object with a +0x40 word store |
+| `$s1` | lw 0x4 (DE00), lw 0x8 x2 (D480, E6E0), lw 0x54 (DE00 E300) | object with +0x4/+0x8/+0x54 fields; ALSO the trampoline band's argument source (`addu $a0,$s1,$zero`) |
+| `$s0` | sw 0x0 x6 (C220 x3 / DE00 x2 / CB50 x1), lw 0x4 x2, lw 0x8 x1, sw 0x40 x2, sw 0x44 x4 | object with +0x0/+0x40/+0x44 stores, +0x4/+0x8 reads |
+
+### Consequences for family-level C
+
+1. Every web parent holds object pointers in s-registers across its whole
+   body - which is exactly GCC 2.6.3's natural allocation for a local used
+   across calls (probe shape B allocated its reused argument to s0 the same
+   way). No register pinning needed; the s-reg roles should fall out of
+   plain locals in the parent C function.
+2. The 0x50 frame's six local slots bound the spill budget of the first
+   family component: whatever the source computes beyond s-reg capacity
+   must fit 0x10..0x24.
+3. The state object is small (~0x18 bytes, flags first, halfword fields at
+   +0x10..+0x16) - a plain struct in the C unit, initialized/stored only
+   through word/byte stores measured above.
 
 ## Next actions
 
@@ -200,8 +263,11 @@ Remaining known gap before any family C lands: the state-object field map
    the C-unit decision above. GCC 2.6.3 reproduces the switch chain, the
    jal delay-slot arg placement (word-exact), and the goto/delay-slot-steal
    structure of E1C4 -> E1D8 from plain C.
-3. State-object field map (`$s3`/`$s7`/frame-0x50 locals) -> extend this
-   doc before any family C.
+3. DONE 2026-10-12: state-object field map (section above;
+   scripts/fabric_fields.py repo-external). Frames enumerated, `$s3` state
+   object laid out (+0x00 flags word / +0x04 word+byte / +0x08 / +0x0C /
+   halfwords +0x10..+0x16), all seven s-registers assigned deref censuses,
+   JP==EU aggregates confirmed. Family-C consequences recorded.
 4. Known grid drift left in older rows (follow-up carves, low priority):
    JP `func_8003312C` row (3312C..3386C) holds window-14 tail + 0xC of
    sector-14 ECC; EU `func_80033948` row head (33948..33978) holds 0x30 of
