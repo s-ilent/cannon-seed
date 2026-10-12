@@ -495,3 +495,34 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   entries execute as decoded (callers do not set $at in their 6-word
   prefixes) shares the walker's runtime-evidence gate; (3)
   func_8005A014's 5 jal sites vs undecodable content.
+- cron-20261012-2141 (2026-10-13): re-bound func_800588D4 and carved the
+  library above it out of the old data_80058DA8 head (queue item 1 from
+  the previous session). Decode pass (scripts/head_lib_decode.py +
+  scripts/head_blob_recon.py, repo-external) mapped [0x80058F00..0x80059DB0)
+  and found the runtime-opaque block pattern: TWICE the library shows
+  clean code -> high-entropy undecodable block -> clean code, the blocks
+  ending in a shared 7-word marker and taking real bne targets INSIDE
+  them (0x80058DAC x2, 0x800596CC). Carve (JP only): func_800588D4
+  re-bound 0x4d4 -> 0x4bc pinned (true code end 0x80058D90; the D48 tail
+  the old extract rendered .word decodes clean - lui+lh to known global
+  D_800CA59C, both bne targets 0x80058DAC, s2 write-backs); pinned
+  data_80058D90 (0x134) + func_80058EC4 (0x3c, the detached epilogue
+  sp+0x68 inverse of the prologue, sh v0/v1 -> D_800C9D10/D_800C9D0E
+  then jal func_8005A514); the 14-function middle stays scan-owned
+  (func_80058F08 0x618 coarse row); pinned func_80059520 (0x1a4) +
+  data_800596C4 (0x12c, second marker instance) + detached tail
+  func_800597F0 (0x2c); pinned func_8005981C (0x80, jr-ra stub + twelve
+  vector negate/swap leaves the scan demoted to data) + func_800599A8
+  (0x9c, jump-table dispatcher, table at 0x8002 21F4). EU cross-check:
+  EU holds the same library with its own layout (data_80058DF4 0x104 +
+  func_80058EF8 0x860, jal/branch into 0x80058dbc/0x80058dec/0x80058e38)
+  but has no byte-identical blob. New FABRIC section "The runtime-opaque
+  block pattern"; curated evidence block carries the full measured facts
+  and the runtime gate (patched/decrypted in place vs provably-dead
+  branches - static evidence cannot settle it). Gates: 8/8 GREEN first
+  try, ratchets 365/0, screen 0 DATA / 0 SUSPECT both mainmenu discs,
+  re-scan byte-stable. Open threads: (1) the coarse rows func_80058F08
+  0x618 / func_80059A44 0x4fc hide 16 measured function boundaries that
+  a future C-match pass will need as row splits; (2) data_80058D90 /
+  data_800596C4 interpretation shares the $at runtime gate; (3)
+  func_8005A014 still undecoded (5 jal sites).

@@ -154,6 +154,46 @@ CODE: `lw $ra,0x10($sp); nop; jr $ra; addiu $sp,0x18`, byte-identical JP/EU].
 Carved 2026-10-12: JP mirrors EU's func_80030BA0 row; EU's func_80030BB0
 ECC head (313A0..313D0) is now data too.)
 
+## The runtime-opaque block pattern (measured 2026-10-13, mainmenu_jp)
+
+Twice inside the 0x80058Dxx-0x80059xxx library the same shape appears:
+clean code, then a high-entropy block the static image cannot decode,
+then clean code again - and the block's tail carries a 7-word marker
+(`FFFFFF00 FFFFFFFF 00FFFFFF XXXXXXXX 00080000 00080000 00000000`,
+4th word differing per instance: `00185602` / `02571800`).
+
+* Instance 1 sits between func_800588D4's real tail (write-backs of
+  s2+0x2E/0x30 into D_800C9D0C and the `$gp` lhu at 0x80058D8C) and the
+  function's detached epilogue func_80058EC4 (sp+0x68, restores exactly
+  the prologue's ra/s5-s0 set, writes `$v0`/`$v1` back to D_800C9D10 /
+  D_800C9D0E, then jal func_8005A514 with a1=s5). Block: data_80058D90,
+  0x134. TWO bne instructions inside func_800588D4 (0x80058D54, 0x80058D70)
+  branch INTO it at 0x80058DAC.
+* Instance 2 sits inside func_80059520 (clip/cull helper, prologue
+  sp-0x40 s0-s4/ra): code 0x1a4, then data_800596C4 0x12c, then the
+  detached tail func_800597F0 (jal func_80052564 + inverse restores).
+  ONE bne (0x800596A0) branches INTO it at 0x800596CC.
+
+Static evidence on instance 1: 59/77 words plausible-MIPS1 (data control
+51/64, code control 59/64), invalid COP2/SDC1 register mixes, zero
+image-wide pointer or lui+lo references, no byte-identical copy anywhere
+in the EU image, no self-copy in JP. Both discs therefore hold the
+library (EU takes jal/branch into 0x80058dbc/0x80058dec/0x80058e38 with
+its own layout: data_80058DF4 0x104 + func_80058EF8 0x860), but the
+blocks' bytes differ between discs.
+
+Interpretation is runtime-gated: either the bytes are patched/decrypted
+in place before execution (the bne targets real runtime code), or the
+branches into them are never taken (the guard variables make them dead).
+Static analysis cannot settle which; the carve classifies the bytes as
+pinned data and records the branch targets, the same honesty rule as the
+`$at`-entry contract above. Both blocks are carved with `pinned` data
+rows plus pinned detached-tail rows; the 14 undisputed functions between
+the instances (heads 80058F08..800594F4 per the decode pass) stay
+scan-owned inside the coarse func_80058F08 row (0x618), and the twelve
+vector negate/swap leaves at func_8005981C (0x80) are pinned against the
+scan's data demotion.
+
 ## JP/EU twin structure
 
 Bytes are relocation twins at the same vram for every span except code
