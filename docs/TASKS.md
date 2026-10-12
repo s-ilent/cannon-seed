@@ -24,6 +24,16 @@ byte-verified SDK member, or carry a high instruction-validity density — would
 surface them. The SDK re-pin is DONE (see Log): the 3.3 match set below is
 this task's evidence base.
 
+**Evidence census (2026-10-12, `sdk_in_data.py` repo-external): 606 of the
+968 anchored/unique placements sit inside rows the maps label `data`** —
+per target: slps 52, sces 64, mainmenu_jp 97, mainmenu_eu 90, g3_jp 95,
+g3_eu 69, g3org_jp 66, g3org_eu 73. The worst single rows are the tail data
+blobs (mainmenu_jp `data_80086D3C` 0x432c4 holds 38 members; g3_jp
+`data_8006EB0C` 0xe948 holds 39). First two carves landed as the
+pattern-proof: slps `data_80040FF8`/`data_80041690` (4-byte walk-gap
+artifacts at anchored `StSetRing`/`_SpuDataCallback` starts) re-typed to
+pinned asm rows, 8/8 GREEN.
+
 ### Re-pin the Psy-Q SDK to 3.3 and regenerate the SDK reports
 
 DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
