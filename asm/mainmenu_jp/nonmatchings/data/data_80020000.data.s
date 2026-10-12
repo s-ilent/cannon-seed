@@ -2718,14 +2718,25 @@ dlabel jtbl_8002209C
     /* 29FC 800221FC 29202120 */ .word 0x20212029
     /* 2A00 80022200 28696E20 */ .word 0x206E6928
     /* 2A04 80022204 496E6974 */ .word 0x74696E49
-    /* 2A08 80022208 53707269 */ .word 0x69727053
-    /* 2A0C 8002220C 74652829 */ .word 0x29286574
-    /* 2A10 80022210 290A0000 */ .word 0x00000A29
+enddlabel jtbl_8002209C
+
+.align 2
+nonmatching D_80022208
+
+dlabel D_80022208
+    /* 2A08 80022208 */ .asciz "Sprite())\n"
+    /* 5370726974652829290A0000 */
+.align 2
     /* 2A14 80022214 E0FD0380 */ .word 0x8003FDE0
+enddlabel D_80022208
+
+nonmatching D_80022218
+
+dlabel D_80022218
     /* 2A18 80022218 F4FD0380 */ .word 0x8003FDF4
     /* 2A1C 8002221C A0FE0380 */ .word func_8003FEA0
     /* 2A20 80022220 08FE0380 */ .word 0x8003FE08
-enddlabel jtbl_8002209C
+enddlabel D_80022218
 
 nonmatching D_80022224
 

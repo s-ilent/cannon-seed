@@ -143,6 +143,31 @@ state_table_5 = 0x80020300; // state table: -> 0x800264FC
 state_table_6 = 0x80020304; // state table: -> 0x800264FC
 state_table_7 = 0x80020308; // state table: -> 0x800264FC
 state_table_8 = 0x8002030C; // state table: -> 0x80026454
+//
+// The shared query-tail entries the reset walker's phase loops call
+// (cron-20261012-2026: carved func_80059F40/func_80059FB8 out of
+// data_80058DA8; the scan then reclaimed func_80059DB0 above them and
+// func_8005A014 below the tail data). func_80059F40 is a 0x18-frame
+// block: print-style call func_80037410(a0=D_800C9998), the 42x-jal'd
+// func_800598CC, branch on result, then the two mid-stream entries, then
+// a clean epilogue (lw ra / jr ra / sp+0x18). Entry contract, fall-through
+// values in parens: func_80059F90 stores $v1 (0x12C=300) to u16 counter
+// D_800C9F7C via $at=0x800D0000 and bumps $v0; func_80059F9C stores $v0
+// (counter D_800CA544 + 1 on fall-through) to u16 D_800CA544 and calls
+// func_800527C8 before the shared epilogue. 8 image-wide jal sites enter
+// the two entries directly (walker F3 0x8002630C, F4 0x8002640C, phase-2
+// loop head 0x80026454, plus 0x80024B28/0x80043570/0x80043678/0x80062C38/
+// 0x80062E74; Q1 5x, Q2 3x). None of the six-word prefixes sets $at, so
+// whether the entries execute as decoded stays gated on runtime evidence
+// - the same gate as the walker's own mid-function entry contract
+// (docs/FABRIC.md). EU twin: the same library is already asm on
+// mainmenu_eu (scan-carved func_800597F4), entries 0x80059BC0/0x80059BCC
+// = JP - 0x3D0.
+func_80059F40 = 0x80059F40; // query-tail host: print + 42x helper + shared counter stores, frame 0x18
+func_80059F90 = 0x80059F90; // query tail A: u16 D_800C9F7C = $v1 (300 on fall-through), $v0++
+func_80059F9C = 0x80059F9C; // query tail B: u16 D_800CA544 = $v0, then jal func_800527C8
+func_80059FB8 = 0x80059FB8; // die-block: a0=D_80022218 (ptr table + "file not found"), jal func_80037410, u16 D_800C9F7C--
+func_80059DB0 = 0x80059DB0; // counter state-machine (D_800C9E84+=2; checks D_800CA5B4/D_800C9F94<9/D_800CA3BC)
 
 // target: mainmenu_eu
 // State-map words - EU twins of the mainmenu_jp names above (+0x814 /
