@@ -459,3 +459,39 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   docs/FABRIC.md (frame contract). Commit c6cfd7f.
 - Runtime harness re-check: still blocked (no pcsx-redux, no BIOS, no
   raw-BIN disc).
+
+**2026-10-13 — query-target question resolved: carve, not debunk.**
+- Queue item 1 (carve or debunk 80059f90/80059f9c inside data_80058DA8):
+  CARVED. scripts/query_target_recon.py + query_target_recon2.py (repo-
+  external) measured: (a) the two query targets are mid-stream entries
+  inside a real function whose clean 0x18-frame head is 80059f40 —
+  prologue, print-style call func_80037410(a0=D_800C9998), the 42x-jal'd
+  func_800598CC, branch, entries, clean epilogue; (b) 8 image-wide jal
+  sites in real code enter the entries directly (Q1 5x: walker F3
+  0x8002630C, F4 0x8002640C, 0x80024B28, 0x80043570, 0x80043678; Q2 3x:
+  phase-2 loop 0x80026454, 0x80062C38, 0x80062E74); (c) the A4239F7C
+  word (sh $v1,-0x6084($at)) recurs 35x image-wide because it is a live
+  instruction of this and sibling counter blocks, not table data; (d)
+  the EU scan had already carved the same library as code
+  (func_800597F4 hosts the EU twins 80059bc0/80059bcc = JP - 0x3D0) —
+  the JP scan had simply misclassified the whole region as one data row.
+- Carve (JP only; EU already code): data_80058DA8 0x13dc -> data 0x1008
+  + pinned func_80059F40 (0x78) + pinned func_80059FB8 (0x38, the
+  die-block: a0=D_80022218 ptr table + "file not found", then u16
+  D_800C9F7C--) + data 0x194; the scan then reclaimed func_80059DB0
+  (0x190, a coherent counter state-machine) above the pinned rows and
+  split the tail data into data 0x24 + func_8005A014 (0x48, content
+  still undecoded .words despite 5 jal sites - kept visible as its own
+  row) + data 0x128. Curated evidence block pins the entry names and
+  contracts; extract gives each function its own file; the four data
+  sidecar ripples are symbol-resolution only. Gates: 8/8 GREEN first
+  try, ratchets 365/0, re-scan byte-stable, screen 0 DATA / 0 SUSPECT.
+- Open threads this carve exposed: (1) the data head [0x395A8..0x3A5B0)
+  still hides the rest of the library - two branches from
+  func_800588D4's row land at 0x80058DAC inside it, and the tail-block
+  epilogue at 0x80058EC4 restores a frame no head in the row sets, so
+  func_800588D4's row end at 0x395A8 is suspected to cut a function
+  whose continuation sits in the data head; (2) whether the query
+  entries execute as decoded (callers do not set $at in their 6-word
+  prefixes) shares the walker's runtime-evidence gate; (3)
+  func_8005A014's 5 jal sites vs undecodable content.
