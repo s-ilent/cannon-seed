@@ -48,6 +48,37 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — the name-adoption pass: 788 member names adopted; the
+code-in-data census closes at zero (ac56ef8, 629b790).**
+- `tools/sdk_curated.py` (new): reads the regenerated member report
+  (3.3 + sig-db) and appends a generated adoption block to
+  `config/symbols.curated.txt` — every `anchored`/`unique` symbol marked
+  `adoptable` (its address is now an asm/c row start). Collision rules:
+  hand entries win; a name already curated keeps its address; the same
+  name at several addresses is real (LIBC/LIBC2 ship the same sources)
+  but one label each — the lowest address takes it; two names at one
+  address (never observed) rank by verdict then sig-db, ties skip
+  loudly. The adoptable set went 13 -> 826 post-carve; **788 adopted**
+  (slps 77, sces 73, mainmenu 115+99, g3 110+111, g3org 100+103), 7
+  name-dup skips (memclr x6, Snd_play x1), 25 addr-curated keeps.
+  Symbols-file only, per-target scoped, marker-delimited so the
+  hand-written head of the file is never touched.
+- 8/8 verify GREEN on the first pass with the names applied; ratchets
+  317/12 unchanged; re-scan idempotent (two full passes over all 8
+  produce byte-identical staged config diffs; the splat yamls do not
+  move — curated stays symbols-file-only).
+- `libshare.py` re-measure at 3.3: lib bytes are 13.2% of payload
+  overall (slps 23.7% payload / 40.8% of code, sces 17.3%/33.1%),
+  1778/11612 functions are library members (15.3%).
+- Residual census (`sdk_in_data.py`): **606 -> 1 -> 0**. The last one,
+  slps `scale_view_param` (MATRIX3), was the tree-wins case: the
+  archive next-symbol extent (0xf0) overshoots into the empty C
+  function func_80036CFC (the first oracle match, `jr $ra; nop`) that
+  the original link placed between it and select_max_param. The true
+  extent is the row itself (0xe8) — carved as a pinned member row,
+  name adopted (629b790). Every byte-verified SDK member now lives in
+  an asm row under its real name.
+
 **2026-10-12 — the `--sdk-anchors` rule: the whole 3.3 match set carved
 (c9453ae, 0922fe6).**
 - `tools/sdk_anchors.py` (new): reads the committed member report + the
