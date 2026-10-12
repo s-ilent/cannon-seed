@@ -340,7 +340,7 @@ segments:
       - [0x464B8, asm, func_80065CB8]   # 0x1e8 sdk
       - [0x466A0, asm, func_80065EA0]   # 0x238 sdk
       - [0x468D8, data, data_800660D8]   # 0xc4
-      - [0x4699C, asm, func_8006619C]   # 0x14
+      - [0x4699C, data, data_8006619C]   # 0x14 pinned
       - [0x469B0, data, data_800661B0]   # 0x1d8
       - [0x46B88, asm, func_80066388]   # 0x7c
       - [0x46C04, asm, func_80066404]   # 0x258 sdk

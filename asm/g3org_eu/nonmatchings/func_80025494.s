@@ -54,7 +54,7 @@ glabel func_800254F4
     /* 5D10 80025510 01000434 */  ori        $a0, $zero, 0x1
 endlabel func_800254F4
 
-nonmatching func_80025514, 0x80
+nonmatching func_80025514, 0x2E4
 
 glabel func_80025514
     /* 5D14 80025514 002C1500 */  sll        $a1, $s5, 16
@@ -89,11 +89,6 @@ glabel func_80025514
     /* 5D88 80025588 01000534 */  ori        $a1, $zero, 0x1
     /* 5D8C 8002558C E3A3000C */  jal        func_80028F8C
     /* 5D90 80025590 21884000 */   addu      $s1, $v0, $zero
-endlabel func_80025514
-
-nonmatching func_80025594, 0x264
-
-glabel func_80025594
     /* 5D94 80025594 1000A0AF */  sw         $zero, 0x10($sp)
     /* 5D98 80025598 00841000 */  sll        $s0, $s0, 16
     /* 5D9C 8002559C 03841000 */  sra        $s0, $s0, 16
@@ -247,7 +242,7 @@ glabel func_80025594
     /* 5FEC 800257EC 1800B08F */  lw         $s0, 0x18($sp)
     /* 5FF0 800257F0 0800E003 */  jr         $ra
     /* 5FF4 800257F4 3800BD27 */   addiu     $sp, $sp, 0x38
-endlabel func_80025594
+endlabel func_80025514
 
 nonmatching func_800257F8, 0xB8
 

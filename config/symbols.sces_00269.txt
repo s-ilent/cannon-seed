@@ -54,7 +54,6 @@ func_80041208 = 0x80041208; // type:func
 func_80041F74 = 0x80041F74; // type:func
 func_80042854 = 0x80042854; // type:func
 func_80044568 = 0x80044568; // type:func
-func_80044C18 = 0x80044C18; // type:func
 func_80044CFC = 0x80044CFC; // type:func
 func_80044E44 = 0x80044E44; // type:func
 func_80048470 = 0x80048470; // type:func

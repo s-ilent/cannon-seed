@@ -335,15 +335,10 @@ glabel func_80055E78
     /* 36678 80055E78 21802002 */  addu       $s0, $s1, $zero
 endlabel func_80055E78
 
-nonmatching func_80055E7C, 0x4
+nonmatching func_80055E7C, 0x80
 
 glabel func_80055E7C
     /* 3667C 80055E7C 21200002 */  addu       $a0, $s0, $zero
-endlabel func_80055E7C
-
-nonmatching func_80055E80, 0x7C
-
-glabel func_80055E80
     /* 36680 80055E80 21280002 */  addu       $a1, $s0, $zero
     /* 36684 80055E84 DE26010C */  jal        func_80049B78
     /* 36688 80055E88 06000634 */   ori       $a2, $zero, 0x6
@@ -375,7 +370,7 @@ glabel func_80055E80
     /* 366F0 80055EF0 FFFF4224 */  addiu      $v0, $v0, -0x1
     /* 366F4 80055EF4 213B0108 */  j          D_8004EC84
     /* 366F8 80055EF8 8C0002A6 */   sh        $v0, 0x8C($s0)
-endlabel func_80055E80
+endlabel func_80055E7C
 
 nonmatching func_80055EFC, 0x1C
 

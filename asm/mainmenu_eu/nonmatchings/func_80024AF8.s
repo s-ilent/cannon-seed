@@ -108,20 +108,15 @@ glabel func_80024AF8
     /* 546C 80024C6C 6B02020C */  jal        func_800809AC
 endlabel func_80024AF8
 
-nonmatching func_80024C70, 0x8
+nonmatching func_80024C70, 0x14
 
 glabel func_80024C70
     /* 5470 80024C70 00000000 */  nop
     /* 5474 80024C74 3000BF8F */  lw         $ra, 0x30($sp)
-endlabel func_80024C70
-
-nonmatching func_80024C78, 0xC
-
-glabel func_80024C78
     /* 5478 80024C78 00000000 */  nop
     /* 547C 80024C7C 0800E003 */  jr         $ra
     /* 5480 80024C80 3800BD27 */   addiu     $sp, $sp, 0x38
-endlabel func_80024C78
+endlabel func_80024C70
 
 nonmatching func_80024C84, 0x3C
 

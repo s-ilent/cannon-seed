@@ -64,24 +64,19 @@ glabel func_80038388
     /* 18BD4 800383D4 21800402 */   addu      $s0, $s0, $a0
 endlabel func_80038388
 
-nonmatching func_800383D8, 0xC
+nonmatching func_800383D8, 0x24
 
 glabel func_800383D8
     /* 18BD8 800383D8 0280043C */  lui        $a0, %hi(D_8002167C)
     /* 18BDC 800383DC 7C168424 */  addiu      $a0, $a0, %lo(D_8002167C)
     /* 18BE0 800383E0 2A14010C */  jal        func_800450A8
-endlabel func_800383D8
-
-nonmatching func_800383E4, 0x18
-
-glabel func_800383E4
-    /* 18BE4 800383E4 00000000 */  nop
+    /* 18BE4 800383E4 00000000 */   nop
     /* 18BE8 800383E8 21100002 */  addu       $v0, $s0, $zero
     /* 18BEC 800383EC 1400BF8F */  lw         $ra, 0x14($sp)
     /* 18BF0 800383F0 1000B08F */  lw         $s0, 0x10($sp)
     /* 18BF4 800383F4 0800E003 */  jr         $ra
     /* 18BF8 800383F8 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_800383E4
+endlabel func_800383D8
 
 nonmatching func_800383FC, 0x44
 

@@ -224,7 +224,7 @@ segments:
       - [0x231B8, data, data_800429B8]   # 0x1bb0
       - [0x24D68, asm, func_80044568]   # 0x698
       - [0x25400, data, data_80044C00]   # 0x18
-      - [0x25418, asm, func_80044C18]   # 0x2c
+      - [0x25418, data, data_80044C18]   # 0x2c pinned
       - [0x25444, data, data_80044C44]   # 0xb8
       - [0x254FC, asm, func_80044CFC]   # 0x20
       - [0x2551C, data, data_80044D1C]   # 0x128

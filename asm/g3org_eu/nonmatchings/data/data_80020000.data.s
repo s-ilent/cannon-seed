@@ -1737,9 +1737,9 @@ dlabel jtbl_8002174C
     /* 1FB4 800217B4 20202020 */ .word 0x20202020
 enddlabel jtbl_8002174C
 
-nonmatching D_800217B8
+nonmatching jtbl_800217B8
 
-dlabel D_800217B8
+dlabel jtbl_800217B8
     /* 1FB8 800217B8 20202020 */ .word 0x20202020
     /* 1FBC 800217BC 20202020 */ .word 0x20202020
     /* 1FC0 800217C0 20542E49 */ .word 0x492E5420
@@ -1749,7 +1749,7 @@ dlabel D_800217B8
     /* 1FD0 800217D0 20202020 */ .word 0x20202020
     /* 1FD4 800217D4 20202020 */ .word 0x20202020
     /* 1FD8 800217D8 20202054 */ .word 0x54202020
-enddlabel D_800217B8
+enddlabel jtbl_800217B8
 
 .align 2
 nonmatching D_800217DC
