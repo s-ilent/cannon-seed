@@ -41,6 +41,22 @@ temporaries):
    rX != $ra; the jump does not read $rX, so the reorder is
    semantically a no-op.
 
+   Three-load variant (found 2026-10-12, mainmenu_jp func_8002C478,
+   the first unit member whose frame saves two callee-saved registers
+   besides $ra): retail releases the frame in the branch delay after
+   both reloads, with no extra nop:
+       lw   $31,24($sp)     lw   $31,24($sp)
+       lw   $17,20($sp)     lw   $17,20($sp)
+       lw   $16,16($sp)  -> lw   $16,16($sp)
+       addu $sp,$sp,32      j    $31
+       j    $31             addu $sp,$sp,32  <- retail (branch delay)
+       nop
+   Fires only on [lw $ra][lw $rX][lw $rY][addu $sp][j $ra](nop) with
+   rX/rY != $ra; the jump reads neither, so the reorder is
+   semantically a no-op. Checked before the two-load variant (the
+   two-load window [lw $rY][addu][j] sits inside this shape and would
+   otherwise fire first and mis-swap).
+
 2. EXTEND-PAIR UNWEAVE. When two 16-bit sign extensions are scheduled
    together GCC interleaves them; retail emits each pair as a unit:
        sll $A,$B,16         sll $A,$B,16
@@ -123,6 +139,7 @@ SW_RA = re.compile(r"^sw\t\$(?:31|ra),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
 LW_SREG = re.compile(r"^lw\t\$(\w+),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
 JAL_CALL = re.compile(r"^jal\t\S+")
 SW_SREG = re.compile(r"^sw\t\$(\w+),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
+LW_GP_ANY = re.compile(r"^lw[ \t]+\$(\w+),(-?0x[0-9a-fA-F]+|\d+)\(\$gp\)$")
 # Register-only ALU op for the prologue hoist (rule 5): captures the
 # destination register. Memory ops, branches and frame allocs excluded
 # by construction (memory ops are never safe to reorder around stores;
@@ -152,6 +169,27 @@ def is_instruction(line: str) -> bool:
 def apply_rules(insns: list[str]) -> list[str]:
     """Replace instruction subsequences in place; return new list."""
     res = list(insns)
+
+    # Rule 1 (three-load variant): [lw $ra][lw $rX][lw $rY][addu $sp]
+    # [j $ra](nop)? -> [lw $ra][lw $rX][lw $rY][j $ra][addu $sp] (nop
+    # absorbed). Checked first: the two-load window [lw $rY][addu][j]
+    # sits inside this shape and would otherwise fire first and
+    # mis-swap.
+    i = 0
+    while i < len(res) - 4:
+        m_ra = LW_RA.match(res[i])
+        m_sx, m_sy = LW_SREG.match(res[i + 1]), LW_SREG.match(res[i + 2])
+        if (m_ra and m_sx and m_sy
+                and m_sx.group(1) not in ("31", "ra", "29", "sp")
+                and m_sy.group(1) not in ("31", "ra", "29", "sp")
+                and ADDU_SP.match(res[i + 3]) and JUMP_RA.match(res[i + 4])):
+            tail_nop = (i + 5 < len(res) and NOP.match(res[i + 5]))
+            res[i : i + (6 if tail_nop else 5)] = [
+                res[i], res[i + 1], res[i + 2], res[i + 4], res[i + 3]
+            ]
+            i += 5
+            continue
+        i += 1
 
     # Rule 1 (two-load variant): [lw $ra][lw $rX,N($sp)][addu $sp]
     # [j $ra](nop)? -> [lw $ra][lw $rX][j $ra][addu $sp] (nop absorbed).
@@ -239,6 +277,17 @@ def apply_rules(insns: list[str]) -> list[str]:
                     res[i], res[i + 2], res[i + 4], res[i + 3], res[i + 1]
                 ]
                 i += 5
+                continue
+        i += 1
+
+    # Rule 7: [frame-alloc][lw $r,N($gp)] -> [lw $r,N($gp)][frame-alloc]
+    i = 0
+    while i < len(res) - 1:
+        if FRAME_ALLOC.match(res[i]):
+            m = LW_GP_ANY.match(res[i + 1])
+            if m and m.group(1) not in ("29", "sp"):
+                res[i], res[i + 1] = res[i + 1], res[i]
+                i += 2
                 continue
         i += 1
 

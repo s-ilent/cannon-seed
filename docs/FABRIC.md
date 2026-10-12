@@ -252,44 +252,53 @@ parent's frame - which is why they have no prologues of their own.
 
 ## Multi-subsegment C machinery (design 2026-10-12, implement next)
 
-The first family component (the E1A8..E250 band + its C45C/C4C0/C50C
-targets) is four disjoint address windows inside the C220 row, but ONE C
-compilation unit. Today's build path is one `c` row = one src file = one
-`.r_<rom>` section at one address (build.sh c_entries + gen_ld.py), so the
-machinery to add is a SPLIT, not a new pipeline:
+AMENDED 2026-10-12 (probe session, `probes/gcc263/c478.c`): the first
+proof below - four c-rows at C45C/C4C0/C50C/E1A8 fed by one
+`src/fabric_band.c` - is STRUCTURALLY IMPOSSIBLE and is dropped. Those
+four windows are frame-sharing label blocks of the parent functions
+(the C45C epilogue tail, C4C0/C50C inside func_8002C478's 0x20 frame,
+the E1A8 band under the C220 0x28 frame): a GCC standalone function
+always opens with its own prologue and closes with its own return, and
+cc1 cannot emit a lone epilogue, a fall-through window end, or a
+save-less callee-saved write - the probe verdict block below already
+said as much ("the fragments are label blocks of the shared parent
+frame, not functions"). The sound family-C unit is therefore the WHOLE
+PARENT FUNCTION, one c-row each, with the multi-subsegment machinery
+(<base>.pN rows) reserved for genuinely function-boundary-aligned
+window sets.
 
-1. **Yaml shape** (hand edit at carve time): the containing asm row is cut
-   into per-piece rows. Piece 1 keeps the base name, pieces 2..N are rows
-   named `<base>.pN`, all type `c`:
-   `[0x..., asm, ...][0xE1A8, c, fabric_band][0x..., asm, ...]
-    [0xC45C, c, fabric_band.p2] ...` - rows stay in payload order; splat
-   only needs unique names, gen_ld only needs the addresses.
-2. **build.sh**: the c_entries pass compiles `src/<base>.c` ONCE per base
-   (cache the cc.sh -S product), splits the output at `glabel` boundaries
-   into functions, and maps functions to pieces BY ORDER: piece 1 = the
-   base row, piece N = the `.pN` row. The compiled function order in the
-   .c source must equal the address order of the rows - assert count and
-   fail loudly on mismatch. Each piece gets its own staged file
-   (`build/src/<base>[.pN].r.s`) with `.text` rewritten to `.r_<its row
-   rom>`, assembled to `build/src/<base>[.pN].o` - exactly the names
-   gen_ld.py already links.
-3. **Invariants**: pieces are WHOLE functions (cc1 branch labels `.Lnn`
-   stay intra-function, so intra-piece; the `.L<8hex>` globalization and
-   the two-pass auto-define keep working unchanged). The gp_rel rewrite
-   and the MACRO_PRONE data-as-code guard apply per staged piece as
-   today. A piece containing anything outside .text (cc1 .rdata for
-   constants, .data) must fail the build loudly - the fabric C unit
-   should be pure control flow + calls; constants get their own rows.
-4. **First proof**: the C220-row split + a 4-piece `src/fabric_band.c`
-   (band first? no - ADDRESS order: C45C, C4C0, C50C, then the E1A8
-   band) whose bodies are the tail-call-only shapes the probe validated
-   (probe verdict GO). Byte-exact or it does not land.
+The corrected first component: **func_8002C478 (C478..C608) as one c
+row** - a complete function (real prologue saving ra/s1/s0, real
+epilogue), the band's `j .L8002C4C0/.L8002C4DC/.L8002C50C` targets land
+inside it, and the cross-object jumps keep resolving through build.sh's
+two-pass auto-definition (already exercised: func_8003B568's
+`j .L80037CB0` into the C-matched func_80037CAC). Probe results
+(probes/gcc263/c478.c, 2026-10-12):
 
-Why order-mapped pieces and not per-function names: the retail band
-fragments are label blocks of the shared parent frame - their C names are
-inventions, and per-piece rows keep the yaml the single source of
-addresses. Symbolic names for the pieces can be curated later, exactly
-like the SDK member adoptions.
+* Prologue and epilogue compile RETAIL-EXACT through the pipeline:
+  `[lw v0,0x3D8(gp)][addiu sp,-0x20][sw ra][sw s1][beqz (sw s0 delay)]`
+  and `[lw ra][lw s1][lw s0][jr ra (addiu sp delay)]`. Two new narrow
+  cc_post rules carry this: rule 1's three-load epilogue variant
+  ([lw $ra][lw $rX][lw $rY][addu $sp][j $ra] -> release into the branch
+  delay) and rule 7 (leading-load hoist, [frame-alloc][lw $2,N($gp)] ->
+  load first). All 8 targets verify GREEN with both rules landed.
+* The four gp-relative accesses (0x3D8/0x1048/0x1050 off mainmenu's
+  runtime gp base - value still unmeasured) compile byte-exact as
+  literal-offset asm from a `$2` file-scope register variable.
+* OPEN GAP (only divergence class left): cc1 folds the constant pointer
+  `s0 = &D_80089440` - the `*s0` store becomes an at-pair and
+  `(int)s0 - 0x40` folds to absolute lui/addiu pairs, while retail
+  materializes s0 and stores/adds through the register. The retail
+  source held s0 opaquely; finding the C-89 shape that does the same
+  without extra insns is the remaining question before the function
+  lands as src/func_8002C478.c. Everything else about the function
+  (the call trains, delay-slot fills, the bne/s1 compare, the
+  j .L8002ABD4 tail with maspsx's reorder-mode delay nop) already
+  matches the pipeline evidence.
+
+The machinery itself (tools/cc_split.py + build.sh grouping, commit
+917502f) is unchanged and stays dormant until a function-boundary-
+aligned multi-window unit appears.
 
 ## Next actions
 
