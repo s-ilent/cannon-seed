@@ -54,6 +54,16 @@ _96_init = 0x800318E8; // SDK veneer: vector 0xa0, index 0x71
 DisableEvent = 0x80049770; // SDK veneer: vector 0xb0, index 0x0d
 GsDefDispBuff = 0x8003A8B4; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; pinned member row
 GsSortGLine = 0x800357A0; // LIBGS 2D_LIN1 member; tools/sdk_members.py, unique placement + signature DB agrees
+GsInitCoordinate2 = 0x80039688; // LIBGS MATRIX member .text+0x0 (extent 0x3e8, 10 syms); unique placement + signature DB agrees
+GsInitCoord2param = 0x80039704; // LIBGS MATRIX member .text+0x7c; unique placement + signature DB agrees
+GsSetLsMatrix = 0x80039730; // LIBGS MATRIX member .text+0xa8; unique placement + signature DB agrees
+GsSetLightMatrix = 0x80039760; // LIBGS MATRIX member .text+0xd8; unique placement + signature DB agrees
+GsSetLightMatrix2 = 0x800397FC; // LIBGS MATRIX member .text+0x174; unique placement + signature DB agrees
+GsMulCoord0 = 0x80039830; // LIBGS MATRIX member .text+0x1a8; unique placement + signature DB agrees
+GsMulCoord2 = 0x800398C4; // LIBGS MATRIX member .text+0x23c; unique placement + signature DB agrees
+GsMulCoord3 = 0x80039948; // LIBGS MATRIX member .text+0x2c0; unique placement + signature DB agrees
+print_matrix = 0x800399CC; // LIBGS MATRIX member .text+0x344; unique placement + signature DB agrees
+print_vector = 0x80039A3C; // LIBGS MATRIX member .text+0x3b4; unique placement + signature DB agrees
 
 // target: g3org_jp
 StSetRing = 0x8006A468; // LIBCD CDROM member; tools/sdk_members.py, unique placement + signature DB agrees

@@ -1077,13 +1077,27 @@ dlabel D_80020D10
     /* 1654 80020E54 */ .asciz "SetGraphDebug:level:%d,type:%d reverse:%d\n"
     /* 536574477261706844656275673A6C6576656C3A25642C747970653A256420726576657273653A25640A0000 */
 .align 2
+enddlabel D_80020D10
+
 .align 2
+nonmatching D_80020E80
+
+dlabel D_80020E80
     /* 1680 80020E80 */ .asciz "SetGrapQue(%d)...\n"
     /* 53657447726170517565282564292E2E2E0A0000 */
 .align 2
+    /* 1694 80020E94 44726177 */ .word 0x77617244
+    /* 1698 80020E98 53796E63 */ .word 0x636E7953
+    /* 169C 80020E9C 43616C6C */ .word 0x6C6C6143
+    /* 16A0 80020EA0 6261636B */ .word 0x6B636162
+enddlabel D_80020E80
+
 .align 2
-    /* 1694 80020E94 */ .asciz "DrawSyncCallback(%08x)...\n"
-    /* 4472617753796E6343616C6C6261636B2825303878292E2E2E0A0000 */
+nonmatching D_80020EA4
+
+dlabel D_80020EA4
+    /* 16A4 80020EA4 */ .asciz "(%08x)...\n"
+    /* 2825303878292E2E2E0A0000 */
 .align 2
 .align 2
     /* 16B0 80020EB0 */ .asciz "SetDispMask(%d)...\n"
@@ -1094,7 +1108,7 @@ dlabel D_80020D10
     /* 4472617753796E63282564292E2E2E0A00000000 */
 .align 2
     /* 16D8 80020ED8 25733A62 */ .word 0x623A7325
-enddlabel D_80020D10
+enddlabel D_80020EA4
 
 nonmatching jtbl_80020EDC
 
