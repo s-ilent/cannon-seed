@@ -576,3 +576,50 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   the Lua path for free-run breaking. Recipe in `docs/RUNTIME.md`.
 - Runtime evidence (queue item 1) is unblocked on this host: pcsx-redux,
   region BIOS, raw-BIN disc + cue all present.
+
+**2026-10-13 — The 58Fxx library split: 19 honest rows per the
+walker-family recipe, and a measured zero-entry contract.**
+- Queue item 1 from cron-20261012-2141. The coarse rows func_80058F08
+  (0x618) and func_80059A44 (0x4fc) are now split on their measured
+  prologue/epilogue boundaries (scripts/head_lib_decode.py map,
+  scripts/row_split_census.py census, both repo-external). Row A -> 14
+  rows (11 functions + three 8-byte jr-ra leaves: 80058F94 with a real
+  delay-slot store sh $zero,0x2c($a0), 80059114/800593D4 jr-ra+nop);
+  row B -> 5 rows (clip/cull twins 80059A44/80059BC4, stub 80059D4C,
+  leaf 80059D54, and func_80059DB0 0x190 whose 2026 carve the scan had
+  re-merged into the coarse row). All 19 rows pinned; sizes sum exactly
+  to the two old rows; extract renders the interior entries as alabels
+  (func_800590AC/func_80059100 in func_80059074.s) - the walker-family
+  rendering.
+- NEW MEASURED FACT (entry contract): image-wide census of jal/j,
+  conditional branches, pointer words and lui+lo materializations finds
+  ZERO static references to any of the 19 row starts. The library's
+  only static callers enter at 6 INTERIOR addresses (67 jal sites):
+  0x80058F20 (1x, counter-bump tail), 0x800590AC (16x, indexed u16
+  read tail), 0x80059100 (46x, clear-fields tail ending jr ra + addiu
+  sp,0x8 - func_80059074's own frame size, but measured callers carry
+  other frames, e.g. func_8005A184's 0x18; two sites are 2-word stubs
+  whose first instruction is the jal), 0x800591BC (1x), 0x8005936C
+  (1x), 0x80059410 (2x). Row starts are reachable only through
+  runtime-built control flow - the same gate as the state table, the
+  $at entries and the runtime-opaque blocks (docs/FABRIC.md).
+- Dispatcher table nuance (func_800599A8, re-measured): the bounds
+  check passes only for state<=4, and the four in-bounds table entries
+  0x800221F4..0x80022208 are STRING bytes ("t Direct!) (Init
+  Sprite)\n"); the pointer words at 0x80022214+ are out of bounds. The
+  table is runtime-patched or the lookup never executes - recorded in
+  curated, runtime-gated.
+- Sidecar ripples: cross-row jal/j to the retired branch-target names
+  now render as .L labels (func_8005F430.s, func_8006225C.s); byte
+  encodings unchanged. Gates: mainmenu_jp verify GREEN first try, full
+  8/8 GREEN, ratchets 365/0, screen 0 DATA / 0 SUSPECT both mainmenu
+  discs, re-scan byte-stable. Curated: 19 row names + full entry-
+  contract evidence block (175 curated names kept, was 157).
+  Open threads: (1) func_8005A014 (0x48, 5 real jal sites vs
+  undecodable content) - census the sites' prefixes before touching;
+  (2) the runtime-opaque blocks / row-start reachability / sp
+  convention of the 46x tail all share one runtime gate (pcsx-redux +
+  BIOS + raw-BIN - now present on this host, see the gdb-session entry
+  above; queue the runtime check); (3) EU-side mirror of this library
+  only when EU C work needs it.
+

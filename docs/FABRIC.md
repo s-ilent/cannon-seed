@@ -132,6 +132,28 @@ is one complete function, not two: prologue (`sp-0x28`, saves `ra/s3/s2/s1/s0`),
   back into the pool body. Classic continuation fragments; a standalone C
   function cannot emit a jr-less, caller-frame-epilogue-sharing body.
 
+### The 58Fxx library's zero-entry contract (measured 2026-10-12)
+
+The library between the two runtime-opaque blocks (`80058F08..800594F4` +
+`80059A44..80059DB0`, 19 pinned rows after the cron-20261012-2256 split)
+has NO static entry at any row start: an image-wide census of `jal`/`j`,
+conditional branches, pointer words and lui+lo materializations returns
+zero hits on all 19 heads. Every static caller enters at one of 6
+INTERIOR addresses (67 jal sites; e.g. `80059100`, the clear-fields tail
+called 46x). Consequences, same gate family as the walker's loop heads
+and the `$at` entries:
+
+* The compiler-unit rows (prologue/epilogue-exact) are the honest layout,
+  but the units the CALLERS bind to are interior shared tails. A C match
+  of this library cannot be per-row: the C unit is the whole library or
+  the sub-TU that shares the tails, exactly like the walker family.
+* Row-start reachability, the runtime-opaque blocks' interpretation, and
+  the shared tail's `addiu sp,0x8`-vs-caller-frame mismatch (callers
+  measured with 0x18 frames) are one and the same runtime gate:
+  pcsx-redux + region BIOS + raw-BIN. The dispatcher `func_800599A8`
+  adds a fourth instance: its in-bounds table entries are string bytes
+  in the static image (runtime-patched or never taken).
+
 ## Misclassified code inside "data" rows
 
 Real continuation code sits in three data-classified spans (both discs):
