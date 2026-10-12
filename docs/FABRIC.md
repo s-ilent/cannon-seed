@@ -161,6 +161,32 @@ probe fails, the fabric stays asm permanently and the C effort moves to the
 framed SDK members path (docs/MATCHING.md 3c) - which the probe result will
 have cost one small unit to learn, not a month.
 
+**Probe verdict (2026-10-12, `probes/gcc263/tramp.c`): GO.** GCC 2.6.3 with
+the pinned flags (`-mips1 -O2 -G8 -funsigned-char -fno-builtin`) reproduces
+every idiom in the band from plain C:
+
+* sparse-case `switch` compiles to the `ori $v0,C; beq $x,$v0,L` chain,
+  variable-first compare, `j Ldefault; nop` for the default path - and the
+  scheduler fills `beq` delay slots with independent downstream insns
+  (the probe saw a duplicated `li $a0,0x100` arg setup land there).
+* back-to-back calls put the last independent arg setup in each `jal` delay
+  slot with word-exact classes: `ori $a1,0x91F` (`3405091F`),
+  `addiu $a2,-1` (`2406FFFF`), `addu $a1,$zero,$zero` (`00002821`),
+  `ori $v0,8` (`34020008`) - all byte-identical to retail words.
+* the E1C4 -> E1D8 structure reproduces exactly: `j Lnext` whose delay slot
+  carries the target block's `a0` setup, target block opening directly with
+  `jal` (no own arg setup), the unconditional `j` NOT shortened away because
+  its delay slot holds live work.
+* standalone-probe caveat, and it supports the family-C premise: a
+  standalone C function must open `addiu sp,-N; sw ra` (the probe's first
+  `beq` delay slot took the `sw ra`), which the frameless retail fragments
+  lack - the fragments are label blocks of the shared parent frame, not
+  functions. Family-level C is therefore not just feasible but REQUIRED
+  for these shapes, exactly as this document decided.
+
+Remaining known gap before any family C lands: the state-object field map
+(Next action 3).
+
 ## Next actions
 
 1. DONE 2026-10-12: honesty carves 1+2 (EF10, F834), carve 3 (DDB0 whole
@@ -169,8 +195,11 @@ have cost one small unit to learn, not a month.
    mirroring EU, BB0-row ECC-head trims. All rows carry the `pinned`
    marker: `make scan` reproduces them verbatim (generalized pin
    mechanism, commit 7c7451c).
-2. Trampoline-band C probe (E1A8..E250 component) - the family-level C
-   decision point, now unblocked.
+2. DONE 2026-10-12: trampoline-band C probe (`probes/gcc263/tramp.c` +
+   docs/TOOLCHAIN.md probe table). Verdict GO - see the verdict block in
+   the C-unit decision above. GCC 2.6.3 reproduces the switch chain, the
+   jal delay-slot arg placement (word-exact), and the goto/delay-slot-steal
+   structure of E1C4 -> E1D8 from plain C.
 3. State-object field map (`$s3`/`$s7`/frame-0x50 locals) -> extend this
    doc before any family C.
 4. Known grid drift left in older rows (follow-up carves, low priority):

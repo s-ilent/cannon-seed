@@ -71,6 +71,14 @@ Probe evidence (`probes/gcc263/idioms.c`):
 | `a * b` | mult row | Exact match: `mult` + `mflo` |
 | `p[i]` plain char | char signedness row | `lbu` (unsigned char) |
 | `p[i]` signed char | minority row | `lb` (signed char) |
+| `switch` sparse cases | `func_8002E1A8` (mainmenu fabric) | Exact shape: `ori $v0,C; beq $x,$v0,L` chain, variable-first compare, default `j L; nop`; independent downstream insns (duplicated arg setup) scheduled into `beq` delay slots |
+| arg setup in call delay slots | `func_8002E1FC` head | Exact words: `ori $a1,C` / `addiu $a2,-1` inside `jal` delay slots, `addu $a0,$x,$zero` / `addu $a1,$zero,$zero` (word `00002821`) before the call |
+| goto chain + delay-slot steal | `func_8002E1C4 -> 8002E1D8` pair | Exact structure: `j Lnext` with the target block's `a0` setup moved into the delay slot; target block opens directly with `jal` (no own arg setup); fallthrough path keeps its duplicated setup. The unconditional `j` to a nearby block is NOT shortened away when its delay slot carries live work |
+
+Probe source: `probes/gcc263/tramp.c` (shapes A/B/C, compiled 2026-10-12).
+This settles the mainmenu fabric C-unit question: every idiom in the
+E1A8..E250 trampoline band is reproducible GCC 2.6.3 output from plain C
+with the pinned flags — no register pinning, no inline asm (docs/FABRIC.md).
 
 Confirmed cc1 defaults: `-mgas -msoft-float`, `-G 8`, `Cpu = 3000, ISA = 1`.
 
