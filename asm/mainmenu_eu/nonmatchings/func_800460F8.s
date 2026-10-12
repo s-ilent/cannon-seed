@@ -475,23 +475,18 @@ glabel func_80046610
     /* 26E34 80046634 7800BD27 */   addiu     $sp, $sp, 0x78
 endlabel func_80046610
 
-nonmatching func_80046638, 0x8
+nonmatching func_80046638, 0x20
 
 glabel func_80046638
     /* 26E38 80046638 D8FFBD27 */  addiu      $sp, $sp, -0x28
     /* 26E3C 8004663C 2000BFAF */  sw         $ra, 0x20($sp)
-endlabel func_80046638
-
-nonmatching func_80046640, 0x18
-
-glabel func_80046640
     /* 26E40 80046640 1C00B1AF */  sw         $s1, 0x1C($sp)
     /* 26E44 80046644 8DE7000C */  jal        func_80039E34
     /* 26E48 80046648 1800B0AF */   sw        $s0, 0x18($sp)
     /* 26E4C 8004664C 21800000 */  addu       $s0, $zero, $zero
     /* 26E50 80046650 FFFF1124 */  addiu      $s1, $zero, -0x1
     /* 26E54 80046654 1000A427 */  addiu      $a0, $sp, 0x10
-endlabel func_80046640
+endlabel func_80046638
 
 nonmatching func_80046658, 0x14
 

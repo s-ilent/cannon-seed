@@ -239,7 +239,7 @@ glabel func_80029754
     /* 9FD4 800297D4 D80F82AF */  sw         $v0, 0xFD8($gp)
 endlabel func_80029754
 
-nonmatching func_800297D8, 0x58
+nonmatching func_800297D8, 0x48
 
 glabel func_800297D8
     /* 9FD8 800297D8 6000248E */  lw         $a0, 0x60($s1)
@@ -260,12 +260,16 @@ glabel func_800297D8
     /* A014 80029814 43100200 */  sra        $v0, $v0, 1
     /* A018 80029818 18004500 */  mult       $v0, $a1
     /* A01C 8002981C C2170300 */  srl        $v0, $v1, 31
-  .L80029820:
+endlabel func_800297D8
+
+nonmatching func_80029820, 0x10
+
+glabel func_80029820
     /* A020 80029820 21104300 */  addu       $v0, $v0, $v1
     /* A024 80029824 12900000 */  mflo       $s2
     /* A028 80029828 00000000 */  nop
     /* A02C 8002982C 43100200 */  sra        $v0, $v0, 1
-endlabel func_800297D8
+endlabel func_80029820
 
 nonmatching func_80029830, 0x1C
 

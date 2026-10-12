@@ -329,6 +329,7 @@ glabel func_8002C608
     /* CEC0 8002C6C0 28A133AC */  sw         $s3, %lo(D_8008A128)($at)
     /* CEC4 8002C6C4 0980013C */  lui        $at, %hi(D_8008A12C)
     /* CEC8 8002C6C8 2CA131AC */  sw         $s1, %lo(D_8008A12C)($at)
+  .L8002C6CC:
     /* CECC 8002C6CC 0980043C */  lui        $a0, %hi(D_80089328)
     /* CED0 8002C6D0 28938424 */  addiu      $a0, $a0, %lo(D_80089328)
     /* CED4 8002C6D4 21280000 */  addu       $a1, $zero, $zero

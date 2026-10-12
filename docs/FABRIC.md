@@ -74,11 +74,15 @@ band - the outer loop hands control back into the fabric mid-body.
 * **One shared 0x50 frame.** The prologue `addiu $sp, $sp, -0x50` at
   `8002D974` (inside code block 4, after j-entry `8002D930`) pairs with the
   epilogue `lw $ra, 0x48($sp); lw $s0..$s7, 0x28..0x44($sp); jr $ra;
-  addiu $sp, $sp, 0x50` at `8002DDD4..8002DDFC` - which sits inside the
-  row currently classified `data_8002DDB0` ("pool epilogue"). The real
-  function spans `8002D930..8002DDFC`, crossing the grid payload/descriptor
-  row boundaries; the 0x50 row is its tail, misfiled as data. The web's
-  continuations run inside this saved-s0..s7 frame.
+  addiu $sp, $sp, 0x50` at `8002DDD4..8002DDFC`. The whole `data_8002DDB0`
+  row (0x50, DDB0..DE00) is that tail - NO sector header in it: byte dump
+  shows `addiu $v0,<rel>`; `sw $v0,0($s7)` (the DDB4 tail store, an alabel
+  entry); `ori $v0,1; sw $v0,0x380/0x37C($gp)` (JP/EU small-data offsets
+  differ); `j 8002C024` + nop; `lui $v0,0x8008; addiu $v0,<rel>; sw
+  $v0,0($s7)` (next-state pointer store, 0x7094 JP / 0x78A8 EU); then the
+  epilogue. The earlier DDC8..DE00 bound was wrong. Carved 2026-10-12 as
+  asm `func_8002DDB0` on both discs. The web's continuations run inside
+  this saved-s0..s7 frame.
 * **Trampoline band E1A8..E250.** Byte-identical on JP and EU except jal
   targets (uniform 0xB0 callee shift): `addu $a0, $s1, $zero; jal <helper>;
   ori $a1, 0x91C/0x91D/0x91E/0x91F; j 8002C45C` - string-id-selected
@@ -94,16 +98,19 @@ Real continuation code sits in three data-classified spans (both discs):
 | --- | --- |
 | `data_8002EF10` (0x458) | state-id switch chains at 8002F10C..8002F328: `ori $v0, N; beq $v0, $v1; nop; j <pool entry>` sequences calling `80026414`/`80026668`, interleaved with `lui/addiu` string constants; also host of root-table 4's handler entries |
 | `data_8002F834` (0xb14 JP / 0x137c EU) | same switch-chain shape at 8002F9C8..8002FB78 and 8002FEC0..80030324; calls `8005C62C`, `80035D50`, `80026668`, `80026414`; jumps into D480 mid-body (D8BC, D8D4, D930, DA0C, DA58) and the DDB4 tail store |
-| `data_800313C0` (0x1d6c) | tail j-chains at 80031348..80031888 jumping into EB64/F368 mid-body entries (EC8C, ECBC, ECD4, EE20, EE38, EE88, EFDC, EFF4, F13C, F154, F3B0, F3D8) |
+| `data_800313C0`/`data_800313D0` zone | CARVED 2026-10-12 - the zone is the raw-sector grid, headers verified at 314B8/31DE8/32718/33048 (0x930 pitch) on BOTH discs; all four user windows are the continuation web's CALL-SITE BANK: window 11 314D0..31CD0, window 12 31E00..32600, window 13 32730..32F30, window-14 head 33060.. - each 0x800 carries 83-90 `jal`, dense `lui/addiu` argument pairs, `lw/sw` locals, ZERO raw pointers. The earlier "tail j-chains at 80031348..80031888" note saw only window 11's head. Carved as asm `func_800314D0`/`func_80031E00`/`func_80032730`/`func_80033060` (JP+EU; JP's window-14 head is the 0xCC to the existing func_8003312C row) |
 
 The earlier "6/278 and 0/709 words decode" census note was measured over
 whole rows and is wrong as a classification signal: the code islands decode
 cleanly, the rows also contain long genuine-data stretches. The correct
 statement is "mixed code+data rows", and the code half is exactly the
-web-traffic listed above. (`data_80030A88` by contrast is genuinely data:
-its three j-shaped words target garbage - `8D0B65A8` etc. - data
-coincidences. The 30348 row's real islands at `8003047C`/`800306B4` already
-sit inside an asm row.)
+web-traffic listed above. (`data_80030A88` was earlier called "genuinely
+data: its three j-shaped words target garbage" - WRONG, that census was
+parity bytes. The row is [0x100 sector-9 ECC | 0x18 sector-10 header (MSF
+00:17:61 JP / 00:19:63 EU, mode 02, subheader) | 0x10 user = window-10 head
+CODE: `lw $ra,0x10($sp); nop; jr $ra; addiu $sp,0x18`, byte-identical JP/EU].
+Carved 2026-10-12: JP mirrors EU's func_80030BA0 row; EU's func_80030BB0
+ECC head (313A0..313D0) is now data too.)
 
 ## JP/EU twin structure
 
@@ -139,14 +146,9 @@ per-disc scanner opinions; the web edges are the ground truth.
 No standalone C function exists in the family, on either disc. The only
 honest C unit is the web itself - and only after two prerequisites:
 
-1. **Honesty carve of the mixed rows** (cheap, proven recipe): lift the
-   j-chain islands out of `data_8002EF10`, `data_8002F834`, `data_800313C0`
-   into asm rows with explicit entry labels,
-   and reclassify `data_8002DDB0`'s DDC8..DE00 portion as the frame-0x50
-   function tail (entry at DDB4/D930 with an alabel). Sector overhead stays
-   data. This is normal carve work - recon, yaml edit, git-rm stale,
-   extract, verify, regression - and it makes the census count real
-   functions instead of data islands.
+1. **Honesty carve of the mixed rows** - DONE 2026-10-12 (carves 1-4,
+   see Next actions); the fabric's code side is now fully visible to the
+   scanner as hand-pinned asm rows.
 2. **Frame/state model**: identify the state object (`$s3`) field offsets
    and the 0x50 frame's s-register roles before writing C. The epilogue
    tells us the frame shape; the dispatcher tells us the state word.
@@ -161,13 +163,19 @@ have cost one small unit to learn, not a month.
 
 ## Next actions
 
-1. Honesty carve 1: JP+EU `data_8002EF10` j-chains -> asm rows (entries at
-   the switch-chain heads; keep sector overhead as data).
-2. Honesty carve 2: JP+EU `data_8002F834` j-chains, same recipe.
-3. Honesty carve 3: `data_8002DDB0` tail -> the frame-0x50 function
-   (D930 entry label, DDD4 epilogue), JP+EU.
-4. Honesty carve 4: `data_800313C0` tail j-chains, JP+EU (the 30348 row's
-   islands are already asm; no action there).
-5. Trampoline-band C probe (E1A8..E250 component) once the carves land.
-6. State-object field map (`$s3`/`$s7`/frame-0x50 locals) -> extend this
+1. DONE 2026-10-12: honesty carves 1+2 (EF10, F834), carve 3 (DDB0 whole
+   row -> asm `func_8002DDB0`), carve 4 (313C0/313D0 zone -> grid
+   decomposition with call-bank windows 11-14 as asm), JP 30A88 split
+   mirroring EU, BB0-row ECC-head trims. All rows carry the `pinned`
+   marker: `make scan` reproduces them verbatim (generalized pin
+   mechanism, commit 7c7451c).
+2. Trampoline-band C probe (E1A8..E250 component) - the family-level C
+   decision point, now unblocked.
+3. State-object field map (`$s3`/`$s7`/frame-0x50 locals) -> extend this
    doc before any family C.
+4. Known grid drift left in older rows (follow-up carves, low priority):
+   JP `func_8003312C` row (3312C..3386C) holds window-14 tail + 0xC of
+   sector-14 ECC; EU `func_80033948` row head (33948..33978) holds 0x30 of
+   sector-14 ECC and its span crosses the sector-15/16 headers; JP
+   `data_8003386C` (0x2678) and EU `data_80034AD0` (0xad4) span multiple
+   sectors. Decompose on the same recipe when those zones need C work.
