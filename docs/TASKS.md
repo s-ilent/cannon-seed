@@ -6,6 +6,24 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### Carve the code out of the `data` rows — the other direction
+
+The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
+error is larger: rows the splat map calls `data` that are really code, and it
+is measured, not suspected.
+
+* 12.9% of every byte the eight maps label `data` is byte-verified Psy-Q
+  library code — 446 KB of 3.45 MB — measured with `tools/libshare.py` at
+  3.3. 77% of the whole library share sits in `data` rows.
+* Runtime agrees: `tools/coverage_vs_fragments.py` reports regions the static
+  classifier calls `ORPHAN … end=data_stop` that the CPU executes — 13 in
+  slps_00270, 4 in g3org_jp, 1 in mainmenu_jp.
+
+A walk-stop rule symmetric to the pin — a `data` row whose bytes are a
+byte-verified SDK member, or carry a high instruction-validity density — would
+surface them. Sequence it after the SDK re-pin below: the strongest evidence is
+the 3.3 match set.
+
 ### Re-pin the Psy-Q SDK to 3.3 and regenerate the SDK reports
 
 The game links Psy-Q ~3.3 (kernel RCS tags dated 1995-10, `docs/RECON.md`), but
