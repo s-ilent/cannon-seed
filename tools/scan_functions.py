@@ -241,7 +241,7 @@ def load_sdk_anchors(target):
 
 
 def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
-         pin_spans=()):
+         pin_spans=(), c_spans=()):
     n = len(payload) // 4
     words = struct.unpack(f"<{n}I", payload[: n * 4])
 
@@ -348,6 +348,18 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
         return (a, end) if end > a else None
 
     covered = {}  # start_off -> end_off (function ranges)
+    # `noseed` rows (cron-20261012-1141): pre-seed them into covered so
+    # every seed filter (in_covered, the rescue's mask scan) refuses to
+    # START a walk inside one - a prologue pair at the function's second
+    # instruction or a mid-function .L trampoline target must not anchor
+    # a walk that re-decomposes the oracle-verified zone (witnessed:
+    # mainmenu_jp func_8002C478). Scoped per row: unmarked rows behave
+    # exactly as before. The v2/v3b seed passes below also skip these
+    # ranges - the matched code's own branch targets must not seed walks
+    # into the (screened) zones around it.
+    c_starts = {ps for ps, _pe in c_spans}
+    for ps, pe in c_spans:
+        covered[ps] = pe
     for a in sorted(anchors):
         if any(s <= a < e for s, e in covered.items()):
             continue
@@ -386,6 +398,8 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
     # barrier-less walks, connection-only acceptance.
     seeds = set()
     for s, e in list(covered.items()):
+        if s in c_starts:
+            continue
         for i in range(s // 4, e // 4):
             t = branch_target(i, words[i])
             if t is None:
@@ -429,6 +443,8 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
     while True:
         strong = set()
         for s, e in list(covered.items()):
+            if s in c_starts:
+                continue
             for i in range(s // 4, e // 4):
                 if (words[i] >> 26) != 0x02:
                     continue
@@ -618,6 +634,8 @@ def scan(payload: bytes, entry_off: int, hard_stops=frozenset(), barrier=None,
                     continue
                 body_idx = next((k for k, (s2, _) in enumerate(trimmed)
                                  if s2 == e), None)
+                if body_idx is not None and trimmed[body_idx][0] in hard_stops:
+                    continue  # never extend a kept row (matched C / pins)
                 ends_clean = (
                     e >= 8
                     and words[(e // 4) - 2] == 0x03E00008
@@ -793,8 +811,9 @@ def preserved_types(yaml_path: Path):
     kept = {}
     pinned = set()
     sdk = set()
+    noseed = set()
     if not yaml_path.exists():
-        return kept, pinned, sdk
+        return kept, pinned, sdk, noseed
     in_block = False
     for ln in yaml_path.read_text().splitlines():
         if "# BEGIN GENERATED SUBSEGMENTS" in ln:
@@ -817,10 +836,21 @@ def preserved_types(yaml_path: Path):
         # anchors file is absent. All become exact-size hard rows below.
         # Blanket-preserving unmarked rows stays wrong (v3 rescues real code
         # from data gaps); only the explicit marker counts. A `c` row never
-        # joins the no-walk pin set: the walk may flow into a matched C
+        # joins the no-walk pin set (walks may flow into a matched C
         # function and the defensive split in main() owns its exact-size
-        # carve-out.
+        # carve-out) - but a c row CAN carry a `noseed` marker: its zone
+        # then refuses every walk SEED (v1 anchors, the v3 rescue's
+        # prologue scan, v2/v3b branch-target seeds) while walks from
+        # outside still flow through. Use it when the function's head is
+        # not a prologue pair (a gp load or hand-asm opener defeats the
+        # walk's anchor alignment) or mid-function .L trampoline targets
+        # would anchor a walk that re-decomposes the oracle-verified zone
+        # (witnessed: mainmenu_jp func_8002C478, whose prologue pair sits
+        # one word past its head). Scoped per row on purpose: unmarked rows
+        # behave exactly as before, so existing targets keep byte-identical
+        # scans.
         is_sdk = re.search(r"#\s*0x[0-9A-Fa-f]+\s+sdk\s*$", ln) is not None
+        is_noseed = re.search(r"#\s*0x[0-9A-Fa-f]+\s+noseed\s*$", ln) is not None
         if m.group(2) == "c" or "pinned" in ln or is_sdk:
             off = int(m.group(1), 16) - HDR
             kept[off] = (m.group(2), m.group(3), int(m.group(4), 16))
@@ -829,7 +859,9 @@ def preserved_types(yaml_path: Path):
                     sdk.add(off)
                 else:
                     pinned.add(off)
-    return kept, pinned, sdk
+            elif is_noseed:
+                noseed.add(off)
+    return kept, pinned, sdk, noseed
 
 
 def main(argv):
@@ -843,7 +875,7 @@ def main(argv):
     pc0 = header_words[0]
     entry_off = pc0 - BASE
 
-    kept, pinned, sdk = preserved_types(
+    kept, pinned, sdk, noseed = preserved_types(
         yaml_path := REPO / "config" / f"splat.{target}.yaml")
 
     # v6 SDK anchors (docstring 13): byte-verified member spans become
@@ -898,11 +930,43 @@ def main(argv):
 
     hard_stops = frozenset(kept)
     # pinned rows (hand) and sdk rows (byte-verified members) are hard
-    # no-walk spans, not just stop offsets
+    # no-walk spans, not just stop offsets. Rows carrying `noseed` (matched
+    # c functions whose head the walk cannot align with) pre-seed `covered`
+    # inside scan() instead: no walk may START inside one, while walks
+    # from outside still flow through and the defensive split below owns
+    # the exact-size carve.
     pin_spans = [(off, off + kept[off][2]) for off in pinned | sdk]
+    noseed_spans = [(off, off + kept[off][2]) for off in noseed]
 
     ranges, cross_targets = scan(payload, entry_off, hard_stops,
-                                 pin_spans=pin_spans)
+                                 pin_spans=pin_spans, c_spans=noseed_spans)
+    # Pin-span hygiene (cron-20261012-1026): the passes inside scan() (the
+    # v3c merge, the v5 body-extension and its adjacency re-merge) can
+    # bridge a range ACROSS a no-walk span - witnessed: slps_00270
+    # func_80025AE0's 4-byte head extended leftward over its own pin and
+    # merged with the predecessor, swallowing the matched C row. No range
+    # may contain a byte-verified row's bytes: subtract every pin span
+    # from every range here, before the defensive split and the gap
+    # accounting see them.
+    if pin_spans:
+        clean = []
+        for s, e in ranges:
+            pieces = [[s, e]]
+            for ps, pe in pin_spans:
+                nxt = []
+                for a, b in pieces:
+                    if ps <= a and b <= pe:
+                        continue  # fully inside the pin
+                    if b <= ps or a >= pe:
+                        nxt.append([a, b])
+                        continue
+                    if a < ps:
+                        nxt.append([a, ps])
+                    if pe < b:
+                        nxt.append([pe, b])
+                pieces = nxt
+            clean.extend(pieces)
+        ranges = clean
     gaps = data_gaps(ranges, len(payload))
 
     # Defensive: a preserved c-function must START its own subsegment at
@@ -996,9 +1060,16 @@ def main(argv):
     ytext = yaml_path.read_text()
     gen = ["    # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)"]
     for off, typ, name, size in subsegs:
-        # Re-emit the `pinned`/`sdk` marker or the NEXT scan reads an
-        # unmarked row, drops it from kept, and re-types the range.
-        mark = " pinned" if off in pinned else (" sdk" if off in sdk else "")
+        # Re-emit the `pinned`/`sdk`/`noseed` marker or the NEXT scan reads
+        # an unmarked row, drops it from kept, and re-types the range.
+        if off in pinned:
+            mark = " pinned"
+        elif off in sdk:
+            mark = " sdk"
+        elif off in noseed:
+            mark = " noseed"
+        else:
+            mark = ""
         gen.append(f"      - [0x{HDR + off:X}, {typ}, {name}]   # {size:#x}{mark}")
     gen.append("    # END GENERATED SUBSEGMENTS")
     block = "\n".join(gen)
