@@ -285,16 +285,31 @@ two-pass auto-definition (already exercised: func_8003B568's
 * The four gp-relative accesses (0x3D8/0x1048/0x1050 off mainmenu's
   runtime gp base - value still unmeasured) compile byte-exact as
   literal-offset asm from a `$2` file-scope register variable.
-* OPEN GAP (only divergence class left): cc1 folds the constant pointer
-  `s0 = &D_80089440` - the `*s0` store becomes an at-pair and
-  `(int)s0 - 0x40` folds to absolute lui/addiu pairs, while retail
-  materializes s0 and stores/adds through the register. The retail
-  source held s0 opaquely; finding the C-89 shape that does the same
-  without extra insns is the remaining question before the function
-  lands as src/func_8002C478.c. Everything else about the function
-  (the call trains, delay-slot fills, the bne/s1 compare, the
-  j .L8002ABD4 tail with maspsx's reorder-mode delay nop) already
-  matches the pipeline evidence.
+* s0-OPACITY GAP: SOLVED 2026-10-12 (cron-20261012-1026,
+  `probes/gcc263/c478.c` - the file now IS the landing source; every
+  word of the function compiles retail-exact). No C-89 shape works:
+  cc1's tree folder pushes the constant pointer through every
+  assignment, and GCC 2.6.3's cse sees through every empty-asm form
+  (tie-constraint, output-only, volatile input-only, volatile store
+  targets were all tested and fold or misorder). The recipe:
+  (1) the D_80089440 store group is ONE hand-asm volatile block with
+  s0 as an "=r" output - nine retail words verbatim, the barrier stops
+  the scheduler hoisting the next call's arg setup above the group, and
+  s0 leaves genuinely opaque; (2) the two identical `(int)s0 - 0x40`
+  arguments share one cse entry (same `(plus $16,-64)` key across the
+  calls) and compile to a destructive temp unless a SECOND output-only
+  asm re-defines s0 before the last reset-table call - then both args
+  take the direct one-insn `addiu $a0,$s0,-0x40` form exactly as
+  retail. LANDING IS BLOCKED ONLY ON SCANNER SEMANTICS: the scan's v3
+  rescue seeds a walk at the function's second instruction (the
+  prologue pair at CC7C sits one word past the gp load that opens the
+  function) and re-decomposes the zone; cron-20261012-1026 tried three
+  seed-refusal designs and each perturbed other targets' verified
+  decompositions (slps func_80025AF0 / g3_eu func_8004D744 heads ->
+  data, mainmenu_eu data_8003809C falsely walked, g3_jp func_80024FAC
+  merged away). The next session needs a design that keeps the seven
+  other targets' scans byte-identical; candidates and the full recipe
+  are in the probe header.
 
 The machinery itself (tools/cc_split.py + build.sh grouping, commit
 917502f) is unchanged and stays dormant until a function-boundary-
