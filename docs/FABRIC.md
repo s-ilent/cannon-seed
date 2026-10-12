@@ -141,6 +141,18 @@ glabel starts (CD00, CD18, CE50, CFA8, ...) that JP files only contain as
 mid-body addresses. Conclusion: function identities in this zone are
 per-disc scanner opinions; the web edges are the ground truth.
 
+EU c-row landing residues (2026-10-12, measured): carving `func_8002C418`
+out of `data_8002B8D8` made the scan surface two honest code islands the
+data row had been hiding - `func_8002C3A4` (0x74, the C220-twin's tail:
+jal trains + the shared state words D_8008A1EC/D_8008A1D4 + a 0x28-frame
+epilogue) and `func_8002A9D8` (0x540, the label block the fragment's
+`j 0x8002A9D8` anchors, v4-rescued and v3c-merged with the following
+walk). Structure mirrors JP exactly: the equal-path tail target
+`.L8002AB74` sits +0x10 into `func_8002A9D8`, as JP's `.L8002ABD4` sits
++0x10 into `func_8002ABC4`. The C220-twin zone (EU vram 0x8002C238..C418,
+part code part blob) is therefore already half-exposed; landing the EU
+twin of the C220 row is a carve + pin task, not a discovery task.
+
 ## C-unit decision
 
 No standalone C function exists in the family, on either disc. The only

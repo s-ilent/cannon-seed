@@ -48,6 +48,39 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — the EU twin port: func_8002C418 landed as C, the second
+family-C component; the landing surfaced the C220-twin structure (ed3ba27
+prequel + this session's carve).**
+- `src/func_8002C418.c` (mainmenu_eu): the JP `func_8002C478` template
+  ported with EU's relocation map read off the retail encodings — gp
+  displacements -4 (0x3D4/0x1044/0x104C), the state-map words +0x814
+  (16/16 consistent), D_800C9B3C/44 +0x838, callees -0xB0 except
+  func_80035A18 (-0x60), tail `.L8002AB74` (-0x60). 61/100 words
+  identical, every diff a relocation flavor. Same shaping as JP
+  (r_v0 file-scope register variable, the hand-asm D_ store group,
+  the output-only cse break); `noseed` marker on the yaml row.
+- Landing procedure that worked: revert any speculative scan, carve the
+  yaml row at the byte-verified address (yaml offset = the EXE file
+  offset = the .s comment column; VRAM = yaml + 0x8001F800 on BOTH
+  discs — the worklog's earlier +0x800 offset confusion cost one
+  mis-carve + revert), `make scan` (the row survives first try), check
+  the config diff, extract, screen, verify.
+- The scan surfaced two honest code islands from the data row:
+  `func_8002C3A4` (0x74, the C220-twin's tail — jal trains, the shared
+  state words, the 0x28-frame epilogue) and `func_8002A9D8` (0x540,
+  the label block `j 0x8002A9D8` in that tail anchors, v4-rescued +
+  v3c-merged with the following walk). Both end at real epilogues;
+  the screen stays 0 DATA / 0 SUSPECT (275 subsegs). Structure mirrors
+  JP: the equal-path tail target sits +0x10 into `func_8002A9D8` as
+  JP's does into `func_8002ABC4`.
+- Safety proof: the seven other targets' scans byte-identical; 8/8
+  verify GREEN; ratchets 341/57 -> 365/102 (the new file's own
+  placeholder tokens, itemized in ratchets.json per precedent); re-scan
+  idempotent.
+- Next: the EU twin of the C220 row is now a carve + pin task (see
+  FABRIC.md "EU c-row landing residues"), then the state-map naming
+  pass (36 D_ externs across the two C files) lowers unknown_data.
+
 **2026-10-12 — the name-adoption pass: 788 member names adopted; the
 code-in-data census closes at zero (ac56ef8, 629b790).**
 - `tools/sdk_curated.py` (new): reads the regenerated member report
