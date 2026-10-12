@@ -48,6 +48,44 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — JP's A9D8-twin island head carved: func_8002AA38 (0x18c
+pinned), the twin zone now mirrors EU's func_8002A9D8 structure.**
+- Evidence (scripts/jp_head_evidence.py, repo-external — correct
+  file-offset arithmetic: vram = file offset + 0x8001F800, the exe
+  header is 0x800): the island head's ONLY static reference on either
+  disc is the equal-path tail `j` — JP 0x8002C448 -> 0x8002AA38 (inside
+  the pinned func_8002C220 row), EU 0x8002C3E8 -> 0x8002A9D8 (inside the
+  walk-derived func_8002C3A4 row). Zero beq/bne on both discs.
+  CORRECTION to the cron-20261012-1411 record: the claimed "bne at EU
+  0x80041538 -> 0x8002A9D8" does not exist. The bne at that (skewed)
+  address is real but targets 0x80040DBC; and the definitive
+  target-space scan — every branch class and j/jal in the whole image,
+  skew-independent — finds ZERO branches to 0x8002A9D8 (EU) and zero to
+  0x8002AA38 (JP). EU's rescue came solely from the j source being
+  v4-visible (walk-derived row); JP's head stayed data because its j
+  source is pinned-row-invisible (the 1411 MIS-STEP lesson, now the
+  positive explanation too).
+- Twin proof: JP [0x8002AA38,0x8002ABC4) vs EU [0x8002A9D8,0x8002AB64)
+  = 99/99 words IDENTICAL (not even relocation diffs). EU's side is
+  scanner-verified code (the v4-rescued func_8002A9D8, 0x540). Mirror
+  structure: the equal-path tail j lands +0x10 into the island on both
+  discs (JP .L8002ABD4 inside func_8002ABC4 / EU .L8002AB74).
+- Carve: data_80029D38 0xe8c -> 0xd00, new [0xB238, asm,
+  func_8002AA38] # 0x18c pinned. Pinned because JP's j source lives in
+  a pinned row (v4-invisible) - an unmarked row would regenerate as
+  data (the preserved_types rule). The equal-path j now renders
+  `j func_8002AA38`.
+- MIS-CARVE + revert (one scan cycle lost, the 1126 lesson repeated):
+  first attempt placed the row at yaml 0xAA38 — vram/yaml conflation,
+  vram 0x8002AA38 is yaml 0xB238. Symptom: the row's own branch to
+  0x8002A40C (func_80029518's row) failed PC16 relocation because the
+  content was linked 0x800 above its disassembly base. The diagnostic
+  scripts had the same off-by-0x800 (file offset vs payload offset) -
+  fixed in the persisted script before any number above was recorded.
+- Gates: make verify mainmenu_jp GREEN; 8/8 GREEN; re-scan idempotent
+  (yaml diff = the carve only); screen 0 DATA / 0 SUSPECT everywhere;
+  ratchets 365/12 unchanged (asm-only carve); matched functions 82.
+
 **2026-10-12 — the state-map naming pass: 36 curated data names, the
 unknown_data ratchet 102->12, the twins tied by identical names.**
 - New mechanism (tools/scan_functions.py): the symbols writer now emits a

@@ -149,7 +149,7 @@ glabel func_8002C220
     /* CC3C 8002C43C D8994224 */  addiu      $v0, $v0, %lo(state_block_9)
     /* CC40 8002C440 0980013C */  lui        $at, %hi(state_cursor)
     /* CC44 8002C444 C09922AC */  sw         $v0, %lo(state_cursor)($at)
-    /* CC48 8002C448 8EAA0008 */  j          D_8002AA38
+    /* CC48 8002C448 8EAA0008 */  j          func_8002AA38
     /* CC4C 8002C44C 00000000 */   nop
   .L8002C450:
     /* CC50 8002C450 0980013C */  lui        $at, %hi(state_cursor)
