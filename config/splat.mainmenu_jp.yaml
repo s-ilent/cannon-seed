@@ -217,14 +217,31 @@ segments:
       - [0x39590, data, data_80058D90]   # 0x134 pinned
       - [0x396C4, asm, func_80058EC4]   # 0x3c pinned
       - [0x39700, data, data_80058F00]   # 0x8
-      - [0x39708, asm, func_80058F08]   # 0x618
+      - [0x39708, asm, func_80058F08]   # 0x8c pinned
+      - [0x39794, asm, func_80058F94]   # 0x8 pinned
+      - [0x3979C, asm, func_80058F9C]   # 0x20 pinned
+      - [0x397BC, asm, func_80058FBC]   # 0x48 pinned
+      - [0x39804, asm, func_80059004]   # 0x70 pinned
+      - [0x39874, asm, func_80059074]   # 0xa0 pinned
+      - [0x39914, asm, func_80059114]   # 0x8 pinned
+      - [0x3991C, asm, func_8005911C]   # 0x114 pinned
+      - [0x39A30, asm, func_80059230]   # 0x98 pinned
+      - [0x39AC8, asm, func_800592C8]   # 0x10c pinned
+      - [0x39BD4, asm, func_800593D4]   # 0x8 pinned
+      - [0x39BDC, asm, func_800593DC]   # 0x8c pinned
+      - [0x39C68, asm, func_80059468]   # 0x8c pinned
+      - [0x39CF4, asm, func_800594F4]   # 0x2c pinned
       - [0x39D20, asm, func_80059520]   # 0x1a4 pinned
       - [0x39EC4, data, data_800596C4]   # 0x12c pinned
       - [0x39FF0, asm, func_800597F0]   # 0x2c pinned
       - [0x3A01C, asm, func_8005981C]   # 0x80 pinned
       - [0x3A09C, asm, func_8005989C]   # 0x10c
       - [0x3A1A8, asm, func_800599A8]   # 0x9c pinned
-      - [0x3A244, asm, func_80059A44]   # 0x4fc
+      - [0x3A244, asm, func_80059A44]   # 0x180 pinned
+      - [0x3A3C4, asm, func_80059BC4]   # 0x188 pinned
+      - [0x3A54C, asm, func_80059D4C]   # 0x8 pinned
+      - [0x3A554, asm, func_80059D54]   # 0x5c pinned
+      - [0x3A5B0, asm, func_80059DB0]   # 0x190 pinned
       - [0x3A740, asm, func_80059F40]   # 0x78 pinned
       - [0x3A7B8, asm, func_80059FB8]   # 0x38 pinned
       - [0x3A7F0, data, data_80059FF0]   # 0x24

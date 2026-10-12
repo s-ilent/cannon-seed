@@ -43,7 +43,7 @@ glabel func_8005F480
     /* 3FC94 8005F494 01001134 */   ori       $s1, $zero, 0x1
     /* 3FC98 8005F498 6865010C */  jal        func_800595A0
     /* 3FC9C 8005F49C 00000000 */   nop
-    /* 3FCA0 8005F4A0 DB64010C */  jal        func_8005936C
+    /* 3FCA0 8005F4A0 DB64010C */  jal        .L8005936C
     /* 3FCA4 8005F4A4 00000000 */   nop
     /* 3FCA8 8005F4A8 FD65010C */  jal        func_800597F4
     /* 3FCAC 8005F4AC 00000000 */   nop

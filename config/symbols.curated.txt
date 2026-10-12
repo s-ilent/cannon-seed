@@ -205,23 +205,62 @@ func_80059DB0 = 0x80059DB0; // counter state-machine (D_800C9E84+=2; checks D_80
 //     negate/swap leaves (lw/negu/jr/sw over a0/a1/a2), each with its own
 //     jr ra; the scan's walk ran over them and demoted the row to data
 //     before the pin.
-// The library between the two patterns ([0x80058F00..0x80059520), 14
-// functions per the decode pass: heads 80058F08 80058F9C 80058FBC 80059004
-// 80059074 8005911C 80059230 800592C8 800593DC 80059468 800594F4 + three
-// 8-byte jr-ra stubs) has no disputed boundary, so it stays scan-owned in
-// one coarse row (func_80058F08 0x618; same for func_80059A44 0x4fc above
-// the second pattern). EU cross-check: EU's own scan drew data_80058DF4
-// 0x104 / func_80058EF8 0x860 over the same neighborhood and takes jal/
-// branch INTO 0x80058dbc/0x80058dec/0x80058e38, so both discs hold this
-// library, but no byte-identical blob exists on EU - the JP carve is
-// ruled by JP bytes only.
+// The library between the two patterns is now SPLIT on its measured
+// boundaries (cron-20261012-2256). func_80058F08's old 0x618 coarse row
+// held 14 functions (heads 80058F08 80058F9C 80058FBC 80059004 80059074
+// 8005911C 80059230 800592C8 800593DC 80059468 800594F4 + three 8-byte
+// jr-ra stubs) and func_80059A44's 0x4fc coarse row held the clip/cull
+// twins 80059A44/80059BC4, stub 80059D4C, leaf 80059D54, and the counter
+// state machine 80059DB0 (whose 2026 carve the scan had re-merged). All
+// 19 rows are pinned; the per-row sizes sum exactly to the two old rows.
+// ENTRY CONTRACT (image-wide census of jal/j, branches, pointer words and
+// lui+lo materializations): ZERO static references to any of the 19 row
+// starts. The library's only static callers enter at 6 INTERIOR addresses
+// (67 jal sites): 0x80058F20 = func_80058F08+0x18 (1x, 0x8003b424;
+// counter-bump tail addiu v0,1 / sh v0,0x2c(s0)), 0x800590AC =
+// func_80059074+0x38 (16x; indexed u16 read tail lui at,0x800b/addiu
+// -0x7b34/addu at,at,v0/lh), 0x80059100 = func_80059074+0x8c (46x;
+// clear-fields tail sh zero,0x5e(a1) / sh -1,0x5c(a1) / jr ra / addiu
+// sp,0x8 - func_80059074's own frame size, but measured callers carry
+// other frames, e.g. func_8005A184's 0x18: the sp convention is
+// runtime-gated, same family as the $at entries; two sites 0x8005b748/
+// 0x8005c23c are 2-word stubs whose FIRST instruction is the jal),
+// 0x800591BC = func_8005911C+0xa0 (1x, 0x8005f4c8), 0x8005936C =
+// func_800592C8+0xa4 (1x, 0x8005f4a0), 0x80059410 = func_800593DC+0x34
+// (2x, 0x800247c4 + 0x8003bf68). Row starts are reachable only through
+// runtime-built control flow - same gate as the state table and the
+// runtime-opaque blocks (docs/FABRIC.md). EU cross-check: EU's own scan
+// drew data_80058DF4 0x104 / func_80058EF8 0x860 over the same
+// neighborhood, so both discs hold this library, but no byte-identical
+// blob exists on EU - the JP split is ruled by JP bytes only.
 func_80058EC4 = 0x80058EC4; // detached tail of func_800588D4: epilogue sp+0x68, sh v0->D_800C9D10/v1->D_800C9D0E, jal func_8005A514
 data_80058D90 = 0x80058D90; // runtime-opaque block 1: bne targets 0x80058DAC inside, 7-word marker tail, no static xrefs
 func_80059520 = 0x80059520; // clip/cull helper: prologue sp-0x40 s0-s4/ra; bne into block 2 at 0x800596CC
 data_800596C4 = 0x800596C4; // runtime-opaque block 2: bne target 0x800596CC inside, same marker tail (0x02571800)
 func_800597F0 = 0x800597F0; // detached tail of func_80059520: jal func_80052564, restores s0-s4/ra sp+0x40
 func_8005981C = 0x8005981C; // jr-ra stub + twelve vector negate/swap leaves (own jr ra each)
-func_800599A8 = 0x800599A8; // jump-table dispatcher (table at 0x8002 21F4) + two case tails ending j 0x8005224c
+func_800599A8 = 0x800599A8; // jump-table dispatcher: lh 0x80(a0), bounds pass only for state<=4, lw from 0x800221F4+state*4, jr v0; case tails j 0x8005224c. The four in-bounds entries 0x800221F4..0x80022208 are STRING bytes ("t Direct!) (Init Sprite)\n") and the pointer words at 0x80022214+ are out of bounds - the table is runtime-patched or the branch never taken (runtime-gated)
+//
+// The 19 split rows (cron-20261012-2256), names for the symbols file; the
+// entry contract above is the evidence block. Sizes are the pinned rows.
+func_80058F08 = 0x80058F08; // library row 0x8c: 0x18 frame; interior counter-bump entry +0x18 (1x)
+func_80058F94 = 0x80058F94; // 8-byte leaf: jr ra + sh $zero,0x2c($a0) in the delay slot
+func_80058F9C = 0x80058F9C; // library row 0x20: 0x18 frame
+func_80058FBC = 0x80058FBC; // library row 0x48: gp-load opener (lui/lw of a 0x800D global) before the 0x18 frame
+func_80059004 = 0x80059004; // library row 0x70: no-frame; struct init over a0/a1, ori a3,1 result
+func_80059074 = 0x80059074; // library row 0xa0: 0x8 frame; interior entries +0x38 (16x) and +0x8c (46x)
+func_80059114 = 0x80059114; // 8-byte leaf: jr ra + nop
+func_8005911C = 0x8005911C; // library row 0x114: lw t3,0x10(sp) opener; interior entry +0xa0 (1x)
+func_80059230 = 0x80059230; // library row 0x98: 0x30 frame
+func_800592C8 = 0x800592C8; // library row 0x10c: 0x20 frame; interior entry +0xa4 (1x)
+func_800593D4 = 0x800593D4; // 8-byte leaf: jr ra + nop
+func_800593DC = 0x800593DC; // library row 0x8c: 0x18 frame; interior entry +0x34 (2x)
+func_80059468 = 0x80059468; // library row 0x8c: 0x20 frame
+func_800594F4 = 0x800594F4; // library row 0x2c: 0x20 frame; ends at func_80059520's prologue
+func_80059A44 = 0x80059A44; // clip/cull twin A 0x180: 0x40 frame (s0-s4/ra), lh fields of an a1-struct, jal func_800521B8
+func_80059BC4 = 0x80059BC4; // clip/cull twin B 0x188: 0x40 frame (s0-s4/ra), same shape
+func_80059D4C = 0x80059D4C; // 8-byte leaf: jr ra + nop
+func_80059D54 = 0x80059D54; // leaf 0x5c: mult opener; ends at func_80059DB0
 
 // target: mainmenu_eu
 // State-map words - EU twins of the mainmenu_jp names above (+0x814 /
