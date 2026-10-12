@@ -430,3 +430,32 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   the runtime computed jump, so the names claim the pointer roles only,
   pending the (still blocked) runtime evidence. 8/8 GREEN, ratchets unchanged,
   yaml untouched (symbols-file-only). Commit b4cf7f6.
+
+**2026-10-13 — walker family split at function boundaries; entry contract measured.**
+- Queue item 1 (F2/F3 honest splits): the walker-family pinned rows are now
+  five function-boundary-aligned rows per disc — F1 gp-table leaf (0x44),
+  F2 retry loop (0x68), F3 device setup (0xec), F4 the walker function
+  whole (0xcc), F5 continuation (0x60); EU = JP - 0xB0 throughout. The
+  scan preserves pinned rows verbatim, so the yaml diff is exactly the
+  split; each function keeps its own file for future C or runtime work.
+  8/8 GREEN, ratchets 365/0, re-scan idempotent, screen clean.
+  Commit 4327547.
+- Queue item 3 (entry decode): scripts/walker_entry_decode.py (repo-
+  external) settled the func_80026414 contract. The walker function
+  (263E8..264B4) is one function: prologue -> s1=a0/s3=a1/~268M counter ->
+  phase-1 loop (head 26414: query jal 80059f90, walk jal 800257a4(s1,v0),
+  retry on != -1, fatal 0x800200AC) -> phase-2 loop (head 26454: query
+  jal 80059f9c, walk(s3,v0), fatal 0x800200C8) -> epilogue returning the
+  walk result. 26414 is the phase-1 LOOP HEAD, not an entry: the C
+  driver's ten sites are normal C calls (a2 in the delay slot, matching
+  the matched source), but addu a1,v0 clobbers the mode argument at
+  entry — the live inputs are the caller's v0/s1/s3. All 936 image-wide
+  jal sites share the same C-style prefix, so the facade is uniform.
+  New open fact: both query targets (80059f90/80059f9c) are scan-
+  classified DATA (incoherent heads; the word A4239F7C recurs in other
+  data rows) while the walk step 800257a4 is code — the web's own
+  callees are classification-mixed, extending the state-map blob
+  question; runtime evidence remains the gate. Written into
+  docs/FABRIC.md (frame contract). Commit c6cfd7f.
+- Runtime harness re-check: still blocked (no pcsx-redux, no BIOS, no
+  raw-BIN disc).
