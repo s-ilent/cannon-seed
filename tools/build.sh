@@ -157,6 +157,44 @@ for seg in cfg["segments"]:
             if isinstance(e, list) and len(e) >= 3 and e[1] == "c":
                 print(f"{e[2]} {e[0]:X}")
 EOF
+    # Multi-subsegment C (docs/FABRIC.md machinery): rows named <base>.pN
+    # are PIECES of src/<base>.c - one compilation unit covering several
+    # disjoint address windows. Group them with their base row into units
+    # ("BASE ROM1 [ROM2 ...]" in yaml order = address order), and shrink
+    # c_list to the plain single-window rows the loop below handles as
+    # before. Zero .pN rows -> c_list unchanged, this is a no-op.
+    "$PY" - "$c_list" > "${c_list}.units" <<'PYUNITS' || fail "piece grouping failed"
+import re, sys
+bases, pieces, order = {}, {}, []
+for ln in open(sys.argv[1]):
+    parts = ln.split()
+    if not parts:
+        continue
+    name, rom = parts
+    m = re.match(r"^([A-Za-z_]\w*)\.p(\d+)$", name)
+    if m:
+        pieces.setdefault(m.group(1), []).append((int(m.group(2)), rom))
+        if m.group(1) not in pieces:
+            order.append(m.group(1))
+    else:
+        bases[name] = rom
+        order.append(name)
+out = []
+for name in order:
+    if name in pieces:
+        ps = sorted(pieces[name])
+        want = list(range(2, len(ps) + 2))
+        if [n for n, _r in ps] != want:
+            raise SystemExit(f"piece numbering gap under {name}")
+        if name not in bases:
+            raise SystemExit(f"piece rows under {name} but no base row")
+        out.append(" ".join([name, bases[name]] + [r for _n, r in ps]))
+    else:
+        out.append(f"{name} {bases[name]}")
+print("\n".join(out))
+PYUNITS
+    grep -vE '^[A-Za-z_][A-Za-z0-9_]*\.p[0-9]{1,} ' "$c_list" > "${c_list}.plain" || true
+    mv "${c_list}.plain" "$c_list"
     n_c=0
     n_c_fail=0
     while read -r cname crom; do
@@ -202,6 +240,50 @@ PYSEC
     done < "$c_list"
     [ "$n_c_fail" -eq 0 ] || fail "C assembly errors"
     [ "$n_c" -eq 0 ] || echo "compiled: $n_c C source file(s)"
+
+    # --- multi-subsegment C units (docs/FABRIC.md machinery) --------------
+    # One src/<base>.c covering several yaml c rows: the base row plus its
+    # <base>.pN piece rows. cc.sh -S runs ONCE; tools/cc_split.py cuts the
+    # product at function boundaries (piece order = .c function order =
+    # base row then p2..pN) into per-row staged files with their own
+    # .r_<rom> sections; each assembles to the object name gen_ld.py links
+    # for its row (build/src/<base>.o, build/src/<base>.pN.o, ...).
+    n_c=0
+    n_c_fail=0
+    while read -ra unit; do
+        [ -n "${unit:-}" ] || continue
+        [ "${#unit[@]}" -ge 3 ] || continue     # 2-field lines: plain rows
+        base="${unit[0]}"; shift_count=0
+        roms=("${unit[@]:1}")
+        [ -f "src/${base}.c" ] || fail "yaml wants C at ${base} but src/${base}.c is missing"
+        if ! "$REPO/tools/cc.sh" -S -o "build/src/${base}.o" "src/${base}.c"; then
+            fail "C compile failed: src/${base}.c"
+        fi
+        rom_args=()
+        for r in "${roms[@]}"; do rom_args+=("0x$r"); done
+        if ! "$PY" "$REPO/tools/cc_split.py" "build/src/${base}.mas.s" \
+                "build/src/${base}" "${rom_args[@]}" --gp="$GP_REWRITE" \
+                > build/src/${base}.split.log; then
+            cat build/src/${base}.split.log >&2
+            fail "C split failed: src/${base}.c"
+        fi
+        for idx in "${!roms[@]}"; do
+            r="${roms[$idx]}"
+            if [ "$idx" -eq 0 ]; then staged="build/src/${base}.r.s"
+            else staged="build/src/${base}.p$((idx + 1)).r.s"; fi
+            if [ "$idx" -eq 0 ]; then obj="build/src/${base}.o"
+            else obj="build/src/${base}.p$((idx + 1)).o"; fi
+            if ! "$AS" $ASFLAGS -o "$obj" "$staged" 2> "${staged%.s}.aserr"; then
+                echo "as FAILED: ${base} piece $((idx + 1))" >&2
+                head -5 "${staged%.s}.aserr" >&2
+                n_c_fail=$((n_c_fail + 1))
+                continue
+            fi
+        done
+        n_c=$((n_c + 1))
+    done < "${c_list}.units"
+    [ "$n_c_fail" -eq 0 ] || fail "C piece assembly errors"
+    [ "$n_c" -eq 0 ] || echo "compiled: $n_c multi-subsegment C unit(s)"
 fi
 
 # --- link (two-pass: auto-define address-encoded unresolved symbols) ---------
