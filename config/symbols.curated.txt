@@ -43,14 +43,20 @@ InitHeap = 0x80051BE4; // SDK veneer: vector 0xa0, index 0x39
 // target: slps_00270
 startIntrDMA = 0x800316C4; // LIBETC INTR_DMA member; tools/sdk_members.py, unique placement + signature DB agrees; pinned member row
 GsDefDispBuff = 0x8003ADEC; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; body stores x/x2/y/y2 display-env halfwords; pinned member row
+select_max_param = 0x80036D04; // LIBGS MATRIX3 member; tools/sdk_members.py, unique placement
+GsClearOt = 0x8003B244; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
+SpuSetNoiseVoice = 0x800487B4; // LIBSPU S_SNV member; tools/sdk_members.py, unique placement + signature DB agrees
 
 // target: sces_00269
 _96_init = 0x800318E8; // SDK veneer: vector 0xa0, index 0x71
 DisableEvent = 0x80049770; // SDK veneer: vector 0xb0, index 0x0d
 GsDefDispBuff = 0x8003A8B4; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; pinned member row
+GsSortGLine = 0x800357A0; // LIBGS 2D_LIN1 member; tools/sdk_members.py, unique placement + signature DB agrees
 
 // target: g3org_jp
 StSetRing = 0x8006A468; // LIBCD CDROM member; tools/sdk_members.py, unique placement + signature DB agrees
+_SpuDataCallback = 0x8006BE7C; // LIBSPU S_DCB member; tools/sdk_members.py, unique placement + signature DB agrees
 
 // target: mainmenu_jp
 gte_init = 0x8007EF64; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
+GsClearOt = 0x8007F0E0; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
