@@ -394,3 +394,39 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   re-scan idempotent. Commit d2bf440.
 - Runtime evidence (queue item 1) stays blocked: no pcsx-redux, no region
   BIOS, no raw-BIN disc images in the sandbox (build/work empty).
+
+**2026-10-13 — EU walker-family twin carved; state table named on both discs.**
+- Queue item 1 (EU twin of the reset-walker carve): scripts/dispatch_table_recon.py
+  (repo-external, persisted) located the EU zone head at yaml 0x69A0 = JP - 0xB0
+  exactly as the 1411 callee map predicted, and proved the twin: JP
+  [0x6A50..0x6D14) vs EU [0x69A0..) = 156/177 words identical, all 21 diffs
+  relocations (j/jal targets + gp displacements). EU xref census mirrors JP:
+  937 jal -> 0x80026364 (the mid-function entry, `addu a1,v0,zero` after the
+  jal's delay slot), 14 j-shims (11 -> 0x8002634C, 3 -> 0x80026334 = JP twins
+  -0xB0), the 9-word dispatch table, zero external branches. Carved
+  [0x69A0, asm, func_800261A0] # 0x2c4 pinned + unmarked tail row 0x88; the
+  scan KEPT the tail as code (seed chain self-sustaining — unlike JP where the
+  tail is data; section F of the recon shows the tail bytes are NOT twins:
+  11/134 words identical, so each disc's tail classification stands on its own
+  bytes). Extract splits the pinned row at the six twin heads (func_800261A0/
+  261E4/2624C/26338/26364/26404 — sums to 0x2c4), with the workhorse entry
+  func_80026364 as its own glabel block; the tail renders as small blocks with
+  alabel func_80026474 = the twin of JP's dlabel func_80026524. Ripples, all
+  byte-identical: cross-row j-shims retarget local labels (JP's .L8002C350
+  precedent), the old spurious func_80027050 boundary (no symbol, no xref)
+  merged away, the dispatch-table words that resolved to symbols now render
+  raw hex (JP's landed rendering). Hygiene: removed stale tracked
+  data_800261A0.data.s + func_800261E4.s (EU) and data_80026250.data.s (JP,
+  left over from the 1641 carve); extract does not re-create them. 8/8 GREEN,
+  ratchets 365/0, re-scan idempotent, screen 0 DATA / 0 SUSPECT. Commit 251e708.
+- Queue item 2 (dispatch-table naming): the 9 pointer words at 0x800202EC..
+  0x80020310 (yaml 0xAEC..0xB10, same addresses on BOTH discs) named
+  state_table_0..8 through the curated data path. Evidence: targets are the
+  walker family's mid-function pieces (JP: 0x800264C0 = func_800264B4 +0xC,
+  0x80026454 = func_80026414 +0x40, 0x8002647C = retry-loop tail +0x68,
+  0x800264FC = func_800264B4 +0x48; EU = JP - 0xB0 throughout); zero static
+  readers image-wide (no pointer words into the table range, no lui/addiu/ori
+  pair materializes any of its addresses) — the table is consumed purely by
+  the runtime computed jump, so the names claim the pointer roles only,
+  pending the (still blocked) runtime evidence. 8/8 GREEN, ratchets unchanged,
+  yaml untouched (symbols-file-only). Commit b4cf7f6.
