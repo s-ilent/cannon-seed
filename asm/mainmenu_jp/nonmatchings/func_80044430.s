@@ -250,6 +250,7 @@ nonmatching func_800446F4, 0x14
 
 glabel func_800446F4
     /* 24EF4 800446F4 06006004 */  bltz       $v1, func_80044710
+  alabel func_800446F8
     /* 24EF8 800446F8 56006228 */   slti      $v0, $v1, 0x56
     /* 24EFC 800446FC 02004014 */  bnez       $v0, func_80044708
     /* 24F00 80044700 00000000 */   nop

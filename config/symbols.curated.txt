@@ -168,6 +168,60 @@ func_80059F90 = 0x80059F90; // query tail A: u16 D_800C9F7C = $v1 (300 on fall-t
 func_80059F9C = 0x80059F9C; // query tail B: u16 D_800CA544 = $v0, then jal func_800527C8
 func_80059FB8 = 0x80059FB8; // die-block: a0=D_80022218 (ptr table + "file not found"), jal func_80037410, u16 D_800C9F7C--
 func_80059DB0 = 0x80059DB0; // counter state-machine (D_800C9E84+=2; checks D_800CA5B4/D_800C9F94<9/D_800CA3BC)
+//
+// The 588D4 re-bound and the two runtime-opaque blocks (cron-20261012-2141,
+// queue item 1 from the previous session). The old data_80058DA8 cut at
+// yaml 0x395A8 split a structure, not a boundary. Measured, JP bytes:
+//   * func_800588D4's real code runs to 0x80058D90 (row now 0x4bc pinned):
+//     the alabel-func_80058D48 tail was rendered .word by the scan but
+//     decodes clean - lui+lh to the KNOWN global D_800CA59C, two bne whose
+//     targets both land at 0x80058DAC, then write-backs lhu 0x2E(s2) ->
+//     D_800C9D0C and lhu 0x30(s2); entered by fall-through from case
+//     func_80058D40 (jal func_800518FC, no j-escape) and mid-stream from
+//     0x8003bf60/0x8004637c/0x80046384/0x8005f94c/0x80061480 (census).
+//   * data_80058D90 0x134 pinned: high-entropy block, 59/77 words
+//     plausible-MIPS1 (data control 51/64, code control 59/64), invalid
+//     COP2/SDC1 mixes, ZERO image-wide pointer/lui+lo references, and the
+//     two bne targets above land INSIDE it (0x80058DAC). Ends with the
+//     7-word marker FFFFFF00 FFFFFFFF 00FFFFFF 00185602 00080000 00080000
+//     00000000. Byte-identical nowhere in the EU image, no self-copy in
+//     JP. Interpretation is runtime-gated (in-place patched/decrypted
+//     bytes, or provably-untaken branches into data) - static evidence
+//     cannot settle it; same gate family as the $at entries.
+//   * func_80058EC4 0x3c pinned: the function's DETACHED TAIL, not a
+//     function - epilogue lw ra/s5/s4/s3/s2/s1/s0 +0x48..0x60, jr ra,
+//     addiu sp,0x68, the exact inverse of func_800588D4's prologue; first
+//     writes sh $v0 -> D_800C9D10 and sh $v1 -> D_800C9D0E (the globals
+//     the body reads at 0x80058988), then jal func_8005A514 (mid-function
+//     entry inside func_8005A184) with a1 = s5. Reached through the block
+//     above or its bne targets; no direct jal site exists.
+//   * func_80059520 repeats the pattern one library step up: code
+//     [0x80059520..0x800596C4) 0x1a4 pinned with bne 0x800596A0 ->
+//     0x800596CC, data_800596C4 0x12c pinned (same 7-word marker tail,
+//     4th word 0x02571800), detached tail func_800597F0 0x2c pinned
+//     (jal func_80052564 + restores s0-s4/ra sp+0x40, the inverse of
+//     func_80059520's prologue).
+//   * func_8005981C 0x80 pinned: jr-ra stub + twelve 3-6 word vector
+//     negate/swap leaves (lw/negu/jr/sw over a0/a1/a2), each with its own
+//     jr ra; the scan's walk ran over them and demoted the row to data
+//     before the pin.
+// The library between the two patterns ([0x80058F00..0x80059520), 14
+// functions per the decode pass: heads 80058F08 80058F9C 80058FBC 80059004
+// 80059074 8005911C 80059230 800592C8 800593DC 80059468 800594F4 + three
+// 8-byte jr-ra stubs) has no disputed boundary, so it stays scan-owned in
+// one coarse row (func_80058F08 0x618; same for func_80059A44 0x4fc above
+// the second pattern). EU cross-check: EU's own scan drew data_80058DF4
+// 0x104 / func_80058EF8 0x860 over the same neighborhood and takes jal/
+// branch INTO 0x80058dbc/0x80058dec/0x80058e38, so both discs hold this
+// library, but no byte-identical blob exists on EU - the JP carve is
+// ruled by JP bytes only.
+func_80058EC4 = 0x80058EC4; // detached tail of func_800588D4: epilogue sp+0x68, sh v0->D_800C9D10/v1->D_800C9D0E, jal func_8005A514
+data_80058D90 = 0x80058D90; // runtime-opaque block 1: bne targets 0x80058DAC inside, 7-word marker tail, no static xrefs
+func_80059520 = 0x80059520; // clip/cull helper: prologue sp-0x40 s0-s4/ra; bne into block 2 at 0x800596CC
+data_800596C4 = 0x800596C4; // runtime-opaque block 2: bne target 0x800596CC inside, same marker tail (0x02571800)
+func_800597F0 = 0x800597F0; // detached tail of func_80059520: jal func_80052564, restores s0-s4/ra sp+0x40
+func_8005981C = 0x8005981C; // jr-ra stub + twelve vector negate/swap leaves (own jr ra each)
+func_800599A8 = 0x800599A8; // jump-table dispatcher (table at 0x8002 21F4) + two case tails ending j 0x8005224c
 
 // target: mainmenu_eu
 // State-map words - EU twins of the mainmenu_jp names above (+0x814 /

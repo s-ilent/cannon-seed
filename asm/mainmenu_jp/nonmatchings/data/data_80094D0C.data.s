@@ -25506,6 +25506,11 @@ dlabel D_800A831C
     /* 88CC6 800A84C6 */ .short 0x0000
     /* 88CC8 800A84C8 */ .short 0x0000
     /* 88CCA 800A84CA */ .short 0x4000
+enddlabel D_800A831C
+
+nonmatching D_800A84CC
+
+dlabel D_800A84CC
     /* 88CCC 800A84CC */ .short 0x0002
     /* 88CCE 800A84CE */ .short 0x0000
     /* 88CD0 800A84D0 */ .short 0x0000
@@ -25516,39 +25521,33 @@ dlabel D_800A831C
     /* 88CDA 800A84DA */ .short 0x0000
     /* 88CDC 800A84DC */ .short 0x0000
     /* 88CDE 800A84DE */ .short 0x0000
-    /* 88CE0 800A84E0 */ .short 0x0000
-    /* 88CE2 800A84E2 */ .short 0x0000
-    /* 88CE4 800A84E4 */ .short 0x0000
-    /* 88CE6 800A84E6 */ .short 0x0000
-    /* 88CE8 800A84E8 */ .short 0x0000
-    /* 88CEA 800A84EA */ .short 0x0000
-    /* 88CEC 800A84EC */ .short 0x0000
-    /* 88CEE 800A84EE */ .short 0x0000
-    /* 88CF0 800A84F0 */ .short 0x0000
-    /* 88CF2 800A84F2 */ .short 0x0000
-    /* 88CF4 800A84F4 */ .short 0x0182
-    /* 88CF6 800A84F6 */ .short 0x0000
-    /* 88CF8 800A84F8 */ .short 0x0029
-    /* 88CFA 800A84FA */ .short 0x0000
-    /* 88CFC 800A84FC */ .short 0x0000
-    /* 88CFE 800A84FE */ .short 0x4000
-    /* 88D00 800A8500 */ .short 0x0002
-    /* 88D02 800A8502 */ .short 0x0000
-    /* 88D04 800A8504 */ .short 0x0000
-    /* 88D06 800A8506 */ .short 0x0000
-    /* 88D08 800A8508 */ .short 0x0000
-    /* 88D0A 800A850A */ .short 0x0000
-    /* 88D0C 800A850C */ .short 0x0000
-    /* 88D0E 800A850E */ .short 0x0000
-    /* 88D10 800A8510 */ .short 0x0000
-    /* 88D12 800A8512 */ .short 0x0000
-    /* 88D14 800A8514 */ .short 0x0000
-    /* 88D16 800A8516 */ .short 0x0000
-    /* 88D18 800A8518 */ .short 0x0000
-    /* 88D1A 800A851A */ .short 0x0000
-    /* 88D1C 800A851C */ .short 0x0000
-    /* 88D1E 800A851E */ .short 0x0000
-enddlabel D_800A831C
+enddlabel D_800A84CC
+
+nonmatching D_800A84E0
+
+dlabel D_800A84E0
+    /* 88CE0 800A84E0 00000000 */ .word 0x00000000
+    /* 88CE4 800A84E4 00000000 */ .word 0x00000000
+    /* 88CE8 800A84E8 00000000 */ .word 0x00000000
+    /* 88CEC 800A84EC 00000000 */ .word 0x00000000
+    /* 88CF0 800A84F0 00000000 */ .word 0x00000000
+    /* 88CF4 800A84F4 82010000 */ .word 0x00000182
+    /* 88CF8 800A84F8 29000000 */ .word 0x00000029
+    /* 88CFC 800A84FC 00000040 */ .word 0x40000000
+enddlabel D_800A84E0
+
+nonmatching D_800A8500
+
+dlabel D_800A8500
+    /* 88D00 800A8500 02000000 */ .word 0x00000002
+    /* 88D04 800A8504 00000000 */ .word 0x00000000
+    /* 88D08 800A8508 00000000 */ .word 0x00000000
+    /* 88D0C 800A850C 00000000 */ .word 0x00000000
+    /* 88D10 800A8510 00000000 */ .word 0x00000000
+    /* 88D14 800A8514 00000000 */ .word 0x00000000
+    /* 88D18 800A8518 00000000 */ .word 0x00000000
+    /* 88D1C 800A851C 00000000 */ .word 0x00000000
+enddlabel D_800A8500
 
 nonmatching D_800A8520
 
