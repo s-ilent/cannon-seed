@@ -48,6 +48,30 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — the C220-twin zone completed on EU: func_8002C238 carved
+(d968396), the twin row structure now mirrors JP on both discs.**
+- Word-diff proof (scripts/eu_c220_twin_recon.py, repo-external): EU
+  [CA38,CC18) vs JP [CA98,CC78) at the family's -0x60 vram shift = 45/120
+  relocation diffs, every one classified (state map +0x814, callee
+  -0xB0, func_80035A18 -0x60, j func_8002A9D8 -0x60), 75/120 identical.
+  The zone is code, byte-corresponding to JP's pinned twin row.
+- Static xrefs: ZERO jal/j/branch/pointer references into the zone in the
+  whole EU image (same as JP's twin) — entry is the runtime state-table
+  computed jump. Carve is a pinned asm row (FABRIC honesty-carve class).
+- Scanner dynamics finding: pinning the MERGED whole [CA38,CC18) kills
+  the bridging walk that covers the tail row, so the tail's
+  `j func_8002A9D8` never reaches the v4 strong-anchor rescue and
+  func_8002A9D8 loses its 0x18c head back to data. Pinning ONLY the
+  front keeps the tail's self-sustaining seed chain. Lesson: pinned rows
+  are invisible to the v4 j-source scan (it reads covered/walked ranges
+  only) — when carving next to a row whose walk chain feeds v4, carve
+  the minimum span and leave the walk-derived neighbor unmarked.
+- Hygiene: removed the stale tracked func_8002AB64.s (intermediate
+  1126-state extract product, not yaml-referenced, not linked); the
+  extract does not re-create it once absent.
+- Gates: scan idempotent (diff = the carve), screen 0 DATA / 0 SUSPECT
+  (276 subsegs), ratchets 365/102 unchanged, 8/8 verify GREEN.
+
 **2026-10-12 — the EU twin port: func_8002C418 landed as C, the second
 family-C component; the landing surfaced the C220-twin structure (ed3ba27
 prequel + this session's carve).**
