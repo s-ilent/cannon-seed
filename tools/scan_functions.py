@@ -927,6 +927,16 @@ def main(argv):
             n_curated += 1
         else:
             gen_syms.append(f"func_{BASE + s:08X} = 0x{BASE + s:08X}; // type:func")
+    # Pinned hand-carved rows (e.g. SDK member entries re-typed out of data
+    # gaps) can carry curated names too: the row start IS the member's
+    # byte-verified entry address even though the walk never produced a
+    # code range there. Symbols-file-only, like every curated name.
+    for off, typ, _name, _k in kept_gap_rows:
+        if typ == "asm" and off in curated:
+            gen_syms.append(
+                f"{curated[off]} = 0x{BASE + off:08X}; "
+                f"// type:func (pinned member row)")
+            n_curated += 1
     # v3b: cross-range branch targets (see scan()). Naming them lets
     # spimdisasm emit `j func_XXXXXXXX` instead of an unresolvable
     # file-local `.L`; the second link pass defines address-encoded names.

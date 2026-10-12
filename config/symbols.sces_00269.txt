@@ -58,6 +58,7 @@ func_8004962C = 0x8004962C; // type:func
 func_800496C0 = 0x800496C0; // type:func
 DisableEvent = 0x80049770; // type:func
 func_8004A928 = 0x8004A928; // type:func
+GsDefDispBuff = 0x8003A8B4; // type:func (pinned member row)
 func_80023030 = 0x80023030; // type:func (branch target)
 func_80023040 = 0x80023040; // type:func (branch target)
 func_80023108 = 0x80023108; // type:func (branch target)

@@ -40,9 +40,14 @@ OpenEvent = 0x80051454; // SDK veneer: vector 0xb0, index 0x08
 strcat = 0x8004DEDC; // SDK veneer: vector 0xa0, index 0x15
 InitHeap = 0x80051BE4; // SDK veneer: vector 0xa0, index 0x39
 
+// target: slps_00270
+startIntrDMA = 0x800316C4; // LIBETC INTR_DMA member; tools/sdk_members.py, unique placement + signature DB agrees; pinned member row
+GsDefDispBuff = 0x8003ADEC; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; body stores x/x2/y/y2 display-env halfwords; pinned member row
+
 // target: sces_00269
 _96_init = 0x800318E8; // SDK veneer: vector 0xa0, index 0x71
 DisableEvent = 0x80049770; // SDK veneer: vector 0xb0, index 0x0d
+GsDefDispBuff = 0x8003A8B4; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; pinned member row
 
 // target: g3org_jp
 StSetRing = 0x8006A468; // LIBCD CDROM member; tools/sdk_members.py, unique placement + signature DB agrees

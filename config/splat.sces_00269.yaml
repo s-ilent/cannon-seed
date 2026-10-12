@@ -134,7 +134,8 @@ segments:
       - [0x1ACA0, asm, func_8003A4A0]   # 0x14
       - [0x1ACB4, data, data_8003A4B4]   # 0x2c8
       - [0x1AF7C, asm, func_8003A77C]   # 0x134
-      - [0x1B0B0, data, data_8003A8B0]   # 0xc
+      - [0x1B0B0, data, data_8003A8B0]   # 0x4 pinned
+      - [0x1B0B4, asm, func_8003A8B4]   # 0x8 pinned
       - [0x1B0BC, asm, func_8003A8BC]   # 0x2d8
       - [0x1B394, data, data_8003AB94]   # 0x59c
       - [0x1B930, asm, func_8003B130]   # 0x7f8
