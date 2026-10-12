@@ -63,6 +63,48 @@ band - the outer loop hands control back into the fabric mid-body.
 
 ## Frame contract
 
+### The reset walker's entry contract (measured 2026-10-13)
+
+The walker function at `800263E8..800264B4` (JP; EU = -0xB0, `80026338..80026404`)
+is one complete function, not two: prologue (`sp-0x28`, saves `ra/s3/s2/s1/s0`),
+`$s1 = $a0` (base), `$s3 = $a1` (mode), `$s0 = ~268M` retry counter, then:
+
+* **Phase 1 loop, head `80026414`**: `jal 80059f90` (query) -> `addu $a1,$v0` ->
+  loop `jal 800257a4` (walk step) with delay `a0 = $s1`; retry while the walk
+  result != -1, counter-guarded fatal (`0x800200AC` string -> `8005c62c`);
+  early exit `j 80025788` with `v0 = 0`.
+* **Phase 2 loop, head `80026454`**: `jal 80059f9c` (query) -> walk step with
+  delay `a0 = $s3`; same retry/fatal shape (`0x800200C8`).
+* **Epilogue `80026498`**: restores, `jr $ra`, returns the phase-2 walk result
+  in `v0`.
+
+`80026414` is the **phase-1 loop head, not an entry**. Measured consequences:
+
+1. The C driver's ten call sites (matched `src/func_8002C478.c`) are normal C
+   calls: `a0 = &state_block_N` (lui/addiu, incl. `s0-0x40`), `a1 = mode`,
+   `a2 = rearm` in the jal delay slot - exactly the source's
+   `func_80026414(base, mode, rearm)`.
+2. At that entry `addu $a1,$v0` immediately clobbers the C `a1`: the compiled
+   pair never consumes the mode argument. The live inputs at a `80026414`
+   entry are the caller's `$v0` (phase-1 walk argument), `$s1` (phase-1 base)
+   and `$s3` (phase-2 base) - registers the skipped prologue would have
+   initialized from `a0/a1`. The image-wide 936 jal sites all show the same
+   C-style prefix (`a0`/`a1` setup, `a2` in the delay slot), so the symbol
+   façade is uniform; what actually flows in is caller loop state.
+3. **The web's own callees are classification-mixed.** The walk step
+   `800257a4` is code (inside `func_800253F8`'s row; stores 2/30 to gp slots
+   then `j 80024ce8`), but both query targets `80059f90`/`80059f9c` are
+   classified DATA (inside `data_80058DA8`, incoherent as function heads,
+   and the word `A4239F7C` recurs in other data rows). Whether the loops
+   ever execute as decoded is the same open question the state-map blob
+   carries (1526 record): byte-coherent, xref-rich, runtime-unproven. The
+   PCSX-Redux harness (docs/RUNTIME.md) remains the gate.
+4. Structure (commit 4327547): the family is five function-boundary-aligned
+   pinned rows per disc - F1 gp-table leaf (0x44), F2 retry loop (0x68),
+   F3 device setup (0xec), F4 the walker function whole (0xcc, loop head
+   alabel on JP / glabel block on EU), F5 continuation (0x60). Each function
+   keeps its own file for future C or runtime work.
+
 * **State pointer `$s3`.** Both dispatcher heads open with
   `lw $v0, 0($s3); nop; beqz $v0, ...` (`8002E6E0`, and the same shape again
   at `8002E520` inside the E4B0 block). `$s3` holds the current state id /
@@ -345,7 +387,12 @@ aligned multi-window unit appears.
    object laid out (+0x00 flags word / +0x04 word+byte / +0x08 / +0x0C /
    halfwords +0x10..+0x16), all seven s-registers assigned deref censuses,
    JP==EU aggregates confirmed. Family-C consequences recorded.
-4. Known grid drift left in older rows (follow-up carves, low priority):
+4. DONE 2026-10-13: walker entry-contract decode (scripts/walker_entry_decode.py
+   repo-external) + the five-row function-boundary split of the walker-family
+   pinned rows on both discs (section above). The mode-arg clobber, the
+   v0/s1/s3 live channels, and the mixed classification of the web's own
+   callees are now measured facts.
+5. Known grid drift left in older rows (follow-up carves, low priority):
    JP `func_8003312C` row (3312C..3386C) holds window-14 tail + 0xC of
    sector-14 ECC; EU `func_80033948` row head (33948..33978) holds 0x30 of
    sector-14 ECC and its span crosses the sector-15/16 headers; JP
