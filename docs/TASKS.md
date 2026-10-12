@@ -369,3 +369,28 @@ code-in-data census closes at zero (ac56ef8, 629b790).**
   exact-address Exec breakpoints fire, range breakpoints and watchpoints do not,
   the exe entry is not caught, and the GDB stub shares the same breakpoint
   store. It is not a carve oracle.
+
+**2026-10-13 — flag naming closes unknown_data; reset-walker zone carved.**
+- Queue item 2 (wrapper-family flags): the last four D_ objects named through
+  the curated data-symbol path — `menu_state_flag` (0x800C8B38 JP / 0x800C936C
+  EU; armed 0/1 by the wrapper families before the menu primitive; no other
+  static ref on either disc), `boot_flag_0` (0x80063268 slps word; writes
+  measured 0/1 via the leading-nop stub family: cleared per walk iteration by
+  func_80025AE0, set by twin stub func_80025AF0, no static reader),
+  `boot_flag_1` (0x80063294 slps halfword; cleared by stub func_8002A0DC +
+  at func_8002706C; ==1 gate in func_80027100 re-enters the walk at
+  func_80026288; set-site outside the current scan). unknown_data ratchet
+  12->0 — the placeholder class is empty by construction now. Commit 55540b9.
+- Queue item 3 (reset-walker zone): data_80026250 (JP, 0x40c) decoded as
+  coherent code — gp-table leaf, retry-loop, device-setup block, and the
+  reset walker at 0x800263e8. The walker's mid-function entry 0x80026414 is
+  the image-wide workhorse: 936 jal sites + the C driver's ten + 14 j-shims
+  into its prologue/epilogue + the 9-word dispatch table at 0x800202ec
+  (mid-function pieces — the static state-table). Carved
+  [0x6A50, asm, func_80026250] # 0x2c4 pinned + tail data row 0x148; extract
+  splits at the five function heads (func_80026250/26294/262FC/263E8/264B4,
+  alabel func_80026414); the tail row carries a referenced func_80026524
+  (walker-family continuation — future carve). 8/8 GREEN, ratchets 365/0,
+  re-scan idempotent. Commit d2bf440.
+- Runtime evidence (queue item 1) stays blocked: no pcsx-redux, no region
+  BIOS, no raw-BIN disc images in the sandbox (build/work empty).
