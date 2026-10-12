@@ -29,7 +29,7 @@ glabel func_80050E10
     /* 31650 80050E50 01001134 */ .word 0x34110001
 enddlabel func_80050E10
 
-nonmatching func_80050E54, 0x24
+nonmatching func_80050E54, 0x38
 
 glabel func_80050E54
     /* 31654 80050E54 F514010C */  jal        func_800453D4
@@ -41,17 +41,12 @@ glabel func_80050E54
     /* 3166C 80050E6C 07004014 */  bnez       $v0, func_80050E8C
     /* 31670 80050E70 02002336 */   ori       $v1, $s1, 0x2
     /* 31674 80050E74 03000234 */  ori        $v0, $zero, 0x3
-endlabel func_80050E54
-
-nonmatching func_80050E78, 0x14
-
-glabel func_80050E78
     /* 31678 80050E78 04006214 */  bne        $v1, $v0, func_80050E8C
     /* 3167C 80050E7C 01000234 */   ori       $v0, $zero, 0x1
     /* 31680 80050E80 B400438E */  lw         $v1, 0xB4($s2)
     /* 31684 80050E84 240002A6 */  sh         $v0, 0x24($s0)
     /* 31688 80050E88 440003AE */  sw         $v1, 0x44($s0)
-endlabel func_80050E78
+endlabel func_80050E54
 
 nonmatching func_80050E8C, 0x28
 

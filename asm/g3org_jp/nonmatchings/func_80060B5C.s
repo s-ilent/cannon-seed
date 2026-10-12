@@ -62,7 +62,7 @@ glabel func_80060BC4
     /* 41408 80060C08 00000000 */   nop
 endlabel func_80060BC4
 
-nonmatching func_80060C0C, 0x68
+nonmatching func_80060C0C, 0xC4
 
 glabel func_80060C0C
     /* 4140C 80060C0C 8C00E724 */  addiu      $a3, $a3, 0x8C
@@ -91,11 +91,7 @@ glabel func_80060C0C
     /* 41468 80060C68 8400EFAC */  sw         $t7, 0x84($a3)
     /* 4146C 80060C6C 7660010C */  jal        func_800581D8
     /* 41470 80060C70 00000000 */   nop
-endlabel func_80060C0C
-
-nonmatching func_80060C74, 0x5C
-
-glabel func_80060C74
+  .L80060C74:
     /* 41474 80060C74 F4FFEC8C */  lw         $t4, -0xC($a3)
     /* 41478 80060C78 8CFFED24 */  addiu      $t5, $a3, -0x74
     /* 4147C 80060C7C BCFFEE24 */  addiu      $t6, $a3, -0x44
@@ -119,7 +115,7 @@ glabel func_80060C74
     /* 414C4 80060CC4 8800FF8C */  lw         $ra, 0x88($a3)
     /* 414C8 80060CC8 74FFE724 */  addiu      $a3, $a3, -0x8C
     /* 414CC 80060CCC FFFFC624 */  addiu      $a2, $a2, -0x1
-endlabel func_80060C74
+endlabel func_80060C0C
 
 nonmatching func_80060CD0, 0x80
 

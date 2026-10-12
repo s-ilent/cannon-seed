@@ -326,7 +326,7 @@ glabel func_8007F21C
     /* 5FA9C 8007F29C 8000AF97 */  lhu        $t7, 0x80($sp)
     /* 5FAA0 8007F2A0 00000000 */  nop
     /* 5FAA4 8007F2A4 2110E201 */  addu       $v0, $t7, $v0
-    /* 5FAA8 8007F2A8 65CB0108 */  j          D_80072D94
+    /* 5FAA8 8007F2A8 65CB0108 */  j          .L80072D94
     /* 5FAAC 8007F2AC 23105200 */   subu      $v0, $v0, $s2
 endlabel func_8007F21C
 
@@ -345,7 +345,7 @@ glabel func_8007F2B0
     /* 5FAD4 8007F2D4 00000000 */  nop
     /* 5FAD8 8007F2D8 2110C203 */  addu       $v0, $fp, $v0
     /* 5FADC 8007F2DC 23105700 */  subu       $v0, $v0, $s7
-    /* 5FAE0 8007F2E0 75CB0108 */  j          D_80072DD4
+    /* 5FAE0 8007F2E0 75CB0108 */  j          .L80072DD4
     /* 5FAE4 8007F2E4 23104A00 */   subu      $v0, $v0, $t2
 endlabel func_8007F2B0
 

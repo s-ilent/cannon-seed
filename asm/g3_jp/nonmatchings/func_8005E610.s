@@ -273,6 +273,11 @@ dlabel D_8005E7E0
     /* 3F180 8005E980 8E85D692 */ .word 0x92D6858E
     /* 3F184 8005E984 23D01135 */ .word 0x3511D023
     /* 3F188 8005E988 9E914541 */ .word 0x4145919E /* invalid instruction */
+enddlabel D_8005E7E0
+
+nonmatching func_8005E98C
+
+glabel func_8005E98C
     /* 3F18C 8005E98C 9B4E4953 */ .word 0x53494E9B
     /* 3F190 8005E990 3487BD3B */ .word 0x3BBD8734
     /* 3F194 8005E994 5255AC2A */ .word 0x2AAC5552
@@ -285,4 +290,4 @@ dlabel D_8005E7E0
     /* 3F1B0 8005E9B0 4E2B44EF */ .word 0xEF442B4E /* invalid instruction */
     /* 3F1B4 8005E9B4 846ACCBF */ .word 0xBFCC6A84
     /* 3F1B8 8005E9B8 9869099D */ .word 0x9D096998
-enddlabel D_8005E7E0
+enddlabel func_8005E98C

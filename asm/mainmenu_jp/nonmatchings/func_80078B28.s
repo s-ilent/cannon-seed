@@ -27,6 +27,7 @@ glabel func_80078B28
     /* 5935C 80078B5C 21586501 */  addu       $t3, $t3, $a1
     /* 59360 80078B60 21608501 */  addu       $t4, $t4, $a1
     /* 59364 80078B64 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
+  alabel func_80078B68
     /* 59368 80078B68 00000000 */  nop
     /* 5936C 80078B6C 38004004 */  bltz       $v0, func_80078C50
     /* 59370 80078B70 00000000 */   nop
@@ -47,6 +48,7 @@ glabel func_80078B28
     /* 593AC 80078BAC D44CCE8D */  lw         $t6, %lo(D_80194CD4)($t6)
     /* 593B0 80078BB0 0200AD31 */  andi       $t5, $t5, 0x2
     /* 593B4 80078BB4 40700E00 */  sll        $t6, $t6, 1
+  alabel func_80078BB8
     /* 593B8 80078BB8 2568CD01 */  or         $t5, $t6, $t5
     /* 593BC 80078BBC 006E0D00 */  sll        $t5, $t5, 24
     /* 593C0 80078BC0 802D0E3C */  lui        $t6, (0x2D808080 >> 16)
@@ -127,6 +129,7 @@ glabel func_80078C50
     /* 594D0 80078CD0 19800E3C */  lui        $t6, %hi(D_80194CD4)
     /* 594D4 80078CD4 D44CCE8D */  lw         $t6, %lo(D_80194CD4)($t6)
     /* 594D8 80078CD8 03008280 */  lb         $v0, 0x3($a0)
+  alabel func_80078CDC
     /* 594DC 80078CDC 40700E00 */  sll        $t6, $t6, 1
     /* 594E0 80078CE0 25104E00 */  or         $v0, $v0, $t6
     /* 594E4 80078CE4 00160200 */  sll        $v0, $v0, 24

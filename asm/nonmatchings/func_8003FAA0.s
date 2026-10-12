@@ -340,7 +340,7 @@ glabel func_8003FE2C
     /* 20654 8003FE54 21284002 */   addu      $a1, $s2, $zero
     /* 20658 8003FE58 04004014 */  bnez       $v0, func_8003FE6C
     /* 2065C 8003FE5C 2C005226 */   addiu     $s2, $s2, 0x2C
-    /* 20660 8003FE60 00EF0008 */  j          D_8003BC00
+    /* 20660 8003FE60 00EF0008 */  j          func_8003BC00
     /* 20664 8003FE64 01000226 */   addiu     $v0, $s0, 0x1
 endlabel func_8003FE2C
 
@@ -416,7 +416,7 @@ glabel func_8003FEA4
     /* 20734 8003FF34 54148424 */  addiu      $a0, $a0, %lo(D_80021454)
     /* 20738 8003FF38 04B7000C */  jal        func_8002DC10
     /* 2073C 8003FF3C 00000000 */   nop
-    /* 20740 8003FF40 ADEF0008 */  j          D_8003BEB4
+    /* 20740 8003FF40 ADEF0008 */  j          .L8003BEB4
     /* 20744 8003FF44 FFFF0224 */   addiu     $v0, $zero, -0x1
 endlabel func_8003FEA4
 
@@ -484,7 +484,7 @@ nonmatching func_8003FFE4, 0x10
 glabel func_8003FFE4
     /* 207E4 8003FFE4 07004212 */  beq        $s2, $v0, func_80040004
     /* 207E8 8003FFE8 21206002 */   addu      $a0, $s3, $zero
-    /* 207EC 8003FFEC 69EF0008 */  j          D_8003BDA4
+    /* 207EC 8003FFEC 69EF0008 */  j          .L8003BDA4
     /* 207F0 8003FFF0 00000000 */   nop
 endlabel func_8003FFE4
 
@@ -493,7 +493,7 @@ nonmatching func_8003FFF4, 0x10
 glabel func_8003FFF4
     /* 207F4 8003FFF4 0280023C */  lui        $v0, %hi(D_80021490)
     /* 207F8 8003FFF8 90144294 */  lhu        $v0, %lo(D_80021490)($v0)
-    /* 207FC 8003FFFC 70EF0008 */  j          D_8003BDC0
+    /* 207FC 8003FFFC 70EF0008 */  j          .L8003BDC0
     /* 20800 80040000 0800A2A6 */   sh        $v0, 0x8($s5)
 endlabel func_8003FFF4
 
@@ -506,7 +506,7 @@ glabel func_80040004
     /* 20810 80040010 96146380 */  lb         $v1, %lo(D_80021496)($v1)
     /* 20814 80040014 2000A2A6 */  sh         $v0, 0x20($s5)
     /* 20818 80040018 2200A3A2 */  sb         $v1, 0x22($s5)
-    /* 2081C 8004001C 70EF0008 */  j          D_8003BDC0
+    /* 2081C 8004001C 70EF0008 */  j          .L8003BDC0
     /* 20820 80040020 00000000 */   nop
     /* 20824 80040024 20000692 */  lbu        $a2, 0x20($s0)
     /* 20828 80040028 D3EF000C */  jal        func_8003BF4C

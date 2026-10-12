@@ -120,7 +120,6 @@ nonmatching func_800460D0, 0x94
 
 glabel func_800460D0
     /* 268D0 800460D0 0B80023C */  lui        $v0, %hi(D_800ACC8C)
-  alabel func_800460D4
     /* 268D4 800460D4 8CCC4294 */  lhu        $v0, %lo(D_800ACC8C)($v0)
     /* 268D8 800460D8 0B80013C */  lui        $at, %hi(D_800ACCE4)
     /* 268DC 800460DC E4CC23A4 */  sh         $v1, %lo(D_800ACCE4)($at)
@@ -152,7 +151,6 @@ glabel func_800460D0
     /* 26944 80046144 8CCC23A4 */  sh         $v1, %lo(D_800ACC8C)($at)
     /* 26948 80046148 01004224 */  addiu      $v0, $v0, 0x1
     /* 2694C 8004614C 0B80013C */  lui        $at, %hi(D_800AC6E4)
-  alabel func_80046150
     /* 26950 80046150 E4C622A4 */  sh         $v0, %lo(D_800AC6E4)($at)
     /* 26954 80046154 CA11010C */  jal        func_80044728
     /* 26958 80046158 00000000 */   nop

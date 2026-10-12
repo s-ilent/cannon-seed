@@ -58,13 +58,18 @@ glabel func_800788DC
     /* 590EC 800788EC 2800E724 */  addiu      $a3, $a3, 0x28
 endlabel func_800788DC
 
-nonmatching func_800788F0, 0x18
+nonmatching func_800788F0, 0x8
 
 glabel func_800788F0
     /* 590F0 800788F0 FFFF1827 */  addiu      $t8, $t8, -0x1
     /* 590F4 800788F4 A4FF0017 */  bnez       $t8, D_80078788
-    /* 590F8 800788F8 00000000 */   nop
+endlabel func_800788F0
+
+nonmatching func_800788F8, 0x10
+
+glabel func_800788F8
+    /* 590F8 800788F8 00000000 */  nop
     /* 590FC 800788FC 2110E000 */  addu       $v0, $a3, $zero
     /* 59100 80078900 0800E003 */  jr         $ra
     /* 59104 80078904 00000000 */   nop
-endlabel func_800788F0
+endlabel func_800788F8

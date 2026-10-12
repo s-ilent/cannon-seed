@@ -77,6 +77,7 @@ glabel func_80064A64
     /* 452BC 80064ABC 8000EEAC */  sw         $t6, 0x80($a3)
     /* 452C0 80064AC0 8400EFAC */  sw         $t7, 0x84($a3)
     /* 452C4 80064AC4 0B6E010C */  jal        func_8005B82C
+  alabel func_80064AC8
     /* 452C8 80064AC8 00000000 */   nop
     /* 452CC 80064ACC F4FFEC8C */  lw         $t4, -0xC($a3)
     /* 452D0 80064AD0 8CFFED24 */  addiu      $t5, $a3, -0x74
@@ -95,6 +96,7 @@ glabel func_80064A64
     /* 45304 80064B04 7800ECAC */  sw         $t4, 0x78($a3)
     /* 45308 80064B08 7C00EDAC */  sw         $t5, 0x7C($a3)
     /* 4530C 80064B0C 8000EEAC */  sw         $t6, 0x80($a3)
+  alabel func_80064B10
     /* 45310 80064B10 8400EFAC */  sw         $t7, 0x84($a3)
     /* 45314 80064B14 0B6E010C */  jal        func_8005B82C
     /* 45318 80064B18 00000000 */   nop

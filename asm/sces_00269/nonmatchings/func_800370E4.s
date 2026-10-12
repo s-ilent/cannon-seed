@@ -162,7 +162,7 @@ glabel func_800371F8
     /* 17A24 80037224 00000000 */   nop
 endlabel func_800371F8
 
-nonmatching func_80037228, 0x2C
+nonmatching func_80037228, 0x34
 
 glabel func_80037228
     /* 17A28 80037228 0000888C */  lw         $t0, 0x0($a0)
@@ -176,14 +176,10 @@ glabel func_80037228
     /* 17A48 80037248 0800AD8C */  lw         $t5, 0x8($a1)
     /* 17A4C 8003724C 0400888C */  lw         $t0, 0x4($a0)
     /* 17A50 80037250 21108000 */  addu       $v0, $a0, $zero
-endlabel func_80037228
-
-nonmatching func_80037254, 0x8
-
-glabel func_80037254
+  .L80037254:
     /* 17A54 80037254 12480000 */  mflo       $t1
     /* 17A58 80037258 034B0900 */  sra        $t1, $t1, 12
-endlabel func_80037254
+endlabel func_80037228
 
 nonmatching func_8003725C, 0x10
 
@@ -194,7 +190,7 @@ glabel func_8003725C
     /* 17A68 80037268 03530A00 */  sra        $t2, $t2, 12
 endlabel func_8003725C
 
-nonmatching func_8003726C, 0x24
+nonmatching func_8003726C, 0xE0
 
 glabel func_8003726C
     /* 17A6C 8003726C 00540A00 */  sll        $t2, $t2, 16
@@ -206,11 +202,6 @@ glabel func_8003726C
     /* 17A84 80037284 19002B01 */  multu      $t1, $t3
     /* 17A88 80037288 03540800 */  sra        $t2, $t0, 16
     /* 17A8C 8003728C 0800888C */  lw         $t0, 0x8($a0)
-endlabel func_8003726C
-
-nonmatching func_80037290, 0xBC
-
-glabel func_80037290
     /* 17A90 80037290 12480000 */  mflo       $t1
     /* 17A94 80037294 034B0900 */  sra        $t1, $t1, 12
     /* 17A98 80037298 FFFF2931 */  andi       $t1, $t1, 0xFFFF
@@ -259,7 +250,7 @@ glabel func_80037290
     /* 17B40 80037340 034B0900 */  sra        $t1, $t1, 12
     /* 17B44 80037344 0800E003 */  jr         $ra
     /* 17B48 80037348 100089AC */   sw        $t1, 0x10($a0)
-endlabel func_80037290
+endlabel func_8003726C
 
 nonmatching func_8003734C, 0x3C
 
@@ -268,7 +259,6 @@ glabel func_8003734C
     /* 17B50 80037350 1CE3CE8D */  lw         $t6, %lo(D_8004E31C)($t6)
     /* 17B54 80037354 00000000 */  nop
     /* 17B58 80037358 8002C129 */  slti       $at, $t6, 0x280
-  alabel func_8003735C
     /* 17B5C 8003735C 0A002014 */  bnez       $at, func_80037388
     /* 17B60 80037360 0580013C */   lui       $at, %hi(D_8004E310)
     /* 17B64 80037364 10E33FAC */  sw         $ra, %lo(D_8004E310)($at)

@@ -18,6 +18,10 @@ glabel func_80038224
     /* 18A38 80038238 ECCAF726 */ .word 0x26F7CAEC
     /* 18A3C 8003823C 32DFED3C */ .word 0x3CEDDF32 /* invalid instruction */
     /* 18A40 80038240 06FFC574 */ .word 0x74C5FF06 /* invalid instruction */
+
+nonmatching .L80038244
+
+alabel .L80038244
     /* 18A44 80038244 090BE3EF */ .word 0xEFE30B09 /* invalid instruction */
     /* 18A48 80038248 4309BEF1 */ .word 0xF1BE0943
     /* 18A4C 8003824C 596C1825 */ .word 0x25186C59
@@ -90,8 +94,20 @@ glabel func_800382D4
     /* 18B20 80038320 12280000 */ .word 0x00002812
     /* 18B24 80038324 18004202 */ .word 0x02420018
     /* 18B28 80038328 12400000 */ .word 0x00004012
+
+nonmatching .L8003832C
+
+alabel .L8003832C
     /* 18B2C 8003832C 18005300 */ .word 0x00530018
+
+nonmatching .L80038330
+
+alabel .L80038330
     /* 18B30 80038330 12600000 */ .word 0x00006012
+
+nonmatching .L80038334
+
+alabel .L80038334
     /* 18B34 80038334 18008200 */ .word 0x00820018
     /* 18B38 80038338 12200000 */ .word 0x00002012
     /* 18B3C 8003833C 18009102 */ .word 0x02910018

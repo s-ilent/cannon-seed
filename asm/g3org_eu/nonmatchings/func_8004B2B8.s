@@ -155,6 +155,7 @@ glabel func_8004B42C
     /* 2BC50 8004B450 2800B78F */  lw         $s7, 0x28($sp)
     /* 2BC54 8004B454 2400BE8F */  lw         $fp, 0x24($sp)
     /* 2BC58 8004B458 7F000010 */  b          func_8004B658
+  alabel func_8004B45C
     /* 2BC5C 8004B45C 8002AE8F */   lw        $t6, 0x280($sp)
     /* 2BC60 8004B460 8002AF8F */  lw         $t7, 0x280($sp)
 endlabel func_8004B42C

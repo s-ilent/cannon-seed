@@ -110,6 +110,7 @@ glabel func_800663A0
     /* 46BA0 800663A0 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 46BA4 800663A4 1000B0AF */  sw         $s0, 0x10($sp)
     /* 46BA8 800663A8 21808000 */  addu       $s0, $a0, $zero
+  alabel func_800663AC
     /* 46BAC 800663AC 02000234 */  ori        $v0, $zero, 0x2
     /* 46BB0 800663B0 05000216 */  bne        $s0, $v0, func_800663C8
     /* 46BB4 800663B4 1400BFAF */   sw        $ra, 0x14($sp)

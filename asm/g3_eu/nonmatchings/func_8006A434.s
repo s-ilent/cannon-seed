@@ -585,8 +585,16 @@ dlabel func_8006AA58
     /* 4B268 8006AA68 B676FF87 */ .word 0x87FF76B6
     /* 4B26C 8006AA6C 936C31D4 */ .word 0xD4316C93
     /* 4B270 8006AA70 519CFB6F */ .word 0x6FFB9C51 /* handwritten instruction */
+
+nonmatching .L8006AA74
+
+alabel .L8006AA74
     /* 4B274 8006AA74 48921D35 */ .word 0x351D9248
     /* 4B278 8006AA78 E43837C1 */ .word 0xC13738E4 /* handwritten instruction */
+
+nonmatching func_8006AA7C
+
+alabel func_8006AA7C
     /* 4B27C 8006AA7C CF8DB95B */ .word 0x5BB98DCF /* invalid instruction */
     /* 4B280 8006AA80 FD8F7700 */ .word 0x00778FFD /* invalid instruction */
     /* 4B284 8006AA84 574738AC */ .word 0xAC384757

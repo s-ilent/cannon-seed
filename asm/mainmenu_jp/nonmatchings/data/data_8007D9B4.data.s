@@ -13,8 +13,13 @@ dlabel D_8007D9B4
     /* 5E1C0 8007D9C0 FA55E028 */ .word 0x28E055FA
     /* 5E1C4 8007D9C4 A10341D1 */ .word 0xD14103A1
     /* 5E1C8 8007D9C8 4DE83AA0 */ .word 0xA03AE84D
-    /* 5E1CC 8007D9CC 536C0828 */ .word 0x28086C53
 enddlabel D_8007D9B4
+
+nonmatching func_8007D9CC
+
+dlabel func_8007D9CC
+    /* 5E1CC 8007D9CC 536C0828 */ .word 0x28086C53
+enddlabel func_8007D9CC
 
 nonmatching D_8007D9D0
 

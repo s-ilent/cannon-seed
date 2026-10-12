@@ -280,10 +280,12 @@ glabel func_8004748C
     /* 27C90 80047490 21204000 */  addu       $a0, $v0, $zero
     /* 27C94 80047494 00140200 */  sll        $v0, $v0, 16
     /* 27C98 80047498 03140200 */  sra        $v0, $v0, 16
+  alabel func_8004749C
     /* 27C9C 8004749C 18004010 */  beqz       $v0, func_80047500
     /* 27CA0 800474A0 00000000 */   nop
     /* 27CA4 800474A4 02004104 */  bgez       $v0, func_800474B0
     /* 27CA8 800474A8 00000000 */   nop
+  alabel func_800474AC
     /* 27CAC 800474AC 23100200 */  negu       $v0, $v0
 endlabel func_8004748C
 
@@ -311,6 +313,7 @@ nonmatching func_800474D8, 0x10
 
 glabel func_800474D8
     /* 27CD8 800474D8 00140400 */  sll        $v0, $a0, 16
+  alabel func_800474DC
     /* 27CDC 800474DC 02004104 */  bgez       $v0, func_800474E8
     /* 27CE0 800474E0 23200300 */   negu      $a0, $v1
     /* 27CE4 800474E4 21206000 */  addu       $a0, $v1, $zero

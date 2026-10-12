@@ -224,6 +224,7 @@ glabel func_8007A964
     /* 5B19C 8007A99C 43C81900 */  sra        $t9, $t9, 1
     /* 5B1A0 8007A9A0 83180300 */  sra        $v1, $v1, 2
     /* 5B1A4 8007A9A4 0000F8A4 */  sh         $t8, 0x0($a3)
+  alabel func_8007A9A8
     /* 5B1A8 8007A9A8 4800F9A4 */  sh         $t9, 0x48($a3)
     /* 5B1AC 8007A9AC 6000E3A4 */  sh         $v1, 0x60($a3)
     /* 5B1B0 8007A9B0 02000C85 */  lh         $t4, 0x2($t0)

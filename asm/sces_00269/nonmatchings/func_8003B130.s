@@ -291,7 +291,7 @@ glabel func_8003B434
     /* 1BC58 8003B458 840F8424 */  addiu      $a0, $a0, %lo(D_80020F84)
     /* 1BC5C 8003B45C 0DDF000C */  jal        func_80037C34
     /* 1BC60 8003B460 00000000 */   nop
-    /* 1BC64 8003B464 E3DE0008 */  j          D_80037B8C
+    /* 1BC64 8003B464 E3DE0008 */  j          .L80037B8C
     /* 1BC68 8003B468 FFFF0224 */   addiu     $v0, $zero, -0x1
 endlabel func_8003B434
 
@@ -344,7 +344,7 @@ glabel func_8003B4CC
     /* 1BCF0 8003B4F0 940F8424 */  addiu      $a0, $a0, %lo(D_80020F94)
     /* 1BCF4 8003B4F4 0DDF000C */  jal        func_80037C34
     /* 1BCF8 8003B4F8 00000000 */   nop
-    /* 1BCFC 8003B4FC 09DF0008 */  j          D_80037C24
+    /* 1BCFC 8003B4FC 09DF0008 */  j          func_80037C24
     /* 1BD00 8003B500 FFFF0224 */   addiu     $v0, $zero, -0x1
 endlabel func_8003B4CC
 
@@ -497,7 +497,7 @@ glabel func_8003B6D8
     /* 1BEDC 8003B6DC 1831638C */  lw         $v1, %lo(D_80053118)($v1)
     /* 1BEE0 8003B6E0 03008010 */  beqz       $a0, func_8003B6F0
     /* 1BEE4 8003B6E4 00000000 */   nop
-    /* 1BEE8 8003B6E8 7EDF0008 */  j          D_80037DF8
+    /* 1BEE8 8003B6E8 7EDF0008 */  j          .L80037DF8
     /* 1BEEC 8003B6EC 40100400 */   sll       $v0, $a0, 1
 endlabel func_8003B6D8
 
@@ -530,7 +530,7 @@ glabel func_8003B708
     /* 1BF38 8003B738 0580063C */  lui        $a2, %hi(D_8005312C)
     /* 1BF3C 8003B73C 2C31C68C */  lw         $a2, %lo(D_8005312C)($a2)
     /* 1BF40 8003B740 40100200 */  sll        $v0, $v0, 1
-    /* 1BF44 8003B744 B9DF0008 */  j          D_80037EE4
+    /* 1BF44 8003B744 B9DF0008 */  j          .L80037EE4
     /* 1BF48 8003B748 2158A200 */   addu      $t3, $a1, $v0
 endlabel func_8003B708
 
@@ -575,7 +575,7 @@ glabel func_8003B7A0
     /* 1BFC4 8003B7C4 821D0400 */  srl        $v1, $a0, 22
     /* 1BFC8 8003B7C8 03006004 */  bltz       $v1, func_8003B7D8
     /* 1BFCC 8003B7CC 80220400 */   sll       $a0, $a0, 10
-    /* 1BFD0 8003B7D0 B8DF0008 */  j          D_80037EE0
+    /* 1BFD0 8003B7D0 B8DF0008 */  j          .L80037EE0
     /* 1BFD4 8003B7D4 2510E300 */   or        $v0, $a3, $v1
 endlabel func_8003B7A0
 

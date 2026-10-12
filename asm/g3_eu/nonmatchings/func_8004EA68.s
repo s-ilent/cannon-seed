@@ -193,6 +193,7 @@ glabel func_8004EB84
     /* 2F498 8004EC98 03C31900 */  sra        $t8, $t9, 12
     /* 2F49C 8004EC9C 19002C01 */  multu      $t1, $t4
     /* 2F4A0 8004ECA0 0E00B8A4 */  sh         $t8, 0xE($a1)
+  alabel func_8004ECA4
     /* 2F4A4 8004ECA4 00000000 */  nop
     /* 2F4A8 8004ECA8 12C00000 */  mflo       $t8
     /* 2F4AC 8004ECAC 00000000 */  nop

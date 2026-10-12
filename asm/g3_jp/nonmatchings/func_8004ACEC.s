@@ -252,8 +252,10 @@ glabel func_8004AF9C
     /* 2B7A4 8004AFA4 0C00838C */  lw         $v1, 0xC($a0)
     /* 2B7A8 8004AFA8 5000858C */  lw         $a1, 0x50($a0)
     /* 2B7AC 8004AFAC 4000828C */  lw         $v0, 0x40($a0)
+  .L8004AFB0:
     /* 2B7B0 8004AFB0 23306500 */  subu       $a2, $v1, $a1
     /* 2B7B4 8004AFB4 23186200 */  subu       $v1, $v1, $v0
+  alabel func_8004AFB8
     /* 2B7B8 8004AFB8 23106500 */  subu       $v0, $v1, $a1
     /* 2B7BC 8004AFBC 26104600 */  xor        $v0, $v0, $a2
     /* 2B7C0 8004AFC0 05004104 */  bgez       $v0, func_8004AFD8

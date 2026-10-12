@@ -127,7 +127,6 @@ glabel func_80037D70
     /* 18588 80037D88 00008848 */  mtc2       $t0, $0 /* handwritten instruction */
     /* 1858C 80037D8C 00088A48 */  mtc2       $t2, $1 /* handwritten instruction */
     /* 18590 80037D90 00000000 */  nop
-  alabel func_80037D94
     /* 18594 80037D94 1260484A */  mvmva      1, 0, 0, 3, 0
     /* 18598 80037D98 FFFF6B31 */  andi       $t3, $t3, 0xFFFF
     /* 1859C 80037D9C 00740E00 */  sll        $t6, $t6, 16

@@ -22,6 +22,10 @@ glabel func_800471A0
     /* 279C4 800471C4 72997B91 */ .word 0x917B9972
     /* 279C8 800471C8 1708C0A0 */ .word 0xA0C00817
     /* 279CC 800471CC 3D12F75B */ .word 0x5BF7123D /* invalid instruction */
+
+nonmatching func_800471D0
+
+alabel func_800471D0
     /* 279D0 800471D0 66955BF2 */ .word 0xF25B9566
     /* 279D4 800471D4 E86F35B7 */ .word 0xB7356FE8
 enddlabel func_800471A0

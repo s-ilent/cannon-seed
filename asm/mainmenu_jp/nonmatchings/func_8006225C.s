@@ -146,7 +146,6 @@ glabel func_800623D8
     /* 42BE4 800623E4 01000234 */  ori        $v0, $zero, 0x1
     /* 42BE8 800623E8 12006210 */  beq        $v1, $v0, func_80062434
     /* 42BEC 800623EC 02006228 */   slti      $v0, $v1, 0x2
-  alabel func_800623F0
     /* 42BF0 800623F0 05004010 */  beqz       $v0, func_80062408
     /* 42BF4 800623F4 00000000 */   nop
     /* 42BF8 800623F8 0A006010 */  beqz       $v1, func_80062424
@@ -388,6 +387,7 @@ glabel func_8006268C
     /* 42EB8 800626B8 24008294 */  lhu        $v0, 0x24($a0)
     /* 42EBC 800626BC 2118A000 */  addu       $v1, $a1, $zero
     /* 42EC0 800626C0 01004224 */  addiu      $v0, $v0, 0x1
+  alabel func_800626C4
     /* 42EC4 800626C4 240082A4 */  sh         $v0, 0x24($a0)
 endlabel func_8006268C
 

@@ -65,6 +65,7 @@ glabel func_8005D948
     /* 3E1FC 8005D9FC 1000EEE8 */  swc2       $14, 0x10($a3)
     /* 3E200 8005DA00 00000000 */  nop
     /* 3E204 8005DA04 0100184A */  rtps
+  alabel func_8005DA08
     /* 3E208 8005DA08 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
     /* 3E20C 8005DA0C 00000000 */  nop
     /* 3E210 8005DA10 1A004004 */  bltz       $v0, func_8005DA7C
@@ -153,7 +154,7 @@ glabel func_8005DAC0
 endlabel func_8005DAC0
 
 /* Handwritten function */
-nonmatching func_8005DB08, 0xD0
+nonmatching func_8005DB08, 0xD8
 
 glabel func_8005DB08
     /* 3E308 8005DB08 17800B3C */  lui        $t3, %hi(D_80171CE4)
@@ -208,14 +209,10 @@ glabel func_8005DB08
     /* 3E3CC 8005DBCC 25104300 */  or         $v0, $v0, $v1
     /* 3E3D0 8005DBD0 0000E2AC */  sw         $v0, 0x0($a3)
     /* 3E3D4 8005DBD4 2610ED00 */  xor        $v0, $a3, $t5
-endlabel func_8005DB08
-
-nonmatching func_8005DBD8, 0x8
-
-glabel func_8005DBD8
+  .L8005DBD8:
     /* 3E3D8 8005DBD8 001A0200 */  sll        $v1, $v0, 8
     /* 3E3DC 8005DBDC 02120300 */  srl        $v0, $v1, 8
-endlabel func_8005DBD8
+endlabel func_8005DB08
 
 nonmatching func_8005DBE0, 0x10
 

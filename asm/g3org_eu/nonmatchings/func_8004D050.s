@@ -42,6 +42,7 @@ glabel func_8004D070
     /* 2D8B0 8004D0B0 1100E105 */  bgez       $t7, func_8004D0F8
     /* 2D8B4 8004D0B4 FF0FF931 */   andi      $t9, $t7, 0xFFF
     /* 2D8B8 8004D0B8 12C00000 */  mflo       $t8
+  alabel func_8004D0BC
     /* 2D8BC 8004D0BC 03731800 */  sra        $t6, $t8, 12
     /* 2D8C0 8004D0C0 1000AEA4 */  sh         $t6, 0x10($a1)
     /* 2D8C4 8004D0C4 23780F00 */  negu       $t7, $t7

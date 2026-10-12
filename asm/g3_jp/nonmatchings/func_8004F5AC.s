@@ -110,6 +110,7 @@ glabel func_8004F624
     /* 2FEF4 8004F6F4 19002C01 */  multu      $t1, $t4
     /* 2FEF8 8004F6F8 0800B8A4 */  sh         $t8, 0x8($a1)
     /* 2FEFC 8004F6FC 00000000 */  nop
+  .L8004F700:
     /* 2FF00 8004F700 12C00000 */  mflo       $t8
 endlabel func_8004F624
     /* 2FF04 8004F704 00000000 */  nop

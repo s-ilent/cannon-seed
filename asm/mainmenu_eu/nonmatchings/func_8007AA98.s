@@ -29,6 +29,7 @@ glabel func_8007AA98
     /* 5B2D4 8007AAD4 2500F9A0 */  sb         $t9, 0x25($a3)
     /* 5B2D8 8007AAD8 20C08D01 */  add        $t8, $t4, $t5 /* handwritten instruction */
     /* 5B2DC 8007AADC 20C8EE01 */  add        $t9, $t7, $t6 /* handwritten instruction */
+  alabel func_8007AAE0
     /* 5B2E0 8007AAE0 20181903 */  add        $v1, $t8, $t9 /* handwritten instruction */
     /* 5B2E4 8007AAE4 43C01800 */  sra        $t8, $t8, 1
     /* 5B2E8 8007AAE8 43C81900 */  sra        $t9, $t9, 1

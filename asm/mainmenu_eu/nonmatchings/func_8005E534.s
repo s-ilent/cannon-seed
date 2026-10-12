@@ -22,6 +22,7 @@ glabel func_8005E534
     /* 3ED58 8005E558 0352010C */  jal        func_8005480C
     /* 3ED5C 8005E55C 00000000 */   nop
     /* 3ED60 8005E560 10590108 */  j          func_80056440
+  alabel func_8005E564
     /* 3ED64 8005E564 00000000 */   nop
 endlabel func_8005E534
 

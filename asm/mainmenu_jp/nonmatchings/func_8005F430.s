@@ -52,8 +52,10 @@ glabel func_8005F480
     /* 3FCB8 8005F4B8 BE44010C */  jal        func_800512F8
     /* 3FCBC 8005F4BC 00000000 */   nop
     /* 3FCC0 8005F4C0 3942010C */  jal        func_800508E4
+  .L8005F4C4:
     /* 3FCC4 8005F4C4 00000000 */   nop
     /* 3FCC8 8005F4C8 6F64010C */  jal        func_800591BC
+  alabel func_8005F4CC
     /* 3FCCC 8005F4CC 00000000 */   nop
     /* 3FCD0 8005F4D0 0D80023C */  lui        $v0, %hi(D_800C8B0C)
     /* 3FCD4 8005F4D4 0C8B428C */  lw         $v0, %lo(D_800C8B0C)($v0)
@@ -213,6 +215,7 @@ nonmatching func_8005F6A0, 0x34
 glabel func_8005F6A0
     /* 3FEA0 8005F6A0 15DD000C */  jal        func_80037454
     /* 3FEA4 8005F6A4 00000000 */   nop
+  alabel func_8005F6A8
     /* 3FEA8 8005F6A8 5CE1000C */  jal        func_80038570
     /* 3FEAC 8005F6AC 00000000 */   nop
     /* 3FEB0 8005F6B0 3562010C */  jal        func_800588D4
@@ -419,7 +422,6 @@ glabel func_8005F918
     /* 4011C 8005F91C 00000000 */  nop
     /* 40120 8005F920 0800E003 */  jr         $ra
     /* 40124 8005F924 1800BD27 */   addiu     $sp, $sp, 0x18
-  alabel func_8005F928
     /* 40128 8005F928 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 4012C 8005F92C 1400BFAF */  sw         $ra, 0x14($sp)
     /* 40130 8005F930 0280043C */  lui        $a0, %hi(D_8002292C)
@@ -481,7 +483,6 @@ glabel func_8005F998
     /* 401CC 8005F9CC 00000000 */   nop
     /* 401D0 8005F9D0 7768010C */  jal        func_8005A1DC
     /* 401D4 8005F9D4 00000000 */   nop
-  alabel func_8005F9D8
     /* 401D8 8005F9D8 00140200 */  sll        $v0, $v0, 16
     /* 401DC 8005F9DC 03140200 */  sra        $v0, $v0, 16
     /* 401E0 8005F9E0 03000334 */  ori        $v1, $zero, 0x3
@@ -495,6 +496,7 @@ glabel func_8005F9E8
     /* 401EC 8005F9EC 1580063C */  lui        $a2, %hi(D_8014A408)
     /* 401F0 8005F9F0 08A4C624 */  addiu      $a2, $a2, %lo(D_8014A408)
     /* 401F4 8005F9F4 0D80033C */  lui        $v1, %hi(D_800CA27C)
+  alabel func_8005F9F8
     /* 401F8 8005F9F8 7CA2638C */  lw         $v1, %lo(D_800CA27C)($v1)
     /* 401FC 8005F9FC 0000C494 */  lhu        $a0, 0x0($a2)
     /* 40200 8005FA00 1580053C */  lui        $a1, %hi(D_8014A5AC)

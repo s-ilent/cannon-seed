@@ -66,6 +66,7 @@ glabel func_80044E44
     /* 25718 80044F18 000023A0 */  sb         $v1, 0x0($at)
     /* 2571C 80044F1C 0D80013C */  lui        $at, %hi(D_800D4CA8)
     /* 25720 80044F20 A84C2124 */  addiu      $at, $at, %lo(D_800D4CA8)
+  .L80044F24:
     /* 25724 80044F24 21082200 */  addu       $at, $at, $v0
     /* 25728 80044F28 000020A4 */  sh         $zero, 0x0($at)
     /* 2572C 80044F2C 0D80013C */  lui        $at, %hi(D_800D4CAA)
@@ -533,52 +534,50 @@ glabel func_800454B0
     /* 25CCC 800454CC 7F004524 */   addiu     $a1, $v0, 0x7F
 endlabel func_800454B0
 
-nonmatching func_800454D0, 0x64
+nonmatching func_800454D0
 
 glabel func_800454D0
-    /* 25CD0 800454D0 21280000 */  addu       $a1, $zero, $zero
-    /* 25CD4 800454D4 00840A00 */  sll        $s0, $t2, 16
-    /* 25CD8 800454D8 03841000 */  sra        $s0, $s0, 16
-    /* 25CDC 800454DC 40101000 */  sll        $v0, $s0, 1
-    /* 25CE0 800454E0 21105000 */  addu       $v0, $v0, $s0
-    /* 25CE4 800454E4 80100200 */  sll        $v0, $v0, 2
-    /* 25CE8 800454E8 21105000 */  addu       $v0, $v0, $s0
-    /* 25CEC 800454EC 80100200 */  sll        $v0, $v0, 2
-    /* 25CF0 800454F0 FFFFC430 */  andi       $a0, $a2, 0xFFFF
-    /* 25CF4 800454F4 0D80013C */  lui        $at, %hi(D_800D4CA0)
-    /* 25CF8 800454F8 A04C2124 */  addiu      $at, $at, %lo(D_800D4CA0)
-    /* 25CFC 800454FC 21082200 */  addu       $at, $at, $v0
-    /* 25D00 80045500 00002290 */  lbu        $v0, 0x0($at)
-    /* 25D04 80045504 1280013C */  lui        $at, %hi(D_80119E0A)
-    /* 25D08 80045508 0A9E2AA4 */  sh         $t2, %lo(D_80119E0A)($at)
-    /* 25D0C 8004550C 1280013C */  lui        $at, %hi(D_80119DFC)
-    /* 25D10 80045510 FC9D22A0 */  sb         $v0, %lo(D_80119DFC)($at)
-    /* 25D14 80045514 9AFC000C */  jal        func_8003F268
-    /* 25D18 80045518 FFFFA530 */   andi      $a1, $a1, 0xFFFF
-    /* 25D1C 8004551C 00191000 */  sll        $v1, $s0, 4
-    /* 25D20 80045520 0D80013C */  lui        $at, %hi(D_800D4AF8)
-    /* 25D24 80045524 F84A2124 */  addiu      $at, $at, %lo(D_800D4AF8)
-    /* 25D28 80045528 21082300 */  addu       $at, $at, $v1
-    /* 25D2C 8004552C 000022A4 */  sh         $v0, 0x0($at)
-    /* 25D30 80045530 494B2895 */  lhu        $t0, 0x4B49($t1)
-endlabel func_800454D0
+    /* 25CD0 800454D0 21280000 */ .word 0x00002821
+    /* 25CD4 800454D4 00840A00 */ .word 0x000A8400
+    /* 25CD8 800454D8 03841000 */ .word 0x00108403
+    /* 25CDC 800454DC 40101000 */ .word 0x00101040
+    /* 25CE0 800454E0 21105000 */ .word 0x00501021
+    /* 25CE4 800454E4 80100200 */ .word 0x00021080
+    /* 25CE8 800454E8 21105000 */ .word 0x00501021
+    /* 25CEC 800454EC 80100200 */ .word 0x00021080
+    /* 25CF0 800454F0 FFFFC430 */ .word 0x30C4FFFF
+    /* 25CF4 800454F4 0D80013C */ .word 0x3C01800D
+    /* 25CF8 800454F8 A04C2124 */ .word 0x24214CA0
+    /* 25CFC 800454FC 21082200 */ .word 0x00220821
+    /* 25D00 80045500 00002290 */ .word 0x90220000
+    /* 25D04 80045504 1280013C */ .word 0x3C018012
+    /* 25D08 80045508 0A9E2AA4 */ .word 0xA42A9E0A
+    /* 25D0C 8004550C 1280013C */ .word 0x3C018012
+    /* 25D10 80045510 FC9D22A0 */ .word 0xA0229DFC
+    /* 25D14 80045514 9AFC000C */ .word 0x0C00FC9A
+    /* 25D18 80045518 FFFFA530 */ .word 0x30A5FFFF
+    /* 25D1C 8004551C 00191000 */ .word 0x00101900
+    /* 25D20 80045520 0D80013C */ .word 0x3C01800D
+    /* 25D24 80045524 F84A2124 */ .word 0x24214AF8
+    /* 25D28 80045528 21082300 */ .word 0x00230821
+    /* 25D2C 8004552C 000022A4 */ .word 0xA4220000
+    /* 25D30 80045530 494B2895 */ .word 0x95284B49
 
-nonmatching func_80045534
+nonmatching .L80045534
 
-glabel func_80045534
+alabel .L80045534
     /* 25D34 80045534 C648597A */ .word 0x7A5948C6 /* invalid instruction */
     /* 25D38 80045538 F8C4753B */ .word 0x3B75C4F8
-enddlabel func_80045534
 
-nonmatching func_8004553C
+nonmatching .L8004553C
 
-glabel func_8004553C
+alabel .L8004553C
     /* 25D3C 8004553C ED6363E2 */ .word 0xE26363ED
     /* 25D40 80045540 5856D17B */ .word 0x7BD15658 /* invalid instruction */
     /* 25D44 80045544 3256AEF1 */ .word 0xF1AE5632
     /* 25D48 80045548 8890B443 */ .word 0x43B49088 /* invalid instruction */
     /* 25D4C 8004554C 253D2700 */ .word 0x00273D25 /* invalid instruction */
-enddlabel func_8004553C
+enddlabel func_800454D0
 
 nonmatching func_80045550, 0xC
 

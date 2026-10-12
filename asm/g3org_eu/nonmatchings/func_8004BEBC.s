@@ -287,6 +287,7 @@ glabel func_8004C264
     /* 2CA98 8004C298 040088AC */  sw         $t0, 0x4($a0)
     /* 2CA9C 8004C29C FFFFEF31 */  andi       $t7, $t7, 0xFFFF
     /* 2CAA0 8004C2A0 004C0900 */  sll        $t1, $t1, 16
+  alabel func_8004C2A4
     /* 2CAA4 8004C2A4 25482F01 */  or         $t1, $t1, $t7
     /* 2CAA8 8004C2A8 080089AC */  sw         $t1, 0x8($a0)
     /* 2CAAC 8004C2AC 10008BE8 */  swc2       $11, 0x10($a0)

@@ -471,6 +471,6 @@ glabel func_80070548
     /* 50E3C 8007063C 8001083C */  lui        $t0, (0x1800000 >> 16)
     /* 50E40 80070640 63BF832D */  sltiu      $v1, $t4, -0x409D
     /* 50E44 80070644 629641F3 */  scd        $at, -0x699E($k0) /* handwritten instruction */
-    /* 50E48 80070648 D3057450 */  beql       $v1, $s4, D_80071D98
+    /* 50E48 80070648 D3057450 */  beql       $v1, $s4, .L80071D98
     /* 50E4C 8007064C 19FCC8FB */   sdc2      $8, -0x3E7($fp)
 endlabel func_80070548

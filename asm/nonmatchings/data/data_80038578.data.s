@@ -9,9 +9,14 @@ nonmatching D_80038578
 dlabel D_80038578
     /* 18D78 80038578 D0FFBD27 */ .word 0x27BDFFD0
     /* 18D7C 8003857C 1000B0AF */ .word 0xAFB00010
+enddlabel D_80038578
+
+nonmatching D_80038580
+
+dlabel D_80038580
     /* 18D80 80038580 21808000 */ .word 0x00808021
     /* 18D84 80038584 2800BFAF */ .word 0xAFBF0028
-enddlabel D_80038578
+enddlabel D_80038580
 
 nonmatching func_80038588
 

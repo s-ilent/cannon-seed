@@ -55,6 +55,7 @@ glabel func_8005EB08
     /* 3F350 8005EB50 0D80013C */  lui        $at, %hi(D_800CA19C)
     /* 3F354 8005EB54 9CA120A4 */  sh         $zero, %lo(D_800CA19C)($at)
     /* 3F358 8005EB58 01004224 */  addiu      $v0, $v0, 0x1
+  alabel func_8005EB5C
     /* 3F35C 8005EB5C 0D80013C */  lui        $at, %hi(D_800CA544)
     /* 3F360 8005EB60 44A522A4 */  sh         $v0, %lo(D_800CA544)($at)
     /* 3F364 8005EB64 1000BF8F */  lw         $ra, 0x10($sp)
@@ -174,7 +175,6 @@ glabel func_8005EC6C
     /* 3F49C 8005EC9C 08006014 */  bnez       $v1, func_8005ECC0
     /* 3F4A0 8005ECA0 00000000 */   nop
     /* 3F4A4 8005ECA4 0D80023C */  lui        $v0, %hi(D_800CA6BC)
-  alabel func_8005ECA8
     /* 3F4A8 8005ECA8 BCA64294 */  lhu        $v0, %lo(D_800CA6BC)($v0)
     /* 3F4AC 8005ECAC 0D80013C */  lui        $at, %hi(D_800C9F94)
     /* 3F4B0 8005ECB0 949F20A4 */  sh         $zero, %lo(D_800C9F94)($at)
@@ -682,6 +682,10 @@ nonmatching D_8005F298
 dlabel D_8005F298
     /* 3FA98 8005F298 E8FFBD27 */ .word 0x27BDFFE8
     /* 3FA9C 8005F29C 1000BFAF */ .word 0xAFBF0010
+
+nonmatching D_8005F2A0
+
+dlabel D_8005F2A0
     /* 3FAA0 8005F2A0 8A43BC50 */ .word 0x50BC438A
     /* 3FAA4 8005F2A4 1A669D03 */ .word 0x039D661A /* invalid instruction */
     /* 3FAA8 8005F2A8 6175BD77 */ .word 0x77BD7561 /* invalid instruction */

@@ -12,6 +12,7 @@ nonmatching func_80064BE8, 0x2C
 glabel func_80064BE8
     /* 453E8 80064BE8 43C01900 */  sra        $t8, $t9, 1
     /* 453EC 80064BEC 2B089801 */  sltu       $at, $t4, $t8
+  alabel func_80064BF0
     /* 453F0 80064BF0 08002010 */  beqz       $at, func_80064C14
     /* 453F4 80064BF4 2B08B801 */   sltu      $at, $t5, $t8
     /* 453F8 80064BF8 06002010 */  beqz       $at, func_80064C14
@@ -93,6 +94,7 @@ glabel func_80064CD0
     /* 454D0 80064CD0 23C02303 */  subu       $t8, $t9, $v1
     /* 454D4 80064CD4 2A089801 */  slt        $at, $t4, $t8
     /* 454D8 80064CD8 08002010 */  beqz       $at, func_80064CFC
+  alabel func_80064CDC
     /* 454DC 80064CDC 2A08B801 */   slt       $at, $t5, $t8
     /* 454E0 80064CE0 06002010 */  beqz       $at, func_80064CFC
     /* 454E4 80064CE4 2A08D801 */   slt       $at, $t6, $t8

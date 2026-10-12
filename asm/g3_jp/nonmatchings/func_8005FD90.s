@@ -46,7 +46,7 @@ nonmatching func_8005FE04, 0x64
 
 glabel func_8005FE04
     /* 40604 8005FE04 FFFFE724 */  addiu      $a3, $a3, -0x1
-    /* 40608 8005FE08 B8FFE014 */  bnez       $a3, D_8005FCEC
+    /* 40608 8005FE08 B8FFE014 */  bnez       $a3, func_8005FCEC
     /* 4060C 8005FE0C 00000000 */   nop
   alabel func_8005FE10
     /* 40610 8005FE10 2110C000 */  addu       $v0, $a2, $zero

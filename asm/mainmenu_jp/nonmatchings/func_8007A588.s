@@ -36,6 +36,7 @@ glabel func_8007A5B8
     /* 5ADCC 8007A5CC 42180300 */  srl        $v1, $v1, 1
     /* 5ADD0 8007A5D0 21C02203 */  addu       $t8, $t9, $v0
     /* 5ADD4 8007A5D4 10000C85 */  lh         $t4, 0x10($t0)
+  .L8007A5D8:
     /* 5ADD8 8007A5D8 10002D85 */  lh         $t5, 0x10($t1)
     /* 5ADDC 8007A5DC 10004E85 */  lh         $t6, 0x10($t2)
     /* 5ADE0 8007A5E0 10006F85 */  lh         $t7, 0x10($t3)

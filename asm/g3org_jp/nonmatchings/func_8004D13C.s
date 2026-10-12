@@ -351,6 +351,7 @@ nonmatching func_8004D5A0, 0x30
 
 glabel func_8004D5A0
     /* 2DDA0 8004D5A0 0000888C */  lw         $t0, 0x0($a0)
+  alabel func_8004D5A4
     /* 2DDA4 8004D5A4 0400898C */  lw         $t1, 0x4($a0)
     /* 2DDA8 8004D5A8 08008A8C */  lw         $t2, 0x8($a0)
     /* 2DDAC 8004D5AC 0C008B8C */  lw         $t3, 0xC($a0)

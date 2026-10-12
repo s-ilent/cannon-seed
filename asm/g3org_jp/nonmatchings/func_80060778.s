@@ -211,6 +211,7 @@ glabel func_80060970
     /* 411DC 800609DC 3200F8A4 */  sh         $t8, 0x32($a3)
     /* 411E0 800609E0 1A00F9A4 */  sh         $t9, 0x1A($a3)
     /* 411E4 800609E4 20C08D01 */  add        $t8, $t4, $t5 /* handwritten instruction */
+  alabel func_800609E8
     /* 411E8 800609E8 20C8EE01 */  add        $t9, $t7, $t6 /* handwritten instruction */
     /* 411EC 800609EC 20181903 */  add        $v1, $t8, $t9 /* handwritten instruction */
     /* 411F0 800609F0 43C01800 */  sra        $t8, $t8, 1

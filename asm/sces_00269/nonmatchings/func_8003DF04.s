@@ -12,6 +12,7 @@ nonmatching func_8003DF04, 0x28
 glabel func_8003DF04
     /* 1E704 8003DF04 000062A0 */  sb         $v0, 0x0($v1)
     /* 1E708 8003DF08 0680023C */  lui        $v0, %hi(D_80065480)
+  alabel func_8003DF0C
     /* 1E70C 8003DF0C 8054428C */  lw         $v0, %lo(D_80065480)($v0)
     /* 1E710 8003DF10 00000000 */  nop
     /* 1E714 8003DF14 00004290 */  lbu        $v0, 0x0($v0)
@@ -93,6 +94,7 @@ nonmatching func_8003DFE4, 0x38
 glabel func_8003DFE4
     /* 1E7E4 8003DFE4 8854638C */  lw         $v1, 0x5488($v1)
     /* 1E7E8 8003DFE8 00000000 */  nop
+  alabel func_8003DFEC
     /* 1E7EC 8003DFEC B8016294 */  lhu        $v0, 0x1B8($v1)
     /* 1E7F0 8003DFF0 00000000 */  nop
     /* 1E7F4 8003DFF4 09004014 */  bnez       $v0, func_8003E01C
@@ -118,6 +120,7 @@ nonmatching func_8003E020, 0xB4
 glabel func_8003E020
     /* 1E820 8003E020 B00162A4 */  sh         $v0, 0x1B0($v1)
     /* 1E824 8003E024 B20162A4 */  sh         $v0, 0x1B2($v1)
+  alabel func_8003E028
     /* 1E828 8003E028 01C00234 */  ori        $v0, $zero, 0xC001
     /* 1E82C 8003E02C AA0162A4 */  sh         $v0, 0x1AA($v1)
     /* 1E830 8003E030 0680033C */  lui        $v1, %hi(D_80065474)
@@ -127,12 +130,15 @@ glabel func_8003E020
     /* 1E840 8003E040 0000A2A3 */  sb         $v0, 0x0($sp)
     /* 1E844 8003E044 02000234 */  ori        $v0, $zero, 0x2
     /* 1E848 8003E048 0300A0A3 */  sb         $zero, 0x3($sp)
+  .L8003E04C:
     /* 1E84C 8003E04C 0100A0A3 */  sb         $zero, 0x1($sp)
     /* 1E850 8003E050 000062A0 */  sb         $v0, 0x0($v1)
+  alabel func_8003E054
     /* 1E854 8003E054 0680033C */  lui        $v1, %hi(D_8006547C)
     /* 1E858 8003E058 7C54638C */  lw         $v1, %lo(D_8006547C)($v1)
     /* 1E85C 8003E05C 0000A293 */  lbu        $v0, 0x0($sp)
     /* 1E860 8003E060 00000000 */  nop
+  alabel func_8003E064
     /* 1E864 8003E064 000062A0 */  sb         $v0, 0x0($v1)
     /* 1E868 8003E068 0680033C */  lui        $v1, %hi(D_80065480)
     /* 1E86C 8003E06C 8054638C */  lw         $v1, %lo(D_80065480)($v1)
@@ -198,6 +204,7 @@ glabel func_8003E10C
     /* 1E934 8003E134 1000BF8F */  lw         $ra, 0x10($sp)
     /* 1E938 8003E138 1800BD27 */  addiu      $sp, $sp, 0x18
     /* 1E93C 8003E13C 0800E003 */  jr         $ra
+  .L8003E140:
     /* 1E940 8003E140 00000000 */   nop
 endlabel func_8003E10C
 

@@ -137,6 +137,7 @@ glabel func_8004F9DC
     /* 30200 8004FA00 0800898C */  lw         $t1, 0x8($a0)
     /* 30204 8004FA04 10008A8C */  lw         $t2, 0x10($a0)
     /* 30208 8004FA08 FFFF013C */  lui        $at, (0xFFFF0000 >> 16)
+  .L8004FA0C:
     /* 3020C 8004FA0C 24482101 */  and        $t1, $t1, $at
     /* 30210 8004FA10 25400901 */  or         $t0, $t0, $t1
     /* 30214 8004FA14 00480E48 */  mfc2       $t6, $9 /* handwritten instruction */

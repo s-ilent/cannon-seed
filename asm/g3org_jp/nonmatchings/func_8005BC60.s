@@ -19,10 +19,6 @@ glabel func_8005BC60
     /* 3C478 8005BC78 0C739D15 */ .word 0x159D730C
     /* 3C47C 8005BC7C 32BFBFF5 */ .word 0xF5BFBF32
     /* 3C480 8005BC80 C6AC64FC */ .word 0xFC64ACC6
-
-nonmatching func_8005BC84
-
-alabel func_8005BC84
     /* 3C484 8005BC84 154AE83E */ .word 0x3EE84A15 /* invalid instruction */
     /* 3C488 8005BC88 1B6C0A80 */ .word 0x800A6C1B
     /* 3C48C 8005BC8C DDE83D68 */ .word 0x683DE8DD

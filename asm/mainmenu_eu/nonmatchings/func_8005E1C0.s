@@ -42,6 +42,7 @@ glabel func_8005E1F8
     /* 3EA1C 8005E21C 88AD22A4 */  sh         $v0, %lo(D_800CAD88)($at)
     /* 3EA20 8005E220 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3EA24 8005E224 00000000 */  nop
+  alabel func_8005E228
     /* 3EA28 8005E228 0800E003 */  jr         $ra
     /* 3EA2C 8005E22C 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005E1F8
@@ -294,6 +295,7 @@ glabel func_8005E498
     /* 3ED18 8005E518 0D80013C */  lui        $at, %hi(D_800CAD88)
     /* 3ED1C 8005E51C 88AD22A4 */  sh         $v0, %lo(D_800CAD88)($at)
     /* 3ED20 8005E520 1000BF8F */  lw         $ra, 0x10($sp)
+  alabel func_8005E524
     /* 3ED24 8005E524 00000000 */  nop
     /* 3ED28 8005E528 0800E003 */  jr         $ra
     /* 3ED2C 8005E52C 1800BD27 */   addiu     $sp, $sp, 0x18

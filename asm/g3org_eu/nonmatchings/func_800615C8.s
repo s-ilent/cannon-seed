@@ -92,6 +92,7 @@ glabel func_80061690
     /* 41EE8 800616E8 F962010C */  jal        func_80058BE4
     /* 41EEC 800616EC 00000000 */   nop
     /* 41EF0 800616F0 F8FFEC8C */  lw         $t4, -0x8($a3)
+  alabel func_800616F4
     /* 41EF4 800616F4 D8FFED24 */  addiu      $t5, $a3, -0x28
     /* 41EF8 800616F8 C0FFEE24 */  addiu      $t6, $a3, -0x40
     /* 41EFC 800616FC 4800ECAC */  sw         $t4, 0x48($a3)

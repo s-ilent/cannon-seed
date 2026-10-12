@@ -217,6 +217,7 @@ glabel func_800814F0
     /* 61CF4 800814F4 EC7C428C */  lw         $v0, %lo(D_800C7CEC)($v0)
     /* 61CF8 800814F8 0C80013C */  lui        $at, %hi(D_800C7CEC)
     /* 61CFC 800814FC EC7C24AC */  sw         $a0, %lo(D_800C7CEC)($at)
+  alabel func_80081500
     /* 61D00 80081500 0800E003 */  jr         $ra
     /* 61D04 80081504 00000000 */   nop
 endlabel func_800814F0
@@ -261,8 +262,10 @@ glabel func_80081564
     /* 61D7C 8008157C 05004014 */  bnez       $v0, func_80081594
     /* 61D80 80081580 01000234 */   ori       $v0, $zero, 0x1
     /* 61D84 80081584 3FD8010C */  jal        func_800760FC
+  .L80081588:
     /* 61D88 80081588 FFFF1026 */   addiu     $s0, $s0, -0x1
     /* 61D8C 8008158C 0AD30108 */  j          D_80074C28
+  .L80081590:
     /* 61D90 80081590 FFFF0224 */   addiu     $v0, $zero, -0x1
 endlabel func_80081564
 
@@ -687,6 +690,10 @@ glabel func_800819DC
     /* 621F4 800819F4 EA4CA475 */ .word 0x75A44CEA /* invalid instruction */
     /* 621F8 800819F8 A73AF646 */ .word 0x46F63AA7 /* invalid instruction */
     /* 621FC 800819FC 86C33A9E */ .word 0x9E3AC386
+
+nonmatching .L80081A00
+
+alabel .L80081A00
     /* 62200 80081A00 A161354D */ .word 0x4D3561A1 /* invalid instruction */
     /* 62204 80081A04 70CE2F1A */ .word 0x1A2FCE70 /* invalid instruction */
     /* 62208 80081A08 B3A96AA4 */ .word 0xA46AA9B3

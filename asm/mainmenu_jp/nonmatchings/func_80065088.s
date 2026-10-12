@@ -236,6 +236,7 @@ glabel func_800652D8
     /* 45AD8 800652D8 032C0500 */  sra        $a1, $a1, 16
     /* 45ADC 800652DC 00141000 */  sll        $v0, $s0, 16
     /* 45AE0 800652E0 03140200 */  sra        $v0, $v0, 16
+  alabel func_800652E4
     /* 45AE4 800652E4 1980013C */  lui        $at, %hi(D_801880B8)
     /* 45AE8 800652E8 B8802124 */  addiu      $at, $at, %lo(D_801880B8)
     /* 45AEC 800652EC 21082200 */  addu       $at, $at, $v0
@@ -317,6 +318,7 @@ nonmatching func_800653B8, 0xB0
 glabel func_800653B8
     /* 45BB8 800653B8 1980083C */  lui        $t0, %hi(D_8018DBA2)
     /* 45BBC 800653BC A2DB0885 */  lh         $t0, %lo(D_8018DBA2)($t0)
+  alabel func_800653C0
     /* 45BC0 800653C0 12480000 */  mflo       $t1
     /* 45BC4 800653C4 00000000 */  nop
     /* 45BC8 800653C8 00000000 */  nop

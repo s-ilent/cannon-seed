@@ -43,5 +43,6 @@ glabel func_8004F368
     /* 2FBE0 8004F3E0 03C31900 */  sra        $t8, $t9, 12
     /* 2FBE4 8004F3E4 1000B8A4 */  sh         $t8, 0x10($a1)
     /* 2FBE8 8004F3E8 0800E003 */  jr         $ra
+  alabel func_8004F3EC
     /* 2FBEC 8004F3EC 00000000 */   nop
 endlabel func_8004F368

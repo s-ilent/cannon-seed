@@ -742,7 +742,7 @@ glabel func_80049570
     /* 29DAC 800495AC 9D463294 */  lhu        $s2, 0x469D($at)
     /* 29DB0 800495B0 11ECCEB1 */  sdl        $t6, -0x13EF($t6)
     /* 29DB4 800495B4 69EF3B80 */  lb         $k1, -0x1097($at) /* handwritten instruction */
-    /* 29DB8 800495B8 2539931A */  .word      0x1A933925                    # blez       $s4, D_80057A50 # 00130000 <InstrIdType: CPU_NORMAL>
+    /* 29DB8 800495B8 2539931A */  .word      0x1A933925                    # blez       $s4, .L80057A50 # 00130000 <InstrIdType: CPU_NORMAL>
     /* 29DBC 800495BC B06B4A88 */   lwl       $t2, 0x6BB0($v0)
     /* 29DC0 800495C0 A13DFBC2 */  ll         $k1, 0x3DA1($s7) /* handwritten instruction */
     /* 29DC4 800495C4 DD0E6E5D */  .word      0x5D6E0EDD                    # bgtzl      $t3, D_8004D13C # 000E0000 <InstrIdType: CPU_NORMAL>

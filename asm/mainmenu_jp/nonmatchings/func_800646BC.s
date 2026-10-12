@@ -22,6 +22,7 @@ glabel func_800646BC
     /* 44EE0 800646E0 01001434 */  ori        $s4, $zero, 0x1
     /* 44EE4 800646E4 21980000 */  addu       $s3, $zero, $zero
     /* 44EE8 800646E8 38FF1024 */  addiu      $s0, $zero, -0xC8
+  .L800646EC:
     /* 44EEC 800646EC 2190C000 */  addu       $s2, $a2, $zero
     /* 44EF0 800646F0 03001134 */  ori        $s1, $zero, 0x3
 endlabel func_800646BC
@@ -35,6 +36,7 @@ glabel func_800646F4
     /* 44F00 80064700 21200002 */  addu       $a0, $s0, $zero
     /* 44F04 80064704 346E010C */  jal        func_8005B8D0
     /* 44F08 80064708 21286002 */   addu      $a1, $s3, $zero
+  alabel func_8006470C
     /* 44F0C 8006470C 21200002 */  addu       $a0, $s0, $zero
     /* 44F10 80064710 476E010C */  jal        func_8005B91C
     /* 44F14 80064714 21284002 */   addu      $a1, $s2, $zero
@@ -100,6 +102,7 @@ glabel func_8006479C
     /* 44FC8 800647C8 80300300 */  sll        $a2, $v1, 2
     /* 44FCC 800647CC 2130C300 */  addu       $a2, $a2, $v1
     /* 44FD0 800647D0 9F71010C */  jal        func_8005C67C
+  alabel func_800647D4
     /* 44FD4 800647D4 40300600 */   sll       $a2, $a2, 1
 endlabel func_8006479C
 
@@ -112,6 +115,7 @@ glabel func_800647D8
     /* 44FE4 800647E4 10004490 */  lbu        $a0, 0x10($v0)
     /* 44FE8 800647E8 05006014 */  bnez       $v1, func_80064800
     /* 44FEC 800647EC 002C1100 */   sll       $a1, $s1, 16
+  alabel func_800647F0
     /* 44FF0 800647F0 21188000 */  addu       $v1, $a0, $zero
     /* 44FF4 800647F4 30000234 */  ori        $v0, $zero, 0x30
     /* 44FF8 800647F8 06006210 */  beq        $v1, $v0, func_80064814
@@ -254,6 +258,7 @@ glabel func_80064950
     /* 45154 80064954 1800BFAF */  sw         $ra, 0x18($sp)
     /* 45158 80064958 1400B1AF */  sw         $s1, 0x14($sp)
     /* 4515C 8006495C 1000B0AF */  sw         $s0, 0x10($sp)
+  alabel func_80064960
     /* 45160 80064960 A0001134 */  ori        $s1, $zero, 0xA0
     /* 45164 80064964 02001034 */  ori        $s0, $zero, 0x2
     /* 45168 80064968 002C1100 */  sll        $a1, $s1, 16

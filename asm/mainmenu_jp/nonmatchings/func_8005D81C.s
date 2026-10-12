@@ -587,6 +587,7 @@ glabel func_8005DEE4
     /* 3E6F8 8005DEF8 00000000 */   nop
     /* 3E6FC 8005DEFC 0D80013C */  lui        $at, %hi(D_800CA59C)
     /* 3E700 8005DF00 9CA520A4 */  sh         $zero, %lo(D_800CA59C)($at)
+  alabel func_8005DF04
     /* 3E704 8005DF04 02030234 */  ori        $v0, $zero, 0x302
     /* 3E708 8005DF08 0D80013C */  lui        $at, %hi(D_800CA0EC)
     /* 3E70C 8005DF0C ECA022A4 */  sh         $v0, %lo(D_800CA0EC)($at)
