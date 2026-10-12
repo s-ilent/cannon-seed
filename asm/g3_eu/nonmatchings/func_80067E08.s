@@ -201,7 +201,7 @@ glabel func_80067F9C
     /* 4882C 8006802C 2C00A38F */  lw         $v1, 0x2C($sp)
     /* 48830 80068030 1800A2AC */  sw         $v0, 0x18($a1)
     /* 48834 80068034 1C00A3AC */  sw         $v1, 0x1C($a1)
-    /* 48838 80068038 B27A010C */  jal        func_8005EAC8
+    /* 48838 80068038 B27A010C */  jal        GsTMDdivTF3NL
     /* 4883C 8006803C 3000A427 */   addiu     $a0, $sp, 0x30
     /* 48840 80068040 21100000 */  addu       $v0, $zero, $zero
     /* 48844 80068044 AC00BF8F */  lw         $ra, 0xAC($sp)

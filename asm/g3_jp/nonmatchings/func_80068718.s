@@ -565,7 +565,7 @@ glabel func_80068D60
     /* 49574 80068D74 90A42124 */  addiu      $at, $at, %lo(D_800AA490)
     /* 49578 80068D78 21082200 */  addu       $at, $at, $v0
     /* 4957C 80068D7C 0000228C */  lw         $v0, 0x0($at)
-    /* 49580 80068D80 B07D0108 */  j          func_8005F6C0
+    /* 49580 80068D80 B07D0108 */  j          GsTMDdivTG3NL
     /* 49584 80068D84 00000000 */   nop
 endlabel func_80068D60
 

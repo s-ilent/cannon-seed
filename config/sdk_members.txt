@@ -33,84 +33,84 @@
 // config/symbols.curated.txt - read the guard block at its top first.
 
 // target: g3_eu  (134 placements, 16 anchored, 51 named symbols)
-//   0x80050520 LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x80050538 LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
-//   0x80050548 LIBETC    INTR           unique     ResetCallback  (sig-db agree)
-//   0x80050578 LIBETC    INTR           unique     InterruptCallback  (sig-db agree)
-//   0x800505a8 LIBETC    INTR           unique     DMACallback  (sig-db agree)
-//   0x800505d8 LIBETC    INTR           unique     VSyncCallback  (sig-db agree)
-//   0x8005060c LIBETC    INTR           unique     VSyncCallbacks  (sig-db agree)
-//   0x8005063c LIBETC    INTR           unique     StopCallback  (sig-db agree)
-//   0x8005066c LIBETC    INTR           unique     RestartCallback  (sig-db agree)
-//   0x8005069c LIBETC    INTR           unique     CheckCallback  (sig-db agree)
-//   0x800506ac LIBETC    INTR           unique     GetIntrMask  (sig-db agree)
-//   0x800506c4 LIBETC    INTR           unique     SetIntrMask  (sig-db agree)
-//   0x800506e0 LIBETC    INTR           unique     startIntr  (sig-db agree)
-//   0x800507bc LIBETC    INTR           unique     trapIntr  (sig-db agree)
-//   0x800509a4 LIBETC    INTR           unique     setIntr  (sig-db agree)
-//   0x80050af8 LIBETC    INTR           unique     stopIntr  (sig-db agree)
-//   0x80050ba8 LIBETC    INTR           unique     restartIntr  (sig-db agree)
-//   0x80050c30 LIBETC    INTR           unique     memclr  (sig-db agree)
-//   0x80051044 LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x8005109c LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x80051118 LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x80051144 LIBETC    INTR_VB        unique     memclr  (sig-db agree)
-//   0x80051170 LIBETC    VSYNC          unique     VSync  (sig-db agree)
-//   0x800512b8 LIBETC    VSYNC          unique     v_wait  (sig-db agree)
+//   0x80050520 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x80050538 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x80050548 LIBETC    INTR           unique     ResetCallback adoptable  (sig-db agree)
+//   0x80050578 LIBETC    INTR           unique     InterruptCallback adoptable  (sig-db agree)
+//   0x800505a8 LIBETC    INTR           unique     DMACallback adoptable  (sig-db agree)
+//   0x800505d8 LIBETC    INTR           unique     VSyncCallback adoptable  (sig-db agree)
+//   0x8005060c LIBETC    INTR           unique     VSyncCallbacks adoptable  (sig-db agree)
+//   0x8005063c LIBETC    INTR           unique     StopCallback adoptable  (sig-db agree)
+//   0x8005066c LIBETC    INTR           unique     RestartCallback adoptable  (sig-db agree)
+//   0x8005069c LIBETC    INTR           unique     CheckCallback adoptable  (sig-db agree)
+//   0x800506ac LIBETC    INTR           unique     GetIntrMask adoptable  (sig-db agree)
+//   0x800506c4 LIBETC    INTR           unique     SetIntrMask adoptable  (sig-db agree)
+//   0x800506e0 LIBETC    INTR           unique     startIntr adoptable  (sig-db agree)
+//   0x800507bc LIBETC    INTR           unique     trapIntr adoptable  (sig-db agree)
+//   0x800509a4 LIBETC    INTR           unique     setIntr adoptable  (sig-db agree)
+//   0x80050af8 LIBETC    INTR           unique     stopIntr adoptable  (sig-db agree)
+//   0x80050ba8 LIBETC    INTR           unique     restartIntr adoptable  (sig-db agree)
+//   0x80050c30 LIBETC    INTR           unique     memclr adoptable  (sig-db agree)
+//   0x80051044 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x8005109c LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x80051118 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x80051144 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x80051170 LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
+//   0x800512b8 LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
 //   0x8005510c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8005510c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80055a08 LIBGS     MATRIX         unique     GsInitCoordinate2  (sig-db agree)
-//   0x80055a84 LIBGS     MATRIX         unique     GsInitCoord2param  (sig-db agree)
-//   0x80055ab0 LIBGS     MATRIX         unique     GsSetLsMatrix  (sig-db agree)
-//   0x80055ae0 LIBGS     MATRIX         unique     GsSetLightMatrix  (sig-db agree)
-//   0x80055b7c LIBGS     MATRIX         unique     GsSetLightMatrix2  (sig-db agree)
-//   0x80055bb0 LIBGS     MATRIX         unique     GsMulCoord0  (sig-db agree)
-//   0x80055c44 LIBGS     MATRIX         unique     GsMulCoord2  (sig-db agree)
-//   0x80055cc8 LIBGS     MATRIX         unique     GsMulCoord3  (sig-db agree)
-//   0x80055d4c LIBGS     MATRIX         unique     print_matrix  (sig-db agree)
-//   0x80055dbc LIBGS     MATRIX         unique     print_vector  (sig-db agree)
-//   0x80055df0 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x80055e88 LIBGS     SCLIB          unique     GsMapModelingData
-//   0x80056114 LIBGS     MATRIX3        unique     GsGetLs
-//   0x800563e8 LIBGS     MATRIX3        unique     GsGetLw
-//   0x800566ac LIBGS     SCLIB          unique     GsSetAmbient
-//   0x800566d4 LIBGS     SCLIB          unique     GsInit3D
-//   0x80056f88 LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x800595c4 LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x8005a148 LIBGTE    DVF3_02        unique     GsTMDdivF3NL  (sig-db agree)
-//   0x8005a334 LIBGTE    DVF4_02        unique     GsTMDdivF4NL  (sig-db agree)
-//   0x8005a570 LIBGTE    DVG3_02        unique     GsTMDdivG3NL  (sig-db agree)
-//   0x8005aaf8 LIBGTE    DVFT3_00       unique     GsTMDdivTF3L  (sig-db agree)
-//   0x8005adf0 LIBGTE    DVFT4_00       unique     GsTMDdivTF4L  (sig-db agree)
-//   0x8005b43c LIBGTE    DVGT4_00       unique     GsTMDdivTG4L  (sig-db agree)
-//   0x8005b728 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3  (sig-db agree)
-//   0x8005bd5c LIBGTE    DVGT3_03       unique     GsTMDdivTNG3  (sig-db agree)
-//   0x8005bf98 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4  (sig-db agree)
-//   0x8005e224 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG  (sig-db agree)
+//   0x80055a08 LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
+//   0x80055a84 LIBGS     MATRIX         unique     GsInitCoord2param adoptable  (sig-db agree)
+//   0x80055ab0 LIBGS     MATRIX         unique     GsSetLsMatrix adoptable  (sig-db agree)
+//   0x80055ae0 LIBGS     MATRIX         unique     GsSetLightMatrix adoptable  (sig-db agree)
+//   0x80055b7c LIBGS     MATRIX         unique     GsSetLightMatrix2 adoptable  (sig-db agree)
+//   0x80055bb0 LIBGS     MATRIX         unique     GsMulCoord0 adoptable  (sig-db agree)
+//   0x80055c44 LIBGS     MATRIX         unique     GsMulCoord2 adoptable  (sig-db agree)
+//   0x80055cc8 LIBGS     MATRIX         unique     GsMulCoord3 adoptable  (sig-db agree)
+//   0x80055d4c LIBGS     MATRIX         unique     print_matrix adoptable  (sig-db agree)
+//   0x80055dbc LIBGS     MATRIX         unique     print_vector adoptable  (sig-db agree)
+//   0x80055df0 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x80055e88 LIBGS     SCLIB          unique     GsMapModelingData adoptable
+//   0x80056114 LIBGS     MATRIX3        unique     GsGetLs adoptable
+//   0x800563e8 LIBGS     MATRIX3        unique     GsGetLw adoptable
+//   0x800566ac LIBGS     SCLIB          unique     GsSetAmbient adoptable
+//   0x800566d4 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x80056f88 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x800595c4 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x8005a148 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
+//   0x8005a334 LIBGTE    DVF4_02        unique     GsTMDdivF4NL adoptable  (sig-db agree)
+//   0x8005a570 LIBGTE    DVG3_02        unique     GsTMDdivG3NL adoptable  (sig-db agree)
+//   0x8005aaf8 LIBGTE    DVFT3_00       unique     GsTMDdivTF3L adoptable  (sig-db agree)
+//   0x8005adf0 LIBGTE    DVFT4_00       unique     GsTMDdivTF4L adoptable  (sig-db agree)
+//   0x8005b43c LIBGTE    DVGT4_00       unique     GsTMDdivTG4L adoptable  (sig-db agree)
+//   0x8005b728 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3 adoptable  (sig-db agree)
+//   0x8005bd5c LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
+//   0x8005bf98 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4 adoptable  (sig-db agree)
+//   0x8005e224 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
 //   0x8005e494 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8005e494 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x8005eac8 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL  (sig-db agree)
-//   0x8005ed50 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL  (sig-db agree)
-//   0x8005efd4 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL  (sig-db agree)
-//   0x80061934 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG  (sig-db agree)
+//   0x8005eac8 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
+//   0x8005ed50 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL adoptable  (sig-db agree)
+//   0x8005efd4 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL adoptable  (sig-db agree)
+//   0x80061934 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
 //   0x80061bd8 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80061bd8 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
 //   0x800651f8 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x800651f8 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
-//   0x80065430 LIBGTE    DVF4_00        unique     GsTMDdivF4L  (sig-db agree)
-//   0x80065a10 LIBGTE    DVG4_00        unique     GsTMDdivG4L  (sig-db agree)
-//   0x80065cb8 LIBGTE    DVF3_03        unique     GsTMDdivNF3  (sig-db agree)
-//   0x80065ea0 LIBGTE    DVF4_03        unique     GsTMDdivNF4  (sig-db agree)
-//   0x80066404 LIBGTE    DVG4_03        unique     GsTMDdivNG4  (sig-db agree)
-//   0x800675ec LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x80065430 LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
+//   0x80065a10 LIBGTE    DVG4_00        unique     GsTMDdivG4L adoptable  (sig-db agree)
+//   0x80065cb8 LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
+//   0x80065ea0 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
+//   0x80066404 LIBGTE    DVG4_03        unique     GsTMDdivNG4 adoptable  (sig-db agree)
+//   0x800675ec LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x800676c4 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x800676c4 LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x800676e8 LIBGS     SCLIB          unique     gte_init
-//   0x80067864 LIBGS     SCLIB          unique     GsClearOt
-//   0x800678bc LIBGS     SCLIB          unique     GsSetLightMode
-//   0x80067948 LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x80067958 LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x80068120 LIBGS     EMULIB         unique     GsSwapDispBuff
+//   0x800676e8 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x80067864 LIBGS     SCLIB          unique     GsClearOt adoptable
+//   0x800678bc LIBGS     SCLIB          unique     GsSetLightMode adoptable
+//   0x80067948 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x80067958 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x80068120 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x800683c0 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800683c0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800683e0 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -119,8 +119,8 @@
 //   0x80068400 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068a28 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80068a28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80068a98 LIBPRESS  VLC            unique     MDEC_vlc_brk  (sig-db agree)
-//   0x80068ac8 LIBPRESS  VLC            unique     MDEC_vlc  (sig-db agree)
+//   0x80068a98 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
+//   0x80068ac8 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x800695a8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800695a8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80069650 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -131,26 +131,26 @@
 //   0x80069c4c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80069c6c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80069c6c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8006c7f4 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x8006e01c LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x8006e05c LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x8006e07c LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x8006e0ac LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x8006e300 LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x8006e368 LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x8006e424 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
-//   0x8006f898 LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x8006f9e4 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x8006fb54 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x8006fb88 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x8006fbc4 LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x8006fbf0 LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x8006fc00 LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x8006fc8c LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x80075c24 LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x80075c48 LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x80075c9c LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
-//   0x80075d50 LIBSND    VM_VSU         unique     SpuVmVSetUp  (sig-db agree)
+//   0x8006c7f4 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x8006e01c LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x8006e05c LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x8006e07c LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x8006e0ac LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x8006e300 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x8006e368 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x8006e424 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8006f898 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x8006f9e4 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x8006fb54 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x8006fb88 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x8006fbc4 LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x8006fbf0 LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x8006fc00 LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x8006fc8c LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x80075c24 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x80075c48 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x80075c9c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
+//   0x80075d50 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80075f70 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80075f70 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075f70 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -171,23 +171,23 @@
 //   0x800769f0 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800769f0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800769f0 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80076a10 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x80076a24 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x80077048 LIBSPU    S_M_M          unique     SpuMalloc  (sig-db agree)
-//   0x80077740 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x800777b8 LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x8007789c LIBSND    UT_GVA         unique     SsUtGetVagAtr  (sig-db agree)
-//   0x80077adc LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x80077ff0 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x80078150 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x8007817c LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x80078224 LIBSND    SSCALL         unique     SsSeqCalledTbyT  (sig-db agree)
-//   0x80078498 LIBSND    PAUSE          unique     Snd_pause  (sig-db agree)
-//   0x80078538 LIBSND    PAUSE          unique     Snd_nextpause  (sig-db agree)
-//   0x80078bd4 LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x80078c3c LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x8007af2c LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x8007af88 LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x80076a10 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x80076a24 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x80077048 LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
+//   0x80077740 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x800777b8 LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x8007789c LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
+//   0x80077adc LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x80077ff0 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x80078150 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x8007817c LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x80078224 LIBSND    SSCALL         unique     SsSeqCalledTbyT adoptable  (sig-db agree)
+//   0x80078498 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
+//   0x80078538 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
+//   0x80078bd4 LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x80078c3c LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x8007af2c LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x8007af88 LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8007b014 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8007b014 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007b014 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
@@ -201,92 +201,92 @@
 //   0x8007b034 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8007b034 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007b034 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x8007bf48 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x8007c0f8 LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x8007c1c8 LIBSND    UT_SVA         unique     SsUtSetVagAtr  (sig-db agree)
-//   0x8007c4b0 LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
+//   0x8007bf48 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8007c0f8 LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x8007c1c8 LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x8007c4b0 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x8007cabc LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8007cc28 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8007cc50 LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x8007cc50 LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
-//   0x8007cc7c LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x8007cc7c LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: g3_jp  (142 placements, 21 anchored, 35 named symbols)
-//   0x8005135c LIBETC    INTR_DMA       unique     startIntrDMA  (sig-db agree)
-//   0x800513ac LIBETC    INTR_DMA       unique     trapIntrDMA  (sig-db agree)
-//   0x80051530 LIBETC    INTR_DMA       unique     setIntrDMA  (sig-db agree)
-//   0x800515d8 LIBETC    INTR_DMA       unique     memclr  (sig-db agree)
+//   0x8005135c LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
+//   0x800513ac LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
+//   0x80051530 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
+//   0x800515d8 LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
 //   0x800517c4 LIBGS     SCLIB          ambiguous  GsSetProjection adoptable
 //   0x800517c4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff adoptable  (sig-db agree)
-//   0x800517e4 LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x8005183c LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x800518b8 LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x800518e4 LIBETC    INTR_VB        unique     memclr  (sig-db agree)
-//   0x80051910 LIBETC    VSYNC          unique     VSync  (sig-db agree)
-//   0x80051a58 LIBETC    VSYNC          unique     v_wait  (sig-db agree)
-//   0x80055008 LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x80055020 LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
+//   0x800517e4 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x8005183c LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x800518b8 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x800518e4 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x80051910 LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
+//   0x80051a58 LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
+//   0x80055008 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x80055020 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x80055900 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80055900 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x800561fc LIBGS     MATRIX         unique     GsInitCoordinate2  (sig-db agree)
-//   0x80056278 LIBGS     MATRIX         unique     GsInitCoord2param  (sig-db agree)
-//   0x800562a4 LIBGS     MATRIX         unique     GsSetLsMatrix  (sig-db agree)
-//   0x800562d4 LIBGS     MATRIX         unique     GsSetLightMatrix  (sig-db agree)
-//   0x80056370 LIBGS     MATRIX         unique     GsSetLightMatrix2  (sig-db agree)
-//   0x800563a4 LIBGS     MATRIX         unique     GsMulCoord0  (sig-db agree)
-//   0x80056438 LIBGS     MATRIX         unique     GsMulCoord2  (sig-db agree)
-//   0x800564bc LIBGS     MATRIX         unique     GsMulCoord3  (sig-db agree)
-//   0x80056540 LIBGS     MATRIX         unique     print_matrix  (sig-db agree)
-//   0x800565b0 LIBGS     MATRIX         unique     print_vector  (sig-db agree)
-//   0x800565e4 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x8005667c LIBGS     SCLIB          unique     GsMapModelingData
-//   0x800566f4 LIBGS     SCLIB          unique     GsGetTimInfo
-//   0x80056bdc LIBGS     MATRIX3        unique     GsGetLw
-//   0x80056ea0 LIBGS     SCLIB          unique     GsSetAmbient
-//   0x80056ec8 LIBGS     SCLIB          unique     GsInit3D
-//   0x8005777c LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x800579ac LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x800592a4 LIBGS     OBJT           unique     GsLinkObject4  (sig-db agree)
-//   0x80059d90 LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x80059e24 LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x8005a704 LIBGTE    DVF3_02        unique     GsTMDdivF3NL  (sig-db agree)
-//   0x8005ac5c LIBGTE    DVG3_02        unique     GsTMDdivG3NL  (sig-db agree)
-//   0x8005ae58 LIBGTE    DVG4_02        unique     GsTMDdivG4NL  (sig-db agree)
-//   0x8005b4dc LIBGTE    DVFT4_00       unique     GsTMDdivTF4L  (sig-db agree)
+//   0x800561fc LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
+//   0x80056278 LIBGS     MATRIX         unique     GsInitCoord2param adoptable  (sig-db agree)
+//   0x800562a4 LIBGS     MATRIX         unique     GsSetLsMatrix adoptable  (sig-db agree)
+//   0x800562d4 LIBGS     MATRIX         unique     GsSetLightMatrix adoptable  (sig-db agree)
+//   0x80056370 LIBGS     MATRIX         unique     GsSetLightMatrix2 adoptable  (sig-db agree)
+//   0x800563a4 LIBGS     MATRIX         unique     GsMulCoord0 adoptable  (sig-db agree)
+//   0x80056438 LIBGS     MATRIX         unique     GsMulCoord2 adoptable  (sig-db agree)
+//   0x800564bc LIBGS     MATRIX         unique     GsMulCoord3 adoptable  (sig-db agree)
+//   0x80056540 LIBGS     MATRIX         unique     print_matrix adoptable  (sig-db agree)
+//   0x800565b0 LIBGS     MATRIX         unique     print_vector adoptable  (sig-db agree)
+//   0x800565e4 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x8005667c LIBGS     SCLIB          unique     GsMapModelingData adoptable
+//   0x800566f4 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
+//   0x80056bdc LIBGS     MATRIX3        unique     GsGetLw adoptable
+//   0x80056ea0 LIBGS     SCLIB          unique     GsSetAmbient adoptable
+//   0x80056ec8 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x8005777c LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x800579ac LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x800592a4 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
+//   0x80059d90 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x80059e24 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x8005a704 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
+//   0x8005ac5c LIBGTE    DVG3_02        unique     GsTMDdivG3NL adoptable  (sig-db agree)
+//   0x8005ae58 LIBGTE    DVG4_02        unique     GsTMDdivG4NL adoptable  (sig-db agree)
+//   0x8005b4dc LIBGTE    DVFT4_00       unique     GsTMDdivTF4L adoptable  (sig-db agree)
 //   0x8005b77c LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x8005b77c LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x8005be14 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3  (sig-db agree)
-//   0x8005c098 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4  (sig-db agree)
-//   0x8005c684 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4  (sig-db agree)
+//   0x8005be14 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3 adoptable  (sig-db agree)
+//   0x8005c098 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
+//   0x8005c684 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4 adoptable  (sig-db agree)
 //   0x8005e5a8 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8005e5a8 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x8005eb80 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8005eb80 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x8005edc4 LIBGTE    DVG4_01        unique     GsTMDdivG4LFG  (sig-db agree)
-//   0x8005f43c LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL  (sig-db agree)
-//   0x8005f6c0 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL  (sig-db agree)
-//   0x8005f8f4 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL  (sig-db agree)
-//   0x80061bf0 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG  (sig-db agree)
+//   0x8005edc4 LIBGTE    DVG4_01        unique     GsTMDdivG4LFG adoptable  (sig-db agree)
+//   0x8005f43c LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL adoptable  (sig-db agree)
+//   0x8005f6c0 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL adoptable  (sig-db agree)
+//   0x8005f8f4 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL adoptable  (sig-db agree)
+//   0x80061bf0 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG adoptable  (sig-db agree)
 //   0x800622c4 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x800622c4 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x80062540 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG  (sig-db agree)
+//   0x80062540 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
 //   0x800658e4 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x800658e4 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
-//   0x80065b1c LIBGTE    DVF4_00        unique     GsTMDdivF4L  (sig-db agree)
+//   0x80065b1c LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
 //   0x80065d88 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x80065d88 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x800663a4 LIBGTE    DVF3_03        unique     GsTMDdivNF3  (sig-db agree)
-//   0x8006658c LIBGTE    DVF4_03        unique     GsTMDdivNF4  (sig-db agree)
-//   0x800667c4 LIBGTE    DVG3_03        unique     GsTMDdivNG3  (sig-db agree)
-//   0x80066e58 LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x800663a4 LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
+//   0x8006658c LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
+//   0x800667c4 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x80066e58 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x80066f30 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x80066f30 LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x80066f54 LIBGS     SCLIB          unique     gte_init
-//   0x800670d0 LIBGS     SCLIB          unique     GsClearOt
-//   0x80067128 LIBGS     SCLIB          unique     GsSetLightMode
-//   0x800671b4 LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x800671c4 LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x8006798c LIBGS     EMULIB         unique     GsSwapDispBuff
+//   0x80066f54 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x800670d0 LIBGS     SCLIB          unique     GsClearOt adoptable
+//   0x80067128 LIBGS     SCLIB          unique     GsSetLightMode adoptable
+//   0x800671b4 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x800671c4 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x8006798c LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x80067ac4 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80067ac4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80067bb0 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -295,8 +295,8 @@
 //   0x80067bd0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80067bf0 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80067bf0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80068218 LIBPRESS  VLC            unique     MDEC_vlc_brk  (sig-db agree)
-//   0x80068248 LIBPRESS  VLC            unique     MDEC_vlc  (sig-db agree)
+//   0x80068218 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
+//   0x80068248 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x80068d28 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80068d28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068dd0 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -307,31 +307,31 @@
 //   0x800693cc LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800693ec LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800693ec LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8006ba48 LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x8006bad8 LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x8006bb00 LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x8006bb28 LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x8006bb60 LIBCD     CDREAD2        unique     CdRead2  (sig-db agree)
-//   0x8006bc04 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x8006d55c LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x8006d59c LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x8006d5bc LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x8006d5ec LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x8006d64c LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x8006d710 LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x8006d778 LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x8006efd0 LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x8006eff4 LIBSPU    S_INI          unique     _SpuInit  (sig-db agree)
-//   0x8006f0bc LIBSPU    S_INI          unique     SpuStart  (sig-db agree)
-//   0x8006f140 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x8006f2b0 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x8006f2e4 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x8006f320 LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x8006f34c LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x8006f518 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x80074e14 LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x80074e38 LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x80074e8c LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
+//   0x8006ba48 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x8006bad8 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x8006bb00 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x8006bb28 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x8006bb60 LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
+//   0x8006bc04 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x8006d55c LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x8006d59c LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x8006d5bc LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x8006d5ec LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x8006d64c LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x8006d710 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x8006d778 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x8006efd0 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x8006eff4 LIBSPU    S_INI          unique     _SpuInit adoptable  (sig-db agree)
+//   0x8006f0bc LIBSPU    S_INI          unique     SpuStart adoptable  (sig-db agree)
+//   0x8006f140 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x8006f2b0 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x8006f2e4 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x8006f320 LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x8006f34c LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x8006f518 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x80074e14 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x80074e38 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x80074e8c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x80075298 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80075298 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075298 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -349,105 +349,105 @@
 //   0x80075d08 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80075d08 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075d08 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80075d28 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x80075d3c LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x80076360 LIBSPU    S_M_M          unique     SpuMalloc  (sig-db agree)
-//   0x80076628 LIBSPU    S_M_INT        unique     _spu_gcSPU  (sig-db agree)
-//   0x80076928 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x800769a0 LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x80076df4 LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x80076e44 LIBSPU    S_SCA          unique     SpuSetCommonAttr  (sig-db agree)
-//   0x800771d8 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x80077338 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x80077364 LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x800777b0 LIBSND    DECRE          unique     Snd_decrescendo  (sig-db agree)
-//   0x80077c60 LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x80077cc8 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x8007a034 LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x8007a090 LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x80075d28 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x80075d3c LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x80076360 LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
+//   0x80076628 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
+//   0x80076928 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x800769a0 LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x80076df4 LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x80076e44 LIBSPU    S_SCA          unique     SpuSetCommonAttr adoptable  (sig-db agree)
+//   0x800771d8 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x80077338 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x80077364 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x800777b0 LIBSND    DECRE          unique     Snd_decrescendo adoptable  (sig-db agree)
+//   0x80077c60 LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x80077cc8 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x8007a034 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x8007a090 LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8007a11c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8007a11c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007a11c LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8007a13c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8007a13c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007a13c LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x8007af68 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea  (sig-db agree)
-//   0x8007afd8 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_  (sig-db agree)
-//   0x8007b050 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x8007b200 LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x8007b2d0 LIBSND    NEXT           unique     Snd_nextsep  (sig-db agree)
-//   0x8007b6e0 LIBSND    CRES           unique     Snd_crescendo  (sig-db agree)
-//   0x8007bf4c LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
-//   0x8007c068 LIBSND    PAUSE          unique     Snd_pause  (sig-db agree)
-//   0x8007c108 LIBSND    PAUSE          unique     Snd_nextpause  (sig-db agree)
-//   0x8007c16c LIBSND    TEMPO          unique     Snd_tempo  (sig-db agree)
-//   0x8007c34c LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x8007af68 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
+//   0x8007afd8 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
+//   0x8007b050 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8007b200 LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x8007b2d0 LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
+//   0x8007b6e0 LIBSND    CRES           unique     Snd_crescendo adoptable  (sig-db agree)
+//   0x8007bf4c LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
+//   0x8007c068 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
+//   0x8007c108 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
+//   0x8007c16c LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
+//   0x8007c34c LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: g3org_eu  (133 placements, 17 anchored, 26 named symbols)
-//   0x8004d254 LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x8004d26c LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
-//   0x8004dad0 LIBETC    INTR_DMA       unique     startIntrDMA  (sig-db agree)
-//   0x8004db20 LIBETC    INTR_DMA       unique     trapIntrDMA  (sig-db agree)
-//   0x8004dca4 LIBETC    INTR_DMA       unique     setIntrDMA  (sig-db agree)
-//   0x8004dd4c LIBETC    INTR_DMA       unique     memclr  (sig-db agree)
-//   0x8004dd78 LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x8004ddd0 LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x8004de4c LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x8004de78 LIBETC    INTR_VB        unique     memclr  (sig-db agree)
+//   0x8004d254 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x8004d26c LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x8004dad0 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
+//   0x8004db20 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
+//   0x8004dca4 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
+//   0x8004dd4c LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
+//   0x8004dd78 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x8004ddd0 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x8004de4c LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x8004de78 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
 //   0x80051e40 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80051e40 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80052110 LIBGS     EMULIB         unique     GsInitGraph
-//   0x80052188 LIBGS     EMULIB         unique     gpu_init
-//   0x800522e0 LIBGS     EMULIB         unique     GsInitGraph2
-//   0x80052358 LIBGS     EMULIB         unique     valiable_init
-//   0x800525d4 LIBGS     EMULIB         unique     GsSortClear
-//   0x80052c54 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x80052cec LIBGS     SCLIB          unique     GsMapModelingData
-//   0x80052d64 LIBGS     SCLIB          unique     GsGetTimInfo
-//   0x80052e48 LIBGS     MATRIX3        unique     GsGetLs
-//   0x80053510 LIBGS     SCLIB          unique     GsSetAmbient
-//   0x80053538 LIBGS     SCLIB          unique     GsInit3D
-//   0x80053dec LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x8005401c LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x80055a6c LIBGS     2D_SP0         unique     GsSortSprite  (sig-db agree)
-//   0x80056428 LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x800564bc LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x80056e7c LIBGTE    DVF3_02        unique     GsTMDdivF3NL  (sig-db agree)
-//   0x800573d4 LIBGTE    DVG3_02        unique     GsTMDdivG3NL  (sig-db agree)
-//   0x800575d0 LIBGTE    DVG4_02        unique     GsTMDdivG4NL  (sig-db agree)
-//   0x8005782c LIBGTE    DVFT3_00       unique     GsTMDdivTF3L  (sig-db agree)
+//   0x80052110 LIBGS     EMULIB         unique     GsInitGraph adoptable
+//   0x80052188 LIBGS     EMULIB         unique     gpu_init adoptable
+//   0x800522e0 LIBGS     EMULIB         unique     GsInitGraph2 adoptable
+//   0x80052358 LIBGS     EMULIB         unique     valiable_init adoptable
+//   0x800525d4 LIBGS     EMULIB         unique     GsSortClear adoptable
+//   0x80052c54 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x80052cec LIBGS     SCLIB          unique     GsMapModelingData adoptable
+//   0x80052d64 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
+//   0x80052e48 LIBGS     MATRIX3        unique     GsGetLs adoptable
+//   0x80053510 LIBGS     SCLIB          unique     GsSetAmbient adoptable
+//   0x80053538 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x80053dec LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x8005401c LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x80055a6c LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x80056428 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x800564bc LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x80056e7c LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
+//   0x800573d4 LIBGTE    DVG3_02        unique     GsTMDdivG3NL adoptable  (sig-db agree)
+//   0x800575d0 LIBGTE    DVG4_02        unique     GsTMDdivG4NL adoptable  (sig-db agree)
+//   0x8005782c LIBGTE    DVFT3_00       unique     GsTMDdivTF3L adoptable  (sig-db agree)
 //   0x80057ef4 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80057ef4 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x80058170 LIBGTE    DVGT4_00       unique     GsTMDdivTG4L  (sig-db agree)
-//   0x80058810 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4  (sig-db agree)
-//   0x80058a90 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3  (sig-db agree)
+//   0x80058170 LIBGTE    DVGT4_00       unique     GsTMDdivTG4L adoptable  (sig-db agree)
+//   0x80058810 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
+//   0x80058a90 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
 //   0x8005ad20 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8005ad20 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
-//   0x8005af58 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG  (sig-db agree)
-//   0x8005b53c LIBGTE    DVG4_01        unique     GsTMDdivG4LFG  (sig-db agree)
-//   0x8005b7fc LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL  (sig-db agree)
-//   0x8005be38 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL  (sig-db agree)
-//   0x8005c06c LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL  (sig-db agree)
-//   0x8005e368 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG  (sig-db agree)
-//   0x8005e668 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG  (sig-db agree)
-//   0x8005ecb8 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG  (sig-db agree)
-//   0x80062294 LIBGTE    DVF4_00        unique     GsTMDdivF4L  (sig-db agree)
+//   0x8005af58 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
+//   0x8005b53c LIBGTE    DVG4_01        unique     GsTMDdivG4LFG adoptable  (sig-db agree)
+//   0x8005b7fc LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
+//   0x8005be38 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL adoptable  (sig-db agree)
+//   0x8005c06c LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL adoptable  (sig-db agree)
+//   0x8005e368 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG adoptable  (sig-db agree)
+//   0x8005e668 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
+//   0x8005ecb8 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x80062294 LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
 //   0x80062500 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x80062500 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x80062b1c LIBGTE    DVF3_03        unique     GsTMDdivNF3  (sig-db agree)
-//   0x80062d04 LIBGTE    DVF4_03        unique     GsTMDdivNF4  (sig-db agree)
-//   0x80062f3c LIBGTE    DVG3_03        unique     GsTMDdivNG3  (sig-db agree)
-//   0x80064320 LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x80062b1c LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
+//   0x80062d04 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
+//   0x80062f3c LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x80064320 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x800643f8 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x800643f8 LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x8006441c LIBGS     SCLIB          unique     gte_init
-//   0x800646c8 LIBGS     SCLIB          unique     GsClearOt
-//   0x80064720 LIBGS     SCLIB          unique     GsSetLightMode
-//   0x800647ac LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x800647bc LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x800648d8 LIBGS     SCLIB          unique     GsSetFlatLight
-//   0x80064d9c LIBGS     SCLIB          unique     gte_set_lc
-//   0x80064e04 LIBGS     SCLIB          unique     gte_read_lc
+//   0x8006441c LIBGS     SCLIB          unique     gte_init adoptable
+//   0x800646c8 LIBGS     SCLIB          unique     GsClearOt adoptable
+//   0x80064720 LIBGS     SCLIB          unique     GsSetLightMode adoptable
+//   0x800647ac LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x800647bc LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x800648d8 LIBGS     SCLIB          unique     GsSetFlatLight adoptable
+//   0x80064d9c LIBGS     SCLIB          unique     gte_set_lc adoptable
+//   0x80064e04 LIBGS     SCLIB          unique     gte_read_lc adoptable
 //   0x80065224 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80065224 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80065244 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -456,8 +456,8 @@
 //   0x80065264 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8006575c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8006575c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x800658fc LIBPRESS  VLC            unique     MDEC_vlc_brk  (sig-db agree)
-//   0x8006592c LIBPRESS  VLC            unique     MDEC_vlc  (sig-db agree)
+//   0x800658fc LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
+//   0x8006592c LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x8006640c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8006640c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800664b4 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -468,30 +468,30 @@
 //   0x80066980 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800669a0 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800669a0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8006937c LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x8006940c LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x80069434 LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x8006945c LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x80069528 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x8006ae80 LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x8006aec0 LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x8006aee0 LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x8006af10 LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x8006af70 LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x8006b034 LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x8006b09c LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x8006b158 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
-//   0x8006c5cc LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x8006c848 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x8006c9b8 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x8006c9ec LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x8006ca28 LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x8006ca54 LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x8006ca64 LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x8006caf0 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x80072958 LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x8007297c LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x800729d0 LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
+//   0x8006937c LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x8006940c LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x80069434 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x8006945c LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80069528 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x8006ae80 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x8006aec0 LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x8006aee0 LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x8006af10 LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x8006af70 LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x8006b034 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x8006b09c LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x8006b158 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8006c5cc LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x8006c848 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x8006c9b8 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x8006c9ec LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x8006ca28 LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x8006ca54 LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x8006ca64 LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x8006caf0 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x80072958 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x8007297c LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x800729d0 LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x80072dd4 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80072dd4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072dd4 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -509,118 +509,118 @@
 //   0x80073854 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80073854 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80073854 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80073874 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x80073888 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x80073eac LIBSPU    S_M_M          unique     SpuMalloc  (sig-db agree)
-//   0x80074174 LIBSPU    S_M_INT        unique     _spu_gcSPU  (sig-db agree)
-//   0x80074474 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x800744ec LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x80074940 LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x80074990 LIBSPU    S_SCA          unique     SpuSetCommonAttr  (sig-db agree)
-//   0x80074d24 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x80074e84 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x80074eb0 LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x800752fc LIBSND    PAUSE          unique     Snd_pause  (sig-db agree)
-//   0x8007539c LIBSND    PAUSE          unique     Snd_nextpause  (sig-db agree)
-//   0x80075400 LIBSND    TEMPO          unique     Snd_tempo  (sig-db agree)
-//   0x80075a38 LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x80075aa0 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x80077c60 LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x80077cbc LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x80073874 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x80073888 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x80073eac LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
+//   0x80074174 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
+//   0x80074474 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x800744ec LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x80074940 LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x80074990 LIBSPU    S_SCA          unique     SpuSetCommonAttr adoptable  (sig-db agree)
+//   0x80074d24 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x80074e84 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x80074eb0 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x800752fc LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
+//   0x8007539c LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
+//   0x80075400 LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
+//   0x80075a38 LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x80075aa0 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x80077c60 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x80077cbc LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80077d48 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80077d48 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80077d48 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80077d68 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80077d68 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80077d68 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80078b94 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea  (sig-db agree)
-//   0x80078c04 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_  (sig-db agree)
-//   0x80078c7c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x80078e2c LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x80079314 LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
-//   0x80079ab4 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x80079ae0 LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x80078b94 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
+//   0x80078c04 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
+//   0x80078c7c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x80078e2c LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x80079314 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
+//   0x80079ab4 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x80079ae0 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: g3org_jp  (147 placements, 17 anchored, 33 named symbols)
-//   0x8004e208 LIBETC    INTR_DMA       unique     startIntrDMA  (sig-db agree)
-//   0x8004e258 LIBETC    INTR_DMA       unique     trapIntrDMA  (sig-db agree)
-//   0x8004e3dc LIBETC    INTR_DMA       unique     setIntrDMA  (sig-db agree)
-//   0x8004e484 LIBETC    INTR_DMA       unique     memclr  (sig-db agree)
+//   0x8004e208 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
+//   0x8004e258 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
+//   0x8004e3dc LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
+//   0x8004e484 LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
 //   0x8004e4b0 LIBETC    PAD            ambiguous  PadInit  (sig-db agree)
 //   0x8004e510 LIBETC    PAD            ambiguous  PadRead  (sig-db agree)
 //   0x8004e540 LIBETC    PAD            ambiguous  PadStop  (sig-db agree)
 //   0x8004e540 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8004e540 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8004e560 LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x8004e5b8 LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x8004e634 LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x8004e660 LIBETC    INTR_VB        unique     memclr  (sig-db agree)
-//   0x80051d84 LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x80051d9c LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
+//   0x8004e560 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x8004e5b8 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x8004e634 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x8004e660 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x80051d84 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x80051d9c LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x8005267c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8005267c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80053490 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x80053528 LIBGS     SCLIB          unique     GsMapModelingData
-//   0x800535a0 LIBGS     SCLIB          unique     GsGetTimInfo
-//   0x80053684 LIBGS     MATRIX3        unique     GsGetLs
-//   0x80053d4c LIBGS     SCLIB          unique     GsSetAmbient
-//   0x80053d74 LIBGS     SCLIB          unique     GsInit3D
-//   0x80053dec LIBGS     MATRIX3        unique     GsSetRefView2
-//   0x800541b4 LIBGS     MATRIX3        unique     scale_view_param
-//   0x800542a4 LIBGS     MATRIX3        unique     select_max_param
-//   0x8005436c LIBGS     MATRIX3        unique     len_param
-//   0x80054628 LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x80054858 LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x80056150 LIBGS     OBJT           unique     GsLinkObject4  (sig-db agree)
-//   0x80056280 LIBGS     2D_SP0         unique     GsSortSprite  (sig-db agree)
-//   0x80056c3c LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x80056cd0 LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x800575b0 LIBGTE    DVF3_02        unique     GsTMDdivF3NL  (sig-db agree)
-//   0x8005779c LIBGTE    DVF4_02        unique     GsTMDdivF4NL  (sig-db agree)
-//   0x80057d04 LIBGTE    DVG4_02        unique     GsTMDdivG4NL  (sig-db agree)
-//   0x80057f60 LIBGTE    DVFT3_00       unique     GsTMDdivTF3L  (sig-db agree)
+//   0x80053490 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x80053528 LIBGS     SCLIB          unique     GsMapModelingData adoptable
+//   0x800535a0 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
+//   0x80053684 LIBGS     MATRIX3        unique     GsGetLs adoptable
+//   0x80053d4c LIBGS     SCLIB          unique     GsSetAmbient adoptable
+//   0x80053d74 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x80053dec LIBGS     MATRIX3        unique     GsSetRefView2 adoptable
+//   0x800541b4 LIBGS     MATRIX3        unique     scale_view_param adoptable
+//   0x800542a4 LIBGS     MATRIX3        unique     select_max_param adoptable
+//   0x8005436c LIBGS     MATRIX3        unique     len_param adoptable
+//   0x80054628 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x80054858 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x80056150 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
+//   0x80056280 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x80056c3c LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x80056cd0 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x800575b0 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
+//   0x8005779c LIBGTE    DVF4_02        unique     GsTMDdivF4NL adoptable  (sig-db agree)
+//   0x80057d04 LIBGTE    DVG4_02        unique     GsTMDdivG4NL adoptable  (sig-db agree)
+//   0x80057f60 LIBGTE    DVFT3_00       unique     GsTMDdivTF3L adoptable  (sig-db agree)
 //   0x80058628 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80058628 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x800588a4 LIBGTE    DVGT4_00       unique     GsTMDdivTG4L  (sig-db agree)
-//   0x80058f44 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4  (sig-db agree)
-//   0x800591c4 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3  (sig-db agree)
-//   0x80059400 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4  (sig-db agree)
+//   0x800588a4 LIBGTE    DVGT4_00       unique     GsTMDdivTG4L adoptable  (sig-db agree)
+//   0x80058f44 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
+//   0x800591c4 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
+//   0x80059400 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4 adoptable  (sig-db agree)
 //   0x8005b454 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8005b454 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
-//   0x8005b68c LIBGTE    DVF4_01        unique     GsTMDdivF4LFG  (sig-db agree)
+//   0x8005b68c LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
 //   0x8005b8fc LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8005b8fc LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x8005bf30 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL  (sig-db agree)
-//   0x8005c1b8 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL  (sig-db agree)
-//   0x8005c7a0 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL  (sig-db agree)
-//   0x8005ed9c LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG  (sig-db agree)
-//   0x8005f3ec LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG  (sig-db agree)
+//   0x8005bf30 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
+//   0x8005c1b8 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL adoptable  (sig-db agree)
+//   0x8005c7a0 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL adoptable  (sig-db agree)
+//   0x8005ed9c LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
+//   0x8005f3ec LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
 //   0x80062660 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x80062660 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x80062c34 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x80062c34 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x80062e78 LIBGTE    DVG4_00        unique     GsTMDdivG4L  (sig-db agree)
-//   0x80063438 LIBGTE    DVF4_03        unique     GsTMDdivNF4  (sig-db agree)
-//   0x80063670 LIBGTE    DVG3_03        unique     GsTMDdivNG3  (sig-db agree)
-//   0x8006386c LIBGTE    DVG4_03        unique     GsTMDdivNG4  (sig-db agree)
+//   0x80062e78 LIBGTE    DVG4_00        unique     GsTMDdivG4L adoptable  (sig-db agree)
+//   0x80063438 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
+//   0x80063670 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x8006386c LIBGTE    DVG4_03        unique     GsTMDdivNG4 adoptable  (sig-db agree)
 //   0x80063ddc LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x80063ddc LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x80063e00 LIBGS     SCLIB          unique     gte_init
-//   0x80063f7c LIBGS     SCLIB          unique     GsClearOt
-//   0x80063fd4 LIBGS     SCLIB          unique     GsSetLightMode
-//   0x80064060 LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x80064070 LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x80064838 LIBGS     EMULIB         unique     GsSwapDispBuff
-//   0x80064970 LIBGS     SCLIB          ambiguous  GsSetProjection
-//   0x80064970 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x80063e00 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x80063f7c LIBGS     SCLIB          unique     GsClearOt adoptable
+//   0x80063fd4 LIBGS     SCLIB          unique     GsSetLightMode adoptable
+//   0x80064060 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x80064070 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x80064838 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
+//   0x80064970 LIBGS     SCLIB          ambiguous  GsSetProjection adoptable
+//   0x80064970 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff adoptable  (sig-db agree)
 //   0x80064a5c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80064a5c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80064a7c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80064a7c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80064a9c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80064a9c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x800650c4 LIBPRESS  VLC            unique     MDEC_vlc_brk  (sig-db agree)
-//   0x800650f4 LIBPRESS  VLC            unique     MDEC_vlc  (sig-db agree)
+//   0x800650c4 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
+//   0x800650f4 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x80065bd4 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80065bd4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80065c7c LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -631,34 +631,34 @@
 //   0x80066278 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80066298 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80066298 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x800688f4 LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x80068984 LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x800689ac LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x800689d4 LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x80068a0c LIBCD     CDREAD2        unique     CdRead2  (sig-db agree)
-//   0x80068ab0 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x8006a408 LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x8006a448 LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
+//   0x800688f4 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x80068984 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x800689ac LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x800689d4 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80068a0c LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
+//   0x80068ab0 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x8006a408 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x8006a448 LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
 //   0x8006a468 LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
-//   0x8006a498 LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x8006a4f8 LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x8006a5bc LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x8006a624 LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x8006a6e0 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
+//   0x8006a498 LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x8006a4f8 LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x8006a5bc LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x8006a624 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x8006a6e0 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
 //   0x8006be7c LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
-//   0x8006bea0 LIBSPU    S_INI          unique     _SpuInit  (sig-db agree)
-//   0x8006bf68 LIBSPU    S_INI          unique     SpuStart  (sig-db agree)
-//   0x8006bfec LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x8006c15c LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x8006c190 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x8006c1cc LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x8006c1f8 LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x8006c208 LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x8006c294 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x80071cc0 LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x80071ce4 LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x80071d38 LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
-//   0x80071dec LIBSND    VM_VSU         unique     SpuVmVSetUp  (sig-db agree)
+//   0x8006bea0 LIBSPU    S_INI          unique     _SpuInit adoptable  (sig-db agree)
+//   0x8006bf68 LIBSPU    S_INI          unique     SpuStart adoptable  (sig-db agree)
+//   0x8006bfec LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x8006c15c LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x8006c190 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x8006c1cc LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x8006c1f8 LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x8006c208 LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x8006c294 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x80071cc0 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x80071ce4 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x80071d38 LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
+//   0x80071dec LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80072014 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80072014 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072014 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -679,21 +679,21 @@
 //   0x80072a84 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80072a84 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072a84 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80072aa4 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x80072ab8 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x800730dc LIBSPU    S_M_M          unique     SpuMalloc  (sig-db agree)
-//   0x800737d4 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x8007384c LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x80073930 LIBSND    UT_GVA         unique     SsUtGetVagAtr  (sig-db agree)
-//   0x80073b70 LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x80074084 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x800741e4 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x80074210 LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x800742b8 LIBSND    SSCALL         unique     SsSeqCalledTbyT  (sig-db agree)
-//   0x80074b0c LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x80074b74 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x80076ee0 LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x80076f3c LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x80072aa4 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x80072ab8 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x800730dc LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
+//   0x800737d4 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x8007384c LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x80073930 LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
+//   0x80073b70 LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x80074084 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x800741e4 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x80074210 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x800742b8 LIBSND    SSCALL         unique     SsSeqCalledTbyT adoptable  (sig-db agree)
+//   0x80074b0c LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x80074b74 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x80076ee0 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x80076f3c LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80076fc8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80076fc8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80076fc8 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
@@ -707,85 +707,85 @@
 //   0x80076fe8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80076fe8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80076fe8 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80077efc LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x800780ac LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x8007817c LIBSND    NEXT           unique     Snd_nextsep  (sig-db agree)
-//   0x8007827c LIBSND    UT_SVA         unique     SsUtSetVagAtr  (sig-db agree)
+//   0x80077efc LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x800780ac LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x8007817c LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
+//   0x8007827c LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
 //   0x80078b08 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x80078c74 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x80078c9c LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x80078c9c LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
-//   0x80078cc8 LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
-//   0x80078de4 LIBSND    PAUSE          unique     Snd_pause  (sig-db agree)
-//   0x80078e84 LIBSND    PAUSE          unique     Snd_nextpause  (sig-db agree)
-//   0x800791f8 LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x80078cc8 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
+//   0x80078de4 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
+//   0x80078e84 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
+//   0x800791f8 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: mainmenu_eu  (140 placements, 16 anchored, 33 named symbols)
-//   0x8006797c LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x80067994 LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
-//   0x800681f8 LIBETC    INTR_DMA       unique     startIntrDMA  (sig-db agree)
-//   0x80068248 LIBETC    INTR_DMA       unique     trapIntrDMA  (sig-db agree)
-//   0x800683cc LIBETC    INTR_DMA       unique     setIntrDMA  (sig-db agree)
-//   0x80068474 LIBETC    INTR_DMA       unique     memclr  (sig-db agree)
-//   0x800686fc LIBETC    VSYNC          unique     VSync  (sig-db agree)
-//   0x80068844 LIBETC    VSYNC          unique     v_wait  (sig-db agree)
+//   0x8006797c LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x80067994 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x800681f8 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
+//   0x80068248 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
+//   0x800683cc LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
+//   0x80068474 LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
+//   0x800686fc LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
+//   0x80068844 LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
 //   0x8006c568 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8006c568 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8006c838 LIBGS     EMULIB         unique     GsInitGraph
-//   0x8006c8b0 LIBGS     EMULIB         unique     gpu_init
-//   0x8006ca08 LIBGS     EMULIB         unique     GsInitGraph2
-//   0x8006ca80 LIBGS     EMULIB         unique     valiable_init
-//   0x8006ccfc LIBGS     EMULIB         unique     GsSortClear
-//   0x8006d37c LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x8006d414 LIBGS     SCLIB          unique     GsMapModelingData
-//   0x8006d48c LIBGS     SCLIB          unique     GsGetTimInfo
-//   0x8006d570 LIBGS     MATRIX3        unique     GsGetLs
-//   0x8006dc38 LIBGS     SCLIB          unique     GsSetAmbient
-//   0x8006dc60 LIBGS     SCLIB          unique     GsInit3D
-//   0x8006e514 LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x8006e744 LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x80070b50 LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x80070be4 LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x800715a4 LIBGTE    DVF3_02        unique     GsTMDdivF3NL  (sig-db agree)
-//   0x80071afc LIBGTE    DVG3_02        unique     GsTMDdivG3NL  (sig-db agree)
-//   0x80071cf8 LIBGTE    DVG4_02        unique     GsTMDdivG4NL  (sig-db agree)
-//   0x8007237c LIBGTE    DVFT4_00       unique     GsTMDdivTF4L  (sig-db agree)
+//   0x8006c838 LIBGS     EMULIB         unique     GsInitGraph adoptable
+//   0x8006c8b0 LIBGS     EMULIB         unique     gpu_init adoptable
+//   0x8006ca08 LIBGS     EMULIB         unique     GsInitGraph2 adoptable
+//   0x8006ca80 LIBGS     EMULIB         unique     valiable_init adoptable
+//   0x8006ccfc LIBGS     EMULIB         unique     GsSortClear adoptable
+//   0x8006d37c LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x8006d414 LIBGS     SCLIB          unique     GsMapModelingData adoptable
+//   0x8006d48c LIBGS     SCLIB          unique     GsGetTimInfo adoptable
+//   0x8006d570 LIBGS     MATRIX3        unique     GsGetLs adoptable
+//   0x8006dc38 LIBGS     SCLIB          unique     GsSetAmbient adoptable
+//   0x8006dc60 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x8006e514 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x8006e744 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x80070b50 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x80070be4 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x800715a4 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
+//   0x80071afc LIBGTE    DVG3_02        unique     GsTMDdivG3NL adoptable  (sig-db agree)
+//   0x80071cf8 LIBGTE    DVG4_02        unique     GsTMDdivG4NL adoptable  (sig-db agree)
+//   0x8007237c LIBGTE    DVFT4_00       unique     GsTMDdivTF4L adoptable  (sig-db agree)
 //   0x8007261c LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x8007261c LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x80072cb4 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3  (sig-db agree)
-//   0x80072f38 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4  (sig-db agree)
-//   0x800731b8 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3  (sig-db agree)
+//   0x80072cb4 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3 adoptable  (sig-db agree)
+//   0x80072f38 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
+//   0x800731b8 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
 //   0x80075448 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x80075448 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
-//   0x80075680 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG  (sig-db agree)
+//   0x80075680 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
 //   0x80075a20 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x80075a20 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x80075c64 LIBGTE    DVG4_01        unique     GsTMDdivG4LFG  (sig-db agree)
-//   0x80075f24 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL  (sig-db agree)
-//   0x80076560 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL  (sig-db agree)
-//   0x80076794 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL  (sig-db agree)
-//   0x80078a90 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG  (sig-db agree)
+//   0x80075c64 LIBGTE    DVG4_01        unique     GsTMDdivG4LFG adoptable  (sig-db agree)
+//   0x80075f24 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
+//   0x80076560 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL adoptable  (sig-db agree)
+//   0x80076794 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL adoptable  (sig-db agree)
+//   0x80078a90 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG adoptable  (sig-db agree)
 //   0x80079164 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80079164 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x800793e0 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG  (sig-db agree)
-//   0x8007c9bc LIBGTE    DVF4_00        unique     GsTMDdivF4L  (sig-db agree)
+//   0x800793e0 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x8007c9bc LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
 //   0x8007cc28 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8007cc28 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x8007d244 LIBGTE    DVF3_03        unique     GsTMDdivNF3  (sig-db agree)
-//   0x8007d42c LIBGTE    DVF4_03        unique     GsTMDdivNF4  (sig-db agree)
-//   0x8007d664 LIBGTE    DVG3_03        unique     GsTMDdivNG3  (sig-db agree)
-//   0x8007ea48 LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x8007d244 LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
+//   0x8007d42c LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
+//   0x8007d664 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x8007ea48 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8007eb20 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8007eb20 LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x8007f6c0 LIBGS     SCLIB          unique     gte_init
-//   0x8007f83c LIBGS     SCLIB          unique     GsClearOt
-//   0x8007f894 LIBGS     SCLIB          unique     GsSetLightMode
-//   0x8007f920 LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x8007f930 LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x800800f8 LIBGS     EMULIB         unique     GsSwapDispBuff
-//   0x800801ec LIBGS     2D_COM0        unique     _mk_spr_packet  (sig-db agree)
-//   0x8008022c LIBGS     2D_COM0        unique     _mk_xpndsp  (sig-db agree)
-//   0x800804f4 LIBGS     2D_COM0        unique     _mk_normsp  (sig-db agree)
+//   0x8007f6c0 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x8007f83c LIBGS     SCLIB          unique     GsClearOt adoptable
+//   0x8007f894 LIBGS     SCLIB          unique     GsSetLightMode adoptable
+//   0x8007f920 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x8007f930 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x800800f8 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
+//   0x800801ec LIBGS     2D_COM0        unique     _mk_spr_packet adoptable  (sig-db agree)
+//   0x8008022c LIBGS     2D_COM0        unique     _mk_xpndsp adoptable  (sig-db agree)
+//   0x800804f4 LIBGS     2D_COM0        unique     _mk_normsp adoptable  (sig-db agree)
 //   0x80080a38 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80080a38 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080a58 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -804,29 +804,29 @@
 //   0x80082194 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800821b4 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800821b4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80084b90 LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x80084c20 LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x80084c48 LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x80084c70 LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x80084d3c LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x800858fc LIBCD     CDROM          unique     StSetChannel  (sig-db elsewhere)
-//   0x80086910 LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x80086950 LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x80086970 LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x800869a0 LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x80086a00 LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x80086ac4 LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x80086b2c LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x80086e88 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x80086fe4 LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x800883e0 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x8008841c LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x80088448 LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x80088458 LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x800884e4 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x8008e34c LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x8008e370 LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x8008e5a8 LIBSND    VM_VSU         unique     SpuVmVSetUp  (sig-db agree)
+//   0x80084b90 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x80084c20 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x80084c48 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x80084c70 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80084d3c LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x800858fc LIBCD     CDROM          unique     StSetChannel adoptable  (sig-db elsewhere)
+//   0x80086910 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x80086950 LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x80086970 LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x800869a0 LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x80086a00 LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x80086ac4 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x80086b2c LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x80086e88 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x80086fe4 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x800883e0 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x8008841c LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x80088448 LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x80088458 LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x800884e4 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x8008e34c LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x8008e370 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x8008e5a8 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x8008e7c8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8008e7c8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e7c8 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -847,25 +847,25 @@
 //   0x8008f248 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8008f248 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008f248 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x8008f268 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
-//   0x8008f304 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x8008f318 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x8008f93c LIBSPU    S_M_M          unique     SpuMalloc  (sig-db agree)
-//   0x8008fc04 LIBSPU    S_M_INT        unique     _spu_gcSPU  (sig-db agree)
-//   0x8008ff04 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x80090190 LIBSND    UT_GVA         unique     SsUtGetVagAtr  (sig-db agree)
-//   0x800903d0 LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x80090420 LIBSPU    S_SCA          unique     SpuSetCommonAttr  (sig-db agree)
-//   0x80090a44 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x80090a70 LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x80090b18 LIBSND    SSCALL         unique     SsSeqCalledTbyT  (sig-db agree)
-//   0x80090d8c LIBSND    PAUSE          unique     Snd_pause  (sig-db agree)
-//   0x80090e2c LIBSND    PAUSE          unique     Snd_nextpause  (sig-db agree)
-//   0x80090e90 LIBSND    TEMPO          unique     Snd_tempo  (sig-db agree)
-//   0x800914c8 LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x80091530 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x80093820 LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x8009387c LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x8008f268 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8008f304 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x8008f318 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x8008f93c LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
+//   0x8008fc04 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
+//   0x8008ff04 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x80090190 LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
+//   0x800903d0 LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x80090420 LIBSPU    S_SCA          unique     SpuSetCommonAttr adoptable  (sig-db agree)
+//   0x80090a44 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x80090a70 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x80090b18 LIBSND    SSCALL         unique     SsSeqCalledTbyT adoptable  (sig-db agree)
+//   0x80090d8c LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
+//   0x80090e2c LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
+//   0x80090e90 LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
+//   0x800914c8 LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x80091530 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x80093820 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x8009387c LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80093908 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80093908 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80093908 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
@@ -879,94 +879,94 @@
 //   0x80093928 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80093928 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80093928 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80094624 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea  (sig-db agree)
-//   0x80094694 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_  (sig-db agree)
-//   0x8009470c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x80094abc LIBSND    UT_SVA         unique     SsUtSetVagAtr  (sig-db agree)
-//   0x80094da4 LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
+//   0x80094624 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
+//   0x80094694 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
+//   0x8009470c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x80094abc LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x80094da4 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x800953b0 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8009551c LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x80095544 LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x80095544 LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
-//   0x80095570 LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x80095570 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: mainmenu_jp  (153 placements, 23 anchored, 47 named symbols)
-//   0x80068920 LIBETC    INTR_DMA       unique     startIntrDMA  (sig-db agree)
-//   0x80068970 LIBETC    INTR_DMA       unique     trapIntrDMA  (sig-db agree)
-//   0x80068af4 LIBETC    INTR_DMA       unique     setIntrDMA  (sig-db agree)
-//   0x80068b9c LIBETC    INTR_DMA       unique     memclr  (sig-db agree)
+//   0x80068920 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
+//   0x80068970 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
+//   0x80068af4 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
+//   0x80068b9c LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
 //   0x80068bc8 LIBETC    PAD            ambiguous  PadInit  (sig-db agree)
 //   0x80068c28 LIBETC    PAD            ambiguous  PadRead  (sig-db agree)
 //   0x80068c58 LIBETC    PAD            ambiguous  PadStop  (sig-db agree)
 //   0x80068c58 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80068c58 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80068c78 LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x80068cd0 LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x80068d4c LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x80068d78 LIBETC    INTR_VB        unique     memclr  (sig-db agree)
-//   0x8006c49c LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x8006c4b4 LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
+//   0x80068c78 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x80068cd0 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x80068d4c LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x80068d78 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x8006c49c LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x8006c4b4 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x8006cd94 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8006cd94 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8006d064 LIBGS     EMULIB         unique     GsInitGraph
-//   0x8006d0dc LIBGS     EMULIB         unique     gpu_init
-//   0x8006d234 LIBGS     EMULIB         unique     GsInitGraph2
-//   0x8006d2ac LIBGS     EMULIB         unique     valiable_init
-//   0x8006d528 LIBGS     EMULIB         unique     GsSortClear
-//   0x8006dba8 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x8006dc40 LIBGS     SCLIB          unique     GsMapModelingData
-//   0x8006dcb8 LIBGS     SCLIB          unique     GsGetTimInfo
-//   0x8006dd9c LIBGS     MATRIX3        unique     GsGetLs
-//   0x8006e464 LIBGS     SCLIB          unique     GsSetAmbient
-//   0x8006e48c LIBGS     SCLIB          unique     GsInit3D
-//   0x8006e504 LIBGS     MATRIX3        unique     GsSetRefView2
-//   0x8006e8cc LIBGS     MATRIX3        unique     scale_view_param
-//   0x8006e9bc LIBGS     MATRIX3        unique     select_max_param
-//   0x8006ea84 LIBGS     MATRIX3        unique     len_param
-//   0x8006ed40 LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x8006ef70 LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x80070868 LIBGS     OBJT           unique     GsLinkObject4  (sig-db agree)
-//   0x80070998 LIBGS     2D_SP0         unique     GsSortSprite  (sig-db agree)
-//   0x80071354 LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x800713e8 LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x80071cc8 LIBGTE    DVF3_02        unique     GsTMDdivF3NL  (sig-db agree)
-//   0x80071eb4 LIBGTE    DVF4_02        unique     GsTMDdivF4NL  (sig-db agree)
-//   0x8007241c LIBGTE    DVG4_02        unique     GsTMDdivG4NL  (sig-db agree)
-//   0x80072678 LIBGTE    DVFT3_00       unique     GsTMDdivTF3L  (sig-db agree)
+//   0x8006d064 LIBGS     EMULIB         unique     GsInitGraph adoptable
+//   0x8006d0dc LIBGS     EMULIB         unique     gpu_init adoptable
+//   0x8006d234 LIBGS     EMULIB         unique     GsInitGraph2 adoptable
+//   0x8006d2ac LIBGS     EMULIB         unique     valiable_init adoptable
+//   0x8006d528 LIBGS     EMULIB         unique     GsSortClear adoptable
+//   0x8006dba8 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x8006dc40 LIBGS     SCLIB          unique     GsMapModelingData adoptable
+//   0x8006dcb8 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
+//   0x8006dd9c LIBGS     MATRIX3        unique     GsGetLs adoptable
+//   0x8006e464 LIBGS     SCLIB          unique     GsSetAmbient adoptable
+//   0x8006e48c LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x8006e504 LIBGS     MATRIX3        unique     GsSetRefView2 adoptable
+//   0x8006e8cc LIBGS     MATRIX3        unique     scale_view_param adoptable
+//   0x8006e9bc LIBGS     MATRIX3        unique     select_max_param adoptable
+//   0x8006ea84 LIBGS     MATRIX3        unique     len_param adoptable
+//   0x8006ed40 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x8006ef70 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x80070868 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
+//   0x80070998 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x80071354 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x800713e8 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x80071cc8 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
+//   0x80071eb4 LIBGTE    DVF4_02        unique     GsTMDdivF4NL adoptable  (sig-db agree)
+//   0x8007241c LIBGTE    DVG4_02        unique     GsTMDdivG4NL adoptable  (sig-db agree)
+//   0x80072678 LIBGTE    DVFT3_00       unique     GsTMDdivTF3L adoptable  (sig-db agree)
 //   0x80072d40 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80072d40 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
-//   0x80072fbc LIBGTE    DVGT4_00       unique     GsTMDdivTG4L  (sig-db agree)
-//   0x8007365c LIBGTE    DVFT4_03       unique     GsTMDdivTNF4  (sig-db agree)
-//   0x800738dc LIBGTE    DVGT3_03       unique     GsTMDdivTNG3  (sig-db agree)
+//   0x80072fbc LIBGTE    DVGT4_00       unique     GsTMDdivTG4L adoptable  (sig-db agree)
+//   0x8007365c LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
+//   0x800738dc LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
 //   0x80075b6c LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x80075b6c LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
-//   0x80075da4 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG  (sig-db agree)
-//   0x80076388 LIBGTE    DVG4_01        unique     GsTMDdivG4LFG  (sig-db agree)
-//   0x80076648 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL  (sig-db agree)
-//   0x800768d0 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL  (sig-db no-hit)
-//   0x80076c84 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL  (sig-db agree)
-//   0x80076eb8 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL  (sig-db agree)
-//   0x800791b4 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG  (sig-db agree)
-//   0x800794b4 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG  (sig-db agree)
-//   0x80079b04 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG  (sig-db agree)
+//   0x80075da4 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
+//   0x80076388 LIBGTE    DVG4_01        unique     GsTMDdivG4LFG adoptable  (sig-db agree)
+//   0x80076648 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
+//   0x800768d0 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL adoptable  (sig-db no-hit)
+//   0x80076c84 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL adoptable  (sig-db agree)
+//   0x80076eb8 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL adoptable  (sig-db agree)
+//   0x800791b4 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG adoptable  (sig-db agree)
+//   0x800794b4 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
+//   0x80079b04 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
 //   0x8007cd78 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8007cd78 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x8007d34c LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8007d34c LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
-//   0x8007d590 LIBGTE    DVG4_00        unique     GsTMDdivG4L  (sig-db agree)
-//   0x8007db50 LIBGTE    DVF4_03        unique     GsTMDdivNF4  (sig-db agree)
-//   0x8007dd88 LIBGTE    DVG3_03        unique     GsTMDdivNG3  (sig-db agree)
-//   0x8007df84 LIBGTE    DVG4_03        unique     GsTMDdivNG4  (sig-db agree)
-//   0x8007e41c LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x8007d590 LIBGTE    DVG4_00        unique     GsTMDdivG4L adoptable  (sig-db agree)
+//   0x8007db50 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
+//   0x8007dd88 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x8007df84 LIBGTE    DVG4_03        unique     GsTMDdivNG4 adoptable  (sig-db agree)
+//   0x8007e41c LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8007e4f4 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8007e4f4 LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x8007ee40 LIBGS     SCLIB          unique     gte_scale_matrix
+//   0x8007ee40 LIBGS     SCLIB          unique     gte_scale_matrix adoptable
 //   0x8007ef64 LIBGS     SCLIB          unique     gte_init adoptable
 //   0x8007f0e0 LIBGS     SCLIB          unique     GsClearOt adoptable
-//   0x8007f138 LIBGS     SCLIB          unique     GsSetLightMode
-//   0x8007f1c4 LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x8007f1d4 LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x8007f99c LIBGS     EMULIB         unique     GsSwapDispBuff
+//   0x8007f138 LIBGS     SCLIB          unique     GsSetLightMode adoptable
+//   0x8007f1c4 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x8007f1d4 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x8007f99c LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x80080174 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80080174 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080260 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -975,8 +975,8 @@
 //   0x80080280 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800802a0 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800802a0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x800808c8 LIBPRESS  VLC            unique     MDEC_vlc_brk  (sig-db agree)
-//   0x800808f8 LIBPRESS  VLC            unique     MDEC_vlc  (sig-db agree)
+//   0x800808c8 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
+//   0x800808f8 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x800813d8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800813d8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80081480 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -987,34 +987,34 @@
 //   0x8008194c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8008196c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8008196c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x800840f8 LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x80084188 LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x800841b0 LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x800841d8 LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x80084210 LIBCD     CDREAD2        unique     CdRead2  (sig-db agree)
-//   0x800842b4 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x80084e74 LIBCD     CDROM          unique     StSetChannel  (sig-db elsewhere)
-//   0x80084ea8 LIBCD     TOC            unique     CdGetToc  (sig-db agree)
-//   0x80084ecc LIBCD     TOC            unique     CdGetToc2  (sig-db agree)
-//   0x80085e88 LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x80085ec8 LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x80085ee8 LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x80085f18 LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x80085f78 LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x8008603c LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x800860a4 LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x80086160 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x800862d0 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x80086580 LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x80087b74 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x80087bb0 LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x80087bdc LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x80087bec LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x80087c78 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x8008d6a4 LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x8008d6c8 LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x8008d71c LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
-//   0x8008d7d0 LIBSND    VM_VSU         unique     SpuVmVSetUp  (sig-db agree)
+//   0x800840f8 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x80084188 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x800841b0 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x800841d8 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80084210 LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
+//   0x800842b4 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x80084e74 LIBCD     CDROM          unique     StSetChannel adoptable  (sig-db elsewhere)
+//   0x80084ea8 LIBCD     TOC            unique     CdGetToc adoptable  (sig-db agree)
+//   0x80084ecc LIBCD     TOC            unique     CdGetToc2 adoptable  (sig-db agree)
+//   0x80085e88 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x80085ec8 LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x80085ee8 LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x80085f18 LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x80085f78 LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x8008603c LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x800860a4 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x80086160 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x800862d0 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x80086580 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x80087b74 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x80087bb0 LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x80087bdc LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x80087bec LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x80087c78 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x8008d6a4 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x8008d6c8 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x8008d71c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
+//   0x8008d7d0 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x8008d9f8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8008d9f8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008d9f8 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -1035,26 +1035,26 @@
 //   0x8008e598 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8008e598 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e598 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x8008e5b8 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
-//   0x8008e654 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x8008e668 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x8008e678 LIBSND    VS_VH          unique     SsVabOpenHead  (sig-db agree)
-//   0x8008e6ac LIBSND    VS_VH          unique     SsVabOpenHeadSticky  (sig-db agree)
-//   0x8008e6e0 LIBSND    VS_VH          unique     SsVabFakeHead  (sig-db agree)
-//   0x8008e714 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode  (sig-db agree)
-//   0x8008ef54 LIBSPU    S_M_INT        unique     _spu_gcSPU  (sig-db agree)
-//   0x8008f254 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x8008f2cc LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x8008f3b0 LIBSND    UT_GVA         unique     SsUtGetVagAtr  (sig-db agree)
-//   0x8008f5f0 LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x8008fb04 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x8008fc64 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x8008fc90 LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x800900dc LIBSND    DECRE          unique     Snd_decrescendo  (sig-db agree)
-//   0x8009058c LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x800905f4 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x80092960 LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x800929bc LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x8008e5b8 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8008e654 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x8008e668 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x8008e678 LIBSND    VS_VH          unique     SsVabOpenHead adoptable  (sig-db agree)
+//   0x8008e6ac LIBSND    VS_VH          unique     SsVabOpenHeadSticky adoptable  (sig-db agree)
+//   0x8008e6e0 LIBSND    VS_VH          unique     SsVabFakeHead adoptable  (sig-db agree)
+//   0x8008e714 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode adoptable  (sig-db agree)
+//   0x8008ef54 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
+//   0x8008f254 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x8008f2cc LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x8008f3b0 LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
+//   0x8008f5f0 LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x8008fb04 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x8008fc64 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x8008fc90 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x800900dc LIBSND    DECRE          unique     Snd_decrescendo adoptable  (sig-db agree)
+//   0x8009058c LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x800905f4 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x80092960 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x800929bc LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80092a48 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80092a48 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80092a48 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
@@ -1068,58 +1068,58 @@
 //   0x80092a68 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80092a68 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80092a68 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x80093894 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea  (sig-db agree)
-//   0x80093904 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_  (sig-db agree)
-//   0x8009397c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x80093b2c LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x80093bfc LIBSND    NEXT           unique     Snd_nextsep  (sig-db agree)
-//   0x80093cfc LIBSND    UT_SVA         unique     SsUtSetVagAtr  (sig-db agree)
+//   0x80093894 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
+//   0x80093904 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
+//   0x8009397c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x80093b2c LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x80093bfc LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
+//   0x80093cfc LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
 //   0x80094588 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x800946f4 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8009471c LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x8009471c LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
-//   0x80094748 LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
-//   0x80094a98 LIBSND    TEMPO          unique     Snd_tempo  (sig-db agree)
-//   0x80094c78 LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x80094748 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
+//   0x80094a98 LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
+//   0x80094c78 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: sces_00269  (107 placements, 17 anchored, 41 named symbols)
-//   0x800308e4 LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x800308fc LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
-//   0x80031538 LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x80031590 LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x8003160c LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x80031638 LIBETC    INTR_VB        unique     memclr  (sig-db agree)
-//   0x80031664 LIBETC    VSYNC          unique     VSync  (sig-db agree)
-//   0x800317ac LIBETC    VSYNC          unique     v_wait  (sig-db agree)
+//   0x800308e4 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x800308fc LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x80031538 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x80031590 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x8003160c LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x80031638 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x80031664 LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
+//   0x800317ac LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
 //   0x80035600 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80035600 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800357a0 LIBGS     2D_LIN1        unique     GsSortGLine adoptable  (sig-db agree)
-//   0x80035ff0 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x80036088 LIBGS     SCLIB          unique     GsGetTimInfo
-//   0x8003616c LIBGS     SCLIB          unique     GsInit3D
-//   0x80037b60 LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x80037d90 LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x80039688 LIBGS     MATRIX         unique     GsInitCoordinate2  (sig-db agree)
-//   0x80039704 LIBGS     MATRIX         unique     GsInitCoord2param  (sig-db agree)
-//   0x80039730 LIBGS     MATRIX         unique     GsSetLsMatrix  (sig-db agree)
-//   0x80039760 LIBGS     MATRIX         unique     GsSetLightMatrix  (sig-db agree)
-//   0x800397fc LIBGS     MATRIX         unique     GsSetLightMatrix2  (sig-db agree)
-//   0x80039830 LIBGS     MATRIX         unique     GsMulCoord0  (sig-db agree)
-//   0x800398c4 LIBGS     MATRIX         unique     GsMulCoord2  (sig-db agree)
-//   0x80039948 LIBGS     MATRIX         unique     GsMulCoord3  (sig-db agree)
-//   0x800399cc LIBGS     MATRIX         unique     print_matrix  (sig-db agree)
-//   0x80039a3c LIBGS     MATRIX         unique     print_vector  (sig-db agree)
-//   0x80039a70 LIBGS     MATRIX3        unique     GsGetLw
-//   0x80039ef8 LIBGS     2D_SP0         unique     GsSortSprite  (sig-db agree)
-//   0x8003a8b4 LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x8003a964 LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x80035ff0 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x80036088 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
+//   0x8003616c LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x80037b60 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x80037d90 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x80039688 LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
+//   0x80039704 LIBGS     MATRIX         unique     GsInitCoord2param adoptable  (sig-db agree)
+//   0x80039730 LIBGS     MATRIX         unique     GsSetLsMatrix adoptable  (sig-db agree)
+//   0x80039760 LIBGS     MATRIX         unique     GsSetLightMatrix adoptable  (sig-db agree)
+//   0x800397fc LIBGS     MATRIX         unique     GsSetLightMatrix2 adoptable  (sig-db agree)
+//   0x80039830 LIBGS     MATRIX         unique     GsMulCoord0 adoptable  (sig-db agree)
+//   0x800398c4 LIBGS     MATRIX         unique     GsMulCoord2 adoptable  (sig-db agree)
+//   0x80039948 LIBGS     MATRIX         unique     GsMulCoord3 adoptable  (sig-db agree)
+//   0x800399cc LIBGS     MATRIX         unique     print_matrix adoptable  (sig-db agree)
+//   0x80039a3c LIBGS     MATRIX         unique     print_vector adoptable  (sig-db agree)
+//   0x80039a70 LIBGS     MATRIX3        unique     GsGetLw adoptable
+//   0x80039ef8 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x8003a8b4 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x8003a964 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8003aa3c LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8003aa3c LIBGS     SCLIB          ambiguous  GsDrawOtIO
-//   0x8003aa60 LIBGS     SCLIB          unique     gte_init
-//   0x8003abdc LIBGS     SCLIB          unique     GsClearOt
-//   0x8003ac34 LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x8003ac44 LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x8003ad60 LIBGS     EMULIB         unique     GsSwapDispBuff
+//   0x8003aa60 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x8003abdc LIBGS     SCLIB          unique     GsClearOt adoptable
+//   0x8003ac34 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x8003ac44 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x8003ad60 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x8003b130 LIBGS     SCLIB          ambiguous  GsSetProjection adoptable
 //   0x8003b130 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff adoptable  (sig-db agree)
 //   0x8003b150 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -1128,8 +1128,8 @@
 //   0x8003b170 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b668 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003b668 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8003bb6c LIBPRESS  VLC2           unique     MDEC_vlc2  (sig-db agree)
-//   0x8003bf48 LIBPRESS  VLC2           unique     ivlc_dct_dc_size  (sig-db agree)
+//   0x8003bb6c LIBPRESS  VLC2           unique     MDEC_vlc2 adoptable  (sig-db agree)
+//   0x8003bf48 LIBPRESS  VLC2           unique     ivlc_dct_dc_size adoptable  (sig-db agree)
 //   0x8003c1e8 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003c1e8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c3c0 LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -1140,29 +1140,29 @@
 //   0x8003c88c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c8ac LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003c8ac LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8003f288 LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x8003f318 LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x8003f340 LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x8003f368 LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x8003f434 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x80040d8c LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x80040dcc LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x80040dec LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x80040e1c LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x80040e7c LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x80040f40 LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x80040fa8 LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x80041064 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x800411d4 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x80041330 LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x80042898 LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x800428c4 LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x800428d4 LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x80042960 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
-//   0x800487c8 LIBSPU    S_SNV          unique     SpuSetNoiseVoice  (sig-db agree)
-//   0x800487ec LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x80048840 LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
-//   0x800488f4 LIBSND    VM_VSU         unique     SpuVmVSetUp  (sig-db agree)
+//   0x8003f288 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x8003f318 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x8003f340 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x8003f368 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x8003f434 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x80040d8c LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x80040dcc LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x80040dec LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x80040e1c LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x80040e7c LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x80040f40 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x80040fa8 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x80041064 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x800411d4 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x80041330 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x80042898 LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x800428c4 LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x800428d4 LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x80042960 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
+//   0x800487c8 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
+//   0x800487ec LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x80048840 LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
+//   0x800488f4 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80048b14 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80048b14 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80048b14 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -1180,27 +1180,27 @@
 //   0x800496c4 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800496c4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800496c4 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x800496e4 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
-//   0x80049780 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x80049794 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x800497a4 LIBSND    VS_VH          unique     SsVabOpenHead  (sig-db agree)
-//   0x800497d8 LIBSND    VS_VH          unique     SsVabOpenHeadSticky  (sig-db agree)
-//   0x8004980c LIBSND    VS_VH          unique     SsVabFakeHead  (sig-db agree)
-//   0x80049840 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode  (sig-db agree)
-//   0x8004a080 LIBSPU    S_M_INT        unique     _spu_gcSPU  (sig-db agree)
-//   0x8004a380 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x8004a3f8 LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x8004a4dc LIBSND    UT_GVA         unique     SsUtGetVagAtr  (sig-db agree)
-//   0x8004a71c LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x8004ac30 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x8004ad90 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x8004adbc LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x8004ae64 LIBSND    SSCALL         unique     SsSeqCalledTbyT  (sig-db agree)
-//   0x8004b30c LIBSND    TEMPO          unique     Snd_tempo  (sig-db agree)
-//   0x8004b814 LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x8004b87c LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x8004db6c LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x8004dbc8 LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x800496e4 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x80049780 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x80049794 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x800497a4 LIBSND    VS_VH          unique     SsVabOpenHead adoptable  (sig-db agree)
+//   0x800497d8 LIBSND    VS_VH          unique     SsVabOpenHeadSticky adoptable  (sig-db agree)
+//   0x8004980c LIBSND    VS_VH          unique     SsVabFakeHead adoptable  (sig-db agree)
+//   0x80049840 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode adoptable  (sig-db agree)
+//   0x8004a080 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
+//   0x8004a380 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x8004a3f8 LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x8004a4dc LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
+//   0x8004a71c LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x8004ac30 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x8004ad90 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x8004adbc LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x8004ae64 LIBSND    SSCALL         unique     SsSeqCalledTbyT adoptable  (sig-db agree)
+//   0x8004b30c LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
+//   0x8004b814 LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x8004b87c LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x8004db6c LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x8004dbc8 LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8004dc54 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8004dc54 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004dc54 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
@@ -1214,58 +1214,58 @@
 //   0x8004dc74 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8004dc74 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004dc74 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x8004eaa0 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea  (sig-db agree)
-//   0x8004eb10 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_  (sig-db agree)
-//   0x8004eb88 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x8004ed38 LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x8004ee08 LIBSND    UT_SVA         unique     SsUtSetVagAtr  (sig-db agree)
+//   0x8004eaa0 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
+//   0x8004eb10 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
+//   0x8004eb88 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8004ed38 LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x8004ee08 LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
 //   0x8004f6fc LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8004f868 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8004f890 LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x8004f890 LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
-//   0x8004f8bc LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x8004f8bc LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
 
 // target: slps_00270  (112 placements, 17 anchored, 40 named symbols)
-//   0x800316c4 LIBETC    INTR_DMA       unique     startIntrDMA  (sig-db agree)
-//   0x80031714 LIBETC    INTR_DMA       unique     trapIntrDMA  (sig-db agree)
-//   0x80031898 LIBETC    INTR_DMA       unique     setIntrDMA  (sig-db agree)
-//   0x80031940 LIBETC    INTR_DMA       unique     memclr  (sig-db agree)
+//   0x800316c4 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
+//   0x80031714 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
+//   0x80031898 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
+//   0x80031940 LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
 //   0x8003196c LIBETC    PAD            ambiguous  PadInit  (sig-db agree)
 //   0x800319cc LIBETC    PAD            ambiguous  PadRead  (sig-db agree)
 //   0x800319fc LIBETC    PAD            ambiguous  PadStop  (sig-db agree)
 //   0x800319fc LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x800319fc LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80031a1c LIBETC    INTR_VB        unique     startIntrVSync  (sig-db agree)
-//   0x80031a74 LIBETC    INTR_VB        unique     trapIntrVSync  (sig-db agree)
-//   0x80031af0 LIBETC    INTR_VB        unique     setIntrVSync  (sig-db agree)
-//   0x80031b1c LIBETC    INTR_VB        unique     memclr  (sig-db agree)
-//   0x80035240 LIBETC    VMODE          unique     SetVideoMode  (sig-db agree)
-//   0x80035258 LIBETC    VMODE          unique     GetVideoMode  (sig-db agree)
+//   0x80031a1c LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
+//   0x80031a74 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
+//   0x80031af0 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
+//   0x80031b1c LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x80035240 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
+//   0x80035258 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x80035b38 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80035b38 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x80035efc LIBGS     EMULIB         unique     GsInitGraph
-//   0x80035f74 LIBGS     EMULIB         unique     gpu_init
-//   0x800360cc LIBGS     EMULIB         unique     GsInitGraph2
-//   0x80036144 LIBGS     EMULIB         unique     valiable_init
-//   0x800363c0 LIBGS     EMULIB         unique     GsSortClear
-//   0x80036528 LIBGS     EMULIB         unique     GsSetDrawBuffClip
-//   0x800367d4 LIBGS     SCLIB          unique     GsInit3D
-//   0x8003684c LIBGS     MATRIX3        unique     GsSetRefView2
+//   0x80035efc LIBGS     EMULIB         unique     GsInitGraph adoptable
+//   0x80035f74 LIBGS     EMULIB         unique     gpu_init adoptable
+//   0x800360cc LIBGS     EMULIB         unique     GsInitGraph2 adoptable
+//   0x80036144 LIBGS     EMULIB         unique     valiable_init adoptable
+//   0x800363c0 LIBGS     EMULIB         unique     GsSortClear adoptable
+//   0x80036528 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
+//   0x800367d4 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x8003684c LIBGS     MATRIX3        unique     GsSetRefView2 adoptable
 //   0x80036c14 LIBGS     MATRIX3        unique     scale_view_param
 //   0x80036d04 LIBGS     MATRIX3        unique     select_max_param adoptable
-//   0x80036dcc LIBGS     MATRIX3        unique     len_param
-//   0x80038098 LIBGS     SCLIB          unique     gte_rotate_z_matrix
-//   0x800383f8 LIBGTE    COR_00         unique     RotMatrixC  (sig-db agree)
-//   0x8003a0d8 LIBGS     MATRIX3        unique     GsGetLw
-//   0x8003a39c LIBGS     2D_COM1        unique     _make_packet  (sig-db agree)
-//   0x8003adec LIBGS     SCLIB          unique     GsDefDispBuff
-//   0x8003ae9c LIBGS     SCLIB          unique     Gssub_make_matrix
+//   0x80036dcc LIBGS     MATRIX3        unique     len_param adoptable
+//   0x80038098 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x800383f8 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x8003a0d8 LIBGS     MATRIX3        unique     GsGetLw adoptable
+//   0x8003a39c LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x8003adec LIBGS     SCLIB          unique     GsDefDispBuff adoptable
+//   0x8003ae9c LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8003af74 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8003af74 LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x8003b244 LIBGS     SCLIB          unique     GsClearOt adoptable
-//   0x8003b29c LIBGS     EMULIB         unique     GsGetActiveBuff
-//   0x8003b2ac LIBGS     EMULIB         unique     GsSetDrawBuffOffset
-//   0x8003b3c8 LIBGS     EMULIB         unique     GsSwapDispBuff
+//   0x8003b29c LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
+//   0x8003b2ac LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
+//   0x8003b3c8 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x8003b500 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003b500 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b5ec LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -1274,8 +1274,8 @@
 //   0x8003b60c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b62c LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003b62c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8003bc54 LIBPRESS  VLC            unique     MDEC_vlc_brk  (sig-db agree)
-//   0x8003bc84 LIBPRESS  VLC            unique     MDEC_vlc  (sig-db agree)
+//   0x8003bc54 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
+//   0x8003bc84 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x8003c764 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003c764 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c80c LIBGS     SCLIB          ambiguous  GsSetProjection
@@ -1286,31 +1286,31 @@
 //   0x8003ce08 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003ce28 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8003ce28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
-//   0x8003f484 LIBCD     EVENT          unique     CdInit  (sig-db agree)
-//   0x8003f514 LIBCD     EVENT          unique     def_cbsync  (sig-db agree)
-//   0x8003f53c LIBCD     EVENT          unique     def_cbready  (sig-db agree)
-//   0x8003f564 LIBCD     EVENT          unique     def_cbread  (sig-db agree)
-//   0x8003f59c LIBCD     CDREAD2        unique     CdRead2  (sig-db agree)
-//   0x8003f640 LIBCD     CDROM          unique     StSetStream  (sig-db elsewhere)
-//   0x80040f98 LIBCD     CDROM          unique     init_ring_status  (sig-db elsewhere)
-//   0x80040fd8 LIBCD     CDROM          unique     StSetMask  (sig-db elsewhere)
-//   0x80040ff8 LIBCD     CDROM          unique     StSetRing  (sig-db agree)
-//   0x80041028 LIBCD     CDROM          unique     StClearRing  (sig-db elsewhere)
-//   0x80041088 LIBCD     CDROM          unique     StGetNext  (sig-db elsewhere)
-//   0x8004114c LIBCD     CDROM          unique     data_ready_callback  (sig-db elsewhere)
-//   0x800411b4 LIBCD     CDROM          unique     StFreeRing  (sig-db elsewhere)
-//   0x80041270 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly  (sig-db agree)
-//   0x800413e0 LIBSPU    S_STM          unique     SpuSetTransferMode  (sig-db agree)
-//   0x80041690 LIBSPU    S_DCB          unique     _SpuDataCallback  (sig-db agree)
-//   0x80042c84 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr  (sig-db agree)
-//   0x80042cc0 LIBSPU    S_IT           unique     _spu_setInTransfer  (sig-db agree)
-//   0x80042cec LIBSPU    S_IT           unique     _spu_getInTransfer  (sig-db agree)
-//   0x80042cfc LIBSPU    S_WP           unique     SpuWritePartly  (sig-db agree)
-//   0x80042d88 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB  (sig-db agree)
+//   0x8003f484 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
+//   0x8003f514 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
+//   0x8003f53c LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
+//   0x8003f564 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x8003f59c LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
+//   0x8003f640 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
+//   0x80040f98 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
+//   0x80040fd8 LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
+//   0x80040ff8 LIBCD     CDROM          unique     StSetRing adoptable  (sig-db agree)
+//   0x80041028 LIBCD     CDROM          unique     StClearRing adoptable  (sig-db elsewhere)
+//   0x80041088 LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
+//   0x8004114c LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
+//   0x800411b4 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x80041270 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
+//   0x800413e0 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
+//   0x80041690 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
+//   0x80042c84 LIBSPU    S_STSA         unique     SpuSetTransferStartAddr adoptable  (sig-db agree)
+//   0x80042cc0 LIBSPU    S_IT           unique     _spu_setInTransfer adoptable  (sig-db agree)
+//   0x80042cec LIBSPU    S_IT           unique     _spu_getInTransfer adoptable  (sig-db agree)
+//   0x80042cfc LIBSPU    S_WP           unique     SpuWritePartly adoptable  (sig-db agree)
+//   0x80042d88 LIBSND    UT_GVBA        unique     SsUtGetVBaddrInSB adoptable  (sig-db agree)
 //   0x800487b4 LIBSPU    S_SNV          unique     SpuSetNoiseVoice adoptable  (sig-db agree)
-//   0x800487d8 LIBSPU    S_M_INIT       unique     SpuInitMalloc  (sig-db agree)
-//   0x8004882c LIBSPU    S_SAV          unique     _SpuSetAnyVoice  (sig-db agree)
-//   0x800488e0 LIBSND    VM_VSU         unique     SpuVmVSetUp  (sig-db agree)
+//   0x800487d8 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
+//   0x8004882c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
+//   0x800488e0 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80048b08 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80048b08 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80048b08 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
@@ -1328,26 +1328,26 @@
 //   0x80049558 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x80049558 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80049558 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
-//   0x800496c8 LIBSPU    S_Q            unique     SpuQuit  (sig-db agree)
-//   0x80049764 LIBSND    VS_MONO        unique     SsSetMono  (sig-db agree)
-//   0x80049778 LIBSND    VS_MONO        unique     SsSetStereo  (sig-db agree)
-//   0x80049788 LIBSND    VS_VH          unique     SsVabOpenHead  (sig-db agree)
-//   0x800497bc LIBSND    VS_VH          unique     SsVabOpenHeadSticky  (sig-db agree)
-//   0x800497f0 LIBSND    VS_VH          unique     SsVabFakeHead  (sig-db agree)
-//   0x80049824 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode  (sig-db agree)
-//   0x8004a064 LIBSPU    S_M_INT        unique     _spu_gcSPU  (sig-db agree)
-//   0x8004a364 LIBSND    VS_VFB         unique     SsVabFakeBody  (sig-db agree)
-//   0x8004a3dc LIBSND    UT_GVH         unique     SsUtGetVabHdr  (sig-db agree)
-//   0x8004a4c0 LIBSND    UT_GVA         unique     SsUtGetVagAtr  (sig-db agree)
-//   0x8004a700 LIBSND    SCSMVOL        unique     SsSetMVol  (sig-db agree)
-//   0x8004ac14 LIBSND    SCSSVOL        unique     SsSetSerialVol  (sig-db agree)
-//   0x8004ad74 LIBSND    VS_VTC         unique     SsVabTransCompleted  (sig-db agree)
-//   0x8004ada0 LIBSPU    S_ITC          unique     SpuIsTransferCompleted  (sig-db agree)
-//   0x8004ae48 LIBSND    SSCALL         unique     SsSeqCalledTbyT  (sig-db agree)
-//   0x8004b69c LIBSND    REPLAY         unique     Snd_replay  (sig-db agree)
-//   0x8004b704 LIBSND    PLAY           unique     Snd_play  (sig-db agree)
-//   0x8004da70 LIBSND    ADSR           unique     _SsUtResolveADSR  (sig-db agree)
-//   0x8004dacc LIBSND    ADSR           unique     _SsUtBuildADSR  (sig-db agree)
+//   0x800496c8 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x80049764 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
+//   0x80049778 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
+//   0x80049788 LIBSND    VS_VH          unique     SsVabOpenHead adoptable  (sig-db agree)
+//   0x800497bc LIBSND    VS_VH          unique     SsVabOpenHeadSticky adoptable  (sig-db agree)
+//   0x800497f0 LIBSND    VS_VH          unique     SsVabFakeHead adoptable  (sig-db agree)
+//   0x80049824 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode adoptable  (sig-db agree)
+//   0x8004a064 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
+//   0x8004a364 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
+//   0x8004a3dc LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
+//   0x8004a4c0 LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
+//   0x8004a700 LIBSND    SCSMVOL        unique     SsSetMVol adoptable  (sig-db agree)
+//   0x8004ac14 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
+//   0x8004ad74 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
+//   0x8004ada0 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
+//   0x8004ae48 LIBSND    SSCALL         unique     SsSeqCalledTbyT adoptable  (sig-db agree)
+//   0x8004b69c LIBSND    REPLAY         unique     Snd_replay adoptable  (sig-db agree)
+//   0x8004b704 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
+//   0x8004da70 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
+//   0x8004dacc LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8004db58 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8004db58 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004db58 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
@@ -1361,17 +1361,17 @@
 //   0x8004db78 LIBGS     SCLIB          ambiguous  GsSetProjection
 //   0x8004db78 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004db78 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
-//   0x8004e9a4 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea  (sig-db agree)
-//   0x8004ea14 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_  (sig-db agree)
-//   0x8004ea8c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea  (sig-db agree)
-//   0x8004ec3c LIBSPU    S_SR           unique     SpuSetReverb  (sig-db agree)
-//   0x8004ed0c LIBSND    NEXT           unique     Snd_nextsep  (sig-db agree)
-//   0x8004ee0c LIBSND    UT_SVA         unique     SsUtSetVagAtr  (sig-db agree)
+//   0x8004e9a4 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
+//   0x8004ea14 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
+//   0x8004ea8c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8004ec3c LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x8004ed0c LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
+//   0x8004ee0c LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
 //   0x8004f698 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8004f804 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8004f82c LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x8004f82c LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
-//   0x8004f858 LIBSND    UT_GPA         unique     SsUtGetProgAtr  (sig-db agree)
-//   0x8004f974 LIBSND    PAUSE          unique     Snd_pause  (sig-db agree)
-//   0x8004fa14 LIBSND    PAUSE          unique     Snd_nextpause  (sig-db agree)
-//   0x8004fd88 LIBSND    SCSSATTR       unique     SsSetSerialAttr  (sig-db agree)
+//   0x8004f858 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
+//   0x8004f974 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
+//   0x8004fa14 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
+//   0x8004fd88 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
