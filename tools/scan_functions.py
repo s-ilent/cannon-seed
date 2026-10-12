@@ -1117,7 +1117,34 @@ def main(argv):
     for o in sorted(cross_targets):
         gen_syms.append(f"func_{BASE + o:08X} = 0x{BASE + o:08X}; // type:func (branch target)")
     gen_syms.append("// END GENERATED FUNCTION SYMBOLS")
-    sym_path.write_text(head + "\n" + "\n".join(gen_syms) + "\n")
+    # Curated data symbols: any curated offset that is not a function
+    # entry names a data location (state-map words, record tables). Emit
+    # them as `// type:s32` (the curated data contract: all current
+    # curated data are `extern int`) so splat applies them to the
+    # dlabels - the generated asm then defines the names and C externs
+    # resolve against them. Mid-row splits follow automatically
+    # (referenced-symbol splitting, same mechanism that splits dlabels
+    # at code operands). splat's symbol parser has no bare `data` type;
+    # a future non-int curated datum needs its own type plumbed through.
+    consumed = set()
+    for s, _e in ranges:
+        if s in curated:
+            consumed.add(s)
+    for off, typ, _name, _k in kept_gap_rows:
+        if typ == "asm" and off in curated:
+            consumed.add(off)
+    data_syms = []
+    for off in sorted(curated):
+        if off in consumed:
+            continue
+        data_syms.append(f"{curated[off]} = 0x{BASE + off:08X}; // type:s32")
+        n_curated += 1
+    out = head + "\n" + "\n".join(gen_syms) + "\n"
+    if data_syms:
+        out += "// BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)\n"
+        out += "\n".join(data_syms) + "\n"
+        out += "// END GENERATED DATA SYMBOLS\n"
+    sym_path.write_text(out)
     if n_curated:
         print(f"scan: kept {n_curated} curated symbol name(s)")
 

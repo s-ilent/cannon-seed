@@ -7,7 +7,7 @@
  * Relocation map (JP -> EU), all read off the retail encodings:
  *   gp displacements      -4  (0x3D8/0x1048/0x1050 -> 0x3D4/0x1044/0x104C)
  *   state-map D_80089xxx  +0x814  (uniform across all 16 words touched)
- *   D_800C9B3C/44         +0x838  -> D_800CA374/D_800CA37C
+ *   state_record_0/1      +0x838  (JP C9B3C/44 -> EU CA374/37C)
  *   callees               -0xB0 (267C8/26784/26414 -> 26718/266D4/26364),
  *                         except func_80035A78 -> 0x80035A18 (-0x60)
  *   tail jump             -0x60 (.L8002ABD4 -> .L8002AB74)
@@ -32,24 +32,24 @@
  * landing (ed3ba27).
  */
 
-extern int D_80089B3C;
-extern int D_80089B7C;
-extern int D_80089C14;
-extern int D_80089C54;
-extern int D_80089C58;
-extern int D_80089C5C;
-extern int D_80089C60;
-extern int D_80089F0C;
-extern int D_80089F4C;
-extern int D_80089F8C;
-extern int D_80089FCC;
-extern int D_8008A00C;
-extern int D_8008A04C;
-extern int D_8008A25C;
-extern int D_8008A1D4;
-extern int D_8008A1EC;
-extern int D_800CA374;
-extern int D_800CA37C;
+extern int state_block_0;
+extern int state_block_1;
+extern int state_block_2;
+extern int state_rearm_0;
+extern int state_rearm_1;
+extern int state_rearm_2;
+extern int state_rearm_3;
+extern int state_block_3;
+extern int state_block_4;
+extern int state_block_5;
+extern int state_block_6;
+extern int state_block_7;
+extern int state_block_8;
+extern int state_block_10;
+extern int state_cursor;
+extern int state_block_9;
+extern int state_record_0;
+extern int state_record_1;
 extern void func_80026718(int, int, int);
 extern void func_800266D4(int);
 extern void func_80026364(int, int, int);
@@ -64,45 +64,45 @@ void func_8002C418(void)
 
     __asm__("lw %0,0x3D4($gp)" : "=r"(r_v0));
     if (r_v0 != 0) {
-        func_80026718((int)&D_80089C14, (int)&D_800CA374, (int)&D_800CA37C);
+        func_80026718((int)&state_block_2, (int)&state_record_0, (int)&state_record_1);
         __asm__ volatile("sw $0,0x3D4($gp)");
     }
     __asm__ volatile("lw $5,0x1044($gp)");
     __asm__ volatile("lw $6,0x104C($gp)");
-    func_800266D4((int)&D_80089C14);
+    func_800266D4((int)&state_block_2);
     s1 = -1;
     /* MATCHING: retail store group, emitted verbatim; s0 leaves opaque
      * (see the JP twin's header - the tie/output-only/volatile asm
      * alternatives all fold under GCC 2.6.3's cse). */
     __asm__ volatile(
-        "lui %0,%%hi(D_80089C54)\n\t"
-        "addiu %0,%0,%%lo(D_80089C54)\n\t"
+        "lui %0,%%hi(state_rearm_0)\n\t"
+        "addiu %0,%0,%%lo(state_rearm_0)\n\t"
         "sw %1,0(%0)\n\t"
-        "lui $1,%%hi(D_80089C58)\n\t"
-        "sw %1,%%lo(D_80089C58)($1)\n\t"
-        "lui $1,%%hi(D_80089C5C)\n\t"
-        "sw %1,%%lo(D_80089C5C)($1)\n\t"
-        "lui $1,%%hi(D_80089C60)\n\t"
-        "sw %1,%%lo(D_80089C60)($1)"
+        "lui $1,%%hi(state_rearm_1)\n\t"
+        "sw %1,%%lo(state_rearm_1)($1)\n\t"
+        "lui $1,%%hi(state_rearm_2)\n\t"
+        "sw %1,%%lo(state_rearm_2)($1)\n\t"
+        "lui $1,%%hi(state_rearm_3)\n\t"
+        "sw %1,%%lo(state_rearm_3)($1)"
         : "=r"(s0) : "r"(s1) : "$1");
-    func_80026364((int)&D_80089B3C, 0, -1);
-    func_80026364((int)&D_80089B7C, 0, -1);
+    func_80026364((int)&state_block_0, 0, -1);
+    func_80026364((int)&state_block_1, 0, -1);
     func_80026364((int)s0 - 0x40, 0, -1);
-    func_80026364((int)&D_8008A25C, 0, 0);
-    func_80026364((int)&D_80089F0C, 0, 0);
-    func_80026364((int)&D_80089F4C, 0, 0);
-    func_80026364((int)&D_80089F8C, 0, 0);
-    func_80026364((int)&D_80089FCC, 0, 0);
-    func_80026364((int)&D_8008A00C, 0, 0);
-    func_80026364((int)&D_8008A04C, 0, 0);
+    func_80026364((int)&state_block_10, 0, 0);
+    func_80026364((int)&state_block_3, 0, 0);
+    func_80026364((int)&state_block_4, 0, 0);
+    func_80026364((int)&state_block_5, 0, 0);
+    func_80026364((int)&state_block_6, 0, 0);
+    func_80026364((int)&state_block_7, 0, 0);
+    func_80026364((int)&state_block_8, 0, 0);
     /* MATCHING: drop the shared (s0 - 0x40) cse entry so the last
      * reset-table call recomputes its argument from s0 (see header). */
     __asm__("" : "=r"(s0));
     func_80026364((int)s0 - 0x40, 2, -1);
     if (func_80035A18(0xC) == s1) {
-        r_v0 = (int)&D_8008A1EC;
-        D_8008A1D4 = r_v0;
+        r_v0 = (int)&state_block_9;
+        state_cursor = r_v0;
         __asm__ volatile("j .L8002AB74");
     }
-    D_8008A1D4 = s1;
+    state_cursor = s1;
 }

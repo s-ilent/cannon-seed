@@ -48,6 +48,41 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — the state-map naming pass: 36 curated data names, the
+unknown_data ratchet 102->12, the twins tied by identical names.**
+- New mechanism (tools/scan_functions.py): the symbols writer now emits a
+  generated DATA block - curated offsets that are not function entries go
+  out as `// type:s32` (splat's parser has no bare `data` type; all
+  current curated data are `extern int`). splat applies them to the
+  dlabels, the generated asm defines the names, C externs resolve.
+  Mid-row splits follow the existing referenced-symbol mechanism; yaml
+  untouched (symbols-file-only, byte-identical on re-scan).
+- Names (config/symbols.curated.txt, hand sections of both mainmenu
+  scopes; role-descriptive, evidence documented per name): the ten
+  reset-walker bases -> state_block_0..10 (ascending; state_block_2 also
+  feeds func_80026668/func_800267C8), the four-word -1 group inside
+  state_block_2 -> state_rearm_0..3, the -1-or-pointer slot ->
+  state_cursor (written by both the matched driver and the func_8002C220
+  row behind the func_80035A78(0xC) gate), its target -> state_block_9,
+  the two 8-byte id records passed to func_800267C8 -> state_record_0/1.
+  EU = JP +0x814 (+0x838 for the records), same names under the
+  mainmenu_eu scope per the measured relocation map.
+- Renamed src/func_8002C478.c and src/func_8002C418.c (externs, call
+  trains, the hand-asm store group's %%hi/%%lo refs, header mentions).
+  The generated asm rename surface: both discs' state-map data rows plus
+  the 15 code files referencing them; encoding columns byte-identical.
+- Open question recorded, not solved: the state-map rows' bytes decode
+  instruction-like (division-magic idioms, coherent 0x80149E28+
+  lui/addiu patch targets - addresses OUTSIDE the 0xAA000 image, all
+  eight EXEs load at 0x80020000, so no EXE lives there statically).
+  Classification of that blob stays open pending runtime evidence
+  (docs/RUNTIME.md); the names claim only the measured consumer roles.
+- Gates: 8/8 `make verify` GREEN; re-scan idempotent on both discs;
+  screen 0 DATA / 0 SUSPECT everywhere; ratchets 365/12; matched
+  functions 82 unchanged. Remaining 12 D_ tokens in src/ are the
+  wrapper-family flags D_800C936C/D_800C8B38 and two g3/slps small-data
+  globals - each needs its own evidence pass.
+
 **2026-10-12 — the C220-twin zone completed on EU: func_8002C238 carved
 (d968396), the twin row structure now mirrors JP on both discs.**
 - Word-diff proof (scripts/eu_c220_twin_recon.py, repo-external): EU

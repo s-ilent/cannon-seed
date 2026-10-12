@@ -21,8 +21,8 @@ glabel func_80030348
     /* 10B68 80030368 02000534 */  ori        $a1, $zero, 0x2
     /* 10B6C 8003036C 0599000C */  jal        func_80026414
     /* 10B70 80030370 21300000 */   addu      $a2, $zero, $zero
-    /* 10B74 80030374 0980043C */  lui        $a0, %hi(D_80089400)
-    /* 10B78 80030378 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* 10B74 80030374 0980043C */  lui        $a0, %hi(state_block_2)
+    /* 10B78 80030378 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* 10B7C 8003037C 02000534 */  ori        $a1, $zero, 0x2
     /* 10B80 80030380 0599000C */  jal        func_80026414
     /* 10B84 80030384 21300000 */   addu      $a2, $zero, $zero
@@ -53,15 +53,15 @@ endlabel func_80030348
 nonmatching func_800303E0, 0x2C
 
 glabel func_800303E0
-    /* 10BE0 800303E0 0980043C */  lui        $a0, %hi(D_80089A48)
-    /* 10BE4 800303E4 489A8424 */  addiu      $a0, $a0, %lo(D_80089A48)
+    /* 10BE0 800303E0 0980043C */  lui        $a0, %hi(state_block_10)
+    /* 10BE4 800303E4 489A8424 */  addiu      $a0, $a0, %lo(state_block_10)
     /* 10BE8 800303E8 4999000C */  jal        func_80026524
     /* 10BEC 800303EC 21280000 */   addu      $a1, $zero, $zero
     /* 10BF0 800303F0 06005114 */  bne        $v0, $s1, func_8003040C
     /* 10BF4 800303F4 02000534 */   ori       $a1, $zero, 0x2
     /* 10BF8 800303F8 01001034 */  ori        $s0, $zero, 0x1
-    /* 10BFC 800303FC 0980043C */  lui        $a0, %hi(D_80089400)
-    /* 10C00 80030400 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* 10BFC 800303FC 0980043C */  lui        $a0, %hi(state_block_2)
+    /* 10C00 80030400 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* 10C04 80030404 0599000C */  jal        func_80026414
     /* 10C08 80030408 FFFF0624 */   addiu     $a2, $zero, -0x1
 endlabel func_800303E0

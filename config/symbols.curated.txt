@@ -75,6 +75,63 @@ _SpuDataCallback = 0x8006BE7C; // LIBSPU S_DCB member; tools/sdk_members.py, uni
 // target: mainmenu_jp
 gte_init = 0x8007EF64; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
 GsClearOt = 0x8007F0E0; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
+//
+// State-map words (docs/FABRIC.md + src/func_8002C478.c usage sites).
+// Names are role-descriptive, not original symbols (no Psy-Q headers cover
+// game data). Evidence per name:
+// - state_block_N: bases handed to the reset walker func_80026414 by the
+//   matched state-clear driver (a0=base, a1/a2 mode words); state_block_2
+//   is also the func_80026668/func_800267C8 argument in the same web.
+// - state_rearm_N: the four-word group the driver re-arms to -1 in one
+//   hand-asm store group (state_block_2 + 0x40..0x4C).
+// - state_cursor: slot written -1 or &state_block_9, gated on
+//   func_80035A78(0xC) (also written by the func_8002C220 row, same gate).
+// - state_record_N: the two 8-byte id records passed to func_800267C8
+//   alongside &state_block_2; no other reference anywhere in the image.
+// EU twins sit at JP +0x814 (state words) / +0x838 (records); identical
+// names under both target scopes tie the relocation twins together.
+state_block_0 = 0x80089328; // state map: reset-walker entry (func_80026414 a0, mode 0/-1)
+state_block_1 = 0x80089368; // state map: reset-walker entry (mode 0/-1)
+state_block_2 = 0x80089400; // state map: reset-walker entry (modes 0/-1, 2/-1); func_80026668/267C8 arg
+state_rearm_0 = 0x80089440; // state map: re-armed to -1 by the state-clear driver (block_2+0x40)
+state_rearm_1 = 0x80089444; // state map: re-armed to -1 (block_2+0x44)
+state_rearm_2 = 0x80089448; // state map: re-armed to -1 (block_2+0x48)
+state_rearm_3 = 0x8008944C; // state map: re-armed to -1 (block_2+0x4C)
+state_block_3 = 0x800896F8; // state map: reset-walker entry (mode 0/0)
+state_block_4 = 0x80089738; // state map: reset-walker entry (mode 0/0)
+state_block_5 = 0x80089778; // state map: reset-walker entry (mode 0/0)
+state_block_6 = 0x800897B8; // state map: reset-walker entry (mode 0/0)
+state_block_7 = 0x800897F8; // state map: reset-walker entry (mode 0/0)
+state_block_8 = 0x80089838; // state map: reset-walker entry (mode 0/0)
+state_cursor = 0x800899C0; // state map: -1 or &state_block_9, func_80035A78(0xC)-gated
+state_block_9 = 0x800899D8; // state map: the block the cursor selects
+state_block_10 = 0x80089A48; // state map: reset-walker entry (mode 0/0)
+state_record_0 = 0x800C9B3C; // state map: id record pair, func_800267C8 arg 2
+state_record_1 = 0x800C9B44; // state map: id record pair, func_800267C8 arg 3
+
+// target: mainmenu_eu
+// State-map words - EU twins of the mainmenu_jp names above (+0x814 /
+// +0x838, per the relocation map measured in src/func_8002C418.c and the
+// cron-20261012-1411 recon). Same roles, same names.
+state_block_0 = 0x80089B3C; // state map: reset-walker entry (func_80026364 a0, mode 0/-1)
+state_block_1 = 0x80089B7C; // state map: reset-walker entry (mode 0/-1)
+state_block_2 = 0x80089C14; // state map: reset-walker entry (modes 0/-1, 2/-1); func_80026668/26718 arg
+state_rearm_0 = 0x80089C54; // state map: re-armed to -1 by the state-clear driver (block_2+0x40)
+state_rearm_1 = 0x80089C58; // state map: re-armed to -1 (block_2+0x44)
+state_rearm_2 = 0x80089C5C; // state map: re-armed to -1 (block_2+0x48)
+state_rearm_3 = 0x80089C60; // state map: re-armed to -1 (block_2+0x4C)
+state_block_3 = 0x80089F0C; // state map: reset-walker entry (mode 0/0)
+state_block_4 = 0x80089F4C; // state map: reset-walker entry (mode 0/0)
+state_block_5 = 0x80089F8C; // state map: reset-walker entry (mode 0/0)
+state_block_6 = 0x80089FCC; // state map: reset-walker entry (mode 0/0)
+state_block_7 = 0x8008A00C; // state map: reset-walker entry (mode 0/0)
+state_block_8 = 0x8008A04C; // state map: reset-walker entry (mode 0/0)
+state_cursor = 0x8008A1D4; // state map: -1 or &state_block_9, func_80035A18(0xC)-gated
+state_block_9 = 0x8008A1EC; // state map: the block the cursor selects
+state_block_10 = 0x8008A25C; // state map: reset-walker entry (mode 0/0)
+state_record_0 = 0x800CA374; // state map: id record pair, func_80026718 arg 2
+state_record_1 = 0x800CA37C; // state map: id record pair, func_80026718 arg 3
+
 // ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
 //
 // Evidence base: config/sdk_members.txt (tools/sdk_members.py)

@@ -40,8 +40,8 @@ glabel func_8002F368
     /* FBD0 8002F3D0 D998000C */  jal        func_80026364
     /* FBD4 8002F3D4 FFFF0624 */   addiu     $a2, $zero, -0x1
   .L8002F3D8:
-    /* FBD8 8002F3D8 0980043C */  lui        $a0, %hi(D_80089C14)
-    /* FBDC 8002F3DC 149C8424 */  addiu      $a0, $a0, %lo(D_80089C14)
+    /* FBD8 8002F3D8 0980043C */  lui        $a0, %hi(state_block_2)
+    /* FBDC 8002F3DC 149C8424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* FBE0 8002F3E0 21280000 */  addu       $a1, $zero, $zero
     /* FBE4 8002F3E4 D998000C */  jal        func_80026364
     /* FBE8 8002F3E8 FFFF0624 */   addiu     $a2, $zero, -0x1

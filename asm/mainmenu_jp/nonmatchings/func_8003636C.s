@@ -45,8 +45,8 @@ glabel func_8003639C
     /* 16BB0 800363B0 21280000 */  addu       $a1, $zero, $zero
     /* 16BB4 800363B4 0599000C */  jal        func_80026414
     /* 16BB8 800363B8 21300000 */   addu      $a2, $zero, $zero
-    /* 16BBC 800363BC 0980043C */  lui        $a0, %hi(D_80089400)
-    /* 16BC0 800363C0 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* 16BBC 800363BC 0980043C */  lui        $a0, %hi(state_block_2)
+    /* 16BC0 800363C0 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* 16BC4 800363C4 21280000 */  addu       $a1, $zero, $zero
     /* 16BC8 800363C8 0599000C */  jal        func_80026414
     /* 16BCC 800363CC 21300000 */   addu      $a2, $zero, $zero
@@ -148,8 +148,8 @@ glabel func_80036488
     /* 16D24 80036524 21280000 */  addu       $a1, $zero, $zero
     /* 16D28 80036528 0599000C */  jal        func_80026414
     /* 16D2C 8003652C FFFF0624 */   addiu     $a2, $zero, -0x1
-    /* 16D30 80036530 0980043C */  lui        $a0, %hi(D_80089400)
-    /* 16D34 80036534 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* 16D30 80036530 0980043C */  lui        $a0, %hi(state_block_2)
+    /* 16D34 80036534 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* 16D38 80036538 21280000 */  addu       $a1, $zero, $zero
     /* 16D3C 8003653C 0599000C */  jal        func_80026414
     /* 16D40 80036540 FFFF0624 */   addiu     $a2, $zero, -0x1
@@ -212,8 +212,8 @@ glabel func_80036574
     /* 16E10 80036610 21280000 */  addu       $a1, $zero, $zero
     /* 16E14 80036614 0599000C */  jal        func_80026414
     /* 16E18 80036618 FFFF0624 */   addiu     $a2, $zero, -0x1
-    /* 16E1C 8003661C 0980043C */  lui        $a0, %hi(D_80089400)
-    /* 16E20 80036620 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* 16E1C 8003661C 0980043C */  lui        $a0, %hi(state_block_2)
+    /* 16E20 80036620 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* 16E24 80036624 21280000 */  addu       $a1, $zero, $zero
     /* 16E28 80036628 0599000C */  jal        func_80026414
     /* 16E2C 8003662C FFFF0624 */   addiu     $a2, $zero, -0x1

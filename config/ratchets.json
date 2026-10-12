@@ -27,7 +27,19 @@
   "landing: 1 definition + 4 externs + 15 call sites + 4 comment refs.",
   "unknown_data 57->102 (2026-10-12): same file - 45 data tokens (18 state-map",
   "externs + 27 code refs + 3 header comments); all spimdisasm address names,",
-  "EU's own addresses per the relocation map in the file header."
+  "EU's own addresses per the relocation map in the file header.",
+  "unknown_data 102->12 (2026-10-12): the state-map naming pass - 36 curated",
+  "data names (18 per disc, twins named identically at +0x814/+0x838) applied",
+  "through the new scan_functions.py data-symbol emission (type:s32; splat",
+  "renames the dlabels, the generated asm defines them). src/func_8002C478.c",
+  "and src/func_8002C418.c lose all 90 D_ tokens (18 externs + code refs +",
+  "header mentions per file); names are role-descriptive (state_block_N",
+  "reset-walker entries, state_rearm_N -1 group, state_cursor, state_record_N)",
+  "- evidence per name in config/symbols.curated.txt. The 12 remaining tokens",
+  "are the wrapper-family flags D_800C936C/D_800C8B38 (4+4) and the two",
+  "g3/slps small-data globals (2+2), unrenamed pending their own evidence.",
+  "8/8 verify GREEN; yaml byte-identical on re-scan (symbols-file-only);",
+  "matched functions 82 unchanged."
  ],
  "patterns": [
   {
@@ -41,6 +53,6 @@
  ],
  "baselines": {
   "unknown_function": 365,
-  "unknown_data": 102
+  "unknown_data": 12
  }
 }

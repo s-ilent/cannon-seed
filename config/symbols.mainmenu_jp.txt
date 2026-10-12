@@ -1738,3 +1738,23 @@ func_80086C7C = 0x80086C7C; // type:func (branch target)
 func_80086C88 = 0x80086C88; // type:func (branch target)
 func_80086C98 = 0x80086C98; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
+// BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+state_block_0 = 0x80089328; // type:s32
+state_block_1 = 0x80089368; // type:s32
+state_block_2 = 0x80089400; // type:s32
+state_rearm_0 = 0x80089440; // type:s32
+state_rearm_1 = 0x80089444; // type:s32
+state_rearm_2 = 0x80089448; // type:s32
+state_rearm_3 = 0x8008944C; // type:s32
+state_block_3 = 0x800896F8; // type:s32
+state_block_4 = 0x80089738; // type:s32
+state_block_5 = 0x80089778; // type:s32
+state_block_6 = 0x800897B8; // type:s32
+state_block_7 = 0x800897F8; // type:s32
+state_block_8 = 0x80089838; // type:s32
+state_cursor = 0x800899C0; // type:s32
+state_block_9 = 0x800899D8; // type:s32
+state_block_10 = 0x80089A48; // type:s32
+state_record_0 = 0x800C9B3C; // type:s32
+state_record_1 = 0x800C9B44; // type:s32
+// END GENERATED DATA SYMBOLS

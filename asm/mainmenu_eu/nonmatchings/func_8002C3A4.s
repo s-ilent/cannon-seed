@@ -23,10 +23,10 @@ glabel func_8002C3A4
     /* CBCC 8002C3CC 0C000434 */   ori       $a0, $zero, 0xC
     /* CBD0 8002C3D0 07005414 */  bne        $v0, $s4, func_8002C3F0
     /* CBD4 8002C3D4 00000000 */   nop
-    /* CBD8 8002C3D8 0980023C */  lui        $v0, %hi(D_8008A1EC)
-    /* CBDC 8002C3DC ECA14224 */  addiu      $v0, $v0, %lo(D_8008A1EC)
-    /* CBE0 8002C3E0 0980013C */  lui        $at, %hi(D_8008A1D4)
-    /* CBE4 8002C3E4 D4A122AC */  sw         $v0, %lo(D_8008A1D4)($at)
+    /* CBD8 8002C3D8 0980023C */  lui        $v0, %hi(state_block_9)
+    /* CBDC 8002C3DC ECA14224 */  addiu      $v0, $v0, %lo(state_block_9)
+    /* CBE0 8002C3E0 0980013C */  lui        $at, %hi(state_cursor)
+    /* CBE4 8002C3E4 D4A122AC */  sw         $v0, %lo(state_cursor)($at)
     /* CBE8 8002C3E8 76AA0008 */  j          func_8002A9D8
     /* CBEC 8002C3EC 00000000 */   nop
 endlabel func_8002C3A4
@@ -34,8 +34,8 @@ endlabel func_8002C3A4
 nonmatching func_8002C3F0, 0x28
 
 glabel func_8002C3F0
-    /* CBF0 8002C3F0 0980013C */  lui        $at, %hi(D_8008A1D4)
-    /* CBF4 8002C3F4 D4A134AC */  sw         $s4, %lo(D_8008A1D4)($at)
+    /* CBF0 8002C3F0 0980013C */  lui        $at, %hi(state_cursor)
+    /* CBF4 8002C3F4 D4A134AC */  sw         $s4, %lo(state_cursor)($at)
     /* CBF8 8002C3F8 2400BF8F */  lw         $ra, 0x24($sp)
     /* CBFC 8002C3FC 2000B48F */  lw         $s4, 0x20($sp)
     /* CC00 8002C400 1C00B38F */  lw         $s3, 0x1C($sp)
