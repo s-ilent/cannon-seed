@@ -70412,12 +70412,12 @@ dlabel D_800C8B0C
     /* A9334 800C8B34 3AF0AA02 */ .word 0x02AAF03A
 enddlabel D_800C8B0C
 
-nonmatching D_800C8B38
+nonmatching menu_state_flag
 
-dlabel D_800C8B38
+dlabel menu_state_flag
     /* A9338 800C8B38 3BF0B002 */ .word 0x02B0F03B
     /* A933C 800C8B3C 3CF0B602 */ .word 0x02B6F03C
-enddlabel D_800C8B38
+enddlabel menu_state_flag
 
 nonmatching D_800C8B40
 

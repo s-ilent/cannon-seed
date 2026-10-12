@@ -2,7 +2,7 @@
  *
  * The main-menu wrapper family (0x6b8 cluster at 0x80037A44): 35 tiny
  * void functions, the JP twin of the mainmenu_eu family at 0x800379E4.
- * Each arms the menu-state flag D_800C8B38 (first two functions) and/or
+ * Each arms the menu-state flag (first two functions) and/or
  * drives the sequence helper func_800356C4(N, M), then calls the
  * unprototyped menu primitive func_80025DAC(). Functions 17-35 here
  * (func_80037D0C..func_800380D0) were once described as JP-only
@@ -41,20 +41,20 @@
  *   evidence.
  */
 
-extern int D_800C8B38;
+extern int menu_state_flag;
 extern void func_80025DAC(void);
 extern void func_800356C4(int, int);
 extern int func_80035A78(int);
 
 void func_80037A44(void)
 {
-    D_800C8B38 = 0;
+    menu_state_flag = 0;
     func_80025DAC();
 }
 
 void func_80037A6C(void)
 {
-    D_800C8B38 = 1;
+    menu_state_flag = 1;
     func_80025DAC();
 }
 

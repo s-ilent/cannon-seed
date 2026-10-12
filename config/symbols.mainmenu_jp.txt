@@ -1755,6 +1755,7 @@ state_block_8 = 0x80089838; // type:s32
 state_cursor = 0x800899C0; // type:s32
 state_block_9 = 0x800899D8; // type:s32
 state_block_10 = 0x80089A48; // type:s32
+menu_state_flag = 0x800C8B38; // type:s32
 state_record_0 = 0x800C9B3C; // type:s32
 state_record_1 = 0x800C9B44; // type:s32
 // END GENERATED DATA SYMBOLS

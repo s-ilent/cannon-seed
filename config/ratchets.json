@@ -39,7 +39,18 @@
   "are the wrapper-family flags D_800C936C/D_800C8B38 (4+4) and the two",
   "g3/slps small-data globals (2+2), unrenamed pending their own evidence.",
   "8/8 verify GREEN; yaml byte-identical on re-scan (symbols-file-only);",
-  "matched functions 82 unchanged."
+  "matched functions 82 unchanged.",
+  "unknown_data 12->0 (2026-10-13): the wrapper-family flag naming pass - the",
+  "last four D_ objects renamed through the curated data-symbol path:",
+  "menu_state_flag (0x800C8B38 JP / 0x800C936C EU - armed 0/1 by the wrapper",
+  "families before the menu primitive; committed prose vocabulary), boot_flag_0",
+  "(0x80063268 slps word - writes measured 0/1 via the leading-nop stub family:",
+  "cleared per walk iteration by func_80025AE0, set by twin stub func_80025AF0,",
+  "no static reader) and boot_flag_1 (0x80063294 slps halfword - cleared by stub",
+  "func_8002A0DC + at func_8002706C, ==1 gate in func_80027100 re-enters the",
+  "walk at func_80026288; set-site outside the current scan). Evidence per name",
+  "in config/symbols.curated.txt. unknown_data is now empty by construction:",
+  "future D_ tokens re-raise the ratchet the day they appear."
  ],
  "patterns": [
   {
@@ -53,6 +64,6 @@
  ],
  "baselines": {
   "unknown_function": 365,
-  "unknown_data": 12
+  "unknown_data": 0
  }
 }

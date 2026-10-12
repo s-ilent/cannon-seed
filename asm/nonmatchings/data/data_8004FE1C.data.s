@@ -35067,11 +35067,11 @@ dlabel D_80063264
     /* 43A64 80063264 0A000104 */ .word 0x0401000A
 enddlabel D_80063264
 
-nonmatching D_80063268
+nonmatching boot_flag_0
 
-dlabel D_80063268
+dlabel boot_flag_0
     /* 43A68 80063268 FD030000 */ .word 0x000003FD
-enddlabel D_80063268
+enddlabel boot_flag_0
 
 nonmatching D_8006326C
 
@@ -35112,38 +35112,24 @@ dlabel D_80063280
     /* 43A90 80063290 FD030100 */ .word 0x000103FD
 enddlabel D_80063280
 
-nonmatching D_80063294
+nonmatching boot_flag_1
 
-dlabel D_80063294
-    /* 43A94 80063294 */ .short 0x000D
-    /* 43A96 80063296 */ .short 0x0401
-    /* 43A98 80063298 */ .short 0x03FD
-    /* 43A9A 8006329A */ .short 0x03FF
-    /* 43A9C 8006329C */ .short 0x000A
-    /* 43A9E 8006329E */ .short 0x0401
-    /* 43AA0 800632A0 */ .short 0x1001
-    /* 43AA2 800632A2 */ .short 0x0000
-    /* 43AA4 800632A4 */ .short 0x000A
-    /* 43AA6 800632A6 */ .short 0x0401
-    /* 43AA8 800632A8 */ .short 0x1001
-    /* 43AAA 800632AA */ .short 0x0000
-    /* 43AAC 800632AC */ .short 0x000A
-    /* 43AAE 800632AE */ .short 0x0401
-    /* 43AB0 800632B0 */ .short 0x1001
-    /* 43AB2 800632B2 */ .short 0x0000
-    /* 43AB4 800632B4 */ .short 0x000A
-    /* 43AB6 800632B6 */ .short 0x0401
-    /* 43AB8 800632B8 */ .short 0x1001
-    /* 43ABA 800632BA */ .short 0x0000
-    /* 43ABC 800632BC */ .short 0x000C
-    /* 43ABE 800632BE */ .short 0x0401
-    /* 43AC0 800632C0 */ .short 0x1001
-    /* 43AC2 800632C2 */ .short 0xFE00
-    /* 43AC4 800632C4 */ .short 0x000C
-    /* 43AC6 800632C6 */ .short 0x0401
-    /* 43AC8 800632C8 */ .short 0x1001
-    /* 43ACA 800632CA */ .short 0xFE00
-enddlabel D_80063294
+dlabel boot_flag_1
+    /* 43A94 80063294 0D000104 */ .word 0x0401000D
+    /* 43A98 80063298 FD03FF03 */ .word 0x03FF03FD
+    /* 43A9C 8006329C 0A000104 */ .word 0x0401000A
+    /* 43AA0 800632A0 01100000 */ .word 0x00001001
+    /* 43AA4 800632A4 0A000104 */ .word 0x0401000A
+    /* 43AA8 800632A8 01100000 */ .word 0x00001001
+    /* 43AAC 800632AC 0A000104 */ .word 0x0401000A
+    /* 43AB0 800632B0 01100000 */ .word 0x00001001
+    /* 43AB4 800632B4 0A000104 */ .word 0x0401000A
+    /* 43AB8 800632B8 01100000 */ .word 0x00001001
+    /* 43ABC 800632BC 0C000104 */ .word 0x0401000C
+    /* 43AC0 800632C0 011000FE */ .word 0xFE001001
+    /* 43AC4 800632C4 0C000104 */ .word 0x0401000C
+    /* 43AC8 800632C8 011000FE */ .word 0xFE001001
+enddlabel boot_flag_1
 
 nonmatching D_800632CC
 

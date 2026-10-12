@@ -13,10 +13,10 @@
  * shape emits an entry nop). The volatile asm below is therefore
  * the settled, faithful reproduction of a hand-asm stub.
  */
-extern unsigned short D_80063294;
+extern unsigned short boot_flag_1;
 
 void func_8002A0DC(void)
 {
     __asm__ volatile("nop");
-    D_80063294 = 0;
+    boot_flag_1 = 0;
 }

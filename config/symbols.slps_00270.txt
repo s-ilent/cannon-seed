@@ -710,3 +710,7 @@ func_8004ABC4 = 0x8004ABC4; // type:func (branch target)
 func_8004ABEC = 0x8004ABEC; // type:func (branch target)
 func_8004AC08 = 0x8004AC08; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
+// BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+boot_flag_0 = 0x80063268; // type:s32
+boot_flag_1 = 0x80063294; // type:s32
+// END GENERATED DATA SYMBOLS

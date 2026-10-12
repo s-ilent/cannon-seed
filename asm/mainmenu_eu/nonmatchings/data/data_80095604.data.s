@@ -68148,12 +68148,12 @@ dlabel D_800C9348
     /* A9B68 800C9368 09F00801 */ .word 0x0108F009
 enddlabel D_800C9348
 
-nonmatching D_800C936C
+nonmatching menu_state_flag
 
-dlabel D_800C936C
+dlabel menu_state_flag
     /* A9B6C 800C936C 09F00E01 */ .word 0x010EF009
     /* A9B70 800C9370 0AF01401 */ .word 0x0114F00A
-enddlabel D_800C936C
+enddlabel menu_state_flag
 
 nonmatching D_800C9374
 

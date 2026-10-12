@@ -11,7 +11,7 @@ nonmatching func_80025AF0, 0x10
 
 glabel func_80025AF0
     /* 62F0 80025AF0 01000234 */  ori        $v0, $zero, 0x1
-    /* 62F4 80025AF4 3C0082AF */  sw         $v0, %gp_rel(D_80063268)($gp)
+    /* 62F4 80025AF4 3C0082AF */  sw         $v0, %gp_rel(boot_flag_0)($gp)
     /* 62F8 80025AF8 0800E003 */  jr         $ra
     /* 62FC 80025AFC 00000000 */   nop
 endlabel func_80025AF0

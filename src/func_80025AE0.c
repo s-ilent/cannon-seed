@@ -17,10 +17,10 @@
  * handwritten. The volatile asm below is therefore the settled, faithful
  * reproduction of a hand-asm stub.
  */
-extern unsigned int D_80063268;
+extern unsigned int boot_flag_0;
 
 void func_80025AE0(void)
 {
     __asm__ volatile("nop");
-    D_80063268 = 0;
+    boot_flag_0 = 0;
 }

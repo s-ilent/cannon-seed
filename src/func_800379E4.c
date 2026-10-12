@@ -1,8 +1,8 @@
 /* Matched 2026-10-11 through the round-trip oracle (mainmenu_eu).
  *
  * The main-menu wrapper family (0x2c8 cluster at 0x800379E4): sixteen
- * tiny void functions, each arming the menu-state flag D_800C936C
- * and/or driving the sequence helper func_80035664(N, M), then calling
+ * tiny void functions, each arming the menu-state flag and/or
+ * driving the sequence helper func_80035664(N, M), then calling
  * the unprototyped menu primitive func_80025CFC().
  *
  * Shaping notes (GCC 2.6.3 -O2 -G8, MIPS1):
@@ -26,19 +26,19 @@
  *   bytes those jumps land on.
  */
 
-extern int D_800C936C;
+extern int menu_state_flag;
 extern void func_80025CFC(void);
 extern void func_80035664(int, int);
 
 void func_800379E4(void)
 {
-    D_800C936C = 0;
+    menu_state_flag = 0;
     func_80025CFC();
 }
 
 void func_80037A0C(void)
 {
-    D_800C936C = 1;
+    menu_state_flag = 1;
     func_80025CFC();
 }
 
