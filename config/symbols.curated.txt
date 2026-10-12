@@ -127,6 +127,22 @@ state_record_1 = 0x800C9B44; // state map: id record pair, func_800267C8 arg 3
 // stored 0 or 1 immediately before invoking the menu primitive
 // func_80025DAC(); no other static reference in the image.
 menu_state_flag = 0x800C8B38; // wrapper-family flag: armed 0/1 before func_80025DAC()
+//
+// The static state table the runtime computed jump hands control through
+// (9 pointer words into the walker family's mid-function pieces; zero
+// static readers image-wide - no pointer words into 0x800202EC..0x80020310
+// and no lui/addiu/ori pair materializes any of its addresses - so the
+// names claim the pointer roles only, pending runtime evidence). EU twin:
+// same nine addresses on mainmenu_eu, targets -0xB0.
+state_table_0 = 0x800202EC; // state table: -> 0x800264C0 (func_800264B4 body +0xC)
+state_table_1 = 0x800202F0; // state table: -> 0x80026454 (func_80026414 body +0x40)
+state_table_2 = 0x800202F4; // state table: -> 0x8002647C (func_80026414 body +0x68, retry-loop tail)
+state_table_3 = 0x800202F8; // state table: -> 0x800264FC (func_800264B4 body +0x48)
+state_table_4 = 0x800202FC; // state table: -> 0x80026454
+state_table_5 = 0x80020300; // state table: -> 0x800264FC
+state_table_6 = 0x80020304; // state table: -> 0x800264FC
+state_table_7 = 0x80020308; // state table: -> 0x800264FC
+state_table_8 = 0x8002030C; // state table: -> 0x80026454
 
 // target: mainmenu_eu
 // State-map words - EU twins of the mainmenu_jp names above (+0x814 /
@@ -156,6 +172,19 @@ state_record_1 = 0x800CA37C; // state map: id record pair, func_80026718 arg 3
 // wrapper family before invoking the menu primitive func_80025CFC(); no
 // other static reference in the image.
 menu_state_flag = 0x800C936C; // wrapper-family flag: armed 0/1 before func_80025CFC()
+//
+// EU twin of the mainmenu_jp state table above: same nine addresses, EU
+// walker targets = JP - 0xB0 (the 1411 callee map, re-measured by
+// scripts/dispatch_table_recon.py).
+state_table_0 = 0x800202EC; // state table: -> 0x80026410 (func_80026404 body +0xC)
+state_table_1 = 0x800202F0; // state table: -> 0x800263A4 (func_80026364 body +0x40)
+state_table_2 = 0x800202F4; // state table: -> 0x800263CC (func_80026364 body +0x68, retry-loop tail)
+state_table_3 = 0x800202F8; // state table: -> 0x8002644C (func_80026404 body +0x48)
+state_table_4 = 0x800202FC; // state table: -> 0x800263A4
+state_table_5 = 0x80020300; // state table: -> 0x8002644C
+state_table_6 = 0x80020304; // state table: -> 0x8002644C
+state_table_7 = 0x80020308; // state table: -> 0x8002644C
+state_table_8 = 0x8002030C; // state table: -> 0x800263A4
 
 // ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
 //

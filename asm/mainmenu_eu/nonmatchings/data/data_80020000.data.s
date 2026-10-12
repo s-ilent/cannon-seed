@@ -229,14 +229,59 @@ dlabel D_80020260
     /* AC4 800202C4 */ .asciz "%s(%d):Invalid attribute in set_att()\n"
     /* 2573282564293A496E76616C69642061747472696275746520696E207365745F61747428290A0000 */
 .align 2
+enddlabel D_80020260
+
+nonmatching state_table_0
+
+dlabel state_table_0
     /* AEC 800202EC 10640280 */ .word 0x80026410
+enddlabel state_table_0
+
+nonmatching state_table_1
+
+dlabel state_table_1
     /* AF0 800202F0 A4630280 */ .word 0x800263A4
+enddlabel state_table_1
+
+nonmatching state_table_2
+
+dlabel state_table_2
     /* AF4 800202F4 CC630280 */ .word 0x800263CC
+enddlabel state_table_2
+
+nonmatching state_table_3
+
+dlabel state_table_3
     /* AF8 800202F8 4C640280 */ .word 0x8002644C
+enddlabel state_table_3
+
+nonmatching state_table_4
+
+dlabel state_table_4
     /* AFC 800202FC A4630280 */ .word 0x800263A4
+enddlabel state_table_4
+
+nonmatching state_table_5
+
+dlabel state_table_5
     /* B00 80020300 4C640280 */ .word 0x8002644C
+enddlabel state_table_5
+
+nonmatching state_table_6
+
+dlabel state_table_6
     /* B04 80020304 4C640280 */ .word 0x8002644C
+enddlabel state_table_6
+
+nonmatching state_table_7
+
+dlabel state_table_7
     /* B08 80020308 4C640280 */ .word 0x8002644C
+enddlabel state_table_7
+
+nonmatching state_table_8
+
+dlabel state_table_8
     /* B0C 8002030C A4630280 */ .word 0x800263A4
     /* B10 80020310 25732825 */ .word 0x25287325
     /* B14 80020314 64293A49 */ .word 0x493A2964
@@ -267,7 +312,7 @@ dlabel D_80020260
     /* B78 80020378 69666965 */ .word 0x65696669
     /* B7C 8002037C 6420696E */ .word 0x6E692064
     /* B80 80020380 20736574 */ .word 0x74657320
-enddlabel D_80020260
+enddlabel state_table_8
 
 .align 2
 nonmatching D_80020384

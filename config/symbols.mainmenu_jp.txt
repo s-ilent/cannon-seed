@@ -1739,6 +1739,15 @@ func_80086C88 = 0x80086C88; // type:func (branch target)
 func_80086C98 = 0x80086C98; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+state_table_0 = 0x800202EC; // type:s32
+state_table_1 = 0x800202F0; // type:s32
+state_table_2 = 0x800202F4; // type:s32
+state_table_3 = 0x800202F8; // type:s32
+state_table_4 = 0x800202FC; // type:s32
+state_table_5 = 0x80020300; // type:s32
+state_table_6 = 0x80020304; // type:s32
+state_table_7 = 0x80020308; // type:s32
+state_table_8 = 0x8002030C; // type:s32
 state_block_0 = 0x80089328; // type:s32
 state_block_1 = 0x80089368; // type:s32
 state_block_2 = 0x80089400; // type:s32
