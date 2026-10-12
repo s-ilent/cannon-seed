@@ -73,7 +73,8 @@ segments:
       - [0xB86C, asm, func_8002B06C]   # 0x6b4 pinned
       - [0xBF20, data, data_8002B720]   # 0xa0
       - [0xBFC0, data, data_8002B7C0]   # 0x118 pinned
-      - [0xC0D8, data, data_8002B8D8]   # 0xacc
+      - [0xC0D8, data, data_8002B8D8]   # 0x960
+      - [0xCA38, asm, func_8002C238]   # 0x16c pinned
       - [0xCBA4, asm, func_8002C3A4]   # 0x74
       - [0xCC18, c, func_8002C418]   # 0x190 noseed
       - [0xCDA8, data, data_8002C5A8]   # 0x6b4

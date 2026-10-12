@@ -185,7 +185,7 @@ glabel func_8002DF44
     /* E830 8002E030 FAFF8424 */  addiu      $a0, $a0, -0x6
     /* E834 8002E034 B599000C */  jal        func_800266D4
     /* E838 8002E038 3A000534 */   ori       $a1, $zero, 0x3A
-    /* E83C 8002E03C D4B00008 */  j          D_8002C350
+    /* E83C 8002E03C D4B00008 */  j          .L8002C350
     /* E840 8002E040 21A00000 */   addu      $s4, $zero, $zero
 endlabel func_8002DF44
 
