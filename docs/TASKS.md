@@ -6,6 +6,40 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### Split the de-framed payload, not the framed on-disc file
+
+`baselines/*.bin` are raw MODE2/2352 sector images, not plain EXEs: the MODE2
+sync `00 FF FF FF FF FF FF FF FF FF FF 00`, an incrementing BCD address, mode
+`02` and subheader every 2352 bytes, first at `0x918`, ~296 sectors per file.
+Their SHA-1s match `config/sha1/**`, so the disc really does hold the framed
+file — this is not an extraction bug. `docs/GRID.md` found the `0x930` grid but
+did not draw the consequence.
+
+The game de-frames at load. Verified against the running game through the GDB
+stub (`tools/gdb_stub_proxy.py`), 2026-10-13:
+
+* 4 KiB read at `0x80020000` equals the de-framed payload byte for byte, and
+  does not match the framed file;
+* `Too few TOC` runs at `0x80020000`; the carve puts it at `0x80020130`;
+* `func_800253F8`'s bytes run at `0x80024818`; the carve puts them at
+  `0x800253F8`.
+
+So `splat` maps the framed file linearly and every VRAM past the file's start
+is offset from the real runtime address by an amount that grows with position
+(`0x130` near the start, `0xBE0` further in). Every `func_XXXXXXXX` name is a
+file offset, not a runtime address.
+
+Carve impact: 481 of 1841 (26%) of `asm`/`c` subsegments overlap framing bytes
+— 197 start inside a framing region, 59 have a full 304-byte chunk strictly
+inside, so their code is interrupted and cannot match as clean C. None of the 12
+matched `c` regions is affected, so existing matches stand.
+
+Fix: de-frame each baseline into the real payload image, point the splat config
+at that, and re-derive the symbol addresses from it. Decide first what
+`make verify` compares: the on-disc framed file (today's oracle, what the disc
+holds) or the de-framed payload that actually executes — if the former stays the
+target, the build must re-frame.
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
