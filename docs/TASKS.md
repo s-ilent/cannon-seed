@@ -6,10 +6,43 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
-*(empty — the carve-pin application below landed as d683dc9; next queue items
-live in the sandbox agent's shared worklog)*
+### Re-pin the Psy-Q SDK to 3.3 and regenerate the SDK reports
+
+The game links Psy-Q ~3.3 (kernel RCS tags dated 1995-10, `docs/RECON.md`), but
+`docs/MATCHING.md` §3b/§3c pin release 4.0, and both `config/sdk_*.txt` reports
+were generated against it. `tools/libshare.py` measures how much that costs: on
+slps_00270 the member function bytes match 4.0 for 2.6% of the payload and 3.3
+for 23.7%.
+
+    git clone --depth 1 https://github.com/sozud/psy-q ~/psyq   # ships 3.3..4.0
+    python3 tools/sdk_members.py --libs ~/psyq/3.3/PSX/LIB
+    python3 tools/sdk_symbols.py --libs ~/psyq/3.3/PSX/LIB
+
+Both tools overwrite `config/sdk_*.txt` on every run (they have no dry-run), so
+review the diff before committing. Then update the pinned path in
+`docs/MATCHING.md` §3b/§3c and `docs/TOOLCHAIN.md`.
 
 ## Log
+
+**2026-10-12 — the Psy-Q library share, calibrated.**
+- `tools/libshare.py` — matches each SDK member's *individual* functions (split
+  at its own `.text` symbols) against the payload, not whole members. Over the
+  eight targets at 3.3: **13.2% of payload bytes** are Psy-Q library code, and
+  about the same share of the scanner's function list (1509/11463). The boot
+  executables are library-heavy (slps 24%, sces 17%); the game executables run
+  9–15%.
+- `tools/sdk_members.py` under-counts badly: it needs an entire member present,
+  and these binaries linked the library function-granular. On slps_00270 the
+  whole-member scan covers 1.8% of the payload against 23.7% here. The
+  function-level set recovers 97% of the committed report's 810 placement rows,
+  83% of its 128 confident rows, and finds ~5× more.
+- The pinned SDK is the wrong release: the same scan finds 1.8% of the payload
+  at 4.0 and 13.2% at 3.3 (see Queued).
+- Library code sits inside ranges the splat map calls `data` — an evenly
+  0x30-spaced libetc callback block (`ResetCallback`, `DMACallback`,
+  `VSyncCallback`, `GetIntrMask`) lies inside `data_8002FD9C` in slps_00270.
+  That carve error runs the other way from the 37 ranges
+  `tools/code_data_screen.py` flags.
 
 **2026-10-12 — carve-type pins applied (d683dc9).**
 - The queued `docs/carve-pin.patch` landed: 37 DATA-verdict rows re-typed to
