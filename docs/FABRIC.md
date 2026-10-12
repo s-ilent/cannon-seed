@@ -250,6 +250,47 @@ parent's frame - which is why they have no prologues of their own.
    +0x10..+0x16) - a plain struct in the C unit, initialized/stored only
    through word/byte stores measured above.
 
+## Multi-subsegment C machinery (design 2026-10-12, implement next)
+
+The first family component (the E1A8..E250 band + its C45C/C4C0/C50C
+targets) is four disjoint address windows inside the C220 row, but ONE C
+compilation unit. Today's build path is one `c` row = one src file = one
+`.r_<rom>` section at one address (build.sh c_entries + gen_ld.py), so the
+machinery to add is a SPLIT, not a new pipeline:
+
+1. **Yaml shape** (hand edit at carve time): the containing asm row is cut
+   into per-piece rows. Piece 1 keeps the base name, pieces 2..N are rows
+   named `<base>.pN`, all type `c`:
+   `[0x..., asm, ...][0xE1A8, c, fabric_band][0x..., asm, ...]
+    [0xC45C, c, fabric_band.p2] ...` - rows stay in payload order; splat
+   only needs unique names, gen_ld only needs the addresses.
+2. **build.sh**: the c_entries pass compiles `src/<base>.c` ONCE per base
+   (cache the cc.sh -S product), splits the output at `glabel` boundaries
+   into functions, and maps functions to pieces BY ORDER: piece 1 = the
+   base row, piece N = the `.pN` row. The compiled function order in the
+   .c source must equal the address order of the rows - assert count and
+   fail loudly on mismatch. Each piece gets its own staged file
+   (`build/src/<base>[.pN].r.s`) with `.text` rewritten to `.r_<its row
+   rom>`, assembled to `build/src/<base>[.pN].o` - exactly the names
+   gen_ld.py already links.
+3. **Invariants**: pieces are WHOLE functions (cc1 branch labels `.Lnn`
+   stay intra-function, so intra-piece; the `.L<8hex>` globalization and
+   the two-pass auto-define keep working unchanged). The gp_rel rewrite
+   and the MACRO_PRONE data-as-code guard apply per staged piece as
+   today. A piece containing anything outside .text (cc1 .rdata for
+   constants, .data) must fail the build loudly - the fabric C unit
+   should be pure control flow + calls; constants get their own rows.
+4. **First proof**: the C220-row split + a 4-piece `src/fabric_band.c`
+   (band first? no - ADDRESS order: C45C, C4C0, C50C, then the E1A8
+   band) whose bodies are the tail-call-only shapes the probe validated
+   (probe verdict GO). Byte-exact or it does not land.
+
+Why order-mapped pieces and not per-function names: the retail band
+fragments are label blocks of the shared parent frame - their C names are
+inventions, and per-piece rows keep the yaml the single source of
+addresses. Symbolic names for the pieces can be curated later, exactly
+like the SDK member adoptions.
+
 ## Next actions
 
 1. DONE 2026-10-12: honesty carves 1+2 (EF10, F834), carve 3 (DDB0 whole
