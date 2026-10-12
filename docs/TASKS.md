@@ -41,6 +41,32 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — the single-member data rows carved; member names adopted
+(b8b2bd6, 993af95).**
+- slps `data_800316C0` (0x48) and `data_8003ADE8` (0xc) + sces
+  `data_8003A8B0` (0xc) decompose as `[4-byte unreferenced zero word |
+  anchored member entry]`: `startIntrDMA` (unique + sig-db agree, framed
+  body ending `lw ra` exactly at the row end) and `GsDefDispBuff` twice
+  (unique; the old row boundary BISECTED the function — the following
+  row's frame setup consumes the `$v0` the 2-instruction head loads and
+  stores a0/a2/a1/a3 as the x/x2/y/y2 display-env halfwords). Rows
+  re-typed to pinned data + pinned asm starting at the member's true
+  address.
+- `tools/scan_functions.py` now emits curated names for pinned member
+  rows (their start IS the byte-verified member entry even though the
+  walk never produced a range there); symbols-file-only, like every
+  curated name.
+- All 13 unambiguous `adoptable` names from the 3.3 report are now
+  adopted (6 new: `GsSortGLine`, `select_max_param`, `GsClearOt` x2,
+  `SpuSetNoiseVoice`, `_SpuDataCallback`). The 2 `ambiguous` pairs
+  (GsSetProjection/SsSetNoiseOff) stay unadopted by design.
+- 8/8 verify GREEN after each commit; ratchets 317/12 unchanged.
+  Remaining scale step: group contiguous member runs inside the big
+  multi-member rows (mainmenu_jp `data_80086D3C`, g3_jp `data_8006EB0C`)
+  — each member's `.text` extent from the 3.3 archives is needed so the
+  carve ends where the member ends (the psyq re-clone stalled twice this
+  session at ~116K; try sparse/blob-filtered clone next).
+
 **2026-10-12 — the SDK re-pin landed (3.3).**
 - `config/sdk_members.txt` regenerated against `~/psyq/3.3/PSX/LIB` with
   `--sigs psx_psyq_signatures/330`: 968 placements (was 781), **144 anchored
