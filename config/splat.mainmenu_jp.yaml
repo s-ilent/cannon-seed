@@ -53,7 +53,11 @@ segments:
       - [0x5BF8, asm, func_800253F8]   # 0x810
       - [0x6408, data, data_80025C08]   # 0x194
       - [0x659C, asm, func_80025D9C]   # 0x4b4
-      - [0x6A50, asm, func_80026250]   # 0x2c4 pinned
+      - [0x6A50, asm, func_80026250]   # 0x44 pinned
+      - [0x6A94, asm, func_80026294]   # 0x68 pinned
+      - [0x6AFC, asm, func_800262FC]   # 0xec pinned
+      - [0x6BE8, asm, func_800263E8]   # 0xcc pinned
+      - [0x6CB4, asm, func_800264B4]   # 0x60 pinned
       - [0x6D14, data, data_80026514]   # 0x148
       - [0x6E5C, asm, func_8002665C]   # 0x190
       - [0x6FEC, data, data_800267EC]   # 0x8
