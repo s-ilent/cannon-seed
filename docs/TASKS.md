@@ -24,6 +24,13 @@ byte-verified SDK member, or carry a high instruction-validity density — would
 surface them. The SDK re-pin is DONE (see Log): the 3.3 match set below is
 this task's evidence base.
 
+**The walk-stop rule itself is DONE (see Log 2026-10-12, the `--sdk-anchors`
+rule): 805 member rows carved in one pass, 8/8 GREEN.** What remains here is
+the NAME side: the ~800 new rows are `func_XXXXXXXX` — the anchors file
+holds each row's evidence name, so the next adoption pass is: regenerate
+`sdk_members.txt` (the adoptable set changes now that the rows exist), then
+adopt through `config/symbols.curated.txt` as before.
+
 **Evidence census (2026-10-12, `sdk_in_data.py` repo-external): 606 of the
 968 anchored/unique placements sit inside rows the maps label `data`** —
 per target: slps 52, sces 64, mainmenu_jp 97, mainmenu_eu 90, g3_jp 95,
@@ -40,6 +47,38 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 897 sig agreements); docs/MATCHING.md §3b/§3c updated.
 
 ## Log
+
+**2026-10-12 — the `--sdk-anchors` rule: the whole 3.3 match set carved
+(c9453ae, 0922fe6).**
+- `tools/sdk_anchors.py` (new): reads the committed member report + the
+  archives' own .text symbol tables, writes `config/sdk_anchors.txt` — one
+  row per `anchored`/`unique` placement with its extent (next symbol's
+  offset, or .text size): **821 anchors across the 8 targets, zero extent
+  misses.** `ambiguous` is not evidence and stays out.
+- The scanner's v6 rule (docstring 13): every anchor becomes a pinned-class
+  asm row at its exact address — no-walk pin BEFORE the scan, gap-carve lift
+  after. The tree's kept rows win (same offset, different size = the
+  hand-verified state stands, the anchor is skipped loudly). This first run:
+  **805 carved** (slps 83, sces 74, mainmenu 118+99, g3 111+112, g3org
+  103+105), 7 tree-wins skips — exactly the hand-carve and C-function sites
+  (startIntrDMA, GsDefDispBuff, StSetRing, _SpuDataCallback, scale_view_param
+  over func_80036CFC).
+- `preserved_types()` recognizes the end-of-line `sdk` marker (pinned-class:
+  hard no-walk span, marker re-emitted), so re-scans keep the carve even
+  without the anchors file. 8/8 verify GREEN; ratchets 317/12 unchanged;
+  re-scan hash-identical on all 8 targets.
+- Aftermath: one rescue fragment in g3org_eu (0x80063FA4, 0x37c) earned the
+  screen's DATA verdict once the pin boundary sliced it from the row it used
+  to ride inside — no anchored evidence, re-typed to pinned data per the
+  d683dc9 procedure. The SUSPECT human-call set grew 25 -> 28 (same
+  score-25 short-fragment class near the new pin boundaries).
+- The big tail blobs dissolved as predicted: mainmenu_jp `data_80086D3C`
+  (0x432c4, 38 members) and g3_jp `data_8006EB0C` (0xe948, 39) are now runs
+  of member rows with the unevidenced remainders honestly data.
+- Next: the name-adoption pass for the ~800 new rows (regenerate the
+  report, adopt via curated); then re-measure the code-in-data share
+  (`libshare.py`) — the data side should have dropped by roughly the same
+  ~446 KB the census measured.
 
 **2026-10-12 — member-extent carves: VMODE, MATRIX.o whole-member, SCLIB/COR_00
 (2fc13c9, 1f039fc, f05f963).**
