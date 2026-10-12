@@ -615,8 +615,11 @@ walker-family recipe, and a measured zero-entry contract.**
   8/8 GREEN, ratchets 365/0, screen 0 DATA / 0 SUSPECT both mainmenu
   discs, re-scan byte-stable. Curated: 19 row names + full entry-
   contract evidence block (175 curated names kept, was 157).
-  Open threads: (1) func_8005A014 (0x48, 5 real jal sites vs
-  undecodable content) - census the sites' prefixes before touching;
+  Open threads: (1) func_8005A014 CENSUSED this session: 5 real jal
+  sites, consistent ABI (a0=0|3, a1=-1 in the delay slot; the
+  0x800634xx pair flag-gated on bit 0 of 0x800CA27C), body = 18 noise
+  words with zero static writers - record in curated, settle on the
+  pcsx-redux path;
   (2) the runtime-opaque blocks / row-start reachability / sp
   convention of the 46x tail all share one runtime gate (pcsx-redux +
   BIOS + raw-BIN - now present on this host, see the gdb-session entry

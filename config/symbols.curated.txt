@@ -261,6 +261,22 @@ func_80059A44 = 0x80059A44; // clip/cull twin A 0x180: 0x40 frame (s0-s4/ra), lh
 func_80059BC4 = 0x80059BC4; // clip/cull twin B 0x188: 0x40 frame (s0-s4/ra), same shape
 func_80059D4C = 0x80059D4C; // 8-byte leaf: jr ra + nop
 func_80059D54 = 0x80059D54; // leaf 0x5c: mult opener; ends at func_80059DB0
+//
+// func_8005A014 census (cron-20261012-2256, queue item 3 of 2141): the 5
+// image-wide jal sites are real and share one ABI - a0 = 0 (0x800247E4;
+// 0x8003AB38's bne-taken path keeps the delay-slot ori a0,3; the
+// 0x800634DC/0x80063528 pair) or 3 (0x8003A900), a1 = -1 in the jal
+// delay slot (3 sites) or shifted from a loop counter (the 0x800634xx
+// pair, flag-gated on bit 0 of u32 0x800CA27C - call skipped when set).
+// The body is 18 words of high-entropy noise: no prologue, no jr ra,
+// none of the 58Fxx 7-word markers - and NOTHING in the image stores
+// into the range (lui+addiu materialization and store census: zero
+// hits). Verdict: real callers, opaque body; either the runtime patches
+// the bytes before first call through a path with no static writer, or
+// the calls are dead as decoded - settle on the pcsx-redux path (now
+// unblocked on this host). Same gate family as the 58Fxx blocks; NOT
+// carved, the row stays asm with this record.
+func_8005A014 = 0x8005A014; // call-entered opaque block: ABI (a0 device/class id, a1 -1), 18 noise words, zero static writers
 
 // target: mainmenu_eu
 // State-map words - EU twins of the mainmenu_jp names above (+0x814 /
