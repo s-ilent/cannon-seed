@@ -41,6 +41,31 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-12 — member-extent carves: VMODE, MATRIX.o whole-member, SCLIB/COR_00
+(2fc13c9, 1f039fc, f05f963).**
+- psyq re-clone SOLVED sparse: `git clone --depth 1 --filter=blob:none --sparse`
+  + sparse-checkout `3.3` = 14M (the full clone stalls at ~116K). Member .text
+  extents now measurable: `scripts/member_extent.py` (repo-external) prints
+  size + symbol offsets from the archives.
+- slps `data_8003523C` (0x51c): LIBETC VMODE.o (0x28, SetVideoMode+GetVideoMode,
+  both sig-db) carved out after its zero word; both names adopted; the row's
+  veneer stub + one big framed function stay data (no evidence).
+- sces `data_80039684`/`data_80039730`: the WHOLE LIBGS MATRIX.o (.text 0x3e8,
+  10 symbols) spanned three rows - GsInitCoord2param crossed a row boundary
+  (8-byte head in row1, tail 0x24 was an existing walk-owned asm row); member
+  split at every symbol boundary into 10 pinned rows, all 10 names adopted
+  (all sig-db). The 0xa30 past the member stays data.
+- slps `data_80038094` (0xbe8): LIBGS SCLIB gte_rotate_z_matrix (0xb8) +
+  LIBGTE COR_00 RotMatrixC (0x180, sig-db) carved; the 0x2a8 gap and 0x704
+  tail open with framed prologues (code) but have no anchored evidence - stay
+  data until the --sdk-anchors rule.
+- 8/8 verify GREEN after each commit; ratchets 317/12 unchanged. Adopted-name
+  count: slps 9, sces 14 curated rows emitted.
+- Next: the remaining multi-member rows all live in the census list; the
+  biggest lever is the --sdk-anchors scanner rule (data_gaps walk-stops at
+  byte-verified member starts) so unevidenced prologue runs like
+  data_80038150/data_80038578 get surfaced automatically.
+
 **2026-10-12 — the single-member data rows carved; member names adopted
 (b8b2bd6, 993af95).**
 - slps `data_800316C0` (0x48) and `data_8003ADE8` (0xc) + sces
