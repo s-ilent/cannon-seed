@@ -1,5 +1,44 @@
 # RUNTIME: emulator evidence for the split
 
+## Read this first: the carve and the runtime use different addresses
+
+`baselines/*.bin` are **raw MODE2/2352 CD sector images**, not plain EXEs. Each
+carries the MODE2 sync `00 FF FF FF FF FF FF FF FF FF FF 00`, an incrementing
+BCD address, mode byte `02` and subheader `00 00 08 00 00 00 08 00` every 2352
+bytes, first at `0x918`. Their SHA-1s match `config/sha1/**`, so the disc really
+holds the framed file — this is not an extraction bug. The game **de-frames at
+load** and runs the concatenation of the 2048-byte data areas.
+
+`splat` maps the framed file linearly, so **a carve VRAM is not the runtime VRAM
+for the same byte**, and the gap grows with position:
+
+| | runtime | carve |
+| --- | --- | --- |
+| `Too few TOC` | `0x80020000` | `0x80020130` |
+| `func_800253F8`'s bytes | `0x80024818` | `0x800253F8` |
+
+Verified by reading the running game through the gdb stub: 4 KiB at
+`0x80020000` equals the de-framed payload byte for byte.
+
+**Before comparing any runtime hit to a carve address, translate it.**
+`tools/deframe.py` does it and writes the de-framed image:
+
+```sh
+python3 tools/deframe.py --map-framed  mainmenu_jp 0x800253F8   # -> 0x80024818
+python3 tools/deframe.py --map-runtime mainmenu_jp 0x80024818   # -> 0x800253f8
+python3 tools/deframe.py --payload mainmenu_jp build/work/mainmenu_jp.payload.bin
+```
+
+A carve address that maps to nothing (`--map-framed` prints
+`framing/header`) is inside the 304-byte MODE2 framing — the 280-byte EDC/ECC
+plus the next sector's 24-byte header — which is **not code**. 341 carve rows
+are >90% that framing; 100 of them are typed `asm` and carry bogus
+`func_XXXXXXXX` names. Two rows a recent pass pinned as "runtime-opaque blocks"
+(`data_80058D90`, `data_800596C4`) and the undecoded `func_8005A014` are
+framing: their "clean code → high-entropy block → clean code" shape is data
+area → ECC → next data area, and the branches "into" them land in ECC. Nothing
+is patched or decrypted at run time.
+
 Static analysis infers function boundaries. `tools/fragment_report.py`
 classifies every prologue-less subsegment (ORPHAN / REF'D / SHARED-TAIL /
 PTR-CALLED) from branch and pointer references, and `tools/prologue_hunt.py`

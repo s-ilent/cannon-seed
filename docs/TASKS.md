@@ -102,6 +102,24 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-13 — the runtime-opaque blocks are sector framing; row-start
+reachability probed live.**
+- The two "runtime-opaque blocks" the 58Fxx pass pinned (mainmenu_jp
+  `data_80058D90` 308 B, `data_800596C4` 300 B) are MODE2 sector framing, not
+  runtime-patched code: they sit in the 304-byte EDC/ECC + next-header gap, and
+  their "real bne targets" (`0x80058DAC`, `0x800596CC`) land in ECC. So that
+  gate resolves to dead branches. `func_8005A014`'s row is framing too — its
+  "18 noise words" are ECC and its "5 jal sites" misdecode. 341 rows are >90%
+  framing (241 `data`, 100 `asm` — queued above). Full layout and the
+  carve↔runtime mapping: `docs/RUNTIME.md`, `tools/deframe.py`.
+- Row-start reachability, probed on this host (gdb via
+  `tools/gdb_stub_proxy.py`, breakpoints at the mapped runtime addresses):
+  `func_80058EC4`, `func_80058F08`, `func_80059520`, `func_800597F0`,
+  `func_8005981C` and `func_800599A8` were **not reached in ~60 s** of the
+  unattended attract cycle, while a breakpoint at the live PC fired
+  continuously — the mechanism works, so those rows are simply not on the
+  attract path. Reaching them needs a driven session (input), not a longer run.
+
 **2026-10-12 — JP's A9D8-twin island head carved: func_8002AA38 (0x18c
 pinned), the twin zone now mirrors EU's func_8002A9D8 structure.**
 - Evidence (scripts/jp_head_evidence.py, repo-external — correct
