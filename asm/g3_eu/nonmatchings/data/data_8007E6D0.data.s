@@ -76666,11 +76666,11 @@ dlabel D_800AB0E4
     /* 8B8E4 800AB0E4 03000000 */ .word 0x00000003
 enddlabel D_800AB0E4
 
-nonmatching D_800AB0E8
+nonmatching _spu_inTransfer
 
-dlabel D_800AB0E8
+dlabel _spu_inTransfer
     /* 8B8E8 800AB0E8 00000000 */ .word 0x00000000
-enddlabel D_800AB0E8
+enddlabel _spu_inTransfer
 
 nonmatching D_800AB0EC
 

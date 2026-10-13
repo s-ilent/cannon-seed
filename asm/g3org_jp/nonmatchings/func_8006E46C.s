@@ -78,8 +78,8 @@ endlabel func_8006E4F4
 nonmatching func_8006E518, 0x30
 
 glabel func_8006E518
-    /* 4ED18 8006E518 1880033C */  lui        $v1, %hi(D_8017881C)
-    /* 4ED1C 8006E51C 1C886384 */  lh         $v1, %lo(D_8017881C)($v1)
+    /* 4ED18 8006E518 1880033C */  lui        $v1, %hi(_svm_stereo_mono)
+    /* 4ED1C 8006E51C 1C886384 */  lh         $v1, %lo(_svm_stereo_mono)($v1)
     /* 4ED20 8006E520 01000234 */  ori        $v0, $zero, 0x1
     /* 4ED24 8006E524 09006214 */  bne        $v1, $v0, func_8006E54C
     /* 4ED28 8006E528 00240900 */   sll       $a0, $t1, 16
@@ -409,8 +409,8 @@ glabel func_8006E924
     /* 4F170 8006E970 7C2620AC */  sw         $zero, %lo(D_8017267C)($at)
     /* 4F174 8006E974 1880013C */  lui        $at, %hi(D_8017E110)
     /* 4F178 8006E978 10E120A0 */  sb         $zero, %lo(D_8017E110)($at)
-    /* 4F17C 8006E97C 1880013C */  lui        $at, %hi(D_8017881C)
-    /* 4F180 8006E980 1C8820A4 */  sh         $zero, %lo(D_8017881C)($at)
+    /* 4F17C 8006E97C 1880013C */  lui        $at, %hi(_svm_stereo_mono)
+    /* 4F180 8006E980 1C8820A4 */  sh         $zero, %lo(_svm_stereo_mono)($at)
     /* 4F184 8006E984 1880013C */  lui        $at, %hi(D_80178894)
     /* 4F188 8006E988 948822A4 */  sh         $v0, %lo(D_80178894)($at)
     /* 4F18C 8006E98C F392010C */  jal        func_80064BCC

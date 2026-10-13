@@ -237,7 +237,23 @@ def load_curated_gp_markers(target):
         m = re.match(r"\s*([A-Za-z_]\w*)\s*=\s*(0x[0-9A-Fa-f]+)", line)
         if m and scope == target and "gp:absolute" in line:
             out.add(int(m.group(2), 16) - BASE)
-    return out
+    if not out:
+        return out
+    # The marker exists for build.sh's gp_rel rewrite, which only fires on
+    # a target that actually has a gp base. Emitting splat's native
+    # absolute:true attribute on non-gp targets is inert for the build but
+    # changes splat's symbol handling (references to the symbol render as
+    # bare D_ labels in neighbour .s files), so gate the whole marker set
+    # on the yaml carrying a nonzero gp_value.
+    has_gp = False
+    ypath = REPO / "config" / f"splat.{target}.yaml"
+    if ypath.is_file():
+        for line in ypath.read_text(errors="replace").splitlines():
+            mg = re.match(r"\s*gp_value:\s*(0x[0-9A-Fa-f]+|\d+)\s*$", line)
+            if mg:
+                has_gp = int(mg.group(1), 0) != 0
+                break
+    return out if has_gp else set()
 
 
 def load_sdk_anchors(target):
@@ -983,6 +999,36 @@ def main(argv):
                 for a, b in pieces:
                     if ps <= a and b <= pe:
                         continue  # fully inside the pin
+                    if b <= ps or a >= pe:
+                        nxt.append([a, b])
+                        continue
+                    if a < ps:
+                        nxt.append([a, ps])
+                    if pe < b:
+                        nxt.append([pe, b])
+                pieces = nxt
+            clean.extend(pieces)
+        ranges = clean
+    # Same hygiene for kept c rows (cron-20261013-0741): a range may START
+    # inside a matched C function - witnessed: sces_00269 jal's directly to
+    # SsSetStereo+0x4 (a shared tail whose caller pre-loads $at), so the
+    # walk covered the tail and left the function's head in a gap too small
+    # to hold the row; the gap-carve then skipped it (off + size > gap end)
+    # and the head was re-typed data, splitting the matched function.
+    # Subtract every c span from every range here: the bytes become a hole
+    # the gap-carve emits with the row's own type, and any walk range that
+    # merely extended past the row is truncated at its end exactly as the
+    # defensive split below would have done.
+    c_spans = [(off, off + kept[off][2]) for off in kept if kept[off][0] == "c"]
+    if c_spans:
+        clean = []
+        for s, e in ranges:
+            pieces = [[s, e]]
+            for ps, pe in c_spans:
+                nxt = []
+                for a, b in pieces:
+                    if ps <= a and b <= pe:
+                        continue  # fully inside the C row
                     if b <= ps or a >= pe:
                         nxt.append([a, b])
                         continue

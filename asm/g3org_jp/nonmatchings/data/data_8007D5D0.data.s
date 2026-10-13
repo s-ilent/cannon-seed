@@ -94761,11 +94761,11 @@ dlabel D_800B75F0
     /* 97DF0 800B75F0 00000000 */ .word 0x00000000
 enddlabel D_800B75F0
 
-nonmatching D_800B75F4
+nonmatching _spu_inTransfer
 
-dlabel D_800B75F4
+dlabel _spu_inTransfer
     /* 97DF4 800B75F4 00000000 */ .word 0x00000000
-enddlabel D_800B75F4
+enddlabel _spu_inTransfer
 
 nonmatching D_800B75F8
 

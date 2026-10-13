@@ -67720,11 +67720,11 @@ dlabel D_800C8DD0
     /* A95D0 800C8DD0 7E57A1EC */ .word 0xECA1577E
 enddlabel D_800C8DD0
 
-nonmatching D_800C8DD4
+nonmatching _spu_inTransfer
 
-dlabel D_800C8DD4
+dlabel _spu_inTransfer
     /* A95D4 800C8DD4 035F15E4 */ .word 0xE4155F03
-enddlabel D_800C8DD4
+enddlabel _spu_inTransfer
 
 nonmatching D_800C8DD8
 

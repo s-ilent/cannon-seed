@@ -14,13 +14,13 @@ glabel _spu_setInTransfer
     /* 4FB24 8006F324 05008214 */  bne        $a0, $v0, .L8006F33C
     /* 4FB28 8006F328 00000000 */   nop
   .L8006F32C:
-    /* 4FB2C 8006F32C 0B80013C */  lui        $at, %hi(D_800AA8AC)
-    /* 4FB30 8006F330 ACA820AC */  sw         $zero, %lo(D_800AA8AC)($at)
+    /* 4FB2C 8006F32C 0B80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 4FB30 8006F330 ACA820AC */  sw         $zero, %lo(_spu_inTransfer)($at)
     /* 4FB34 8006F334 D9930108 */  j          D_80064F64
     /* 4FB38 8006F338 00000000 */   nop
   .L8006F33C:
-    /* 4FB3C 8006F33C 0B80013C */  lui        $at, %hi(D_800AA8AC)
-    /* 4FB40 8006F340 ACA822AC */  sw         $v0, %lo(D_800AA8AC)($at)
+    /* 4FB3C 8006F33C 0B80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 4FB40 8006F340 ACA822AC */  sw         $v0, %lo(_spu_inTransfer)($at)
     /* 4FB44 8006F344 0800E003 */  jr         $ra
     /* 4FB48 8006F348 00000000 */   nop
 endlabel _spu_setInTransfer

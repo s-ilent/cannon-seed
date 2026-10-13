@@ -95401,11 +95401,11 @@ dlabel D_800B7DF0
     /* 985F0 800B7DF0 00000000 */ .word 0x00000000
 enddlabel D_800B7DF0
 
-nonmatching D_800B7DF4
+nonmatching _spu_inTransfer
 
-dlabel D_800B7DF4
+dlabel _spu_inTransfer
     /* 985F4 800B7DF4 00000000 */ .word 0x00000000
-enddlabel D_800B7DF4
+enddlabel _spu_inTransfer
 
 nonmatching D_800B7DF8
 

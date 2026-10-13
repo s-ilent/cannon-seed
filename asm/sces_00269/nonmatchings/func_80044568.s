@@ -76,8 +76,8 @@ endlabel func_800445F0
 nonmatching func_80044614, 0x30
 
 glabel func_80044614
-    /* 24E14 80044614 1180033C */  lui        $v1, %hi(D_80114578)
-    /* 24E18 80044618 78456384 */  lh         $v1, %lo(D_80114578)($v1)
+    /* 24E14 80044614 1180033C */  lui        $v1, %hi(_svm_stereo_mono)
+    /* 24E18 80044618 78456384 */  lh         $v1, %lo(_svm_stereo_mono)($v1)
     /* 24E1C 8004461C 01000234 */  ori        $v0, $zero, 0x1
     /* 24E20 80044620 09006214 */  bne        $v1, $v0, func_80044648
     /* 24E24 80044624 00240800 */   sll       $a0, $t0, 16
@@ -528,8 +528,8 @@ endlabel func_80044B50
 nonmatching func_80044B74, 0x2C
 
 glabel func_80044B74
-    /* 25374 80044B74 1180033C */  lui        $v1, %hi(D_80114578)
-    /* 25378 80044B78 78456384 */  lh         $v1, %lo(D_80114578)($v1)
+    /* 25374 80044B74 1180033C */  lui        $v1, %hi(_svm_stereo_mono)
+    /* 25378 80044B78 78456384 */  lh         $v1, %lo(_svm_stereo_mono)($v1)
     /* 2537C 80044B7C 01000234 */  ori        $v0, $zero, 0x1
     /* 25380 80044B80 09006214 */  bne        $v1, $v0, func_80044BA8
     /* 25384 80044B84 00240900 */   sll       $a0, $t1, 16

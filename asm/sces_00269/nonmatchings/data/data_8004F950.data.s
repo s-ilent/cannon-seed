@@ -26150,11 +26150,11 @@ dlabel D_80065A64
     /* 46264 80065A64 00000000 */ .word 0x00000000
 enddlabel D_80065A64
 
-nonmatching D_80065A68
+nonmatching _spu_inTransfer
 
-dlabel D_80065A68
+dlabel _spu_inTransfer
     /* 46268 80065A68 020000FE */ .word 0xFE000002
-enddlabel D_80065A68
+enddlabel _spu_inTransfer
 
 nonmatching D_80065A6C
 

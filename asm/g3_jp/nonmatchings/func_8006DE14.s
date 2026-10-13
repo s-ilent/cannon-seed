@@ -177,8 +177,8 @@ glabel func_8006E000
     /* 4E804 8006E004 0B80043C */  lui        $a0, %hi(D_800AA87C)
     /* 4E808 8006E008 7CA8848C */  lw         $a0, %lo(D_800AA87C)($a0)
     /* 4E80C 8006E00C 01000334 */  ori        $v1, $zero, 0x1
-    /* 4E810 8006E010 0B80013C */  lui        $at, %hi(D_800AA8AC)
-    /* 4E814 8006E014 ACA823AC */  sw         $v1, %lo(D_800AA8AC)($at)
+    /* 4E810 8006E010 0B80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 4E814 8006E014 ACA823AC */  sw         $v1, %lo(_spu_inTransfer)($at)
     /* 4E818 8006E018 00C00334 */  ori        $v1, $zero, 0xC000
     /* 4E81C 8006E01C AA0183A4 */  sh         $v1, 0x1AA($a0)
     /* 4E820 8006E020 0B80013C */  lui        $at, %hi(D_800AA8B0)

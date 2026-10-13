@@ -19,8 +19,8 @@ glabel SpuIsTransferCompleted
     /* 57B7C 8007737C 01001034 */  ori        $s0, $zero, 0x1
     /* 57B80 80077380 06005010 */  beq        $v0, $s0, .L8007739C
     /* 57B84 80077384 1800BFAF */   sw        $ra, 0x18($sp)
-    /* 57B88 80077388 0B80023C */  lui        $v0, %hi(D_800AA8AC)
-    /* 57B8C 8007738C ACA8428C */  lw         $v0, %lo(D_800AA8AC)($v0)
+    /* 57B88 80077388 0B80023C */  lui        $v0, %hi(_spu_inTransfer)
+    /* 57B8C 8007738C ACA8428C */  lw         $v0, %lo(_spu_inTransfer)($v0)
     /* 57B90 80077390 00000000 */  nop
     /* 57B94 80077394 03005014 */  bne        $v0, $s0, .L800773A4
     /* 57B98 80077398 00000000 */   nop
@@ -50,8 +50,8 @@ glabel SpuIsTransferCompleted
     /* 57BE4 800773E4 03005014 */  bne        $v0, $s0, .L800773F4
     /* 57BE8 800773E8 00000000 */   nop
   .L800773EC:
-    /* 57BEC 800773EC 0B80013C */  lui        $at, %hi(D_800AA8AC)
-    /* 57BF0 800773F0 ACA822AC */  sw         $v0, %lo(D_800AA8AC)($at)
+    /* 57BEC 800773EC 0B80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 57BF0 800773F0 ACA822AC */  sw         $v0, %lo(_spu_inTransfer)($at)
   .L800773F4:
     /* 57BF4 800773F4 1800BF8F */  lw         $ra, 0x18($sp)
     /* 57BF8 800773F8 1400B18F */  lw         $s1, 0x14($sp)

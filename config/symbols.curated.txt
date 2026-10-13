@@ -411,6 +411,14 @@ GsSetDrawBuffOffset = 0x80067958; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // bss beyond the payload segment - extern-resolved by the C.
 // Full evidence under target: mainmenu_jp.
 PSDIDX = 0x80172734; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x8016AC90; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x80076A10; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x80076A24; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x80068120; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x80068A98; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x80068AC8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -528,6 +536,14 @@ GsSetDrawBuffOffset = 0x800671C4; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // bss beyond the payload segment - extern-resolved by the C.
 // Full evidence under target: mainmenu_jp.
 PSDIDX = 0x80171E14; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x8016AB68; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x80075D28; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x80075D3C; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x8006798C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x80068218; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x80068248; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -650,6 +666,14 @@ GsSetDrawBuffOffset = 0x800647BC; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // bss beyond the payload segment - extern-resolved by the C.
 // Full evidence under target: mainmenu_jp.
 PSDIDX = 0x801803AC; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x80178908; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x80073874; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x80073888; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSetFlatLight = 0x800648D8; // LIBGS SCLIB member .text+0x0 (extent 0x4c4); sdk_members.py unique placement
 gte_set_lc = 0x80064D9C; // LIBGS SCLIB member .text+0x4c4 (extent 0x68); sdk_members.py unique placement
 gte_read_lc = 0x80064E04; // LIBGS SCLIB member .text+0x52c (extent 0x50); sdk_members.py unique placement
@@ -768,6 +792,14 @@ GsSetDrawBuffOffset = 0x80064070; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // bss beyond the payload segment - extern-resolved by the C.
 // Full evidence under target: mainmenu_jp.
 PSDIDX = 0x8017FAC8; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x8017881C; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x80072AA4; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x80072AB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x80064838; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x800650C4; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x800650F4; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -884,6 +916,14 @@ GsSetDrawBuffOffset = 0x8007F930; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // bss beyond the payload segment - extern-resolved by the C.
 // Full evidence under target: mainmenu_jp.
 PSDIDX = 0x80195748; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x8018DB5C; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x8008F304; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x8008F318; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x800800F8; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 _mk_spr_packet = 0x800801EC; // LIBGS 2D_COM0 member .text+0x0 (extent 0x40); sdk_members.py unique placement + sig-db agrees
 _mk_xpndsp = 0x8008022C; // LIBGS 2D_COM0 member .text+0x40 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
@@ -1014,6 +1054,23 @@ GsSetDrawBuffOffset = 0x8007F1D4; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // lives beyond the payload segment (EXE bss), so no dlabel renders -
 // the C resolves it extern. Full evidence under target: mainmenu_jp.
 PSDIDX = 0x80194E34; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ's backing flag for the Sound
+// System mono/stereo setters. Evidence: the local Psy-Q 3.3 LIBSND.LIB
+// archive carries member VS_MONO with source path E:\PS-X~~00\SRC\SND\
+// VM\VS_MONO.C, defined symbols SsSetMono + SsSetStereo, and exactly one
+// undefined external besides the pair: _svm_stereo_mono; the SVM cluster
+// (SpuVmInit et al.) references the same symbol, and the library symbol
+// directory groups it with the other _svm_* statics. The Psy-Q sig-db
+// VS_MONO.OBJ signature matches retail bytes on both bodies (ori
+// $v0,$zero,1 + lui/sh; lui/sh $zero + jr $ra/nop; labels @0 / @0x14).
+// LIBSND.H 3.3: `extern void SsSetMono (void);` / `extern void
+// SsSetStereo (void);` - no args, no return; the sh proves halfword
+// width, SsSetMono writes 1, SsSetStereo writes 0. The static sits
+// beyond the payload segment (EXE bss), so no dlabel renders - the C
+// resolves it extern.
+_svm_stereo_mono = 0x8018DA40; // LIBSND VS_MONO member bss static; evidence above
+SsSetMono = 0x8008E654; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x8008E668; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x8007F99C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x800808C8; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x800808F8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -1116,6 +1173,14 @@ GsSetDrawBuffOffset = 0x8003AC44; // LIBGS EMULIB member .text+0x10 (extent 0x11
 // bss beyond the payload segment - extern-resolved by the C.
 // Full evidence under target: mainmenu_jp.
 PSDIDX = 0x8011C07C; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x80114578; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x80049780; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x80049794; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x8003AD60; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc2 = 0x8003BB6C; // LIBPRESS VLC2 member .text+0x0 (extent 0x3dc); sdk_members.py unique placement + sig-db agrees
 ivlc_dct_dc_size = 0x8003BF48; // LIBPRESS VLC2 member .text+0x3dc (extent 0x214); sdk_members.py unique placement + sig-db agrees

@@ -76779,11 +76779,11 @@ dlabel D_800AA8A8
     /* 8B0A8 800AA8A8 00000000 */ .word 0x00000000
 enddlabel D_800AA8A8
 
-nonmatching D_800AA8AC
+nonmatching _spu_inTransfer
 
-dlabel D_800AA8AC
+dlabel _spu_inTransfer
     /* 8B0AC 800AA8AC 03000300 */ .word 0x00030003
-enddlabel D_800AA8AC
+enddlabel _spu_inTransfer
 
 nonmatching D_800AA8B0
 
