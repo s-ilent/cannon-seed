@@ -1134,6 +1134,18 @@ memclr = 0x80068B9C; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_me
 startIntrVSync = 0x80068C78; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x80068CD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x80068D4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// intr_vb_cb_slots: the LIBETC INTR_VB member's own .data+0 callback slot
+// array (8 words; member layout from psyq/3.3 LIBETC.LIB INTR_VB.OBJ:
+// .data 0x28 bytes = 8 zero slots +0x00..0x1f, exported Vcount +0x20,
+// I_MASK register constant 0x1F801114 +0x24). The member's own
+// relocations pin the base: setIntrVSync's lui/addiu pair (.text+0xd4/d8)
+// resolves to sec3+0 = this array; startIntrVSync zero-fills Vcount
+// (+0x20) and writes 0x107 through the pointer loaded from +0x24;
+// trapIntrVSync dispatches through the slots. Retail never registers
+// through setIntrVSync, so slot contents are game/linker history.
+// Vcount and the +0x24 slot are NOT curated: the matched unit does not
+// reference them and the neighbouring asm rows keep their D_ rendering.
+intr_vb_cb_slots = 0x800B4D24;
 SetVideoMode = 0x8006C49C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x8006C4B4; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // video_mode: role-descriptive name for the VMODE member's backing static

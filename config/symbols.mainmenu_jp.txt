@@ -1791,6 +1791,7 @@ intr_start_tab = 0x800B4CE8; // type:s32
 intr_imask_ptr = 0x800B4CEC; // type:s32
 intr_mask_ptr = 0x800B4CF0; // type:s32
 intr_dicr_ptr = 0x800B4CF4; // type:s32
+intr_vb_cb_slots = 0x800B4D24; // type:s32
 video_mode = 0x800B4EC4; // type:s32
 _spu_inTransfer = 0x800C85AC; // type:s32
 menu_state_flag = 0x800C8B38; // type:s32

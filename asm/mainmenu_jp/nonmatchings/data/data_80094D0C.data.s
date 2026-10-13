@@ -46702,9 +46702,9 @@ dlabel D_800B4D20
     /* 95520 800B4D20 00007800 */ .word 0x00780000
 enddlabel D_800B4D20
 
-nonmatching D_800B4D24
+nonmatching intr_vb_cb_slots
 
-dlabel D_800B4D24
+dlabel intr_vb_cb_slots
     /* 95524 800B4D24 00000000 */ .word 0x00000000
     /* 95528 800B4D28 CA080000 */ .word 0x000008CA
     /* 9552C 800B4D2C 80070000 */ .word 0x00000780
@@ -46713,7 +46713,7 @@ dlabel D_800B4D24
     /* 95538 800B4D38 00000000 */ .word 0x00000000
     /* 9553C 800B4D3C 00000000 */ .word 0x00000000
     /* 95540 800B4D40 00000000 */ .word 0x00000000
-enddlabel D_800B4D24
+enddlabel intr_vb_cb_slots
 
 nonmatching D_800B4D44
 
