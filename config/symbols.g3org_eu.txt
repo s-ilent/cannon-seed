@@ -190,7 +190,6 @@ Gssub_make_matrix = 0x80064320; // type:func (pinned member row)
 gte_init = 0x8006441C; // type:func (pinned member row)
 GsClearOt = 0x800646C8; // type:func (pinned member row)
 GsSetLightMode = 0x80064720; // type:func (pinned member row)
-GsGetActiveBuff = 0x800647AC; // type:func (pinned member row)
 GsSetDrawBuffOffset = 0x800647BC; // type:func (pinned member row)
 GsSetFlatLight = 0x800648D8; // type:func (pinned member row)
 gte_set_lc = 0x80064D9C; // type:func (pinned member row)
@@ -1630,6 +1629,8 @@ func_8006C838 = 0x8006C838; // type:func (branch target)
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
 SetVideoMode = 0x8004D254; // type:s32
 GetVideoMode = 0x8004D26C; // type:s32
+GsGetActiveBuff = 0x800647AC; // type:s32
 video_mode = 0x800A3910; // type:s32
+_spu_inTransfer = 0x800B7DF4; // type:s32 absolute:true
 PSDIDX = 0x801803AC; // type:s32
 // END GENERATED DATA SYMBOLS

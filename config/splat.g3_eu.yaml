@@ -402,7 +402,7 @@ segments:
       - [0x50354, asm, func_8006FB54]   # 0x34 sdk
       - [0x50388, asm, func_8006FB88]   # 0x3c sdk
       - [0x503C4, asm, func_8006FBC4]   # 0x2c sdk
-      - [0x503F0, asm, func_8006FBF0]   # 0x10 sdk
+      - [0x503F0, c, func_8006FBF0]   # 0x10 sdk
       - [0x50400, asm, func_8006FC00]   # 0x8c sdk
       - [0x5048C, asm, func_8006FC8C]   # 0x58 sdk
       - [0x504E4, data, data_8006FCE4]   # 0xd78

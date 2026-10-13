@@ -1397,5 +1397,6 @@ SetVideoMode = 0x80050520; // type:s32
 GetVideoMode = 0x80050538; // type:s32
 GsGetActiveBuff = 0x80067948; // type:s32
 video_mode = 0x80096C04; // type:s32
+_spu_inTransfer = 0x800AB0E8; // type:s32 absolute:true
 PSDIDX = 0x80172734; // type:s32
 // END GENERATED DATA SYMBOLS

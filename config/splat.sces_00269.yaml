@@ -218,7 +218,7 @@ segments:
       - [0x22FDC, data, data_800427DC]   # 0x78
       - [0x23054, asm, func_80042854]   # 0x44
       - [0x23098, asm, func_80042898]   # 0x2c sdk
-      - [0x230C4, asm, func_800428C4]   # 0x10 sdk
+      - [0x230C4, c, func_800428C4]   # 0x10 sdk
       - [0x230D4, asm, func_800428D4]   # 0x8c sdk
       - [0x23160, asm, func_80042960]   # 0x58 sdk
       - [0x231B8, data, data_800429B8]   # 0x1bb0

@@ -69991,11 +69991,11 @@ dlabel D_800C85A8
     /* A8DA8 800C85A8 20F121FA */ .word 0xFA21F120
 enddlabel D_800C85A8
 
-nonmatching D_800C85AC
+nonmatching _spu_inTransfer
 
-dlabel D_800C85AC
+dlabel _spu_inTransfer
     /* A8DAC 800C85AC 1EF126FA */ .word 0xFA26F11E
-enddlabel D_800C85AC
+enddlabel _spu_inTransfer
 
 nonmatching D_800C85B0
 

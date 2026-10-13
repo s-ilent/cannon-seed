@@ -428,6 +428,11 @@ SpuSetTransferMode = 0x8006FB54; // LIBSPU S_STM member .text+0x0 (extent 0x34);
 SpuSetTransferStartAddr = 0x8006FB88; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x8006FBC4; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x8006FBF0; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x800AB0E8; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x8006FC00; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x8006FC8C; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x80075C24; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -547,6 +552,11 @@ SpuSetTransferMode = 0x8006F2B0; // LIBSPU S_STM member .text+0x0 (extent 0x34);
 SpuSetTransferStartAddr = 0x8006F2E4; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x8006F320; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x8006F34C; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x800AA8AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SsUtGetVBaddrInSB = 0x8006F518; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x80074E14; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
 SpuInitMalloc = 0x80074E38; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
@@ -664,6 +674,11 @@ SpuSetTransferMode = 0x8006C9B8; // LIBSPU S_STM member .text+0x0 (extent 0x34);
 SpuSetTransferStartAddr = 0x8006C9EC; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x8006CA28; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x8006CA54; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x800B7DF4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x8006CA64; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x8006CAF0; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x80072958; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -776,6 +791,11 @@ SpuSetTransferMode = 0x8006C15C; // LIBSPU S_STM member .text+0x0 (extent 0x34);
 SpuSetTransferStartAddr = 0x8006C190; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x8006C1CC; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x8006C1F8; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x800B75F4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x8006C208; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x8006C294; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x80071CC0; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -886,6 +906,11 @@ _SpuDataCallback = 0x80086FE4; // LIBSPU S_DCB member .text+0x0 (extent 0x24); s
 SpuSetTransferStartAddr = 0x800883E0; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x8008841C; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x80088448; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x800C8DD4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x80088458; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x800884E4; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x8008E34C; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -1014,6 +1039,16 @@ _SpuDataCallback = 0x80086580; // LIBSPU S_DCB member .text+0x0 (extent 0x24); s
 SpuSetTransferStartAddr = 0x80087B74; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x80087BB0; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x80087BDC; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: the SPU in-transfer flag the S_ITC member's getter
+// polls. Psy-Q 2.60/3.00 sig-db: S_ITC.OBJ labels _spu_getInTransfer at
+// .text+0xdc and its signature bytes match retail exactly (lui/lw on
+// the flag, jr $ra with sltiu $v0,$v0,1 in the delay slot = return
+// flag == 0). S_ITC.OBJ carries no bss of its own - S_INI.OBJ defines
+// _spu_inTransfer (Psy-Q 2.60 xbss) and the getter reads it as an
+// extern. The flag sits beyond the payload segment (EXE bss; no dlabel
+// renders), resolved extern by the C. Full evidence under target:
+// mainmenu_jp.
+_spu_inTransfer = 0x800C85AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - the flag is 8 bytes per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x80087BEC; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x80087C78; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x8008D6A4; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -1101,6 +1136,11 @@ SpuSetTransferMode = 0x800411D4; // LIBSPU S_STM member .text+0x0 (extent 0x34);
 _SpuDataCallback = 0x80041330; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x80042898; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x800428C4; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x80065A68; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x800428D4; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x80042960; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x800487C8; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -1183,6 +1223,16 @@ _SpuDataCallback = 0x80041690; // LIBSPU S_DCB member .text+0x0 (extent 0x24); s
 SpuSetTransferStartAddr = 0x80042C84; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x80042CC0; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x80042CEC; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; evidence under target: mainmenu_jp
 SpuWritePartly = 0x80042CFC; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x80042D88; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuInitMalloc = 0x800487D8; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees

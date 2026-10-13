@@ -199,7 +199,6 @@ GsTMDdivNG4 = 0x8006386C; // type:func (pinned member row)
 gte_init = 0x80063E00; // type:func (pinned member row)
 GsClearOt = 0x80063F7C; // type:func (pinned member row)
 GsSetLightMode = 0x80063FD4; // type:func (pinned member row)
-GsGetActiveBuff = 0x80064060; // type:func (pinned member row)
 GsSetDrawBuffOffset = 0x80064070; // type:func (pinned member row)
 GsSwapDispBuff = 0x80064838; // type:func (pinned member row)
 MDEC_vlc_brk = 0x800650C4; // type:func (pinned member row)
@@ -1721,6 +1720,8 @@ func_8006EAEC = 0x8006EAEC; // type:func (branch target)
 SetVideoMode = 0x80051D84; // type:s32
 GetVideoMode = 0x80051D9C; // type:s32
 len_param = 0x8005436C; // type:s32
+GsGetActiveBuff = 0x80064060; // type:s32
 video_mode = 0x800A4398; // type:s32
+_spu_inTransfer = 0x800B75F4; // type:s32 absolute:true
 PSDIDX = 0x8017FAC8; // type:s32
 // END GENERATED DATA SYMBOLS
