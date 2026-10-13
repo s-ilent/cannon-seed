@@ -1161,3 +1161,83 @@ Probe findings (p1-p4, all 85/85 words with structure aligned):
   then the EU five (sces/mainmenu_eu/g3_jp/g3org_eu rows sit inside
   data segments - split like the startIntr carve), JP three keep asm
   (their tails diverge past word 53).
+
+## 2026-10-14 late+1 - setIntr round 2: the aspsx la-tracking model, maspsx pass landed
+
+Probe corpus q1-q14 (scripts/setintr/, setintr_cmp.py harness). The
+round-1 blockers both dissolved into ONE mechanism:
+
+ASPSX LA-TRACKING (the retail expansion policy). Walking the retail
+g3_eu stream against a "la-tracking assembler" model explains 8/8
+forms: GCC emits ONE `la a1,intr_cb_slots` (for the elem addu) and
+plain `sym+/-off` memory operands everywhere else; aspsx remembers the
+la and rewrites later sym+/-off operands as off(a1). Flag read
+`lhu v0,cb_slots-4` -> retail `lhu v0,-4(a1)` (+0x44); on-path shadow
+read/store -> `lhu v0,0x2c(a1)` / `sh v0,0x2c(a1)` (+0x7c/+0x8c, the
+tail store in the j delay slot); unla'd symbols (intr_mask_ptr,
+intr_mask_shadow) expand dest-based (loads) / $at-based (stores) which
+is exactly the retail off-path forms (+0x54/+0xa0/+0xb0). MASPSX now
+implements this: opt-in pass, magic comment `# maspsx:la-track`
+anywhere in the input; tracks `la reg,sym` per .ent (latest la wins),
+rewrites load/store sym+/-off displacements through the tracked reg,
+invalidates on register write (best-effort dest detection). Local
+maspsx commit 611fa36; full upstream suite still 154 passed; inert
+without the marker so all 8 targets' existing builds are unchanged.
+
+CSE LIVE-RANGE TRUNCATION (why round 1's opaque-base shapes kept
+breaking). GCC 2.6.3 CSE substitutes a foldable base's value into
+base+/-const addresses, turning them into sym+off operands; the base
+pseudo then has no further uses, its live range truncates at the last
+necessary use, and GCC reuses its register (q10: base=v1, reused for
+cur at +0x60, so the tracker is dead before the shadow read). Retail
+only works because base lands in A1: GCC's scratch traffic (mp=v0,
+cur=v1, bit/shadow on-path) never touches a1, so the la's track
+survives from +0x14 to the tail store. THE REMAINING BLOCKER IS PURE
+ALLOCATION: steer base -> a1 (q8 gives v1; ANSI vs K&R def irrelevant
+q13; local decl order irrelevant so far). Once a1, the C is the q8
+shape + `# maspsx:la-track` + off-path memory clobber - no opacity
+needed, the store fold becomes the TRACKED rewrite.
+
+PARM-BLOCK LAW (round 1 blocker 1, resolved). assign_parms emits the
+eager entry block (sw s1/move s1/sw s2/move s2) ALWAYS; the final
+scheduler then sinks independent parm moves to first use (p4's
+deferred move s2,a1 was scheduler sinking, not lazy expansion). Any
+inline asm before the sink path blocks it: a no-op `__asm__("")` at
+stmt 1 pins both moves early (q8 = retail parm block +0x004..+0x010).
+In the converged a1 shape the no-op asm becomes unnecessary: the la
+writes a1, the move s2,a1 cannot sink past it (dependency), which is
+why retail shows the eager block without any asm.
+
+Other laws banked this round:
+- Opaque-base family (q2/q4/q12): asm "=r"/"0" output or asm-emitted
+  la DOES kill the CSE substitution (all accesses register-relative,
+  tail store included) but the asm's entry-block operand ref promotes
+  base above elem in the allocno sort -> base=a0, elem=a1 (retail is
+  the exact swap). Opacity is therefore the WRONG lever; tracking is
+  the right one.
+- The stopIntr decay trick does NOT stop CSE substitution (q9): it
+  only defeats the REG_EQUIV note (reload remat). stopIntr never faced
+  substitution because all its accesses through p are offset 0.
+- Off-path order: the shadow read hoists above slots[chan]=0 unless a
+  `__asm__("" ::: "memory")` separates them (q4; volatile casts are
+  NOT enough - q2/q8 evidence).
+- +0x124 nop: the mp re-read pseudo's register decides the load-delay
+  fill - re-read into v0 (retail) and the return move v0,s4 cannot
+  enter the slot (nop stays); into v1 and the move fills it (one word
+  short, q4). Follows from the base=a1 allocation cascade.
+
+Next queue:
+1. Steer base -> a1 with a foldable base. Candidate levers: make cur
+   (or another overlapping scratch) sort before base by shaping its
+   refs; give the elem pseudo more entry refs WITHOUT touching base;
+   decomp-permuter grind on q8 with the 85-word masked scorer (the
+   corpus + harness are permuter-ready). Then g3_eu flip (curated:
+   intr_cb_slots/intr_wakeup/func_8004ADF4/func_8004AE74 + yaml flip +
+   q8-shape C with the marker), then EU five carve, JP three stay asm.
+2. startIntr C flip: reopen with the tracking pass available - the
+   p8/p9b shapes' s1/s0 cascade may dissolve the same way (retail
+   startIntr's pin may be a TRACKED la, not an allocation pin).
+3. trapIntr fingerprint when its lane opens.
+4. Walker rows stay under the zero-entry contract; coordinate with the
+   walker-probe session first.
+5. Runtime gate-family: still blocked (fresh-checked this session).
