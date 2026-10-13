@@ -6,6 +6,26 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### Retire the `asm` rows that are MODE2 sector framing
+
+The framed-file layout (see the de-frame item below) puts 304 bytes of MODE2
+framing — 280 bytes of EDC/ECC plus the next sector's 24-byte
+sync/address/mode/subheader — between every pair of 2048-byte data areas. 341
+carve rows are >90% that framing: 241 typed `data` (correct) and **100 typed
+`asm`, 7832 bytes, which are not code at all**.
+
+This settles the "runtime-opaque block" gate without an emulator. The two
+blocks the 58Fxx library pass pinned — mainmenu_jp `data_80058D90` (308 B) and
+`data_800596C4` (300 B) — are that framing, not runtime-patched code, and the
+"real bne targets inside them" (carve `0x80058DAC`, `0x800596CC`) land in the
+ECC, so they are misdecodes. The "clean code → high-entropy block → clean code"
+shape is data area → ECC → next data area, and the shared marker is the sector
+header. Nothing is patched or decrypted in place; the branches are dead.
+
+Fix: re-type the 100 `asm` rows to `data` (the carve-pin path), which also
+retires the bogus `func_XXXXXXXX` names they carry. The 241 `data` rows are
+already right. Re-derive the list from `tools/deframe.py`'s layout.
+
 ### Split the de-framed payload, not the framed on-disc file
 
 `baselines/*.bin` are raw MODE2/2352 sector images, not plain EXEs: the MODE2
