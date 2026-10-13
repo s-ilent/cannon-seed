@@ -119,7 +119,11 @@ PYSEC
         continue
     fi
     n_ok=$((n_ok + 1))
-done < <(find "$ASM_DIR" -name "*.s" | sort)
+# The nested nonmatchings/nonmatchings/ tree is splat's extract-after-flip
+# stub noise (untracked, gitignored) - its files are named by SYMBOL, not
+# by row, so the per-file rom decode below cannot handle them; they are
+# not inputs to any gate. Excluded from the build walk.
+done < <(find "$ASM_DIR" -name "*.s" ! -path "*/nonmatchings/nonmatchings/*" | sort)
 
 echo "assembled: $n_ok ok, $n_fail failed"
 [ "$n_fail" -eq 0 ] || fail "assembly errors - fix the split or the pipeline"
