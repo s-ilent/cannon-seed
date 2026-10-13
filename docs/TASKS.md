@@ -1093,3 +1093,71 @@ stopIntr-0x154). Fingerprinting notes:
   the mask-port read/clear, the per-channel bit set-or-clear through
   base+0x2c, the nor path for off, the shared mask halfword at
   base+0x2c-0x2c... full decode deferred to the flip session.
+
+## 2026-10-14 late - setIntr full decode + C-flip probe round 1 (p1-p4)
+
+scripts/setintr/ (repo-side corpus: setintr_cmp.py + p1-p4 + sib.c).
+g3_eu setIntr (0x800509A4, 0x154) fully decoded. Semantics: old =
+cb_slots[chan] (word slots at 0x80096C0C = intr_active_flag+4); early-out
+`on_off == old` and `!*(u16*)(base-4)` both `return old` (move v0,s4 in
+the branch delay slots); mp = intr_mask_ptr slot (0x80097C98); cur = *mp
+(lhu); *mp = 0 (clear I_MASK); newm = cur (andi s3 in the beqz delay
+slot, feeds both paths). ON path: bit = 1<<chan; slots[chan] = on_off;
+shadow (base+0x2c) |= bit via a1-relative lhu/or, then BARE
+`j 0x8004A56C` with the shadow store in the delay slot (retail
+a4a2002c at +0x8c). OFF path: bit = ~(1<<chan); slots[chan] = 0; shadow
+re-read ABSOLUTELY (lui v1 + lhu 0x6c38(v1)); newm &= bit; shadow &=
+bit; absolute sh via $at; the chan 0/4/5/6 event ladder (chan 0:
+z=(on_off==0) into s0, jal 0x8004ADF4(z), jal 0x8004AE74(3, z); chans
+4/5/6: jal 0x8004AE74(0/1/2, on_off==0) with sltiu in each jal delay
+slot); final *mp = newm through a re-read slot; return old. setIntr has
+NO callers in g3_eu (dead library code, stopIntr precedent) - matching
+is byte-level only. The three code targets are unattributed:
+0x8004A56C is a .L mid-body entry inside func_8004A02C's cluster (the
+jr-delay-slot addiu of the func_8004A560 epilogue pair, setIntr-only
+reference), 0x8004ADF4/0x8004AE74 are real code inside data_8004A828
+(same mis-typed-data island as intr_stop_begin/commit).
+
+Probe findings (p1-p4, all 85/85 words with structure aligned):
+- GCC 2.6.3 has NO sibcall: `return f(x)` compiles jal+epilogue
+  (scripts/setintr/sib.c). The retail bare-j tail needs basic asm.
+- The tail IS expressible: `__asm__(".set\tnoreorder");
+  __asm__("j intr_wakeup"); <shadow store>; __asm__(".set\treorder");`
+  - maspsx only skips the delay-slot nop when is_reorder is False, and
+  its `.set` matcher requires a TAB (".set\tnoreorder"); a space
+  silently passes through and the nop comes back (p2 vs p4).
+- OPEN BLOCKER 1 (prologue): retail shifts BOTH args in the entry parm
+  block (sw s1/move s1/sw s2/move s2) and materializes the slots base
+  into a1 (lui/addiu 0x80096C0C) before the sll/addu; every probe shape
+  (ANSI + K&R definition + declaration-initializer) shifts only s1
+  early, defers `move s2, a1` to first use, and lands the base pseudo
+  in v1. Working theory: GCC shifts an arg early only when the arg reg
+  is about to be clobbered - retail's base went to a1 (clobbering the
+  on_off arg reg) which FORCED the early s2 shift; our probes allocate
+  the base to v1 (first free allocatable reg) so a1 is never clobbered
+  and the shift stays late. Need a source shape (or allocation steer)
+  that puts the base in a1.
+- OPEN BLOCKER 2 (addressing policy): GCC 2.6.3-psx emits symbol+off
+  forms (lhu $2,intr_cb_slots-4) for extern-base accesses; maspsx
+  passes them through unchanged; GNU as expands dest-based (lui $2;
+  lhu $2,%lo($2)) or $at-based (stores) - while retail uses
+  REGISTER-relative displacement on the on-path (lhu v0,-4(a1),
+  lhu v0,0x2c(a1), sh v0,0x2c(a1)) and ABSOLUTE on the off-path.
+  The p4 tail store expanded to `lui at; sh v1,0x2c(at)` which puts
+  the LUI in the j delay slot (the store would never execute). Either
+  maspsx needs an aspsx-style sym+off -> tracked-base-register
+  conversion, or the C needs an opaque base (volatile local has stack
+  traffic; not yet probed). The off-path absolute forms already match
+  after masking (separate intr_mask_shadow extern + volatile casts
+  also correctly stops the scheduler hoisting the shadow load above
+  the slots[chan] = 0 store - p1 evidence).
+- Next: steer the base into a1 (candidates: anchor the arithmetic on
+  intr_active_flag with a two-step decay GCC refuses to fold; probe a
+  `base` local whose only def is an array decay + offset in separate
+  statements; check what the aspsx assembler's sym+off expansion
+  policy implies for the whole pipeline). Then re-run p-series; on
+  convergence do the g3_eu flip (curated: intr_cb_slots = flag+4,
+  intr_wakeup = 0x8004A56C, func_8004ADF4/func_8004AE74 per target),
+  then the EU five (sces/mainmenu_eu/g3_jp/g3org_eu rows sit inside
+  data segments - split like the startIntr carve), JP three keep asm
+  (their tails diverge past word 53).
