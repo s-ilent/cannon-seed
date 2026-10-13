@@ -1065,3 +1065,31 @@ marker passing -fno-cse-skip-blocks) + the p8 shape, then re-probe the
 gate store/return with the flag's CSE table state; (c) keep asm and
 spend the time on setIntr/trapIntr fingerprints. The probe corpus
 (p1-p9b) stays in scripts/startintr/ for whichever lane picks this up.
+
+## 2026-10-14 later - setIntr fingerprint: present in all 8, two revisions
+
+scripts/setintr_fp.py (member .text+0x45c, extent 0x154, predicted
+stopIntr-0x154). Fingerprinting notes:
+- The masked-word template needed `j` (op 0x02) masked alongside jal:
+  setIntr carries a bare `j` to the dispatcher cluster entry whose
+  target is absolute per build (startIntr had only jals, which is why
+  the startIntr fingerprint could skip it; restartIntr's fp already
+  masked j).
+- EU-revision five (sces_00269, mainmenu_eu, g3_jp, g3_eu, g3org_eu):
+  the FULL 0x55-word masked template matches UNIQUELY at stopIntr-0x154
+  in each - same instruction stream modulo addressing.
+- JP-revision three (slps_00270, mainmenu_jp, g3org_jp): setIntr sits at
+  stopIntr-0x284 (the same 0x130 revision delta the startIntr region
+  showed); the first 53 words (0xd4) are masked-identical to the EU
+  template, then the ENTIRE tail (words 53-84) diverges - the EU tail is
+  the ori 4/5/6 channel ladder calling the dispatcher entry, the JP tail
+  is a different stream. The older revision's member is genuinely
+  shorter/different in its dispatch tail.
+- Consequence for the C flip: one C source can cover the EU-revision
+  five only; the JP-revision three need either their own C shape or
+  attribution-only asm rows (the restartIntr precedent). The g3_eu body
+  decodes as: setIntr(chan 0..n, on_off) - s1=chan, s2=on_off; the state
+  word array at base+0x10 (s4 = state[chan]), the same-value early-out,
+  the mask-port read/clear, the per-channel bit set-or-clear through
+  base+0x2c, the nor path for off, the shared mask halfword at
+  base+0x2c-0x2c... full decode deferred to the flip session.
