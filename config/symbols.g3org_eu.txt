@@ -144,8 +144,6 @@ func_8006BF24 = 0x8006BF24; // type:func
 func_8006C720 = 0x8006C720; // type:func
 func_8006E250 = 0x8006E250; // type:func
 func_8007D5C0 = 0x8007D5C0; // type:func
-SetVideoMode = 0x8004D254; // type:func (pinned member row)
-GetVideoMode = 0x8004D26C; // type:func (pinned member row)
 startIntrDMA = 0x8004DAD0; // type:func (pinned member row)
 trapIntrDMA = 0x8004DB20; // type:func (pinned member row)
 setIntrDMA = 0x8004DCA4; // type:func (pinned member row)
@@ -1630,5 +1628,8 @@ func_8006C5C0 = 0x8006C5C0; // type:func (branch target)
 func_8006C838 = 0x8006C838; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+SetVideoMode = 0x8004D254; // type:s32
+GetVideoMode = 0x8004D26C; // type:s32
 video_mode = 0x800A3910; // type:s32
+PSDIDX = 0x801803AC; // type:s32
 // END GENERATED DATA SYMBOLS

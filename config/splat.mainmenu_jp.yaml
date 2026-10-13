@@ -482,7 +482,7 @@ segments:
       - [0x5F8DC, data, data_8007F0DC]   # 0x4
       - [0x5F8E0, asm, func_8007F0E0]   # 0x58 sdk
       - [0x5F938, asm, func_8007F138]   # 0x8c sdk
-      - [0x5F9C4, asm, func_8007F1C4]   # 0x10 sdk
+      - [0x5F9C4, c, func_8007F1C4]   # 0x10 sdk
       - [0x5F9D4, asm, func_8007F1D4]   # 0x11c sdk
       - [0x5FAF0, data, data_8007F2F0]   # 0x58
       - [0x5FB48, asm, func_8007F348]   # 0x20c

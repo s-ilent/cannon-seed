@@ -26,8 +26,8 @@ glabel GsInitGraph
     /* 4D06C 8006C86C 1CCC010C */  jal        func_80073070
     /* 4D070 8006C870 00000000 */   nop
     /* 4D074 8006C874 21202002 */  addu       $a0, $s1, $zero
-    /* 4D078 8006C878 1980013C */  lui        $at, %hi(D_80195748)
-    /* 4D07C 8006C87C 485720A4 */  sh         $zero, %lo(D_80195748)($at)
+    /* 4D078 8006C878 1980013C */  lui        $at, %hi(PSDIDX)
+    /* 4D07C 8006C87C 485720A4 */  sh         $zero, %lo(PSDIDX)($at)
     /* 4D080 8006C880 D88A010C */  jal        func_80062B60
     /* 4D084 8006C884 21280002 */   addu      $a1, $s0, $zero
     /* 4D088 8006C888 CB8C010C */  jal        func_8006332C

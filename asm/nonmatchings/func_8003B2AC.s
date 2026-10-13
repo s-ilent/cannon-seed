@@ -17,8 +17,8 @@ glabel GsSetDrawBuffOffset
     /* 1BABC 8003B2BC 1400B1AF */  sw         $s1, 0x14($sp)
     /* 1BAC0 8003B2C0 20004010 */  beqz       $v0, .L8003B344
     /* 1BAC4 8003B2C4 1000B0AF */   sw        $s0, 0x10($sp)
-    /* 1BAC8 8003B2C8 1280033C */  lui        $v1, %hi(D_8011C304)
-    /* 1BACC 8003B2CC 04C36384 */  lh         $v1, %lo(D_8011C304)($v1)
+    /* 1BAC8 8003B2C8 1280033C */  lui        $v1, %hi(PSDIDX)
+    /* 1BACC 8003B2CC 04C36384 */  lh         $v1, %lo(PSDIDX)($v1)
     /* 1BAD0 8003B2D0 1180023C */  lui        $v0, %hi(D_80114ECC)
     /* 1BAD4 8003B2D4 CC4E4294 */  lhu        $v0, %lo(D_80114ECC)($v0)
     /* 1BAD8 8003B2D8 40180300 */  sll        $v1, $v1, 1
@@ -51,8 +51,8 @@ glabel GsSetDrawBuffOffset
   .L8003B344:
     /* 1BB44 8003B344 0D80023C */  lui        $v0, %hi(D_800D608C)
     /* 1BB48 8003B348 8C604224 */  addiu      $v0, $v0, %lo(D_800D608C)
-    /* 1BB4C 8003B34C 1280053C */  lui        $a1, %hi(D_8011C304)
-    /* 1BB50 8003B350 04C3A584 */  lh         $a1, %lo(D_8011C304)($a1)
+    /* 1BB4C 8003B34C 1280053C */  lui        $a1, %hi(PSDIDX)
+    /* 1BB50 8003B350 04C3A584 */  lh         $a1, %lo(PSDIDX)($a1)
     /* 1BB54 8003B354 1180043C */  lui        $a0, %hi(D_80114ECC)
     /* 1BB58 8003B358 CC4E8484 */  lh         $a0, %lo(D_80114ECC)($a0)
     /* 1BB5C 8003B35C 0200A014 */  bnez       $a1, .L8003B368

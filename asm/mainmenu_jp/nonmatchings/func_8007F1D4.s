@@ -17,8 +17,8 @@ glabel GsSetDrawBuffOffset
     /* 5F9E4 8007F1E4 1400B1AF */  sw         $s1, 0x14($sp)
     /* 5F9E8 8007F1E8 20004010 */  beqz       $v0, .L8007F26C
     /* 5F9EC 8007F1EC 1000B0AF */   sw        $s0, 0x10($sp)
-    /* 5F9F0 8007F1F0 1980033C */  lui        $v1, %hi(D_80194E34)
-    /* 5F9F4 8007F1F4 344E6384 */  lh         $v1, %lo(D_80194E34)($v1)
+    /* 5F9F0 8007F1F0 1980033C */  lui        $v1, %hi(PSDIDX)
+    /* 5F9F4 8007F1F4 344E6384 */  lh         $v1, %lo(PSDIDX)($v1)
     /* 5F9F8 8007F1F8 1980023C */  lui        $v0, %hi(D_80189224)
     /* 5F9FC 8007F1FC 24924294 */  lhu        $v0, %lo(D_80189224)($v0)
     /* 5FA00 8007F200 40180300 */  sll        $v1, $v1, 1
@@ -51,8 +51,8 @@ glabel GsSetDrawBuffOffset
   .L8007F26C:
     /* 5FA6C 8007F26C 1580023C */  lui        $v0, %hi(D_8014A3A4)
     /* 5FA70 8007F270 A4A34224 */  addiu      $v0, $v0, %lo(D_8014A3A4)
-    /* 5FA74 8007F274 1980053C */  lui        $a1, %hi(D_80194E34)
-    /* 5FA78 8007F278 344EA584 */  lh         $a1, %lo(D_80194E34)($a1)
+    /* 5FA74 8007F274 1980053C */  lui        $a1, %hi(PSDIDX)
+    /* 5FA78 8007F278 344EA584 */  lh         $a1, %lo(PSDIDX)($a1)
     /* 5FA7C 8007F27C 1980043C */  lui        $a0, %hi(D_80189224)
     /* 5FA80 8007F280 24928484 */  lh         $a0, %lo(D_80189224)($a0)
     /* 5FA84 8007F284 0200A014 */  bnez       $a1, .L8007F290

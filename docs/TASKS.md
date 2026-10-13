@@ -652,3 +652,29 @@ in C across all three placements.**
   global (D_800B4EC4) has a curated, signature-DB-backed name — the
   pair proves the semantics, the canonical SDK name does not exist in
   curated yet.
+
+**2026-10-13 (later) — GsGetActiveBuff matched in C across all eight
+targets; the linker auto-define pass now resolves curated names.**
+- The 16-byte / one-data-ref shape topping the rank list in every target
+  is LIBGS's GsGetActiveBuff (GS_002.OBJ member .text+0x0, extent 0x10;
+  already curated everywhere). Psy-Q 3.3 sig-db evidence: the member's
+  signature bytes match retail exactly (lui/lh on the backing static,
+  jr $ra + nop), and the OBJ's own bss carries PSDIDX (size 2) — the
+  only halfword-sized static there. GsSetDrawBuffOffset re-reads the
+  same index and scales it by two to pick a slot in a two-entry offset
+  table, confirming index semantics; curated as PSDIDX per target with
+  the full evidence block under mainmenu_jp.
+- Placement fact worth keeping: these Psy-Q library statics sit in the
+  EXE's bss, beyond the yaml's payload coverage (mainmenu_jp PSDIDX at
+  0x80194E34 vs payload end 0x800CA800), so no dlabel renders and the
+  C resolves them extern. build.sh's two-pass auto-define previously
+  only handled address-encoded spellings (D_XXXXXXXX / func_XXXXXXXX /
+  .LXXXXXXXX); it now falls back to the committed per-target symbols
+  file for real-named symbols — the same principle (the address is the
+  retail value), just spelled out in the table instead of the symbol.
+- matched 101 -> 109 (progress TOTAL 13789); ratchets 365/0; screens 0
+  DATA / 0 SUSPECT on all eight targets.
+- Hygiene: the VMODE commit had swept in 12 auto-generated splat stubs
+  under nested nonmatchings/ paths (extract ran after the flip there);
+  removed and the pattern is git-ignored — extract-after-flip noise no
+  longer lands in the tree.

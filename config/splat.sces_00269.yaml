@@ -176,7 +176,7 @@ segments:
       - [0x1B314, asm, func_8003AB14]   # 0x80
       - [0x1B394, data, data_8003AB94]   # 0x48
       - [0x1B3DC, asm, func_8003ABDC]   # 0x58 sdk
-      - [0x1B434, asm, func_8003AC34]   # 0x10 sdk
+      - [0x1B434, c, func_8003AC34]   # 0x10 sdk
       - [0x1B444, asm, func_8003AC44]   # 0x11c sdk
       - [0x1B560, asm, func_8003AD60]   # 0xf4 sdk
       - [0x1B654, data, data_8003AE54]   # 0x2dc

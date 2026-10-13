@@ -10,8 +10,8 @@
 nonmatching GsSetDrawBuffClip, 0x98
 
 glabel GsSetDrawBuffClip
-    /* 33C90 80053490 1880023C */  lui        $v0, %hi(D_8017FAC8)
-    /* 33C94 80053494 C8FA4284 */  lh         $v0, %lo(D_8017FAC8)($v0)
+    /* 33C90 80053490 1880023C */  lui        $v0, %hi(PSDIDX)
+    /* 33C94 80053494 C8FA4284 */  lh         $v0, %lo(PSDIDX)($v0)
     /* 33C98 80053498 1880043C */  lui        $a0, %hi(D_80178CA4)
     /* 33C9C 8005349C A48C8494 */  lhu        $a0, %lo(D_80178CA4)($a0)
     /* 33CA0 800534A0 1880033C */  lui        $v1, %hi(D_80178CA0)

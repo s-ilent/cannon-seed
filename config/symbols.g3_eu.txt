@@ -121,8 +121,6 @@ func_8006F438 = 0x8006F438; // type:func
 func_8006F510 = 0x8006F510; // type:func
 func_80070A5C = 0x80070A5C; // type:func
 func_8007E4F8 = 0x8007E4F8; // type:func
-SetVideoMode = 0x80050520; // type:func (pinned member row)
-GetVideoMode = 0x80050538; // type:func (pinned member row)
 ResetCallback = 0x80050548; // type:func (pinned member row)
 InterruptCallback = 0x80050578; // type:func (pinned member row)
 DMACallback = 0x800505A8; // type:func (pinned member row)
@@ -185,7 +183,6 @@ Gssub_make_matrix = 0x800675EC; // type:func (pinned member row)
 gte_init = 0x800676E8; // type:func (pinned member row)
 GsClearOt = 0x80067864; // type:func (pinned member row)
 GsSetLightMode = 0x800678BC; // type:func (pinned member row)
-GsGetActiveBuff = 0x80067948; // type:func (pinned member row)
 GsSetDrawBuffOffset = 0x80067958; // type:func (pinned member row)
 GsSwapDispBuff = 0x80068120; // type:func (pinned member row)
 MDEC_vlc_brk = 0x80068A98; // type:func (pinned member row)
@@ -1396,5 +1393,9 @@ func_80070EA4 = 0x80070EA4; // type:func (branch target)
 func_80070EF8 = 0x80070EF8; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+SetVideoMode = 0x80050520; // type:s32
+GetVideoMode = 0x80050538; // type:s32
+GsGetActiveBuff = 0x80067948; // type:s32
 video_mode = 0x80096C04; // type:s32
+PSDIDX = 0x80172734; // type:s32
 // END GENERATED DATA SYMBOLS

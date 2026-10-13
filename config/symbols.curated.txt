@@ -406,6 +406,11 @@ GsClearOt = 0x80067864; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_membe
 GsSetLightMode = 0x800678BC; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x80067948; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x80067958; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x80172734; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x80068120; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x80068A98; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x80068AC8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -513,6 +518,11 @@ GsClearOt = 0x800670D0; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_membe
 GsSetLightMode = 0x80067128; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x800671B4; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x800671C4; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x80171E14; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x8006798C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x80068218; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x80068248; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -625,6 +635,11 @@ GsClearOt = 0x800646C8; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_membe
 GsSetLightMode = 0x80064720; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x800647AC; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x800647BC; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x801803AC; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSetFlatLight = 0x800648D8; // LIBGS SCLIB member .text+0x0 (extent 0x4c4); sdk_members.py unique placement
 gte_set_lc = 0x80064D9C; // LIBGS SCLIB member .text+0x4c4 (extent 0x68); sdk_members.py unique placement
 gte_read_lc = 0x80064E04; // LIBGS SCLIB member .text+0x52c (extent 0x50); sdk_members.py unique placement
@@ -733,6 +748,11 @@ GsClearOt = 0x80063F7C; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_membe
 GsSetLightMode = 0x80063FD4; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x80064060; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x80064070; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x8017FAC8; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x80064838; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x800650C4; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x800650F4; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -839,6 +859,11 @@ GsClearOt = 0x8007F83C; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_membe
 GsSetLightMode = 0x8007F894; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x8007F920; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8007F930; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x80195748; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x800800F8; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 _mk_spr_packet = 0x800801EC; // LIBGS 2D_COM0 member .text+0x0 (extent 0x40); sdk_members.py unique placement + sig-db agrees
 _mk_xpndsp = 0x8008022C; // LIBGS 2D_COM0 member .text+0x40 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
@@ -955,6 +980,15 @@ gte_scale_matrix = 0x8007EE40; // LIBGS SCLIB member .text+0x0 (extent 0x124); s
 GsSetLightMode = 0x8007F138; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x8007F1C4; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8007F1D4; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: the GS_002.OBJ member's own bss static for the active draw
+// buffer index (Psy-Q 3.3 sig-db: labels GsGetActiveBuff @0 /
+// GsSetDrawBuffOffset @0x10, sig bytes match retail lui+lh+jr+nop).
+// GsGetActiveBuff lh-loads it straight into $v0; GsSetDrawBuffOffset
+// re-reads it and scales it by two to index a two-entry offset table.
+// PSDIDX is the only halfword-sized bss symbol that OBJ carries. It
+// lives beyond the payload segment (EXE bss), so no dlabel renders -
+// the C resolves it extern. Full evidence under target: mainmenu_jp.
+PSDIDX = 0x80194E34; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x8007F99C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x800808C8; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x800808F8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -1042,6 +1076,11 @@ gte_init = 0x8003AA60; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_member
 GsClearOt = 0x8003ABDC; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
 GsGetActiveBuff = 0x8003AC34; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8003AC44; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x8011C07C; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x8003AD60; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc2 = 0x8003BB6C; // LIBPRESS VLC2 member .text+0x0 (extent 0x3dc); sdk_members.py unique placement + sig-db agrees
 ivlc_dct_dc_size = 0x8003BF48; // LIBPRESS VLC2 member .text+0x3dc (extent 0x214); sdk_members.py unique placement + sig-db agrees
@@ -1117,6 +1156,11 @@ _make_packet = 0x8003A39C; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_
 Gssub_make_matrix = 0x8003AE9C; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
 GsGetActiveBuff = 0x8003B29C; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8003B2AC; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x8011C304; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x8003B3C8; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x8003BC54; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x8003BC84; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees

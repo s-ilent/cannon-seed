@@ -163,8 +163,6 @@ memclr = 0x8004E484; // type:func (pinned member row)
 startIntrVSync = 0x8004E560; // type:func (pinned member row)
 trapIntrVSync = 0x8004E5B8; // type:func (pinned member row)
 setIntrVSync = 0x8004E634; // type:func (pinned member row)
-SetVideoMode = 0x80051D84; // type:func (pinned member row)
-GetVideoMode = 0x80051D9C; // type:func (pinned member row)
 GsSetDrawBuffClip = 0x80053490; // type:func (pinned member row)
 GsMapModelingData = 0x80053528; // type:func (pinned member row)
 GsGetTimInfo = 0x800535A0; // type:func (pinned member row)
@@ -1720,6 +1718,9 @@ func_8006EACC = 0x8006EACC; // type:func (branch target)
 func_8006EAEC = 0x8006EAEC; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+SetVideoMode = 0x80051D84; // type:s32
+GetVideoMode = 0x80051D9C; // type:s32
 len_param = 0x8005436C; // type:s32
 video_mode = 0x800A4398; // type:s32
+PSDIDX = 0x8017FAC8; // type:s32
 // END GENERATED DATA SYMBOLS

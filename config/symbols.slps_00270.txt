@@ -714,4 +714,5 @@ len_param = 0x80036DCC; // type:s32
 video_mode = 0x8004E500; // type:s32
 boot_flag_0 = 0x80063268; // type:s32
 boot_flag_1 = 0x80063294; // type:s32
+PSDIDX = 0x8011C304; // type:s32
 // END GENERATED DATA SYMBOLS
