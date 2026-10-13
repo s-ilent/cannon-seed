@@ -118,6 +118,41 @@ Every rule triggers on a narrow, byte-verified pattern; anything that
 does not match passes through untouched. The SHA-1 oracle gates the
 result either way.
 
+EPILOGUE CONVENTION SPLIT (found 2026-10-13, g3_eu stopIntr - the first
+SDK member whose frame saves a callee-saved register AND makes calls).
+The game-compiled units follow the swapped branch-delay convention the
+rules above reproduce; SDK members assembled by Sony's ASPSX driver in
+.set-reorder mode keep GCC's own order (frame release BEFORE the jump,
+nop in the branch delay):
+    lw   $31,20($sp)     lw   $31,20($sp)
+    lw   $16,16($sp)     lw   $16,16($sp)
+    addu $sp,$sp,24      addu $sp,$sp,24   <- SDK/ASPSX (maspsx raw)
+    j    $31             j    $31
+    nop                  nop
+maspsx's raw output already IS this form; the rule-1 variants below
+would swap it away from retail. Units that carry the source marker
+`cc-post: keep-epilogue` (a comment in the .c file, detected by
+tools/cc.sh) are compiled with --keep-epilogue, which disables ONLY
+the rule-1 epilogue swap variants; every other rule still applies.
+
+6. SDK LOAD-TO-SYMBOL-STORE HAZARD NOP (--sdk-aspsx units; found
+   2026-10-13, g3_eu stopIntr). cc1 emits an explicit `#nop` marker
+   whenever the instruction after a load reads the loaded register;
+   the 1995-era ASPSX assembler materialized those markers and only
+   THEN expanded a bare-symbol store into lui $at + sh, giving:
+       lhu  $3,0($2)        lhu  $3,0($2)
+       sh   $3,symbol  ->   nop              <- retail keeps this nop
+                            lui  $at,%hi(symbol)
+                            sh   $3,%lo(symbol)($at)
+   maspsx (nop_at_expansion=False) instead reasons that the $at
+   expansion itself separates the load from the use and drops cc1's
+   #nop, emitting the 3-insn form - one nop short of retail. Units
+   carrying the source marker `cc-post: sdk-aspsx` (which implies
+   keep-epilogue) get rule 8: insert the nop between a load and a
+   bare-symbol store that reads the loaded register. Fires only on
+   that exact [load $X][store $X,<symbol>] shape; reg-offset stores
+   keep maspsx's own hazard logic.
+
 maspsx formatting note: it emits a blank line after every call's
 delay-slot instruction. Blank lines carry no bytes, so they are
 dropped on read - otherwise the prologue call pattern above would be
@@ -166,9 +201,48 @@ def is_instruction(line: str) -> bool:
     return True
 
 
+KEEP_EPILOGUE = False
+SDK_ASPSX = False
+
+
 def apply_rules(insns: list[str]) -> list[str]:
     """Replace instruction subsequences in place; return new list."""
     res = list(insns)
+
+    if not KEEP_EPILOGUE:
+        res = _rule1_epilogue_swap(res)
+    if SDK_ASPSX:
+        res = _rule8_sdk_hazard_nop(res)
+    res = _rule2_extend_pair(res)
+    res = _rule3_return_move(res)
+    res = _rule4_prologue_save(res)
+    res = _rule5_prologue_call(res)
+    res = _rule7_gp_load(res)
+    return res
+
+
+LOAD_OP = re.compile(r"^(?:l(?:w|h|b|bu|hu|wl|wr)|ulw)\t\$(\w+),")
+STORE_SYM = re.compile(r"^(?:s(?:w|h|b|d|wl|wr)|usw)\t\$(\w+),[A-Za-z_]")
+
+
+def _rule8_sdk_hazard_nop(res: list[str]) -> list[str]:
+    # Rule 8 (--sdk-aspsx): [load $X,..][store $X,<bare-symbol>] ->
+    # [load $X][nop][store $X,<symbol>]. See header note 6.
+    i = 0
+    while i < len(res) - 1:
+        m1 = LOAD_OP.match(res[i])
+        if m1:
+            m2 = STORE_SYM.match(res[i + 1])
+            if m2 and m1.group(1) == m2.group(1):
+                res[i + 1 : i + 1] = ["nop"]
+                i += 2
+                continue
+        i += 1
+    return res
+
+
+def _rule1_epilogue_swap(res: list[str]) -> list[str]:
+    res = list(res)
 
     # Rule 1 (three-load variant): [lw $ra][lw $rX][lw $rY][addu $sp]
     # [j $ra](nop)? -> [lw $ra][lw $rX][lw $rY][j $ra][addu $sp] (nop
@@ -221,6 +295,10 @@ def apply_rules(insns: list[str]) -> list[str]:
             continue
         i += 1
 
+    return res
+
+
+def _rule2_extend_pair(res: list[str]) -> list[str]:
     # Rule 2: [sll A][sll C][sra A][sra C] -> [sll A][sra A][sll C][sra C]
     i = 0
     while i < len(res) - 3:
@@ -236,6 +314,10 @@ def apply_rules(insns: list[str]) -> list[str]:
                 continue
         i += 1
 
+    return res
+
+
+def _rule3_return_move(res: list[str]) -> list[str]:
     # Rule 3: [j $ra][addu $2,$X,$zero] -> [addu][j $ra][nop]
     i = 0
     while i < len(res) - 1:
@@ -247,6 +329,10 @@ def apply_rules(insns: list[str]) -> list[str]:
                 continue
         i += 1
 
+    return res
+
+
+def _rule4_prologue_save(res: list[str]) -> list[str]:
     # Rule 4: [subu $sp][v0 imm][sw $ra] -> [subu $sp][sw $ra][v0 imm]
     i = 0
     while i < len(res) - 2:
@@ -257,6 +343,10 @@ def apply_rules(insns: list[str]) -> list[str]:
             continue
         i += 1
 
+    return res
+
+
+def _rule5_prologue_call(res: list[str]) -> list[str]:
     # Rule 5: [frame-alloc][ALU X][sw $ra][jal T][sw $rS,N($sp)] ->
     #         [frame-alloc][sw $ra][sw $rS][jal T][X]
     # (the call's delay slot gets X; the spill moves next to the $ra
@@ -280,6 +370,10 @@ def apply_rules(insns: list[str]) -> list[str]:
                 continue
         i += 1
 
+    return res
+
+
+def _rule7_gp_load(res: list[str]) -> list[str]:
     # Rule 7: [frame-alloc][lw $r,N($gp)] -> [lw $r,N($gp)][frame-alloc]
     i = 0
     while i < len(res) - 1:
@@ -295,10 +389,19 @@ def apply_rules(insns: list[str]) -> list[str]:
 
 
 def main() -> None:
-    if len(sys.argv) != 2:
-        sys.stderr.write("usage: cc_post.py <file.mas.s>\n")
+    global KEEP_EPILOGUE, SDK_ASPSX
+    args = sys.argv[1:]
+    if "--keep-epilogue" in args:
+        KEEP_EPILOGUE = True
+        args.remove("--keep-epilogue")
+    if "--sdk-aspsx" in args:
+        KEEP_EPILOGUE = True
+        SDK_ASPSX = True
+        args.remove("--sdk-aspsx")
+    if len(args) != 1:
+        sys.stderr.write("usage: cc_post.py [--keep-epilogue|--sdk-aspsx] <file.mas.s>\n")
         sys.exit(2)
-    path = sys.argv[1]
+    path = args[0]
     lines = open(path).read().splitlines()
 
     out: list[str] = []

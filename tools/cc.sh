@@ -79,7 +79,18 @@ python3 "$MASPSX" --expand-div < "$STEM.gcc.s" > "$STEM.mas.s"
 # Instruction-order fixups so cc1 output matches retail scheduling
 # (epilogue delay swap, extend-pair unweave). C path only - see
 # tools/cc_post.py header for the byte-verified rationale.
-python3 "$REPO/tools/cc_post.py" "$STEM.mas.s"
+# Source markers (comments in the .c file, see cc_post.py header):
+#   `cc-post: keep-epilogue` - keep GCC's own epilogue order
+#   `cc-post: sdk-aspsx`     - full Sony/ASPSX library-unit convention
+#                              (keep-epilogue + the load-to-symbol-store
+#                              hazard nop, stopIntr finding 2026-10-13)
+POSTFLAGS=""
+if grep -q 'cc-post: sdk-aspsx' "$SRC" 2>/dev/null; then
+    POSTFLAGS="--sdk-aspsx"
+elif grep -q 'cc-post: keep-epilogue' "$SRC" 2>/dev/null; then
+    POSTFLAGS="--keep-epilogue"
+fi
+python3 "$REPO/tools/cc_post.py" $POSTFLAGS "$STEM.mas.s"
 
 if [ "$STOP_AT_ASM" = 1 ]; then
     # Hand the .mas.s to the caller (tools/build.sh rewrites the section
