@@ -109,6 +109,18 @@ def eval_function(name, code):
     if n_alloc > 1:
         return False, flags, "multi-frame"
     if n_alloc == 0:
+        # A true frameless leaf never touches the caller's stack frame and
+        # never reloads $ra/$s* from it. A body that frees stack space it
+        # never allocated (positive addiu $sp) or that reloads saved
+        # registers from sp-relative memory is the EPILOGUE TAIL of some
+        # framed caller, jumped into mid-body (the 46x-tail / shared-tail
+        # shape from the 58Fxx census) - not a function entry. Reject it:
+        # as C it only round-trips as part of the owning unit.
+        for m, r in code:
+            if re.match(r"^addiu\s+\$sp,\s*\$sp,\s*(?:0x)?[0-9a-f]+\s*$", m + " " + r):
+                return False, flags, "frees stack it never allocated (shared tail)"
+            if re.match(r"^lw\s+\$(ra|s[0-7]),\s*-?0x[0-9a-f]+\(\$sp\)", r):
+                return False, flags, "reloads saved regs from a frame it never made (shared tail)"
         # frameless leaf is fine ONLY if it is a true entry: every register
         # read before being written must be an argument register. Reading
         # $t*/$s*/$v*/$gp first = continuation of a split function.
