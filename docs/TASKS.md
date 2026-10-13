@@ -845,3 +845,65 @@ all statics named; callee anomaly discovered.**
   PSDOFSX/PSDOFSY are 2.60-commons names (sig-db-backed); the callees
   have no names yet (role-descriptive per the intr_trap_flag
   precedent, or better once the anomaly is understood).
+
+**2026-10-13 (evening) - INTR tail assessment complete (cron-20261013-1241);
+the callee anomaly is SYSTEMIC; stopIntr probe banks a new codegen
+question.**
+
+- Full callee/static map of the five INTR tail members in g3_eu
+  (startIntr 0xdc / trapIntr 0x1e8 / setIntr 0x154 / stopIntr 0xb0 /
+  restartIntr 0x88). EVERY callee lands outside attributed code:
+  - func_8004A2CC, .L8004A480, .L8004A56C, .L8004A72C, alabels
+    0x8004A740/76C/77C are all mid-body entries inside the mis-carved
+    0x7fc mega-function func_8004A02C (>=8 cluster entries the INTR
+    members jal/j into).
+  - func_8004AA24/AD44/ADF4/AE14/AE64/AE74/AE94/AEB4 (and
+    func_80047C54 for trapIntr) are dlabels inside DATA rows
+    (data_8004A828 size 0x1ca4, data_8004712C size 0x1c98).
+    Disassembly confirms real code: coherent instruction streams,
+    valid jal chains into 0x800300bc, structured s0-relative state
+    access (e.g. 0x8004AD44 reads the INTR state fields at
+    +0x10/+0x12/+0x14/+0x30, fills +0x78..+0x80). Same finding as
+    GsSetDrawBuffOffset's func_800604E0: the scanner mis-types whole
+    blocks of the interrupt/DMA machinery as data.
+- stopIntr probe match attempted (all mechanics proven end to end):
+  7 curated names (intr_active_flag 0x80096C08, intr_saved_mask
+  0x80096C3A, intr_saved_dicr 0x80096C3C, intr_imask_ptr 0x80097C94,
+  intr_dicr_ptr 0x80097C9C, callees intr_stop_begin/intr_stop_commit),
+  scan weave + suffix repair, yaml flip, C write, link through the
+  auto-define pass - the build linked FIRST TRY with cluster-entry
+  callees resolving from the symbols file into a data row. The C shape
+  did not converge in session: retail pins &intr_active_flag (a
+  2-instruction lui/addiu constant) in s0 across BOTH opaque calls
+  (entry read via 0(s0), exit `move v0,s0; sh zero,0(v0)` serving the
+  clear AND the return), while GCC 2.6.3 -O2 RE-MATERIALIZES the
+  address after the last call and never allocates s0. Four source
+  shapes tested (plain extern reads; volatile pointer local; register
+  hint; pointer return type) - all four rematerialize identically.
+  Probe reverted; tree back to GREEN; the curated attribution stays.
+- The s0-pin question generalizes: any INTR-tail C (and the
+  GsSetDrawBuffOffset match) has values live across opaque calls.
+  Next shape ideas: the address carried in a pointer the compiler
+  cannot prove constant at -O2 (e.g. read from a static pointer slot
+  whose initializer the linker provides), a struct-typed extern whose
+  member accesses span the calls, or -fcaller-saves interactions.
+  Also un-proven: restartIntr's tail `j .L8004A72C` (mid-body
+  continuation into func_8004A718's body) needs a GCC sibcall-shaped
+  tail with the frame NOT popped - how 2.6.3 emits that at all is
+  still open (same question as the GsSetDrawBuffOffset tail).
+- stopIntr statics semantics banked (evidence in the curated block):
+  active flag halfword at the state base +0 (gate; startIntr/restart
+  set 1, stopIntr clears), intr_trap_flag is +0x2; saved mask
+  (+0x32) and saved dicr word (+0x34) are the stopIntr-save /
+  restartIntr-restore pair; intr_imask_ptr receives the volatile
+  re-read of the zeroed mask (I_MASK semantics); intr_dicr_ptr's
+  target gets AND 0x77777777 (DMA DICR per-channel + master enable
+  clear). Initial retail values of all slots are arbitrary linker
+  leftovers (the game never calls this subsystem).
+- Cross-target scope for the eventual rollout: the INTR member is
+  sig-placed only in g3_eu (sdk_members.txt); other targets carry the
+  INTR_VB/INTR_DMA members (already matched where applicable). The
+  tail members may still exist in other EXEs unattributed - a
+  byte-fingerprint pass (0x77777777 / 0x33333333 ori pairs are
+  address-free and target-independent) will locate them when the C
+  shape converges.
