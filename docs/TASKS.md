@@ -992,3 +992,76 @@ asm rows in all 8 targets; the sibcall tail question is CLOSED
   (4) memclr as C in the 7 targets where it is still inside data
   remainder rows (g3_eu has it as a c row; the restartIntr splits
   exposed the member start at ri+0x88 everywhere).
+
+## 2026-10-14 later - startIntr C-flip assessment: one allocation diff short
+
+Probe session (scripts/startintr/, the stopintr_probe.sh harness + a new
+-G0/-sdk-aspsx-aware comparator startintr_cmp2.py). The g3_eu retail body
+(0x800506E0, 0xdc) is fully decoded and every shape below was probed
+byte-level. Result: the C flip is ONE compiler-allocation decision short
+and stays asm for now (restartIntr precedent).
+
+Body (55 words): gate on intr_active_flag (early exit 0), the three
+volatile port slots (ip/mp/dp read in that order; zero the mask port,
+write the re-read through ip, 0x33333333 through dp), aux1(p, 0x41a)
+with the 0x41a in the call delay slot, aux2(p+0x1c) with the arg computed
+INTO a0 IN the delay slot, `if (ret != 0) aux3()` (the retail beqz SKIPS
+aux3 - the condition is != 0, not == 0), then the pin OVERWRITE to
+flag+0x3c (2-insn lui+addiu), restart_begin(pin-4), the self-pointer
+install *(long*)pin = pin+0xfdc sunk into restart_begin's delay slot,
+the gate store 1 through pin-0x3c in aux4's delay slot, aux4ret ->
+intr_start_tab+0x14 and aux5ret -> tab+4 sunk into the NEXT calls' delay
+slots (tab loaded twice, after each call, v1/a0), aux6, commit, and the
+return value computed IN commit's delay slot as addiu s0,s0,-0x3c then
+move v0,s0.
+
+Shape laws established this session (all probed):
+1. -fno-cse-skip-blocks is the structural key: it stops GCC 2.6.3's CSE
+   from merging the aux2 arg (flag+0x38) with the restart arg
+   (newpin-4) across the conditional aux3 block. Without it the merged
+   pseudo forces frame 0x20, a second callee-saved save, move-based arg
+   setup, and a 1-insn addiu reassignment. With it: frame 0x18, the pin
+   in s0, addiu a0,s0,0x38 directly in aux2's delay slot, the beqz
+   shape, and a 2-insn la reassignment - all retail.
+2. The aux2-arg CSE entry dies only if the flag flushes the block; the
+   memory barrier `__asm__ __volatile__("" ::: "memory")` does NOT
+   flush address constants, and neither calls nor the pin re-set do.
+3. Symbol-boundary trick (p8/p9): introduce a second unsized-array view
+   intr_state_page at base+0x3c (evidence: the retail body installs
+   base+0x1018 into that word and passes base+0x38 = page-4 to the
+   restart cluster). Two different symbols make the aux2-arg/restart-arg
+   merge IMPOSSIBLE even without the flag (symbol differences are
+   unknown at compile time), and the reassignment `p = &intr_state_page[0]`
+   re-materializes as a fresh 2-insn la (array decay defeats REG_EQUIV
+   remat; a scalar symbol address does NOT - p7 proved the scalar form
+   gets remat-killed into per-use las).
+4. GCC path asymmetry: VALUE uses of a symbol-relative constant take the
+   CHEAPEST form (register-relative off the live pin - 1 insn); STORE
+   addresses take the CONSTANT form (lui $at + store - 2 insns) whenever
+   CSE can resolve the address to a symbol-relative constant. That is
+   why the return comes out addiu v0,s0,-0x3c but the gate store comes
+   out sh v0,-0x3c($at) from the same expression. The store only stays
+   register-relative when its address is CSE-opaque (derived from a
+   pseudo whose CSE entry was flushed pre-branch - the p5/p9 dead-old-pin
+   trick, where the gate store goes through the dead first pin).
+5. Allocator law (the blocker): with more than one callee-saved
+   candidate, GCC 2.6.3 gives s0 to the LATER-born pseudo (post-branch
+   or multi-set) and s1 to the pre-branch single-set pin; declaration
+   order is irrelevant (p6a/p9b). The retail compiler shares s0 between
+   the dead first pin and the new pin (frame 0x18, one sw s0). Every
+   source shape tested (single reassigned local; two locals; two locals
+   + page decay; both declaration orders) lands the first pin in s1 -
+   the only remaining diff is this frame/save/registration cascade.
+
+p9 (two pins + page decay + the flag) matches retail EXACTLY except:
+sw s1/frame 0x20 vs sw-less/frame 0x18, and every s0 -> s1 on the first
+pin (gate read, aux1 arg, aux2 arg, gate store base). p8 (single pin +
+page decay, no flag) additionally differs on the gate store form and the
+return placement. Next-session candidates, in order: (a) find a source
+shape that grows the FIRST pin's conflict clique past the second pin's
+(extra entry-block live values are bounded by the retail insn count, so
+this is likely closed); (b) a per-unit cc1 flag mechanism (cc-post-style
+marker passing -fno-cse-skip-blocks) + the p8 shape, then re-probe the
+gate store/return with the flag's CSE table state; (c) keep asm and
+spend the time on setIntr/trapIntr fingerprints. The probe corpus
+(p1-p9b) stays in scripts/startintr/ for whichever lane picks this up.
