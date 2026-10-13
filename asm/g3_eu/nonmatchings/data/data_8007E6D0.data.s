@@ -36914,27 +36914,33 @@ dlabel D_80096C08
     /* 77408 80096C08 */ .short 0x140C
 enddlabel D_80096C08
 
-nonmatching D_80096C0A
+nonmatching intr_trap_flag
 
-dlabel D_80096C0A
+dlabel intr_trap_flag
     /* 7740A 80096C0A */ .short 0x8008
-enddlabel D_80096C0A
-
-nonmatching D_80096C0C
-
-dlabel D_80096C0C
-    /* 7740C 80096C0C 04030300 */ .word 0x00030304
-    /* 77410 80096C10 2C140880 */ .word D_8008142C
-    /* 77414 80096C14 11030000 */ .word 0x00000311
-    /* 77418 80096C18 4C140880 */ .word D_8008144C
-    /* 7741C 80096C1C 11030300 */ .word 0x00030311
-    /* 77420 80096C20 6C140880 */ .word D_8008146C
-    /* 77424 80096C24 12030000 */ .word 0x00000312
-    /* 77428 80096C28 8C140880 */ .word D_8008148C
-    /* 7742C 80096C2C 12030000 */ .word 0x00000312
-    /* 77430 80096C30 AC140880 */ .word D_800814AC
-    /* 77434 80096C34 15030000 */ .word 0x00000315
-enddlabel D_80096C0C
+    /* 7740C 80096C0C */ .short 0x0304
+    /* 7740E 80096C0E */ .short 0x0003
+    /* 77410 80096C10 */ .short 0x142C
+    /* 77412 80096C12 */ .short 0x8008
+    /* 77414 80096C14 */ .short 0x0311
+    /* 77416 80096C16 */ .short 0x0000
+    /* 77418 80096C18 */ .short 0x144C
+    /* 7741A 80096C1A */ .short 0x8008
+    /* 7741C 80096C1C */ .short 0x0311
+    /* 7741E 80096C1E */ .short 0x0003
+    /* 77420 80096C20 */ .short 0x146C
+    /* 77422 80096C22 */ .short 0x8008
+    /* 77424 80096C24 */ .short 0x0312
+    /* 77426 80096C26 */ .short 0x0000
+    /* 77428 80096C28 */ .short 0x148C
+    /* 7742A 80096C2A */ .short 0x8008
+    /* 7742C 80096C2C */ .short 0x0312
+    /* 7742E 80096C2E */ .short 0x0000
+    /* 77430 80096C30 */ .short 0x14AC
+    /* 77432 80096C32 */ .short 0x8008
+    /* 77434 80096C34 */ .short 0x0315
+    /* 77436 80096C36 */ .short 0x0000
+enddlabel intr_trap_flag
 
 nonmatching D_80096C38
 
@@ -38020,11 +38026,11 @@ dlabel D_80097C94
     /* 78494 80097C94 40020000 */ .word 0x00000240
 enddlabel D_80097C94
 
-nonmatching D_80097C98
+nonmatching intr_mask_ptr
 
-dlabel D_80097C98
+dlabel intr_mask_ptr
     /* 78498 80097C98 6C470880 */ .word D_8008476C
-enddlabel D_80097C98
+enddlabel intr_mask_ptr
 
 nonmatching D_80097C9C
 

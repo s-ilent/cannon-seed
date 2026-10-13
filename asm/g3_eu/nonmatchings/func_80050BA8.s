@@ -21,8 +21,8 @@ glabel restartIntr
     /* 313C8 80050BC8 00000000 */   nop
     /* 313CC 80050BCC 712B010C */  jal        func_8004ADC4
     /* 313D0 80050BD0 38000426 */   addiu     $a0, $s0, 0x38
-    /* 313D4 80050BD4 0980043C */  lui        $a0, %hi(D_80097C98)
-    /* 313D8 80050BD8 987C848C */  lw         $a0, %lo(D_80097C98)($a0)
+    /* 313D4 80050BD4 0980043C */  lui        $a0, %hi(intr_mask_ptr)
+    /* 313D8 80050BD8 987C848C */  lw         $a0, %lo(intr_mask_ptr)($a0)
     /* 313DC 80050BDC 0980033C */  lui        $v1, %hi(D_80096C3A)
     /* 313E0 80050BE0 3A6C6394 */  lhu        $v1, %lo(D_80096C3A)($v1)
     /* 313E4 80050BE4 01000234 */  ori        $v0, $zero, 0x1

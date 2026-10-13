@@ -1486,12 +1486,17 @@ func_8007D704 = 0x8007D704; // type:func (branch target)
 func_8007D710 = 0x8007D710; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+CheckCallback = 0x80050C5C; // type:s32
+GetIntrMask = 0x80050C6C; // type:s32
+SetIntrMask = 0x80050C84; // type:s32
 SetVideoMode = 0x80055008; // type:s32
 GetVideoMode = 0x80055020; // type:s32
 GsGetActiveBuff = 0x800671B4; // type:s32
 _spu_getInTransfer = 0x8006F34C; // type:s32
 SsSetMono = 0x80075D28; // type:s32
 SsSetStereo = 0x80075D3C; // type:s32
+intr_trap_flag = 0x800963EE; // type:s32
+intr_mask_ptr = 0x8009747C; // type:s32
 video_mode = 0x80097650; // type:s32
 _spu_inTransfer = 0x800AA8AC; // type:s32
 _svm_stereo_mono = 0x8016AB68; // type:s32

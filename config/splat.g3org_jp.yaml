@@ -259,7 +259,11 @@ segments:
       - [0x2DE94, data, data_8004D694]   # 0x28 pinned
       - [0x2DEBC, data, data_8004D6BC]   # 0xa0
       - [0x2DF5C, asm, func_8004D75C]   # 0x254
-      - [0x2E1B0, data, data_8004D9B0]   # 0x858
+      - [0x2E1B0, data, data_8004D9B0]   # 0x158
+      - [0x2E308, c, func_8004DB08]   # 0x10 sdk
+      - [0x2E318, c, func_8004DB18]   # 0x18 sdk
+      - [0x2E330, c, func_8004DB30]   # 0x1c sdk
+      - [0x2E34C, data, data_8004DB4C]   # 0x6bc
       - [0x2EA08, asm, func_8004E208]   # 0x50 sdk
       - [0x2EA58, asm, func_8004E258]   # 0x184 sdk
       - [0x2EBDC, asm, func_8004E3DC]   # 0xa8 sdk

@@ -520,11 +520,11 @@ dlabel D_8004E328
     /* 2EB28 8004E328 10008012 */ .word 0x12800010
 enddlabel D_8004E328
 
-nonmatching D_8004E32C
+nonmatching intr_mask_ptr
 
-dlabel D_8004E32C
+dlabel intr_mask_ptr
     /* 2EB2C 8004E32C D1000434 */ .word 0x340400D1
-enddlabel D_8004E32C
+enddlabel intr_mask_ptr
 
 nonmatching D_8004E330
 

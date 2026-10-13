@@ -56742,7 +56742,13 @@ enddlabel video_mode
 nonmatching D_800A3914
 
 dlabel D_800A3914
-    /* 84114 800A3914 29121502 */ .word 0x02151229
+    /* 84114 800A3914 */ .short 0x1229
+enddlabel D_800A3914
+
+nonmatching intr_trap_flag
+
+dlabel intr_trap_flag
+    /* 84116 800A3916 */ .short 0x0215
     /* 84118 800A3918 00000800 */ .word 0x00080000
     /* 8411C 800A391C 00000800 */ .word 0x00080000
     /* 84120 800A3920 13000000 */ .word 0x00000013
@@ -57792,7 +57798,7 @@ dlabel D_800A3914
     /* 85170 800A4970 16080000 */ .word 0x00000816
     /* 85174 800A4974 60CD0880 */ .word D_8008CD60
     /* 85178 800A4978 16080000 */ .word 0x00000816
-enddlabel D_800A3914
+enddlabel intr_trap_flag
 
 nonmatching D_800A497C
 
@@ -57807,10 +57813,15 @@ dlabel D_800A497C
     /* 85198 800A4998 48080000 */ .word 0x00000848
     /* 8519C 800A499C 00CE0880 */ .word D_8008CE00
     /* 851A0 800A49A0 48080000 */ .word 0x00000848
+enddlabel D_800A497C
+
+nonmatching intr_mask_ptr
+
+dlabel intr_mask_ptr
     /* 851A4 800A49A4 20CE0880 */ .word D_8008CE20
     /* 851A8 800A49A8 48080000 */ .word 0x00000848
     /* 851AC 800A49AC 40CE0880 */ .word D_8008CE40
-enddlabel D_800A497C
+enddlabel intr_mask_ptr
 
 nonmatching D_800A49B0
 

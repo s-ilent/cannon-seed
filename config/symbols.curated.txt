@@ -53,6 +53,11 @@ GetVideoMode = 0x80035258; // LIBETC VMODE member .text+0x18; tools/sdk_members.
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x8004E500; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+CheckCallback = 0x80030FC4; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x80030FD4; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x80030FEC; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_trap_flag = 0x8004D29E; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x8004E32C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 gte_rotate_z_matrix = 0x80038098; // LIBGS SCLIB member .text+0x0 (extent 0xb8); tools/sdk_members.py, unique placement
 scale_view_param = 0x80036C14; // LIBGS MATRIX3 member .text+0x0 (true extent 0xe8; the archive next-symbol extent 0xf0 overshoots into the empty function func_80036CFC); tools/sdk_members.py, unique placement
 RotMatrixC = 0x800383F8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools/sdk_members.py, unique placement + signature DB agrees
@@ -352,6 +357,8 @@ RestartCallback = 0x8005066C; // LIBETC INTR member .text+0x124 (extent 0x30); s
 CheckCallback = 0x8005069C; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x800506AC; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x800506C4; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_trap_flag = 0x80096C0A; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x80097C98; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 startIntr = 0x800506E0; // LIBETC INTR member .text+0x198 (extent 0xdc); sdk_members.py unique placement + sig-db agrees
 trapIntr = 0x800507BC; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x800509A4; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
@@ -487,6 +494,11 @@ GetVideoMode = 0x80055020; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x80097650; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+CheckCallback = 0x80050C5C; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x80050C6C; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x80050C84; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_trap_flag = 0x800963EE; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x8009747C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 GsInitCoordinate2 = 0x800561FC; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 GsInitCoord2param = 0x80056278; // LIBGS MATRIX member .text+0x7c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 GsSetLsMatrix = 0x800562A4; // LIBGS MATRIX member .text+0xa8 (extent 0x30); sdk_members.py unique placement + sig-db agrees
@@ -613,6 +625,11 @@ GetVideoMode = 0x8004D26C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x800A3910; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+CheckCallback = 0x8004D3D0; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x8004D3E0; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x8004D3F8; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_trap_flag = 0x800A3916; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x800A49A4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 startIntrDMA = 0x8004DAD0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x8004DB20; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x8004DCA4; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
@@ -748,6 +765,11 @@ GetVideoMode = 0x80051D9C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x800A4398; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+CheckCallback = 0x8004DB08; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x8004DB18; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x8004DB30; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_trap_flag = 0x800A3136; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x800A41C4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 GsSetDrawBuffClip = 0x80053490; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
 GsMapModelingData = 0x80053528; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
 GsGetTimInfo = 0x800535A0; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
@@ -866,6 +888,11 @@ GetVideoMode = 0x80067994; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x800B4470; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+CheckCallback = 0x80067AF8; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x80067B08; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x80067B20; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_trap_flag = 0x800B4476; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x800B5504; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 startIntrDMA = 0x800681F8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x80068248; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x800683CC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
@@ -999,6 +1026,40 @@ GetVideoMode = 0x8006C4B4; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_
 // (archive string table carries only GetVideoMode/SetVideoMode + the
 // E:\PSX\SRC\ETC\VMODE.C path), so no original name is recoverable.
 video_mode = 0x800B4EC4; // LIBETC VMODE member backing static; evidence above, no Psy-Q symbol name exists
+CheckCallback = 0x80068220; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x80068230; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x80068248; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+// intr_trap_flag / intr_mask_ptr: LIBETC INTR.OBJ backing statics
+// for the CheckCallback / GetIntrMask / SetIntrMask trio above.
+// Role-descriptive names: no Psy-Q symbol name exists - the 3.3
+// LIBETC.LIB INTR.OBJ carries no bss and its COFF symbol table
+// lists only the member functions plus kernel externals
+// (ChangeClearPAD/ResetEntryInt/HookEntryInt/...); every sig-db
+// version 2.60-4.70 shows INTR.OBJ bss absent.
+// - intr_trap_flag (halfword): CheckCallback returns it (lhu);
+//   trapIntr stores 1 on trap entry (ori $v0,1 + sh) and 0 on exit
+//   (sh $zero) - the in-trap in-progress flag.
+// - intr_mask_ptr (word): the deref'd halfword is the interrupt
+//   mask; GetIntrMask returns *(u16*)ptr, SetIntrMask swaps it
+//   with $a0 and returns the old value; trapIntr/setIntr/stopIntr/
+//   restartIntr/startIntr use it the same way (startIntr stores 0
+//   through it).
+// Retail placement facts: both sit inside initialized data (the
+// flag's initial bytes vary per target - g3_eu flag is the high
+// half of the word at 0x80096C08; the g3_eu ptr initial value is
+// the tail of the game string "\\DRAGOON\\G33CMXA.STR;1") and no
+// EXE code repoints either: the INTR mask/dispatch subsystem is
+// linked-in but never called in retail. Addressing: every target
+// loads BOTH statics lui+lo ABSOLUTE; slps_00270's copies sit
+// ~0x15F8E / 0x14F00 BELOW its gp base 0x8006322C - far outside
+// the +/-32K gp_rel window - so the canonical %hi/%lo split is
+// exactly retail's lui 0x8005 pair (lo words 0xD29E/0xE32C are
+// sign-extended displacements, not positive offsets: the first
+// placement pass misread them as 0x8005D29E/0x8005E32C).
+// LIBETC.H 3.3: int CheckCallback(void); Get/SetIntrMask postdate
+// the 3.3 header (sig-db labels + the bodies give the signatures).
+intr_trap_flag = 0x800B3C62; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x800B4CF0; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 GsInitGraph = 0x8006D064; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
 gpu_init = 0x8006D0DC; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
 GsInitGraph2 = 0x8006D234; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement

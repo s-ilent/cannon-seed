@@ -1251,7 +1251,7 @@
 //   0x80036528 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
 //   0x800367d4 LIBGS     SCLIB          unique     GsInit3D adoptable
 //   0x8003684c LIBGS     MATRIX3        unique     GsSetRefView2 adoptable
-//   0x80036c14 LIBGS     MATRIX3        unique     scale_view_param
+//   0x80036c14 LIBGS     MATRIX3        unique     scale_view_param adoptable
 //   0x80036d04 LIBGS     MATRIX3        unique     select_max_param adoptable
 //   0x80036dcc LIBGS     MATRIX3        unique     len_param adoptable
 //   0x80038098 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable

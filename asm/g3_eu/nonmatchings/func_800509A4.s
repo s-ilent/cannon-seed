@@ -15,8 +15,8 @@ glabel setIntr
     /* 311AC 800509AC 21888000 */  addu       $s1, $a0, $zero
     /* 311B0 800509B0 1800B2AF */  sw         $s2, 0x18($sp)
     /* 311B4 800509B4 2190A000 */  addu       $s2, $a1, $zero
-    /* 311B8 800509B8 0980053C */  lui        $a1, %hi(D_80096C0C)
-    /* 311BC 800509BC 0C6CA524 */  addiu      $a1, $a1, %lo(D_80096C0C)
+    /* 311B8 800509B8 0980053C */  lui        $a1, %hi(intr_trap_flag + 0x2)
+    /* 311BC 800509BC 0C6CA524 */  addiu      $a1, $a1, %lo(intr_trap_flag + 0x2)
     /* 311C0 800509C0 80101100 */  sll        $v0, $s1, 2
     /* 311C4 800509C4 21204500 */  addu       $a0, $v0, $a1
     /* 311C8 800509C8 2400BFAF */  sw         $ra, 0x24($sp)
@@ -31,8 +31,8 @@ glabel setIntr
     /* 311EC 800509EC 00000000 */  nop
     /* 311F0 800509F0 38004010 */  beqz       $v0, .L80050AD4
     /* 311F4 800509F4 21108002 */   addu      $v0, $s4, $zero
-    /* 311F8 800509F8 0980023C */  lui        $v0, %hi(D_80097C98)
-    /* 311FC 800509FC 987C428C */  lw         $v0, %lo(D_80097C98)($v0)
+    /* 311F8 800509F8 0980023C */  lui        $v0, %hi(intr_mask_ptr)
+    /* 311FC 800509FC 987C428C */  lw         $v0, %lo(intr_mask_ptr)($v0)
     /* 31200 80050A00 00000000 */  nop
     /* 31204 80050A04 00004394 */  lhu        $v1, 0x0($v0)
     /* 31208 80050A08 000040A4 */  sh         $zero, 0x0($v0)
@@ -86,8 +86,8 @@ glabel setIntr
     /* 312B8 80050AB8 9D2B010C */  jal        func_8004AE74
     /* 312BC 80050ABC 0100452E */   sltiu     $a1, $s2, 0x1
   .L80050AC0:
-    /* 312C0 80050AC0 0980023C */  lui        $v0, %hi(D_80097C98)
-    /* 312C4 80050AC4 987C428C */  lw         $v0, %lo(D_80097C98)($v0)
+    /* 312C0 80050AC0 0980023C */  lui        $v0, %hi(intr_mask_ptr)
+    /* 312C4 80050AC4 987C428C */  lw         $v0, %lo(intr_mask_ptr)($v0)
     /* 312C8 80050AC8 00000000 */  nop
     /* 312CC 80050ACC 000053A4 */  sh         $s3, 0x0($v0)
     /* 312D0 80050AD0 21108002 */  addu       $v0, $s4, $zero

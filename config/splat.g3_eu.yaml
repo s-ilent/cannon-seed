@@ -202,9 +202,9 @@ segments:
       - [0x30E0C, asm, func_8005060C]   # 0x30 sdk
       - [0x30E3C, asm, func_8005063C]   # 0x30 sdk
       - [0x30E6C, asm, func_8005066C]   # 0x30 sdk
-      - [0x30E9C, asm, func_8005069C]   # 0x10 sdk
-      - [0x30EAC, asm, func_800506AC]   # 0x18 sdk
-      - [0x30EC4, asm, func_800506C4]   # 0x1c sdk
+      - [0x30E9C, c, func_8005069C]   # 0x10 sdk
+      - [0x30EAC, c, func_800506AC]   # 0x18 sdk
+      - [0x30EC4, c, func_800506C4]   # 0x1c sdk
       - [0x30EE0, asm, func_800506E0]   # 0xdc sdk
       - [0x30FBC, asm, func_800507BC]   # 0x1e8 sdk
       - [0x311A4, asm, func_800509A4]   # 0x154 sdk
