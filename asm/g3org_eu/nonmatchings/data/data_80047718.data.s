@@ -289,6 +289,11 @@ dlabel D_80047718
     /* 28374 80047B74 05006214 */ .word 0x14620005
     /* 28378 80047B78 00000000 */ .word 0x00000000
     /* 2837C 80047B7C 08CA000C */ .word 0x0C00CA08
+enddlabel D_80047718
+
+nonmatching intr_restart_tail
+
+dlabel intr_restart_tail
     /* 28380 80047B80 00000000 */ .word 0x00000000
     /* 28384 80047B84 420A0108 */ .word 0x08010A42
     /* 28388 80047B88 00000000 */ .word 0x00000000
@@ -329,7 +334,7 @@ dlabel D_80047718
     /* 28414 80047C14 80000596 */ .word 0x96050080
     /* 28418 80047C18 300002A6 */ .word 0xA6020030
     /* 2841C 80047C1C 100003A6 */ .word 0xA6030010
-enddlabel D_80047718
+enddlabel intr_restart_tail
 
 nonmatching D_80047C20
 
@@ -776,6 +781,11 @@ dlabel func_800481F8
     /* 28A0C 8004820C 8C0982A7 */ .word 0xA782098C
     /* 28A10 80048210 CE0B0108 */ .word 0x08010BCE
     /* 28A14 80048214 040020A6 */ .word 0xA6200004
+enddlabel func_800481F8
+
+nonmatching intr_restart_begin
+
+dlabel intr_restart_begin
     /* 28A18 80048218 8E098287 */ .word 0x8782098E
     /* 28A1C 8004821C 00000000 */ .word 0x00000000
     /* 28A20 80048220 0A00401C */ .word 0x1C40000A
@@ -796,7 +806,7 @@ dlabel func_800481F8
     /* 28A5C 8004825C 00000000 */ .word 0x00000000
     /* 28A60 80048260 FFFF4224 */ .word 0x2442FFFF
     /* 28A64 80048264 920982A7 */ .word 0xA7820992
-enddlabel func_800481F8
+enddlabel intr_restart_begin
 
 nonmatching intr_stop_commit
 
@@ -843,9 +853,9 @@ dlabel func_800482A8
     /* 28AB4 800482B4 0C974284 */ .word 0x8442970C
 enddlabel func_800482A8
 
-nonmatching func_800482B8
+nonmatching intr_restart_commit
 
-dlabel func_800482B8
+dlabel intr_restart_commit
     /* 28AB8 800482B8 E8FFBD27 */ .word 0x27BDFFE8
     /* 28ABC 800482BC 1400BFAF */ .word 0xAFBF0014
     /* 28AC0 800482C0 1000B0AF */ .word 0xAFB00010
@@ -854,7 +864,7 @@ dlabel func_800482B8
     /* 28ACC 800482CC 0180033C */ .word 0x3C038001
     /* 28AD0 800482D0 040E6384 */ .word 0x84630E04
     /* 28AD4 800482D4 02000234 */ .word 0x34020002
-enddlabel func_800482B8
+enddlabel intr_restart_commit
 
 nonmatching func_800482D8
 

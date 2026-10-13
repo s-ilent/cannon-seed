@@ -70,13 +70,13 @@ glabel func_8002F99C
 endlabel func_8002F99C
     /* 101A8 8002F9A8 00000000 */  nop
 
-nonmatching func_8002F9AC, 0xC
+nonmatching intr_restart_commit
 
-glabel func_8002F9AC
-    /* 101AC 8002F9AC 02000106 */  bgez       $s0, func_8002F9B8
-    /* 101B0 8002F9B0 21180002 */   addu      $v1, $s0, $zero
-    /* 101B4 8002F9B4 FF071026 */  addiu      $s0, $s0, 0x7FF
-endlabel func_8002F9AC
+dlabel intr_restart_commit
+    /* 101AC 8002F9AC 02000106 */ .word 0x06010002
+    /* 101B0 8002F9B0 21180002 */ .word 0x02001821
+    /* 101B4 8002F9B4 FF071026 */ .word 0x261007FF
+enddlabel intr_restart_commit
 
 nonmatching func_8002F9B8, 0x10
 

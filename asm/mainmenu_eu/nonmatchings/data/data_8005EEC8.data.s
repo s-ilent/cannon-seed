@@ -313,11 +313,16 @@ dlabel func_8005F290
     /* 3FA94 8005F294 0800E003 */ .word 0x03E00008
     /* 3FA98 8005F298 00000000 */ .word 0x00000000
     /* 3FA9C 8005F29C E8FFBD27 */ .word 0x27BDFFE8
+enddlabel func_8005F290
+
+nonmatching intr_restart_begin
+
+dlabel intr_restart_begin
     /* 3FAA0 8005F2A0 83C3C42D */ .word 0x2DC4C383
     /* 3FAA4 8005F2A4 24922BD3 */ .word 0xD32B9224
     /* 3FAA8 8005F2A8 52DC71B9 */ .word 0xB971DC52
     /* 3FAAC 8005F2AC 3FFA2E0B */ .word 0x0B2EFA3F
-enddlabel func_8005F290
+enddlabel intr_restart_begin
 
 nonmatching func_8005F2B0
 
@@ -385,14 +390,14 @@ dlabel func_8005F330
     /* 3FB3C 8005F33C 910E6226 */ .word 0x26620E91
 enddlabel func_8005F330
 
-nonmatching func_8005F340
+nonmatching intr_restart_commit
 
-dlabel func_8005F340
+dlabel intr_restart_commit
     /* 3FB40 8005F340 742F2816 */ .word 0x16282F74
     /* 3FB44 8005F344 08A84841 */ .word 0x4148A808
     /* 3FB48 8005F348 AF57F607 */ .word 0x07F657AF
     /* 3FB4C 8005F34C E2DF6F48 */ .word 0x486FDFE2
-enddlabel func_8005F340
+enddlabel intr_restart_commit
 
 nonmatching func_8005F350
 

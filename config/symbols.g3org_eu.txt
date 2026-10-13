@@ -144,7 +144,7 @@ func_8006BF24 = 0x8006BF24; // type:func
 func_8006C720 = 0x8006C720; // type:func
 func_8006E250 = 0x8006E250; // type:func
 func_8007D5C0 = 0x8007D5C0; // type:func
-stopIntr = 0x8004D95C; // type:func (pinned member row)
+restartIntr = 0x8004DA0C; // type:func (pinned member row)
 startIntrDMA = 0x8004DAD0; // type:func (pinned member row)
 trapIntrDMA = 0x8004DB20; // type:func (pinned member row)
 setIntrDMA = 0x8004DCA4; // type:func (pinned member row)
@@ -1624,13 +1624,17 @@ func_8006C5C0 = 0x8006C5C0; // type:func (branch target)
 func_8006C838 = 0x8006C838; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+intr_restart_tail = 0x80047B80; // type:s32
 intr_stop_begin = 0x80048198; // type:s32
+intr_restart_begin = 0x80048218; // type:s32
 intr_stop_commit = 0x80048268; // type:s32
+intr_restart_commit = 0x800482B8; // type:s32
 SetVideoMode = 0x8004D254; // type:s32
 GetVideoMode = 0x8004D26C; // type:s32
 CheckCallback = 0x8004D3D0; // type:s32
 GetIntrMask = 0x8004D3E0; // type:s32
 SetIntrMask = 0x8004D3F8; // type:s32
+stopIntr = 0x8004D95C; // type:s32
 memclr = 0x8004DD4C; // type:s32
 GsGetActiveBuff = 0x800647AC; // type:s32
 _spu_getInTransfer = 0x8006CA54; // type:s32

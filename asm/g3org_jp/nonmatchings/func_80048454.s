@@ -454,7 +454,7 @@ glabel func_800488C0
     /* 290C8 800488C8 21384300 */   addu      $a3, $v0, $v1
 endlabel func_800488C0
 
-nonmatching func_800488CC, 0x30
+nonmatching func_800488CC, 0x14
 
 glabel func_800488CC
     /* 290CC 800488CC 0600A284 */  lh         $v0, 0x6($a1)
@@ -462,14 +462,19 @@ glabel func_800488CC
     /* 290D4 800488D4 80100200 */  sll        $v0, $v0, 2
     /* 290D8 800488D8 0300E388 */  lwl        $v1, 0x3($a3)
     /* 290DC 800488DC 0000E398 */  lwr        $v1, 0x0($a3)
-    /* 290E0 800488E0 00000000 */  nop
-    /* 290E4 800488E4 1580013C */  lui        $at, %hi(D_801524CB)
-    /* 290E8 800488E8 CB242124 */  addiu      $at, $at, %lo(D_801524CB)
-    /* 290EC 800488EC 21082200 */  addu       $at, $at, $v0
-    /* 290F0 800488F0 000023A8 */  swl        $v1, 0x0($at)
-    /* 290F4 800488F4 1580013C */  lui        $at, %hi(D_801524C8)
-    /* 290F8 800488F8 C8242124 */  addiu      $at, $at, %lo(D_801524C8)
 endlabel func_800488CC
+
+nonmatching intr_restart_begin
+
+dlabel intr_restart_begin
+    /* 290E0 800488E0 00000000 */ .word 0x00000000
+    /* 290E4 800488E4 1580013C */ .word 0x3C018015
+    /* 290E8 800488E8 CB242124 */ .word 0x242124CB
+    /* 290EC 800488EC 21082200 */ .word 0x00220821
+    /* 290F0 800488F0 000023A8 */ .word 0xA8230000
+    /* 290F4 800488F4 1580013C */ .word 0x3C018015
+    /* 290F8 800488F8 C8242124 */ .word 0x242124C8
+enddlabel intr_restart_begin
 
 nonmatching func_800488FC, 0x10
 
@@ -546,15 +551,19 @@ glabel func_80048980
     /* 29180 80048980 07004224 */  addiu      $v0, $v0, 0x7
 endlabel func_80048980
 
-nonmatching func_80048984, 0x10
+nonmatching func_80048984, 0xC
 
 glabel func_80048984
     /* 29184 80048984 21188000 */  addu       $v1, $a0, $zero
     /* 29188 80048988 02006104 */  bgez       $v1, func_80048994
     /* 2918C 8004898C C3100200 */   sra       $v0, $v0, 3
-  alabel func_80048990
-    /* 29190 80048990 07006324 */  addiu      $v1, $v1, 0x7
 endlabel func_80048984
+
+nonmatching intr_restart_commit
+
+dlabel intr_restart_commit
+    /* 29190 80048990 07006324 */ .word 0x24630007
+enddlabel intr_restart_commit
 
 nonmatching func_80048994, 0x1C
 

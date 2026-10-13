@@ -354,6 +354,10 @@ alabel func_8004ACD8
     /* 2B4E0 8004ACE0 0800E003 */ .word 0x03E00008
     /* 2B4E4 8004ACE4 1800BD27 */ .word 0x27BD0018
     /* 2B4E8 8004ACE8 E8FFBD27 */ .word 0x27BDFFE8
+
+nonmatching intr_restart_tail
+
+dlabel intr_restart_tail
     /* 2B4EC 8004ACEC 1000BFAF */ .word 0xAFBF0010
     /* 2B4F0 8004ACF0 24008384 */ .word 0x84830024
     /* 2B4F4 8004ACF4 01000234 */ .word 0x34020001

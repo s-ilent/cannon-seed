@@ -907,3 +907,71 @@ question.**
   byte-fingerprint pass (0x77777777 / 0x33333333 ori pairs are
   address-free and target-independent) will locate them when the C
   shape converges.
+
+**2026-10-14 (early) - restartIntr attributed everywhere + restored to
+asm rows in all 8 targets; the sibcall tail question is CLOSED
+(negative, probe-proven); trapIntr inherits the conclusion
+(cron-20261013-1626).**
+
+- Byte fingerprint (scripts/restartintr_fp.py, ALL PASS): the g3_eu
+  restartIntr body's 34-slot masked word template (opcodes+registers
+  kept; address immediates and jal/j indexes zeroed; branch
+  displacements kept) matches ALL EIGHT targets exactly at
+  stopIntr + 0xb0 - uniform delta, including mainmenu_jp (an earlier
+  read had its stopIntr base off by 0x100; corrected against the
+  curated stopIntr entries). Extracted statics equal the curated
+  intr_* addresses in every target and satisfy saved_mask=flag+0x32,
+  saved_dicr=flag+0x34, dicr=mask+4. Member identified as sig-db
+  INTR.OBJ .text+0x660 (extent 0x88, ends right before memclr).
+- THE SIBCALL QUESTION IS CLOSED - NEGATIVE. Probe matrix
+  (scripts/restartintr/, 5 shapes x {-O0,-O1,-O2,-O3} through the
+  probe harness): `return tailfn();`, noreturn-attributed call,
+  plain void call, volatile-void call, and the r6 control
+  (`return (long)p;`) ALL emit `jal <tail>` + a full epilogue. GCC
+  2.6.3 MIPS has no sibcall and does not elide epilogues behind
+  opaque calls. The r6 control reproduces the retail body AND the
+  shared-epilogue jump FORM byte-for-byte (`j <local shared
+  epilogue>; move $v0,$s0` with the return-0 block falling through)
+  - the ONLY divergence is the jump TARGET (GCC: its own local
+  epilogue; retail: an external dispatcher-cluster address). Best
+  explanation: the original SDK source closed restartIntr with a
+  hand-written asm tail carrying an ra-clobber bug (the tail block's
+  `jr $ra` returns into restartIntr's own jump instruction - dead
+  code in retail, which never calls this subsystem). CONSEQUENCE:
+  restartIntr stays an assembly row; trapIntr closes with the same
+  form (`j` + frame not popped) so its C attempt is skipped too;
+  the GsSetDrawBuffOffset tail question loses its "maybe 2.6.3
+  sibcall" branch.
+- Rollout (scripts/restartintr_rollout.py, 8/8 verify GREEN first
+  try each): curated 4 names per target (restartIntr,
+  intr_restart_begin, intr_restart_commit, intr_restart_tail; full
+  evidence block under mainmenu_jp) -> collision census (clear:
+  no cross-target row-label reuse - the SetIntrMask/stopIntr lesson
+  does not bite) -> hand-carve: the covering data row splits into
+  `[asm, func_<ri>] # 0x88 sdk` + a data remainder row (sces's 0x49c
+  row leaves a 0x414 remainder; the others 0x38/0x3c) -> make scan
+  (suffix churn 7-11 rows/target, restored) -> extract -> stale data
+  .s removed -> verify. g3_eu was already an exact asm row: curated
+  names only.
+- Rendering evidence: with the curated data-type symbols present,
+  spimdisasm renders the tail `j intr_restart_tail` BY NAME
+  (g3org_eu/slps - the two targets whose tail lives inside a data
+  row; the symbol resolves through the build's symbols-file
+  auto-define at link). begin/commit render as address-encoded
+  labels; spimdisasm created dlabel/alabel islands at the
+  newly-referenced addresses (union-preserving re-derivations,
+  accepted as scanned). This closes the "cross-row j into a data
+  row" mechanism for future members: curate the name, let the
+  auto-define resolve it.
+- Gates: matched 168 (unchanged - asm row, no C unit); progress
+  TOTAL 13830; ratchets 365/0; screens 0 DATA / 0 SUSPECT on all 8;
+  8/8 verify GREEN.
+- Next queue: (1) startIntr (0xdc) - its body is C-shaped (normal
+  jal tail, proven by stopIntr/restartIntr idioms) BUT it jal's into
+  cluster entries whose names are now curated; the s0-pin +
+  shared-tail shapes are all proven. (2) setIntr (0x154, normal
+  return tail) - bigger but same toolkit. (3) trapIntr (0x1e8) -
+  branch-heavy AND carries the asm-only tail; keep asm or hybrid.
+  (4) memclr as C in the 7 targets where it is still inside data
+  remainder rows (g3_eu has it as a c row; the restartIntr splits
+  exposed the member start at ri+0x88 everywhere).

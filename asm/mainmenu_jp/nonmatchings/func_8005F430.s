@@ -419,7 +419,7 @@ glabel func_8005F908
     /* 40114 8005F914 00000000 */   nop
 endlabel func_8005F908
 
-nonmatching func_8005F918, 0x50
+nonmatching func_8005F918, 0x40
 
 glabel func_8005F918
     /* 40118 8005F918 1000BF8F */  lw         $ra, 0x10($sp)
@@ -438,11 +438,16 @@ glabel func_8005F918
     /* 4014C 8005F94C 5E63010C */  jal        func_80058D78
     /* 40150 8005F950 01001034 */   ori       $s0, $zero, 0x1
     /* 40154 8005F954 0465010C */  jal        func_80059410
-    /* 40158 8005F958 00000000 */   nop
-    /* 4015C 8005F95C 0D80013C */  lui        $at, %hi(D_800CA27C)
-    /* 40160 8005F960 7CA220AC */  sw         $zero, %lo(D_800CA27C)($at)
-    /* 40164 8005F964 0D80013C */  lui        $at, (0x800D0000 >> 16)
 endlabel func_8005F918
+
+nonmatching intr_restart_begin
+
+dlabel intr_restart_begin
+    /* 40158 8005F958 00000000 */ .word 0x00000000
+    /* 4015C 8005F95C 0D80013C */ .word 0x3C01800D
+    /* 40160 8005F960 7CA220AC */ .word 0xAC20A27C
+    /* 40164 8005F964 0D80013C */ .word 0x3C01800D
+enddlabel intr_restart_begin
 
 nonmatching func_8005F968, 0x20
 
@@ -496,7 +501,7 @@ dlabel intr_stop_commit
     /* 401E4 8005F9E4 16004314 */ .word 0x14430016
 enddlabel intr_stop_commit
 
-nonmatching func_8005F9E8, 0x40
+nonmatching func_8005F9E8, 0x20
 
 glabel func_8005F9E8
     /* 401E8 8005F9E8 02000234 */  ori        $v0, $zero, 0x2
@@ -508,16 +513,20 @@ glabel func_8005F9E8
     /* 401FC 8005F9FC 0000C494 */  lhu        $a0, 0x0($a2)
     /* 40200 8005FA00 1580053C */  lui        $a1, %hi(D_8014A5AC)
     /* 40204 8005FA04 ACA5A594 */  lhu        $a1, %lo(D_8014A5AC)($a1)
-  alabel func_8005FA08
-    /* 40208 8005FA08 0D80013C */  lui        $at, %hi(D_800CA264)
-    /* 4020C 8005FA0C 64A222A4 */  sh         $v0, %lo(D_800CA264)($at)
-    /* 40210 8005FA10 0D80013C */  lui        $at, %hi(D_800C9F74)
-    /* 40214 8005FA14 749F30A4 */  sh         $s0, %lo(D_800C9F74)($at)
-    /* 40218 8005FA18 09006334 */  ori        $v1, $v1, 0x9
-    /* 4021C 8005FA1C 0D80013C */  lui        $at, %hi(D_800CA27C)
-    /* 40220 8005FA20 7CA223AC */  sw         $v1, %lo(D_800CA27C)($at)
-    /* 40224 8005FA24 01008424 */  addiu      $a0, $a0, 0x1
 endlabel func_8005F9E8
+
+nonmatching intr_restart_commit
+
+dlabel intr_restart_commit
+    /* 40208 8005FA08 0D80013C */ .word 0x3C01800D
+    /* 4020C 8005FA0C 64A222A4 */ .word 0xA422A264
+    /* 40210 8005FA10 0D80013C */ .word 0x3C01800D
+    /* 40214 8005FA14 749F30A4 */ .word 0xA4309F74
+    /* 40218 8005FA18 09006334 */ .word 0x34630009
+    /* 4021C 8005FA1C 0D80013C */ .word 0x3C01800D
+    /* 40220 8005FA20 7CA223AC */ .word 0xAC23A27C
+    /* 40224 8005FA24 01008424 */ .word 0x24840001
+enddlabel intr_restart_commit
 
 nonmatching func_8005FA28, 0x10
 

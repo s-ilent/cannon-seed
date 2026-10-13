@@ -362,14 +362,19 @@ glabel func_8002ED50
     /* F558 8002ED58 4000A8AF */   sw        $t0, 0x40($sp)
 endlabel func_8002ED50
 
-nonmatching func_8002ED5C
+nonmatching func_8002ED5C, 0x14
 
 glabel func_8002ED5C
-    /* F55C 8002ED5C 21200002 */ .word 0x02002021
-    /* F560 8002ED60 1180133C */ .word 0x3C138011
-    /* F564 8002ED64 A4487326 */ .word 0x267348A4
-    /* F568 8002ED68 21B89102 */ .word 0x0291B821
-    /* F56C 8002ED6C C2471700 */ .word 0x001747C2
+    /* F55C 8002ED5C 21200002 */  addu       $a0, $s0, $zero
+    /* F560 8002ED60 1180133C */  lui        $s3, %hi(D_801148A4)
+    /* F564 8002ED64 A4487326 */  addiu      $s3, $s3, %lo(D_801148A4)
+    /* F568 8002ED68 21B89102 */  addu       $s7, $s4, $s1
+    /* F56C 8002ED6C C2471700 */  srl        $t0, $s7, 31
+endlabel func_8002ED5C
+
+nonmatching intr_restart_tail
+
+dlabel intr_restart_tail
     /* F570 8002ED70 4800A8AF */ .word 0xAFA80048
     /* F574 8002ED74 1800A393 */ .word 0x93A30018
     /* F578 8002ED78 1900A593 */ .word 0x93A50019
@@ -860,4 +865,4 @@ alabel func_8002F358
     /* FB5C 8002F35C 1800B08F */ .word 0x8FB00018
     /* FB60 8002F360 0800E003 */ .word 0x03E00008
     /* FB64 8002F364 2000BD27 */ .word 0x27BD0020
-enddlabel func_8002ED5C
+enddlabel intr_restart_tail

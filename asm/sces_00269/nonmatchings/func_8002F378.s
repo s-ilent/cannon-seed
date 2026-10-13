@@ -74,17 +74,21 @@ glabel func_8002F3D8
     /* FBF4 8002F3F4 FCFF028E */  lw         $v0, -0x4($s0)
 endlabel func_8002F3D8
 
-nonmatching func_8002F3F8, 0x18
+nonmatching func_8002F3F8, 0x10
 
 glabel func_8002F3F8
     /* FBF8 8002F3F8 00000000 */  nop
     /* FBFC 8002F3FC 04005614 */  bne        $v0, $s6, func_8002F410
     /* FC00 8002F400 21906002 */   addu      $s2, $s3, $zero
     /* FC04 8002F404 F8FF1125 */  addiu      $s1, $t0, -0x8
-  alabel func_8002F408
-    /* FC08 8002F408 03B50008 */  j          D_8002D40C
-    /* FC0C 8002F40C 08001525 */   addiu     $s5, $t0, 0x8
 endlabel func_8002F3F8
+
+nonmatching intr_restart_begin
+
+dlabel intr_restart_begin
+    /* FC08 8002F408 03B50008 */ .word 0x0800B503
+    /* FC0C 8002F40C 08001525 */ .word 0x25150008
+enddlabel intr_restart_begin
 
 nonmatching func_8002F410, 0x20
 
@@ -165,12 +169,12 @@ glabel func_8002F4A4
     /* FCA4 8002F4A4 CC0097AF */  sw         $s7, 0xCC($gp)
 endlabel func_8002F4A4
 
-nonmatching func_8002F4A8, 0x8
+nonmatching intr_restart_commit
 
-glabel func_8002F4A8
-    /* FCA8 8002F4A8 34B50008 */  j          func_8002D4D0
-    /* FCAC 8002F4AC 00000000 */   nop
-endlabel func_8002F4A8
+dlabel intr_restart_commit
+    /* FCA8 8002F4A8 34B50008 */ .word 0x0800B534
+    /* FCAC 8002F4AC 00000000 */ .word 0x00000000
+enddlabel intr_restart_commit
 
 nonmatching func_8002F4B0, 0x18
 

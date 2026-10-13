@@ -424,7 +424,7 @@ glabel func_80048118
     /* 28920 80048120 00324234 */   ori       $v0, $v0, (0x80013200 & 0xFFFF)
 endlabel func_80048118
 
-nonmatching func_80048124, 0x6C
+nonmatching func_80048124, 0x60
 
 glabel func_80048124
     /* 28924 80048124 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -451,10 +451,15 @@ glabel func_80048124
     /* 28978 80048178 1A15010C */  jal        func_80045468
     /* 2897C 8004817C 98020634 */   ori       $a2, $zero, 0x298
     /* 28980 80048180 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 28984 80048184 00000000 */  nop
-    /* 28988 80048188 0800E003 */  jr         $ra
-    /* 2898C 8004818C 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80048124
+    /* 28984 80048184 00000000 */  nop
+
+nonmatching intr_restart_tail
+
+dlabel intr_restart_tail
+    /* 28988 80048188 0800E003 */ .word 0x03E00008
+    /* 2898C 8004818C 1800BD27 */ .word 0x27BD0018
+enddlabel intr_restart_tail
 
 nonmatching func_80048190, 0x3C
 

@@ -265,7 +265,8 @@ segments:
       - [0x2E330, c, func_8004DB30]   # 0x1c sdk
       - [0x2E34C, data, data_8004DB4C]   # 0x548
       - [0x2E894, c, func_8004E094]   # 0xb0 sdk
-      - [0x2E944, data, data_8004E144]   # 0xc4
+      - [0x2E944, asm, func_8004E144]   # 0x88 sdk
+      - [0x2E9CC, data, data_8004E1CC]   # 0x3c
       - [0x2EA08, asm, func_8004E208]   # 0x50 sdk
       - [0x2EA58, asm, func_8004E258]   # 0x184 sdk
       - [0x2EBDC, asm, func_8004E3DC]   # 0xa8 sdk

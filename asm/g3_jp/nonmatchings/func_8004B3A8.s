@@ -78,17 +78,22 @@ glabel func_8004B424
     /* 2BC30 8004B430 12008210 */  beq        $a0, $v0, func_8004B47C
 endlabel func_8004B424
 
-nonmatching func_8004B434, 0x1C
+nonmatching func_8004B434, 0x10
 
 glabel func_8004B434
     /* 2BC34 8004B434 02008228 */  slti       $v0, $a0, 0x2
     /* 2BC38 8004B438 05004010 */  beqz       $v0, func_8004B450
     /* 2BC3C 8004B43C 00000000 */   nop
     /* 2BC40 8004B440 0A008010 */  beqz       $a0, func_8004B46C
-    /* 2BC44 8004B444 00000000 */   nop
-    /* 2BC48 8004B448 DB160108 */  j          func_80045B6C
-    /* 2BC4C 8004B44C 00000000 */   nop
 endlabel func_8004B434
+
+nonmatching intr_restart_begin
+
+dlabel intr_restart_begin
+    /* 2BC44 8004B444 00000000 */ .word 0x00000000
+    /* 2BC48 8004B448 DB160108 */ .word 0x080116DB
+    /* 2BC4C 8004B44C 00000000 */ .word 0x00000000
+enddlabel intr_restart_begin
 
 nonmatching func_8004B450, 0x1C
 
@@ -172,19 +177,22 @@ glabel func_8004B4E4
     /* 2BCF0 8004B4F0 0180043C */  lui        $a0, (0x80010000 >> 16)
 endlabel func_8004B4E4
 
-nonmatching func_8004B4F4, 0x20
+nonmatching intr_restart_commit
 
-glabel func_8004B4F4
-    /* 2BCF4 8004B4F4 0A0E8434 */  ori        $a0, $a0, 0xE0A
-    /* 2BCF8 8004B4F8 FF000534 */  ori        $a1, $zero, 0xFF
-    /* 2BCFC 8004B4FC F31F010C */  jal        func_80047FCC
-    /* 2BD00 8004B500 FC520634 */   ori       $a2, $zero, 0x52FC
-  alabel func_8004B504
-    /* 2BD04 8004B504 0180043C */  lui        $a0, (0x80016106 >> 16)
-    /* 2BD08 8004B508 06618434 */  ori        $a0, $a0, (0x80016106 & 0xFFFF)
-    /* 2BD0C 8004B50C 21280000 */  addu       $a1, $zero, $zero
-    /* 2BD10 8004B510 F31F010C */  jal        func_80047FCC
-endlabel func_8004B4F4
+dlabel intr_restart_commit
+    /* 2BCF4 8004B4F4 0A0E8434 */ .word 0x34840E0A
+    /* 2BCF8 8004B4F8 FF000534 */ .word 0x340500FF
+    /* 2BCFC 8004B4FC F31F010C */ .word 0x0C011FF3
+    /* 2BD00 8004B500 FC520634 */ .word 0x340652FC
+
+nonmatching func_8004B504
+
+alabel func_8004B504
+    /* 2BD04 8004B504 0180043C */ .word 0x3C048001
+    /* 2BD08 8004B508 06618434 */ .word 0x34846106
+    /* 2BD0C 8004B50C 21280000 */ .word 0x00002821
+    /* 2BD10 8004B510 F31F010C */ .word 0x0C011FF3
+enddlabel intr_restart_commit
 
 nonmatching func_8004B514, 0xC
 

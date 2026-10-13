@@ -2616,12 +2616,12 @@ dlabel D_80021ED8
     /* 26DC 80021EDC */ .asciz "(%d %d %d)\n"
     /* 282564202564202564290A00 */
 .align 2
-    /* 26E8 80021EE8 00120580 */ .word 0x80051200
-    /* 26EC 80021EEC 00120580 */ .word 0x80051200
-    /* 26F0 80021EF0 00120580 */ .word 0x80051200
-    /* 26F4 80021EF4 EC110580 */ .word 0x800511EC
-    /* 26F8 80021EF8 EC110580 */ .word 0x800511EC
-    /* 26FC 80021EFC EC110580 */ .word 0x800511EC
+    /* 26E8 80021EE8 00120580 */ .word stopIntr + 0x18
+    /* 26EC 80021EEC 00120580 */ .word stopIntr + 0x18
+    /* 26F0 80021EF0 00120580 */ .word stopIntr + 0x18
+    /* 26F4 80021EF4 EC110580 */ .word stopIntr + 0x4
+    /* 26F8 80021EF8 EC110580 */ .word stopIntr + 0x4
+    /* 26FC 80021EFC EC110580 */ .word stopIntr + 0x4
     /* 2700 80021F00 CC110580 */ .word 0x800511CC
     /* 2704 80021F04 CC110580 */ .word 0x800511CC
     /* 2708 80021F08 CC110580 */ .word 0x800511CC
