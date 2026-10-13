@@ -24,7 +24,9 @@ header. Nothing is patched or decrypted in place; the branches are dead.
 
 Fix: re-type the 100 `asm` rows to `data` (the carve-pin path), which also
 retires the bogus `func_XXXXXXXX` names they carry. The 241 `data` rows are
-already right. Re-derive the list from `tools/deframe.py`'s layout.
+already right. Regenerate the list with `python3 tools/deframe.py
+--framing-rows` (every row per target, then the type totals) — it recomputes
+from the carve, so use it rather than a snapshot.
 
 ### Split the de-framed payload, not the framed on-disc file
 

@@ -35,6 +35,8 @@ import hashlib
 import sys
 from pathlib import Path
 
+import yaml
+
 REPO = Path(__file__).resolve().parent.parent
 SYNC = bytes.fromhex("00ffffffffffffffffffff00")
 SECTOR = 2352          # MODE2/2352
@@ -109,6 +111,31 @@ def _targets() -> list[str]:
     return [Path(b).stem for b in sorted(glob.glob(str(REPO / "baselines" / "*.bin")))]
 
 
+def framing_rows(target: str, thresh: float = 0.9) -> list[tuple[str, str, int, int]]:
+    """[(name, type, size, offset)] for carve rows that are >thresh framing.
+
+    A row whose bytes are mostly the 304-byte MODE2 gap is not code, whatever
+    the map calls it. Regenerate the list rather than trusting a snapshot: the
+    carve moves.
+    """
+    p = _baseline(target)
+    lay = layout(p)
+    d = lay["data"]
+    spans = [(s + DATA + HDR, s + SECTOR + HDR) for s in lay["syncs"]]
+    cfg = yaml.safe_load((REPO / "config" / f"splat.{target}.yaml").read_text())
+    subs = sorted((s[0], s[1], s[2]) for s in cfg["segments"][0]["subsegments"]
+                  if isinstance(s, list))
+    out = []
+    for i, (st, ty, nm) in enumerate(subs):
+        en = subs[i + 1][0] if i + 1 < len(subs) else len(d)
+        if en - st < 16:
+            continue
+        fr = sum(max(0, min(en, e) - max(st, s)) for s, e in spans) / (en - st)
+        if fr > thresh:
+            out.append((nm, ty, en - st, st))
+    return out
+
+
 def cmd_report(targets: list[str]) -> None:
     print(f"{'target':12s} {'file':>9s} {'syncs':>6s} {'framed pay':>11s} "
           f"{'payload':>9s} {'t_size':>9s} {'framed sha1':>13s}")
@@ -131,8 +158,20 @@ def main(argv: list[str]) -> int:
                     help="carve VRAM -> runtime VRAM")
     ap.add_argument("--map-runtime", nargs=2, metavar=("TARGET", "VRAM"),
                     help="runtime VRAM -> carve VRAM")
+    ap.add_argument("--framing-rows", action="store_true",
+                    help="list carve rows that are >90%% MODE2 framing (not code)")
     args = ap.parse_args(argv[1:])
     targets = args.target or _targets()
+    if args.framing_rows:
+        totals = {}
+        for t in targets:
+            rows = framing_rows(t)
+            for nm, ty, sz, off in rows:
+                totals[ty] = totals.get(ty, 0) + 1
+                print(f"{t:12s} {ty:5s} {nm:22s} {sz:5d}  @ {off:#08x}")
+        print(f"# framing rows by type: {totals}"
+              f"  (re-type `asm` rows to `data` + `pinned`)")
+        return 0
     if args.payload:
         t, out = args.payload
         hdr, payload = deframe(_baseline(t))
