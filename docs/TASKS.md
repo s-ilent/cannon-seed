@@ -754,9 +754,94 @@ targets; the linker auto-define pass now resolves curated names.**
     D_8018DAA6 (word written by halves: sh), D_8018DB14 + D_8018DB18
     (lh + sh - read-modify-write pair). Callees: func_800604E0 (jal,
     path A) + tail j to D_80072DB8; func_80062FCC (jal, path B).
-  - Attribution route (next session): writers-first on the seven
-    unnamed statics (who stores what value when pins each one's role,
-    then the role matches the EMULIB name list), then the three callees
-    via the same member-placement evidence used for the trio. The
-    ratchet constraint means all ten symbols must be curated before the
-    C match can land.
+
+**2026-10-13 (later still) — EMULIB attribution COMPLETE (cron-20261013-1126);
+all statics named; callee anomaly discovered.**
+
+- Tooling (repo-external, /home/z/my-project/scripts/): `emulib_place.py`
+  (sig-place the GS_0xx members in a baseline, then decode every hi/lo
+  pair's concrete address from the retail bytes), `mjp_dis.py`
+  (standalone mainmenu_jp disassembler), `gsdb_sig_probe.py` (sig probe
+  at an address across ALL sig-db versions), `xsearch.py` (cross-target
+  byte search with per-target vma bases). Mapping gotcha baked into all
+  of them: splat rom offsets INCLUDE the 0x800-byte EXE header, so
+  file_off = vma - 0x8001F800 directly for the mainmenu/g3 family —
+  skipping the header a second time reads 0x800 too far (cost half a
+  session before caught).
+- Member placements in mainmenu_jp (3.3 sig-db, full-member sig match):
+  GS_001 GsInitGraph @ 0x8006D064 (0x62c), GS_002 @ 0x8007F1C4
+  (the curated GsGetActiveBuff+GsSetDrawBuffOffset rows), GS_010
+  GsSwapDispBuff @ 0x8007F99C (0xf4). GS_004/005/006/012 have NO
+  placements (dead-linked or sig drift); GS_013 GsSetOrign's 24-byte
+  wildcard-heavy sig matches twice inside game code — both false
+  positives (they store args 8 bytes apart to 0x800C9C0C/14-class
+  bss, not to adjacent halves).
+- STATIC ATTRIBUTION (all evidence-backed, 2.60-consistent — the
+  decisive fact: in Psy-Q 2.60's LIBGS every member declares the SAME
+  11 commons, and GsORGOFSX/GsORGOFSY/PSDCNT DO NOT EXIST yet — they
+  first appear in 3.30. So the 2-byte flag can only be PSDGPU and the
+  DB14/18 pair can only be PSDOFSX/PSDOFSY):
+  - PSDIDX = 0x80194E34 (already curated; re-confirmed: GsInitGraph
+    zeroes it, GsSwapDispBuff flips it).
+  - PSDGPU = 0x80194E3C (2 B): the only other 2-byte common; written
+    by GsInitGraph2 from its mode arg (sh a2) and valiable_init; read
+    by GsSetDrawBuffOffset as the path selector (beqz -> path B).
+  - PSDCNT = 0x80194E30 (4 B, 3.3 name; incremented by GsSwapDispBuff
+    with the is-zero -> a0=1 else a0=v1 dance). Not needed by the
+    match; noted for the map.
+  - POSITION = 0x80189224 (offx) / 0x80189226 (offy), _GsPOSITION
+    {short offx, offy}: zeroed by valiable_init; read lhu in path A,
+    lh in path B of GsSetDrawBuffOffset.
+  - PSDBASEX[2] = 0x8014A3A4, PSDBASEY[2] = 0x8014A3A8: read by
+    GsInitGraph and GsSwapDispBuff (lhu, indexed by PSDIDX*2 bytes);
+    "double buffer base" per LIBGS.H.
+  - GsDRAWENV = 0x8018DA9C, 92 bytes = the LIBGPU.H DRAWENV exactly:
+    clip@+0 (8), ofs[2]@+8 (DAA4/A6 - path A writes the sums here),
+    tw@+0xC, tpage@+0x14, dtd/dfe/isbg@+0x16-18, r0g0b0@+0x19-1B,
+    DR_ENV@+0x1C. valiable_init zeroes DAA4..DAB4 (everything after
+    clip) - the zero range is the struct proof.
+  - GsDISPENV = 0x8018DAF8, 20 bytes (abuts GsDRAWENV's end exactly):
+    disp@+0, screen@+8, isinter/isrgb24/pad@+0x10-13; GsSwapDispBuff
+    stores PSDBASE[PSDIDX] into disp.x/y; valiable_init zeroes
+    through +0x12.
+  - PSDOFSX = 0x8018DB14, PSDOFSY = 0x8018DB18 (4 B words, ALL
+    accesses are sh to the low halves): zeroed by gte_init and path A;
+    stored (sh) with the computed offsets by path B after its
+    func_80062FCC(X,Y) call; read (lh x2) by func_80070998.
+- GsSetDrawBuffOffset semantics now fully decoded. Path A (PSDGPU != 0,
+  lhu loads): GsDRAWENV.ofs[0/1] = POSITION.offx/offy + PSDBASEX/Y
+  [PSDIDX]; PSDOFSX/Y = 0; func_800604E0(&GsDRAWENV); tail j
+  0x80072DB8. Path B (PSDGPU == 0, lh loads): X = POSITION.offx +
+  PSDBASEX[1-PSDIDX], Y = POSITION.offy + PSDBASEY[1-PSDIDX];
+  func_80062FCC(X, Y); PSDOFSX = X; PSDOFSY = Y (sh). gte_init calls
+  func_80062F38(0,0,0) then func_80062FCC(0,0) then zeroes PSDOFSX/Y.
+- CALLEE ANOMALY (blocks the C match, new project-level finding): all
+  three callee targets are MIDDLE-of-function entries, not function
+  starts. func_800604E0 is a dlabel inside data row data_80060368
+  (real code mis-typed data); func_80062FCC lands inside func_80062B04
+  (frame 0x38) at +0x4C8 - its first words store v0 to 0xf6e($gp) and
+  its "epilogue" restores ra from 0x30(sp), which is outside
+  GsSetDrawBuffOffset's 0x20 frame; the tail target 0x80072DB8 is the
+  loop-setup of a 0x88-frame function whose epilogue restores
+  0x84(sp). Cross-target byte search: neither callee's bytes exist in
+  any other baseline (not even mainmenu_eu); no sig-db member matches
+  them in ANY version (20162 sigs probed). gte_init and func_80062B04
+  have ZERO callers in the scan's current view. Working hypothesis:
+  PSYLINK placed continuation/shared-tail code overlapping larger
+  functions (cluster entries mid-body), and the paths through them are
+  dead at runtime (the 0x88-frame epilogue restore would read garbage
+  ra). Next session: determine whether path A/B are live (who writes
+  PSDGPU nonzero, who calls gte_init) - if the jal/j targets are dead,
+  the C match still needs them as curated-named callees, and the
+  open question becomes how GCC 2.6.3 emitted a frame-unpopped tail j
+  (sibcall with shared frame? PSYLINK relocation?) - check the 2.60
+  sig-db GS_002 sig's tail-j wildcard and compare against other
+  targets' GsSetDrawBuffOffset rows before writing any C.
+- The ratchet constraint (no D_/func_ tokens in src/) means the match
+  needs curated names for: PSDGPU, POSITION, PSDBASEX, PSDBASEY,
+  GsDRAWENV (+ RECT/DRAWENV type shims - check how src/ handles struct
+  types today), PSDOFSX, PSDOFSY, and the three callees. POSITION/
+  PSDBASEX/PSDBASEY/GsDRAWENV have canonical SDK names; PSDGPU/
+  PSDOFSX/PSDOFSY are 2.60-commons names (sig-db-backed); the callees
+  have no names yet (role-descriptive per the intr_trap_flag
+  precedent, or better once the anomaly is understood).
