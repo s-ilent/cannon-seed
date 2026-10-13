@@ -119,7 +119,7 @@ segments:
       - [0x17414, asm, func_80036C14]   # 0xe8 pinned
       - [0x174FC, c, func_80036CFC]   # 0x8
       - [0x17504, asm, func_80036D04]   # 0xc8 sdk
-      - [0x175CC, asm, func_80036DCC]   # 0x1c sdk
+      - [0x175CC, c, func_80036DCC]   # 0x1c sdk
       - [0x175E8, data, data_80036DE8]   # 0xbb4
       - [0x1819C, asm, func_8003799C]   # 0x34
       - [0x181D0, data, data_800379D0]   # 0xf8
