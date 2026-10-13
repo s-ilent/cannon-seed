@@ -716,3 +716,47 @@ targets; the linker auto-define pass now resolves curated names.**
   under nested nonmatchings/ paths (extract ran after the flip there);
   removed and the pattern is git-ignored — extract-after-flip noise no
   longer lands in the tree.
+
+## 2026-10-13 later — memclr + the EMULIB common-block discovery
+
+- memclr matched in C, all eight targets (commit after the INTR trio):
+  the rows already existed as sdk-marked asm rows everywhere, the body
+  references no statics, so it was a pure flip + write + verify. Source
+  shape matters and is documented in each unit: the guard-free countdown
+  for-loop (`for (i = len - 1; i != -1; i--) { *p = 0; p++; }`) is what
+  makes GCC 2.6.3 reproduce the retail body — loop rotation rewrites the
+  entry test into `beqz $a1` with the len-1 init in the delay slot, the
+  -1 sentinel lands in $v1 for the bottom `bne`, and the frame stays at
+  the retail 8 bytes. A guarded do-while (test `--i != -1`) produces the
+  same loop frameless (missing the sp dance); an up-counting for-loop
+  produces `blez` + `slt` instead of the sentinel. Each target carries
+  three byte-identical memclr copies (INTR / INTR_VB / INTR_DMA members
+  of the same source); the curated `memclr` copy is matched, the other
+  two stay func_-named asm. matched 152 -> 160, TOTAL 13822.
+- GsSetDrawBuffOffset evidence pass (writers-first, banked):
+  - The EMULIB.C family is THIRTEEN archive members (GS_001..GS_013),
+    each defining one function plus the SAME static set: PSDOFSX,
+    PSDOFSY, CLIP2, PSDBASEX, PSDBASEY, GsDSTACK, POSITION, PSDIDX,
+    PSDCNT, GsDRAWENV, GsDISPENV, PSDGPU, GsORGOFSX, GsORGOFSY (GS_001
+    adds GsInitGraph2, GS_004 GsSetOffset, GS_005 GsSetClip, GS_006
+    GsSetClip2D, GS_010 GsSwapDispBuff, GS_012 GsSetClip2, GS_013
+    GsSetOrign). The statics appear in every member's symbol directory
+    -> they are COMMON symbols (tentative definitions merged by the
+    linker into one bss instance). This explains why no per-member bss
+    layout exists: the layout is the whole-EXE link order of the merged
+    commons, scattered across several bss regions.
+  - mainmenu_jp GsSetDrawBuffOffset (0x8007F1D4, extent 0x11c) touches:
+    D_80194E3C (lh; the EMULIB mode flag; writers exist in 4 files -
+    the earlier "never written" guess was wrong), PSDIDX (lh x2,
+    curated), D_80189224 + D_80189226 (halves of a word; lh/lhu/sh
+    across 3 files), D_8014A3A4 + D_8014A3A8 (lhu reads here; sh
+    writers elsewhere - the two per-buffer offset slots), D_8018DAA4 +
+    D_8018DAA6 (word written by halves: sh), D_8018DB14 + D_8018DB18
+    (lh + sh - read-modify-write pair). Callees: func_800604E0 (jal,
+    path A) + tail j to D_80072DB8; func_80062FCC (jal, path B).
+  - Attribution route (next session): writers-first on the seven
+    unnamed statics (who stores what value when pins each one's role,
+    then the role matches the EMULIB name list), then the three callees
+    via the same member-placement evidence used for the trio. The
+    ratchet constraint means all ten symbols must be curated before the
+    C match can land.
