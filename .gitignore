@@ -51,3 +51,11 @@ tools-src/
 # into the CWD by decomp-permuter --debug):
 /debug_source.c
 /debug_compiled_object.o
+
+# splat regenerates per-symbol nonmatching stubs for c rows under a nested
+# nonmatchings/ path whenever extract runs after a flip; they are generated
+# references, not sources, and no gate reads them (first noticed as 12
+# accidentally committed SetVideoMode/GetVideoMode stubs in the VMODE
+# commit, cleaned up alongside the GsGetActiveBuff match):
+asm/*/nonmatchings/nonmatchings/
+asm/nonmatchings/nonmatchings/

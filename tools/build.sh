@@ -330,10 +330,25 @@ fi
 rm -f build/undef_syms.ld
 "$LD" -N -T "$LD_SCRIPT" --no-check-sections -o "$OUT_ELF" 2> build/ld.err || true
 if grep -q "undefined reference" build/ld.err; then
-    "$PY" - <<EOF
+    "$PY" - "$TARGET" <<EOF
 import re, sys
 errs = open("build/ld.err", errors="replace").read()
 names = sorted(set(re.findall(r"undefined reference to \`([A-Za-z_.][A-Za-z0-9_.]*)'", errs)))
+# Committed per-target symbols file: the retail placement of every
+# curated name. Symbols the tree already knows by real name (Psy-Q bss
+# statics beyond the payload segment, like LIBGS's PSDIDX) carry no
+# address in their spelling and no dlabel renders for them, so the
+# address-encoded fallbacks below cannot see them. Their address in
+# this file IS the retail value - the same principle as the encoded
+# names, just spelled out in the table instead of the symbol.
+symaddr = {}
+try:
+    for ln in open(f"config/symbols.{sys.argv[1]}.txt"):
+        m = re.match(r"^(\\w+) = 0x([0-9A-Fa-f]+);", ln)
+        if m:
+            symaddr[m.group(1)] = int(m.group(2), 16)
+except FileNotFoundError:
+    pass
 out, bad = [], []
 for n in names:
     # spimdisasm names unresolved references after their runtime value;
@@ -352,6 +367,10 @@ for n in names:
     m = re.match(r"^\.L([0-9A-Fa-f]{8})$", n)
     if m:
         out.append(f"{n} = 0x{m.group(1)};")
+        continue
+    a = symaddr.get(n)
+    if a is not None:
+        out.append(f"{n} = 0x{a:X};")
         continue
     bad.append(n)
 if bad:
