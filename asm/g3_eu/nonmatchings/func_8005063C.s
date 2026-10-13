@@ -10,8 +10,8 @@
 nonmatching StopCallback, 0x30
 
 glabel StopCallback
-    /* 30E3C 8005063C 0980023C */  lui        $v0, %hi(D_80097C90)
-    /* 30E40 80050640 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 30E3C 8005063C 0980023C */  lui        $v0, %hi(intr_start_tab)
+    /* 30E40 80050640 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
     /* 30E44 80050644 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 30E48 80050648 1000BFAF */  sw         $ra, 0x10($sp)
     /* 30E4C 8005064C 1000428C */  lw         $v0, 0x10($v0)

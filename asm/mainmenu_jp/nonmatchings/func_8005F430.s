@@ -110,7 +110,7 @@ glabel func_8005F584
     /* 3FD84 8005F584 0D80023C */  lui        $v0, (0x800D0000 >> 16)
 endlabel func_8005F584
 
-nonmatching func_8005F588, 0x28
+nonmatching func_8005F588, 0x20
 
 glabel func_8005F588
     /* 3FD88 8005F588 0CA24294 */  lhu        $v0, -0x5DF4($v0)
@@ -121,9 +121,14 @@ glabel func_8005F588
     /* 3FD9C 8005F59C 00140200 */  sll        $v0, $v0, 16
     /* 3FDA0 8005F5A0 03004014 */  bnez       $v0, func_8005F5B0
     /* 3FDA4 8005F5A4 10000234 */   ori       $v0, $zero, 0x10
-    /* 3FDA8 8005F5A8 0D80013C */  lui        $at, %hi(D_800CA20C)
-    /* 3FDAC 8005F5AC 0CA222A4 */  sh         $v0, %lo(D_800CA20C)($at)
 endlabel func_8005F588
+
+nonmatching intr_start_aux4
+
+dlabel intr_start_aux4
+    /* 3FDA8 8005F5A8 0D80013C */ .word 0x3C01800D
+    /* 3FDAC 8005F5AC 0CA222A4 */ .word 0xA422A20C
+enddlabel intr_start_aux4
 
 nonmatching func_8005F5B0, 0x38
 
@@ -537,12 +542,12 @@ glabel func_8005FA28
     /* 40234 8005FA34 ACA525A4 */  sh         $a1, %lo(D_8014A5AC)($at)
 endlabel func_8005FA28
 
-nonmatching func_8005FA38, 0x8
+nonmatching intr_start_aux6
 
-glabel func_8005FA38
-    /* 40238 8005FA38 345E010C */  jal        func_800578D0
-    /* 4023C 8005FA3C 00000000 */   nop
-endlabel func_8005FA38
+dlabel intr_start_aux6
+    /* 40238 8005FA38 345E010C */ .word 0x0C015E34
+    /* 4023C 8005FA3C 00000000 */ .word 0x00000000
+enddlabel intr_start_aux6
 
 nonmatching func_8005FA40, 0x10
 

@@ -12,8 +12,8 @@ nonmatching trapIntr, 0x1E8
 glabel trapIntr
     /* 30FBC 800507BC D8FFBD27 */  addiu      $sp, $sp, -0x28
     /* 30FC0 800507C0 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 30FC4 800507C4 0980113C */  lui        $s1, %hi(D_80096C08)
-    /* 30FC8 800507C8 086C3126 */  addiu      $s1, $s1, %lo(D_80096C08)
+    /* 30FC4 800507C4 0980113C */  lui        $s1, %hi(intr_active_flag)
+    /* 30FC8 800507C8 086C3126 */  addiu      $s1, $s1, %lo(intr_active_flag)
     /* 30FCC 800507CC 2400BFAF */  sw         $ra, 0x24($sp)
     /* 30FD0 800507D0 2000B4AF */  sw         $s4, 0x20($sp)
     /* 30FD4 800507D4 1C00B3AF */  sw         $s3, 0x1C($sp)
@@ -24,8 +24,8 @@ glabel trapIntr
   alabel func_800507E8
     /* 30FE8 800507E8 0B004014 */  bnez       $v0, .L80050818
     /* 30FEC 800507EC 00000000 */   nop
-    /* 30FF0 800507F0 0980023C */  lui        $v0, %hi(D_80097C94)
-    /* 30FF4 800507F4 947C428C */  lw         $v0, %lo(D_80097C94)($v0)
+    /* 30FF0 800507F0 0980023C */  lui        $v0, %hi(intr_imask_ptr)
+    /* 30FF4 800507F4 947C428C */  lw         $v0, %lo(intr_imask_ptr)($v0)
     /* 30FF8 800507F8 00000000 */  nop
     /* 30FFC 800507FC 00004594 */  lhu        $a1, 0x0($v0)
     /* 31000 80050800 0280043C */  lui        $a0, %hi(D_8002167C)
@@ -35,8 +35,8 @@ glabel trapIntr
     /* 31010 80050810 AD2B010C */  jal        func_8004AEB4
     /* 31014 80050814 00000000 */   nop
   .L80050818:
-    /* 31018 80050818 0980043C */  lui        $a0, %hi(D_80097C94)
-    /* 3101C 8005081C 947C848C */  lw         $a0, %lo(D_80097C94)($a0)
+    /* 31018 80050818 0980043C */  lui        $a0, %hi(intr_imask_ptr)
+    /* 3101C 8005081C 947C848C */  lw         $a0, %lo(intr_imask_ptr)($a0)
     /* 31020 80050820 01000234 */  ori        $v0, $zero, 0x1
     /* 31024 80050824 0980013C */  lui        $at, %hi(intr_trap_flag)
     /* 31028 80050828 0A6C22A4 */  sh         $v0, %lo(intr_trap_flag)($at)
@@ -62,8 +62,8 @@ glabel trapIntr
     /* 31070 80050870 01000232 */   andi      $v0, $s0, 0x1
     /* 31074 80050874 0B004010 */  beqz       $v0, .L800508A4
     /* 31078 80050878 04103302 */   sllv      $v0, $s3, $s1
-    /* 3107C 8005087C 0980033C */  lui        $v1, %hi(D_80097C94)
-    /* 31080 80050880 947C638C */  lw         $v1, %lo(D_80097C94)($v1)
+    /* 3107C 8005087C 0980033C */  lui        $v1, %hi(intr_imask_ptr)
+    /* 31080 80050880 947C638C */  lw         $v1, %lo(intr_imask_ptr)($v1)
     /* 31084 80050884 27100200 */  nor        $v0, $zero, $v0
     /* 31088 80050888 000062A4 */  sh         $v0, 0x0($v1)
     /* 3108C 8005088C 0000428E */  lw         $v0, 0x0($s2)
@@ -79,8 +79,8 @@ glabel trapIntr
     /* 310B0 800508B0 EDFF4014 */  bnez       $v0, .L80050868
     /* 310B4 800508B4 01003126 */   addiu     $s1, $s1, 0x1
   .L800508B8:
-    /* 310B8 800508B8 0980043C */  lui        $a0, %hi(D_80097C94)
-    /* 310BC 800508BC 947C848C */  lw         $a0, %lo(D_80097C94)($a0)
+    /* 310B8 800508B8 0980043C */  lui        $a0, %hi(intr_imask_ptr)
+    /* 310BC 800508BC 947C848C */  lw         $a0, %lo(intr_imask_ptr)($a0)
     /* 310C0 800508C0 0980023C */  lui        $v0, %hi(D_80096C38)
     /* 310C4 800508C4 386C4294 */  lhu        $v0, %lo(D_80096C38)($v0)
     /* 310C8 800508C8 0980033C */  lui        $v1, %hi(intr_mask_ptr)
@@ -92,8 +92,8 @@ glabel trapIntr
     /* 310E0 800508E0 DEFF0016 */  bnez       $s0, .L8005085C
     /* 310E4 800508E4 00000000 */   nop
   .L800508E8:
-    /* 310E8 800508E8 0980053C */  lui        $a1, %hi(D_80097C94)
-    /* 310EC 800508EC 947CA58C */  lw         $a1, %lo(D_80097C94)($a1)
+    /* 310E8 800508E8 0980053C */  lui        $a1, %hi(intr_imask_ptr)
+    /* 310EC 800508EC 947CA58C */  lw         $a1, %lo(intr_imask_ptr)($a1)
     /* 310F0 800508F0 0980063C */  lui        $a2, %hi(intr_mask_ptr)
     /* 310F4 800508F4 987CC68C */  lw         $a2, %lo(intr_mask_ptr)($a2)
     /* 310F8 800508F8 0000A294 */  lhu        $v0, 0x0($a1)
@@ -117,8 +117,8 @@ glabel trapIntr
     /* 31140 80050940 0000C694 */  lhu        $a2, 0x0($a2)
     /* 31144 80050944 151F010C */  jal        func_80047C54
     /* 31148 80050948 00000000 */   nop
-    /* 3114C 8005094C 0980023C */  lui        $v0, %hi(D_80097C94)
-    /* 31150 80050950 947C428C */  lw         $v0, %lo(D_80097C94)($v0)
+    /* 3114C 8005094C 0980023C */  lui        $v0, %hi(intr_imask_ptr)
+    /* 31150 80050950 947C428C */  lw         $v0, %lo(intr_imask_ptr)($v0)
     /* 31154 80050954 0980013C */  lui        $at, %hi(D_80097CA0)
     /* 31158 80050958 A07C20AC */  sw         $zero, %lo(D_80097CA0)($at)
     /* 3115C 8005095C 000040A4 */  sh         $zero, 0x0($v0)

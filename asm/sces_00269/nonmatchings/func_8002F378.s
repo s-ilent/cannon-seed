@@ -195,15 +195,19 @@ glabel func_8002F4C8
     /* FCCC 8002F4CC C80082AF */  sw         $v0, 0xC8($gp)
 endlabel func_8002F4C8
 
-nonmatching func_8002F4D0, 0x10
+nonmatching func_8002F4D0, 0x8
 
 glabel func_8002F4D0
     /* FCD0 8002F4D0 0000C38C */  lw         $v1, 0x0($a2)
     /* FCD4 8002F4D4 FFFF0224 */  addiu      $v0, $zero, -0x1
-  alabel func_8002F4D8
-    /* FCD8 8002F4D8 BBFF6214 */  bne        $v1, $v0, func_8002F3C8
-    /* FCDC 8002F4DC 20001026 */   addiu     $s0, $s0, 0x20
 endlabel func_8002F4D0
+
+nonmatching intr_start_aux6
+
+dlabel intr_start_aux6
+    /* FCD8 8002F4D8 BBFF6214 */ .word 0x1462FFBB
+    /* FCDC 8002F4DC 20001026 */ .word 0x26100020
+enddlabel intr_start_aux6
 
 nonmatching func_8002F4E0, 0x8
 
@@ -219,7 +223,6 @@ glabel func_8002F4E8
     /* FCEC 8002F4EC 2C00B58F */  lw         $s5, 0x2C($sp)
     /* FCF0 8002F4F0 2800B48F */  lw         $s4, 0x28($sp)
     /* FCF4 8002F4F4 2400B38F */  lw         $s3, 0x24($sp)
-  alabel func_8002F4F8
     /* FCF8 8002F4F8 2000B28F */  lw         $s2, 0x20($sp)
     /* FCFC 8002F4FC 1C00B18F */  lw         $s1, 0x1C($sp)
     /* FD00 8002F500 1800B08F */  lw         $s0, 0x18($sp)

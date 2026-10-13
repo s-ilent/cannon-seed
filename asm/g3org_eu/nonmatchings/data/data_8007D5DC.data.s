@@ -56774,6 +56774,11 @@ nonmatching intr_saved_dicr
 dlabel intr_saved_dicr
     /* 84148 800A3948 50FBFFFF */ .word 0xFFFFFB50
     /* 8414C 800A394C 90E70000 */ .word 0x0000E790
+enddlabel intr_saved_dicr
+
+nonmatching D_800A3950
+
+dlabel D_800A3950
     /* 84150 800A3950 00000000 */ .word 0x00000000
     /* 84154 800A3954 78940880 */ .word D_80089478
     /* 84158 800A3958 088A0B80 */ .word D_800B8A08
@@ -57809,7 +57814,7 @@ dlabel intr_saved_dicr
     /* 85170 800A4970 16080000 */ .word 0x00000816
     /* 85174 800A4974 60CD0880 */ .word D_8008CD60
     /* 85178 800A4978 16080000 */ .word 0x00000816
-enddlabel intr_saved_dicr
+enddlabel D_800A3950
 
 nonmatching D_800A497C
 
@@ -57822,8 +57827,13 @@ dlabel D_800A497C
     /* 85190 800A4990 48080000 */ .word 0x00000848
     /* 85194 800A4994 E0CD0880 */ .word D_8008CDE0
     /* 85198 800A4998 48080000 */ .word 0x00000848
-    /* 8519C 800A499C 00CE0880 */ .word D_8008CE00
 enddlabel D_800A497C
+
+nonmatching intr_start_tab
+
+dlabel intr_start_tab
+    /* 8519C 800A499C 00CE0880 */ .word D_8008CE00
+enddlabel intr_start_tab
 
 nonmatching intr_imask_ptr
 

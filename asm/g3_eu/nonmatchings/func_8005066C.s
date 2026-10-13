@@ -10,8 +10,8 @@
 nonmatching RestartCallback, 0x30
 
 glabel RestartCallback
-    /* 30E6C 8005066C 0980023C */  lui        $v0, %hi(D_80097C90)
-    /* 30E70 80050670 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 30E6C 8005066C 0980023C */  lui        $v0, %hi(intr_start_tab)
+    /* 30E70 80050670 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
     /* 30E74 80050674 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 30E78 80050678 1000BFAF */  sw         $ra, 0x10($sp)
     /* 30E7C 8005067C 1800428C */  lw         $v0, 0x18($v0)

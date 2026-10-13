@@ -10,8 +10,8 @@
 nonmatching ResetCallback, 0x30
 
 glabel ResetCallback
-    /* 30D48 80050548 0980023C */  lui        $v0, %hi(D_80097C90)
-    /* 30D4C 8005054C 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 30D48 80050548 0980023C */  lui        $v0, %hi(intr_start_tab)
+    /* 30D4C 8005054C 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
     /* 30D50 80050550 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 30D54 80050554 1000BFAF */  sw         $ra, 0x10($sp)
     /* 30D58 80050558 0C00428C */  lw         $v0, 0xC($v0)

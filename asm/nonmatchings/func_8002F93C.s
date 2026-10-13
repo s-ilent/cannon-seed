@@ -98,19 +98,19 @@ nonmatching func_8002F9CC, 0x10
 
 glabel func_8002F9CC
     /* 101CC 8002F9CC C0120200 */  sll        $v0, $v0, 11
-    /* 101D0 8002F9D0 02006210 */  beq        $v1, $v0, func_8002F9DC
+    /* 101D0 8002F9D0 02006210 */  beq        $v1, $v0, intr_start_aux6
     /* 101D4 8002F9D4 0600043C */   lui       $a0, (0x60000 >> 16)
     /* 101D8 8002F9D8 01001026 */  addiu      $s0, $s0, 0x1
 endlabel func_8002F9CC
 
-nonmatching func_8002F9DC, 0x10
+nonmatching intr_start_aux6
 
-glabel func_8002F9DC
-    /* 101DC 8002F9DC F8B6000C */  jal        func_8002DBE0
-    /* 101E0 8002F9E0 00608434 */   ori       $a0, $a0, 0x6000
-    /* 101E4 8002F9E4 CC0082AF */  sw         $v0, %gp_rel(D_800632F8)($gp)
-    /* 101E8 8002F9E8 07004014 */  bnez       $v0, func_8002FA08
-endlabel func_8002F9DC
+dlabel intr_start_aux6
+    /* 101DC 8002F9DC F8B6000C */ .word 0x0C00B6F8
+    /* 101E0 8002F9E0 00608434 */ .word 0x34846000
+    /* 101E4 8002F9E4 CC0082AF */ .word 0xAF8200CC
+    /* 101E8 8002F9E8 07004014 */ .word 0x14400007
+enddlabel intr_start_aux6
 
 nonmatching func_8002F9EC, 0x1C
 

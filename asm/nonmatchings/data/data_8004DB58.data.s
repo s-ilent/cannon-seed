@@ -508,11 +508,11 @@ dlabel D_8004DB58
     /* 2EB20 8004E320 4B22010C */ .word 0x0C01224B
 enddlabel D_8004DB58
 
-nonmatching D_8004E324
+nonmatching intr_start_tab
 
-dlabel D_8004E324
+dlabel intr_start_tab
     /* 2EB24 8004E324 00000000 */ .word 0x00000000
-enddlabel D_8004E324
+enddlabel intr_start_tab
 
 nonmatching intr_imask_ptr
 

@@ -64,6 +64,14 @@ intr_dicr_ptr = 0x8004E330; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x8002F87C; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x8002F95C; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x80031550; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x80031008; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8002F1B8; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8002F1E4; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8002ED44; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8002F54C; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8002F1F4; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8002F9DC; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x8004E324; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 intr_restart_begin = 0x8002F8FC; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x8002F9AC; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x8002F1A4; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
@@ -382,6 +390,13 @@ startIntr = 0x800506E0; // LIBETC INTR member .text+0x198 (extent 0xdc); sdk_mem
 trapIntr = 0x800507BC; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x800509A4; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
 stopIntr = 0x80050AF8; // LIBETC INTR member .text+0x5b0 (extent 0xb0); sdk_members.py unique placement + sig-db agrees
+intr_start_aux1 = 0x8004A740; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8004A76C; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8004A2CC; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8004AA24; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8004A77C; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8004AE94; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x80097C90; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 restartIntr = 0x80050BA8; // LIBETC INTR member .text+0x660 (extent 0x88); sdk_members.py unique placement + sig-db agrees
 intr_restart_begin = 0x8004ADC4; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x8004AE64; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
@@ -527,6 +542,14 @@ intr_dicr_ptr = 0x80097480; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x8004B3C4; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x8004B4A4; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x800511E8; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x80050CA0; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8004AD00; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8004AD2C; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8004A88C; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8004B094; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8004AD3C; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8004B524; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x80097474; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 intr_restart_begin = 0x8004B444; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x8004B4F4; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x8004ACEC; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
@@ -670,6 +693,14 @@ intr_dicr_ptr = 0x800A49A8; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x80048198; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x80048268; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x8004D95C; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x8004D414; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x80047B94; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x80047BC0; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x80047720; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x80047E78; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x80047BD0; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x800482E8; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x800A499C; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 intr_restart_begin = 0x80048218; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x800482B8; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x80047B80; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
@@ -822,6 +853,14 @@ intr_dicr_ptr = 0x800A41C8; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x80048860; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x80048940; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x8004E094; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x8004DB4C; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8004819C; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x800481C8; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x80047D28; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x80048530; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x800481D8; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x800489C0; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x800A41BC; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 intr_restart_begin = 0x800488E0; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x80048990; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x80048188; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
@@ -957,6 +996,14 @@ intr_dicr_ptr = 0x800B5508; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x8005F220; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x8005F2F0; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x80068084; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x80067B3C; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8005EC1C; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8005EC48; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8005E7A8; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8005EF00; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8005EC58; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8005F370; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x800B54FC; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 intr_restart_begin = 0x8005F2A0; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x8005F340; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x8005EC08; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
@@ -1139,6 +1186,51 @@ intr_dicr_ptr = 0x800B4CF4; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x8005F8D8; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x8005F9B8; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x800687AC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+// startIntr statics: LIBETC INTR member start-path (member .text+0x198,
+// extent 0xdc, ending at trapIntr; sig-db labels loc_210/loc_260 are its
+// internal branch targets). No Psy-Q symbol names exist for the statics;
+// role-descriptive names, evidence-first:
+// - startIntr body (55-slot masked-word fingerprint, g3_eu template,
+//   scripts/startintr_fp.py): gate on intr_active_flag (return 0 when
+//   set), zero the mask port through intr_mask_ptr, write the re-read
+//   zeroed halfword through intr_imask_ptr, store 0x33333333 (the DMA
+//   DICR per-channel+master enable pattern) through intr_dicr_ptr,
+//   call the start-path aux cluster, derive flag+0x3c into the same s0
+//   (array-decay pin overwrite), store flag+0x1018 through it, call
+//   intr_restart_begin(flag+0x38) with the arg in the call delay slot,
+//   set the gate to 1, run aux4/aux5 (returns stored through
+//   intr_start_tab at +0x14/+0x4), intr_restart_commit, and return the
+//   flag address (q - 0x3c from the overwritten pin).
+// - intr_start_aux1..aux6: the start-path callee cluster (jal slots
+//   fixed in the fingerprint; addresses extracted per target).
+// - intr_start_tab (word pointer, mask-8): loaded twice by startIntr
+//   (the second load after an opaque call - fresh each time); the
+//   aux4/aux5 return values are stored at +0x14/+0x4 through it.
+// - Fingerprint placement: 5 targets at stopIntr-0x548 (older INTR
+//   revision head offset), sces+g3_eu at stopIntr-0x418 (Psy-Q 3.3
+//   sig-db offset). g3_jp is SPLIT: head 0x50 bytes at stopIntr-0x548,
+//   then a 0x130-byte high-entropy foreign blob spliced mid-function,
+//   then the tail (slots 20..54) at +0x130; the member base there
+//   (0x80050B08) keeps CheckCallback/GetIntrMask/SetIntrMask and the
+//   startIntr head at the sig-db offsets while everything after the
+//   splice is shifted +0x130. Retail never calls the INTR subsystem,
+//   so the splice shipped unnoticed; g3_jp therefore stays data (no
+//   carve, no C unit possible - the function has no contiguous extent).
+// - C-attempt status (scripts/startintr/p1.c, probed through cc1 2.6.3):
+//   the naive reconstruction diverges - GCC CSE-merges flag+0x38 (the
+//   aux2 arg) with restart_begin's arg and hoists it into a callee-
+//   saved register (retail computes it in aux2's delay slot from the
+//   pin), the pin lands in s1, frame 0x20 vs retail 0x18. The stopIntr
+//   shapes carry over but the CSE break + single-register allocation
+//   need dedicated probe iterations (next session).
+startIntr = 0x80068264; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8005F214; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8005F240; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8005EDA0; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8005F5A8; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8005F250; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8005FA38; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x800B4CE8; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 // restartIntr: LIBETC INTR member (sig-db INTR.OBJ .text+0x660,
 // extent 0x88, ending right before memclr). Byte-fingerprint evidence
 // (scripts/restartintr_fp.py): the g3_eu body's 34-slot masked word
@@ -1364,6 +1456,14 @@ intr_dicr_ptr = 0x8004DFB8; // LIBETC INTR member backing static (word pointer, 
 intr_stop_begin = 0x8002F388; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x8002F458; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x80030FEC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x80030BD4; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8002ED84; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8002EDB0; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8002E910; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8002F068; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8002EDC0; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8002F4D8; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x8004DFAC; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
 intr_restart_begin = 0x8002F408; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x8002F4A8; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x8002ED70; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp

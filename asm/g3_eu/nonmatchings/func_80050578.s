@@ -10,8 +10,8 @@
 nonmatching InterruptCallback, 0x30
 
 glabel InterruptCallback
-    /* 30D78 80050578 0980023C */  lui        $v0, %hi(D_80097C90)
-    /* 30D7C 8005057C 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 30D78 80050578 0980023C */  lui        $v0, %hi(intr_start_tab)
+    /* 30D7C 8005057C 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
     /* 30D80 80050580 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 30D84 80050584 1000BFAF */  sw         $ra, 0x10($sp)
     /* 30D88 80050588 0800428C */  lw         $v0, 0x8($v0)

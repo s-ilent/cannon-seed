@@ -2494,20 +2494,20 @@ enddlabel jtbl_80021EB4
 nonmatching D_80021EC8
 
 dlabel D_80021EC8
-    /* 26C8 80021EC8 3C0B0580 */ .word 0x80050B3C
-    /* 26CC 80021ECC 3C0B0580 */ .word 0x80050B3C
+    /* 26C8 80021EC8 3C0B0580 */ .word stopIntr + 0x44
+    /* 26CC 80021ECC 3C0B0580 */ .word stopIntr + 0x44
 enddlabel D_80021EC8
 
 nonmatching D_80021ED0
 
 dlabel D_80021ED0
-    /* 26D0 80021ED0 3C0B0580 */ .word 0x80050B3C
-    /* 26D4 80021ED4 280B0580 */ .word 0x80050B28
-    /* 26D8 80021ED8 280B0580 */ .word 0x80050B28
-    /* 26DC 80021EDC 280B0580 */ .word 0x80050B28
-    /* 26E0 80021EE0 080B0580 */ .word 0x80050B08
-    /* 26E4 80021EE4 080B0580 */ .word 0x80050B08
-    /* 26E8 80021EE8 080B0580 */ .word 0x80050B08
+    /* 26D0 80021ED0 3C0B0580 */ .word stopIntr + 0x44
+    /* 26D4 80021ED4 280B0580 */ .word stopIntr + 0x30
+    /* 26D8 80021ED8 280B0580 */ .word stopIntr + 0x30
+    /* 26DC 80021EDC 280B0580 */ .word stopIntr + 0x30
+    /* 26E0 80021EE0 080B0580 */ .word stopIntr + 0x10
+    /* 26E4 80021EE4 080B0580 */ .word stopIntr + 0x10
+    /* 26E8 80021EE8 080B0580 */ .word stopIntr + 0x10
     /* 26EC 80021EEC 47505520 */ .word 0x20555047
     /* 26F0 80021EF0 434F4445 */ .word 0x45444F43
     /* 26F4 80021EF4 20253032 */ .word 0x32302520

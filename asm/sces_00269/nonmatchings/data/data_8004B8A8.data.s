@@ -1583,6 +1583,11 @@ nonmatching intr_saved_dicr
 dlabel intr_saved_dicr
     /* 2D758 8004CF58 C0FFC226 */ .word 0x26C2FFC0
     /* 2D75C 8004CF5C FF004230 */ .word 0x304200FF
+enddlabel intr_saved_dicr
+
+nonmatching D_8004CF60
+
+dlabel D_8004CF60
     /* 2D760 8004CF60 4000422C */ .word 0x2C420040
     /* 2D764 8004CF64 07004010 */ .word 0x10400007
     /* 2D768 8004CF68 FF00C332 */ .word 0x32C300FF
@@ -2015,7 +2020,7 @@ dlabel intr_saved_dicr
     /* 2DE14 8004D614 28D6AE99 */ .word 0x99AED628
     /* 2DE18 8004D618 4DA19899 */ .word 0x9998A14D
     /* 2DE1C 8004D61C 557FCCD4 */ .word 0xD4CC7F55
-enddlabel intr_saved_dicr
+enddlabel D_8004CF60
 
 nonmatching D_8004D620
 

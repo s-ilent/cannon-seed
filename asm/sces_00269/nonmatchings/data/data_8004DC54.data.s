@@ -228,11 +228,11 @@ dlabel D_8004DF64
     /* 2E7A8 8004DFA8 B73DF351 */ .word 0x51F33DB7
 enddlabel D_8004DF64
 
-nonmatching D_8004DFAC
+nonmatching intr_start_tab
 
-dlabel D_8004DFAC
+dlabel intr_start_tab
     /* 2E7AC 8004DFAC 3B6C90E8 */ .word 0xE8906C3B
-enddlabel D_8004DFAC
+enddlabel intr_start_tab
 
 nonmatching intr_imask_ptr
 

@@ -10,8 +10,8 @@
 nonmatching DMACallback, 0x30
 
 glabel DMACallback
-    /* 30DA8 800505A8 0980023C */  lui        $v0, %hi(D_80097C90)
-    /* 30DAC 800505AC 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 30DA8 800505A8 0980023C */  lui        $v0, %hi(intr_start_tab)
+    /* 30DAC 800505AC 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
     /* 30DB0 800505B0 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 30DB4 800505B4 1000BFAF */  sw         $ra, 0x10($sp)
     /* 30DB8 800505B8 0400428C */  lw         $v0, 0x4($v0)

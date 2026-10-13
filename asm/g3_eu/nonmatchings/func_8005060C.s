@@ -10,8 +10,8 @@
 nonmatching VSyncCallbacks, 0x30
 
 glabel VSyncCallbacks
-    /* 30E0C 8005060C 0980023C */  lui        $v0, %hi(D_80097C90)
-    /* 30E10 80050610 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 30E0C 8005060C 0980023C */  lui        $v0, %hi(intr_start_tab)
+    /* 30E10 80050610 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
     /* 30E14 80050614 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 30E18 80050618 1000BFAF */  sw         $ra, 0x10($sp)
     /* 30E1C 8005061C 1400428C */  lw         $v0, 0x14($v0)

@@ -246,7 +246,7 @@ glabel func_8005ED24
     /* 3F57C 8005ED7C 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8005ED24
 
-nonmatching func_8005ED80, 0x64
+nonmatching func_8005ED80, 0x20
 
 glabel func_8005ED80
     /* 3F580 8005ED80 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -257,24 +257,29 @@ glabel func_8005ED80
     /* 3F594 8005ED94 00000000 */   nop
     /* 3F598 8005ED98 0D80033C */  lui        $v1, %hi(D_800C9F7C)
     /* 3F59C 8005ED9C 7C9F6394 */  lhu        $v1, %lo(D_800C9F7C)($v1)
-    /* 3F5A0 8005EDA0 00000000 */  nop
-    /* 3F5A4 8005EDA4 FFFF6224 */  addiu      $v0, $v1, -0x1
-    /* 3F5A8 8005EDA8 0D80013C */  lui        $at, %hi(D_800C9F7C)
-    /* 3F5AC 8005EDAC 7C9F22A4 */  sh         $v0, %lo(D_800C9F7C)($at)
-    /* 3F5B0 8005EDB0 0C006014 */  bnez       $v1, func_8005EDE4
-    /* 3F5B4 8005EDB4 0F000334 */   ori       $v1, $zero, 0xF
-    /* 3F5B8 8005EDB8 0D80023C */  lui        $v0, %hi(D_800CA544)
-    /* 3F5BC 8005EDBC 44A54294 */  lhu        $v0, %lo(D_800CA544)($v0)
-    /* 3F5C0 8005EDC0 0D80013C */  lui        $at, %hi(D_800C9F7C)
-    /* 3F5C4 8005EDC4 7C9F23A4 */  sh         $v1, %lo(D_800C9F7C)($at)
-    /* 3F5C8 8005EDC8 01004224 */  addiu      $v0, $v0, 0x1
-    /* 3F5CC 8005EDCC 0D80013C */  lui        $at, %hi(D_800CA544)
-    /* 3F5D0 8005EDD0 44A522A4 */  sh         $v0, %lo(D_800CA544)($at)
-    /* 3F5D4 8005EDD4 015B010C */  jal        func_80056C04
-    /* 3F5D8 8005EDD8 00000000 */   nop
-    /* 3F5DC 8005EDDC D35A0108 */  j          func_80056B4C
-    /* 3F5E0 8005EDE0 00000000 */   nop
 endlabel func_8005ED80
+
+nonmatching intr_start_aux3
+
+dlabel intr_start_aux3
+    /* 3F5A0 8005EDA0 00000000 */ .word 0x00000000
+    /* 3F5A4 8005EDA4 FFFF6224 */ .word 0x2462FFFF
+    /* 3F5A8 8005EDA8 0D80013C */ .word 0x3C01800D
+    /* 3F5AC 8005EDAC 7C9F22A4 */ .word 0xA4229F7C
+    /* 3F5B0 8005EDB0 0C006014 */ .word 0x1460000C
+    /* 3F5B4 8005EDB4 0F000334 */ .word 0x3403000F
+    /* 3F5B8 8005EDB8 0D80023C */ .word 0x3C02800D
+    /* 3F5BC 8005EDBC 44A54294 */ .word 0x9442A544
+    /* 3F5C0 8005EDC0 0D80013C */ .word 0x3C01800D
+    /* 3F5C4 8005EDC4 7C9F23A4 */ .word 0xA4239F7C
+    /* 3F5C8 8005EDC8 01004224 */ .word 0x24420001
+    /* 3F5CC 8005EDCC 0D80013C */ .word 0x3C01800D
+    /* 3F5D0 8005EDD0 44A522A4 */ .word 0xA422A544
+    /* 3F5D4 8005EDD4 015B010C */ .word 0x0C015B01
+    /* 3F5D8 8005EDD8 00000000 */ .word 0x00000000
+    /* 3F5DC 8005EDDC D35A0108 */ .word 0x08015AD3
+    /* 3F5E0 8005EDE0 00000000 */ .word 0x00000000
+enddlabel intr_start_aux3
 
 nonmatching func_8005EDE4, 0x18
 
@@ -632,11 +637,16 @@ dlabel intr_restart_tail
     /* 3FA08 8005F208 00000000 */ .word 0x00000000
     /* 3FA0C 8005F20C 1000BF8F */ .word 0x8FBF0010
     /* 3FA10 8005F210 00000000 */ .word 0x00000000
-    /* 3FA14 8005F214 0800E003 */ .word 0x03E00008
-    /* 3FA18 8005F218 1800BD27 */ .word 0x27BD0018
 enddlabel intr_restart_tail
 
-nonmatching func_8005F21C, 0x48
+nonmatching intr_start_aux1
+
+dlabel intr_start_aux1
+    /* 3FA14 8005F214 0800E003 */ .word 0x03E00008
+    /* 3FA18 8005F218 1800BD27 */ .word 0x27BD0018
+enddlabel intr_start_aux1
+
+nonmatching func_8005F21C, 0x20
 
 glabel func_8005F21C
     /* 3FA1C 8005F21C E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -647,17 +657,27 @@ glabel func_8005F21C
     /* 3FA30 8005F230 00000000 */   nop
     /* 3FA34 8005F234 0D80033C */  lui        $v1, %hi(D_800C9F7C)
     /* 3FA38 8005F238 7C9F6394 */  lhu        $v1, %lo(D_800C9F7C)($v1)
-    /* 3FA3C 8005F23C 00000000 */  nop
-    /* 3FA40 8005F240 FFFF6224 */  addiu      $v0, $v1, -0x1
-    /* 3FA44 8005F244 0D80013C */  lui        $at, %hi(D_800C9F7C)
-    /* 3FA48 8005F248 7C9F22A4 */  sh         $v0, %lo(D_800C9F7C)($at)
-    /* 3FA4C 8005F24C 05006010 */  beqz       $v1, func_8005F264
-    /* 3FA50 8005F250 00000000 */   nop
-    /* 3FA54 8005F254 2B64010C */  jal        func_800590AC
-    /* 3FA58 8005F258 00000000 */   nop
-    /* 3FA5C 8005F25C FA5B0108 */  j          func_80056FE8
-    /* 3FA60 8005F260 00000000 */   nop
 endlabel func_8005F21C
+    /* 3FA3C 8005F23C 00000000 */  nop
+
+nonmatching intr_start_aux2
+
+dlabel intr_start_aux2
+    /* 3FA40 8005F240 FFFF6224 */ .word 0x2462FFFF
+    /* 3FA44 8005F244 0D80013C */ .word 0x3C01800D
+    /* 3FA48 8005F248 7C9F22A4 */ .word 0xA4229F7C
+    /* 3FA4C 8005F24C 05006010 */ .word 0x10600005
+enddlabel intr_start_aux2
+
+nonmatching intr_start_aux5
+
+dlabel intr_start_aux5
+    /* 3FA50 8005F250 00000000 */ .word 0x00000000
+    /* 3FA54 8005F254 2B64010C */ .word 0x0C01642B
+    /* 3FA58 8005F258 00000000 */ .word 0x00000000
+    /* 3FA5C 8005F25C FA5B0108 */ .word 0x08015BFA
+    /* 3FA60 8005F260 00000000 */ .word 0x00000000
+enddlabel intr_start_aux5
 
 nonmatching func_8005F264, 0x34
 

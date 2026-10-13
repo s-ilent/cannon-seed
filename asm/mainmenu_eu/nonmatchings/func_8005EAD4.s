@@ -117,6 +117,11 @@ dlabel intr_restart_tail
     /* 3F410 8005EC10 60288424 */ .word 0x24842860
     /* 3F414 8005EC14 EDDC000C */ .word 0x0C00DCED
     /* 3F418 8005EC18 00000000 */ .word 0x00000000
+enddlabel intr_restart_tail
+
+nonmatching intr_start_aux1
+
+dlabel intr_start_aux1
     /* 3F41C 8005EC1C 0D80023C */ .word 0x3C02800D
     /* 3F420 8005EC20 C0A74294 */ .word 0x9442A7C0
     /* 3F424 8005EC24 00000000 */ .word 0x00000000
@@ -128,15 +133,25 @@ dlabel intr_restart_tail
     /* 3F43C 8005EC3C 00000000 */ .word 0x00000000
     /* 3F440 8005EC40 0D80023C */ .word 0x3C02800D
     /* 3F444 8005EC44 70A74294 */ .word 0x9442A770
+enddlabel intr_start_aux1
+
+nonmatching intr_start_aux2
+
+dlabel intr_start_aux2
     /* 3F448 8005EC48 00000000 */ .word 0x00000000
     /* 3F44C 8005EC4C F8F74224 */ .word 0x2442F7F8
     /* 3F450 8005EC50 0D80013C */ .word 0x3C01800D
     /* 3F454 8005EC54 70A722A4 */ .word 0xA422A770
+enddlabel intr_start_aux2
+
+nonmatching intr_start_aux5
+
+dlabel intr_start_aux5
     /* 3F458 8005EC58 F559010C */ .word 0x0C0159F5
     /* 3F45C 8005EC5C 00000000 */ .word 0x00000000
     /* 3F460 8005EC60 865A0108 */ .word 0x08015A86
     /* 3F464 8005EC64 00000000 */ .word 0x00000000
-enddlabel intr_restart_tail
+enddlabel intr_start_aux5
 
 nonmatching func_8005EC68, 0x60
 
