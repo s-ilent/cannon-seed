@@ -26,6 +26,8 @@ Placeholder names are temporary. Ratchet placeholder counts so they only decreas
 
 This repository reconstructs the original program. Directories map to subsystems. Each subsystem has one responsibility and one function prefix. Overlays reside in separate directories for each binary. Store shared library code once, and list it in each overlay manifest.
 
+**Japan is the decompilation target. The Europe builds are a cross-check, not a co-target.** Match the JP row first; port the EU twin when the rollout is mechanical and skip it without ceremony when it is not. An EU port never gates a function's done. Both discs stay staged and all eight hashes stay in `config/sha1` as oracles — skipping an EU port does not retire that target's gate. Because the carve names are address-derived, an EU port of shared library code should reuse the JP source under the member's real name rather than minting a second address-named copy.
+
 Headers follow strict ownership. Place each declaration in the narrowest header that fits. Do not write per-function headers. Do not add file-scope `extern` declarations in C files. When you move a declaration, keep its exact width, signedness, and prototype.
 
 Translation-unit boundaries reflect the original source structure. Use this evidence order:

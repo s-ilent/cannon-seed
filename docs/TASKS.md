@@ -104,6 +104,21 @@ DONE 2026-10-12 — see Log. The reports now pin 3.3 (144 anchored placements,
 
 ## Log
 
+**2026-10-13 — region policy set: Japan is the target, Europe is the
+cross-check (GUIDELINES.md §2).**
+- Until now every library member was rolled out to all eight builds as a
+  matter of course (JP 85 / EU 83 matched), treating EU as a co-target. That
+  doubled the symbol count and the address-collision surface for code that is
+  byte-identical between regions.
+- From here: match the JP row first; port the EU twin when the rollout is
+  mechanical and skip it when it is not; an EU port never gates a function.
+  Already-landed EU matches stay — they are free verification. Both discs stay
+  staged; all eight hashes stay in `config/sha1` as oracles.
+- The durable fix for the per-target duplication is real member names: one
+  `SetVideoMode` file listed in each overlay manifest instead of eight
+  address-named copies (16 src files for the two VMODE getters today). EU
+  policy halves that; naming eliminates it.
+
 **2026-10-13 — the runtime-opaque blocks are sector framing; row-start
 reachability probed live.**
 - The two "runtime-opaque blocks" the 58Fxx pass pinned (mainmenu_jp
