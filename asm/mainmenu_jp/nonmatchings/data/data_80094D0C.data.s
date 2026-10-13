@@ -44754,11 +44754,11 @@ dlabel D_800B3848
     /* 9445E 800B3C5E */ .short 0xFFFF
 enddlabel D_800B3848
 
-nonmatching D_800B3C60
+nonmatching intr_active_flag
 
-dlabel D_800B3C60
+dlabel intr_active_flag
     /* 94460 800B3C60 */ .short 0x2382
-enddlabel D_800B3C60
+enddlabel intr_active_flag
 
 nonmatching intr_trap_flag
 
@@ -44778,15 +44778,15 @@ dlabel intr_trap_flag
     /* 94490 800B3C90 */ .short 0x0000
 enddlabel intr_trap_flag
 
-nonmatching D_800B3C92
+nonmatching intr_saved_mask
 
-dlabel D_800B3C92
+dlabel intr_saved_mask
     /* 94492 800B3C92 */ .short 0x0000
-enddlabel D_800B3C92
+enddlabel intr_saved_mask
 
-nonmatching D_800B3C94
+nonmatching intr_saved_dicr
 
-dlabel D_800B3C94
+dlabel intr_saved_dicr
     /* 94494 800B3C94 00000000 */ .word 0x00000000
     /* 94498 800B3C98 00007800 */ .word 0x00780000
     /* 9449C 800B3C9C 00000000 */ .word 0x00000000
@@ -45024,7 +45024,7 @@ dlabel D_800B3C94
     /* 9483C 800B403C 00000000 */ .word 0x00000000
     /* 94840 800B4040 0000F000 */ .word 0x00F00000
     /* 94844 800B4044 00000000 */ .word 0x00000000
-enddlabel D_800B3C94
+enddlabel intr_saved_dicr
 
 nonmatching D_800B4048
 
@@ -46647,9 +46647,13 @@ dlabel D_800B4048
     /* 954E6 800B4CE6 */ .short 0x0000
     /* 954E8 800B4CE8 */ .short 0x2B98
     /* 954EA 800B4CEA */ .short 0x0000
-    /* 954EC 800B4CEC */ .short 0xFFFF
-    /* 954EE 800B4CEE */ .short 0x0000
 enddlabel D_800B4048
+
+nonmatching intr_imask_ptr
+
+dlabel intr_imask_ptr
+    /* 954EC 800B4CEC FFFF0000 */ .word 0x0000FFFF
+enddlabel intr_imask_ptr
 
 nonmatching intr_mask_ptr
 
@@ -46657,12 +46661,12 @@ dlabel intr_mask_ptr
     /* 954F0 800B4CF0 00000000 */ .word 0x00000000
 enddlabel intr_mask_ptr
 
-nonmatching D_800B4CF4
+nonmatching intr_dicr_ptr
 
-dlabel D_800B4CF4
+dlabel intr_dicr_ptr
     /* 954F4 800B4CF4 00000000 */ .word 0x00000000
     /* 954F8 800B4CF8 00000000 */ .word 0x00000000
-enddlabel D_800B4CF4
+enddlabel intr_dicr_ptr
 
 nonmatching D_800B4CFC
 

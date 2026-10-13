@@ -44771,8 +44771,13 @@ nonmatching video_mode
 
 dlabel video_mode
     /* 94C70 800B4470 00007800 */ .word 0x00780000
-    /* 94C74 800B4474 */ .short 0x0000
 enddlabel video_mode
+
+nonmatching intr_active_flag
+
+dlabel intr_active_flag
+    /* 94C74 800B4474 */ .short 0x0000
+enddlabel intr_active_flag
 
 nonmatching intr_trap_flag
 
@@ -44789,7 +44794,18 @@ dlabel intr_trap_flag
     /* 94C98 800B4498 DC230000 */ .word 0x000023DC
     /* 94C9C 800B449C FFFF0000 */ .word 0x0000FFFF
     /* 94CA0 800B44A0 00000000 */ .word 0x00000000
-    /* 94CA4 800B44A4 00000000 */ .word 0x00000000
+    /* 94CA4 800B44A4 */ .short 0x0000
+enddlabel intr_trap_flag
+
+nonmatching intr_saved_mask
+
+dlabel intr_saved_mask
+    /* 94CA6 800B44A6 */ .short 0x0000
+enddlabel intr_saved_mask
+
+nonmatching intr_saved_dicr
+
+dlabel intr_saved_dicr
     /* 94CA8 800B44A8 00000000 */ .word 0x00000000
     /* 94CAC 800B44AC 00000000 */ .word 0x00000000
     /* 94CB0 800B44B0 00000000 */ .word 0x00000000
@@ -45026,7 +45042,7 @@ dlabel intr_trap_flag
     /* 9504C 800B484C 00000000 */ .word 0x00000000
     /* 95050 800B4850 00000000 */ .word 0x00000000
     /* 95054 800B4854 00000000 */ .word 0x00000000
-enddlabel intr_trap_flag
+enddlabel intr_saved_dicr
 
 nonmatching D_800B4858
 
@@ -46651,17 +46667,26 @@ dlabel D_800B4858
     /* 95CFA 800B54FA */ .short 0x63D7
     /* 95CFC 800B54FC */ .short 0xF9A6
     /* 95CFE 800B54FE */ .short 0x7AD3
-    /* 95D00 800B5500 */ .short 0x920B
-    /* 95D02 800B5502 */ .short 0xDA82
 enddlabel D_800B4858
+
+nonmatching intr_imask_ptr
+
+dlabel intr_imask_ptr
+    /* 95D00 800B5500 0B9282DA */ .word 0xDA82920B
+enddlabel intr_imask_ptr
 
 nonmatching intr_mask_ptr
 
 dlabel intr_mask_ptr
     /* 95D04 800B5504 B79FB25A */ .word 0x5AB29FB7
+enddlabel intr_mask_ptr
+
+nonmatching intr_dicr_ptr
+
+dlabel intr_dicr_ptr
     /* 95D08 800B5508 A78B516B */ .word 0x6B518BA7
     /* 95D0C 800B550C 922C77E9 */ .word 0xE9772C92
-enddlabel intr_mask_ptr
+enddlabel intr_dicr_ptr
 
 nonmatching D_800B5510
 

@@ -56,6 +56,14 @@ video_mode = 0x8004E500; // LIBETC VMODE member backing static; evidence under t
 CheckCallback = 0x80030FC4; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x80030FD4; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x80030FEC; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_active_flag = 0x8004D29C; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x8004D2CE; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x8004D2D0; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x8004E328; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x8004E330; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8002F87C; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8002F95C; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x80031550; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x8004D29E; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x8004E32C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 gte_rotate_z_matrix = 0x80038098; // LIBGS SCLIB member .text+0x0 (extent 0xb8); tools/sdk_members.py, unique placement
@@ -504,6 +512,14 @@ video_mode = 0x80097650; // LIBETC VMODE member backing static; evidence under t
 CheckCallback = 0x80050C5C; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x80050C6C; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x80050C84; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_active_flag = 0x800963EC; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x8009641E; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x80096420; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x80097478; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x80097480; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8004B3C4; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8004B4A4; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x800511E8; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800963EE; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x8009747C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 GsInitCoordinate2 = 0x800561FC; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
@@ -635,6 +651,14 @@ video_mode = 0x800A3910; // LIBETC VMODE member backing static; evidence under t
 CheckCallback = 0x8004D3D0; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x8004D3E0; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x8004D3F8; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_active_flag = 0x800A3914; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800A3946; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x800A3948; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x800A49A0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x800A49A8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x80048198; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x80048268; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x8004D95C; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800A3916; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800A49A4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 startIntrDMA = 0x8004DAD0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
@@ -775,6 +799,14 @@ video_mode = 0x800A4398; // LIBETC VMODE member backing static; evidence under t
 CheckCallback = 0x8004DB08; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x8004DB18; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x8004DB30; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_active_flag = 0x800A3134; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800A3166; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x800A3168; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x800A41C0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x800A41C8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x80048860; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x80048940; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x8004E094; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800A3136; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800A41C4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 GsSetDrawBuffClip = 0x80053490; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
@@ -898,6 +930,14 @@ video_mode = 0x800B4470; // LIBETC VMODE member backing static; evidence under t
 CheckCallback = 0x80067AF8; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x80067B08; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x80067B20; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+intr_active_flag = 0x800B4474; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800B44A6; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x800B44A8; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x800B5500; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x800B5508; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8005F220; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8005F2F0; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x80068084; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800B4476; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800B5504; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 startIntrDMA = 0x800681F8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
@@ -1036,6 +1076,46 @@ video_mode = 0x800B4EC4; // LIBETC VMODE member backing static; evidence above, 
 CheckCallback = 0x80068220; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x80068230; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x80068248; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+// stopIntr statics: LIBETC INTR member backing statics for the shutdown
+// member (extent 0xb0). No Psy-Q symbol names exist for the statics
+// (INTR.OBJ carries no bss in any sig-db version 2.60-4.70);
+// role-descriptive names, evidence-first:
+// - intr_active_flag (halfword, INTR state base): stopIntr reads it via
+//   la $s0 + lhu 0($s0) at entry and clears it through the same s0 at
+//   exit; startIntr/restartIntr share the gate (startIntr sets 1).
+//   Equals trap_flag - 2 in every build that curates both.
+// - intr_saved_mask (halfword, flag+0x32): stopIntr stores the current
+//   mask (read through intr_mask_ptr) before zeroing the port;
+//   restartIntr restores it - the cross-member save/restore pair.
+// - intr_saved_dicr (word, flag+0x34): stopIntr saves the DMA DICR word
+//   (read through intr_dicr_ptr) before the AND 0x77777777 clear;
+//   restartIntr restores it.
+// - intr_mask_ptr / intr_imask_ptr / intr_dicr_ptr (words, consecutive
+//   mask-4 / mask / mask+4): port-pointer slots. stopIntr: mp=mask
+//   (save + zero the I_MASK port), ip=imask (stores the re-read zeroed
+//   value - the volatile re-read of mp), dp=dicr (AND 0x77777777 =
+//   per-channel + master DICR enable clear).
+// - intr_stop_begin / intr_stop_commit: the shutdown cluster entries,
+//   no-arg jal targets of stopIntr sitting inside the mis-typed data
+//   row (real code the scanner types as data; cron-20261013-1241
+//   assessment).
+// Byte-fingerprint evidence (scripts/stopintr_final.py): the g3_eu
+// matched body's 44-slot masked word template (opcodes+registers kept,
+// address immediates and jal indexes zeroed, branch displacements
+// kept) matches ALL EIGHT targets exactly at (unique lui 0x7777 /
+// ori 0x7777 pair) - 0x78; the extracted addresses satisfy the layout
+// invariants in every target, and mask_ptr equals the trio table.
+// Member offsets differ per build (this build: stopIntr at member
+// +0x6e0, sces lacks the trio but carries stopIntr) - the bytes, not
+// the offsets, identify the member.
+intr_active_flag = 0x800B3C60; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800B3C92; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x800B3C94; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x800B4CEC; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x800B4CF4; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8005F8D8; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8005F9B8; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x800687AC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 // intr_trap_flag / intr_mask_ptr: LIBETC INTR.OBJ backing statics
 // for the CheckCallback / GetIntrMask / SetIntrMask trio above.
 // Role-descriptive names: no Psy-Q symbol name exists - the 3.3
@@ -1218,6 +1298,15 @@ GetVideoMode = 0x800308FC; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x8004CF20; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+intr_active_flag = 0x8004CF24; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x8004CF56; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x8004CF58; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x8004DFB4; // LIBETC INTR member backing static (word pointer; the save/zero I_MASK port slot); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x8004DFB0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x8004DFB8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8002F388; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8002F458; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x80030FEC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntrVSync = 0x80031538; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x80031590; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x8003160C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees

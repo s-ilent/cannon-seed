@@ -56739,11 +56739,11 @@ dlabel video_mode
     /* 84110 800A3910 FFFFFF00 */ .word 0x00FFFFFF
 enddlabel video_mode
 
-nonmatching D_800A3914
+nonmatching intr_active_flag
 
-dlabel D_800A3914
+dlabel intr_active_flag
     /* 84114 800A3914 */ .short 0x1229
-enddlabel D_800A3914
+enddlabel intr_active_flag
 
 nonmatching intr_trap_flag
 
@@ -56760,7 +56760,18 @@ dlabel intr_trap_flag
     /* 84138 800A3938 088A0B80 */ .word D_800B8A08
     /* 8413C 800A393C 748B0B80 */ .word D_800B8B74
     /* 84140 800A3940 13000000 */ .word 0x00000013
-    /* 84144 800A3944 000F0000 */ .word 0x00000F00
+    /* 84144 800A3944 */ .short 0x0F00
+enddlabel intr_trap_flag
+
+nonmatching intr_saved_mask
+
+dlabel intr_saved_mask
+    /* 84146 800A3946 */ .short 0x0000
+enddlabel intr_saved_mask
+
+nonmatching intr_saved_dicr
+
+dlabel intr_saved_dicr
     /* 84148 800A3948 50FBFFFF */ .word 0xFFFFFB50
     /* 8414C 800A394C 90E70000 */ .word 0x0000E790
     /* 84150 800A3950 00000000 */ .word 0x00000000
@@ -57798,7 +57809,7 @@ dlabel intr_trap_flag
     /* 85170 800A4970 16080000 */ .word 0x00000816
     /* 85174 800A4974 60CD0880 */ .word D_8008CD60
     /* 85178 800A4978 16080000 */ .word 0x00000816
-enddlabel intr_trap_flag
+enddlabel intr_saved_dicr
 
 nonmatching D_800A497C
 
@@ -57812,16 +57823,26 @@ dlabel D_800A497C
     /* 85194 800A4994 E0CD0880 */ .word D_8008CDE0
     /* 85198 800A4998 48080000 */ .word 0x00000848
     /* 8519C 800A499C 00CE0880 */ .word D_8008CE00
-    /* 851A0 800A49A0 48080000 */ .word 0x00000848
 enddlabel D_800A497C
+
+nonmatching intr_imask_ptr
+
+dlabel intr_imask_ptr
+    /* 851A0 800A49A0 48080000 */ .word 0x00000848
+enddlabel intr_imask_ptr
 
 nonmatching intr_mask_ptr
 
 dlabel intr_mask_ptr
     /* 851A4 800A49A4 20CE0880 */ .word D_8008CE20
+enddlabel intr_mask_ptr
+
+nonmatching intr_dicr_ptr
+
+dlabel intr_dicr_ptr
     /* 851A8 800A49A8 48080000 */ .word 0x00000848
     /* 851AC 800A49AC 40CE0880 */ .word D_8008CE40
-enddlabel intr_mask_ptr
+enddlabel intr_dicr_ptr
 
 nonmatching D_800A49B0
 
@@ -96007,7 +96028,7 @@ enddlabel D_800B8280
 nonmatching D_800B8578
 
 dlabel D_800B8578
-    /* 98D78 800B8578 14390A80 */ .word D_800A3914
+    /* 98D78 800B8578 14390A80 */ .word intr_active_flag
 enddlabel D_800B8578
 
 nonmatching D_800B857C

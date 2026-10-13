@@ -55585,11 +55585,11 @@ dlabel D_8009F134
     /* 83930 800A3130 6C830B80 */ .word D_800B836C
 enddlabel D_8009F134
 
-nonmatching D_800A3134
+nonmatching intr_active_flag
 
-dlabel D_800A3134
+dlabel intr_active_flag
     /* 83934 800A3134 */ .short 0x0017
-enddlabel D_800A3134
+enddlabel intr_active_flag
 
 nonmatching intr_trap_flag
 
@@ -55606,7 +55606,18 @@ dlabel intr_trap_flag
     /* 83958 800A3158 90240000 */ .word 0x00002490
     /* 8395C 800A315C 18E8FFFF */ .word 0xFFFFE818
     /* 83960 800A3160 38E50000 */ .word 0x0000E538
-    /* 83964 800A3164 00000000 */ .word 0x00000000
+    /* 83964 800A3164 */ .short 0x0000
+enddlabel intr_trap_flag
+
+nonmatching intr_saved_mask
+
+dlabel intr_saved_mask
+    /* 83966 800A3166 */ .short 0x0000
+enddlabel intr_saved_mask
+
+nonmatching intr_saved_dicr
+
+dlabel intr_saved_dicr
     /* 83968 800A3168 248F0880 */ .word D_80088F24
     /* 8396C 800A316C 00820B80 */ .word D_800B8200
     /* 83970 800A3170 AC830B80 */ .word D_800B83AC
@@ -56644,7 +56655,7 @@ dlabel intr_trap_flag
     /* 84990 800A4190 9AF59C81 */ .word 0x819CF59A
     /* 84994 800A4194 CCF5B364 */ .word 0x64B3F5CC
     /* 84998 800A4198 627A6881 */ .word 0x81687A62
-enddlabel intr_trap_flag
+enddlabel intr_saved_dicr
 
 nonmatching D_800A419C
 
@@ -56658,16 +56669,26 @@ dlabel D_800A419C
     /* 849B4 800A41B4 496A3642 */ .word 0x42366A49
     /* 849B8 800A41B8 99B11058 */ .word 0x5810B199
     /* 849BC 800A41BC 4265C61D */ .word 0x1DC66542
-    /* 849C0 800A41C0 4CBE3561 */ .word 0x6135BE4C
 enddlabel D_800A419C
+
+nonmatching intr_imask_ptr
+
+dlabel intr_imask_ptr
+    /* 849C0 800A41C0 4CBE3561 */ .word 0x6135BE4C
+enddlabel intr_imask_ptr
 
 nonmatching intr_mask_ptr
 
 dlabel intr_mask_ptr
     /* 849C4 800A41C4 A68DE81D */ .word 0x1DE88DA6
+enddlabel intr_mask_ptr
+
+nonmatching intr_dicr_ptr
+
+dlabel intr_dicr_ptr
     /* 849C8 800A41C8 DABE3567 */ .word 0x6735BEDA
     /* 849CC 800A41CC 000095A9 */ .word 0xA9950000
-enddlabel intr_mask_ptr
+enddlabel intr_dicr_ptr
 
 nonmatching D_800A41D0
 
@@ -95299,7 +95320,7 @@ dlabel D_800B7A8C
     /* 9845C 800B7C5C 64800480 */ .word 0x80048064
     /* 98460 800B7C60 00000000 */ .word 0x00000000
     /* 98464 800B7C64 14810480 */ .word 0x80048114
-    /* 98468 800B7C68 34310A80 */ .word D_800A3134
+    /* 98468 800B7C68 34310A80 */ .word intr_active_flag
     /* 9846C 800B7C6C 9C410A80 */ .word D_800A419C
     /* 98470 800B7C70 7010801F */ .word 0x1F801070
     /* 98474 800B7C74 7410801F */ .word 0x1F801074

@@ -383,7 +383,7 @@ glabel func_800487A4
     /* 2903C 8004883C 00000000 */   nop
 endlabel func_800487A4
 
-nonmatching func_80048840, 0x24
+nonmatching func_80048840, 0x20
 
 glabel func_80048840
     /* 29040 80048840 00000586 */  lh         $a1, 0x0($s0)
@@ -394,9 +394,13 @@ glabel func_80048840
     /* 29054 80048854 A0908494 */  lhu        $a0, %lo(D_800B90A0)($a0)
     /* 29058 80048858 04000586 */  lh         $a1, 0x4($s0)
     /* 2905C 8004885C 910D010C */  jal        func_80043644
-  alabel func_80048860
-    /* 29060 80048860 00000000 */   nop
 endlabel func_80048840
+
+nonmatching intr_stop_begin
+
+dlabel intr_stop_begin
+    /* 29060 80048860 00000000 */ .word 0x00000000
+enddlabel intr_stop_begin
 
 nonmatching func_80048864, 0xC
 
@@ -493,15 +497,20 @@ glabel func_8004890C
     /* 29138 80048938 020086A4 */   sh        $a2, 0x2($a0)
 endlabel func_8004890C
 
-nonmatching func_8004893C, 0x14
+nonmatching func_8004893C, 0x4
 
 glabel func_8004893C
     /* 2913C 8004893C 00140400 */  sll        $v0, $a0, 16
-    /* 29140 80048940 83130200 */  sra        $v0, $v0, 14
-    /* 29144 80048944 0A004224 */  addiu      $v0, $v0, 0xA
-    /* 29148 80048948 2118A200 */  addu       $v1, $a1, $v0
-    /* 2914C 8004894C 00006684 */  lh         $a2, 0x0($v1)
 endlabel func_8004893C
+
+nonmatching intr_stop_commit
+
+dlabel intr_stop_commit
+    /* 29140 80048940 83130200 */ .word 0x00021383
+    /* 29144 80048944 0A004224 */ .word 0x2442000A
+    /* 29148 80048948 2118A200 */ .word 0x00A21821
+    /* 2914C 8004894C 00006684 */ .word 0x84660000
+enddlabel intr_stop_commit
 
 nonmatching func_80048950, 0x20
 

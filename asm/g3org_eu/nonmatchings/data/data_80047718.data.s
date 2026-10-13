@@ -721,9 +721,9 @@ dlabel func_80047FA4
     /* 28994 80048194 110C010C */ .word 0x0C010C11
 enddlabel func_80047FA4
 
-nonmatching func_80048198
+nonmatching intr_stop_begin
 
-dlabel func_80048198
+dlabel intr_stop_begin
     /* 28998 80048198 21280002 */ .word 0x02002821
     /* 2899C 8004819C 00004394 */ .word 0x94430000
     /* 289A0 800481A0 0C80043C */ .word 0x3C04800C
@@ -732,7 +732,7 @@ dlabel func_80048198
     /* 289AC 800481AC 02004294 */ .word 0x94420002
     /* 289B0 800481B0 21280002 */ .word 0x02002821
     /* 289B4 800481B4 640C010C */ .word 0x0C010C64
-enddlabel func_80048198
+enddlabel intr_stop_begin
 
 nonmatching func_800481B8
 
@@ -796,11 +796,16 @@ dlabel func_800481F8
     /* 28A5C 8004825C 00000000 */ .word 0x00000000
     /* 28A60 80048260 FFFF4224 */ .word 0x2442FFFF
     /* 28A64 80048264 920982A7 */ .word 0xA7820992
+enddlabel func_800481F8
+
+nonmatching intr_stop_commit
+
+dlabel intr_stop_commit
     /* 28A68 80048268 00140200 */ .word 0x00021400
     /* 28A6C 8004826C 09004014 */ .word 0x14400009
     /* 28A70 80048270 3C000234 */ .word 0x3402003C
     /* 28A74 80048274 94098387 */ .word 0x87830994
-enddlabel func_800481F8
+enddlabel intr_stop_commit
 
 nonmatching func_80048278
 

@@ -263,9 +263,9 @@ dlabel func_8005F210
     /* 3FA1C 8005F21C 00000000 */ .word 0x00000000
 enddlabel func_8005F210
 
-nonmatching func_8005F220
+nonmatching intr_stop_begin
 
-dlabel func_8005F220
+dlabel intr_stop_begin
     /* 3FA20 8005F220 49E1000C */ .word 0x0C00E149
     /* 3FA24 8005F224 00000000 */ .word 0x00000000
     /* 3FA28 8005F228 5FDD000C */ .word 0x0C00DD5F
@@ -274,7 +274,7 @@ dlabel func_8005F220
     /* 3FA34 8005F234 40AE6384 */ .word 0x8463AE40
     /* 3FA38 8005F238 01000234 */ .word 0x34020001
     /* 3FA3C 8005F23C D8FF6214 */ .word 0x1462FFD8
-enddlabel func_8005F220
+enddlabel intr_stop_begin
 
 nonmatching func_8005F240
 
@@ -348,6 +348,11 @@ dlabel func_8005F2D0
     /* 3FAE4 8005F2E4 3363DB0E */ .word 0x0EDB6333
     /* 3FAE8 8005F2E8 FA04A9AC */ .word 0xACA904FA
     /* 3FAEC 8005F2EC 7452BC49 */ .word 0x49BC5274
+enddlabel func_8005F2D0
+
+nonmatching intr_stop_commit
+
+dlabel intr_stop_commit
     /* 3FAF0 8005F2F0 53BC3E20 */ .word 0x203EBC53
     /* 3FAF4 8005F2F4 9FD709A7 */ .word 0xA709D79F
     /* 3FAF8 8005F2F8 C6E38D97 */ .word 0x978DE3C6
@@ -360,7 +365,7 @@ dlabel func_8005F2D0
     /* 3FB14 8005F314 7641F414 */ .word 0x14F44176
     /* 3FB18 8005F318 64CCF877 */ .word 0x77F8CC64
     /* 3FB1C 8005F31C 06727546 */ .word 0x46757206
-enddlabel func_8005F2D0
+enddlabel intr_stop_commit
 
 nonmatching func_8005F320
 

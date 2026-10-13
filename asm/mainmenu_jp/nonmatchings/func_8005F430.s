@@ -368,7 +368,7 @@ glabel func_8005F820
     /* 40098 8005F898 2CA122A4 */  sh         $v0, %lo(D_800CA12C)($at)
 endlabel func_8005F820
 
-nonmatching func_8005F89C, 0x5C
+nonmatching func_8005F89C, 0x3C
 
 glabel func_8005F89C
     /* 4009C 8005F89C 0D80033C */  lui        $v1, %hi(D_800C9F94)
@@ -386,16 +386,20 @@ glabel func_8005F89C
     /* 400CC 8005F8CC 00000000 */   nop
     /* 400D0 8005F8D0 565D010C */  jal        func_80057558
     /* 400D4 8005F8D4 00000000 */   nop
-  alabel func_8005F8D8
-    /* 400D8 8005F8D8 525D0108 */  j          D_80057548
-    /* 400DC 8005F8DC 00000000 */   nop
-    /* 400E0 8005F8E0 A05D010C */  jal        func_80057680
-    /* 400E4 8005F8E4 00000000 */   nop
-    /* 400E8 8005F8E8 525D0108 */  j          D_80057548
-    /* 400EC 8005F8EC 00000000 */   nop
-    /* 400F0 8005F8F0 B95D010C */  jal        func_800576E4
-    /* 400F4 8005F8F4 00000000 */   nop
 endlabel func_8005F89C
+
+nonmatching intr_stop_begin
+
+dlabel intr_stop_begin
+    /* 400D8 8005F8D8 525D0108 */ .word 0x08015D52
+    /* 400DC 8005F8DC 00000000 */ .word 0x00000000
+    /* 400E0 8005F8E0 A05D010C */ .word 0x0C015DA0
+    /* 400E4 8005F8E4 00000000 */ .word 0x00000000
+    /* 400E8 8005F8E8 525D0108 */ .word 0x08015D52
+    /* 400EC 8005F8EC 00000000 */ .word 0x00000000
+    /* 400F0 8005F8F0 B95D010C */ .word 0x0C015DB9
+    /* 400F4 8005F8F4 00000000 */ .word 0x00000000
+enddlabel intr_stop_begin
 
 nonmatching func_8005F8F8, 0x10
 
@@ -434,7 +438,6 @@ glabel func_8005F918
     /* 4014C 8005F94C 5E63010C */  jal        func_80058D78
     /* 40150 8005F950 01001034 */   ori       $s0, $zero, 0x1
     /* 40154 8005F954 0465010C */  jal        func_80059410
-  alabel func_8005F958
     /* 40158 8005F958 00000000 */   nop
     /* 4015C 8005F95C 0D80013C */  lui        $at, %hi(D_800CA27C)
     /* 40160 8005F960 7CA220AC */  sw         $zero, %lo(D_800CA27C)($at)
@@ -463,7 +466,7 @@ glabel func_8005F988
     /* 40194 8005F994 0D80013C */  lui        $at, (0x800D0000 >> 16)
 endlabel func_8005F988
 
-nonmatching func_8005F998, 0x50
+nonmatching func_8005F998, 0x20
 
 glabel func_8005F998
     /* 40198 8005F998 44A520A4 */  sh         $zero, -0x5ABC($at)
@@ -474,20 +477,24 @@ glabel func_8005F998
     /* 401AC 8005F9AC 2CA123A4 */  sh         $v1, %lo(D_800CA12C)($at)
     /* 401B0 8005F9B0 0D80013C */  lui        $at, %hi(D_800C9F74)
     /* 401B4 8005F9B4 749F30A4 */  sh         $s0, %lo(D_800C9F74)($at)
-  alabel func_8005F9B8
-    /* 401B8 8005F9B8 0D80013C */  lui        $at, %hi(D_800CA094)
-    /* 401BC 8005F9BC 94A020A4 */  sh         $zero, %lo(D_800CA094)($at)
-    /* 401C0 8005F9C0 0D80013C */  lui        $at, %hi(D_800C9F94)
-    /* 401C4 8005F9C4 949F30A4 */  sh         $s0, %lo(D_800C9F94)($at)
-    /* 401C8 8005F9C8 655E010C */  jal        func_80057994
-    /* 401CC 8005F9CC 00000000 */   nop
-    /* 401D0 8005F9D0 7768010C */  jal        func_8005A1DC
-    /* 401D4 8005F9D4 00000000 */   nop
-    /* 401D8 8005F9D8 00140200 */  sll        $v0, $v0, 16
-    /* 401DC 8005F9DC 03140200 */  sra        $v0, $v0, 16
-    /* 401E0 8005F9E0 03000334 */  ori        $v1, $zero, 0x3
-    /* 401E4 8005F9E4 16004314 */  bne        $v0, $v1, func_8005FA40
 endlabel func_8005F998
+
+nonmatching intr_stop_commit
+
+dlabel intr_stop_commit
+    /* 401B8 8005F9B8 0D80013C */ .word 0x3C01800D
+    /* 401BC 8005F9BC 94A020A4 */ .word 0xA420A094
+    /* 401C0 8005F9C0 0D80013C */ .word 0x3C01800D
+    /* 401C4 8005F9C4 949F30A4 */ .word 0xA4309F94
+    /* 401C8 8005F9C8 655E010C */ .word 0x0C015E65
+    /* 401CC 8005F9CC 00000000 */ .word 0x00000000
+    /* 401D0 8005F9D0 7768010C */ .word 0x0C016877
+    /* 401D4 8005F9D4 00000000 */ .word 0x00000000
+    /* 401D8 8005F9D8 00140200 */ .word 0x00021400
+    /* 401DC 8005F9DC 03140200 */ .word 0x00021403
+    /* 401E0 8005F9E0 03000334 */ .word 0x34030003
+    /* 401E4 8005F9E4 16004314 */ .word 0x14430016
+enddlabel intr_stop_commit
 
 nonmatching func_8005F9E8, 0x40
 

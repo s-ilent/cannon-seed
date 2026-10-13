@@ -1769,38 +1769,27 @@ dlabel D_8004BE7C
     /* 2DA98 8004D298 02000234 */ .word 0x34020002
 enddlabel D_8004BE7C
 
-nonmatching D_8004D29C
+nonmatching intr_active_flag
 
-dlabel D_8004D29C
+dlabel intr_active_flag
     /* 2DA9C 8004D29C */ .short 0x006E
-enddlabel D_8004D29C
+enddlabel intr_active_flag
 
 nonmatching intr_trap_flag
 
 dlabel intr_trap_flag
     /* 2DA9E 8004D29E */ .short 0x1082
-    /* 2DAA0 8004D2A0 */ .short 0x0003
-    /* 2DAA2 8004D2A2 */ .short 0x3402
-    /* 2DAA4 8004D2A4 */ .short 0x006C
-    /* 2DAA6 8004D2A6 */ .short 0x1082
-    /* 2DAA8 8004D2A8 */ .short 0x0004
-    /* 2DAAA 8004D2AA */ .short 0x3402
-    /* 2DAAC 8004D2AC */ .short 0x006A
-    /* 2DAAE 8004D2AE */ .short 0x1482
-    /* 2DAB0 8004D2B0 */ .short 0x0000
-    /* 2DAB2 8004D2B2 */ .short 0x0000
-    /* 2DAB4 8004D2B4 */ .short 0x1F16
-    /* 2DAB6 8004D2B6 */ .short 0x0C01
-    /* 2DAB8 8004D2B8 */ .short 0x0000
-    /* 2DABA 8004D2BA */ .short 0x0000
-    /* 2DABC 8004D2BC */ .short 0x1DA2
-    /* 2DABE 8004D2BE */ .short 0x0801
-    /* 2DAC0 8004D2C0 */ .short 0x0000
-    /* 2DAC2 8004D2C2 */ .short 0x0000
-    /* 2DAC4 8004D2C4 */ .short 0x1D40
-    /* 2DAC6 8004D2C6 */ .short 0x0801
-    /* 2DAC8 8004D2C8 */ .short 0x0042
-    /* 2DACA 8004D2CA */ .short 0xA3B1
+    /* 2DAA0 8004D2A0 03000234 */ .word 0x34020003
+    /* 2DAA4 8004D2A4 6C008210 */ .word 0x1082006C
+    /* 2DAA8 8004D2A8 04000234 */ .word 0x34020004
+    /* 2DAAC 8004D2AC 6A008214 */ .word 0x1482006A
+    /* 2DAB0 8004D2B0 00000000 */ .word 0x00000000
+    /* 2DAB4 8004D2B4 161F010C */ .word 0x0C011F16
+    /* 2DAB8 8004D2B8 00000000 */ .word 0x00000000
+    /* 2DABC 8004D2BC A21D0108 */ .word 0x08011DA2
+    /* 2DAC0 8004D2C0 00000000 */ .word 0x00000000
+    /* 2DAC4 8004D2C4 401D0108 */ .word 0x08011D40
+    /* 2DAC8 8004D2C8 4200B1A3 */ .word 0xA3B10042
 enddlabel intr_trap_flag
 
 nonmatching D_8004D2CC
@@ -1809,18 +1798,18 @@ dlabel D_8004D2CC
     /* 2DACC 8004D2CC */ .short 0x0043
 enddlabel D_8004D2CC
 
-nonmatching D_8004D2CE
+nonmatching intr_saved_mask
 
-dlabel D_8004D2CE
+dlabel intr_saved_mask
     /* 2DACE 8004D2CE */ .short 0xA3B1
-enddlabel D_8004D2CE
+enddlabel intr_saved_mask
 
-nonmatching D_8004D2D0
+nonmatching intr_saved_dicr
 
-dlabel D_8004D2D0
+dlabel intr_saved_dicr
     /* 2DAD0 8004D2D0 00241200 */ .word 0x00122400
     /* 2DAD4 8004D2D4 03240400 */ .word 0x00042403
-enddlabel D_8004D2D0
+enddlabel intr_saved_dicr
 
 nonmatching D_8004D2D8
 

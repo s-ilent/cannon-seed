@@ -232,8 +232,23 @@ nonmatching D_8004DFAC
 
 dlabel D_8004DFAC
     /* 2E7AC 8004DFAC 3B6C90E8 */ .word 0xE8906C3B
+enddlabel D_8004DFAC
+
+nonmatching intr_imask_ptr
+
+dlabel intr_imask_ptr
     /* 2E7B0 8004DFB0 7A7672A9 */ .word 0xA972767A
+enddlabel intr_imask_ptr
+
+nonmatching intr_mask_ptr
+
+dlabel intr_mask_ptr
     /* 2E7B4 8004DFB4 CF4362B0 */ .word 0xB06243CF
+enddlabel intr_mask_ptr
+
+nonmatching intr_dicr_ptr
+
+dlabel intr_dicr_ptr
     /* 2E7B8 8004DFB8 511213BA */ .word 0xBA131251
     /* 2E7BC 8004DFBC D34BCA00 */ .word 0x00CA4BD3
     /* 2E7C0 8004DFC0 6FD8370D */ .word 0x0D37D86F
@@ -246,7 +261,7 @@ dlabel D_8004DFAC
     /* 2E7DC 8004DFDC 24B52860 */ .word 0x6028B524
     /* 2E7E0 8004DFE0 00616437 */ .word 0x37646100
     /* 2E7E4 8004DFE4 9101563C */ .word 0x3C560191
-enddlabel D_8004DFAC
+enddlabel intr_dicr_ptr
 
 nonmatching D_8004DFE8
 

@@ -1546,8 +1546,13 @@ nonmatching video_mode
 
 dlabel video_mode
     /* 2D720 8004CF20 2A23010C */ .word 0x0C01232A
-    /* 2D724 8004CF24 */ .short 0x3821
 enddlabel video_mode
+
+nonmatching intr_active_flag
+
+dlabel intr_active_flag
+    /* 2D724 8004CF24 */ .short 0x3821
+enddlabel intr_active_flag
 
 nonmatching D_8004CF26
 
@@ -1564,7 +1569,18 @@ dlabel D_8004CF26
     /* 2D748 8004CF48 00241E00 */ .word 0x001E2400
     /* 2D74C 8004CF4C 14004292 */ .word 0x92420014
     /* 2D750 8004CF50 00000000 */ .word 0x00000000
-    /* 2D754 8004CF54 26004014 */ .word 0x14400026
+    /* 2D754 8004CF54 */ .short 0x0026
+enddlabel D_8004CF26
+
+nonmatching intr_saved_mask
+
+dlabel intr_saved_mask
+    /* 2D756 8004CF56 */ .short 0x1440
+enddlabel intr_saved_mask
+
+nonmatching intr_saved_dicr
+
+dlabel intr_saved_dicr
     /* 2D758 8004CF58 C0FFC226 */ .word 0x26C2FFC0
     /* 2D75C 8004CF5C FF004230 */ .word 0x304200FF
     /* 2D760 8004CF60 4000422C */ .word 0x2C420040
@@ -1999,7 +2015,7 @@ dlabel D_8004CF26
     /* 2DE14 8004D614 28D6AE99 */ .word 0x99AED628
     /* 2DE18 8004D618 4DA19899 */ .word 0x9998A14D
     /* 2DE1C 8004D61C 557FCCD4 */ .word 0xD4CC7F55
-enddlabel D_8004CF26
+enddlabel intr_saved_dicr
 
 nonmatching D_8004D620
 

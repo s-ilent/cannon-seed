@@ -16,14 +16,14 @@ glabel func_8002F378
     /* FB84 8002F384 2000B2AF */  sw         $s2, 0x20($sp)
 endlabel func_8002F378
 
-nonmatching func_8002F388, 0x10
+nonmatching intr_stop_begin
 
-glabel func_8002F388
-    /* FB88 8002F388 1C00B1AF */  sw         $s1, 0x1C($sp)
-    /* FB8C 8002F38C 1800B0AF */  sw         $s0, 0x18($sp)
-    /* FB90 8002F390 21A08000 */  addu       $s4, $a0, $zero
-    /* FB94 8002F394 C800828F */  lw         $v0, 0xC8($gp)
-endlabel func_8002F388
+dlabel intr_stop_begin
+    /* FB88 8002F388 1C00B1AF */ .word 0xAFB1001C
+    /* FB8C 8002F38C 1800B0AF */ .word 0xAFB00018
+    /* FB90 8002F390 21A08000 */ .word 0x0080A021
+    /* FB94 8002F394 C800828F */ .word 0x8F8200C8
+enddlabel intr_stop_begin
 
 nonmatching func_8002F398, 0x10
 
@@ -99,7 +99,7 @@ glabel func_8002F410
     /* FC2C 8002F42C 64008424 */  addiu      $a0, $a0, 0x64
 endlabel func_8002F410
 
-nonmatching func_8002F430, 0x38
+nonmatching func_8002F430, 0x28
 
 glabel func_8002F430
     /* FC30 8002F430 F8FF028E */  lw         $v0, -0x8($s0)
@@ -113,12 +113,16 @@ glabel func_8002F430
     /* FC4C 8002F44C 00000000 */  nop
     /* FC50 8002F450 14004010 */  beqz       $v0, func_8002F4A4
     /* FC54 8002F454 21204002 */   addu      $a0, $s2, $zero
-  alabel func_8002F458
-    /* FC58 8002F458 0400028E */  lw         $v0, 0x4($s0)
-    /* FC5C 8002F45C 00000000 */  nop
-    /* FC60 8002F460 1000A2AF */  sw         $v0, 0x10($sp)
-    /* FC64 8002F464 0000078E */  lw         $a3, 0x0($s0)
 endlabel func_8002F430
+
+nonmatching intr_stop_commit
+
+dlabel intr_stop_commit
+    /* FC58 8002F458 0400028E */ .word 0x8E020004
+    /* FC5C 8002F45C 00000000 */ .word 0x00000000
+    /* FC60 8002F460 1000A2AF */ .word 0xAFA20010
+    /* FC64 8002F464 0000078E */ .word 0x8E070000
+enddlabel intr_stop_commit
 
 nonmatching func_8002F468, 0x10
 

@@ -514,11 +514,11 @@ dlabel D_8004E324
     /* 2EB24 8004E324 00000000 */ .word 0x00000000
 enddlabel D_8004E324
 
-nonmatching D_8004E328
+nonmatching intr_imask_ptr
 
-dlabel D_8004E328
+dlabel intr_imask_ptr
     /* 2EB28 8004E328 10008012 */ .word 0x12800010
-enddlabel D_8004E328
+enddlabel intr_imask_ptr
 
 nonmatching intr_mask_ptr
 
@@ -526,11 +526,11 @@ dlabel intr_mask_ptr
     /* 2EB2C 8004E32C D1000434 */ .word 0x340400D1
 enddlabel intr_mask_ptr
 
-nonmatching D_8004E330
+nonmatching intr_dicr_ptr
 
-dlabel D_8004E330
+dlabel intr_dicr_ptr
     /* 2EB30 8004E330 0680053C */ .word 0x3C058006
-enddlabel D_8004E330
+enddlabel intr_dicr_ptr
 
 nonmatching D_8004E334
 
