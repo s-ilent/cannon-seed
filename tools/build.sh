@@ -148,6 +148,26 @@ cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
 print("1" if cfg["options"].get("gp_value") is not None else "0")
 EOF
 )
+    # Range data for the gp_rel rewrite (PYSEC below): %gp_rel is legal
+    # only within +/-0x7FFF of the gp base, and retail's own libraries
+    # use absolute lui+lo for anything farther (e.g. LIBETC's video-mode
+    # static, ~85 KB below slps_00270's gp base). Emit the gp base and a
+    # name:address table from the committed symbols file; PYSEC rewrites
+    # a bare load/store only when the symbol is known and in range
+    # (unknown names keep the old behavior and fail loudly at link time
+    # if they are genuinely out of range).
+    GP_INFO=$("$PY" - "$TARGET" <<'EOF'
+import sys, yaml, re
+cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
+gp = cfg["options"].get("gp_value") or 0
+addr = {}
+for ln in open(f"config/symbols.{sys.argv[1]}.txt"):
+    m = re.match(r"^(\w+) = 0x([0-9A-Fa-f]+);", ln)
+    if m:
+        addr[m.group(1)] = int(m.group(2), 16)
+print(f"{gp:#x} " + " ".join(f"{n}:{a:#x}" for n, a in sorted(addr.items())))
+EOF
+)
     "$PY" - "$TARGET" > "$c_list" <<EOF || fail "could not list C subsegments"
 import sys, yaml
 cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
@@ -205,9 +225,9 @@ PYUNITS
         fi
         csec=$(printf '%08X' "0x${crom}")
         staged="build/src/${cname}.r.s"
-        "$PY" - "build/src/${cname}.mas.s" "$staged" "$csec" "$GP_REWRITE" <<'PYSEC' || fail "C staging failed: ${cname}"
+        "$PY" - "build/src/${cname}.mas.s" "$staged" "$csec" "$GP_REWRITE" "$GP_INFO" <<'PYSEC' || fail "C staging failed: ${cname}"
 import re, sys
-src, dst, sec, gp_rewrite = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+src, dst, sec, gp_rewrite, gp_info = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
 text = open(src).read()
 text = re.sub(r"^\s*\.text\s*$",
               f'.section .r_{sec}, "awx", @progbits', text, flags=re.M)
@@ -222,10 +242,25 @@ text = re.sub(r"^\s*\.text\s*$",
 # bare form; with -G0 gas expands it to the absolute lui/$at pair that
 # those targets' retail shows.
 if gp_rewrite == "1":
+    gp_base_str, _, tbl = gp_info.partition(" ")
+    gp_base = int(gp_base_str, 16)
+    symaddr = {}
+    for tok in tbl.split():
+        n, _, a = tok.rpartition(":")
+        if n:
+            symaddr[n] = int(a, 16)
+
+    def gp_rewrite_one(m):
+        name = m.group(2)
+        a = symaddr.get(name.split("+", 1)[0])
+        if a is None or abs(a - gp_base) <= 0x7FFF:
+            return f"{m.group(1)}%gp_rel({name})($gp)"
+        return m.group(0)
+
     text = re.sub(
         r"(?m)^(\s*(?:lb|lbu|lh|lhu|lw|lwl|lwr|sb|sh|sw|swl|swr)\s+\$[a-z0-9]+,)"
         r"([A-Za-z_][A-Za-z0-9_]*(?:\+[0-9]+)?)\s*$",
-        r"\1%gp_rel(\2)($gp)",
+        gp_rewrite_one,
         text,
     )
 open(dst, "w").write(text)
