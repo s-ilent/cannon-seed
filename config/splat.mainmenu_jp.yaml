@@ -314,7 +314,7 @@ segments:
       - [0x49120, asm, func_80068920]   # 0x50 sdk
       - [0x49170, asm, func_80068970]   # 0x184 sdk
       - [0x492F4, asm, func_80068AF4]   # 0xa8 sdk
-      - [0x4939C, asm, func_80068B9C]   # 0x2c sdk
+      - [0x4939C, c, func_80068B9C]   # 0x2c sdk
       - [0x493C8, data, data_80068BC8]   # 0xb0
       - [0x49478, asm, func_80068C78]   # 0x58 sdk
       - [0x494D0, asm, func_80068CD0]   # 0x7c sdk

@@ -107,7 +107,7 @@ segments:
       - [0x11D38, asm, func_80031538]   # 0x58 sdk
       - [0x11D90, asm, func_80031590]   # 0x7c sdk
       - [0x11E0C, asm, func_8003160C]   # 0x2c sdk
-      - [0x11E38, asm, func_80031638]   # 0x2c sdk
+      - [0x11E38, c, func_80031638]   # 0x2c sdk
       - [0x11E64, asm, func_80031664]   # 0x148 sdk
       - [0x11FAC, asm, func_800317AC]   # 0x9c sdk
       - [0x12048, data, data_80031848]   # 0xa0
