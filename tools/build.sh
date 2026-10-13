@@ -161,10 +161,23 @@ import sys, yaml, re
 cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
 gp = cfg["options"].get("gp_value") or 0
 addr = {}
+# A curated entry may carry a 'gp:absolute' marker when retail provably
+# loads that symbol with an absolute lui+lo pair even though it sits
+# inside +/-32 KB of the gp base (first case: LIBSPU's _spu_inTransfer,
+# an 8-byte S_INI flag that S_ITC loads absolutely in slps_00270, while
+# same-range 4-byte flags like boot_flag_0 are gp-relative there). The
+# range test alone cannot know this - it is per-symbol retail evidence -
+# so the marker flags the name (a '!' suffix in the PYSEC table) and the
+# rewrite skips it, keeping the absolute form the non-gp targets prove.
 for ln in open(f"config/symbols.{sys.argv[1]}.txt"):
     m = re.match(r"^(\w+) = 0x([0-9A-Fa-f]+);", ln)
     if m:
-        addr[m.group(1)] = int(m.group(2), 16)
+        # splat's native absolute:true boolean (curated gp:absolute) marks
+        # per-symbol retail evidence: load it absolutely even in range.
+        # The '!' suffix tells PYSEC to skip the rewrite for this name
+        # (exclusion alone would fall into the unknown-name rewrite path).
+        marked = "absolute:true" in ln
+        addr[m.group(1) + ("!" if marked else "")] = int(m.group(2), 16)
 print(f"{gp:#x} " + " ".join(f"{n}:{a:#x}" for n, a in sorted(addr.items())))
 EOF
 )
@@ -245,14 +258,24 @@ if gp_rewrite == "1":
     gp_base_str, _, tbl = gp_info.partition(" ")
     gp_base = int(gp_base_str, 16)
     symaddr = {}
+    gp_abs = set()
     for tok in tbl.split():
         n, _, a = tok.rpartition(":")
-        if n:
-            symaddr[n] = int(a, 16)
+        if not n:
+            continue
+        if n.endswith("!"):
+            # curated gp:absolute marker (splat absolute:true): retail
+            # provably loads this datum absolutely; never rewrite it.
+            gp_abs.add(n[:-1])
+            n = n[:-1]
+        symaddr[n] = int(a, 16)
 
     def gp_rewrite_one(m):
         name = m.group(2)
-        a = symaddr.get(name.split("+", 1)[0])
+        base_name = name.split("+", 1)[0]
+        if base_name in gp_abs:
+            return m.group(0)
+        a = symaddr.get(base_name)
         if a is None or abs(a - gp_base) <= 0x7FFF:
             return f"{m.group(1)}%gp_rel({name})($gp)"
         return m.group(0)
