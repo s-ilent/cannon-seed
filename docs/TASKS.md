@@ -626,3 +626,29 @@ walker-family recipe, and a measured zero-entry contract.**
   above; queue the runtime check); (3) EU-side mirror of this library
   only when EU C work needs it.
 
+
+**2026-10-13 — runtime stack wiped by the re-provision; len_param matched
+in C across all three placements.**
+- The 10-12 gdb-session entry's "now present" was ephemeral to that
+  session: the sandbox re-provision took pcsx-redux, the region BIOS,
+  the raw-BIN disc + cue and build/work/ with it (sweeps over the home
+  tree: no pcsx binary, no SCPH image, no CHD/raw-BIN over 50 MiB). The
+  eight baselines survived. BIOS and discs were user-supplied with no
+  in-repo acquisition recipe, so the runtime gate-family check (row
+  reachability, data-block bne targets, func_8005A014's body, the 46x
+  tail's sp convention) is re-blocked until pcsx-redux is rebuilt AND
+  the BIOS/disc are re-uploaded — both facts should be checked per
+  session, not inherited from a previous one.
+- len_param (curated; LIBGS MATRIX3 member .text+0x580, extent 0x1c)
+  matched in C from one source in mainmenu_jp, slps_00270 and g3org_jp:
+  frameless do-while bit-length counter; GCC 2.6.3 -O2 emitted the
+  retail shape on the first compile (blez guard, sra loop, addiu
+  increment in the bgtz delay slot). matched 82 -> 85.
+- Ratchet lesson: placeholder-shaped tokens in src/ text count wherever
+  they appear, comments included — cross-references between matched
+  files must name the placement, not the func_XXXXXXXX symbol.
+- Deferred with evidence noted: the LIBETC VMODE getters (SetVideoMode/
+  GetVideoMode in mainmenu_jp) are one-load C matches once their backing
+  global (D_800B4EC4) has a curated, signature-DB-backed name — the
+  pair proves the semantics, the canonical SDK name does not exist in
+  curated yet.
