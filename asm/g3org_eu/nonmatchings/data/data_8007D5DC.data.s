@@ -56733,11 +56733,11 @@ dlabel D_8009F910
     /* 8410C 800A390C FFFFFFFF */ .word 0xFFFFFFFF
 enddlabel D_8009F910
 
-nonmatching D_800A3910
+nonmatching video_mode
 
-dlabel D_800A3910
+dlabel video_mode
     /* 84110 800A3910 FFFFFF00 */ .word 0x00FFFFFF
-enddlabel D_800A3910
+enddlabel video_mode
 
 nonmatching D_800A3914
 

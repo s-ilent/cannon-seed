@@ -1395,3 +1395,6 @@ func_80070E54 = 0x80070E54; // type:func (branch target)
 func_80070EA4 = 0x80070EA4; // type:func (branch target)
 func_80070EF8 = 0x80070EF8; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
+// BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+video_mode = 0x80096C04; // type:s32
+// END GENERATED DATA SYMBOLS

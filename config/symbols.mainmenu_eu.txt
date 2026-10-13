@@ -2034,6 +2034,7 @@ state_block_8 = 0x8008A04C; // type:s32
 state_cursor = 0x8008A1D4; // type:s32
 state_block_9 = 0x8008A1EC; // type:s32
 state_block_10 = 0x8008A25C; // type:s32
+video_mode = 0x800B4470; // type:s32
 menu_state_flag = 0x800C936C; // type:s32
 state_record_0 = 0x800CA374; // type:s32
 state_record_1 = 0x800CA37C; // type:s32

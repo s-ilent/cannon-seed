@@ -1542,12 +1542,12 @@ dlabel D_8004CEF8
     /* 2D71C 8004CF1C 2C008592 */ .word 0x9285002C
 enddlabel D_8004CEF8
 
-nonmatching D_8004CF20
+nonmatching video_mode
 
-dlabel D_8004CF20
+dlabel video_mode
     /* 2D720 8004CF20 2A23010C */ .word 0x0C01232A
     /* 2D724 8004CF24 */ .short 0x3821
-enddlabel D_8004CF20
+enddlabel video_mode
 
 nonmatching D_8004CF26
 

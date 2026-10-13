@@ -174,7 +174,6 @@ GsInit3D = 0x80053D74; // type:func (pinned member row)
 GsSetRefView2 = 0x80053DEC; // type:func (pinned member row)
 scale_view_param = 0x800541B4; // type:func (pinned member row)
 select_max_param = 0x800542A4; // type:func (pinned member row)
-len_param = 0x8005436C; // type:func (pinned member row)
 gte_rotate_z_matrix = 0x80054628; // type:func (pinned member row)
 RotMatrixC = 0x80054858; // type:func (pinned member row)
 GsLinkObject4 = 0x80056150; // type:func (pinned member row)
@@ -1720,3 +1719,7 @@ func_8006EA20 = 0x8006EA20; // type:func (branch target)
 func_8006EACC = 0x8006EACC; // type:func (branch target)
 func_8006EAEC = 0x8006EAEC; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
+// BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+len_param = 0x8005436C; // type:s32
+video_mode = 0x800A4398; // type:s32
+// END GENERATED DATA SYMBOLS

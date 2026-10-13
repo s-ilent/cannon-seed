@@ -48,6 +48,11 @@ GsClearOt = 0x8003B244; // LIBGS SCLIB member; tools/sdk_members.py, unique plac
 SpuSetNoiseVoice = 0x800487B4; // LIBSPU S_SNV member; tools/sdk_members.py, unique placement + signature DB agrees
 SetVideoMode = 0x80035240; // LIBETC VMODE member .text+0x0 (extent 0x28); tools/sdk_members.py, unique placement + signature DB agrees
 GetVideoMode = 0x80035258; // LIBETC VMODE member .text+0x18; tools/sdk_members.py, unique placement + signature DB agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x8004E500; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 gte_rotate_z_matrix = 0x80038098; // LIBGS SCLIB member .text+0x0 (extent 0xb8); tools/sdk_members.py, unique placement
 scale_view_param = 0x80036C14; // LIBGS MATRIX3 member .text+0x0 (true extent 0xe8; the archive next-symbol extent 0xf0 overshoots into the empty function func_80036CFC); tools/sdk_members.py, unique placement
 RotMatrixC = 0x800383F8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools/sdk_members.py, unique placement + signature DB agrees
@@ -332,6 +337,11 @@ state_table_8 = 0x8002030C; // state table: -> 0x800263A4
 // target: g3_eu  (111 sdk-member adoptions)
 SetVideoMode = 0x80050520; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x80050538; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x80096C04; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 ResetCallback = 0x80050548; // LIBETC INTR member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 InterruptCallback = 0x80050578; // LIBETC INTR member .text+0x30 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 DMACallback = 0x800505A8; // LIBETC INTR member .text+0x60 (extent 0x30); sdk_members.py unique placement + sig-db agrees
@@ -454,6 +464,11 @@ VSync = 0x80051910; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members
 v_wait = 0x80051A58; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
 SetVideoMode = 0x80055008; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x80055020; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x80097650; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 GsInitCoordinate2 = 0x800561FC; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 GsInitCoord2param = 0x80056278; // LIBGS MATRIX member .text+0x7c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 GsSetLsMatrix = 0x800562A4; // LIBGS MATRIX member .text+0xa8 (extent 0x30); sdk_members.py unique placement + sig-db agrees
@@ -557,6 +572,11 @@ SsSetSerialAttr = 0x8007C34C; // LIBSND SCSSATTR member .text+0x0 (extent 0x94);
 // target: g3org_eu  (103 sdk-member adoptions)
 SetVideoMode = 0x8004D254; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x8004D26C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x800A3910; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 startIntrDMA = 0x8004DAD0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x8004DB20; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x8004DCA4; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
@@ -669,6 +689,11 @@ trapIntrVSync = 0x8004E5B8; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); s
 setIntrVSync = 0x8004E634; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 SetVideoMode = 0x80051D84; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x80051D9C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x800A4398; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 GsSetDrawBuffClip = 0x80053490; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
 GsMapModelingData = 0x80053528; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
 GsGetTimInfo = 0x800535A0; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
@@ -764,6 +789,11 @@ SsSetSerialAttr = 0x800791F8; // LIBSND SCSSATTR member .text+0x0 (extent 0x94);
 // target: mainmenu_eu  (99 sdk-member adoptions)
 SetVideoMode = 0x8006797C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x80067994; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x800B4470; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 startIntrDMA = 0x800681F8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x80068248; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x800683CC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
@@ -872,6 +902,13 @@ trapIntrVSync = 0x80068CD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); s
 setIntrVSync = 0x80068D4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 SetVideoMode = 0x8006C49C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x8006C4B4; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing static
+// (0x800B4EC4, initial word 0 = MODE_NTSC). SetVideoMode reads it into $v0
+// then stores $a0 into it; GetVideoMode returns it — the pair proves the
+// semantics. Psy-Q 3.3 LIBETC.LIB VMODE.OBJ exports no symbol for it
+// (archive string table carries only GetVideoMode/SetVideoMode + the
+// E:\PSX\SRC\ETC\VMODE.C path), so no original name is recoverable.
+video_mode = 0x800B4EC4; // LIBETC VMODE member backing static; evidence above, no Psy-Q symbol name exists
 GsInitGraph = 0x8006D064; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
 gpu_init = 0x8006D0DC; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
 GsInitGraph2 = 0x8006D234; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
@@ -982,6 +1019,11 @@ SsSetSerialAttr = 0x80094C78; // LIBSND SCSSATTR member .text+0x0 (extent 0x94);
 // target: sces_00269  (73 sdk-member adoptions)
 SetVideoMode = 0x800308E4; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x800308FC; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x8004CF20; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 startIntrVSync = 0x80031538; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x80031590; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x8003160C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees

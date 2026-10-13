@@ -44767,9 +44767,9 @@ dlabel D_800B0108
     /* 94C6C 800B446C 00000000 */ .word 0x00000000
 enddlabel D_800B0108
 
-nonmatching D_800B4470
+nonmatching video_mode
 
-dlabel D_800B4470
+dlabel video_mode
     /* 94C70 800B4470 00007800 */ .word 0x00780000
     /* 94C74 800B4474 00000000 */ .word 0x00000000
     /* 94C78 800B4478 A0140000 */ .word 0x000014A0
@@ -45020,7 +45020,7 @@ dlabel D_800B4470
     /* 9504C 800B484C 00000000 */ .word 0x00000000
     /* 95050 800B4850 00000000 */ .word 0x00000000
     /* 95054 800B4854 00000000 */ .word 0x00000000
-enddlabel D_800B4470
+enddlabel video_mode
 
 nonmatching D_800B4858
 

@@ -100,8 +100,8 @@ segments:
       - [0x1374C, data, data_80032F4C]   # 0x1c70
       - [0x153BC, asm, func_80034BBC]   # 0x680
       - [0x15A3C, data, data_8003523C]   # 0x4 pinned
-      - [0x15A40, asm, func_80035240]   # 0x18 pinned
-      - [0x15A58, asm, func_80035258]   # 0x10 pinned
+      - [0x15A40, c, func_80035240]   # 0x18
+      - [0x15A58, c, func_80035258]   # 0x10
       - [0x15A68, data, data_80035268]   # 0x4f0
       - [0x15F58, asm, func_80035758]   # 0x400
       - [0x16358, data, data_80035B58]   # 0x120
@@ -119,7 +119,7 @@ segments:
       - [0x17414, asm, func_80036C14]   # 0xe8 pinned
       - [0x174FC, c, func_80036CFC]   # 0x8
       - [0x17504, asm, func_80036D04]   # 0xc8 sdk
-      - [0x175CC, c, func_80036DCC]   # 0x1c sdk
+      - [0x175CC, c, func_80036DCC]   # 0x1c
       - [0x175E8, data, data_80036DE8]   # 0xbb4
       - [0x1819C, asm, func_8003799C]   # 0x34
       - [0x181D0, data, data_800379D0]   # 0xf8

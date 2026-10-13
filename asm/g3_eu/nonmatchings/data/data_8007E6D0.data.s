@@ -36902,11 +36902,11 @@ dlabel D_80092C04
     /* 77400 80096C00 EC130880 */ .word D_800813EC
 enddlabel D_80092C04
 
-nonmatching D_80096C04
+nonmatching video_mode
 
-dlabel D_80096C04
+dlabel video_mode
     /* 77404 80096C04 04030000 */ .word 0x00000304
-enddlabel D_80096C04
+enddlabel video_mode
 
 nonmatching D_80096C08
 

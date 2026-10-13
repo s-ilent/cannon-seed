@@ -69,8 +69,6 @@ memclr = 0x80031940; // type:func (pinned member row)
 startIntrVSync = 0x80031A1C; // type:func (pinned member row)
 trapIntrVSync = 0x80031A74; // type:func (pinned member row)
 setIntrVSync = 0x80031AF0; // type:func (pinned member row)
-SetVideoMode = 0x80035240; // type:func (pinned member row)
-GetVideoMode = 0x80035258; // type:func (pinned member row)
 GsInitGraph = 0x80035EFC; // type:func (pinned member row)
 gpu_init = 0x80035F74; // type:func (pinned member row)
 GsInitGraph2 = 0x800360CC; // type:func (pinned member row)
@@ -81,7 +79,6 @@ GsInit3D = 0x800367D4; // type:func (pinned member row)
 GsSetRefView2 = 0x8003684C; // type:func (pinned member row)
 scale_view_param = 0x80036C14; // type:func (pinned member row)
 select_max_param = 0x80036D04; // type:func (pinned member row)
-len_param = 0x80036DCC; // type:func (pinned member row)
 gte_rotate_z_matrix = 0x80038098; // type:func (pinned member row)
 RotMatrixC = 0x800383F8; // type:func (pinned member row)
 GsGetLw = 0x8003A0D8; // type:func (pinned member row)
@@ -711,6 +708,10 @@ func_8004ABEC = 0x8004ABEC; // type:func (branch target)
 func_8004AC08 = 0x8004AC08; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
+SetVideoMode = 0x80035240; // type:s32
+GetVideoMode = 0x80035258; // type:s32
+len_param = 0x80036DCC; // type:s32
+video_mode = 0x8004E500; // type:s32
 boot_flag_0 = 0x80063268; // type:s32
 boot_flag_1 = 0x80063294; // type:s32
 // END GENERATED DATA SYMBOLS
