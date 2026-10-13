@@ -11,8 +11,8 @@ nonmatching startIntrVSync, 0x58
 
 glabel startIntrVSync
     /* 2E578 8004DD78 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 2E57C 8004DD7C 0A80043C */  lui        $a0, %hi(D_800A49D8)
-    /* 2E580 8004DD80 D8498424 */  addiu      $a0, $a0, %lo(D_800A49D8)
+    /* 2E57C 8004DD7C 0A80043C */  lui        $a0, %hi(intr_vb_cb_slots)
+    /* 2E580 8004DD80 D8498424 */  addiu      $a0, $a0, %lo(intr_vb_cb_slots)
     /* 2E584 8004DD84 0A80033C */  lui        $v1, %hi(D_800A49FC)
     /* 2E588 8004DD88 FC49638C */  lw         $v1, %lo(D_800A49FC)($v1)
     /* 2E58C 8004DD8C 07010234 */  ori        $v0, $zero, 0x107

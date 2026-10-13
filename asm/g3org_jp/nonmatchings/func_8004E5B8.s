@@ -16,8 +16,8 @@ glabel trapIntrVSync
     /* 2EDC4 8004E5C4 1400B1AF */  sw         $s1, 0x14($sp)
     /* 2EDC8 8004E5C8 21880000 */  addu       $s1, $zero, $zero
     /* 2EDCC 8004E5CC 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 2EDD0 8004E5D0 0A80103C */  lui        $s0, %hi(D_800A41F8)
-    /* 2EDD4 8004E5D4 F8411026 */  addiu      $s0, $s0, %lo(D_800A41F8)
+    /* 2EDD0 8004E5D0 0A80103C */  lui        $s0, %hi(intr_vb_cb_slots)
+    /* 2EDD4 8004E5D4 F8411026 */  addiu      $s0, $s0, %lo(intr_vb_cb_slots)
     /* 2EDD8 8004E5D8 1800BFAF */  sw         $ra, 0x18($sp)
     /* 2EDDC 8004E5DC 01004224 */  addiu      $v0, $v0, 0x1
     /* 2EDE0 8004E5E0 0A80013C */  lui        $at, %hi(D_800A4218)

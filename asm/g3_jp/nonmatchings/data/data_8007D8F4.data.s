@@ -31756,8 +31756,13 @@ dlabel D_80097454
     /* 77C68 80097468 144B0880 */ .word D_80084B14
     /* 77C6C 8009746C 50050300 */ .word 0x00030550
     /* 77C70 80097470 344B0880 */ .word D_80084B34
-    /* 77C74 80097474 50050300 */ .word 0x00030550
 enddlabel D_80097454
+
+nonmatching intr_start_tab
+
+dlabel intr_start_tab
+    /* 77C74 80097474 50050300 */ .word 0x00030550
+enddlabel intr_start_tab
 
 nonmatching intr_imask_ptr
 
@@ -31803,9 +31808,9 @@ dlabel D_800974AC
     /* 77CAC 800974AC 68050000 */ .word 0x00000568
 enddlabel D_800974AC
 
-nonmatching D_800974B0
+nonmatching intr_vb_cb_slots
 
-dlabel D_800974B0
+dlabel intr_vb_cb_slots
     /* 77CB0 800974B0 344C0880 */ .word D_80084C34
     /* 77CB4 800974B4 40060000 */ .word 0x00000640
     /* 77CB8 800974B8 544C0880 */ .word D_80084C54
@@ -31814,7 +31819,7 @@ dlabel D_800974B0
     /* 77CC4 800974C4 BB060000 */ .word 0x000006BB
     /* 77CC8 800974C8 944C0880 */ .word D_80084C94
     /* 77CCC 800974CC BB060000 */ .word 0x000006BB
-enddlabel D_800974B0
+enddlabel intr_vb_cb_slots
 
 nonmatching D_800974D0
 

@@ -16,8 +16,8 @@ glabel trapIntrVSync
     /* 318A8 800510A8 1400B1AF */  sw         $s1, 0x14($sp)
     /* 318AC 800510AC 21880000 */  addu       $s1, $zero, $zero
     /* 318B0 800510B0 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 318B4 800510B4 0980103C */  lui        $s0, %hi(D_80097CCC)
-    /* 318B8 800510B8 CC7C1026 */  addiu      $s0, $s0, %lo(D_80097CCC)
+    /* 318B4 800510B4 0980103C */  lui        $s0, %hi(intr_vb_cb_slots)
+    /* 318B8 800510B8 CC7C1026 */  addiu      $s0, $s0, %lo(intr_vb_cb_slots)
     /* 318BC 800510BC 1800BFAF */  sw         $ra, 0x18($sp)
     /* 318C0 800510C0 01004224 */  addiu      $v0, $v0, 0x1
     /* 318C4 800510C4 0980013C */  lui        $at, %hi(D_80097CEC)

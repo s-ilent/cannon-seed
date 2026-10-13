@@ -17,7 +17,7 @@
  *   0x1F801114 +0x24). startIntrVSync passes the same array base as
  *   $a0 and writes 0x107 through the +0x24 pointer; trapIntrVSync
  *   dispatches through the slots; g3_eu's bodies reference
- *   D_80097CCC/CEC/CF0 - the same +0x00/+0x20/+0x24 layout.
+ *   the D-names at 0x80097CCC/CEC/CF0 - the same +0x00/+0x20/+0x24 layout.
  * - Body fingerprint (scripts/setintrvsync_fp.py): all eight targets
  *   carry the byte-identical 11-word body; per-target slot-array
  *   addresses are the materialized lui/addiu immediates.

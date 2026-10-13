@@ -38043,9 +38043,9 @@ dlabel D_80097CA0
     /* 784C8 80097CC8 AC4B0880 */ .word D_80084BAC
 enddlabel D_80097CA0
 
-nonmatching D_80097CCC
+nonmatching intr_vb_cb_slots
 
-dlabel D_80097CCC
+dlabel intr_vb_cb_slots
     /* 784CC 80097CCC C0020000 */ .word 0x000002C0
     /* 784D0 80097CD0 CC4B0880 */ .word D_80084BCC
     /* 784D4 80097CD4 C0020000 */ .word 0x000002C0
@@ -38054,7 +38054,7 @@ dlabel D_80097CCC
     /* 784E0 80097CE0 0C4C0880 */ .word D_80084C0C
     /* 784E4 80097CE4 C0020000 */ .word 0x000002C0
     /* 784E8 80097CE8 2C4C0880 */ .word D_80084C2C
-enddlabel D_80097CCC
+enddlabel intr_vb_cb_slots
 
 nonmatching D_80097CEC
 

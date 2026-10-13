@@ -405,6 +405,11 @@ memclr = 0x80050C30; // LIBETC INTR member .text+0x6e8 (extent 0x2c); sdk_member
 startIntrVSync = 0x80051044; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x8005109C; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x80051118; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
+// member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
+// const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
+// Full evidence under target: mainmenu_jp.
+intr_vb_cb_slots = 0x80097CCC; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
 VSync = 0x80051170; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
 v_wait = 0x800512B8; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
 GsInitCoordinate2 = 0x80055A08; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
@@ -522,6 +527,11 @@ memclr = 0x800515D8; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_me
 startIntrVSync = 0x800517E4; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x8005183C; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x800518B8; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
+// member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
+// const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
+// Full evidence under target: mainmenu_jp.
+intr_vb_cb_slots = 0x800974B0; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
 VSync = 0x80051910; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
 v_wait = 0x80051A58; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
 SetVideoMode = 0x80055008; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
@@ -714,6 +724,11 @@ memclr = 0x8004DD4C; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_me
 startIntrVSync = 0x8004DD78; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x8004DDD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x8004DE4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
+// member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
+// const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
+// Full evidence under target: mainmenu_jp.
+intr_vb_cb_slots = 0x800A49D8; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
 GsInitGraph = 0x80052110; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
 gpu_init = 0x80052188; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
 GsInitGraph2 = 0x800522E0; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
@@ -835,6 +850,11 @@ memclr = 0x8004E484; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_me
 startIntrVSync = 0x8004E560; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x8004E5B8; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x8004E634; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
+// member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
+// const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
+// Full evidence under target: mainmenu_jp.
+intr_vb_cb_slots = 0x800A41F8; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
 SetVideoMode = 0x80051D84; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x80051D9C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // video_mode: role-descriptive name for the VMODE member's backing

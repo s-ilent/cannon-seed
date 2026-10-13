@@ -57879,9 +57879,9 @@ dlabel D_800A49D4
     /* 851D4 800A49D4 E0CE0880 */ .word D_8008CEE0
 enddlabel D_800A49D4
 
-nonmatching D_800A49D8
+nonmatching intr_vb_cb_slots
 
-dlabel D_800A49D8
+dlabel intr_vb_cb_slots
     /* 851D8 800A49D8 52080000 */ .word 0x00000852
     /* 851DC 800A49DC 00CF0880 */ .word D_8008CF00
     /* 851E0 800A49E0 52080000 */ .word 0x00000852
@@ -57890,7 +57890,7 @@ dlabel D_800A49D8
     /* 851EC 800A49EC 40CF0880 */ .word D_8008CF40
     /* 851F0 800A49F0 52080000 */ .word 0x00000852
     /* 851F4 800A49F4 60CF0880 */ .word D_8008CF60
-enddlabel D_800A49D8
+enddlabel intr_vb_cb_slots
 
 nonmatching D_800A49F8
 

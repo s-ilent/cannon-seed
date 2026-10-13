@@ -202,23 +202,28 @@ glabel func_8004B514
     /* 2BD1C 8004B51C 00000000 */   nop
 endlabel func_8004B514
 
-nonmatching func_8004B520, 0x34
+nonmatching func_8004B520, 0x4
 
 glabel func_8004B520
-    /* 2BD20 8004B520 0180053C */  lui        $a1, %hi(D_80010E06)
-    /* 2BD24 8004B524 060EA584 */  lh         $a1, %lo(D_80010E06)($a1)
-    /* 2BD28 8004B528 0180063C */  lui        $a2, %hi(D_80010E08)
-    /* 2BD2C 8004B52C 080EC684 */  lh         $a2, %lo(D_80010E08)($a2)
-    /* 2BD30 8004B530 0180013C */  lui        $at, %hi(D_80010E04)
-    /* 2BD34 8004B534 040E30A4 */  sh         $s0, %lo(D_80010E04)($at)
-    /* 2BD38 8004B538 0180013C */  lui        $at, %hi(D_80010E02)
-    /* 2BD3C 8004B53C 020E20A4 */  sh         $zero, %lo(D_80010E02)($at)
-    /* 2BD40 8004B540 B696000C */  jal        func_80025AD8
-    /* 2BD44 8004B544 11000434 */   ori       $a0, $zero, 0x11
-    /* 2BD48 8004B548 5716010C */  jal        func_8004595C
-    /* 2BD4C 8004B54C 00000000 */   nop
-    /* 2BD50 8004B550 06004584 */  lh         $a1, 0x6($v0)
+    /* 2BD20 8004B520 0180053C */  lui        $a1, (0x80010000 >> 16)
 endlabel func_8004B520
+
+nonmatching intr_start_aux6
+
+dlabel intr_start_aux6
+    /* 2BD24 8004B524 060EA584 */ .word 0x84A50E06
+    /* 2BD28 8004B528 0180063C */ .word 0x3C068001
+    /* 2BD2C 8004B52C 080EC684 */ .word 0x84C60E08
+    /* 2BD30 8004B530 0180013C */ .word 0x3C018001
+    /* 2BD34 8004B534 040E30A4 */ .word 0xA4300E04
+    /* 2BD38 8004B538 0180013C */ .word 0x3C018001
+    /* 2BD3C 8004B53C 020E20A4 */ .word 0xA4200E02
+    /* 2BD40 8004B540 B696000C */ .word 0x0C0096B6
+    /* 2BD44 8004B544 11000434 */ .word 0x34040011
+    /* 2BD48 8004B548 5716010C */ .word 0x0C011657
+    /* 2BD4C 8004B54C 00000000 */ .word 0x00000000
+    /* 2BD50 8004B550 06004584 */ .word 0x84450006
+enddlabel intr_start_aux6
 
 nonmatching func_8004B554, 0x18
 

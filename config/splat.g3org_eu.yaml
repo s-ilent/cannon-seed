@@ -260,7 +260,7 @@ segments:
       - [0x2E54C, c, func_8004DD4C]   # 0x2c sdk
       - [0x2E578, asm, func_8004DD78]   # 0x58 sdk
       - [0x2E5D0, asm, func_8004DDD0]   # 0x7c sdk
-      - [0x2E64C, asm, func_8004DE4C]   # 0x2c sdk
+      - [0x2E64C, c, func_8004DE4C]   # 0x2c sdk
       - [0x2E678, asm, func_8004DE78]   # 0x2c sdk
       - [0x2E6A4, data, data_8004DEA4]   # 0x32c4
       - [0x31968, asm, func_80051168]   # 0x400

@@ -1746,6 +1746,7 @@ intr_start_tab = 0x800A41BC; // type:s32
 intr_imask_ptr = 0x800A41C0; // type:s32
 intr_mask_ptr = 0x800A41C4; // type:s32
 intr_dicr_ptr = 0x800A41C8; // type:s32
+intr_vb_cb_slots = 0x800A41F8; // type:s32
 video_mode = 0x800A4398; // type:s32
 _spu_inTransfer = 0x800B75F4; // type:s32
 _svm_stereo_mono = 0x8017881C; // type:s32

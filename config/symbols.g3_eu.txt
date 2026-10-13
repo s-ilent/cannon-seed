@@ -1413,6 +1413,7 @@ intr_start_tab = 0x80097C90; // type:s32
 intr_imask_ptr = 0x80097C94; // type:s32
 intr_mask_ptr = 0x80097C98; // type:s32
 intr_dicr_ptr = 0x80097C9C; // type:s32
+intr_vb_cb_slots = 0x80097CCC; // type:s32
 _spu_inTransfer = 0x800AB0E8; // type:s32
 _svm_stereo_mono = 0x8016AC90; // type:s32
 PSDIDX = 0x80172734; // type:s32

@@ -276,7 +276,7 @@ segments:
       - [0x2ECB0, data, data_8004E4B0]   # 0xb0
       - [0x2ED60, asm, func_8004E560]   # 0x58 sdk
       - [0x2EDB8, asm, func_8004E5B8]   # 0x7c sdk
-      - [0x2EE34, asm, func_8004E634]   # 0x2c sdk
+      - [0x2EE34, c, func_8004E634]   # 0x2c sdk
       - [0x2EE60, asm, func_8004E660]   # 0x2c sdk
       - [0x2EE8C, data, data_8004E68C]   # 0xc24
       - [0x2FAB0, asm, func_8004F2B0]   # 0x850

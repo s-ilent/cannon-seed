@@ -56725,9 +56725,9 @@ dlabel D_800A41F4
     /* 849F4 800A41F4 3387EA63 */ .word 0x63EA8733
 enddlabel D_800A41F4
 
-nonmatching D_800A41F8
+nonmatching intr_vb_cb_slots
 
-dlabel D_800A41F8
+dlabel intr_vb_cb_slots
     /* 849F8 800A41F8 DFC39661 */ .word 0x6196C3DF
     /* 849FC 800A41FC C5676767 */ .word 0x676767C5
     /* 84A00 800A4200 5D01EDC8 */ .word 0xC8ED015D
@@ -56736,7 +56736,7 @@ dlabel D_800A41F8
     /* 84A0C 800A420C 8225CEAE */ .word 0xAECE2582
     /* 84A10 800A4210 DAC78820 */ .word 0x2088C7DA
     /* 84A14 800A4214 7CDBBB09 */ .word 0x09BBDB7C
-enddlabel D_800A41F8
+enddlabel intr_vb_cb_slots
 
 nonmatching D_800A4218
 
