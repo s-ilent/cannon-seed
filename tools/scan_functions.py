@@ -1186,7 +1186,13 @@ def main(argv):
     # v3b: cross-range branch targets (see scan()). Naming them lets
     # spimdisasm emit `j func_XXXXXXXX` instead of an unresolvable
     # file-local `.L`; the second link pass defines address-encoded names.
+    # A cross target the target's curated scope already names (e.g. a
+    # curated jal callee inside a still-data row) must NOT get an
+    # address-encoded label too - splat rejects duplicate vram symbols
+    # and the curated name wins (same rule as the pinned rows above).
     for o in sorted(cross_targets):
+        if o in curated:
+            continue
         gen_syms.append(f"func_{BASE + o:08X} = 0x{BASE + o:08X}; // type:func (branch target)")
     gen_syms.append("// END GENERATED FUNCTION SYMBOLS")
     # Curated data symbols: any curated offset that is not a function
