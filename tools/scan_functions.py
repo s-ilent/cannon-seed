@@ -1186,11 +1186,24 @@ def main(argv):
     # gaps) can carry curated names too: the row start IS the member's
     # byte-verified entry address even though the walk never produced a
     # code range there. Symbols-file-only, like every curated name.
+    # Matched C rows (`c`, the sdk_c class) take the same path: no walk
+    # ever starts at a kept offset (hard_stops), so a curated-named C
+    # member can never reach the ranges emission above - its name used to
+    # fall through to the data-symbol pass and re-label the function as
+    # type:s32 in the symbols file (witnessed: mainmenu_jp setIntrVSync,
+    # the only sdk member whose row is a c row there). The C object file
+    # defines the real symbol; the symbols-file entry only routes other
+    # rows' references, and those references are function calls - the
+    # entry must stay type:func like every other target's.
     for off, typ, _name, _k in kept_gap_rows:
         if typ == "asm" and off in curated:
             gen_syms.append(
                 f"{curated[off]} = 0x{BASE + off:08X}; "
                 f"// type:func (pinned member row)")
+            n_curated += 1
+        elif typ == "c" and off in curated:
+            gen_syms.append(
+                f"{curated[off]} = 0x{BASE + off:08X}; // type:func")
             n_curated += 1
     # v3b: cross-range branch targets (see scan()). Naming them lets
     # spimdisasm emit `j func_XXXXXXXX` instead of an unresolvable
@@ -1218,7 +1231,7 @@ def main(argv):
         if s in curated:
             consumed.add(s)
     for off, typ, _name, _k in kept_gap_rows:
-        if typ == "asm" and off in curated:
+        if typ in ("asm", "c") and off in curated:
             consumed.add(off)
     data_syms = []
     gp_abs = load_curated_gp_markers(target)
