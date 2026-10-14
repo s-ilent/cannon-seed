@@ -6,6 +6,27 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### Teach `tools/sdk_members.py` the `0xF000`-section archives (LIBC/LIBAPI/…)
+
+`parse_archive()` keys every member's `.text` on section id 2. Five
+archives' members — LIBAPI, LIBC, LIBCARD, LIBCOMB, LIBSN — number `.text`
+as `0xF000` instead (all 3.3 archives share the same outer `LIB\x01`
+wrapper; the section-id scheme inside the member records differs by lib
+vintage), so the parser returns 0 members for those five and
+`config/sdk_members.txt` has never census'd their placements
+(the 2026-10-12 3.3 re-pin counts its 968 placements from the 11 new-format
+libs only). Much of LIBC/LIBAPI is 16-byte zero-relocation BIOS thunks —
+see the Witness A thunk identification addendum, which grew out of exactly
+such a member set — and those place trivially by byte match; the full
+implementations place like any other member once the section id is mapped.
+
+Fix: accept both `.text` ids in `parse_archive()`/`Member.text()` (and in
+the symbol filters), regenerate `config/sdk_members.txt` + the anchored
+census, and re-run the scan with `--sdk-anchors`: any NEW anchored
+placements become walk-stop anchors, so land the yaml/symbols drift with
+the usual re-scan discipline (verify 8/8 must stay GREEN). Small,
+independent, self-checking.
+
 ### Retire the `asm` rows that are MODE2 sector framing
 
 The framed-file layout (see the de-frame item below) puts 304 bytes of MODE2
@@ -122,6 +143,25 @@ head hunt, first fully-worked example of the pathology):
   depths. Same runtime code, different sector alignment per region — the
   trio is the cleanest demonstration that the carve view's row structure
   is a per-region artifact of where 304-byte gaps happen to land.
+* Thunk identification addendum (2026-10-14/15 window): the 4 thunks at
+  `data_80065F50`'s head are not hand-rolled stubs — they are Psy-Q 3.3
+  **LIBC members linked verbatim**, 16 bytes each, byte-identical to the
+  archive bodies (psyq's own scheduling: `addiu $t2,TAB; jr $t2;` with
+  the `addiu $t1,N` ordinal in the delay slot, then `nop`): A0#0x18
+  `strncmp`, A0#0x1A `strncpy`, A0#0x34 `free`, B0#0x38 `exit` —
+  splat-map addresses `0x80065F5C/6C/7C/8C`, row head is 3 nops of
+  padding before the block. Triple-sourced: psyq 3.3 `LIBC.LIB` member
+  bodies parsed from the archive, lab313ru sig-db 330 (`LIBC.LIB.json`
+  C24/C26/C52/A56.OBJ — same sigs byte for byte), and the documented
+  BIOS A0/B0 tables. The same contiguous 4-thunk block exists in every
+  target at its own depth (splat-map addresses of the `strncmp` head,
+  block stride 0x10): mainmenu_jp `0x800666AC`, g3_jp `0x8004EFBC`,
+  g3_eu `0x8004E9D4`, g3org_jp `0x8004BE68`, g3org_eu `0x8004B708`; the
+  two boot EXEs carry a **fifth** LIBC thunk, `rand` (A0#0x2F), between
+  `free` and `exit` — slps_00270 `0x80030E20..0x80030E60`, sces_00269
+  `0x80030894..0x800308D4`. The members are zero-relocation pure
+  immediates, so the identification is address-independent and survives
+  the de-frame transition unchanged.
 
 ### Carve the code out of the `data` rows — the other direction
 
