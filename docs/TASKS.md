@@ -1241,3 +1241,30 @@ Next queue:
 4. Walker rows stay under the zero-entry contract; coordinate with the
    walker-probe session first.
 5. Runtime gate-family: still blocked (fresh-checked this session).
+
+## 2026-10-14 (later): mainmenu_eu INTR_VB carve + setIntrVSync C match
+
+The last incomplete INTR_VB target closed (cron-20261013-2356). The member
+sat inside data_800684A0 (file 0x48CA0, 0x25c); byte-driven hand-carve, then
+the standard flip. Commit 0e8efaa (attribution) + the match commit.
+
+- The cron-20261013-2241 queue note assumed a 4-row carve (member + memclr
+  at +0x100). BYTES FALSIFIED IT: mainmenu_eu's link places 0x130 bytes of
+  genuine data at the canonical memclr position (+0x100 past setIntrVSync);
+  the member's memclr copy sits 0x130 bytes LATER at 0x800686D0
+  (byte-identical to the landed copies). Carve is 3 func rows + 0x130 data
+  row + 1 func_-named memclr-copy row. Lesson: member-layout assumptions
+  are per-link; check bytes first.
+- VRAM-NAMING LAW (cost one failed verify): yaml row symbols are
+  VRAM-derived (name = vram & 0xFFFFFF... i.e. file + 0x1F800 here), and
+  build.sh decodes each object's rom FROM THE FILE NAME
+  (rom = 0x800 + (name_vram - 0x80020000)). Naming a row from its file
+  offset (func_80068ED0 for file 0x48ED0) silently produces an orphan
+  section (.r_000496D0) that ld appends after the payload: image grows by
+  the row size, the row's slot zeroes. Symptom signature: t_size + row
+  extent, content at image end, zeros in place.
+- setIntrVSync matched first try after the carve (same shape as the five
+  landed targets). matched 173 -> 174; ratchets 365/0; screens 0/0.
+- Remaining INTR_VB state: slps_00270/sces_00269 stay asm (boot-EXE
+  reference-decode mystery, evidence banked in the worklog); all other 7
+  targets now carry the C setIntrVSync.
