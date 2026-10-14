@@ -836,7 +836,11 @@ def preserved_types(yaml_path: Path):
     offsets, and the set of `sdk` offsets (byte-verified SDK member rows
     carved by the v6 rule) - the latter two are pinned-class: hard
     no-walk spans whose marker must be re-emitted into the generated
-    block.
+    block. A `c` row carrying an `sdk` marker keeps the ANNOTATION only
+    (`sdk_c`): the row is already preserved by type, and a matched C
+    function must never join the no-walk pin set - but the marker is
+    evidence and must survive the re-scan (it was being dropped, the
+    d683dc9 marker-loss class for the sdk annotation).
 
     v3 note: `c` entries are always preserved, and a `data` entry carrying a
     `pinned` marker is preserved too (a range verified by hand to be data).
@@ -853,9 +857,10 @@ def preserved_types(yaml_path: Path):
     kept = {}
     pinned = set()
     sdk = set()
+    sdk_c = set()
     noseed = set()
     if not yaml_path.exists():
-        return kept, pinned, sdk, noseed
+        return kept, pinned, sdk, sdk_c, noseed
     in_block = False
     for ln in yaml_path.read_text().splitlines():
         if "# BEGIN GENERATED SUBSEGMENTS" in ln:
@@ -901,9 +906,11 @@ def preserved_types(yaml_path: Path):
                     sdk.add(off)
                 else:
                     pinned.add(off)
+            elif is_sdk:
+                sdk_c.add(off)
             elif is_noseed:
                 noseed.add(off)
-    return kept, pinned, sdk, noseed
+    return kept, pinned, sdk, sdk_c, noseed
 
 
 def main(argv):
@@ -917,7 +924,7 @@ def main(argv):
     pc0 = header_words[0]
     entry_off = pc0 - BASE
 
-    kept, pinned, sdk, noseed = preserved_types(
+    kept, pinned, sdk, sdk_c, noseed = preserved_types(
         yaml_path := REPO / "config" / f"splat.{target}.yaml")
 
     # v6 SDK anchors (docstring 13): byte-verified member spans become
@@ -1137,6 +1144,8 @@ def main(argv):
         if off in pinned:
             mark = " pinned"
         elif off in sdk:
+            mark = " sdk"
+        elif off in sdk_c:
             mark = " sdk"
         elif off in noseed:
             mark = " noseed"
