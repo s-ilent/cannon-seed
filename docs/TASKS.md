@@ -1639,3 +1639,51 @@ Next queue:
 3. Parallel lanes stay theirs: setIntr base->a1 steering, startIntr
    reopen, trapIntr fingerprint.
 4. Runtime gate-family: still blocked (no runtime stack in sandbox).
+
+## 2026-10-14 (later): D_80072DB8 attribution carve - the cluster is GsTMDdivTG3L .text+0x78, the then-tail is a cross-member tail-share
+
+The "GsSort-style cluster" impression from round 2 is resolved, and it
+is better news than a carve: **D_80072DB8 is an instruction boundary
+inside a real LIBGTE member**, so the then-path tail resolves through
+an existing member claim and needs NO extent carve of the data row.
+
+Decode facts (baselines/mainmenu_jp.bin, LE words - see the new
+"Retail baseline byte order" section in docs/TOOLCHAIN.md for the
+endian/offset traps this pass hit and fixed):
+
+- The row data_80072B20 is a MIXED region, not a cluster+padding:
+  0x80072B20..~0x80072C24 front DATA (high-entropy words, then
+  `ffffff00/ffffffff/ffffff00` markers); ~0x80072C30..0x80072D3C real
+  CODE entered mid-row (jal 0x800667b8, arg-setup chain, and a branch
+  reaching back into the data_800720F0 row - the same mis-typed-row
+  code-weave class as intr_stop_begin); 0x80072D40..0x80072FBC the
+  LIBGTE member (below).
+- The member at 0x80072D40 is the sdk_members claim `DVGT3_00/01
+  GsTMDdivTG3L` (ambiguous pair, sig-db agree): own prologue
+  `addiu $sp,$sp,-0x88` + s6/s7/s8 argument takes, continuous legal
+  mips1 stream, extent 0x27c ending exactly at the next row
+  (GsTMDdivTG4L, unique+adoptable, at 0x80072FBC).
+- D_80072DB8 = the member .text+0x78, the divided-primitive
+  packet-copy tail: `addiu $s0,$a0,0xc; lhu $v0,6($s0); sll $v0,3;
+  addu $v0,$s6; lwl/lwr $v1/$a0 8-byte loads; swl/swr into ($s3)` -
+  the round-2 "GsSort-style primitive copying" idiom is the GTE
+  division output writer, not a separate GsSort member.
+- XRef: the ONLY image-wide `j 0x80072db8` is at 0x8007F264 =
+  GsSetDrawBuffOffset+0x90 - the then-path tail, exactly where the
+  probe shape has `.set noreorder; j D_80072DB8; nop`. The then path
+  jumps INTO the GTE division member's packet-copy tail: a genuine
+  cross-member mid-entry tail-share (LIBGS EMULIB -> LIBGTE), the
+  same linker-level sharing family as the func_80062FCC splice.
+- No legal branch from the member reaches below 0x80072D40 except the
+  intra-weave edges noted above; the member boundary is clean.
+
+Implication for the flip: the C side keeps `j D_80072DB8` with
+D_80072DB8 resolving as a curated/auto mid-member label; once the
+member itself is carved as an asm row the label becomes that row's
+.text+0x78 symbol. The full row re-carve (front data extent, the
+0x80072C30 weave fragment, DVGT3_00-vs-01 disambiguation from the
+Psy-Q lib archives, and the data_800720F0 weave) is a standalone
+session task with the libs present; it is NOT a GSD-lane gate.
+
+Carve tool: scripts/gsdb8_carve.py (repo-external) - row legality
+pass, TG3L boundary check, image-wide j/jal + lui/%lo XRef scan.

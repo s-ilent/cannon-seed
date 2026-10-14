@@ -95,3 +95,31 @@ Certain retail routines are hand-written assembly rather than compiler output:
 * GTE `ctc2` stub (`func_80037AC8`)
 
 Compiling across optimization levels (`-O0` to `-O3`, `-G0/4/8`) across available flags produced no leading-nop functions. The cc1/maspsx toolchain fills delay slots consistently. These routines represent hand-written assembly in the original game and remain matched via volatile assembly wrappers or assembly stubs rather than pure C functions.
+
+## Retail baseline byte order and address mapping (measured 2026-10-14)
+
+Decoding `baselines/*.bin` by hand (capstone ad-hoc passes, attribution
+carves) must use these facts - getting them wrong costs a full detour:
+
+- The files are complete PS-X EXE images: `PS-X EXE` magic, then a
+  0x800-byte header whose FIELDS are little-endian (standard PS-X EXE;
+  `t_addr` at 0x18 reads 0x80020000, `t_size` at 0x1c reads the text
+  size - both as LE u32), then the text.
+- The TEXT is stored as LITTLE-ENDIAN words, consistent with the
+  `-EL` build (`mipsel-as`, `build.sh` flags `-march=mips64 -mabi=32
+  -EL`) and with the oracle: the committed SHA-1 hashes the file
+  exactly as shipped. Decode with `CS_MODE_MIPS32 |
+  CS_MODE_LITTLE_ENDIAN`; a big-endian pass shows every instruction
+  byte-reversed (e.g. `6c00bf8f` instead of `8fbf006c` = `lw
+  $ra,0x6c($sp)`) and decodes to garbage that looks like data.
+- VA to file offset: `file = 0x800 + VA - 0x80020000` for all 8
+  targets (verified: the GsSetDrawBuffOffset prologue sits at exactly
+  that offset for its curated VA; tools/gsdbo-style fingerprint
+  scripts use the same formula). Splat-yaml offsets are the same
+  file offsets (header included).
+- Word-at-a-time legality passes work: illegal words = data (entropy
+  tables, `ffffff00/ffffffff` markers), legal runs = code; but
+  several data rows contain real code entered mid-row (the
+  `intr_stop_begin` class), so legality alone does not settle rows -
+  byte-matched member claims (config/sdk_members.txt) and image-wide
+  XRef scans decide boundaries.
