@@ -51,6 +51,7 @@ OUT = REPO / "config" / "sdk_members.txt"
 SEC_TEXT = 2          # section id of .text in every Psy-Q object seen
 SEC_NAMES = {1: ".rdata", 2: ".text", 3: ".data", 4: ".sdata", 5: ".sbss",
              6: ".bss", 7: ".ctors", 8: ".dtors"}
+_SEC_CANON = {v: k for k, v in SEC_NAMES.items()}
 
 # Relocation field kinds, inferred from the instruction the linker patched.
 # The object's stream gives a type byte; the encoding is checked against the
@@ -66,13 +67,17 @@ RLO = "lo16"
 # --------------------------------------------------------------------------
 class Member:
     __slots__ = ("lib", "srcfile", "sections", "sec_ids", "relocs", "syms",
-                 "xrefs", "xbss", "locals", "cur")
+                 "xrefs", "xbss", "locals", "cur", "secmap")
 
     def __init__(self, lib):
         self.lib = lib
         self.srcfile = "?"
         self.sections = {}       # section id -> bytearray
         self.sec_ids = {}        # section id -> name
+        self.secmap = {}         # raw record-stream id -> canonical SEC_NAMES id
+                                 # (the 0xF000-section vintage: LIBAPI/LIBC/
+                                 # LIBCARD/LIBCOMB/LIBSN number .text 0xF000,
+                                 # .data 0xF001, ... instead of 2/3/...)
         self.relocs = []         # (section, offset, type, expr)
         self.syms = {}           # symbol number -> (section, offset, name)
         self.xrefs = {}          # symbol number -> external name
@@ -117,7 +122,8 @@ def _expr(data, i, member):
     if op == 0x02:                                  # address of symbol
         return ("sym", struct.unpack_from("<H", data, i)[0]), i + 2
     if op == 0x04:                                  # section base
-        return ("sec", struct.unpack_from("<H", data, i)[0]), i + 2
+        raw = struct.unpack_from("<H", data, i)[0]
+        return ("sec", member.secmap.get(raw, raw)), i + 2
     if op in (0x2C, 0x2E):                          # add / sub
         left, i = _expr(data, i, member)
         right, i = _expr(data, i, member)
@@ -142,7 +148,8 @@ def _record_stream(data, i, member, depth=0):
             buf = member.sections.setdefault(sec, bytearray())
             buf += blob
         elif tag == 0x06:                                   # section switch
-            member.cur = struct.unpack_from("<H", data, i)[0]
+            raw = struct.unpack_from("<H", data, i)[0]
+            member.cur = member.secmap.get(raw, raw)
             i += 2
             patch_offset = len(member.sections.get(member.cur, b""))
         elif tag == 0x08:                                   # uninitialised
@@ -162,7 +169,7 @@ def _record_stream(data, i, member, depth=0):
             ln = data[i]
             nm = data[i + 1:i + 1 + ln].decode("latin1")
             i += 1 + ln
-            member.syms[num] = (sec, off, nm)
+            member.syms[num] = (member.secmap.get(sec, sec), off, nm)
         elif tag == 0x0E:                                   # xref
             num = struct.unpack_from("<H", data, i)[0]
             i += 2
@@ -177,14 +184,16 @@ def _record_stream(data, i, member, depth=0):
             ln = data[i]
             nm = data[i + 1:i + 1 + ln].decode("latin1")
             i += 1 + ln
-            member.sec_ids[sec] = nm
+            canon = _SEC_CANON.get(nm, sec)
+            member.secmap[sec] = canon
+            member.sec_ids[canon] = nm
         elif tag == 0x12:                                   # local symbol
             sec, off = struct.unpack_from("<HI", data, i)
             i += 6
             ln = data[i]
             nm = data[i + 1:i + 1 + ln].decode("latin1")
             i += 1 + ln
-            member.locals.append((sec, off, nm))
+            member.locals.append((member.secmap.get(sec, sec), off, nm))
         elif tag == 0x1C:                                   # source file name
             _num = struct.unpack_from("<H", data, i)[0]
             i += 2
@@ -438,7 +447,7 @@ def is_anchor(stats):
     return sum((stats.get("secrefcnt") or {}).values()) >= 2
 
 
-def locate(payload, member, min_fixed=12):
+def locate(payload, member, min_fixed=8):
     """[(offset, stats)] candidate placements of `member` in `payload`.
 
     The unlinked object carries zeroes at relocated fields, so a byte that is
@@ -585,8 +594,10 @@ def main(argv):
     ap.add_argument("--target", action="append", default=None)
     ap.add_argument("--check", action="store_true", help="report only")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--min-fixed", type=int, default=12,
-                    help="minimum number of non-wildcard bytes in a member")
+    ap.add_argument("--min-fixed", type=int, default=8,
+                    help="minimum number of non-wildcard bytes in a member "
+                         "(8 so the 16-byte zero-relocation BIOS thunks "
+                         "census - they carry exactly 9 non-zero bytes)")
     ap.add_argument("--sigs", type=Path, default=None,
                     help="psx_psyq_signatures/<ver> dir; corroborate placements")
     ap.add_argument("--verbose", action="store_true")
