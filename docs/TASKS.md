@@ -1460,3 +1460,19 @@ Carve-round verdict: NOTHING blocks the flip mechanically - the C
 references resolve through existing auto-names + curated entries. The
 carve round is now pure attribution quality (the D_80072DB8 cluster)
 and rolls into the fingerprint/rollout phase rather than gating it.
+
+## 2026-10-14 (later): GsSetDrawBuffOffset byte fingerprint - 8/8 uniform, imm-only diffs
+
+Fingerprint pass over all 8 baselines (scripts/gsdbo_fingerprint.py,
+repo-external): 0x11c words at each curated address, boot EXE load base
+corrected to 0x80020000 from the PS-X header (0x18 field; both boots
+share it, size 0x46800).
+
+RESULT: prologue-ok in 8/8, and EVERY cross-target diff is an
+address-immediate only (same opcode half, different %hi/%lo imm) -
+mainmenu_jp is the zero-diff reference; mainmenu_eu 20 diff words,
+g3_jp/g3_eu 37, g3org_jp/g3org_eu 33, slps_00270/sces_00269 37. Unlike
+setIntrVSync there is NO JP/EU revision divergence: both revisions
+carry the identical member. One C source serves all 8 targets; the
+rollout after a mainmenu_jp match is the standard curated-addresses +
+flip + verify flow with no per-region shape work.
