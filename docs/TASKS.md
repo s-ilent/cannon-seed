@@ -8,6 +8,18 @@ sandbox agent, which is where the build toolchain lives.
 
 ### Teach `tools/sdk_members.py` the `0xF000`-section archives (LIBC/LIBAPI/…)
 
+TOOL + REPORT DONE 2026-10-15 (see Log): `parse_archive()` now canonicalizes
+section ids by name at section-def time (`0xF000` vintage: LIBAPI, LIBC,
+LIBCARD, LIBCOMB, LIBSN — plus mixed-in members of LIBGTE/LIBC2), and the
+report regenerates at `--min-fixed 8` so the 16-byte zero-relocation BIOS
+thunks (exactly 9 non-zero bytes each) census. 425→748 members, 1068→1975
+placements, 144→145 anchored (thunks are `unique`, not anchored: zero
+relocations to reconstruct), sdk_anchors.txt 856→1703 rows. mainmenu_eu is
+landed and verified GREEN; the remaining seven targets' scan/extract/verify
+landing is the open part of this item.
+
+Original finding, for the record:
+
 `parse_archive()` keys every member's `.text` on section id 2. Five
 archives' members — LIBAPI, LIBC, LIBCARD, LIBCOMB, LIBSN — number `.text`
 as `0xF000` instead (all 3.3 archives share the same outer `LIB\x01`

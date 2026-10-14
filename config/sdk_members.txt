@@ -32,7 +32,42 @@
 // Names are evidence, not configuration: adopted names live in
 // config/symbols.curated.txt - read the guard block at its top first.
 
-// target: g3_eu  (134 placements, 16 anchored, 51 named symbols)
+// target: g3_eu  (257 placements, 16 anchored, 51 named symbols)
+//   0x80028d5c LIBGS     EMULIB         unique     GsSetOrign
+//   0x800294bc LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8002bba4 LIBGS     EMULIB         unique     GsSetOrign
+//   0x80049e50 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8004db14 LIBC      ?              unique     bzero
+//   0x8004db24 LIBC      ?              unique     malloc
+//   0x8004db34 LIBC      ?              unique     memset
+//   0x8004db44 LIBC      ?              unique     strcat
+//   0x8004db54 LIBC      ?              unique     printf
+//   0x8004db64 LIBC      ?              unique     strlen
+//   0x8004db74 LIBC      ?              unique     strcmp
+//   0x8004db84 LIBC      ?              unique     strcpy
+//   0x8004db94 LIBC      ?              unique     strncat
+//   0x8004e814 LIBC      ?              unique     memchr
+//   0x8004e9d4 LIBC      ?              unique     strncmp
+//   0x8004e9e4 LIBC      ?              unique     strncpy
+//   0x8004e9f4 LIBC      ?              unique     free
+//   0x8004ea04 LIBC      ?              ambiguous  exit
+//   0x8004ea04 LIBC2     ?              ambiguous  exit
+//   0x8004ea14 LIBSN     ?              unique     PCopen
+//   0x8004ea34 LIBSN     ?              unique     PClseek
+//   0x8004ea58 LIBSN     ?              unique     PCclose
+//   0x8004ea68 LIBSN     READ           ambiguous  PCread adoptable  (sig-db agree)
+//   0x8004ea68 LIBSN     WRITE          ambiguous  PCwrite adoptable  (sig-db agree)
+//   0x8004eb28 LIBSN     ?              unique     _SN_write
+//   0x8004fca0 LIBGTE    ?              unique     MulMatrix
+//   0x8004fdac LIBGTE    ?              unique     MulMatrix2
+//   0x8004feb8 LIBGTE    ?              unique     ApplyMatrix
+//   0x8004ff08 LIBGTE    ?              unique     ApplyMatrixSV
+//   0x8004ff64 LIBGTE    ?              unique     TransMatrix
+//   0x8004ff88 LIBGTE    ?              unique     ScaleMatrix
+//   0x800500ac LIBGTE    ?              unique     SetRotMatrix
+//   0x800500dc LIBGTE    ?              unique     SetLightMatrix
+//   0x8005010c LIBGTE    ?              unique     SetColorMatrix
+//   0x8005013c LIBGTE    ?              unique     SetTransMatrix
 //   0x80050520 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x80050538 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x80050548 LIBETC    INTR           unique     ResetCallback adoptable  (sig-db agree)
@@ -51,14 +86,61 @@
 //   0x80050af8 LIBETC    INTR           unique     stopIntr adoptable  (sig-db agree)
 //   0x80050ba8 LIBETC    INTR           unique     restartIntr adoptable  (sig-db agree)
 //   0x80050c30 LIBETC    INTR           unique     memclr adoptable  (sig-db agree)
+//   0x80050c5c LIBC      ?              unique     setjmp
 //   0x80051044 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
 //   0x8005109c LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
 //   0x80051118 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
 //   0x80051144 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
 //   0x80051170 LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
 //   0x800512b8 LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
+//   0x80051354 LIBC      ?              unique     puts
+//   0x80051374 LIBAPI    ?              unique     lseek
+//   0x80051384 LIBAPI    ?              unique     close
+//   0x80051394 LIBAPI    ?              unique     write
+//   0x800513a4 LIBAPI    ?              unique     SetMem
+//   0x800513b4 LIBAPI    ?              unique     EnableEvent
+//   0x800513c4 LIBAPI    ?              unique     delete
+//   0x800513d4 LIBAPI    ?              unique     format
+//   0x800513e4 LIBAPI    ?              unique     HookEntryInt
+//   0x800513f4 LIBAPI    ?              unique     _96_init
+//   0x80051404 LIBAPI    ?              unique     LoadExec
+//   0x80051414 LIBAPI    ?              unique     ChangeClearPAD
+//   0x80051424 LIBAPI    ?              unique     InitHeap
+//   0x80051434 LIBAPI    ?              unique     ResetEntryInt
+//   0x80051444 LIBAPI    ?              unique     nextfile
+//   0x80051454 LIBAPI    ?              unique     OpenEvent adoptable
+//   0x80051464 LIBAPI    ?              unique     read
+//   0x80051474 LIBAPI    ?              unique     TestEvent
+//   0x80051494 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x800514a4 LIBAPI    ?              unique     open
+//   0x800514b4 LIBAPI    ?              unique     _96_remove
+//   0x800514c4 LIBAPI    ?              unique     firstfile
+//   0x800514d4 LIBAPI    ?              unique     ReturnFromException
+//   0x80054828 LIBC      ?              unique     memcpy
+//   0x80054838 LIBAPI    ?              unique     GPU_cw
 //   0x8005510c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8005510c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8005510c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8005510c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x8005512c LIBGTE    ?              unique     SetVertex0
+//   0x8005513c LIBGTE    ?              unique     SetVertex1
+//   0x8005514c LIBGTE    ?              unique     SetVertex2
+//   0x8005515c LIBGTE    ?              unique     SetVertexTri
+//   0x8005517c LIBGTE    ?              unique     SetRGBfifo
+//   0x80055190 LIBGTE    ?              unique     SetIR123
+//   0x800551a4 LIBGTE    ?              unique     SetIR0
+//   0x800551b0 LIBGTE    ?              unique     SetBackColor
+//   0x800551d0 LIBGTE    ?              unique     SetFarColor
+//   0x800551f0 LIBGTE    ?              unique     SetSZfifo3
+//   0x80055204 LIBGTE    ?              unique     SetSZfifo4
+//   0x8005521c LIBGTE    ?              unique     SetSXSYfifo
+//   0x80055230 LIBGTE    ?              unique     SetRii
+//   0x80055244 LIBGTE    ?              unique     SetMAC123
+//   0x80055258 LIBGTE    ?              unique     SetData32
+//   0x80055264 LIBGTE    ?              unique     SetGeomOffset
+//   0x8005527c LIBGTE    ?              unique     SetGeomScreen
+//   0x80055288 LIBGTE    ?              unique     SetDQA
+//   0x80055294 LIBGTE    ?              unique     SetDQB
 //   0x80055a08 LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
 //   0x80055a84 LIBGS     MATRIX         unique     GsInitCoord2param adoptable  (sig-db agree)
 //   0x80055ab0 LIBGS     MATRIX         unique     GsSetLsMatrix adoptable  (sig-db agree)
@@ -75,7 +157,26 @@
 //   0x800563e8 LIBGS     MATRIX3        unique     GsGetLw adoptable
 //   0x800566ac LIBGS     SCLIB          unique     GsSetAmbient adoptable
 //   0x800566d4 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x80056e18 LIBGTE    ?              unique     TransposeMatrix
 //   0x80056f88 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
+//   0x800588a0 LIBGTE    ?              unique     LightColor
+//   0x800588c8 LIBGTE    ?              unique     DpqColorLight
+//   0x800588f0 LIBGTE    ?              unique     DpqColor3
+//   0x8005892c LIBGTE    ?              unique     Intpl
+//   0x80058950 LIBGTE    ?              unique     Square12
+//   0x80058978 LIBGTE    ?              unique     Square0
+//   0x800589a0 LIBGTE    ?              unique     AverageZ3
+//   0x800589c0 LIBGTE    ?              unique     AverageZ4
+//   0x800589e4 LIBGTE    ?              unique     OuterProduct12
+//   0x80058a3c LIBGTE    ?              unique     OuterProduct0
+//   0x80058a94 LIBGTE    ?              unique     Lzc
+//   0x80059234 LIBGTE    ?              unique     RotTransPers4
+//   0x800592b4 LIBGTE    ?              unique     ReadSZfifo3
+//   0x800592c8 LIBGTE    ?              unique     ReadSZfifo4
+//   0x800592e0 LIBGTE    ?              unique     ReadSXSYfifo
+//   0x800592f4 LIBGTE    ?              unique     ReadRGBfifo
+//   0x80059308 LIBGTE    ?              unique     ReadGeomOffset
+//   0x80059328 LIBGTE    ?              unique     ReadGeomScreen
 //   0x800595c4 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
 //   0x8005a148 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
 //   0x8005a334 LIBGTE    DVF4_02        unique     GsTMDdivF4NL adoptable  (sig-db agree)
@@ -86,15 +187,45 @@
 //   0x8005b728 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3 adoptable  (sig-db agree)
 //   0x8005bd5c LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
 //   0x8005bf98 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4 adoptable  (sig-db agree)
+//   0x8005cf5c LIBGTE    ?              unique     GsTMDfastNF4
+//   0x8005d0c4 LIBGTE    ?              unique     GsTMDfastF4NL
+//   0x8005d230 LIBGTE    ?              unique     GsTMDfastF4L
+//   0x8005d3a8 LIBGTE    ?              unique     GsTMDfastF4LFG
+//   0x8005dd1c LIBGTE    ?              unique     RotAverageNclip3
+//   0x8005ddac LIBGTE    ?              unique     RotAverageNclip4
+//   0x8005de5c LIBGTE    ?              unique     RotAverage3
 //   0x8005e224 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
 //   0x8005e494 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8005e494 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
 //   0x8005eac8 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
 //   0x8005ed50 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL adoptable  (sig-db agree)
 //   0x8005efd4 LIBGTE    DVGT3_02       unique     GsTMDdivTG3NL adoptable  (sig-db agree)
+//   0x8005f5c4 LIBGTE    ?              unique     GsTMDfastTNF3
+//   0x8005f730 LIBGTE    ?              unique     GsTMDfastTF3NL
+//   0x8005f894 LIBGTE    ?              unique     GsTMDfastTF3L
+//   0x8005fa04 LIBGTE    ?              unique     GsTMDfastTF3LFG
 //   0x80061934 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
 //   0x80061bd8 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80061bd8 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
+//   0x80062288 LIBGTE    ?              unique     RotTransPers
+//   0x800622b4 LIBGTE    ?              unique     RotTransPers3
+//   0x80062308 LIBGTE    ?              unique     RotTrans
+//   0x80062330 LIBGTE    ?              unique     LocalLight
+//   0x80062354 LIBGTE    ?              unique     DpqColor
+//   0x80062370 LIBGTE    ?              unique     NormalColor
+//   0x8006238c LIBGTE    ?              unique     NormalColor3
+//   0x800623c8 LIBGTE    ?              unique     NormalColorDpq
+//   0x800623ec LIBGTE    ?              unique     NormalColorDpq3 adoptable
+//   0x80062434 LIBGTE    ?              unique     NormalColorCol
+//   0x80062454 LIBGTE    ?              unique     NormalColorCol3
+//   0x80062498 LIBGTE    ?              unique     ColorDpq
+//   0x800624c0 LIBGTE    ?              unique     ColorCol
+//   0x800624e4 LIBGTE    ?              unique     NormalClip
+//   0x80062508 LIBGTE    ?              unique     NormalClipS
+//   0x80062518 LIBGTE    ?              unique     AverageSZ3
+//   0x80062528 LIBGTE    ?              unique     AverageSZ4
+//   0x800638e8 LIBGTE    ?              unique     RotAverageNclipColorCol3
+//   0x800639b8 LIBGTE    ?              unique     RotAverageNclipColorDpq3
 //   0x800651f8 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x800651f8 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x80065430 LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
@@ -102,35 +233,56 @@
 //   0x80065cb8 LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
 //   0x80065ea0 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
 //   0x80066404 LIBGTE    DVG4_03        unique     GsTMDdivNG4 adoptable  (sig-db agree)
+//   0x8006665c LIBGTE    ?              unique     RotAverageNclipColorDpq3_1
 //   0x800675ec LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x800676c4 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x800676c4 LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x800676e8 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x80067854 LIBAPI    ?              unique     FlushCache
 //   0x80067864 LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x800678bc LIBGS     SCLIB          unique     GsSetLightMode adoptable
 //   0x80067948 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
 //   0x80067958 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
 //   0x80068120 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x800683c0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800683c0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800683c0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800683c0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800683e0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800683e0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800683e0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800683e0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068400 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80068400 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80068400 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80068400 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068a28 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80068a28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80068a28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80068a28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068a98 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
 //   0x80068ac8 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x800695a8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800695a8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800695a8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800695a8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80069650 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80069650 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80069650 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80069650 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80069670 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80069670 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80069670 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80069670 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80069c4c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80069c4c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80069c4c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80069c4c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80069c6c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80069c6c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80069c6c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80069c6c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x8006c750 LIBAPI    ?              unique     DeliverEvent
 //   0x8006c7f4 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x8006e01c LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
 //   0x8006e05c LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
@@ -139,6 +291,8 @@
 //   0x8006e300 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
 //   0x8006e368 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
 //   0x8006e424 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8006e4a0 LIBAPI    ?              unique     CloseEvent
+//   0x8006e4b0 LIBAPI    ?              unique     DisableEvent
 //   0x8006f898 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
 //   0x8006f9e4 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
 //   0x8006fb54 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
@@ -152,23 +306,37 @@
 //   0x80075c9c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x80075d50 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80075f70 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80075f70 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80075f70 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80075f70 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075f70 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80075f90 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80075f90 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80075f90 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80075f90 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075f90 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x800766d0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800766d0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800766d0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800766d0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800766d0 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x800766f0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800766f0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800766f0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800766f0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800766f0 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x800767b4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800767b4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800767b4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800767b4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800769d0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800769d0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800769d0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800769d0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800769d0 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x800769f0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800769f0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800769f0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800769f0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800769f0 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80076a10 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
@@ -189,6 +357,8 @@
 //   0x8007af2c LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x8007af88 LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8007b014 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8007b014 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8007b014 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8007b014 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007b014 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
 //   0x8007b034 LIBSND    UT_REV         ambiguous  SsUtReverbOff  (sig-db agree)
@@ -199,24 +369,69 @@
 //   0x8007b1e0 LIBSND    UT_REV         ambiguous  SsUtSetReverbDelay  (sig-db agree)
 //   0x8007b014 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8007b034 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8007b034 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8007b034 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8007b034 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007b034 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8007bf48 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8007c0e8 LIBAPI    ?              unique     WaitEvent
 //   0x8007c0f8 LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
 //   0x8007c1c8 LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x8007c394 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x8007c4b0 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x8007cabc LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8007cc28 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8007cc50 LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x8007cc50 LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
 //   0x8007cc7c LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x8007cd10 LIBCARD   ?              unique     _card_load
+//   0x8007cd20 LIBCARD   ?              unique     _card_info
+//   0x8007cd30 LIBCARD   ?              unique     _card_auto
+//   0x8007cd70 LIBCARD   ?              unique     _card_write
+//   0x8007cd80 LIBCARD   ?              unique     InitCARD
+//   0x8007cd90 LIBCARD   ?              unique     StartCARD
+//   0x8007cda0 LIBAPI    ?              ambiguous  _bu_init
+//   0x8007cda0 LIBCARD   ?              ambiguous  _bu_init
+//   0x8007cdb0 LIBCARD   ?              unique     _new_card
+//   0x8007cdc0 LIBCARD   ?              unique     _card_read
+//   0x8007e260 LIBAPI    ?              unique     PAD_dr
+//   0x8007e270 LIBAPI    ?              unique     SysDeqIntRP
+//   0x8007e280 LIBAPI    ?              unique     SysEnqIntRP
 
-// target: g3_jp  (142 placements, 21 anchored, 35 named symbols)
+// target: g3_jp  (265 placements, 22 anchored, 36 named symbols)
+//   0x80028d60 LIBGS     EMULIB         unique     GsSetOrign
+//   0x800294c0 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8002bbb4 LIBGS     EMULIB         unique     GsSetOrign
+//   0x8004a318 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8004deac LIBC      ?              unique     bzero
+//   0x8004debc LIBC      ?              unique     malloc
+//   0x8004decc LIBC      ?              unique     memset
+//   0x8004dedc LIBC      ?              unique     strcat adoptable
+//   0x8004deec LIBC      ?              unique     printf
+//   0x8004e03c LIBC      ?              unique     strcmp
+//   0x8004e04c LIBC      ?              unique     strcpy
+//   0x8004e05c LIBC      ?              unique     strncat
+//   0x8004ef1c LIBC      ?              unique     memchr
+//   0x8004ef2c LIBC      ?              unique     memmove
+//   0x8004efbc LIBC      ?              unique     strncmp
+//   0x8004efcc LIBC      ?              unique     strncpy
+//   0x8004efdc LIBC      ?              unique     free
+//   0x8004efec LIBC      ?              ambiguous  exit
+//   0x8004efec LIBC2     ?              ambiguous  exit
+//   0x8004effc LIBSN     ?              unique     PCopen
+//   0x8004f01c LIBSN     ?              unique     PClseek
+//   0x8004f040 LIBSN     ?              unique     PCclose
+//   0x8004f050 LIBSN     READ           ambiguous  PCread  (sig-db agree)
+//   0x8004f050 LIBSN     WRITE          ambiguous  PCwrite  (sig-db agree)
+//   0x8004f110 LIBSN     ?              unique     _SN_write
+//   0x8005134c LIBC      ?              unique     setjmp
 //   0x8005135c LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x800513ac LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
 //   0x80051530 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
 //   0x800515d8 LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
 //   0x800517c4 LIBGS     SCLIB          ambiguous  GsSetProjection adoptable
+//   0x800517c4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete adoptable
+//   0x800517c4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new adoptable
 //   0x800517c4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff adoptable  (sig-db agree)
 //   0x800517e4 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
 //   0x8005183c LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
@@ -224,10 +439,58 @@
 //   0x800518e4 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
 //   0x80051910 LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
 //   0x80051a58 LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
+//   0x80051af4 LIBC      ?              unique     puts
+//   0x80051b04 LIBAPI    ?              unique     PAD_dr
+//   0x80051b24 LIBAPI    ?              unique     lseek
+//   0x80051b34 LIBAPI    ?              unique     close
+//   0x80051b44 LIBAPI    ?              unique     write
+//   0x80051b54 LIBAPI    ?              unique     SetMem
+//   0x80051b64 LIBAPI    ?              unique     EnableEvent
+//   0x80051b74 LIBAPI    ?              unique     delete
+//   0x80051b84 LIBAPI    ?              unique     format
+//   0x80051b94 LIBAPI    ?              unique     HookEntryInt
+//   0x80051ba4 LIBAPI    ?              unique     _96_init
+//   0x80051bb4 LIBAPI    ?              unique     PAD_init
+//   0x80051bc4 LIBAPI    ?              unique     LoadExec
+//   0x80051bd4 LIBAPI    ?              unique     ChangeClearPAD
+//   0x80051be4 LIBAPI    ?              unique     InitHeap adoptable
+//   0x80051bf4 LIBAPI    ?              unique     ResetEntryInt
+//   0x80051c04 LIBAPI    ?              unique     nextfile
+//   0x80051c14 LIBAPI    ?              unique     OpenEvent
+//   0x80051c24 LIBAPI    ?              unique     read
+//   0x80051c34 LIBAPI    ?              unique     TestEvent
+//   0x80051c54 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x80051c64 LIBAPI    ?              unique     open
+//   0x80051c74 LIBAPI    ?              unique     _96_remove
+//   0x80051c84 LIBAPI    ?              unique     firstfile
+//   0x80051c94 LIBAPI    ?              unique     ReturnFromException
+//   0x80054ff8 LIBC      ?              unique     memcpy
 //   0x80055008 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x80055020 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x80055030 LIBAPI    ?              unique     GPU_cw
 //   0x80055900 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80055900 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80055900 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80055900 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x80055920 LIBGTE    ?              unique     SetVertex0
+//   0x80055930 LIBGTE    ?              unique     SetVertex1
+//   0x80055940 LIBGTE    ?              unique     SetVertex2
+//   0x80055950 LIBGTE    ?              unique     SetVertexTri
+//   0x80055970 LIBGTE    ?              unique     SetRGBfifo
+//   0x80055984 LIBGTE    ?              unique     SetIR123
+//   0x80055998 LIBGTE    ?              unique     SetIR0
+//   0x800559a4 LIBGTE    ?              unique     SetBackColor
+//   0x800559c4 LIBGTE    ?              unique     SetFarColor
+//   0x800559e4 LIBGTE    ?              unique     SetSZfifo3
+//   0x800559f8 LIBGTE    ?              unique     SetSZfifo4
+//   0x80055a10 LIBGTE    ?              unique     SetSXSYfifo
+//   0x80055a24 LIBGTE    ?              unique     SetRii
+//   0x80055a38 LIBGTE    ?              unique     SetMAC123
+//   0x80055a4c LIBGTE    ?              unique     SetData32
+//   0x80055a58 LIBGTE    ?              unique     SetGeomOffset
+//   0x80055a70 LIBGTE    ?              unique     SetGeomScreen
+//   0x80055a7c LIBGTE    ?              unique     SetDQA
+//   0x80055a88 LIBGTE    ?              unique     SetDQB
 //   0x800561fc LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
 //   0x80056278 LIBGS     MATRIX         unique     GsInitCoord2param adoptable  (sig-db agree)
 //   0x800562a4 LIBGS     MATRIX         unique     GsSetLsMatrix adoptable  (sig-db agree)
@@ -244,9 +507,28 @@
 //   0x80056bdc LIBGS     MATRIX3        unique     GsGetLw adoptable
 //   0x80056ea0 LIBGS     SCLIB          unique     GsSetAmbient adoptable
 //   0x80056ec8 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x8005760c LIBGTE    ?              unique     TransposeMatrix
 //   0x8005777c LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
 //   0x800579ac LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x80059094 LIBGTE    ?              unique     LightColor
+//   0x800590bc LIBGTE    ?              unique     DpqColorLight
+//   0x800590e4 LIBGTE    ?              unique     DpqColor3
+//   0x80059120 LIBGTE    ?              unique     Intpl
+//   0x80059144 LIBGTE    ?              unique     Square12
+//   0x8005916c LIBGTE    ?              unique     Square0
+//   0x80059194 LIBGTE    ?              unique     AverageZ3
+//   0x800591b4 LIBGTE    ?              unique     AverageZ4
+//   0x800591d8 LIBGTE    ?              unique     OuterProduct12
+//   0x80059230 LIBGTE    ?              unique     OuterProduct0
+//   0x80059288 LIBGTE    ?              unique     Lzc
 //   0x800592a4 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
+//   0x80059a00 LIBGTE    ?              unique     RotTransPers4
+//   0x80059a80 LIBGTE    ?              unique     ReadSZfifo3
+//   0x80059a94 LIBGTE    ?              unique     ReadSZfifo4
+//   0x80059aac LIBGTE    ?              unique     ReadSXSYfifo
+//   0x80059ac0 LIBGTE    ?              unique     ReadRGBfifo
+//   0x80059ad4 LIBGTE    ?              unique     ReadGeomOffset
+//   0x80059af4 LIBGTE    ?              unique     ReadGeomScreen
 //   0x80059d90 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
 //   0x80059e24 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x8005a704 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
@@ -258,6 +540,13 @@
 //   0x8005be14 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3 adoptable  (sig-db agree)
 //   0x8005c098 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
 //   0x8005c684 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4 adoptable  (sig-db agree)
+//   0x8005cf68 LIBGTE    ?              unique     GsTMDfastNG3
+//   0x8005d0b0 LIBGTE    ?              unique     GsTMDfastG3NL
+//   0x8005d1f0 LIBGTE    ?              unique     GsTMDfastG3L
+//   0x8005d380 LIBGTE    ?              unique     GsTMDfastG3LFG
+//   0x8005e408 LIBGTE    ?              unique     RotAverageNclip3
+//   0x8005e498 LIBGTE    ?              unique     RotAverageNclip4
+//   0x8005e548 LIBGTE    ?              unique     RotAverage3
 //   0x8005e5a8 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8005e5a8 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x8005eb80 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
@@ -270,6 +559,8 @@
 //   0x800622c4 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x800622c4 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
 //   0x80062540 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x80063fd4 LIBGTE    ?              unique     RotAverageNclipColorCol3
+//   0x800640a4 LIBGTE    ?              unique     RotAverageNclipColorDpq3
 //   0x800658e4 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x800658e4 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x80065b1c LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
@@ -278,39 +569,61 @@
 //   0x800663a4 LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
 //   0x8006658c LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
 //   0x800667c4 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x80066d48 LIBGTE    ?              unique     RotAverageNclipColorDpq3_1
 //   0x80066e58 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x80066f30 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x80066f30 LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x80066f54 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x80066fa0 LIBGTE    ?              unique     InitGeom
+//   0x800670c0 LIBAPI    ?              unique     FlushCache
 //   0x800670d0 LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x80067128 LIBGS     SCLIB          unique     GsSetLightMode adoptable
 //   0x800671b4 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
 //   0x800671c4 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
 //   0x8006798c LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x80067ac4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80067ac4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80067ac4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80067ac4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80067bb0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80067bb0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80067bb0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80067bb0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80067bd0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80067bd0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80067bd0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80067bd0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80067bf0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80067bf0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80067bf0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80067bf0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068218 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
 //   0x80068248 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x80068d28 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80068d28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80068d28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80068d28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068dd0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80068dd0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80068dd0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80068dd0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068df0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80068df0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80068df0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80068df0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800693cc LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800693cc LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800693cc LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800693cc LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800693ec LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800693ec LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800693ec LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800693ec LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8006ba48 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x8006bad8 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x8006bb00 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x8006bb28 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x8006bb50 LIBAPI    ?              unique     DeliverEvent
 //   0x8006bb60 LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
 //   0x8006bc04 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x8006d55c LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
@@ -320,6 +633,8 @@
 //   0x8006d64c LIBCD     CDROM          unique     StGetNext adoptable  (sig-db elsewhere)
 //   0x8006d710 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
 //   0x8006d778 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
+//   0x8006d9e0 LIBAPI    ?              unique     CloseEvent
+//   0x8006d9f0 LIBAPI    ?              unique     DisableEvent
 //   0x8006efd0 LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
 //   0x8006eff4 LIBSPU    S_INI          unique     _SpuInit adoptable  (sig-db agree)
 //   0x8006f0bc LIBSPU    S_INI          unique     SpuStart adoptable  (sig-db agree)
@@ -333,20 +648,32 @@
 //   0x80074e38 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
 //   0x80074e8c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x80075298 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80075298 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80075298 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80075298 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075298 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x800752b8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800752b8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800752b8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800752b8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800752b8 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x800758c8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800758c8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800758c8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800758c8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800758c8 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80075adc LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80075adc LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80075adc LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80075adc LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80075ce8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80075ce8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80075ce8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80075ce8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075ce8 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80075d08 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80075d08 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80075d08 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80075d08 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80075d08 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80075d28 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
@@ -366,26 +693,71 @@
 //   0x8007a034 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x8007a090 LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8007a11c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8007a11c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8007a11c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8007a11c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007a11c LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8007a13c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8007a13c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8007a13c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8007a13c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8007a13c LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8007af68 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
 //   0x8007afd8 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
 //   0x8007b050 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8007b1f0 LIBAPI    ?              unique     WaitEvent
 //   0x8007b200 LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
 //   0x8007b2d0 LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
+//   0x8007b6cc LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x8007b6e0 LIBSND    CRES           unique     Snd_crescendo adoptable  (sig-db agree)
 //   0x8007bf4c LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x8007c068 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
 //   0x8007c108 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
 //   0x8007c16c LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
 //   0x8007c34c LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x8007c3e0 LIBCARD   ?              unique     _card_load
+//   0x8007c3f0 LIBCARD   ?              unique     _card_info
+//   0x8007c400 LIBCARD   ?              unique     _card_auto
+//   0x8007c410 LIBCARD   ?              unique     _card_clear
+//   0x8007c440 LIBCARD   ?              unique     _card_write
+//   0x8007c450 LIBCARD   ?              unique     InitCARD
+//   0x8007c460 LIBCARD   ?              unique     StartCARD
+//   0x8007c470 LIBAPI    ?              ambiguous  _bu_init
+//   0x8007c470 LIBCARD   ?              ambiguous  _bu_init
+//   0x8007c480 LIBCARD   ?              unique     _new_card
+//   0x8007c490 LIBCARD   ?              unique     _card_read
+//   0x8007d900 LIBAPI    ?              unique     SysDeqIntRP
+//   0x8007d910 LIBAPI    ?              unique     SysEnqIntRP
 
-// target: g3org_eu  (133 placements, 17 anchored, 26 named symbols)
+// target: g3org_eu  (249 placements, 17 anchored, 26 named symbols)
+//   0x80029aec LIBGS     EMULIB         unique     GsSetOrign
+//   0x8002a24c LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8002c934 LIBGS     EMULIB         unique     GsSetOrign
+//   0x80046cb4 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8004a978 LIBC      ?              unique     bzero
+//   0x8004a988 LIBC      ?              unique     malloc
+//   0x8004a998 LIBC      ?              unique     memset
+//   0x8004a9a8 LIBC      ?              unique     strcat
+//   0x8004a9b8 LIBC      ?              unique     printf
+//   0x8004a9c8 LIBC      ?              unique     strlen
+//   0x8004a9d8 LIBC      ?              unique     strcmp
+//   0x8004a9e8 LIBC      ?              unique     strcpy
+//   0x8004a9f8 LIBC      ?              unique     strncat
+//   0x8004b678 LIBC      ?              unique     memchr
+//   0x8004b708 LIBC      ?              unique     strncmp
+//   0x8004b718 LIBC      ?              unique     strncpy
+//   0x8004b728 LIBC      ?              unique     free
+//   0x8004b738 LIBC      ?              ambiguous  exit
+//   0x8004b738 LIBC2     ?              ambiguous  exit
+//   0x8004b748 LIBSN     ?              unique     PCopen
+//   0x8004b768 LIBSN     ?              unique     PClseek
+//   0x8004b78c LIBSN     ?              unique     PCclose
+//   0x8004b79c LIBSN     READ           ambiguous  PCread  (sig-db agree)
+//   0x8004b79c LIBSN     WRITE          ambiguous  PCwrite  (sig-db agree)
+//   0x8004b85c LIBSN     ?              unique     _SN_write
 //   0x8004d254 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x8004d26c LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x8004dac0 LIBC      ?              unique     setjmp
 //   0x8004dad0 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x8004db20 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
 //   0x8004dca4 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
@@ -394,7 +766,34 @@
 //   0x8004ddd0 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
 //   0x8004de4c LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
 //   0x8004de78 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x8004e1b8 LIBC      ?              unique     puts
+//   0x8004e1d8 LIBAPI    ?              unique     lseek
+//   0x8004e1e8 LIBAPI    ?              unique     close
+//   0x8004e1f8 LIBAPI    ?              unique     write
+//   0x8004e208 LIBAPI    ?              unique     SetMem
+//   0x8004e218 LIBAPI    ?              unique     EnableEvent
+//   0x8004e228 LIBAPI    ?              unique     delete
+//   0x8004e238 LIBAPI    ?              unique     format
+//   0x8004e248 LIBAPI    ?              unique     HookEntryInt
+//   0x8004e258 LIBAPI    ?              unique     _96_init
+//   0x8004e268 LIBAPI    ?              unique     LoadExec
+//   0x8004e278 LIBAPI    ?              unique     ChangeClearPAD
+//   0x8004e288 LIBAPI    ?              unique     InitHeap
+//   0x8004e298 LIBAPI    ?              unique     ResetEntryInt
+//   0x8004e2a8 LIBAPI    ?              unique     nextfile
+//   0x8004e2b8 LIBAPI    ?              unique     OpenEvent
+//   0x8004e2c8 LIBAPI    ?              unique     read
+//   0x8004e2d8 LIBAPI    ?              unique     TestEvent
+//   0x8004e2f8 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x8004e308 LIBAPI    ?              unique     open
+//   0x8004e318 LIBAPI    ?              unique     _96_remove
+//   0x8004e328 LIBAPI    ?              unique     firstfile
+//   0x8004e338 LIBAPI    ?              unique     ReturnFromException
+//   0x8005155c LIBC      ?              unique     memcpy
+//   0x8005156c LIBAPI    ?              unique     GPU_cw
 //   0x80051e40 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80051e40 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80051e40 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80051e40 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80052110 LIBGS     EMULIB         unique     GsInitGraph adoptable
 //   0x80052188 LIBGS     EMULIB         unique     gpu_init adoptable
@@ -407,9 +806,16 @@
 //   0x80052e48 LIBGS     MATRIX3        unique     GsGetLs adoptable
 //   0x80053510 LIBGS     SCLIB          unique     GsSetAmbient adoptable
 //   0x80053538 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x80053c7c LIBGTE    ?              unique     TransposeMatrix
 //   0x80053dec LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
 //   0x8005401c LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
 //   0x80055a6c LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x80056118 LIBGTE    ?              unique     ReadSZfifo3
+//   0x8005612c LIBGTE    ?              unique     ReadSZfifo4
+//   0x80056144 LIBGTE    ?              unique     ReadSXSYfifo
+//   0x80056158 LIBGTE    ?              unique     ReadRGBfifo
+//   0x8005616c LIBGTE    ?              unique     ReadGeomOffset
+//   0x8005618c LIBGTE    ?              unique     ReadGeomScreen
 //   0x80056428 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
 //   0x800564bc LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x80056e7c LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
@@ -421,6 +827,13 @@
 //   0x80058170 LIBGTE    DVGT4_00       unique     GsTMDdivTG4L adoptable  (sig-db agree)
 //   0x80058810 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
 //   0x80058a90 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
+//   0x800590a0 LIBGTE    ?              unique     GsTMDfastNF3
+//   0x800591dc LIBGTE    ?              unique     GsTMDfastF3NL
+//   0x8005931c LIBGTE    ?              unique     GsTMDfastF3L
+//   0x80059464 LIBGTE    ?              unique     GsTMDfastF3LFG
+//   0x8005ab80 LIBGTE    ?              unique     RotAverageNclip3
+//   0x8005ac10 LIBGTE    ?              unique     RotAverageNclip4
+//   0x8005acc0 LIBGTE    ?              unique     RotAverage3
 //   0x8005ad20 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8005ad20 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x8005af58 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
@@ -431,16 +844,37 @@
 //   0x8005e368 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG adoptable  (sig-db agree)
 //   0x8005e668 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
 //   0x8005ecb8 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x8005efbc LIBGTE    ?              unique     RotTransPers
+//   0x8005efe8 LIBGTE    ?              unique     RotTransPers3
+//   0x8005f03c LIBGTE    ?              unique     RotTrans
+//   0x8005f064 LIBGTE    ?              unique     LocalLight
+//   0x8005f088 LIBGTE    ?              unique     DpqColor
+//   0x8005f0a4 LIBGTE    ?              unique     NormalColor
+//   0x8005f0c0 LIBGTE    ?              unique     NormalColor3
+//   0x8005f0fc LIBGTE    ?              unique     NormalColorDpq
+//   0x8005f120 LIBGTE    ?              unique     NormalColorDpq3
+//   0x8005f168 LIBGTE    ?              unique     NormalColorCol
+//   0x8005f188 LIBGTE    ?              unique     NormalColorCol3
+//   0x8005f1cc LIBGTE    ?              unique     ColorDpq
+//   0x8005f1f4 LIBGTE    ?              unique     ColorCol
+//   0x8005f218 LIBGTE    ?              unique     NormalClip
+//   0x8005f23c LIBGTE    ?              unique     NormalClipS
+//   0x8005f24c LIBGTE    ?              unique     AverageSZ3
+//   0x8005f25c LIBGTE    ?              unique     AverageSZ4
+//   0x8006074c LIBGTE    ?              unique     RotAverageNclipColorCol3
+//   0x8006081c LIBGTE    ?              unique     RotAverageNclipColorDpq3
 //   0x80062294 LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
 //   0x80062500 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x80062500 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
 //   0x80062b1c LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
 //   0x80062d04 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
 //   0x80062f3c LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x800634c0 LIBGTE    ?              unique     RotAverageNclipColorDpq3_1
 //   0x80064320 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x800643f8 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x800643f8 LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x8006441c LIBGS     SCLIB          unique     gte_init adoptable
+//   0x800646b8 LIBAPI    ?              unique     FlushCache
 //   0x800646c8 LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x80064720 LIBGS     SCLIB          unique     GsSetLightMode adoptable
 //   0x800647ac LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
@@ -449,29 +883,48 @@
 //   0x80064d9c LIBGS     SCLIB          unique     gte_set_lc adoptable
 //   0x80064e04 LIBGS     SCLIB          unique     gte_read_lc adoptable
 //   0x80065224 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80065224 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80065224 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80065224 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80065244 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80065244 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80065244 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80065244 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80065264 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80065264 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80065264 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80065264 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8006575c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8006575c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8006575c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8006575c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800658fc LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
 //   0x8006592c LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x8006640c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8006640c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8006640c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8006640c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800664b4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800664b4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800664b4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800664b4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800664d4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800664d4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800664d4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800664d4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80066980 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80066980 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80066980 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80066980 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800669a0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800669a0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800669a0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800669a0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8006937c LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x8006940c LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x80069434 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x8006945c LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80069484 LIBAPI    ?              unique     DeliverEvent
 //   0x80069528 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x8006ae80 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
 //   0x8006aec0 LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
@@ -481,6 +934,8 @@
 //   0x8006b034 LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
 //   0x8006b09c LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
 //   0x8006b158 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8006b1d4 LIBAPI    ?              unique     CloseEvent
+//   0x8006b1e4 LIBAPI    ?              unique     DisableEvent
 //   0x8006c5cc LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
 //   0x8006c848 LIBSND    VS_VTBP        unique     SsVabTransBodyPartly adoptable  (sig-db agree)
 //   0x8006c9b8 LIBSPU    S_STM          unique     SpuSetTransferMode adoptable  (sig-db agree)
@@ -493,20 +948,32 @@
 //   0x8007297c LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
 //   0x800729d0 LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x80072dd4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072dd4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072dd4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072dd4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072dd4 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80072df4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072df4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072df4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072df4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072df4 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80073404 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80073404 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80073404 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80073404 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80073404 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80073618 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80073618 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80073618 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80073618 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80073834 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80073834 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80073834 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80073834 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80073834 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80073854 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80073854 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80073854 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80073854 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80073854 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80073874 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
@@ -528,20 +995,66 @@
 //   0x80077c60 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x80077cbc LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80077d48 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80077d48 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80077d48 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80077d48 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80077d48 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80077d68 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80077d68 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80077d68 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80077d68 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80077d68 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80078b94 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
 //   0x80078c04 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
 //   0x80078c7c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x80078e1c LIBAPI    ?              unique     WaitEvent
 //   0x80078e2c LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
+//   0x800791f8 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x80079314 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x80079ab4 LIBSND    PLAY           unique     Snd_play adoptable  (sig-db agree)
 //   0x80079ae0 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x80079b74 LIBCARD   ?              unique     _card_load
+//   0x80079b84 LIBCARD   ?              unique     _card_info
+//   0x80079b94 LIBCARD   ?              unique     _card_auto
+//   0x80079bd4 LIBCARD   ?              unique     _card_write
+//   0x80079be4 LIBCARD   ?              unique     InitCARD
+//   0x80079bf4 LIBCARD   ?              unique     StartCARD
+//   0x80079c04 LIBAPI    ?              ambiguous  _bu_init
+//   0x80079c04 LIBCARD   ?              ambiguous  _bu_init
+//   0x80079c14 LIBCARD   ?              unique     _new_card
+//   0x80079c24 LIBCARD   ?              unique     _card_read
+//   0x8007b0c4 LIBAPI    ?              unique     PAD_dr
+//   0x8007b0d4 LIBAPI    ?              unique     SysDeqIntRP
+//   0x8007b0e4 LIBAPI    ?              unique     SysEnqIntRP
 
-// target: g3org_jp  (147 placements, 17 anchored, 33 named symbols)
+// target: g3org_jp  (271 placements, 17 anchored, 33 named symbols)
+//   0x80029b38 LIBGS     EMULIB         unique     GsSetOrign
+//   0x8002a298 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8002c98c LIBGS     EMULIB         unique     GsSetOrign
+//   0x80047094 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8004ad58 LIBC      ?              unique     bzero
+//   0x8004ad68 LIBC      ?              unique     malloc
+//   0x8004ad78 LIBC      ?              unique     memset
+//   0x8004ad88 LIBC      ?              unique     strcat
+//   0x8004ad98 LIBC      ?              unique     printf
+//   0x8004ada8 LIBC      ?              unique     strlen
+//   0x8004adb8 LIBC      ?              unique     strcmp
+//   0x8004adc8 LIBC      ?              unique     strcpy
+//   0x8004add8 LIBC      ?              unique     strncat
+//   0x8004bdc8 LIBC      ?              unique     memchr
+//   0x8004bdd8 LIBC      ?              unique     memmove
+//   0x8004be68 LIBC      ?              unique     strncmp
+//   0x8004be78 LIBC      ?              unique     strncpy
+//   0x8004be88 LIBC      ?              unique     free
+//   0x8004be98 LIBC      ?              ambiguous  exit
+//   0x8004be98 LIBC2     ?              ambiguous  exit
+//   0x8004bea8 LIBSN     ?              unique     PCopen
+//   0x8004bec8 LIBSN     ?              unique     PClseek
+//   0x8004beec LIBSN     ?              unique     PCclose
+//   0x8004befc LIBSN     READ           ambiguous  PCread  (sig-db agree)
+//   0x8004befc LIBSN     WRITE          ambiguous  PCwrite  (sig-db agree)
+//   0x8004bfbc LIBSN     ?              unique     _SN_write
+//   0x8004e1f8 LIBC      ?              unique     setjmp
 //   0x8004e208 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x8004e258 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
 //   0x8004e3dc LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
@@ -550,15 +1063,65 @@
 //   0x8004e510 LIBETC    PAD            ambiguous  PadRead  (sig-db agree)
 //   0x8004e540 LIBETC    PAD            ambiguous  PadStop  (sig-db agree)
 //   0x8004e540 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8004e540 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8004e540 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8004e540 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8004e560 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
 //   0x8004e5b8 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
 //   0x8004e634 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
 //   0x8004e660 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x8004e9a0 LIBC      ?              unique     puts
+//   0x8004e9b0 LIBAPI    ?              unique     PAD_dr
+//   0x8004e9d0 LIBAPI    ?              unique     lseek
+//   0x8004e9e0 LIBAPI    ?              unique     close
+//   0x8004e9f0 LIBAPI    ?              unique     write
+//   0x8004ea00 LIBAPI    ?              unique     SetMem
+//   0x8004ea10 LIBAPI    ?              unique     EnableEvent
+//   0x8004ea20 LIBAPI    ?              unique     delete
+//   0x8004ea30 LIBAPI    ?              unique     format
+//   0x8004ea40 LIBAPI    ?              unique     HookEntryInt
+//   0x8004ea50 LIBAPI    ?              unique     _96_init
+//   0x8004ea60 LIBAPI    ?              unique     PAD_init
+//   0x8004ea70 LIBAPI    ?              unique     LoadExec
+//   0x8004ea80 LIBAPI    ?              unique     ChangeClearPAD
+//   0x8004ea90 LIBAPI    ?              unique     InitHeap
+//   0x8004eaa0 LIBAPI    ?              unique     ResetEntryInt
+//   0x8004eab0 LIBAPI    ?              unique     nextfile
+//   0x8004eac0 LIBAPI    ?              unique     OpenEvent
+//   0x8004ead0 LIBAPI    ?              unique     read
+//   0x8004eae0 LIBAPI    ?              unique     TestEvent
+//   0x8004eb00 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x8004eb10 LIBAPI    ?              unique     open
+//   0x8004eb20 LIBAPI    ?              unique     _96_remove
+//   0x8004eb30 LIBAPI    ?              unique     firstfile
+//   0x8004eb40 LIBAPI    ?              unique     ReturnFromException
+//   0x80051d74 LIBC      ?              unique     memcpy
 //   0x80051d84 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x80051d9c LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x80051dac LIBAPI    ?              unique     GPU_cw
 //   0x8005267c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8005267c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8005267c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8005267c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x8005269c LIBGTE    ?              unique     SetVertex0
+//   0x800526ac LIBGTE    ?              unique     SetVertex1
+//   0x800526bc LIBGTE    ?              unique     SetVertex2
+//   0x800526cc LIBGTE    ?              unique     SetVertexTri
+//   0x800526ec LIBGTE    ?              unique     SetRGBfifo
+//   0x80052700 LIBGTE    ?              unique     SetIR123
+//   0x80052714 LIBGTE    ?              unique     SetIR0
+//   0x80052720 LIBGTE    ?              unique     SetBackColor
+//   0x80052740 LIBGTE    ?              unique     SetFarColor
+//   0x80052760 LIBGTE    ?              unique     SetSZfifo3
+//   0x80052774 LIBGTE    ?              unique     SetSZfifo4
+//   0x8005278c LIBGTE    ?              unique     SetSXSYfifo
+//   0x800527a0 LIBGTE    ?              unique     SetRii
+//   0x800527b4 LIBGTE    ?              unique     SetMAC123
+//   0x800527c8 LIBGTE    ?              unique     SetData32
+//   0x800527d4 LIBGTE    ?              unique     SetGeomOffset
+//   0x800527ec LIBGTE    ?              unique     SetGeomScreen
+//   0x800527f8 LIBGTE    ?              unique     SetDQA
+//   0x80052804 LIBGTE    ?              unique     SetDQB
 //   0x80053490 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
 //   0x80053528 LIBGS     SCLIB          unique     GsMapModelingData adoptable
 //   0x800535a0 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
@@ -569,10 +1132,18 @@
 //   0x800541b4 LIBGS     MATRIX3        unique     scale_view_param adoptable
 //   0x800542a4 LIBGS     MATRIX3        unique     select_max_param adoptable
 //   0x8005436c LIBGS     MATRIX3        unique     len_param adoptable
+//   0x80054388 LIBGTE    ?              unique     TransposeMatrix
 //   0x80054628 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
 //   0x80054858 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
 //   0x80056150 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
 //   0x80056280 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x8005677c LIBGTE    ?              unique     RotTransPers4
+//   0x800567fc LIBGTE    ?              unique     ReadSZfifo3
+//   0x80056810 LIBGTE    ?              unique     ReadSZfifo4
+//   0x80056828 LIBGTE    ?              unique     ReadSXSYfifo
+//   0x8005683c LIBGTE    ?              unique     ReadRGBfifo
+//   0x80056850 LIBGTE    ?              unique     ReadGeomOffset
+//   0x80056870 LIBGTE    ?              unique     ReadGeomScreen
 //   0x80056c3c LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
 //   0x80056cd0 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x800575b0 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
@@ -585,6 +1156,12 @@
 //   0x80058f44 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
 //   0x800591c4 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
 //   0x80059400 LIBGTE    DVGT4_03       unique     GsTMDdivTNG4 adoptable  (sig-db agree)
+//   0x8005aac4 LIBGTE    ?              unique     GsTMDfastNG4
+//   0x8005ac44 LIBGTE    ?              unique     GsTMDfastG4NL
+//   0x8005adb8 LIBGTE    ?              unique     GsTMDfastG4L
+//   0x8005af98 LIBGTE    ?              unique     GsTMDfastG4LFG
+//   0x8005b184 LIBGTE    ?              unique     RotAverageNclip3
+//   0x8005b3f4 LIBGTE    ?              unique     RotAverage3
 //   0x8005b454 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8005b454 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x8005b68c LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
@@ -593,8 +1170,30 @@
 //   0x8005bf30 LIBGTE    DVFT3_02       unique     GsTMDdivTF3NL adoptable  (sig-db agree)
 //   0x8005c1b8 LIBGTE    DVFT4_02       unique     GsTMDdivTF4NL adoptable  (sig-db agree)
 //   0x8005c7a0 LIBGTE    DVGT4_02       unique     GsTMDdivTG4NL adoptable  (sig-db agree)
+//   0x8005e1fc LIBGTE    ?              unique     GsTMDfastTNG4
+//   0x8005e3b8 LIBGTE    ?              unique     GsTMDfastTG4NL
+//   0x8005e550 LIBGTE    ?              unique     GsTMDfastTG4L
+//   0x8005e75c LIBGTE    ?              unique     GsTMDfastTG4LFG
 //   0x8005ed9c LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
 //   0x8005f3ec LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x8005f6f0 LIBGTE    ?              unique     RotTransPers
+//   0x8005f71c LIBGTE    ?              unique     RotTransPers3
+//   0x8005f770 LIBGTE    ?              unique     RotTrans
+//   0x8005f798 LIBGTE    ?              unique     LocalLight
+//   0x8005f7bc LIBGTE    ?              unique     DpqColor
+//   0x8005f7d8 LIBGTE    ?              unique     NormalColor
+//   0x8005f7f4 LIBGTE    ?              unique     NormalColor3
+//   0x8005f830 LIBGTE    ?              unique     NormalColorDpq
+//   0x8005f854 LIBGTE    ?              unique     NormalColorDpq3
+//   0x8005f89c LIBGTE    ?              unique     NormalColorCol
+//   0x8005f8bc LIBGTE    ?              unique     NormalColorCol3
+//   0x8005f900 LIBGTE    ?              unique     ColorDpq
+//   0x8005f928 LIBGTE    ?              unique     ColorCol
+//   0x8005f94c LIBGTE    ?              unique     NormalClip
+//   0x8005f970 LIBGTE    ?              unique     NormalClipS
+//   0x8005f980 LIBGTE    ?              unique     AverageSZ3
+//   0x8005f990 LIBGTE    ?              unique     AverageSZ4
+//   0x80060d50 LIBGTE    ?              unique     RotAverageNclipColorCol3
 //   0x80062660 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x80062660 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x80062c34 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
@@ -603,38 +1202,59 @@
 //   0x80063438 LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
 //   0x80063670 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
 //   0x8006386c LIBGTE    DVG4_03        unique     GsTMDdivNG4 adoptable  (sig-db agree)
+//   0x80063ac4 LIBGTE    ?              unique     RotAverageNclipColorDpq3_1
 //   0x80063ddc LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x80063ddc LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x80063e00 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x80063f6c LIBAPI    ?              unique     FlushCache
 //   0x80063f7c LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x80063fd4 LIBGS     SCLIB          unique     GsSetLightMode adoptable
 //   0x80064060 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
 //   0x80064070 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
 //   0x80064838 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x80064970 LIBGS     SCLIB          ambiguous  GsSetProjection adoptable
+//   0x80064970 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete adoptable
+//   0x80064970 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new adoptable
 //   0x80064970 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff adoptable  (sig-db agree)
 //   0x80064a5c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80064a5c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80064a5c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80064a5c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80064a7c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80064a7c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80064a7c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80064a7c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80064a9c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80064a9c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80064a9c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80064a9c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800650c4 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
 //   0x800650f4 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x80065bd4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80065bd4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80065bd4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80065bd4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80065c7c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80065c7c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80065c7c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80065c7c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80065c9c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80065c9c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80065c9c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80065c9c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80066278 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80066278 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80066278 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80066278 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80066298 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80066298 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80066298 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80066298 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800688f4 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x80068984 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x800689ac LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x800689d4 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x800689fc LIBAPI    ?              unique     DeliverEvent
 //   0x80068a0c LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
 //   0x80068ab0 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x8006a408 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
@@ -645,6 +1265,8 @@
 //   0x8006a5bc LIBCD     CDROM          unique     data_ready_callback adoptable  (sig-db elsewhere)
 //   0x8006a624 LIBCD     CDROM          unique     StFreeRing adoptable  (sig-db elsewhere)
 //   0x8006a6e0 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8006a75c LIBAPI    ?              unique     CloseEvent
+//   0x8006a76c LIBAPI    ?              unique     DisableEvent
 //   0x8006be7c LIBSPU    S_DCB          unique     _SpuDataCallback adoptable  (sig-db agree)
 //   0x8006bea0 LIBSPU    S_INI          unique     _SpuInit adoptable  (sig-db agree)
 //   0x8006bf68 LIBSPU    S_INI          unique     SpuStart adoptable  (sig-db agree)
@@ -660,23 +1282,37 @@
 //   0x80071d38 LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x80071dec LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80072014 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072014 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072014 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072014 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072014 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80072034 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072034 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072034 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072034 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072034 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80072774 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072774 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072774 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072774 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072774 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80072794 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072794 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072794 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072794 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072794 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80072858 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072858 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072858 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072858 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80072a64 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072a64 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072a64 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072a64 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072a64 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80072a84 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80072a84 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80072a84 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80072a84 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80072a84 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80072aa4 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
@@ -695,6 +1331,8 @@
 //   0x80076ee0 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x80076f3c LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80076fc8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80076fc8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80076fc8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80076fc8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80076fc8 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
 //   0x80076fe8 LIBSND    UT_REV         ambiguous  SsUtReverbOff  (sig-db agree)
@@ -705,12 +1343,16 @@
 //   0x80077194 LIBSND    UT_REV         ambiguous  SsUtSetReverbDelay  (sig-db agree)
 //   0x80076fc8 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80076fe8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80076fe8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80076fe8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80076fe8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80076fe8 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80077efc LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8007809c LIBAPI    ?              unique     WaitEvent
 //   0x800780ac LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
 //   0x8007817c LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
 //   0x8007827c LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x80078448 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x80078b08 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x80078c74 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x80078c9c LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
@@ -719,17 +1361,77 @@
 //   0x80078de4 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
 //   0x80078e84 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
 //   0x800791f8 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x8007928c LIBCARD   ?              unique     _card_load
+//   0x8007929c LIBCARD   ?              unique     _card_info
+//   0x800792ac LIBCARD   ?              unique     _card_auto
+//   0x800792bc LIBCARD   ?              unique     _card_clear
+//   0x800792ec LIBCARD   ?              unique     _card_write
+//   0x800792fc LIBCARD   ?              unique     InitCARD
+//   0x8007930c LIBCARD   ?              unique     StartCARD
+//   0x8007931c LIBAPI    ?              ambiguous  _bu_init
+//   0x8007931c LIBCARD   ?              ambiguous  _bu_init
+//   0x8007932c LIBCARD   ?              unique     _new_card
+//   0x8007933c LIBCARD   ?              unique     _card_read
+//   0x8007a7ac LIBAPI    ?              unique     SysDeqIntRP
+//   0x8007a7bc LIBAPI    ?              unique     SysEnqIntRP
 
-// target: mainmenu_eu  (140 placements, 16 anchored, 33 named symbols)
+// target: mainmenu_eu  (252 placements, 16 anchored, 33 named symbols)
+//   0x8003d35c LIBGS     EMULIB         unique     GsSetOrign
+//   0x8003eb48 LIBGS     EMULIB         unique     GsSetOrign
+//   0x8003f2a8 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x80061508 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x800651cc LIBC      ?              unique     bzero
+//   0x800651dc LIBC      ?              unique     malloc
+//   0x800651ec LIBC      ?              unique     memset
+//   0x800651fc LIBC      ?              unique     strcat
+//   0x8006520c LIBC      ?              unique     printf
+//   0x8006521c LIBC      ?              unique     strlen
+//   0x8006522c LIBC      ?              unique     strcmp
+//   0x8006523c LIBC      ?              unique     strcpy
+//   0x8006524c LIBC      ?              unique     strncat
+//   0x80065ecc LIBC      ?              unique     memchr
+//   0x80065f5c LIBC      ?              unique     strncmp
+//   0x80065f6c LIBC      ?              unique     strncpy
+//   0x80065f7c LIBC      ?              unique     free
+//   0x80065f8c LIBC      ?              ambiguous  exit
+//   0x80065f8c LIBC2     ?              ambiguous  exit
 //   0x8006797c LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x80067994 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x800681e8 LIBC      ?              unique     setjmp
 //   0x800681f8 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x80068248 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
 //   0x800683cc LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
 //   0x80068474 LIBETC    INTR_DMA       unique     memclr adoptable  (sig-db agree)
 //   0x800686fc LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
 //   0x80068844 LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
+//   0x800688e0 LIBC      ?              unique     puts
+//   0x80068900 LIBAPI    ?              unique     lseek
+//   0x80068910 LIBAPI    ?              unique     close
+//   0x80068920 LIBAPI    ?              unique     write
+//   0x80068930 LIBAPI    ?              unique     SetMem
+//   0x80068940 LIBAPI    ?              unique     EnableEvent
+//   0x80068950 LIBAPI    ?              unique     delete
+//   0x80068960 LIBAPI    ?              unique     format
+//   0x80068970 LIBAPI    ?              unique     HookEntryInt
+//   0x80068980 LIBAPI    ?              unique     _96_init
+//   0x80068990 LIBAPI    ?              unique     LoadExec
+//   0x800689a0 LIBAPI    ?              unique     ChangeClearPAD
+//   0x800689b0 LIBAPI    ?              unique     InitHeap
+//   0x800689c0 LIBAPI    ?              unique     ResetEntryInt
+//   0x800689d0 LIBAPI    ?              unique     nextfile
+//   0x800689e0 LIBAPI    ?              unique     OpenEvent
+//   0x800689f0 LIBAPI    ?              unique     read
+//   0x80068a00 LIBAPI    ?              unique     TestEvent
+//   0x80068a20 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x80068a30 LIBAPI    ?              unique     open
+//   0x80068a40 LIBAPI    ?              unique     _96_remove
+//   0x80068a50 LIBAPI    ?              unique     firstfile
+//   0x80068a60 LIBAPI    ?              unique     ReturnFromException
+//   0x8006bc84 LIBC      ?              unique     memcpy
+//   0x8006bc94 LIBAPI    ?              unique     GPU_cw
 //   0x8006c568 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8006c568 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8006c568 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8006c568 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8006c838 LIBGS     EMULIB         unique     GsInitGraph adoptable
 //   0x8006c8b0 LIBGS     EMULIB         unique     gpu_init adoptable
@@ -742,8 +1444,16 @@
 //   0x8006d570 LIBGS     MATRIX3        unique     GsGetLs adoptable
 //   0x8006dc38 LIBGS     SCLIB          unique     GsSetAmbient adoptable
 //   0x8006dc60 LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x8006e3a4 LIBGTE    ?              unique     TransposeMatrix
 //   0x8006e514 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
 //   0x8006e744 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x800707c0 LIBGTE    ?              unique     RotTransPers4
+//   0x80070840 LIBGTE    ?              unique     ReadSZfifo3
+//   0x80070854 LIBGTE    ?              unique     ReadSZfifo4
+//   0x8007086c LIBGTE    ?              unique     ReadSXSYfifo
+//   0x80070880 LIBGTE    ?              unique     ReadRGBfifo
+//   0x80070894 LIBGTE    ?              unique     ReadGeomOffset
+//   0x800708b4 LIBGTE    ?              unique     ReadGeomScreen
 //   0x80070b50 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
 //   0x80070be4 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x800715a4 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
@@ -755,6 +1465,13 @@
 //   0x80072cb4 LIBGTE    DVFT3_03       unique     GsTMDdivTNF3 adoptable  (sig-db agree)
 //   0x80072f38 LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
 //   0x800731b8 LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
+//   0x800737c8 LIBGTE    ?              unique     GsTMDfastNF3
+//   0x80073904 LIBGTE    ?              unique     GsTMDfastF3NL
+//   0x80073a44 LIBGTE    ?              unique     GsTMDfastF3L
+//   0x80073b8c LIBGTE    ?              unique     GsTMDfastF3LFG
+//   0x800752a8 LIBGTE    ?              unique     RotAverageNclip3
+//   0x80075338 LIBGTE    ?              unique     RotAverageNclip4
+//   0x800753e8 LIBGTE    ?              unique     RotAverage3
 //   0x80075448 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x80075448 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x80075680 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
@@ -768,16 +1485,20 @@
 //   0x80079164 LIBGTE    DVGT3_00       ambiguous  GsTMDdivTG3L  (sig-db agree)
 //   0x80079164 LIBGTE    DVGT3_01       ambiguous  GsTMDdivTG3LFG  (sig-db agree)
 //   0x800793e0 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x8007ae74 LIBGTE    ?              unique     RotAverageNclipColorCol3
+//   0x8007af44 LIBGTE    ?              unique     RotAverageNclipColorDpq3
 //   0x8007c9bc LIBGTE    DVF4_00        unique     GsTMDdivF4L adoptable  (sig-db agree)
 //   0x8007cc28 LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
 //   0x8007cc28 LIBGTE    DVG3_01        ambiguous  GsTMDdivG3LFG  (sig-db agree)
 //   0x8007d244 LIBGTE    DVF3_03        unique     GsTMDdivNF3 adoptable  (sig-db agree)
 //   0x8007d42c LIBGTE    DVF4_03        unique     GsTMDdivNF4 adoptable  (sig-db agree)
 //   0x8007d664 LIBGTE    DVG3_03        unique     GsTMDdivNG3 adoptable  (sig-db agree)
+//   0x8007dbe8 LIBGTE    ?              unique     RotAverageNclipColorDpq3_1
 //   0x8007ea48 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8007eb20 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8007eb20 LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x8007f6c0 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x8007f82c LIBAPI    ?              unique     FlushCache
 //   0x8007f83c LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x8007f894 LIBGS     SCLIB          unique     GsSetLightMode adoptable
 //   0x8007f920 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
@@ -787,27 +1508,46 @@
 //   0x8008022c LIBGS     2D_COM0        unique     _mk_xpndsp adoptable  (sig-db agree)
 //   0x800804f4 LIBGS     2D_COM0        unique     _mk_normsp adoptable  (sig-db agree)
 //   0x80080a38 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080a38 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080a38 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080a38 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080a58 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080a58 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080a58 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080a58 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080a78 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080a78 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080a78 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080a78 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080f70 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080f70 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080f70 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080f70 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80081c20 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80081c20 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80081c20 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80081c20 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80081cc8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80081cc8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80081cc8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80081cc8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80081ce8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80081ce8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80081ce8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80081ce8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80082194 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80082194 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80082194 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80082194 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800821b4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800821b4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800821b4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800821b4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80084b90 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x80084c20 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x80084c48 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x80084c70 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80084c98 LIBAPI    ?              unique     DeliverEvent
 //   0x80084d3c LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x800858fc LIBCD     CDROM          unique     StSetChannel adoptable  (sig-db elsewhere)
 //   0x80086910 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
@@ -828,26 +1568,42 @@
 //   0x8008e370 LIBSPU    S_M_INIT       unique     SpuInitMalloc adoptable  (sig-db agree)
 //   0x8008e5a8 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x8008e7c8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e7c8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e7c8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e7c8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e7c8 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8008e7e8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e7e8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e7e8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e7e8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e7e8 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8008ef28 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008ef28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008ef28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008ef28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008ef28 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8008ef48 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008ef48 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008ef48 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008ef48 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008ef48 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8008f00c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008f00c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008f00c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008f00c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8008f228 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008f228 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008f228 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008f228 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008f228 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8008f248 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008f248 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008f248 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008f248 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008f248 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8008f268 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8008f2e4 LIBAPI    ?              unique     CloseEvent
+//   0x8008f2f4 LIBAPI    ?              unique     DisableEvent
 //   0x8008f304 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
 //   0x8008f318 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
 //   0x8008f93c LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
@@ -867,6 +1623,8 @@
 //   0x80093820 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x8009387c LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80093908 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80093908 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80093908 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80093908 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80093908 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
 //   0x80093928 LIBSND    UT_REV         ambiguous  SsUtReverbOff  (sig-db agree)
@@ -877,20 +1635,58 @@
 //   0x80093ad4 LIBSND    UT_REV         ambiguous  SsUtSetReverbDelay  (sig-db agree)
 //   0x80093908 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80093928 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80093928 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80093928 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80093928 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80093928 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80094624 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
 //   0x80094694 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
 //   0x8009470c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x800948ac LIBAPI    ?              unique     WaitEvent
 //   0x80094abc LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x80094c88 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x80094da4 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x800953b0 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8009551c LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x80095544 LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x80095544 LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
 //   0x80095570 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x80095604 LIBCARD   ?              unique     _card_load
+//   0x80095614 LIBCARD   ?              unique     _card_info
+//   0x80095624 LIBCARD   ?              unique     _card_auto
+//   0x80095664 LIBCARD   ?              unique     _card_write
+//   0x80095674 LIBCARD   ?              unique     InitCARD
+//   0x80095684 LIBCARD   ?              unique     StartCARD
+//   0x80095694 LIBAPI    ?              ambiguous  _bu_init
+//   0x80095694 LIBCARD   ?              ambiguous  _bu_init
+//   0x800956a4 LIBCARD   ?              unique     _new_card
+//   0x800956b4 LIBCARD   ?              unique     _card_read
+//   0x80096b54 LIBAPI    ?              unique     PAD_dr
+//   0x80096b64 LIBAPI    ?              unique     SysDeqIntRP
+//   0x80096b74 LIBAPI    ?              unique     SysEnqIntRP
 
-// target: mainmenu_jp  (153 placements, 23 anchored, 47 named symbols)
+// target: mainmenu_jp  (267 placements, 23 anchored, 47 named symbols)
+//   0x8003d3c4 LIBGS     EMULIB         unique     GsSetOrign
+//   0x8003eb90 LIBGS     EMULIB         unique     GsSetOrign
+//   0x8003f2f0 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x80061a08 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8006559c LIBC      ?              unique     bzero
+//   0x800655ac LIBC      ?              unique     malloc
+//   0x800655bc LIBC      ?              unique     memset
+//   0x800655cc LIBC      ?              unique     strcat
+//   0x800655dc LIBC      ?              unique     printf
+//   0x800655ec LIBC      ?              unique     strlen
+//   0x800655fc LIBC      ?              unique     strcmp
+//   0x8006560c LIBC      ?              unique     strcpy
+//   0x8006561c LIBC      ?              unique     strncat
+//   0x8006660c LIBC      ?              unique     memchr
+//   0x8006661c LIBC      ?              unique     memmove
+//   0x800666ac LIBC      ?              unique     strncmp
+//   0x800666bc LIBC      ?              unique     strncpy
+//   0x800666cc LIBC      ?              unique     free
+//   0x800666dc LIBC      ?              ambiguous  exit
+//   0x800666dc LIBC2     ?              ambiguous  exit
+//   0x80068910 LIBC      ?              unique     setjmp
 //   0x80068920 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x80068970 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
 //   0x80068af4 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
@@ -899,14 +1695,45 @@
 //   0x80068c28 LIBETC    PAD            ambiguous  PadRead  (sig-db agree)
 //   0x80068c58 LIBETC    PAD            ambiguous  PadStop  (sig-db agree)
 //   0x80068c58 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80068c58 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80068c58 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80068c58 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80068c78 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
 //   0x80068cd0 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
 //   0x80068d4c LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
 //   0x80068d78 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x800690b8 LIBC      ?              unique     puts
+//   0x800690c8 LIBAPI    ?              unique     PAD_dr
+//   0x800690e8 LIBAPI    ?              unique     lseek
+//   0x800690f8 LIBAPI    ?              unique     close
+//   0x80069108 LIBAPI    ?              unique     write
+//   0x80069118 LIBAPI    ?              unique     SetMem
+//   0x80069128 LIBAPI    ?              unique     EnableEvent
+//   0x80069138 LIBAPI    ?              unique     delete
+//   0x80069148 LIBAPI    ?              unique     format
+//   0x80069158 LIBAPI    ?              unique     HookEntryInt
+//   0x80069168 LIBAPI    ?              unique     _96_init
+//   0x80069178 LIBAPI    ?              unique     PAD_init
+//   0x80069188 LIBAPI    ?              unique     LoadExec
+//   0x80069198 LIBAPI    ?              unique     ChangeClearPAD
+//   0x800691a8 LIBAPI    ?              unique     InitHeap
+//   0x800691b8 LIBAPI    ?              unique     ResetEntryInt
+//   0x800691c8 LIBAPI    ?              unique     nextfile
+//   0x800691d8 LIBAPI    ?              unique     OpenEvent
+//   0x800691e8 LIBAPI    ?              unique     read
+//   0x800691f8 LIBAPI    ?              unique     TestEvent
+//   0x80069218 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x80069228 LIBAPI    ?              unique     open
+//   0x80069238 LIBAPI    ?              unique     _96_remove
+//   0x80069248 LIBAPI    ?              unique     firstfile
+//   0x80069258 LIBAPI    ?              unique     ReturnFromException
+//   0x8006c48c LIBC      ?              unique     memcpy
 //   0x8006c49c LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x8006c4b4 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x8006c4c4 LIBAPI    ?              unique     GPU_cw
 //   0x8006cd94 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8006cd94 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8006cd94 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8006cd94 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8006d064 LIBGS     EMULIB         unique     GsInitGraph adoptable
 //   0x8006d0dc LIBGS     EMULIB         unique     gpu_init adoptable
@@ -927,6 +1754,7 @@
 //   0x8006ef70 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
 //   0x80070868 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
 //   0x80070998 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x80070e94 LIBGTE    ?              unique     RotTransPers4
 //   0x80071354 LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
 //   0x800713e8 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x80071cc8 LIBGTE    DVF3_02        unique     GsTMDdivF3NL adoptable  (sig-db agree)
@@ -938,6 +1766,16 @@
 //   0x80072fbc LIBGTE    DVGT4_00       unique     GsTMDdivTG4L adoptable  (sig-db agree)
 //   0x8007365c LIBGTE    DVFT4_03       unique     GsTMDdivTNF4 adoptable  (sig-db agree)
 //   0x800738dc LIBGTE    DVGT3_03       unique     GsTMDdivTNG3 adoptable  (sig-db agree)
+//   0x80073eec LIBGTE    ?              unique     GsTMDfastNF3
+//   0x80074028 LIBGTE    ?              unique     GsTMDfastF3NL
+//   0x80074168 LIBGTE    ?              unique     GsTMDfastF3L
+//   0x800742b0 LIBGTE    ?              unique     GsTMDfastF3LFG
+//   0x800751dc LIBGTE    ?              unique     GsTMDfastNG4
+//   0x8007535c LIBGTE    ?              unique     GsTMDfastG4NL
+//   0x800754d0 LIBGTE    ?              unique     GsTMDfastG4L
+//   0x800756b0 LIBGTE    ?              unique     GsTMDfastG4LFG
+//   0x80075a5c LIBGTE    ?              unique     RotAverageNclip4
+//   0x80075b0c LIBGTE    ?              unique     RotAverage3
 //   0x80075b6c LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x80075b6c LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x80075da4 LIBGTE    DVF4_01        unique     GsTMDdivF4LFG adoptable  (sig-db agree)
@@ -949,6 +1787,24 @@
 //   0x800791b4 LIBGTE    DVFT3_01       unique     GsTMDdivTF3LFG adoptable  (sig-db agree)
 //   0x800794b4 LIBGTE    DVFT4_01       unique     GsTMDdivTF4LFG adoptable  (sig-db agree)
 //   0x80079b04 LIBGTE    DVGT4_01       unique     GsTMDdivTG4LFG adoptable  (sig-db agree)
+//   0x80079e08 LIBGTE    ?              unique     RotTransPers
+//   0x80079e34 LIBGTE    ?              unique     RotTransPers3
+//   0x80079e88 LIBGTE    ?              unique     RotTrans
+//   0x80079eb0 LIBGTE    ?              unique     LocalLight
+//   0x80079ed4 LIBGTE    ?              unique     DpqColor
+//   0x80079ef0 LIBGTE    ?              unique     NormalColor
+//   0x80079f0c LIBGTE    ?              unique     NormalColor3
+//   0x80079f48 LIBGTE    ?              unique     NormalColorDpq
+//   0x80079f6c LIBGTE    ?              unique     NormalColorDpq3
+//   0x80079fb4 LIBGTE    ?              unique     NormalColorCol
+//   0x80079fd4 LIBGTE    ?              unique     NormalColorCol3
+//   0x8007a018 LIBGTE    ?              unique     ColorDpq
+//   0x8007a040 LIBGTE    ?              unique     ColorCol
+//   0x8007a064 LIBGTE    ?              unique     NormalClip
+//   0x8007a088 LIBGTE    ?              unique     NormalClipS
+//   0x8007a098 LIBGTE    ?              unique     AverageSZ3
+//   0x8007a0a8 LIBGTE    ?              unique     AverageSZ4
+//   0x8007b668 LIBGTE    ?              unique     RotAverageNclipColorDpq3
 //   0x8007cd78 LIBGTE    DVF3_00        ambiguous  GsTMDdivF3L  (sig-db agree)
 //   0x8007cd78 LIBGTE    DVF3_01        ambiguous  GsTMDdivF3LFG  (sig-db agree)
 //   0x8007d34c LIBGTE    DVG3_00        ambiguous  GsTMDdivG3L  (sig-db agree)
@@ -962,35 +1818,55 @@
 //   0x8007e4f4 LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x8007ee40 LIBGS     SCLIB          unique     gte_scale_matrix adoptable
 //   0x8007ef64 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x8007f0d0 LIBAPI    ?              unique     FlushCache
 //   0x8007f0e0 LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x8007f138 LIBGS     SCLIB          unique     GsSetLightMode adoptable
 //   0x8007f1c4 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
 //   0x8007f1d4 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
 //   0x8007f99c LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x80080174 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080174 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080174 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080174 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080260 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080260 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080260 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080260 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80080280 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80080280 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80080280 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80080280 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800802a0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800802a0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800802a0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800802a0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800808c8 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
 //   0x800808f8 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x800813d8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800813d8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800813d8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800813d8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80081480 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80081480 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80081480 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80081480 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800814a0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800814a0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800814a0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800814a0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8008194c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008194c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008194c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008194c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8008196c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008196c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008196c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008196c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800840f8 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x80084188 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x800841b0 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x800841d8 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x80084200 LIBAPI    ?              unique     DeliverEvent
 //   0x80084210 LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
 //   0x800842b4 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x80084e74 LIBCD     CDROM          unique     StSetChannel adoptable  (sig-db elsewhere)
@@ -1016,26 +1892,42 @@
 //   0x8008d71c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x8008d7d0 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x8008d9f8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008d9f8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008d9f8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008d9f8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008d9f8 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8008da18 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008da18 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008da18 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008da18 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008da18 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8008e158 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e158 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e158 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e158 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e158 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8008e178 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e178 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e178 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e178 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e178 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8008e23c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e23c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e23c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e23c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8008e578 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e578 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e578 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e578 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e578 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8008e598 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8008e598 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8008e598 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8008e598 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8008e598 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8008e5b8 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x8008e634 LIBAPI    ?              unique     CloseEvent
+//   0x8008e644 LIBAPI    ?              unique     DisableEvent
 //   0x8008e654 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
 //   0x8008e668 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
 //   0x8008e678 LIBSND    VS_VH          unique     SsVabOpenHead adoptable  (sig-db agree)
@@ -1056,6 +1948,8 @@
 //   0x80092960 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x800929bc LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x80092a48 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80092a48 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80092a48 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80092a48 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80092a48 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
 //   0x80092a68 LIBSND    UT_REV         ambiguous  SsUtReverbOff  (sig-db agree)
@@ -1066,14 +1960,18 @@
 //   0x80092c14 LIBSND    UT_REV         ambiguous  SsUtSetReverbDelay  (sig-db agree)
 //   0x80092a48 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80092a68 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80092a68 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80092a68 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80092a68 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80092a68 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80093894 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
 //   0x80093904 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
 //   0x8009397c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x80093b1c LIBAPI    ?              unique     WaitEvent
 //   0x80093b2c LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
 //   0x80093bfc LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
 //   0x80093cfc LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x80093ec8 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x80094588 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x800946f4 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8009471c LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
@@ -1081,22 +1979,102 @@
 //   0x80094748 LIBSND    UT_GPA         unique     SsUtGetProgAtr adoptable  (sig-db agree)
 //   0x80094a98 LIBSND    TEMPO          unique     Snd_tempo adoptable  (sig-db agree)
 //   0x80094c78 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x80094d0c LIBCARD   ?              unique     _card_load
+//   0x80094d1c LIBCARD   ?              unique     _card_info
+//   0x80094d2c LIBCARD   ?              unique     _card_auto
+//   0x80094d3c LIBCARD   ?              unique     _card_clear
+//   0x80094d6c LIBCARD   ?              unique     _card_write
+//   0x80094d7c LIBCARD   ?              unique     InitCARD
+//   0x80094d8c LIBCARD   ?              unique     StartCARD
+//   0x80094d9c LIBAPI    ?              ambiguous  _bu_init
+//   0x80094d9c LIBCARD   ?              ambiguous  _bu_init
+//   0x80094dac LIBCARD   ?              unique     _new_card
+//   0x80094dbc LIBCARD   ?              unique     _card_read
+//   0x8009622c LIBAPI    ?              unique     SysDeqIntRP
+//   0x8009623c LIBAPI    ?              unique     SysEnqIntRP
 
-// target: sces_00269  (107 placements, 17 anchored, 41 named symbols)
+// target: sces_00269  (211 placements, 17 anchored, 41 named symbols)
+//   0x80027cfc LIBGS     EMULIB         unique     GsSetOrign
+//   0x8002845c LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8002e37c LIBGS     EMULIB         unique     GsSetOrign
+//   0x8002fb04 LIBC      ?              unique     bzero
+//   0x8002fb14 LIBC      ?              unique     malloc
+//   0x8002fb24 LIBC      ?              unique     memset
+//   0x8002fb34 LIBC      ?              unique     strcat
+//   0x8002fb44 LIBC      ?              unique     printf
+//   0x8002fb54 LIBC      ?              unique     strlen
+//   0x8002fb64 LIBC      ?              unique     strcmp
+//   0x8002fb74 LIBC      ?              unique     strcpy
+//   0x8002fb84 LIBC      ?              unique     strncat
+//   0x80030804 LIBC      ?              unique     memchr
+//   0x80030894 LIBC      ?              unique     strncmp
+//   0x800308a4 LIBC      ?              unique     strncpy
+//   0x800308b4 LIBC      ?              unique     free
+//   0x800308c4 LIBC      ?              unique     rand
+//   0x800308d4 LIBC      ?              ambiguous  exit
+//   0x800308d4 LIBC2     ?              ambiguous  exit
 //   0x800308e4 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x800308fc LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x80031150 LIBC      ?              unique     setjmp
 //   0x80031538 LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
 //   0x80031590 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
 //   0x8003160c LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
 //   0x80031638 LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
 //   0x80031664 LIBETC    VSYNC          unique     VSync adoptable  (sig-db agree)
 //   0x800317ac LIBETC    VSYNC          unique     v_wait adoptable  (sig-db agree)
+//   0x80031848 LIBC      ?              unique     puts
+//   0x80031868 LIBAPI    ?              unique     lseek
+//   0x80031878 LIBAPI    ?              unique     close
+//   0x80031888 LIBAPI    ?              unique     write
+//   0x80031898 LIBAPI    ?              unique     SetMem
+//   0x800318a8 LIBAPI    ?              unique     EnableEvent
+//   0x800318b8 LIBAPI    ?              unique     delete
+//   0x800318c8 LIBAPI    ?              unique     format
+//   0x800318d8 LIBAPI    ?              unique     HookEntryInt
+//   0x800318e8 LIBAPI    ?              unique     _96_init adoptable
+//   0x800318f8 LIBAPI    ?              unique     LoadExec
+//   0x80031908 LIBAPI    ?              unique     ChangeClearPAD
+//   0x80031918 LIBAPI    ?              unique     InitHeap
+//   0x80031928 LIBAPI    ?              unique     ResetEntryInt
+//   0x80031938 LIBAPI    ?              unique     nextfile
+//   0x80031948 LIBAPI    ?              unique     OpenEvent
+//   0x80031958 LIBAPI    ?              unique     read
+//   0x80031968 LIBAPI    ?              unique     TestEvent
+//   0x80031988 LIBAPI    ?              unique     ChangeClearRCnt
+//   0x80031998 LIBAPI    ?              unique     open
+//   0x800319a8 LIBAPI    ?              unique     _96_remove
+//   0x800319b8 LIBAPI    ?              unique     firstfile
+//   0x800319c8 LIBAPI    ?              unique     ReturnFromException
+//   0x80034d1c LIBC      ?              unique     memcpy
+//   0x80034d2c LIBAPI    ?              unique     GPU_cw
 //   0x80035600 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80035600 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80035600 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80035600 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x80035620 LIBGTE    ?              unique     SetVertex0
+//   0x80035630 LIBGTE    ?              unique     SetVertex1
+//   0x80035640 LIBGTE    ?              unique     SetVertex2
+//   0x80035650 LIBGTE    ?              unique     SetVertexTri
+//   0x80035670 LIBGTE    ?              unique     SetRGBfifo
+//   0x80035684 LIBGTE    ?              unique     SetIR123
+//   0x80035698 LIBGTE    ?              unique     SetIR0
+//   0x800356a4 LIBGTE    ?              unique     SetBackColor
+//   0x800356c4 LIBGTE    ?              unique     SetFarColor
+//   0x800356e4 LIBGTE    ?              unique     SetSZfifo3
+//   0x800356f8 LIBGTE    ?              unique     SetSZfifo4
+//   0x80035710 LIBGTE    ?              unique     SetSXSYfifo
+//   0x80035724 LIBGTE    ?              unique     SetRii
+//   0x80035738 LIBGTE    ?              unique     SetMAC123
+//   0x8003574c LIBGTE    ?              unique     SetData32
+//   0x80035758 LIBGTE    ?              unique     SetGeomOffset
+//   0x80035770 LIBGTE    ?              unique     SetGeomScreen
+//   0x8003577c LIBGTE    ?              unique     SetDQA
+//   0x80035788 LIBGTE    ?              unique     SetDQB
 //   0x800357a0 LIBGS     2D_LIN1        unique     GsSortGLine adoptable  (sig-db agree)
 //   0x80035ff0 LIBGS     EMULIB         unique     GsSetDrawBuffClip adoptable
 //   0x80036088 LIBGS     SCLIB          unique     GsGetTimInfo adoptable
 //   0x8003616c LIBGS     SCLIB          unique     GsInit3D adoptable
+//   0x800368b0 LIBGTE    ?              unique     TransposeMatrix
 //   0x80037b60 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
 //   0x80037d90 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
 //   0x80039688 LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
@@ -1111,39 +2089,66 @@
 //   0x80039a3c LIBGS     MATRIX         unique     print_vector adoptable  (sig-db agree)
 //   0x80039a70 LIBGS     MATRIX3        unique     GsGetLw adoptable
 //   0x80039ef8 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
+//   0x8003a3f4 LIBGTE    ?              unique     RotTransPers4
+//   0x8003a474 LIBGTE    ?              unique     ReadSZfifo3
+//   0x8003a488 LIBGTE    ?              unique     ReadSZfifo4
+//   0x8003a4a0 LIBGTE    ?              unique     ReadSXSYfifo adoptable
+//   0x8003a4b4 LIBGTE    ?              unique     ReadRGBfifo
+//   0x8003a4c8 LIBGTE    ?              unique     ReadGeomOffset
+//   0x8003a4e8 LIBGTE    ?              unique     ReadGeomScreen
 //   0x8003a8b4 LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x8003a964 LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8003aa3c LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8003aa3c LIBGS     SCLIB          ambiguous  GsDrawOtIO
 //   0x8003aa60 LIBGS     SCLIB          unique     gte_init adoptable
+//   0x8003abcc LIBAPI    ?              unique     FlushCache
 //   0x8003abdc LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x8003ac34 LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
 //   0x8003ac44 LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
 //   0x8003ad60 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x8003b130 LIBGS     SCLIB          ambiguous  GsSetProjection adoptable
+//   0x8003b130 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete adoptable
+//   0x8003b130 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new adoptable
 //   0x8003b130 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff adoptable  (sig-db agree)
 //   0x8003b150 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b150 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b150 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b150 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b170 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b170 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b170 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b170 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b668 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b668 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b668 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b668 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003bb6c LIBPRESS  VLC2           unique     MDEC_vlc2 adoptable  (sig-db agree)
 //   0x8003bf48 LIBPRESS  VLC2           unique     ivlc_dct_dc_size adoptable  (sig-db agree)
 //   0x8003c1e8 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c1e8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c1e8 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c1e8 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c3c0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c3c0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c3c0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c3c0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c3e0 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c3e0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c3e0 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c3e0 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c88c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c88c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c88c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c88c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c8ac LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c8ac LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c8ac LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c8ac LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003f288 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x8003f318 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x8003f340 LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x8003f368 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x8003f390 LIBAPI    ?              unique     DeliverEvent
 //   0x8003f434 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x80040d8c LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
 //   0x80040dcc LIBCD     CDROM          unique     StSetMask adoptable  (sig-db elsewhere)
@@ -1164,23 +2169,37 @@
 //   0x80048840 LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x800488f4 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80048b14 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80048b14 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80048b14 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80048b14 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80048b14 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80048b34 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80048b34 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80048b34 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80048b34 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80048b34 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80049274 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80049274 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80049274 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80049274 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80049274 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80049294 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80049294 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80049294 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80049294 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80049294 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80049358 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80049358 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80049358 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80049358 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x800496c4 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800496c4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800496c4 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800496c4 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x800496c4 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x800496e4 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x80049760 LIBAPI    ?              unique     CloseEvent adoptable
+//   0x80049770 LIBAPI    ?              unique     DisableEvent adoptable
 //   0x80049780 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
 //   0x80049794 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
 //   0x800497a4 LIBSND    VS_VH          unique     SsVabOpenHead adoptable  (sig-db agree)
@@ -1202,6 +2221,8 @@
 //   0x8004db6c LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x8004dbc8 LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8004dc54 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8004dc54 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8004dc54 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8004dc54 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004dc54 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
 //   0x8004dc74 LIBSND    UT_REV         ambiguous  SsUtReverbOff  (sig-db agree)
@@ -1212,20 +2233,58 @@
 //   0x8004de20 LIBSND    UT_REV         ambiguous  SsUtSetReverbDelay  (sig-db agree)
 //   0x8004dc54 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8004dc74 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8004dc74 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8004dc74 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8004dc74 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004dc74 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8004eaa0 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
 //   0x8004eb10 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
 //   0x8004eb88 LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8004ed28 LIBAPI    ?              unique     WaitEvent
 //   0x8004ed38 LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
 //   0x8004ee08 LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x8004efd4 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x8004f6fc LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8004f868 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8004f890 LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
 //   0x8004f890 LIBSND    PLAY           ambiguous  Snd_play  (sig-db agree)
 //   0x8004f8bc LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x8004f950 LIBCARD   ?              unique     _card_load
+//   0x8004f960 LIBCARD   ?              unique     _card_info
+//   0x8004f970 LIBCARD   ?              unique     _card_auto
+//   0x8004f9b0 LIBCARD   ?              unique     _card_write
+//   0x8004f9c0 LIBCARD   ?              unique     InitCARD
+//   0x8004f9d0 LIBCARD   ?              unique     StartCARD
+//   0x8004f9e0 LIBAPI    ?              ambiguous  _bu_init
+//   0x8004f9e0 LIBCARD   ?              ambiguous  _bu_init
+//   0x8004f9f0 LIBCARD   ?              unique     _new_card
+//   0x8004fa00 LIBCARD   ?              unique     _card_read
+//   0x80050fd0 LIBAPI    ?              unique     PAD_dr
+//   0x80050fe0 LIBAPI    ?              unique     SysDeqIntRP
+//   0x80050ff0 LIBAPI    ?              unique     SysEnqIntRP
 
-// target: slps_00270  (112 placements, 17 anchored, 40 named symbols)
+// target: slps_00270  (223 placements, 17 anchored, 40 named symbols)
+//   0x80027cb4 LIBGS     EMULIB         unique     GsSetOrign
+//   0x80028414 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
+//   0x8002e560 LIBGS     EMULIB         unique     GsSetOrign
+//   0x8002fd10 LIBC      ?              unique     bzero
+//   0x8002fd20 LIBC      ?              unique     malloc
+//   0x8002fd30 LIBC      ?              unique     memset
+//   0x8002fd40 LIBC      ?              unique     strcat
+//   0x8002fd50 LIBC      ?              unique     printf
+//   0x8002fd60 LIBC      ?              unique     strlen
+//   0x8002fd70 LIBC      ?              unique     strcmp
+//   0x8002fd80 LIBC      ?              unique     strcpy
+//   0x8002fd90 LIBC      ?              unique     strncat
+//   0x80030d80 LIBC      ?              unique     memchr
+//   0x80030d90 LIBC      ?              unique     memmove
+//   0x80030e20 LIBC      ?              unique     strncmp
+//   0x80030e30 LIBC      ?              unique     strncpy
+//   0x80030e40 LIBC      ?              unique     free
+//   0x80030e50 LIBC      ?              unique     rand
+//   0x80030e60 LIBC      ?              ambiguous  exit
+//   0x80030e60 LIBC2     ?              ambiguous  exit
+//   0x800316b4 LIBC      ?              unique     setjmp
 //   0x800316c4 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x80031714 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
 //   0x80031898 LIBETC    INTR_DMA       unique     setIntrDMA adoptable  (sig-db agree)
@@ -1234,15 +2293,65 @@
 //   0x800319cc LIBETC    PAD            ambiguous  PadRead  (sig-db agree)
 //   0x800319fc LIBETC    PAD            ambiguous  PadStop  (sig-db agree)
 //   0x800319fc LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x800319fc LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x800319fc LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x800319fc LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80031a1c LIBETC    INTR_VB        unique     startIntrVSync adoptable  (sig-db agree)
 //   0x80031a74 LIBETC    INTR_VB        unique     trapIntrVSync adoptable  (sig-db agree)
 //   0x80031af0 LIBETC    INTR_VB        unique     setIntrVSync adoptable  (sig-db agree)
 //   0x80031b1c LIBETC    INTR_VB        unique     memclr adoptable  (sig-db agree)
+//   0x80031e5c LIBC      ?              unique     puts
+//   0x80031e6c LIBAPI    ?              unique     PAD_dr
+//   0x80031e8c LIBAPI    ?              unique     lseek
+//   0x80031e9c LIBAPI    ?              unique     close
+//   0x80031eac LIBAPI    ?              unique     write
+//   0x80031ebc LIBAPI    ?              unique     SetMem
+//   0x80031ecc LIBAPI    ?              unique     EnableEvent
+//   0x80031edc LIBAPI    ?              unique     delete
+//   0x80031eec LIBAPI    ?              unique     format
+//   0x80031efc LIBAPI    ?              unique     HookEntryInt
+//   0x80031f0c LIBAPI    ?              unique     _96_init
+//   0x80031f1c LIBAPI    ?              unique     PAD_init
+//   0x80031f2c LIBAPI    ?              unique     LoadExec
+//   0x80031f3c LIBAPI    ?              unique     ChangeClearPAD
+//   0x80031f4c LIBAPI    ?              unique     InitHeap
+//   0x80031f5c LIBAPI    ?              unique     ResetEntryInt
+//   0x80031f6c LIBAPI    ?              unique     nextfile
+//   0x80031f7c LIBAPI    ?              unique     OpenEvent
+//   0x80031f8c LIBAPI    ?              unique     read
+//   0x80031f9c LIBAPI    ?              unique     TestEvent
+//   0x80031fbc LIBAPI    ?              unique     ChangeClearRCnt
+//   0x80031fcc LIBAPI    ?              unique     open
+//   0x80031fdc LIBAPI    ?              unique     _96_remove
+//   0x80031fec LIBAPI    ?              unique     firstfile
+//   0x80031ffc LIBAPI    ?              unique     ReturnFromException
+//   0x80035230 LIBC      ?              unique     memcpy
 //   0x80035240 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x80035258 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
+//   0x80035268 LIBAPI    ?              unique     GPU_cw
 //   0x80035b38 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80035b38 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80035b38 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80035b38 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
+//   0x80035b58 LIBGTE    ?              unique     SetVertex0
+//   0x80035b68 LIBGTE    ?              unique     SetVertex1
+//   0x80035b78 LIBGTE    ?              unique     SetVertex2
+//   0x80035b88 LIBGTE    ?              unique     SetVertexTri
+//   0x80035ba8 LIBGTE    ?              unique     SetRGBfifo
+//   0x80035bbc LIBGTE    ?              unique     SetIR123
+//   0x80035bd0 LIBGTE    ?              unique     SetIR0
+//   0x80035bdc LIBGTE    ?              unique     SetBackColor
+//   0x80035bfc LIBGTE    ?              unique     SetFarColor
+//   0x80035c1c LIBGTE    ?              unique     SetSZfifo3
+//   0x80035c30 LIBGTE    ?              unique     SetSZfifo4
+//   0x80035c48 LIBGTE    ?              unique     SetSXSYfifo
+//   0x80035c5c LIBGTE    ?              unique     SetRii
+//   0x80035c70 LIBGTE    ?              unique     SetMAC123
+//   0x80035c84 LIBGTE    ?              unique     SetData32
+//   0x80035c90 LIBGTE    ?              unique     SetGeomOffset
+//   0x80035ca8 LIBGTE    ?              unique     SetGeomScreen
+//   0x80035cb4 LIBGTE    ?              unique     SetDQA
+//   0x80035cc0 LIBGTE    ?              unique     SetDQB
 //   0x80035efc LIBGS     EMULIB         unique     GsInitGraph adoptable
 //   0x80035f74 LIBGS     EMULIB         unique     gpu_init adoptable
 //   0x800360cc LIBGS     EMULIB         unique     GsInitGraph2 adoptable
@@ -1254,42 +2363,91 @@
 //   0x80036c14 LIBGS     MATRIX3        unique     scale_view_param adoptable
 //   0x80036d04 LIBGS     MATRIX3        unique     select_max_param adoptable
 //   0x80036dcc LIBGS     MATRIX3        unique     len_param adoptable
+//   0x80036de8 LIBGTE    ?              unique     TransposeMatrix
+//   0x80037bd8 LIBGTE    ?              unique     MulMatrix
+//   0x80037ce4 LIBGTE    ?              unique     MulMatrix2
+//   0x80037df0 LIBGTE    ?              unique     ApplyMatrix
+//   0x80037e40 LIBGTE    ?              unique     ApplyMatrixSV
+//   0x80037e9c LIBGTE    ?              unique     TransMatrix
+//   0x80037ec0 LIBGTE    ?              unique     ScaleMatrix
+//   0x80037fe4 LIBGTE    ?              unique     SetRotMatrix
+//   0x80038014 LIBGTE    ?              unique     SetLightMatrix
+//   0x80038044 LIBGTE    ?              unique     SetColorMatrix
+//   0x80038074 LIBGTE    ?              unique     SetTransMatrix
 //   0x80038098 LIBGS     SCLIB          unique     gte_rotate_z_matrix adoptable
 //   0x800383f8 LIBGTE    COR_00         unique     RotMatrixC adoptable  (sig-db agree)
+//   0x800399b0 LIBGTE    ?              unique     LightColor
+//   0x800399d8 LIBGTE    ?              unique     DpqColorLight
+//   0x80039a00 LIBGTE    ?              unique     DpqColor3
+//   0x80039a3c LIBGTE    ?              unique     Intpl
+//   0x80039a60 LIBGTE    ?              unique     Square12
+//   0x80039a88 LIBGTE    ?              unique     Square0
+//   0x80039ab0 LIBGTE    ?              unique     AverageZ3
+//   0x80039ad0 LIBGTE    ?              unique     AverageZ4
+//   0x80039af4 LIBGTE    ?              unique     OuterProduct12
+//   0x80039b4c LIBGTE    ?              unique     OuterProduct0
+//   0x80039ba4 LIBGTE    ?              unique     Lzc
 //   0x8003a0d8 LIBGS     MATRIX3        unique     GsGetLw adoptable
 //   0x8003a39c LIBGS     2D_COM1        unique     _make_packet adoptable  (sig-db agree)
+//   0x8003aa5c LIBGTE    ?              unique     RotTransPers4
+//   0x8003aadc LIBGTE    ?              unique     ReadSZfifo3
+//   0x8003aaf0 LIBGTE    ?              unique     ReadSZfifo4
+//   0x8003ab08 LIBGTE    ?              unique     ReadSXSYfifo
+//   0x8003ab1c LIBGTE    ?              unique     ReadRGBfifo
+//   0x8003ab30 LIBGTE    ?              unique     ReadGeomOffset
+//   0x8003ab50 LIBGTE    ?              unique     ReadGeomScreen
 //   0x8003adec LIBGS     SCLIB          unique     GsDefDispBuff adoptable
 //   0x8003ae9c LIBGS     SCLIB          unique     Gssub_make_matrix adoptable
 //   0x8003af74 LIBGS     SCLIB          ambiguous  GsDrawOt
 //   0x8003af74 LIBGS     SCLIB          ambiguous  GsDrawOtIO
+//   0x8003b234 LIBAPI    ?              unique     FlushCache
 //   0x8003b244 LIBGS     SCLIB          unique     GsClearOt adoptable
 //   0x8003b29c LIBGS     EMULIB         unique     GsGetActiveBuff adoptable
 //   0x8003b2ac LIBGS     EMULIB         unique     GsSetDrawBuffOffset adoptable
 //   0x8003b3c8 LIBGS     EMULIB         unique     GsSwapDispBuff adoptable
 //   0x8003b500 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b500 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b500 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b500 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b5ec LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b5ec LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b5ec LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b5ec LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b60c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b60c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b60c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b60c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003b62c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003b62c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003b62c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003b62c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003bc54 LIBPRESS  VLC            unique     MDEC_vlc_brk adoptable  (sig-db agree)
 //   0x8003bc84 LIBPRESS  VLC            unique     MDEC_vlc adoptable  (sig-db agree)
 //   0x8003c764 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c764 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c764 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c764 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c80c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c80c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c80c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c80c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003c82c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003c82c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003c82c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003c82c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003ce08 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003ce08 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003ce08 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003ce08 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003ce28 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8003ce28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8003ce28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8003ce28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x8003f484 LIBCD     EVENT          unique     CdInit adoptable  (sig-db agree)
 //   0x8003f514 LIBCD     EVENT          unique     def_cbsync adoptable  (sig-db agree)
 //   0x8003f53c LIBCD     EVENT          unique     def_cbready adoptable  (sig-db agree)
 //   0x8003f564 LIBCD     EVENT          unique     def_cbread adoptable  (sig-db agree)
+//   0x8003f58c LIBAPI    ?              unique     DeliverEvent
 //   0x8003f59c LIBCD     CDREAD2        unique     CdRead2 adoptable  (sig-db agree)
 //   0x8003f640 LIBCD     CDROM          unique     StSetStream adoptable  (sig-db elsewhere)
 //   0x80040f98 LIBCD     CDROM          unique     init_ring_status adoptable  (sig-db elsewhere)
@@ -1312,23 +2470,37 @@
 //   0x8004882c LIBSPU    S_SAV          unique     _SpuSetAnyVoice adoptable  (sig-db agree)
 //   0x800488e0 LIBSND    VM_VSU         unique     SpuVmVSetUp adoptable  (sig-db agree)
 //   0x80048b08 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80048b08 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80048b08 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80048b08 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80048b08 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x80048b28 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80048b28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80048b28 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80048b28 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80048b28 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80049268 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80049268 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80049268 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80049268 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80049268 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x80049288 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80049288 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80049288 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80049288 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80049288 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8004934c LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8004934c LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8004934c LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8004934c LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db agree)
 //   0x80049558 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x80049558 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x80049558 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x80049558 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x80049558 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x800496c8 LIBSPU    S_Q            unique     SpuQuit adoptable  (sig-db agree)
+//   0x80049744 LIBAPI    ?              unique     CloseEvent
+//   0x80049754 LIBAPI    ?              unique     DisableEvent
 //   0x80049764 LIBSND    VS_MONO        unique     SsSetMono adoptable  (sig-db agree)
 //   0x80049778 LIBSND    VS_MONO        unique     SsSetStereo adoptable  (sig-db agree)
 //   0x80049788 LIBSND    VS_VH          unique     SsVabOpenHead adoptable  (sig-db agree)
@@ -1349,6 +2521,8 @@
 //   0x8004da70 LIBSND    ADSR           unique     _SsUtResolveADSR adoptable  (sig-db agree)
 //   0x8004dacc LIBSND    ADSR           unique     _SsUtBuildADSR adoptable  (sig-db agree)
 //   0x8004db58 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8004db58 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8004db58 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8004db58 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004db58 LIBSND    UT_REV         ambiguous  SsUtReverbOn  (sig-db agree)
 //   0x8004db78 LIBSND    UT_REV         ambiguous  SsUtReverbOff  (sig-db agree)
@@ -1359,14 +2533,18 @@
 //   0x8004dd24 LIBSND    UT_REV         ambiguous  SsUtSetReverbDelay  (sig-db agree)
 //   0x8004db58 LIBSPU    S_IH           ambiguous  SpuInitHot  (sig-db agree)
 //   0x8004db78 LIBGS     SCLIB          ambiguous  GsSetProjection
+//   0x8004db78 LIBSN     LIBGCC2        ambiguous  __builtin_vec_delete
+//   0x8004db78 LIBSN     LIBGCC2        ambiguous  __builtin_vec_new
 //   0x8004db78 LIBSND    SCNOFF         ambiguous  SsSetNoiseOff  (sig-db elsewhere)
 //   0x8004db78 LIBSPU    S_I            ambiguous  SpuInit  (sig-db agree)
 //   0x8004e9a4 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea adoptable  (sig-db agree)
 //   0x8004ea14 LIBSPU    S_M_UTIL       unique     _SpuIsInAllocateArea_ adoptable  (sig-db agree)
 //   0x8004ea8c LIBSPU    S_CRWA         unique     SpuClearReverbWorkArea adoptable  (sig-db agree)
+//   0x8004ec2c LIBAPI    ?              unique     WaitEvent
 //   0x8004ec3c LIBSPU    S_SR           unique     SpuSetReverb adoptable  (sig-db agree)
 //   0x8004ed0c LIBSND    NEXT           unique     Snd_nextsep adoptable  (sig-db agree)
 //   0x8004ee0c LIBSND    UT_SVA         unique     SsUtSetVagAtr adoptable  (sig-db agree)
+//   0x8004efd8 LIBSND    VM_DON         unique     SpuVmDamperOn  (sig-db agree)
 //   0x8004f698 LIBSND    STOP           ambiguous  Snd_stop  (sig-db agree)
 //   0x8004f804 LIBSND    STOP           ambiguous  SsSeqStop  (sig-db agree)
 //   0x8004f82c LIBSND    STOP           ambiguous  SsSepStop  (sig-db agree)
@@ -1375,3 +2553,16 @@
 //   0x8004f974 LIBSND    PAUSE          unique     Snd_pause adoptable  (sig-db agree)
 //   0x8004fa14 LIBSND    PAUSE          unique     Snd_nextpause adoptable  (sig-db agree)
 //   0x8004fd88 LIBSND    SCSSATTR       unique     SsSetSerialAttr adoptable  (sig-db agree)
+//   0x8004fe1c LIBCARD   ?              unique     _card_load
+//   0x8004fe2c LIBCARD   ?              unique     _card_info
+//   0x8004fe3c LIBCARD   ?              unique     _card_auto
+//   0x8004fe4c LIBCARD   ?              unique     _card_clear
+//   0x8004fe7c LIBCARD   ?              unique     _card_write
+//   0x8004fe8c LIBCARD   ?              unique     InitCARD
+//   0x8004fe9c LIBCARD   ?              unique     StartCARD
+//   0x8004feac LIBAPI    ?              ambiguous  _bu_init
+//   0x8004feac LIBCARD   ?              ambiguous  _bu_init
+//   0x8004febc LIBCARD   ?              unique     _new_card
+//   0x8004fecc LIBCARD   ?              unique     _card_read
+//   0x8005133c LIBAPI    ?              unique     SysDeqIntRP
+//   0x8005134c LIBAPI    ?              unique     SysEnqIntRP
