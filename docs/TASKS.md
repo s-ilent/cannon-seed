@@ -1268,3 +1268,104 @@ the standard flip. Commit 0e8efaa (attribution) + the match commit.
 - Remaining INTR_VB state: slps_00270/sces_00269 stay asm (boot-EXE
   reference-decode mystery, evidence banked in the worklog); all other 7
   targets now carry the C setIntrVSync.
+
+## 2026-10-14 (later): GsSetDrawBuffOffset round-1 decode + probe assessment
+
+Lane opened: the member is curated in all 8 targets (EMULIB .text+0x10,
+extent 0x11c = 71 insns) but still asm. The stopIntr banked shapes
+(array-decay pin, volatile slots, opaque base) were predicted to transfer;
+this round proves most of them do and maps what is left. Probe harness
+mirrors tools/cc.sh (cpp -> cc1 under qemu -> maspsx --expand-div ->
+cc_post with cc-post marker grep) at scripts/gsdbo/ (repo-external), plus
+a bare-symbol -> lui/%lo expansion normalizer so probe output diffs
+against retail in the same form.
+
+Structure (retail mainmenu_jp 0x8007F1D4):
+- Guard `lh D_80194E3C` hoisted ABOVE the prologue; `beqz` carries the
+  s0-save in its delay slot; frame 0x20 saves ra/s1/s0.
+- Then-path (guard != 0): "u16 world". PSDIDX loaded once (v1), sll 1,
+  table A read at T1 + idx (lhu), out pointer a0 = &D_8018DAA4 (full
+  lui+addiu), clears D_8018DB18 then D_8018DB14, add + `sh 0(a0)`,
+  table B same shape, `sh D_8018DAA6`, jal func_800604E0 with
+  `addiu a0,a0,-8` sunk into the jal DELAY SLOT, then tail `j D_80072DB8`.
+- Else-path (guard == 0): "s16 world". Two separate conditional
+  increments (&T1 += 2 / &T2 += 2 when PSDIDX == 0 - inverted index),
+  cond CSE'd into a1 across both bnez diamonds, sums = 32-bit addu of
+  lh-loaded operands, jal func_80062FCC (arg2 move in the jal delay
+  slot), stores D_8018DB14/DB18 (sh truncates), normal epilogue
+  (GCC's own order - the keep-epilogue SDK convention applies).
+
+Placement facts:
+- All 10 referenced data symbols are bss BEYOND the yaml payload (same
+  class as PSDIDX): D_80194E3C, PSDIDX, D_80189224/26, D_8014A3A4/A8,
+  D_8018DAA4/A6, D_8018DB14/18. C needs externs; only PSDIDX is
+  identified so far.
+- Callees are cluster entries in mis-typed rows: func_800604E0 sits
+  inside data row data_80060368 (0x274); func_80062FCC is a mid-entry
+  inside asm blob func_80062B04 (0x82c); the tail target D_80072DB8 sits
+  inside data row data_80072B20 (0x49c) and is mid-cluster code (no
+  prologue, uses s0/s3/s6) - the INTR-tail "callees are cluster entries
+  in mis-typed data" pattern again. A future carve round must name all
+  three before the flip can land.
+
+Laws proven this round (probe s01 -> s04):
+- Sum-type law: else-path sums must be `long` locals. `short` sums make
+  cc1 emit sll/sra sign-extension pairs around the addu (args promote)
+  that retail does not have; retail passes raw 32-bit addu results and
+  lets the sh stores truncate.
+- Select-shape law: the inverted index must be if-statement increments
+  (`p = T; if (PSDIDX == 0) p += 1;`), NOT pointer ternaries. A ternary
+  makes cc1 re-materialize the constant &T+2 inside each arm; retail
+  materializes the base once and increments it in the arm.
+- Load-width law: the pair symbols and both tables are read lhu in the
+  then-path but lh in the else-path - same addresses, two access types.
+  The C needs unsigned pointer derefs in the then-path and the signed
+  declarations in the else-path (one TU cannot declare both; casts
+  through typed pointers are the lever).
+- Opaque-base transfer: `__asm__("# ...\n\tla %0,D_8018DAA4" : "=r"(pout))`
+  defeats constant folding and lands the out pointer in a0 EXACTLY as
+  retail (full materialization before the clears, `sh 0(a0)` store, arg
+  addiu sunk into the jal delay slot). The setIntr opaque-base law
+  transfers; this time the allocno promotion direction is retail's own.
+- Memory-clobber order law: `__asm__("" ::: "memory")` between the two
+  out-pair stores forces retail's store order, but re-loads PSDIDX from
+  memory for the second index. Fix: hoist `long idx = PSDIDX;` - a
+  register local survives the clobber; retail keeps the single load.
+- Guard/branch shape is already retail at s04: guard load above the
+  prologue, beqz delay-slot s0 save, clears order DB18 -> DB14, else
+  two-diamond with the cond CSE'd into one register, arg moves in delay
+  slots.
+- -O2 confirmed best for this member too (128 normalized diff lines vs
+  137 at -O1, 141 at -O3; s01 baseline was ~160+).
+
+Remaining gaps for round 2 (in probe-diff order):
+1. sym+off at-factoring: cc1 folds %lo into the table load
+   (`lhu v1,%lo(T1)($at)` with at = hi+idx); retail keeps the FULL base
+   (`addiu at,at,%lo; addu at,at,idx; lhu 0(at)`). Same class as the
+   setIntr round-2 "sym+off expansion policy" open blocker - a
+   post-pass policy question, not a C-shape question.
+2. Table-value register: retail keeps the table value in a1 (idx in v1);
+   probe swaps them (idx a1, value v1). Allocation-level.
+3. Else-path increment arms: cc1 re-materializes &T+2 constants in the
+   arms instead of retail's bare `addiu v0,2` increment. Constant-
+   propagation level; opaque-izing the base of p1/p2 is the candidate
+   lever (costs allocation pressure).
+4. Sum placement: probe computes the s1 sum inside the second bne's
+   delay slot; retail sums before the branch and moves a0=s1 in the
+   delay slot instead.
+5. Tail: `j D_80072DB8` via the tab-form noreorder asm per the banked
+   setIntr law (probe used it; sequence lands, needs the real carve of
+   the target's identity first).
+6. Cosmetic for cc_post: `addu reg,reg,-8` vs retail `addiu` negative
+   imm; hex vs decimal stores (already-normalized forms).
+
+Next queue for this lane:
+1. Round 2 probes: opaque-ize p1/p2 bases (gap 3), sum placement (gap
+   4), then re-measure; the at-factoring (gap 1) likely needs the
+   maspsx/cc_post policy decision the setIntr lane also owes.
+2. Carve round: name func_800604E0, func_80062FCC and the D_80072DB8
+   cluster entry (byte-driven, like the INTR_VB carve), plus curated
+   statics for any still-D_ bss the C must reference.
+3. Then flip mainmenu_jp first, roll out with the byte-fingerprint
+   method (0x11c extent, guard-lh prologue, the two-table shape are
+   address-free identifiers).
