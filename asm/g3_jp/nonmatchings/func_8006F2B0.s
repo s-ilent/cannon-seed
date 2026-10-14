@@ -14,7 +14,7 @@ glabel SpuSetTransferMode
     /* 4FAB4 8006F2B4 01000234 */   ori       $v0, $zero, 0x1
     /* 4FAB8 8006F2B8 04008214 */  bne        $a0, $v0, .L8006F2CC
     /* 4FABC 8006F2BC 21100000 */   addu      $v0, $zero, $zero
-    /* 4FAC0 8006F2C0 BB930108 */  j          .L80064EEC
+    /* 4FAC0 8006F2C0 BB930108 */  j          D_80064EEC
     /* 4FAC4 8006F2C4 01000234 */   ori       $v0, $zero, 0x1
   .L8006F2C8:
     /* 4FAC8 8006F2C8 21100000 */  addu       $v0, $zero, $zero

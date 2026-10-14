@@ -85,7 +85,7 @@ segments:
       - [0xFB68, data, data_8002F368]   # 0x10
       - [0xFB78, asm, func_8002F378]   # 0x400
       - [0xFF78, data, data_8002F778]   # 0x118
-      - [0x10090, asm, func_8002F890]   # 0xa0
+      - [0x10090, data, data_8002F890]   # 0xa0 pinned
       - [0x10130, data, data_8002F930]   # 0x24
       - [0x10154, asm, func_8002F954]   # 0x120
       - [0x10274, data, data_8002FA74]   # 0x78
@@ -100,7 +100,7 @@ segments:
       - [0x1110C, data, data_8003090C]   # 0x8
       - [0x11114, asm, func_80030914]   # 0x174
       - [0x11288, data, data_80030A88]   # 0x90
-      - [0x11318, asm, func_80030B18]   # 0x3c
+      - [0x11318, data, data_80030B18]   # 0x3c pinned
       - [0x11354, data, data_80030B54]   # 0xc
       - [0x11360, asm, func_80030B60]   # 0x74
       - [0x113D4, asm, func_80030BD4]   # 0xdc sdk
@@ -193,7 +193,7 @@ segments:
       - [0x1C95C, data, data_8003C15C]   # 0x14c8
       - [0x1DE24, asm, func_8003D624]   # 0x7e0
       - [0x1E604, data, data_8003DE04]   # 0xc0
-      - [0x1E6C4, asm, func_8003DEC4]   # 0x18
+      - [0x1E6C4, data, data_8003DEC4]   # 0x18 pinned
       - [0x1E6DC, data, data_8003DEDC]   # 0x28
       - [0x1E704, asm, func_8003DF04]   # 0x800
       - [0x1EF04, data, data_8003E704]   # 0xaa8
@@ -232,7 +232,7 @@ segments:
       - [0x25400, data, data_80044C00]   # 0x18
       - [0x25418, data, data_80044C18]   # 0x2c pinned
       - [0x25444, data, data_80044C44]   # 0xb8
-      - [0x254FC, asm, func_80044CFC]   # 0x20
+      - [0x254FC, data, data_80044CFC]   # 0x20 pinned
       - [0x2551C, data, data_80044D1C]   # 0x128
       - [0x25644, asm, func_80044E44]   # 0x71c
       - [0x25D60, data, data_80045560]   # 0x2f10
@@ -243,7 +243,7 @@ segments:
       - [0x290F4, asm, func_800488F4]   # 0xd4 sdk
       - [0x291C8, asm, func_800489C8]   # 0x2e4
       - [0x294AC, data, data_80048CAC]   # 0x980
-      - [0x29E2C, asm, func_8004962C]   # 0x20
+      - [0x29E2C, data, data_8004962C]   # 0x20 pinned
       - [0x29E4C, data, data_8004964C]   # 0x74
       - [0x29EC0, asm, func_800496C0]   # 0x24
       - [0x29EE4, asm, func_800496E4]   # 0x7c sdk
