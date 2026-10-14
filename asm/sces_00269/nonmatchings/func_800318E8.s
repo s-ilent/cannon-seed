@@ -14,3 +14,4 @@ glabel _96_init
     /* 120EC 800318EC 08004001 */  jr         $t2
     /* 120F0 800318F0 71000924 */   addiu     $t1, $zero, 0x71
 endlabel _96_init
+    /* 120F4 800318F4 00000000 */  nop

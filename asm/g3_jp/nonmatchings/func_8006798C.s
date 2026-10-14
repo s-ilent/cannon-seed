@@ -40,7 +40,7 @@ glabel GsSwapDispBuff
     /* 481F8 800679F8 01000234 */   ori       $v0, $zero, 0x1
     /* 481FC 800679FC 1780013C */  lui        $at, %hi(PSDIDX)
     /* 48200 80067A00 141E22A4 */  sh         $v0, %lo(PSDIDX)($at)
-    /* 48204 80067A04 69790108 */  j          D_8005E5A4
+    /* 48204 80067A04 69790108 */  j          .L8005E5A4
     /* 48208 80067A08 00000000 */   nop
   .L80067A0C:
     /* 4820C 80067A0C 1780013C */  lui        $at, %hi(PSDIDX)

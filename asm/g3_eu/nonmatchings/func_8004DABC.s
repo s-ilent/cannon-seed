@@ -36,7 +36,4 @@ alabel func_8004DAF8
     /* 2E308 8004DB08 00002000 */ .word 0x00200000 /* invalid instruction */
     /* 2E30C 8004DB0C 00002000 */ .word 0x00200000 /* invalid instruction */
     /* 2E310 8004DB10 00002000 */ .word 0x00200000 /* invalid instruction */
-    /* 2E314 8004DB14 A0000A24 */ .word 0x240A00A0
-    /* 2E318 8004DB18 08004001 */ .word 0x01400008
-    /* 2E31C 8004DB1C 28000924 */ .word 0x24090028
 enddlabel func_8004DABC

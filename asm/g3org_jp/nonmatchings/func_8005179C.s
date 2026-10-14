@@ -498,13 +498,10 @@ glabel func_80051D58
     /* 32564 80051D64 01008424 */   addiu     $a0, $a0, 0x1
 endlabel func_80051D58
 
-nonmatching func_80051D68, 0x18
+nonmatching func_80051D68, 0xC
 
 glabel func_80051D68
     /* 32568 80051D68 0800BD27 */  addiu      $sp, $sp, 0x8
     /* 3256C 80051D6C 0800E003 */  jr         $ra
     /* 32570 80051D70 00000000 */   nop
-    /* 32574 80051D74 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 32578 80051D78 08004001 */  jr         $t2
-    /* 3257C 80051D7C 2A000924 */   addiu     $t1, $zero, 0x2A
 endlabel func_80051D68

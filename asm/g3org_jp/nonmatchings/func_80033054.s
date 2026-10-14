@@ -69,22 +69,17 @@ glabel func_800330E4
     /* 138F8 800330F8 0D003126 */   addiu     $s1, $s1, 0xD
 endlabel func_800330E4
 
-nonmatching func_800330FC, 0x4
+nonmatching func_800330FC, 0x1C
 
 glabel func_800330FC
     /* 138FC 800330FC 21884300 */  addu       $s1, $v0, $v1
-endlabel func_800330FC
-
-nonmatching func_80033100, 0x18
-
-glabel func_80033100
     /* 13900 80033100 0C001026 */  addiu      $s0, $s0, 0xC
     /* 13904 80033104 0000038E */  lw         $v1, 0x0($s0)
     /* 13908 80033108 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 1390C 8003310C DBFF6214 */  bne        $v1, $v0, func_8003307C
     /* 13910 80033110 0C005226 */   addiu     $s2, $s2, 0xC
     /* 13914 80033114 4C00222A */  slti       $v0, $s1, 0x4C
-endlabel func_80033100
+endlabel func_800330FC
 
 nonmatching func_80033118, 0x20
 

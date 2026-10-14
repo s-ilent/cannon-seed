@@ -16,7 +16,7 @@ glabel gte_init
     /* 4460C 80063E0C 00000000 */   nop
     /* 44610 80063E10 21200000 */  addu       $a0, $zero, $zero
     /* 44614 80063E14 21280000 */  addu       $a1, $zero, $zero
-    /* 44618 80063E18 B02F010C */  jal        func_8004BEC0
+    /* 44618 80063E18 B02F010C */  jal        .L8004BEC0
     /* 4461C 80063E1C 21300000 */   addu      $a2, $zero, $zero
     /* 44620 80063E20 21200000 */  addu       $a0, $zero, $zero
     /* 44624 80063E24 D52F010C */  jal        func_8004BF54

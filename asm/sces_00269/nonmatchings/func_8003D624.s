@@ -600,5 +600,5 @@ glabel func_8003D790
     /* 1E5F4 8003DDF4 2B156A39 */  xori       $t2, $t3, 0x152B
     /* 1E5F8 8003DDF8 27362D67 */  daddiu     $t5, $t9, 0x3627
     /* 1E5FC 8003DDFC 03991955 */  bnel       $t0, $t9, D_8002420C
-    /* 1E600 8003DE00 0BA7A156 */   bnel      $s5, $at, D_80027A30
+    /* 1E600 8003DE00 0BA7A156 */   bnel      $s5, $at, func_80027A30
 endlabel func_8003D790

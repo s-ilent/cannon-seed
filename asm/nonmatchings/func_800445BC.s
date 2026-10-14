@@ -483,7 +483,7 @@ glabel func_80044B14
     /* 25364 80044B64 00000000 */   nop
 endlabel func_80044B14
 
-nonmatching func_80044B68, 0x2C
+nonmatching func_80044B68, 0x1C
 
 glabel func_80044B68
     /* 25368 80044B68 00240800 */  sll        $a0, $t0, 16
@@ -493,11 +493,16 @@ glabel func_80044B68
     /* 25378 80044B78 23208200 */  subu       $a0, $a0, $v0
     /* 2537C 80044B7C 00140A00 */  sll        $v0, $t2, 16
     /* 25380 80044B80 03140200 */  sra        $v0, $v0, 16
+endlabel func_80044B68
+
+nonmatching func_80044B84, 0x10
+
+glabel func_80044B84
     /* 25384 80044B84 1A008200 */  div        $zero, $a0, $v0
     /* 25388 80044B88 02004014 */  bnez       $v0, func_80044B94
     /* 2538C 80044B8C 00000000 */   nop
     /* 25390 80044B90 0D000700 */  break      7
-endlabel func_80044B68
+endlabel func_80044B84
 
 nonmatching func_80044B94, 0x18
 
@@ -529,19 +534,21 @@ glabel func_80044BAC
     /* 253E0 80044BE0 000024A4 */  sh         $a0, 0x0($at)
 endlabel func_80044BAC
 
-nonmatching func_80044BE4
+nonmatching func_80044BE4, 0x18
 
 glabel func_80044BE4
-    /* 253E4 80044BE4 0800E003 */ .word 0x03E00008
+    /* 253E4 80044BE4 0800E003 */  jr         $ra
+  .L80044BE8:
+    /* 253E8 80044BE8 00000000 */   nop
+    /* 253EC 80044BEC E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 253F0 80044BF0 001C0400 */  sll        $v1, $a0, 16
+    /* 253F4 80044BF4 031C0300 */  sra        $v1, $v1, 16
+    /* 253F8 80044BF8 C0480300 */  sll        $t1, $v1, 3
+endlabel func_80044BE4
 
-nonmatching .L80044BE8
+nonmatching func_80044BFC
 
-alabel .L80044BE8
-    /* 253E8 80044BE8 00000000 */ .word 0x00000000
-    /* 253EC 80044BEC E8FFBD27 */ .word 0x27BDFFE8
-    /* 253F0 80044BF0 001C0400 */ .word 0x00041C00
-    /* 253F4 80044BF4 031C0300 */ .word 0x00031C03
-    /* 253F8 80044BF8 C0480300 */ .word 0x000348C0
+dlabel func_80044BFC
     /* 253FC 80044BFC 40100300 */ .word 0x00031040
     /* 25400 80044C00 F472E9A3 */ .word 0xA3E972F4
     /* 25404 80044C04 9CD4396F */ .word 0x6F39D49C
@@ -567,4 +574,4 @@ alabel .L80044BE8
     /* 25454 80044C54 4CF823D9 */ .word 0xD923F84C
     /* 25458 80044C58 2AA72C68 */ .word 0x682CA72A
     /* 2545C 80044C5C 323AA9DF */ .word 0xDFA93A32
-enddlabel func_80044BE4
+enddlabel func_80044BFC

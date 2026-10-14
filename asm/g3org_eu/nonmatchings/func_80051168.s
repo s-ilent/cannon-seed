@@ -352,13 +352,10 @@ glabel func_80051540
     /* 31D4C 8005154C 01008424 */   addiu     $a0, $a0, 0x1
 endlabel func_80051540
 
-nonmatching func_80051550, 0x18
+nonmatching func_80051550, 0xC
 
 glabel func_80051550
     /* 31D50 80051550 0800BD27 */  addiu      $sp, $sp, 0x8
     /* 31D54 80051554 0800E003 */  jr         $ra
     /* 31D58 80051558 00000000 */   nop
-    /* 31D5C 8005155C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 31D60 80051560 08004001 */  jr         $t2
-    /* 31D64 80051564 2A000924 */   addiu     $t1, $zero, 0x2A
 endlabel func_80051550

@@ -68,6 +68,7 @@ glabel func_8005DC54
     /* 3E4D4 8005DCD4 2A004018 */  blez       $v0, func_8005DD80
     /* 3E4D8 8005DCD8 00000000 */   nop
     /* 3E4DC 8005DCDC 0800CCE8 */  swc2       $12, 0x8($a2)
+  alabel func_8005DCE0
     /* 3E4E0 8005DCE0 1000CDE8 */  swc2       $13, 0x10($a2)
     /* 3E4E4 8005DCE4 1800CEE8 */  swc2       $14, 0x18($a2)
     /* 3E4E8 8005DCE8 00000000 */  nop

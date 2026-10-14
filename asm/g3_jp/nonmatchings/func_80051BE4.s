@@ -14,3 +14,4 @@ glabel InitHeap
     /* 323E8 80051BE8 08004001 */  jr         $t2
     /* 323EC 80051BEC 39000924 */   addiu     $t1, $zero, 0x39
 endlabel InitHeap
+    /* 323F0 80051BF0 00000000 */  nop

@@ -433,6 +433,7 @@ glabel func_8002C718
     /* CF7C 8002C77C 37AD000C */  jal        func_8002B4DC
     /* CF80 8002C780 00000000 */   nop
     /* CF84 8002C784 21184000 */  addu       $v1, $v0, $zero
+  alabel func_8002C788
     /* CF88 8002C788 02000234 */  ori        $v0, $zero, 0x2
 endlabel func_8002C718
 

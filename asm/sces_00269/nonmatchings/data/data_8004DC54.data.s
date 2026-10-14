@@ -516,204 +516,103 @@ dlabel D_8004E184
     /* 2E984 8004E184 0100A524 */ .word 0x24A50001
     /* 2E988 8004E188 010C023C */ .word 0x3C020C01
     /* 2E98C 8004E18C 001C4234 */ .word 0x34421C00
+    /* 2E990 8004E190 1000A2AF */ .word 0xAFA20010
+    /* 2E994 8004E194 0281063C */ .word 0x3C068102
+    /* 2E998 8004E198 0C00448E */ .word 0x8E44000C
+    /* 2E99C 8004E19C 0904C634 */ .word 0x34C60409
+    /* 2E9A0 8004E1A0 401B0400 */ .word 0x00041B40
+    /* 2E9A4 8004E1A4 18006600 */ .word 0x00660018
+    /* 2E9A8 8004E1A8 10100000 */ .word 0x00001010
+    /* 2E9AC 8004E1AC 002B0400 */ .word 0x00042B00
+    /* 2E9B0 8004E1B0 1800A600 */ .word 0x00A60018
+    /* 2E9B4 8004E1B4 0680013C */ .word 0x3C018006
+    /* 2E9B8 8004E1B8 E85524AC */ .word 0xAC2455E8
+    /* 2E9BC 8004E1BC 1400A497 */ .word 0x97A40014
+    /* 2E9C0 8004E1C0 21104300 */ .word 0x00431021
+    /* 2E9C4 8004E1C4 83110200 */ .word 0x00021183
+    /* 2E9C8 8004E1C8 C31F0300 */ .word 0x00031FC3
+    /* 2E9CC 8004E1CC 23104300 */ .word 0x00431023
+    /* 2E9D0 8004E1D0 23104400 */ .word 0x00441023
+    /* 2E9D4 8004E1D4 2800A2A7 */ .word 0xA7A20028
+    /* 2E9D8 8004E1D8 1600A297 */ .word 0x97A20016
+    /* 2E9DC 8004E1DC 3600A497 */ .word 0x97A40036
+    /* 2E9E0 8004E1E0 10180000 */ .word 0x00001810
+    /* 2E9E4 8004E1E4 21186500 */ .word 0x00651821
+    /* 2E9E8 8004E1E8 83190300 */ .word 0x00031983
+    /* 2E9EC 8004E1EC C32F0500 */ .word 0x00052FC3
+    /* 2E9F0 8004E1F0 23186500 */ .word 0x00651823
+    /* 2E9F4 8004E1F4 23106200 */ .word 0x00621023
+    /* 2E9F8 8004E1F8 2A00A2A7 */ .word 0xA7A2002A
+    /* 2E9FC 8004E1FC 2E00A297 */ .word 0x97A2002E
+    /* 2EA00 8004E200 21206400 */ .word 0x00642021
+    /* 2EA04 8004E204 3400A4A7 */ .word 0xA7A40034
+    /* 2EA08 8004E208 21106200 */ .word 0x00621021
+    /* 2EA0C 8004E20C 2C00A2A7 */ .word 0xA7A2002C
+    /* 2EA10 8004E210 4C00A297 */ .word 0x97A2004C
+    /* 2EA14 8004E214 4E00A497 */ .word 0x97A4004E
+    /* 2EA18 8004E218 21106200 */ .word 0x00621021
+    /* 2EA1C 8004E21C 21186400 */ .word 0x00641821
+    /* 2EA20 8004E220 4800A2A7 */ .word 0xA7A20048
+    /* 2EA24 8004E224 81200108 */ .word 0x08012081
+    /* 2EA28 8004E228 4A00A3A7 */ .word 0xA7A3004A
+    /* 2EA2C 8004E22C 0680013C */ .word 0x3C018006
+    /* 2EA30 8004E230 E85520AC */ .word 0xAC2055E8
+    /* 2EA34 8004E234 0300A016 */ .word 0x16A00003
+    /* 2EA38 8004E238 10006232 */ .word 0x32620010
+    /* 2EA3C 8004E23C 35004010 */ .word 0x10400035
+    /* 2EA40 8004E240 00000000 */ .word 0x00000000
+    /* 2EA44 8004E244 0680033C */ .word 0x3C038006
+    /* 2EA48 8004E248 E055638C */ .word 0x8C6355E0
+    /* 2EA4C 8004E24C 00000000 */ .word 0x00000000
+    /* 2EA50 8004E250 09006228 */ .word 0x28620009
+    /* 2EA54 8004E254 2D004010 */ .word 0x1040002D
+    /* 2EA58 8004E258 07006228 */ .word 0x28620007
+    /* 2EA5C 8004E25C 2B004014 */ .word 0x1440002B
+    /* 2EA60 8004E260 00000000 */ .word 0x00000000
+    /* 2EA64 8004E264 19008016 */ .word 0x16800019
+    /* 2EA68 8004E268 01001734 */ .word 0x34170001
+    /* 2EA6C 8004E26C 1300C016 */ .word 0x16C00013
+    /* 2EA70 8004E270 1000A527 */ .word 0x27A50010
+    /* 2EA74 8004E274 43000434 */ .word 0x34040043
+    /* 2EA78 8004E278 0680023C */ .word 0x3C028006
+    /* 2EA7C 8004E27C E055428C */ .word 0x8C4255E0
+    /* 2EA80 8004E280 FFFF0624 */ .word 0x2406FFFF
+    /* 2EA84 8004E284 00190200 */ .word 0x00021900
+    /* 2EA88 8004E288 21186200 */ .word 0x00621821
+    /* 2EA8C 8004E28C 80180300 */ .word 0x00031880
+    /* 2EA90 8004E290 0680023C */ .word 0x3C028006
+    /* 2EA94 8004E294 E05A4224 */ .word 0x24425AE0
+    /* 2EA98 8004E298 21186200 */ .word 0x00621821
+    /* 2EA9C 8004E29C 00006290 */ .word 0x90620000
+    /* 2EAA0 8004E2A0 01006324 */ .word 0x24630001
+    /* 2EAA4 8004E2A4 FFFF8424 */ .word 0x2484FFFF
+    /* 2EAA8 8004E2A8 0000A2A0 */ .word 0xA0A20000
+    /* 2EAAC 8004E2AC FBFF8614 */ .word 0x1486FFFB
+    /* 2EAB0 8004E2B0 0100A524 */ .word 0x24A50001
+    /* 2EAB4 8004E2B4 A6200108 */ .word 0x080120A6
+    /* 2EAB8 8004E2B8 80000234 */ .word 0x34020080
+    /* 2EABC 8004E2BC 1000A28F */ .word 0x8FA20010
+    /* 2EAC0 8004E2C0 00000000 */ .word 0x00000000
+    /* 2EAC4 8004E2C4 80004234 */ .word 0x34420080
+    /* 2EAC8 8004E2C8 1000A2AF */ .word 0xAFA20010
+    /* 2EACC 8004E2CC 0281043C */ .word 0x3C048102
+    /* 2EAD0 8004E2D0 1000428E */ .word 0x8E420010
+    /* 2EAD4 8004E2D4 09048434 */ .word 0x34840409
+    /* 2EAD8 8004E2D8 C0190200 */ .word 0x000219C0
+    /* 2EADC 8004E2DC 21186200 */ .word 0x00621821
+    /* 2EAE0 8004E2E0 001A0300 */ .word 0x00031A00
+    /* 2EAE4 8004E2E4 18006400 */ .word 0x00640018
+    /* 2EAE8 8004E2E8 0680013C */ .word 0x3C018006
+    /* 2EAEC 8004E2EC EC5522AC */ .word 0xAC2255EC
+    /* 2EAF0 8004E2F0 10100000 */ .word 0x00001010
+    /* 2EAF4 8004E2F4 21104300 */ .word 0x00431021
+    /* 2EAF8 8004E2F8 83110200 */ .word 0x00021183
+    /* 2EAFC 8004E2FC C31F0300 */ .word 0x00031FC3
+    /* 2EB00 8004E300 23104300 */ .word 0x00431023
+    /* 2EB04 8004E304 B9200108 */ .word 0x080120B9
+    /* 2EB08 8004E308 2200A2A7 */ .word 0xA7A20022
+    /* 2EB0C 8004E30C 0680013C */ .word 0x3C018006
 enddlabel D_8004E184
-
-nonmatching D_8004E190
-
-dlabel D_8004E190
-    /* 2E990 8004E190 */ .short 0x0010
-    /* 2E992 8004E192 */ .short 0xAFA2
-    /* 2E994 8004E194 */ .short 0x8102
-    /* 2E996 8004E196 */ .short 0x3C06
-    /* 2E998 8004E198 */ .short 0x000C
-    /* 2E99A 8004E19A */ .short 0x8E44
-    /* 2E99C 8004E19C */ .short 0x0409
-    /* 2E99E 8004E19E */ .short 0x34C6
-    /* 2E9A0 8004E1A0 */ .short 0x1B40
-    /* 2E9A2 8004E1A2 */ .short 0x0004
-    /* 2E9A4 8004E1A4 */ .short 0x0018
-    /* 2E9A6 8004E1A6 */ .short 0x0066
-    /* 2E9A8 8004E1A8 */ .short 0x1010
-    /* 2E9AA 8004E1AA */ .short 0x0000
-    /* 2E9AC 8004E1AC */ .short 0x2B00
-    /* 2E9AE 8004E1AE */ .short 0x0004
-    /* 2E9B0 8004E1B0 */ .short 0x0018
-    /* 2E9B2 8004E1B2 */ .short 0x00A6
-    /* 2E9B4 8004E1B4 */ .short 0x8006
-    /* 2E9B6 8004E1B6 */ .short 0x3C01
-    /* 2E9B8 8004E1B8 */ .short 0x55E8
-    /* 2E9BA 8004E1BA */ .short 0xAC24
-    /* 2E9BC 8004E1BC */ .short 0x0014
-    /* 2E9BE 8004E1BE */ .short 0x97A4
-    /* 2E9C0 8004E1C0 */ .short 0x1021
-    /* 2E9C2 8004E1C2 */ .short 0x0043
-    /* 2E9C4 8004E1C4 */ .short 0x1183
-    /* 2E9C6 8004E1C6 */ .short 0x0002
-    /* 2E9C8 8004E1C8 */ .short 0x1FC3
-    /* 2E9CA 8004E1CA */ .short 0x0003
-    /* 2E9CC 8004E1CC */ .short 0x1023
-    /* 2E9CE 8004E1CE */ .short 0x0043
-    /* 2E9D0 8004E1D0 */ .short 0x1023
-    /* 2E9D2 8004E1D2 */ .short 0x0044
-    /* 2E9D4 8004E1D4 */ .short 0x0028
-    /* 2E9D6 8004E1D6 */ .short 0xA7A2
-    /* 2E9D8 8004E1D8 */ .short 0x0016
-    /* 2E9DA 8004E1DA */ .short 0x97A2
-    /* 2E9DC 8004E1DC */ .short 0x0036
-    /* 2E9DE 8004E1DE */ .short 0x97A4
-    /* 2E9E0 8004E1E0 */ .short 0x1810
-    /* 2E9E2 8004E1E2 */ .short 0x0000
-    /* 2E9E4 8004E1E4 */ .short 0x1821
-    /* 2E9E6 8004E1E6 */ .short 0x0065
-    /* 2E9E8 8004E1E8 */ .short 0x1983
-    /* 2E9EA 8004E1EA */ .short 0x0003
-    /* 2E9EC 8004E1EC */ .short 0x2FC3
-    /* 2E9EE 8004E1EE */ .short 0x0005
-    /* 2E9F0 8004E1F0 */ .short 0x1823
-    /* 2E9F2 8004E1F2 */ .short 0x0065
-    /* 2E9F4 8004E1F4 */ .short 0x1023
-    /* 2E9F6 8004E1F6 */ .short 0x0062
-    /* 2E9F8 8004E1F8 */ .short 0x002A
-    /* 2E9FA 8004E1FA */ .short 0xA7A2
-    /* 2E9FC 8004E1FC */ .short 0x002E
-    /* 2E9FE 8004E1FE */ .short 0x97A2
-    /* 2EA00 8004E200 */ .short 0x2021
-    /* 2EA02 8004E202 */ .short 0x0064
-    /* 2EA04 8004E204 */ .short 0x0034
-    /* 2EA06 8004E206 */ .short 0xA7A4
-    /* 2EA08 8004E208 */ .short 0x1021
-    /* 2EA0A 8004E20A */ .short 0x0062
-    /* 2EA0C 8004E20C */ .short 0x002C
-    /* 2EA0E 8004E20E */ .short 0xA7A2
-    /* 2EA10 8004E210 */ .short 0x004C
-    /* 2EA12 8004E212 */ .short 0x97A2
-    /* 2EA14 8004E214 */ .short 0x004E
-    /* 2EA16 8004E216 */ .short 0x97A4
-    /* 2EA18 8004E218 */ .short 0x1021
-    /* 2EA1A 8004E21A */ .short 0x0062
-    /* 2EA1C 8004E21C */ .short 0x1821
-    /* 2EA1E 8004E21E */ .short 0x0064
-    /* 2EA20 8004E220 */ .short 0x0048
-    /* 2EA22 8004E222 */ .short 0xA7A2
-    /* 2EA24 8004E224 */ .short 0x2081
-    /* 2EA26 8004E226 */ .short 0x0801
-    /* 2EA28 8004E228 */ .short 0x004A
-    /* 2EA2A 8004E22A */ .short 0xA7A3
-    /* 2EA2C 8004E22C */ .short 0x8006
-    /* 2EA2E 8004E22E */ .short 0x3C01
-    /* 2EA30 8004E230 */ .short 0x55E8
-    /* 2EA32 8004E232 */ .short 0xAC20
-    /* 2EA34 8004E234 */ .short 0x0003
-    /* 2EA36 8004E236 */ .short 0x16A0
-    /* 2EA38 8004E238 */ .short 0x0010
-    /* 2EA3A 8004E23A */ .short 0x3262
-    /* 2EA3C 8004E23C */ .short 0x0035
-    /* 2EA3E 8004E23E */ .short 0x1040
-    /* 2EA40 8004E240 */ .short 0x0000
-    /* 2EA42 8004E242 */ .short 0x0000
-    /* 2EA44 8004E244 */ .short 0x8006
-    /* 2EA46 8004E246 */ .short 0x3C03
-    /* 2EA48 8004E248 */ .short 0x55E0
-    /* 2EA4A 8004E24A */ .short 0x8C63
-    /* 2EA4C 8004E24C */ .short 0x0000
-    /* 2EA4E 8004E24E */ .short 0x0000
-    /* 2EA50 8004E250 */ .short 0x0009
-    /* 2EA52 8004E252 */ .short 0x2862
-    /* 2EA54 8004E254 */ .short 0x002D
-    /* 2EA56 8004E256 */ .short 0x1040
-    /* 2EA58 8004E258 */ .short 0x0007
-    /* 2EA5A 8004E25A */ .short 0x2862
-    /* 2EA5C 8004E25C */ .short 0x002B
-    /* 2EA5E 8004E25E */ .short 0x1440
-    /* 2EA60 8004E260 */ .short 0x0000
-    /* 2EA62 8004E262 */ .short 0x0000
-    /* 2EA64 8004E264 */ .short 0x0019
-    /* 2EA66 8004E266 */ .short 0x1680
-    /* 2EA68 8004E268 */ .short 0x0001
-    /* 2EA6A 8004E26A */ .short 0x3417
-    /* 2EA6C 8004E26C */ .short 0x0013
-    /* 2EA6E 8004E26E */ .short 0x16C0
-    /* 2EA70 8004E270 */ .short 0x0010
-    /* 2EA72 8004E272 */ .short 0x27A5
-    /* 2EA74 8004E274 */ .short 0x0043
-    /* 2EA76 8004E276 */ .short 0x3404
-    /* 2EA78 8004E278 */ .short 0x8006
-    /* 2EA7A 8004E27A */ .short 0x3C02
-    /* 2EA7C 8004E27C */ .short 0x55E0
-    /* 2EA7E 8004E27E */ .short 0x8C42
-    /* 2EA80 8004E280 */ .short 0xFFFF
-    /* 2EA82 8004E282 */ .short 0x2406
-    /* 2EA84 8004E284 */ .short 0x1900
-    /* 2EA86 8004E286 */ .short 0x0002
-    /* 2EA88 8004E288 */ .short 0x1821
-    /* 2EA8A 8004E28A */ .short 0x0062
-    /* 2EA8C 8004E28C */ .short 0x1880
-    /* 2EA8E 8004E28E */ .short 0x0003
-    /* 2EA90 8004E290 */ .short 0x8006
-    /* 2EA92 8004E292 */ .short 0x3C02
-    /* 2EA94 8004E294 */ .short 0x5AE0
-    /* 2EA96 8004E296 */ .short 0x2442
-    /* 2EA98 8004E298 */ .short 0x1821
-    /* 2EA9A 8004E29A */ .short 0x0062
-    /* 2EA9C 8004E29C */ .short 0x0000
-    /* 2EA9E 8004E29E */ .short 0x9062
-    /* 2EAA0 8004E2A0 */ .short 0x0001
-    /* 2EAA2 8004E2A2 */ .short 0x2463
-    /* 2EAA4 8004E2A4 */ .short 0xFFFF
-    /* 2EAA6 8004E2A6 */ .short 0x2484
-    /* 2EAA8 8004E2A8 */ .short 0x0000
-    /* 2EAAA 8004E2AA */ .short 0xA0A2
-    /* 2EAAC 8004E2AC */ .short 0xFFFB
-    /* 2EAAE 8004E2AE */ .short 0x1486
-    /* 2EAB0 8004E2B0 */ .short 0x0001
-    /* 2EAB2 8004E2B2 */ .short 0x24A5
-    /* 2EAB4 8004E2B4 */ .short 0x20A6
-    /* 2EAB6 8004E2B6 */ .short 0x0801
-    /* 2EAB8 8004E2B8 */ .short 0x0080
-    /* 2EABA 8004E2BA */ .short 0x3402
-    /* 2EABC 8004E2BC */ .short 0x0010
-    /* 2EABE 8004E2BE */ .short 0x8FA2
-    /* 2EAC0 8004E2C0 */ .short 0x0000
-    /* 2EAC2 8004E2C2 */ .short 0x0000
-    /* 2EAC4 8004E2C4 */ .short 0x0080
-    /* 2EAC6 8004E2C6 */ .short 0x3442
-    /* 2EAC8 8004E2C8 */ .short 0x0010
-    /* 2EACA 8004E2CA */ .short 0xAFA2
-    /* 2EACC 8004E2CC */ .short 0x8102
-    /* 2EACE 8004E2CE */ .short 0x3C04
-    /* 2EAD0 8004E2D0 */ .short 0x0010
-    /* 2EAD2 8004E2D2 */ .short 0x8E42
-    /* 2EAD4 8004E2D4 */ .short 0x0409
-    /* 2EAD6 8004E2D6 */ .short 0x3484
-    /* 2EAD8 8004E2D8 */ .short 0x19C0
-    /* 2EADA 8004E2DA */ .short 0x0002
-    /* 2EADC 8004E2DC */ .short 0x1821
-    /* 2EADE 8004E2DE */ .short 0x0062
-    /* 2EAE0 8004E2E0 */ .short 0x1A00
-    /* 2EAE2 8004E2E2 */ .short 0x0003
-    /* 2EAE4 8004E2E4 */ .short 0x0018
-    /* 2EAE6 8004E2E6 */ .short 0x0064
-    /* 2EAE8 8004E2E8 */ .short 0x8006
-    /* 2EAEA 8004E2EA */ .short 0x3C01
-    /* 2EAEC 8004E2EC */ .short 0x55EC
-    /* 2EAEE 8004E2EE */ .short 0xAC22
-    /* 2EAF0 8004E2F0 */ .short 0x1010
-    /* 2EAF2 8004E2F2 */ .short 0x0000
-    /* 2EAF4 8004E2F4 */ .short 0x1021
-    /* 2EAF6 8004E2F6 */ .short 0x0043
-    /* 2EAF8 8004E2F8 */ .short 0x1183
-    /* 2EAFA 8004E2FA */ .short 0x0002
-    /* 2EAFC 8004E2FC */ .short 0x1FC3
-    /* 2EAFE 8004E2FE */ .short 0x0003
-    /* 2EB00 8004E300 */ .short 0x1023
-    /* 2EB02 8004E302 */ .short 0x0043
-    /* 2EB04 8004E304 */ .short 0x20B9
-    /* 2EB06 8004E306 */ .short 0x0801
-    /* 2EB08 8004E308 */ .short 0x0022
-    /* 2EB0A 8004E30A */ .short 0xA7A2
-    /* 2EB0C 8004E30C */ .short 0x8006
-    /* 2EB0E 8004E30E */ .short 0x3C01
-enddlabel D_8004E190
 
 nonmatching D_8004E310
 

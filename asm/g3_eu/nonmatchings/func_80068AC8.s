@@ -219,7 +219,7 @@ glabel MDEC_vlc
     /* 495B8 80068DB8 FFFF6324 */  addiu      $v1, $v1, -0x1
     /* 495BC 80068DBC FDFF6104 */  bgez       $v1, .L80068DB4
     /* 495C0 80068DC0 0200A524 */   addiu     $a1, $a1, 0x2
-    /* 495C4 80068DC4 C97D0108 */  j          func_8005F724
+    /* 495C4 80068DC4 C97D0108 */  j          .L8005F724
     /* 495C8 80068DC8 21100000 */   addu      $v0, $zero, $zero
   .L80068DCC:
     /* 495CC 80068DCC 0A80013C */  lui        $at, %hi(D_80098C08)

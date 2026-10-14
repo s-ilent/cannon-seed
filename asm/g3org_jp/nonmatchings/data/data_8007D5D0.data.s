@@ -97255,23 +97255,43 @@ dlabel D_800B89E8
     /* 991EA 800B89EA */ .short 0x09C9
     /* 991EC 800B89EC */ .short 0x09C2
     /* 991EE 800B89EE */ .short 0x09BB
+enddlabel D_800B89E8
+
+nonmatching D_800B89F0
+
+dlabel D_800B89F0
     /* 991F0 800B89F0 */ .short 0x09B4
     /* 991F2 800B89F2 */ .short 0x09AD
     /* 991F4 800B89F4 */ .short 0x09A5
     /* 991F6 800B89F6 */ .short 0x099E
+enddlabel D_800B89F0
+
+nonmatching D_800B89F8
+
+dlabel D_800B89F8
     /* 991F8 800B89F8 */ .short 0x0998
     /* 991FA 800B89FA */ .short 0x0991
     /* 991FC 800B89FC */ .short 0x098A
     /* 991FE 800B89FE */ .short 0x0983
+enddlabel D_800B89F8
+
+nonmatching D_800B8A00
+
+dlabel D_800B8A00
     /* 99200 800B8A00 */ .short 0x097C
     /* 99202 800B8A02 */ .short 0x0976
     /* 99204 800B8A04 */ .short 0x096F
     /* 99206 800B8A06 */ .short 0x0969
+enddlabel D_800B8A00
+
+nonmatching D_800B8A08
+
+dlabel D_800B8A08
     /* 99208 800B8A08 */ .short 0x0962
     /* 9920A 800B8A0A */ .short 0x095C
     /* 9920C 800B8A0C */ .short 0x0955
     /* 9920E 800B8A0E */ .short 0x094F
-enddlabel D_800B89E8
+enddlabel D_800B8A08
 
 nonmatching D_800B8A10
 
@@ -97280,39 +97300,79 @@ dlabel D_800B8A10
     /* 99212 800B8A12 */ .short 0x0943
     /* 99214 800B8A14 */ .short 0x093C
     /* 99216 800B8A16 */ .short 0x0936
+enddlabel D_800B8A10
+
+nonmatching D_800B8A18
+
+dlabel D_800B8A18
     /* 99218 800B8A18 */ .short 0x0930
     /* 9921A 800B8A1A */ .short 0x092A
     /* 9921C 800B8A1C */ .short 0x0924
     /* 9921E 800B8A1E */ .short 0x091E
+enddlabel D_800B8A18
+
+nonmatching D_800B8A20
+
+dlabel D_800B8A20
     /* 99220 800B8A20 */ .short 0x0918
     /* 99222 800B8A22 */ .short 0x0912
     /* 99224 800B8A24 */ .short 0x090D
     /* 99226 800B8A26 */ .short 0x0907
+enddlabel D_800B8A20
+
+nonmatching D_800B8A28
+
+dlabel D_800B8A28
     /* 99228 800B8A28 */ .short 0x0901
     /* 9922A 800B8A2A */ .short 0x08FB
     /* 9922C 800B8A2C */ .short 0x08F6
     /* 9922E 800B8A2E */ .short 0x08F0
+enddlabel D_800B8A28
+
+nonmatching D_800B8A30
+
+dlabel D_800B8A30
     /* 99230 800B8A30 */ .short 0x08EB
     /* 99232 800B8A32 */ .short 0x08E5
     /* 99234 800B8A34 */ .short 0x08E0
     /* 99236 800B8A36 */ .short 0x08DA
+enddlabel D_800B8A30
+
+nonmatching D_800B8A38
+
+dlabel D_800B8A38
     /* 99238 800B8A38 */ .short 0x08D5
     /* 9923A 800B8A3A */ .short 0x08CF
     /* 9923C 800B8A3C */ .short 0x08CA
     /* 9923E 800B8A3E */ .short 0x08C5
+enddlabel D_800B8A38
+
+nonmatching D_800B8A40
+
+dlabel D_800B8A40
     /* 99240 800B8A40 */ .short 0x08BF
     /* 99242 800B8A42 */ .short 0x08BA
     /* 99244 800B8A44 */ .short 0x08B5
     /* 99246 800B8A46 */ .short 0x08B0
+enddlabel D_800B8A40
+
+nonmatching D_800B8A48
+
+dlabel D_800B8A48
     /* 99248 800B8A48 */ .short 0x08AB
     /* 9924A 800B8A4A */ .short 0x08A6
     /* 9924C 800B8A4C */ .short 0x08A1
     /* 9924E 800B8A4E */ .short 0x089C
+enddlabel D_800B8A48
+
+nonmatching D_800B8A50
+
+dlabel D_800B8A50
     /* 99250 800B8A50 */ .short 0x0897
     /* 99252 800B8A52 */ .short 0x0892
     /* 99254 800B8A54 */ .short 0x088D
     /* 99256 800B8A56 */ .short 0x0888
-enddlabel D_800B8A10
+enddlabel D_800B8A50
 
 nonmatching D_800B8A58
 
@@ -97460,7 +97520,7 @@ enddlabel D_800B8AF0
 nonmatching D_800B8AF8
 
 dlabel D_800B8AF8
-    /* 992F8 800B8AF8 FC670580 */ .word 0x800567FC
+    /* 992F8 800B8AF8 FC670580 */ .word func_800567FC
     /* 992FC 800B8AFC 80420580 */ .word 0x80054280
 enddlabel D_800B8AF8
 

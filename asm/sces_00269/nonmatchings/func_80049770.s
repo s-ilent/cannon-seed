@@ -14,3 +14,4 @@ glabel DisableEvent
     /* 29F74 80049774 08004001 */  jr         $t2
     /* 29F78 80049778 0D000924 */   addiu     $t1, $zero, 0xD
 endlabel DisableEvent
+    /* 29F7C 8004977C 00000000 */  nop

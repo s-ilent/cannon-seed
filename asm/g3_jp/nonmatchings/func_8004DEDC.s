@@ -14,3 +14,4 @@ glabel strcat
     /* 2E6E0 8004DEE0 08004001 */  jr         $t2
     /* 2E6E4 8004DEE4 15000924 */   addiu     $t1, $zero, 0x15
 endlabel strcat
+    /* 2E6E8 8004DEE8 00000000 */  nop

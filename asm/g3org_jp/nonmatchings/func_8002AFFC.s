@@ -18,7 +18,7 @@ glabel func_8002AFFC
     /* B810 8002B010 04008214 */  bne        $a0, $v0, func_8002B024
     /* B814 8002B014 21B0C302 */   addu      $s6, $s6, $v1
     /* B818 8002B018 00100434 */  ori        $a0, $zero, 0x1000
-    /* B81C 8002B01C 1BA60008 */  j          D_8002986C
+    /* B81C 8002B01C 1BA60008 */  j          func_8002986C
     /* B820 8002B020 00401434 */   ori       $s4, $zero, 0x4000
 endlabel func_8002AFFC
 

@@ -14,3 +14,4 @@ glabel OpenEvent
     /* 31C58 80051458 08004001 */  jr         $t2
     /* 31C5C 8005145C 08000924 */   addiu     $t1, $zero, 0x8
 endlabel OpenEvent
+    /* 31C60 80051460 00000000 */  nop

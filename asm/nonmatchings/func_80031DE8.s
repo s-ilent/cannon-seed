@@ -54,11 +54,3 @@ glabel func_80031E34
     /* 12654 80031E54 0800E003 */  jr         $ra
     /* 12658 80031E58 00000000 */   nop
 endlabel func_80031E34
-
-nonmatching func_80031E5C, 0xC
-
-glabel func_80031E5C
-    /* 1265C 80031E5C B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 12660 80031E60 08004001 */  jr         $t2
-    /* 12664 80031E64 3F000924 */   addiu     $t1, $zero, 0x3F
-endlabel func_80031E5C

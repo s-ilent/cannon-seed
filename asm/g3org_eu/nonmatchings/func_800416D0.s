@@ -404,6 +404,7 @@ nonmatching func_80041B48, 0x54
 
 glabel func_80041B48
     /* 22348 80041B48 1800C600 */  mult       $a2, $a2
+  alabel func_80041B4C
     /* 2234C 80041B4C 12300000 */  mflo       $a2
     /* 22350 80041B50 00000000 */  nop
     /* 22354 80041B54 00000000 */  nop
@@ -457,6 +458,7 @@ glabel func_80041B9C
     /* 223FC 80041BFC FC994284 */  lh         $v0, %lo(D_800B99FC)($v0)
     /* 22400 80041C00 00000000 */  nop
     /* 22404 80041C04 0500401C */  bgtz       $v0, func_80041C1C
+  alabel func_80041C08
     /* 22408 80041C08 00000000 */   nop
     /* 2240C 80041C0C 2BFD000C */  jal        func_8003F4AC
     /* 22410 80041C10 00000000 */   nop

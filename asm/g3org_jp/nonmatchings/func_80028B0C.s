@@ -641,7 +641,7 @@ endlabel func_80029208
 nonmatching func_80029218, 0x10
 
 glabel func_80029218
-    /* 9A18 80029218 06014010 */  beqz       $v0, D_80029634
+    /* 9A18 80029218 06014010 */  beqz       $v0, func_80029634
     /* 9A1C 8002921C 21100002 */   addu      $v0, $s0, $zero
     /* 9A20 80029220 CCA00008 */  j          D_80028330
     /* 9A24 80029224 10001036 */   ori       $s0, $s0, 0x10
@@ -743,6 +743,10 @@ alabel func_8002932C
     /* 9B40 80029340 8A5ECB79 */ .word 0x79CB5E8A /* invalid instruction */
     /* 9B44 80029344 9BE5F585 */ .word 0x85F5E59B
     /* 9B48 80029348 F7336C4D */ .word 0x4D6C33F7 /* invalid instruction */
+
+nonmatching func_8002934C
+
+alabel func_8002934C
     /* 9B4C 8002934C E0CBDFDC */ .word 0xDCDFCBE0
     /* 9B50 80029350 50ED6040 */ .word 0x4060ED50 /* invalid instruction */
     /* 9B54 80029354 C36ED9DD */ .word 0xDDD96EC3

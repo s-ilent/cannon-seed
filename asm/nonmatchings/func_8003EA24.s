@@ -52,7 +52,7 @@ glabel func_8003EA94
     /* 1F2AC 8003EAAC E0014224 */  addiu      $v0, $v0, 0x1E0
     /* 1F2B0 8003EAB0 0C0042AE */  sw         $v0, 0xC($s2)
     /* 1F2B4 8003EAB4 0800428E */  lw         $v0, 0x8($s2)
-    /* 1F2B8 8003EAB8 B5EA0008 */  j          func_8003AAD4
+    /* 1F2B8 8003EAB8 B5EA0008 */  j          .L8003AAD4
     /* 1F2BC 8003EABC 00000000 */   nop
 endlabel func_8003EA94
 

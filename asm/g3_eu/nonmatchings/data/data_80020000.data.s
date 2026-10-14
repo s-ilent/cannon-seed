@@ -1720,7 +1720,12 @@ dlabel D_80021478
     /* 1C8C 8002148C */ .asciz "DOL_BEFORE"
     /* 444F4C5F4245464F52450000 */
 .align 2
+enddlabel D_80021478
+
 .align 2
+nonmatching D_80021498
+
+dlabel D_80021498
     /* 1C98 80021498 */ .asciz "DOL_FAIL1"
     /* 444F4C5F4641494C31000000 */
 .align 2
@@ -1728,7 +1733,12 @@ dlabel D_80021478
     /* 1CA4 800214A4 */ .asciz "KUUBO_DIED"
     /* 4B5555424F5F444945440000 */
 .align 2
+enddlabel D_80021498
+
 .align 2
+nonmatching D_800214B0
+
+dlabel D_800214B0
     /* 1CB0 800214B0 */ .asciz "DOL_SUCS"
     /* 444F4C5F5355435300000000 */
 .align 2
@@ -1832,7 +1842,7 @@ dlabel D_80021478
     /* 1E20 80021620 */ .asciz "DEAD_END"
     /* 444541445F454E4400000000 */
 .align 2
-enddlabel D_80021478
+enddlabel D_800214B0
 
 .align 2
 nonmatching D_8002162C

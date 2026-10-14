@@ -723,17 +723,22 @@ glabel func_80066078
     /* 4688C 8006608C B47135AC */  sw         $s5, %lo(D_800B71B4)($at)
 endlabel func_80066078
 
-nonmatching func_80066090, 0x1C
+nonmatching func_80066090, 0x4
 
 glabel func_80066090
     /* 46890 80066090 06004014 */  bnez       $v0, func_800660AC
-    /* 46894 80066094 21200000 */   addu      $a0, $zero, $zero
+endlabel func_80066090
+
+nonmatching func_80066094, 0x18
+
+glabel func_80066094
+    /* 46894 80066094 21200000 */  addu       $a0, $zero, $zero
     /* 46898 80066098 FA75010C */  jal        func_8005D7E8
     /* 4689C 8006609C 21286002 */   addu      $a1, $s3, $zero
     /* 468A0 800660A0 02004238 */  xori       $v0, $v0, 0x2
     /* 468A4 800660A4 F4730108 */  j          func_8005CFD0
     /* 468A8 800660A8 0100422C */   sltiu     $v0, $v0, 0x1
-endlabel func_80066090
+endlabel func_80066094
 
 nonmatching func_800660AC, 0x30
 

@@ -327,7 +327,7 @@ glabel func_80070DE8
     /* 51640 80070E40 F8FFBD27 */   addiu     $sp, $sp, -0x8
     /* 51644 80070E44 01000234 */  ori        $v0, $zero, 0x1
     /* 51648 80070E48 04408200 */  sllv       $t0, $v0, $a0
-    /* 5164C 80070E4C BD990108 */  j          func_800666F4
+    /* 5164C 80070E4C BD990108 */  j          .L800666F4
     /* 51650 80070E50 21300000 */   addu      $a2, $zero, $zero
 endlabel func_80070DE8
 

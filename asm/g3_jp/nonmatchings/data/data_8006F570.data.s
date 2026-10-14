@@ -1077,11 +1077,16 @@ dlabel func_800704D0
     /* 50D04 80070504 C26D2124 */ .word 0x24216DC2
     /* 50D08 80070508 21082200 */ .word 0x00220821
     /* 50D0C 8007050C 000026A4 */ .word 0xA4260000
+enddlabel func_800704D0
+
+nonmatching func_80070510
+
+dlabel func_80070510
     /* 50D10 80070510 1480013C */ .word 0x3C018014
     /* 50D14 80070514 406F2124 */ .word 0x24216F40
     /* 50D18 80070518 21082400 */ .word 0x00240821
     /* 50D1C 8007051C 00002390 */ .word 0x90230000
-enddlabel func_800704D0
+enddlabel func_80070510
 
 nonmatching func_80070520
 

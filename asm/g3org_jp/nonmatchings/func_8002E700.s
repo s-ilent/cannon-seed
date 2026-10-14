@@ -65,7 +65,7 @@ nonmatching func_8002E784, 0x10
 glabel func_8002E784
     /* EF84 8002E784 FFFF1625 */  addiu      $s6, $t0, -0x1
     /* EF88 8002E788 2140C002 */  addu       $t0, $s6, $zero
-    /* EF8C 8002E78C 25B20008 */  j          D_8002C894
+    /* EF8C 8002E78C 25B20008 */  j          func_8002C894
     /* EF90 8002E790 01000934 */   ori       $t1, $zero, 0x1
 endlabel func_8002E784
 
@@ -87,17 +87,17 @@ glabel func_8002E794
     /* EFC4 8002E7C4 00000000 */  nop
     /* EFC8 8002E7C8 08004000 */  jr         $v0
     /* EFCC 8002E7CC 00000000 */   nop
-    /* EFD0 8002E7D0 49B20008 */  j          D_8002C924
+    /* EFD0 8002E7D0 49B20008 */  j          func_8002C924
     /* EFD4 8002E7D4 21A00000 */   addu      $s4, $zero, $zero
-    /* EFD8 8002E7D8 49B20008 */  j          D_8002C924
+    /* EFD8 8002E7D8 49B20008 */  j          func_8002C924
     /* EFDC 8002E7DC 01001434 */   ori       $s4, $zero, 0x1
-    /* EFE0 8002E7E0 49B20008 */  j          D_8002C924
+    /* EFE0 8002E7E0 49B20008 */  j          func_8002C924
     /* EFE4 8002E7E4 02001434 */   ori       $s4, $zero, 0x2
-    /* EFE8 8002E7E8 49B20008 */  j          D_8002C924
+    /* EFE8 8002E7E8 49B20008 */  j          func_8002C924
     /* EFEC 8002E7EC 03001434 */   ori       $s4, $zero, 0x3
-    /* EFF0 8002E7F0 49B20008 */  j          D_8002C924
+    /* EFF0 8002E7F0 49B20008 */  j          func_8002C924
     /* EFF4 8002E7F4 04001434 */   ori       $s4, $zero, 0x4
-    /* EFF8 8002E7F8 49B20008 */  j          D_8002C924
+    /* EFF8 8002E7F8 49B20008 */  j          func_8002C924
     /* EFFC 8002E7FC 05001434 */   ori       $s4, $zero, 0x5
     /* F000 8002E800 FFFF1424 */  addiu      $s4, $zero, -0x1
 endlabel func_8002E794
@@ -110,7 +110,7 @@ glabel func_8002E804
     /* F00C 8002E80C 00000000 */   nop
     /* F010 8002E810 0300A014 */  bnez       $a1, func_8002E820
     /* F014 8002E814 21800000 */   addu      $s0, $zero, $zero
-    /* F018 8002E818 51B20008 */  j          D_8002C944
+    /* F018 8002E818 51B20008 */  j          func_8002C944
     /* F01C 8002E81C 50000234 */   ori       $v0, $zero, 0x50
 endlabel func_8002E804
 

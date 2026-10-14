@@ -18836,6 +18836,11 @@ dlabel D_8008B7A4
     /* 6BFA8 8008B7A8 D0070000 */ .word 0x000007D0
     /* 6BFAC 8008B7AC 00000000 */ .word 0x00000000
     /* 6BFB0 8008B7B0 E0FCFFFF */ .word 0xFFFFFCE0
+enddlabel D_8008B7A4
+
+nonmatching D_8008B7B4
+
+dlabel D_8008B7B4
     /* 6BFB4 8008B7B4 02000000 */ .word 0x00000002
     /* 6BFB8 8008B7B8 00001400 */ .word 0x00140000
     /* 6BFBC 8008B7BC 04000000 */ .word 0x00000004
@@ -18848,7 +18853,7 @@ dlabel D_8008B7A4
     /* 6BFD8 8008B7D8 A00F0000 */ .word 0x00000FA0
     /* 6BFDC 8008B7DC 00000000 */ .word 0x00000000
     /* 6BFE0 8008B7E0 C8000000 */ .word 0x000000C8
-enddlabel D_8008B7A4
+enddlabel D_8008B7B4
 
 nonmatching D_8008B7E4
 
@@ -19012,6 +19017,11 @@ dlabel D_8008B9A8
     /* 6C1B4 8008B9B4 04000000 */ .word 0x00000004
     /* 6C1B8 8008B9B8 08D5FFFF */ .word 0xFFFFD508
     /* 6C1BC 8008B9BC 00000000 */ .word 0x00000000
+enddlabel D_8008B9A8
+
+nonmatching D_8008B9C0
+
+dlabel D_8008B9C0
     /* 6C1C0 8008B9C0 00000000 */ .word 0x00000000
     /* 6C1C4 8008B9C4 FFFF0000 */ .word 0x0000FFFF
     /* 6C1C8 8008B9C8 00000000 */ .word 0x00000000
@@ -19036,7 +19046,7 @@ dlabel D_8008B9A8
     /* 6C214 8008BA14 05000000 */ .word 0x00000005
     /* 6C218 8008BA18 F4010000 */ .word 0x000001F4
     /* 6C21C 8008BA1C 00000000 */ .word 0x00000000
-enddlabel D_8008B9A8
+enddlabel D_8008B9C0
 
 nonmatching D_8008BA20
 
@@ -79143,8 +79153,13 @@ dlabel D_800AC228
     /* 8CA40 800AC240 1E74BE7D */ .word 0x7DBE741E
     /* 8CA44 800AC244 BF7DECF8 */ .word 0xF8EC7DBF
     /* 8CA48 800AC248 1EE9937E */ .word 0x7E93E91E
-    /* 8CA4C 800AC24C 1F973C44 */ .word 0x443C971F
 enddlabel D_800AC228
+
+nonmatching D_800AC24C
+
+dlabel D_800AC24C
+    /* 8CA4C 800AC24C 1F973C44 */ .word 0x443C971F
+enddlabel D_800AC24C
 
 nonmatching D_800AC250
 
@@ -79555,29 +79570,28 @@ dlabel D_800AC44C
     /* 8CC52 800AC452 */ .short 0x0000
     /* 8CC54 800AC454 */ .short 0x0006
     /* 8CC56 800AC456 */ .short 0x7C1F
-    /* 8CC58 800AC458 */ .short 0x0000
-    /* 8CC5A 800AC45A */ .short 0x0000
-    /* 8CC5C 800AC45C */ .short 0x0006
-    /* 8CC5E 800AC45E */ .short 0x7C1F
-    /* 8CC60 800AC460 */ .short 0x0000
-    /* 8CC62 800AC462 */ .short 0x0000
-    /* 8CC64 800AC464 */ .short 0x0006
-    /* 8CC66 800AC466 */ .short 0x7C1F
-    /* 8CC68 800AC468 */ .short 0x0000
-    /* 8CC6A 800AC46A */ .short 0x0000
-    /* 8CC6C 800AC46C */ .short 0x0006
-    /* 8CC6E 800AC46E */ .short 0x7C1F
-    /* 8CC70 800AC470 */ .short 0x0000
-    /* 8CC72 800AC472 */ .short 0x0000
-    /* 8CC74 800AC474 */ .short 0x0006
-    /* 8CC76 800AC476 */ .short 0x7C1F
-    /* 8CC78 800AC478 */ .short 0x0000
-    /* 8CC7A 800AC47A */ .short 0x0000
-    /* 8CC7C 800AC47C */ .short 0x0006
-    /* 8CC7E 800AC47E */ .short 0x7C1F
-    /* 8CC80 800AC480 */ .short 0x0000
-    /* 8CC82 800AC482 */ .short 0x0000
 enddlabel D_800AC44C
+
+nonmatching D_800AC458
+
+dlabel D_800AC458
+    /* 8CC58 800AC458 00000000 */ .word 0x00000000
+    /* 8CC5C 800AC45C 06001F7C */ .word 0x7C1F0006
+enddlabel D_800AC458
+
+nonmatching D_800AC460
+
+dlabel D_800AC460
+    /* 8CC60 800AC460 00000000 */ .word 0x00000000
+    /* 8CC64 800AC464 06001F7C */ .word 0x7C1F0006
+    /* 8CC68 800AC468 00000000 */ .word 0x00000000
+    /* 8CC6C 800AC46C 06001F7C */ .word 0x7C1F0006
+    /* 8CC70 800AC470 00000000 */ .word 0x00000000
+    /* 8CC74 800AC474 06001F7C */ .word 0x7C1F0006
+    /* 8CC78 800AC478 00000000 */ .word 0x00000000
+    /* 8CC7C 800AC47C 06001F7C */ .word 0x7C1F0006
+    /* 8CC80 800AC480 00000000 */ .word 0x00000000
+enddlabel D_800AC460
 
 nonmatching D_800AC484
 
@@ -79683,15 +79697,28 @@ enddlabel D_800AC524
 nonmatching D_800AC5CC
 
 dlabel D_800AC5CC
-    /* 8CDCC 800AC5CC 06001F7C */ .word 0x7C1F0006
-    /* 8CDD0 800AC5D0 00000000 */ .word 0x00000000
-    /* 8CDD4 800AC5D4 06001F7C */ .word 0x7C1F0006
-    /* 8CDD8 800AC5D8 00000000 */ .word 0x00000000
-    /* 8CDDC 800AC5DC 06001F7C */ .word 0x7C1F0006
-    /* 8CDE0 800AC5E0 00000000 */ .word 0x00000000
-    /* 8CDE4 800AC5E4 06001F7C */ .word 0x7C1F0006
-    /* 8CDE8 800AC5E8 00000000 */ .word 0x00000000
+    /* 8CDCC 800AC5CC */ .short 0x0006
+    /* 8CDCE 800AC5CE */ .short 0x7C1F
+    /* 8CDD0 800AC5D0 */ .short 0x0000
+    /* 8CDD2 800AC5D2 */ .short 0x0000
+    /* 8CDD4 800AC5D4 */ .short 0x0006
+    /* 8CDD6 800AC5D6 */ .short 0x7C1F
+    /* 8CDD8 800AC5D8 */ .short 0x0000
+    /* 8CDDA 800AC5DA */ .short 0x0000
 enddlabel D_800AC5CC
+
+nonmatching D_800AC5DC
+
+dlabel D_800AC5DC
+    /* 8CDDC 800AC5DC */ .short 0x0006
+    /* 8CDDE 800AC5DE */ .short 0x7C1F
+    /* 8CDE0 800AC5E0 */ .short 0x0000
+    /* 8CDE2 800AC5E2 */ .short 0x0000
+    /* 8CDE4 800AC5E4 */ .short 0x0006
+    /* 8CDE6 800AC5E6 */ .short 0x7C1F
+    /* 8CDE8 800AC5E8 */ .short 0x0000
+    /* 8CDEA 800AC5EA */ .short 0x0000
+enddlabel D_800AC5DC
 
 nonmatching D_800AC5EC
 
@@ -79744,11 +79771,16 @@ dlabel D_800AC5FA
     /* 8CE1E 800AC61E */ .short 0x7C1F
     /* 8CE20 800AC620 */ .short 0x0000
     /* 8CE22 800AC622 */ .short 0x0000
+enddlabel D_800AC5FA
+
+nonmatching D_800AC624
+
+dlabel D_800AC624
     /* 8CE24 800AC624 */ .short 0x0006
     /* 8CE26 800AC626 */ .short 0x7C1F
     /* 8CE28 800AC628 */ .short 0x0000
     /* 8CE2A 800AC62A */ .short 0x0000
-enddlabel D_800AC5FA
+enddlabel D_800AC624
 
 nonmatching D_800AC62C
 
@@ -79765,11 +79797,16 @@ dlabel D_800AC62C
     /* 8CE3E 800AC63E */ .short 0x7C1F
     /* 8CE40 800AC640 */ .short 0x0000
     /* 8CE42 800AC642 */ .short 0x0000
+enddlabel D_800AC62C
+
+nonmatching D_800AC644
+
+dlabel D_800AC644
     /* 8CE44 800AC644 */ .short 0x0006
     /* 8CE46 800AC646 */ .short 0x7C1F
     /* 8CE48 800AC648 */ .short 0x0000
     /* 8CE4A 800AC64A */ .short 0x0000
-enddlabel D_800AC62C
+enddlabel D_800AC644
 
 nonmatching D_800AC64C
 
@@ -79802,9 +79839,16 @@ nonmatching D_800AC674
 dlabel D_800AC674
     /* 8CE74 800AC674 06001F7C */ .word 0x7C1F0006
     /* 8CE78 800AC678 00000000 */ .word 0x00000000
-    /* 8CE7C 800AC67C 06001F7C */ .word 0x7C1F0006
-    /* 8CE80 800AC680 00000000 */ .word 0x00000000
 enddlabel D_800AC674
+
+nonmatching D_800AC67C
+
+dlabel D_800AC67C
+    /* 8CE7C 800AC67C */ .short 0x0006
+    /* 8CE7E 800AC67E */ .short 0x7C1F
+    /* 8CE80 800AC680 */ .short 0x0000
+    /* 8CE82 800AC682 */ .short 0x0000
+enddlabel D_800AC67C
 
 nonmatching D_800AC684
 
@@ -79827,11 +79871,16 @@ dlabel D_800AC694
     /* 8CE96 800AC696 */ .short 0x7C1F
     /* 8CE98 800AC698 */ .short 0x0000
     /* 8CE9A 800AC69A */ .short 0x0000
+enddlabel D_800AC694
+
+nonmatching D_800AC69C
+
+dlabel D_800AC69C
     /* 8CE9C 800AC69C */ .short 0x0006
     /* 8CE9E 800AC69E */ .short 0x7C1F
     /* 8CEA0 800AC6A0 */ .short 0x0000
     /* 8CEA2 800AC6A2 */ .short 0x0000
-enddlabel D_800AC694
+enddlabel D_800AC69C
 
 nonmatching D_800AC6A4
 
@@ -79918,10 +79967,20 @@ dlabel D_800AC6EC
     /* 8CEF6 800AC6F6 */ .short 0x7C1F
     /* 8CEF8 800AC6F8 */ .short 0x0000
     /* 8CEFA 800AC6FA */ .short 0x0000
+enddlabel D_800AC6EC
+
+nonmatching D_800AC6FC
+
+dlabel D_800AC6FC
     /* 8CEFC 800AC6FC */ .short 0x0006
     /* 8CEFE 800AC6FE */ .short 0x7C1F
     /* 8CF00 800AC700 */ .short 0x0000
     /* 8CF02 800AC702 */ .short 0x0000
+enddlabel D_800AC6FC
+
+nonmatching D_800AC704
+
+dlabel D_800AC704
     /* 8CF04 800AC704 */ .short 0x0006
     /* 8CF06 800AC706 */ .short 0x7C1F
     /* 8CF08 800AC708 */ .short 0x0000
@@ -79974,7 +80033,7 @@ dlabel D_800AC6EC
     /* 8CF66 800AC766 */ .short 0x0802
     /* 8CF68 800AC768 */ .short 0x0BFF
     /* 8CF6A 800AC76A */ .short 0x0000
-enddlabel D_800AC6EC
+enddlabel D_800AC704
 
 nonmatching D_800AC76C
 
@@ -79983,15 +80042,25 @@ dlabel D_800AC76C
     /* 8CF6E 800AC76E */ .short 0x0802
     /* 8CF70 800AC770 */ .short 0x0401
     /* 8CF72 800AC772 */ .short 0x0000
+enddlabel D_800AC76C
+
+nonmatching D_800AC774
+
+dlabel D_800AC774
     /* 8CF74 800AC774 */ .short 0x000C
     /* 8CF76 800AC776 */ .short 0x0802
     /* 8CF78 800AC778 */ .short 0x0401
     /* 8CF7A 800AC77A */ .short 0x0000
+enddlabel D_800AC774
+
+nonmatching D_800AC77C
+
+dlabel D_800AC77C
     /* 8CF7C 800AC77C */ .short 0x000C
     /* 8CF7E 800AC77E */ .short 0x0802
     /* 8CF80 800AC780 */ .short 0x07FF
     /* 8CF82 800AC782 */ .short 0x0000
-enddlabel D_800AC76C
+enddlabel D_800AC77C
 
 nonmatching D_800AC784
 

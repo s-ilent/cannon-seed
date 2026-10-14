@@ -114,7 +114,7 @@ glabel SpuSetCommonAttr
     /* 577B8 80076FB8 8000C228 */  slti       $v0, $a2, 0x80
     /* 577BC 80076FBC 03004014 */  bnez       $v0, .L80076FCC
     /* 577C0 80076FC0 2118C000 */   addu      $v1, $a2, $zero
-    /* 577C4 80076FC4 D6AE0108 */  j          D_8006BB58
+    /* 577C4 80076FC4 D6AE0108 */  j          .L8006BB58
     /* 577C8 80076FC8 7F000A34 */   ori       $t2, $zero, 0x7F
   .L80076FCC:
     /* 577CC 80076FCC 0200C104 */  bgez       $a2, .L80076FD8

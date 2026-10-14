@@ -259,6 +259,7 @@ glabel func_8003E268
     /* 1EAA4 8003E2A4 00002396 */  lhu        $v1, 0x0($s1)
     /* 1EAA8 8003E2A8 0400468E */  lw         $a2, 0x4($s2)
     /* 1EAAC 8003E2AC 0800478E */  lw         $a3, 0x8($s2)
+  alabel func_8003E2B0
     /* 1EAB0 8003E2B0 0C00488E */  lw         $t0, 0xC($s2)
     /* 1EAB4 8003E2B4 02003126 */  addiu      $s1, $s1, 0x2
     /* 1EAB8 8003E2B8 300000A6 */  sh         $zero, 0x30($s0)
@@ -323,6 +324,7 @@ glabel func_8003E31C
     /* 1EB90 8003E390 21204002 */   addu      $a0, $s2, $zero
     /* 1EB94 8003E394 26006596 */  lhu        $a1, 0x26($s3)
     /* 1EB98 8003E398 02000234 */  ori        $v0, $zero, 0x2
+  alabel func_8003E39C
     /* 1EB9C 8003E39C 240042A6 */  sh         $v0, 0x24($s2)
 endlabel func_8003E31C
 

@@ -454,7 +454,7 @@ glabel func_80046FEC
     /* 27818 80047018 00000000 */   nop
 endlabel func_80046FEC
 
-nonmatching func_8004701C, 0x84
+nonmatching func_8004701C, 0x78
 
 glabel func_8004701C
     /* 2781C 8004701C 0C80033C */  lui        $v1, %hi(D_800B9108)
@@ -484,39 +484,7 @@ glabel func_8004701C
     /* 2787C 8004707C 488D22AC */  sw         $v0, %lo(D_800B8D48)($at)
     /* 27880 80047080 0C80013C */  lui        $at, %hi(D_800B92E8)
     /* 27884 80047084 E89223AC */  sw         $v1, %lo(D_800B92E8)($at)
-    /* 27888 80047088 0500A010 */  beqz       $a1, func_800470A0
+    /* 27888 80047088 0500A010 */  beqz       $a1, .L800470A0
     /* 2788C 8004708C 0900A228 */   slti      $v0, $a1, 0x9
-    /* 27890 80047090 03004010 */  beqz       $v0, func_800470A0
-    /* 27894 80047094 02000234 */   ori       $v0, $zero, 0x2
-    /* 27898 80047098 0C80013C */  lui        $at, %hi(D_800B8DA8)
-    /* 2789C 8004709C A88D22A4 */  sh         $v0, %lo(D_800B8DA8)($at)
+    /* 27890 80047090 03004010 */  beqz       $v0, .L800470A0
 endlabel func_8004701C
-
-nonmatching func_800470A0
-
-glabel func_800470A0
-    /* 278A0 800470A0 0800E003 */ .word 0x03E00008
-    /* 278A4 800470A4 00000000 */ .word 0x00000000
-    /* 278A8 800470A8 1580033C */ .word 0x3C038015
-    /* 278AC 800470AC C8236324 */ .word 0x246323C8
-    /* 278B0 800470B0 21200000 */ .word 0x00002021
-    /* 278B4 800470B4 21280000 */ .word 0x00002821
-    /* 278B8 800470B8 000065AC */ .word 0xAC650000
-    /* 278BC 800470BC 040065A4 */ .word 0xA4650004
-    /* 278C0 800470C0 8A0DF374 */ .word 0x74F30D8A /* invalid instruction */
-    /* 278C4 800470C4 A3123DDA */ .word 0xDA3D12A3
-    /* 278C8 800470C8 732DCF4A */ .word 0x4ACF2D73 /* invalid instruction */
-    /* 278CC 800470CC 74041FC0 */ .word 0xC01F0474
-    /* 278D0 800470D0 E5949988 */ .word 0x889994E5
-    /* 278D4 800470D4 CFFBDC5F */ .word 0x5FDCFBCF /* invalid instruction */
-    /* 278D8 800470D8 C80B656E */ .word 0x6E650BC8
-    /* 278DC 800470DC 9C72E285 */ .word 0x85E2729C
-    /* 278E0 800470E0 0A01E273 */ .word 0x73E2010A /* invalid instruction */
-    /* 278E4 800470E4 06B06613 */ .word 0x1366B006
-    /* 278E8 800470E8 32D303BC */ .word 0xBC03D332
-    /* 278EC 800470EC 747DECEE */ .word 0xEEEC7D74 /* invalid instruction */
-    /* 278F0 800470F0 D071244F */ .word 0x4F2471D0 /* invalid instruction */
-    /* 278F4 800470F4 F217EB50 */ .word 0x50EB17F2
-    /* 278F8 800470F8 B75DCE6A */ .word 0x6ACE5DB7
-    /* 278FC 800470FC FBADA772 */ .word 0x72A7ADFB /* invalid instruction */
-enddlabel func_800470A0

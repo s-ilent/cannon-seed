@@ -40,6 +40,11 @@ dlabel func_8002AF44
     /* B778 8002AF78 77953B42 */ .word 0x423B9577
     /* B77C 8002AF7C 647596CE */ .word 0xCE967564
     /* B780 8002AF80 E9C3843A */ .word 0x3A84C3E9
+enddlabel func_8002AF44
+
+nonmatching func_8002AF84
+
+dlabel func_8002AF84
     /* B784 8002AF84 E79C4C63 */ .word 0x634C9CE7
     /* B788 8002AF88 F7D11753 */ .word 0x5317D1F7
     /* B78C 8002AF8C 15F9E9E0 */ .word 0xE0E9F915
@@ -51,4 +56,4 @@ dlabel func_8002AF44
     /* B7A4 8002AFA4 727178B6 */ .word 0xB6787172
     /* B7A8 8002AFA8 00FFFFFF */ .word 0xFFFFFF00
     /* B7AC 8002AFAC FFFFFFFF */ .word 0xFFFFFFFF
-enddlabel func_8002AF44
+enddlabel func_8002AF84
