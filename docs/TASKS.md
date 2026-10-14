@@ -62,6 +62,55 @@ at that, and re-derive the symbol addresses from it. Decide first what
 holds) or the de-framed payload that actually executes — if the former stays the
 target, the build must re-frame.
 
+Witness A — the `mainmenu_eu` twin islands (2026-10-14, the func_80066388
+head hunt, first fully-worked example of the pathology):
+
+* The drift is not `0xBE0 further in` and done — it grows ~304 B per sector
+  and reaches **0x9210** at mainmenu_eu carve `0x8006626C` (= runtime
+  `0x8005D05C`, `tools/deframe.py --map-framed`). Every address-based
+  conclusion deeper than the first sector inherits this skew.
+* The carve row `data_80065F50` (0x490) is, in order: 4 BIOS-call thunks
+  (`addiu $t2,0xa0/0xb0; jr $t2; addiu $t1,N` — the $t1/$t2 call
+  convention, address-independent shape), island 1 = a real leaf transform
+  helper (runtime `0x8005CEBC..0x8005D054`, 0x198: `move $t7,$a0` head,
+  bgez/negu abs-handling, a `lui 0x800b/lw 0x470($t9)` sign table, six
+  `multu/mflo/subu|addu/sra/sh N($a1)` blocks, `jr $ra`), then a framing
+  pocket (sync at carve file `0x661F8`, address/mode `00 21 06 02`,
+  subheader `00 00 08 00` twice — the bytes the linear disasm decodes as
+  `sll $zero,$t0,0`), then island 2 = the X/Y twin of island 1, runtime
+  `0x8005D05C..0x8005D1F4`, same 0x198 shape with halfword offsets 0/2/4
+  instead of 6/8/0xa.
+* Island 1 is framing-SPLIT in the carve: pieces `[0x4679C..0x468E0)` +
+  `[0x46A10..0x46A64)` with the pocket between — no carve row can hold it
+  as one function. Island 2 happens to be carve-contiguous
+  (`[0x46A6C..0x46C04)`); today's `func_800663E0` (0x24) is its last 0x24.
+  Runtime-continuous across the pocket: data area 1 ends at runtime
+  0x8005D000 and data area 2 resumes at exactly 0x8005D000.
+* Callers prove the runtime encoding: exactly one real `jal` per twin —
+  carve `0x80045398` encodes `jal 0x8005CEBC`, carve `0x800453A8` encodes
+  `jal 0x8005D05C`, adjacent sites calling the two twins back to back.
+  Decoded as carve addresses (what the scanner does with every anchor),
+  those encodings point ~0x9210 bytes BELOW the twins' true carve
+  positions. The ~30 "jal pairs" into the pocket (`0x800660D0/0x800660E4`,
+  sources in `func_80070070`/`data_80070650`/...) are the same phenomenon
+  seen from the other side: runtime-addressed words whose carve-space
+  decode lands inside framing — which is why v3d rejects every walk that
+  crosses the pocket and why the whole zone fell to `data`.
+* Why verify stays green anyway: the pipeline is byte-preserving
+  end-to-end. The split emits retail bytes verbatim, cross-row references
+  stay literal (nothing re-encodes a `jal` field), mkpsxexe reproduces the
+  2048-byte header, and the carve's framing bytes live inside `data` rows
+  and round-trip. The build output is byte-identical to the framed retail
+  including its 297 syncs — no re-framing pass exists or is needed today.
+  The address skew costs nothing at link time; it only poisons address
+  DERIVATION (scanner anchors, pointer decoding, "who references X").
+* Consequence for the fix: this is why no carve-side re-boundary was
+  landed for `func_80066388` — the true head is carve `0x8006626C`, but a
+  hand pin there would (a) claim a carve-space identity the de-frame
+  transition will re-derive, and (b) leave island 1 (the framing-split
+  twin) unfixable anyway. Re-derive from the de-framed payload; the head
+  hunt is closed, not abandoned.
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
