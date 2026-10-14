@@ -1476,3 +1476,83 @@ setIntrVSync there is NO JP/EU revision divergence: both revisions
 carry the identical member. One C source serves all 8 targets; the
 rollout after a mainmenu_jp match is the standard curated-addresses +
 flip + verify flow with no per-region shape work.
+
+## 2026-10-14 (later): GsSetDrawBuffOffset round-3 - else-path CLOSED, then-path allocno resistance mapped
+
+Probe round 3 (scripts/gsdbo/, repo-external; variants s07-s18, all -O2,
+cc1 2.6.3 + maspsx + cc_post via the gsdbo_probe.sh chain). Metric fix
+first: gsdbo_norm.py now tab-proof (GCC emits tabs, the retail
+spimdisasm asm spaces - the subu/beqz canonicalizers silently missed
+every GCC line), operand-canonical (comma spacing, decimal->hex), and
+sign-correct (-8 -> -0x8; "0x%x" % -8 yields "0x-8"). The old "125 diff
+lines" was mostly formatting noise; the true semantic baseline is 55
+(s05) and the honest metric table is s01=94 s02=78 s03=74 s04=54
+s05=55 s06=61.
+
+FALSE-DELTA CLASSES PROVEN WITH THE ACTUAL gas 2.31.1 (assembled and
+objdumped): `addu/subu reg,reg,imm` assembles as `addiu` byte-identically
+(2484fff8 for addu $a0,$a0,-8; 27bdffe0 for subu $sp,$sp,32), and
+`j $ra` assembles as `jr $ra` (03e00008). The subu/addu-vs-addiu
+prologue/epilogue "deltas" and the j-vs-jr epilogue delta are NOT
+deltas; any future norm should fold them.
+
+ELSE PATH CLOSED (s08, 37 diff lines, ALL remaining lines are the false
+classes + the two post-pass items below). Four new laws, all probed:
+1. RETAIL STATEMENT ORDER LAW: reordering the else body to the retail
+   emission order (base A la, PSDIDX reload, first s16 load, if, *p1
+   load, base B la, SUM1, second s16 load, if, *p2 load, SUM2) fixed
+   THREE allocations at once that no decl-order/opacity steering could
+   move: the first s16 load lands in $a0 (was $s1), the bnez#2 delay
+   slot gets the a0=s1 arg move (was the sum), and the base-B la stops
+   fighting for the delay slot.
+2. SUM OPERAND-ORDER LAW: the addu encoding rs/rt follow the C operand
+   order. Retail `addu $s1,$a0,$v0` (rs=loaded-D, rt=loaded-value)
+   means `s1 = D + *p` - NOT `s1 += *p` (that emits addu s1,s1,v0,
+   a different encoding). Same for sum#2.
+3. LOAD-INTO-RESULT LAW: retail's second sum loads *p2 DIRECTLY into
+   the result reg then adds (lh $s0,0x0($v1); addu $s0,$v0,$s0). The
+   C shape is two statements: `s0 = *p2; s0 = d2 + s0;` - the
+   single-expression shape puts the load in a temp reg instead.
+4. VOLATILE-OPAQUE-LA LAW: a plain opaque la asm can be scheduled INTO
+   a branch delay slot by GCC (it filled bnez#1's slot with the base-B
+   la, retail keeps a nop there). `__asm__ __volatile__` pins it;
+   emission position unchanged.
+
+THEN-PATH ALLOCNO (idx->$a1/value->$v1 vs retail idx->$v1/value->$a1)
+RESISTANCE MAPPED: nine source shapes tried (idx split into per-arm
+variables, idx decl-first, idx load moved after the pout asm, value
+through a temp local, A through a local, pout asm volatile, memory
+barrier removed, u16 extern decls replacing the cast-through-pointer
+loads, dummy asm-input mentions) - NONE moved it. GCC 2.6.3 internals
+decoded from the -da dumps (cpp -> cc1 -da works; dumps land in CWD):
+the then/else idx pseudos are LOCAL qtys assigned by local-alloc
+(already hard regs in the .greg dump, reg/v), NOT global allocnos; the
+greg dump's "preferences: 5/4" entries belong to the multi-block
+pseudos (s1/s0/pout class) and come from set_preference - copies
+between hard reg and pseudo (global.c); the u16 cast loads decompose
+into HImode pseudo + zero_extend insn pairs that grab $2/$3 ahead of
+the idx chain. The qty pri formula (log2(n_refs)*n_refs*size/
+(death-birth), DESC, ties by qty number, copy-suggested qtys first)
+could not be reconciled with the observed order from the source alone -
+the remaining lever is a qty-table instrumentation build of cc1 or a
+bisection over synthetic microblocks; parked as its own session.
+
+POST-PASS ITEMS CONFIRMED (blockers for the flip, coordination lane):
+- At-factoring x2 (lui/addiu/addu vs lui/addu+%lo): unchanged, belongs
+  with the setIntr lane's maspsx expansion-policy work.
+- Dead join: cc1 emits `nop; j $Ljoin; nop` after the then-path's
+  inline-asm tail (the CFG edge survives basic asm). __builtin_unreachable
+  does NOT exist in 2.6.3 (compiles to a jal call - probed); a noreturn
+  call emits jal (wrong opcode vs retail's j); goto/return shapes
+  duplicate the epilogue. The retail member has NO join after the tail,
+  so either its source ended the block in a way 2.6.3 cannot express
+  from C, or the retail build post-processed it. Elision as a
+  marker-gated cc_post rule is the candidate; left for coordination
+  with the setIntr lane per the standing do-not-parallel-policy rule.
+
+Probe inventory banked in scripts/gsdbo/: s07 (else order), s08
+(else fix = s07 + volatile la + two-statement sum2, BEST at 37), s09
+(idx split), s10-s14 (single-lever shapes), s15-s17 (dummy-mention
+steering, moves regs into reload instead - negative), s18 (u16
+externs, negative). sweep_then.sh runs a variant list and reports
+psd/val1 regs + diff count.
