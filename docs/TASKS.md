@@ -1687,3 +1687,88 @@ session task with the libs present; it is NOT a GSD-lane gate.
 
 Carve tool: scripts/gsdb8_carve.py (repo-external) - row legality
 pass, TG3L boundary check, image-wide j/jal + lui/%lo XRef scan.
+
+## 2026-10-14 (later): GsSetDrawBuffOffset round-5 - coordination handover: the goto-else source shape kills the dead join on top of s20's laws, RMW-sum encoding law, stray-nop root cause
+
+From the cron-20261014-1227 queue item 1 (coordinate the goto-else shape
+against the lane owner's s20). Their s19/s20 sources are repo-external in
+their sandbox, so s20 was first RECONSTRUCTED from the round-3/4 documented
+laws on top of this sandbox's probe kit (scripts/gsdbo/), then the goto-else
+form was applied as a single-variable delta. All probes -O2 through
+gsdbo_probe.sh (cpp -> cc1 2.6.3 -> maspsx --expand-div -> cc_post
+--sdk-aspsx --keep-epilogue), metric = diff vs retail.norm under the
+extended gsdbo_norm.py canon (folds the gas-proven false classes
+addu/subu-imm and j/jr).
+
+RECONSTRUCTION VALIDATED the round-3/4 law set end to end; three facts had
+to be added, all banked here as laws or refinements:
+1. ARM-POLARITY LAW: retail's guard branch is `beqz $v0,L_ELSE` (fall-
+   through = then, u16 world). In if/else form the C must be
+   `if (D_80194E3C != 0) { then } else { else }` - writing the then body
+   under `if (guard == 0)` inverts GCC's branch to bnez. The goto-else
+   form (`if (guard == 0) goto else_path;` + then at fall-through) gives
+   the matching beqz directly.
+2. Law-1 else order is REQUIRED exactly as documented (base A la, PSDIDX,
+   first s16 load, if, *p1 load, base B la, SUM1, second s16 load, if,
+   *p2 load, SUM2) - with the pre-law-1 order the else allocation
+   cascades (idx->v1, u2->a1, p2->v0; the s19 phenomenon reproduced).
+3. The *p1-load/SUM1 split is STRUCTURAL, not stylistic: retail emits
+   [*p1 load][la p2][SUM1]; a volatile asm la cannot be scheduled across
+   anything, so the C must split the load from the sum with the la p2
+   statement between (`v1t = *p1; <la p2 asm>; s1 = u1 + v1t;`). v1t
+   coalesces into p1's dying reg ($v0) - byte-identical to retail.
+
+THE GOTO-ELSE RESULT (the handover item): with s20's laws in place, the
+goto-else form eliminates the dead join at SOURCE level with ZERO other
+effect. Matrix (raw diff lines vs retail.norm, same canon):
+- s20b (arms inverted + pre-law-1 else order): 57
+- s20c (= s20 laws, if/else form): 32
+- s22 (s20c + the sum2 copy-fix below): 28
+- s21e (goto-else + the sum2 copy-fix): 26
+s22 vs s21e differ by EXACTLY [nop; j $Ljoin] plus a cosmetic label
+renumber - the dead join is the only delta. s21e residual is 3 classes,
+all known: label naming (L_ELSE/L_E2/L_E3, probe-kit metric only),
+at-factoring x2, and one stray tail nop (below). CONSEQUENCE: the
+cc_post dead-join elision candidate from round 3/4 is NO LONGER NEEDED -
+the flip's post-pass dependency set shrinks to {at-factoring refold,
+stray-nop elision}, both mechanical.
+
+NEW LAW - RMW-SUM OPERAND ENCODING (fixes the one remaining real
+encoding delta): when the sum's destination is also an input
+(`s0 = u2 + s0`), GCC 2.6.3 materializes the read-modify-write form and
+emits `addu $s0,$s0,$v0` (destination first) REGARDLESS of the C operand
+order - round-3's law 2 ("C operand order controls rs/rt") holds only
+for sums whose destination is NOT an input (sum1). The retail encoding
+`addu $s0,$v0,$s0` (source operand first) is reproduced by routing the
+sum through a dying temp: `t2 = u2 + s0; s0 = t2;` - the copy
+propagates without commuting the plus and t2 coalesces into s0.
+Two-statement, no allocation side effects (s21e proves the else path
+unchanged otherwise).
+
+STRAY TAIL NOP ROOT-CAUSED (the last non-at-factoring class): cc1's raw
+output for the then tail is exactly retail ([.set noreorder][j
+D_80072DB8][nop][.set reorder]); maspsx appends a SECOND nop after the
+j - its delay-slot fill does not look inside the user asm block to see
+that the slot is already occupied. Evidence: absent in .gcc.s, present
+in .mas0.s (post-maspsx, pre-cc_post). Fix class: maspsx noreorder
+delay-slot fill should skip when the next instruction inside the block
+is already a nop (or a marker-gated cc_post elision). 1 line.
+
+Probe inventory (repo-external scripts/gsdbo/): s20b_recon (negative
+control), s20c_recon (s20 laws, if/else), s21_recon (goto-else),
+s21e_recon (goto-else + copy-form sum2, BEST at 26 raw / 8 GCC-side
+lines in 3 known classes), s22_recon (s20c + copy-form sum2). The s21e
+source is the recommended carve source for the flip - it needs only the
+at-factoring refold and the stray-nop elision to be byte-clean modulo
+splitter label names.
+
+Next queue:
+1. (Lane owner) adopt or reject: goto-else replaces the dead-join
+   elision; copy-form sum2 replaces the law-2 "same for sum#2"
+   extrapolation; stray-nop root cause above for the maspsx pass.
+2. (Lane owner) at-factoring refold remains the single substantive
+   post-pass dependency for the flip.
+3. D_80072DB8 / GsTMDdivTG3L carve stays independent (8d38434).
+4. Parallel lanes stay theirs: setIntr base->a1 steering, startIntr
+   reopen, trapIntr fingerprint.
+5. Runtime gate-family: still blocked (fresh-checked this window).
