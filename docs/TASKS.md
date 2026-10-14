@@ -1556,3 +1556,86 @@ Probe inventory banked in scripts/gsdbo/: s07 (else order), s08
 steering, moves regs into reload instead - negative), s18 (u16
 externs, negative). sweep_then.sh runs a variant list and reports
 psd/val1 regs + diff count.
+
+## 2026-10-14 (later): GsSetDrawBuffOffset round-4 - then-path CLOSED at source level via .lreg pri arithmetic + retail statement order
+
+The instrumented-cc1 lever was not needed: `cc1 -da` on s08 already
+emits `.lreg` (local-alloc's own dump; in 2.6.3 the -a set is
+combine/cse/cse2/dbr/flow/greg/jump/jump2/loop/lreg/rtl/sched/sched2
+- local-alloc's dump is `.lreg`, named `<input>.i.lreg`). The dump
+lists per-qty n_refs/span/size, the live-at-start sets, and the final
+`;; Register N in M` decision lines - the pri formula from round 3
+became checkable ARITHMETIC instead of source reconstruction.
+
+MECHANISM DECODED (s08 then block, from s08da.i.lreg): the then-path
+competition is between the idx*2 pseudo (reg 89, ashift of the PSDIDX
+reg/v pseudo, SImode, n_refs=4) and the value1 pseudo (reg 93, HImode
+"2 bytes", n_refs=2). With s08's C order (pout la + the two zero
+stores BEFORE `*pout = u1 + table[idx]`), value1's birth->death span
+is 2 insns (load and sum are RTL-adjacent; only the sunk la asm sits
+between), so pri(value1) = 1*2*2/2 = 2.0 > pri(idx*2) = 2*16/30 ~=
+1.06. value1 allocates first and takes $v1 (best free after the
+sum/u1 share on $v0); idx*2 falls through to $a1 ($a0 is RESERVED -
+the call argument `pout - 4` is already materialized as hard reg 4 in
+the RTL local-alloc sees, so locals skip it). Retail has the arms
+swapped, therefore in retail's compile the ORDER was inverted.
+
+FIVE NEW LAWS (all verified by the s19/s20 builds against retail.norm):
+1. THEN-STATEMENT-ORDER LAW (Law 1 extended to the then path): retail
+   then emission is idx load, u1 load, table load, pout la, DB18=0,
+   DB14=0, sum1, store - i.e. the la and the zero stores sit BETWEEN
+   the table load and the sum. Restated in that C order, value1's span
+   widens past 5 insns, pri drops to ~0.33 < 1.06, and the allocation
+   flips: idx*2 -> $v1, u1 shares $v0 with sum1, value1 -> $a1,
+   pout -> $a0 - EXACTLY retail (s19 then block byte-matches the retail
+   register assignment).
+2. ARM-PRIVATE-VARIABLE LAW: a temp assigned in BOTH if-arms is ONE
+   multi-block pseudo; the global allocator gives it a single hard reg
+   for both arms. Retail uses $v1 for the then idx and $a1 for the
+   else idx - impossible from a shared decl - so retail's source had
+   arm-private variables. Shared decls also cross-couple steering:
+   s19's then-side fix silently regressed the closed else path
+   (shared idx/v pseudos moved to $v1 globally, cascading through the
+   else chains). s20 splits then-path temps (idxt/u1/vt) from the else
+   temps and the else path returns to the exact s08 output.
+3. TEMP-LOAD-WIDTH LAW: a named-temp assignment from a signed-short
+   array element sign-extends and emits `lh`; the same load consumed
+   inside an add expression (HImode subreg add) emits `lhu` because
+   only the low half of the sum is stored. Retail's then table loads
+   are lhu, so the temp form needs the u16 cast-through-pointer idiom
+   (`vt = *(u16 *)&D_8014A3A4[idxt]`), matching the established
+   cast-load shape for D_80189224/D_80189226.
+4. LOCAL-ALLOC PRI ARITHMETIC (mechanism law): the {v1,a1} competition
+   is decided by pri = floor_log2(n_refs)*n_refs*size/(death-birth),
+   larger allocates earlier; hard regs already materialized in the RTL
+   (call args) are excluded from the free scan. This reconciles the
+   round-3 observation that "allocation order could not be reconciled
+   with the pri formula" - it can, once the dump's real spans are used
+   and the la/store statement positions are included in the spans.
+5. HARD-ARG-REG RESERVATION: local-alloc never assigns a local to a
+   hard reg that already appears as a destination in the RTL (a0 for
+   the func_800604E0 argument). This is why idx*2 landed in $a1 pre-
+   flip and why pout's global placement cannot displace the arg setup.
+
+RESULT (s20_armprivate, diff = 25 lines vs retail.norm, s08 baseline
+was 37): the then path now byte-matches retail's register assignment
+(idx chain $v1, u1 $v0, value1 $a1, pout $a0, sum1 $v0, value2 $v1,
+nop position, addiu $a0,-8 / j D_80072DB8 tail) and the else path is
+unchanged from s08. The 25 residual lines are ALL known classes: label
+naming (L_ELSE/L_E2/L_E3 vs L_GCC, 3 lines, probe-kit metric only),
+at-factoring x2 (4 lines), dead join (3 lines), and the gas-proven
+false classes (addu->addiu x4, j->jr, 5 lines). GsSetDrawBuffOffset is
+now fully shaped at source level, both paths, modulo the two post-pass
+items owned by the coordination lane.
+
+Probe inventory: s19_thenreorder (shared-decl then reorder, then fixed
+but else regressed, 45), s20_armprivate (arm-private temps + u16 cast
+temp load, CLOSED at 25). sweep_then.sh reports psd->/val1-> regs.
+
+Next queue:
+1. (Coordination lane) at-factoring refold + dead-join elision in
+   cc_post/maspsx - once those land, s20 is the carve source.
+2. D_80072DB8 GsSort cluster attribution carve (independent).
+3. Parallel lanes stay theirs: setIntr base->a1 steering, startIntr
+   reopen, trapIntr fingerprint.
+4. Runtime gate-family: still blocked (no runtime stack in sandbox).
