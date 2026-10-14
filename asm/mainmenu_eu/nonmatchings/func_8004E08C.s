@@ -63,7 +63,7 @@ glabel func_8004E0DC
     /* 2E93C 8004E13C 0E0002A6 */   sh        $v0, 0xE($s0)
 endlabel func_8004E0DC
 
-nonmatching func_8004E140, 0x40
+nonmatching func_8004E140, 0xDC
 
 glabel func_8004E140
     /* 2E940 8004E140 260003A6 */  sh         $v1, 0x26($s0)
@@ -82,11 +82,6 @@ glabel func_8004E140
     /* 2E974 8004E174 06000486 */  lh         $a0, 0x6($s0)
     /* 2E978 8004E178 0E000686 */  lh         $a2, 0xE($s0)
     /* 2E97C 8004E17C 140002A6 */  sh         $v0, 0x14($s0)
-endlabel func_8004E140
-
-nonmatching func_8004E180, 0x9C
-
-glabel func_8004E180
     /* 2E980 8004E180 2000228E */  lw         $v0, 0x20($s1)
     /* 2E984 8004E184 21280000 */  addu       $a1, $zero, $zero
     /* 2E988 8004E188 780000A6 */  sh         $zero, 0x78($s0)
@@ -126,7 +121,7 @@ glabel func_8004E180
     /* 2EA10 8004E210 0200A014 */  bnez       $a1, func_8004E21C
     /* 2EA14 8004E214 00000000 */   nop
     /* 2EA18 8004E218 0D000700 */  break      7
-endlabel func_8004E180
+endlabel func_8004E140
 
 nonmatching func_8004E21C, 0x18
 

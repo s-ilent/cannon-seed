@@ -391,16 +391,11 @@ glabel func_8002E324
     /* EB50 8002E350 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_8002E324
 
-nonmatching func_8002E354, 0x8
+nonmatching func_8002E354, 0x28
 
 glabel func_8002E354
     /* EB54 8002E354 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* EB58 8002E358 1000BFAF */  sw         $ra, 0x10($sp)
-endlabel func_8002E354
-
-nonmatching func_8002E35C, 0x20
-
-glabel func_8002E35C
     /* EB5C 8002E35C 21200000 */  addu       $a0, $zero, $zero
     /* EB60 8002E360 21280000 */  addu       $a1, $zero, $zero
     /* EB64 8002E364 C814010C */  jal        func_80045320
@@ -409,7 +404,7 @@ glabel func_8002E35C
     /* EB70 8002E370 00000000 */  nop
     /* EB74 8002E374 0800E003 */  jr         $ra
     /* EB78 8002E378 1800BD27 */   addiu     $sp, $sp, 0x18
-endlabel func_8002E35C
+endlabel func_8002E354
 
 nonmatching func_8002E37C, 0x18
 

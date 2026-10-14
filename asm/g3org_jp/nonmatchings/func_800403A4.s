@@ -29,7 +29,7 @@ alabel func_800403B4
     /* 20BD4 800403D4 2800A4AF */ .word 0xAFA40028
 enddlabel func_800403A4
 
-nonmatching func_800403D8, 0x60
+nonmatching func_800403D8, 0xEC
 
 glabel func_800403D8
     /* 20BD8 800403D8 5E004286 */  lh         $v0, 0x5E($s2)
@@ -56,11 +56,6 @@ glabel func_800403D8
     /* 20C2C 8004042C 500047A6 */  sh         $a3, 0x50($s2)
     /* 20C30 80040430 2000A8AF */  sw         $t0, 0x20($sp)
     /* 20C34 80040434 2400A9AF */  sw         $t1, 0x24($sp)
-endlabel func_800403D8
-
-nonmatching func_80040438, 0x8C
-
-glabel func_80040438
     /* 20C38 80040438 EDF0000C */  jal        func_8003C3B4
     /* 20C3C 8004043C 2800AAAF */   sw        $t2, 0x28($sp)
     /* 20C40 80040440 2000A48F */  lw         $a0, 0x20($sp)
@@ -96,7 +91,7 @@ glabel func_80040438
     /* 20CB8 800404B8 3200A287 */  lh         $v0, 0x32($sp)
     /* 20CBC 800404BC 2C00B387 */  lh         $s3, 0x2C($sp)
     /* 20CC0 800404C0 2E00B487 */  lh         $s4, 0x2E($sp)
-endlabel func_80040438
+endlabel func_800403D8
 
 nonmatching func_800404C4, 0x7C
 
@@ -555,7 +550,7 @@ glabel func_80040A78
     /* 212A0 80040AA0 2000BD27 */   addiu     $sp, $sp, 0x20
 endlabel func_80040A78
 
-nonmatching func_80040AA4, 0x38
+nonmatching func_80040AA4, 0x8C
 
 glabel func_80040AA4
     /* 212A4 80040AA4 98FFBD27 */  addiu      $sp, $sp, -0x68
@@ -572,11 +567,6 @@ glabel func_80040AA4
     /* 212D0 80040AD0 40101000 */  sll        $v0, $s0, 1
     /* 212D4 80040AD4 1780013C */  lui        $at, %hi(D_80173B00)
     /* 212D8 80040AD8 003B2124 */  addiu      $at, $at, %lo(D_80173B00)
-endlabel func_80040AA4
-
-nonmatching func_80040ADC, 0x54
-
-glabel func_80040ADC
     /* 212DC 80040ADC 21082200 */  addu       $at, $at, $v0
     /* 212E0 80040AE0 00003494 */  lhu        $s4, 0x0($at)
     /* 212E4 80040AE4 0C80113C */  lui        $s1, %hi(D_800B93C8)
@@ -598,7 +588,7 @@ glabel func_80040ADC
     /* 21324 80040B24 00000000 */   nop
     /* 21328 80040B28 FBF10008 */  j          func_8003C7EC
     /* 2132C 80040B2C 00000000 */   nop
-endlabel func_80040ADC
+endlabel func_80040AA4
 
 nonmatching func_80040B30, 0x2C
 

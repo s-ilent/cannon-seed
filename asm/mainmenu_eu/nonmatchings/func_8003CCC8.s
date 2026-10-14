@@ -512,21 +512,16 @@ glabel func_8003D290
     /* 1DA9C 8003D29C 2000BD27 */   addiu     $sp, $sp, 0x20
 endlabel func_8003D290
 
-nonmatching func_8003D2A0, 0xC
+nonmatching func_8003D2A0, 0x18
 
 glabel func_8003D2A0
     /* 1DAA0 8003D2A0 C0290400 */  sll        $a1, $a0, 7
     /* 1DAA4 8003D2A4 2328A400 */  subu       $a1, $a1, $a0
     /* 1DAA8 8003D2A8 0A000234 */  ori        $v0, $zero, 0xA
-endlabel func_8003D2A0
-
-nonmatching func_8003D2AC, 0xC
-
-glabel func_8003D2AC
     /* 1DAAC 8003D2AC 1A00A200 */  div        $zero, $a1, $v0
     /* 1DAB0 8003D2B0 02004014 */  bnez       $v0, func_8003D2BC
     /* 1DAB4 8003D2B4 00000000 */   nop
-endlabel func_8003D2AC
+endlabel func_8003D2A0
 
 nonmatching func_8003D2B8, 0x4
 

@@ -100,7 +100,7 @@ glabel func_80062BC8
     /* 4340C 80062C0C 00000000 */   nop
 endlabel func_80062BC8
 
-nonmatching func_80062C10, 0x48
+nonmatching func_80062C10, 0x4C
 
 glabel func_80062C10
     /* 43410 80062C10 0180053C */  lui        $a1, %hi(D_80010E06)
@@ -121,13 +121,8 @@ glabel func_80062C10
     /* 4344C 80062C4C 020040A4 */  sh         $zero, 0x2($v0)
     /* 43450 80062C50 03D7000C */  jal        func_80035C0C
     /* 43454 80062C54 11000434 */   ori       $a0, $zero, 0x11
-endlabel func_80062C10
-
-nonmatching func_80062C58, 0x4
-
-glabel func_80062C58
     /* 43458 80062C58 21180000 */  addu       $v1, $zero, $zero
-endlabel func_80062C58
+endlabel func_80062C10
 
 nonmatching func_80062C5C, 0x60
 

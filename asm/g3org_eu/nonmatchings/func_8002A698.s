@@ -789,13 +789,8 @@ alabel .L8002AE58
     /* B694 8002AE94 393E8AE7 */ .word 0xE78A3E39
     /* B698 8002AE98 02565E77 */ .word 0x775E5602 /* invalid instruction */
     /* B69C 8002AE9C 968D853F */ .word 0x3F858D96 /* invalid instruction */
-enddlabel func_8002AE24
-
-nonmatching func_8002AEA0
-
-glabel func_8002AEA0
     /* B6A0 8002AEA0 4FE69247 */ .word 0x4792E64F /* invalid instruction */
     /* B6A4 8002AEA4 5DA56AB2 */ .word 0xB26AA55D
     /* B6A8 8002AEA8 199CA606 */ .word 0x06A69C19 /* invalid instruction */
     /* B6AC 8002AEAC 6DE5C3DD */ .word 0xDDC3E56D
-enddlabel func_8002AEA0
+enddlabel func_8002AE24

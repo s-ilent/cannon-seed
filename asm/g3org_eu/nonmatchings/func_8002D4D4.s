@@ -659,7 +659,7 @@ glabel func_8002DB78
     /* E428 8002DC28 00000000 */   nop
 endlabel func_8002DB78
 
-nonmatching func_8002DC2C, 0x14
+nonmatching func_8002DC2C, 0x20
 
 glabel func_8002DC2C
     /* E42C 8002DC2C 2000A88F */  lw         $t0, 0x20($sp)
@@ -667,15 +667,10 @@ glabel func_8002DC2C
     /* E434 8002DC34 05000915 */  bne        $t0, $t1, func_8002DC4C
     /* E438 8002DC38 50000234 */   ori       $v0, $zero, 0x50
     /* E43C 8002DC3C 00008390 */  lbu        $v1, 0x0($a0)
-endlabel func_8002DC2C
-
-nonmatching func_8002DC40, 0xC
-
-glabel func_8002DC40
     /* E440 8002DC40 00000000 */  nop
     /* E444 8002DC44 30006210 */  beq        $v1, $v0, D_8002DD08
     /* E448 8002DC48 00000000 */   nop
-endlabel func_8002DC40
+endlabel func_8002DC2C
 
 nonmatching func_8002DC4C, 0x20
 

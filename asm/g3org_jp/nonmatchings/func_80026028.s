@@ -270,22 +270,17 @@ glabel func_800262E4
     /* 6AEC 800262EC 0F008224 */  addiu      $v0, $a0, 0xF
 endlabel func_800262E4
 
-nonmatching func_800262F0, 0xC
+nonmatching func_800262F0, 0x1C
 
 glabel func_800262F0
     /* 6AF0 800262F0 03110200 */  sra        $v0, $v0, 4
     /* 6AF4 800262F4 00110200 */  sll        $v0, $v0, 4
     /* 6AF8 800262F8 23108200 */  subu       $v0, $a0, $v0
-endlabel func_800262F0
-
-nonmatching func_800262FC, 0x10
-
-glabel func_800262FC
     /* 6AFC 800262FC 00290200 */  sll        $a1, $v0, 4
     /* 6B00 80026300 02008104 */  bgez       $a0, func_8002630C
     /* 6B04 80026304 21108000 */   addu      $v0, $a0, $zero
     /* 6B08 80026308 0F008224 */  addiu      $v0, $a0, 0xF
-endlabel func_800262FC
+endlabel func_800262F0
 
 nonmatching func_8002630C, 0x94
 

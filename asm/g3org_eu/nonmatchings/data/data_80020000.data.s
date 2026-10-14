@@ -2112,7 +2112,7 @@ dlabel D_80021AD4
     /* 22D4 80021AD4 */ .asciz "stdmv.c"
     /* 7374646D762E6300 */
 .align 2
-    /* 22DC 80021ADC E05D0380 */ .word func_80035DE0
+    /* 22DC 80021ADC E05D0380 */ .word D_80035DE0
 enddlabel D_80021AD4
 
 nonmatching D_80021AE0

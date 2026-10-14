@@ -24,10 +24,10 @@ dlabel func_8005F378
     /* 3FBB0 8005F3B0 050FD940 */ .word 0x40D90F05
 enddlabel func_8005F378
 
-nonmatching func_8005F3B4
+nonmatching D_8005F3B4
 
-dlabel func_8005F3B4
+dlabel D_8005F3B4
     /* 3FBB4 8005F3B4 D48F3204 */ .word 0x04328FD4
     /* 3FBB8 8005F3B8 00FFFFFF */ .word 0xFFFFFF00
     /* 3FBBC 8005F3BC FFFFFFFF */ .word 0xFFFFFFFF
-enddlabel func_8005F3B4
+enddlabel D_8005F3B4

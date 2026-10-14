@@ -43,14 +43,14 @@ dlabel func_80073DB4
     /* 54638 80073E38 F08143C1 */ .word 0xC14381F0
 enddlabel func_80073DB4
 
-nonmatching func_80073E3C
+nonmatching D_80073E3C
 
-dlabel func_80073E3C
+dlabel D_80073E3C
     /* 5463C 80073E3C 8B440D67 */ .word 0x670D448B
     /* 54640 80073E40 90014F98 */ .word 0x984F0190
     /* 54644 80073E44 1FB81B72 */ .word 0x721BB81F
     /* 54648 80073E48 75123667 */ .word 0x67361275
-enddlabel func_80073E3C
+enddlabel D_80073E3C
 
 nonmatching func_80073E4C
 

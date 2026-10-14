@@ -35,11 +35,6 @@ glabel func_8005E93C
     /* 3F194 8005E994 BD09B7C6 */ .word 0xC6B709BD
     /* 3F198 8005E998 A0632F5A */ .word 0x5A2F63A0 /* invalid instruction */
     /* 3F19C 8005E99C F981C854 */ .word 0x54C881F9
-enddlabel func_8005E93C
-
-nonmatching func_8005E9A0
-
-glabel func_8005E9A0
     /* 3F1A0 8005E9A0 4EA6BBEB */ .word 0xEBBBA64E
     /* 3F1A4 8005E9A4 611DF3D4 */ .word 0xD4F31D61
     /* 3F1A8 8005E9A8 BAA8D794 */ .word 0x94D7A8BA
@@ -68,4 +63,4 @@ glabel func_8005E9A0
     /* 3F204 8005EA04 74CB23C2 */ .word 0xC223CB74
     /* 3F208 8005EA08 1E1A4FB7 */ .word 0xB74F1A1E
     /* 3F20C 8005EA0C 61AAB6D1 */ .word 0xD1B6AA61
-enddlabel func_8005E9A0
+enddlabel func_8005E93C

@@ -152,18 +152,13 @@ glabel func_8003F31C
 endlabel func_8003F31C
     /* 1FB3C 8003F33C 00000000 */  nop
 
-nonmatching func_8003F340, 0xC
+nonmatching func_8003F340, 0x38
 
 glabel func_8003F340
     /* 1FB40 8003F340 0D004014 */  bnez       $v0, func_8003F378
     /* 1FB44 8003F344 00000000 */   nop
-    /* 1FB48 8003F348 1880023C */  lui        $v0, (0x80180000 >> 16)
-endlabel func_8003F340
-
-nonmatching func_8003F34C, 0x2C
-
-glabel func_8003F34C
-    /* 1FB4C 8003F34C B889428C */  lw         $v0, -0x7648($v0)
+    /* 1FB48 8003F348 1880023C */  lui        $v0, %hi(D_801789B8)
+    /* 1FB4C 8003F34C B889428C */  lw         $v0, %lo(D_801789B8)($v0)
     /* 1FB50 8003F350 00000000 */  nop
     /* 1FB54 8003F354 480002AE */  sw         $v0, 0x48($s0)
     /* 1FB58 8003F358 1880023C */  lui        $v0, %hi(D_801789BC)
@@ -174,7 +169,7 @@ glabel func_8003F34C
     /* 1FB6C 8003F36C C089428C */  lw         $v0, %lo(D_801789C0)($v0)
     /* 1FB70 8003F370 00000000 */  nop
     /* 1FB74 8003F374 500002AE */  sw         $v0, 0x50($s0)
-endlabel func_8003F34C
+endlabel func_8003F340
 
 nonmatching func_8003F378, 0x34
 

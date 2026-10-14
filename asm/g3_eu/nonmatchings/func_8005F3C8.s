@@ -137,7 +137,7 @@ glabel func_8005F578
     /* 3FD78 8005F578 9000A88F */  lw         $t0, 0x90($sp)
     /* 3FD7C 8005F57C 00000000 */  nop
     /* 3FD80 8005F580 2B10C803 */  sltu       $v0, $fp, $t0
-    /* 3FD84 8005F584 8BFF4014 */  bnez       $v0, func_8005F3B4
+    /* 3FD84 8005F584 8BFF4014 */  bnez       $v0, D_8005F3B4
     /* 3FD88 8005F588 24001026 */   addiu     $s0, $s0, 0x24
     /* 3FD8C 8005F58C 4000A28F */  lw         $v0, 0x40($sp)
     /* 3FD90 8005F590 7C00BF8F */  lw         $ra, 0x7C($sp)

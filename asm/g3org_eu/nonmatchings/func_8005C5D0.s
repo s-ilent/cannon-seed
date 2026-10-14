@@ -96,21 +96,16 @@ glabel func_8005C668
     /* 3CEDC 8005C6DC 2000E724 */  addiu      $a3, $a3, 0x20
 endlabel func_8005C668
 
-nonmatching func_8005C6E0, 0x4
+nonmatching func_8005C6E0, 0x18
 
 glabel func_8005C6E0
     /* 3CEE0 8005C6E0 FFFF1827 */  addiu      $t8, $t8, -0x1
-endlabel func_8005C6E0
-
-nonmatching func_8005C6E4, 0x14
-
-glabel func_8005C6E4
     /* 3CEE4 8005C6E4 BBFF0017 */  bnez       $t8, func_8005C5D4
     /* 3CEE8 8005C6E8 00000000 */   nop
     /* 3CEEC 8005C6EC 2110E000 */  addu       $v0, $a3, $zero
     /* 3CEF0 8005C6F0 0800E003 */  jr         $ra
     /* 3CEF4 8005C6F4 00000000 */   nop
-endlabel func_8005C6E4
+endlabel func_8005C6E0
 
 nonmatching func_8005C6F8, 0x2C
 

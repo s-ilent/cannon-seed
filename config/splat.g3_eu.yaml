@@ -368,8 +368,8 @@ segments:
       - [0x48158, asm, func_80067958]   # 0x11c sdk
       - [0x48274, data, data_80067A74]   # 0x230
       - [0x484A4, data, data_80067CA4]   # 0x28 pinned
-      - [0x484CC, data, data_80067CCC]   # 0x13c
-      - [0x48608, asm, func_80067E08]   # 0x318
+      - [0x484CC, data, data_80067CCC]   # 0x164
+      - [0x48630, asm, func_80067E30]   # 0x2f0
       - [0x48920, asm, func_80068120]   # 0xf4 sdk
       - [0x48A14, data, data_80068214]   # 0x54c
       - [0x48F60, asm, func_80068760]   # 0x338

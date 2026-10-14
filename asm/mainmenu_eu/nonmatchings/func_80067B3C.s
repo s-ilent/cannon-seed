@@ -56,7 +56,7 @@ glabel startIntr
     /* 483E4 80067BE4 140062AC */   sw        $v0, 0x14($v1)
     /* 483E8 80067BE8 0B80043C */  lui        $a0, %hi(intr_start_tab)
     /* 483EC 80067BEC FC54848C */  lw         $a0, %lo(intr_start_tab)($a0)
-    /* 483F0 80067BF0 DC7C010C */  jal        intr_start_aux6
+    /* 483F0 80067BF0 DC7C010C */  jal        func_8005F370
     /* 483F4 80067BF4 040082AC */   sw        $v0, 0x4($a0)
     /* 483F8 80067BF8 D07C010C */  jal        func_8005F340
     /* 483FC 80067BFC C4FF1026 */   addiu     $s0, $s0, -0x3C

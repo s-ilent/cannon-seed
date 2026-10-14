@@ -311,8 +311,8 @@ segments:
       - [0x45C0C, asm, func_8006540C]   # 0xabc
       - [0x466C8, data, data_80065EC8]   # 0x14
       - [0x466DC, asm, func_80065EDC]   # 0x74
-      - [0x46750, data, data_80065F50]   # 0x438
-      - [0x46B88, asm, func_80066388]   # 0x7c
+      - [0x46750, data, data_80065F50]   # 0x490
+      - [0x46BE0, asm, func_800663E0]   # 0x24
       - [0x46C04, data, data_80066404]   # 0x70
       - [0x46C74, asm, func_80066474]   # 0x130
       - [0x46DA4, data, data_800665A4]   # 0x13d8
