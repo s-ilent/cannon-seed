@@ -357,33 +357,13 @@ state_table_6 = 0x80020304; // state table: -> 0x8002644C
 state_table_7 = 0x80020308; // state table: -> 0x8002644C
 state_table_8 = 0x8002030C; // state table: -> 0x800263A4
 
-// ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
-//
-// Evidence base: config/sdk_members.txt (tools/sdk_members.py)
-// at the Psy-Q release pinned in docs/MATCHING.md 3b, extents
-// from the archives' own .text symbol tables. Verdicts and the
-// collision rules are documented in tools/sdk_curated.py.
-// Names are applied by tools/scan_functions.py - symbols file
-// only, never subsegment names.
-
-// target: g3_eu  (111 sdk-member adoptions)
-SetVideoMode = 0x80050520; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-GetVideoMode = 0x80050538; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// target: g3_eu
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
 video_mode = 0x80096C04; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
-ResetCallback = 0x80050548; // LIBETC INTR member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-InterruptCallback = 0x80050578; // LIBETC INTR member .text+0x30 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-DMACallback = 0x800505A8; // LIBETC INTR member .text+0x60 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-VSyncCallback = 0x800505D8; // LIBETC INTR member .text+0x90 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-VSyncCallbacks = 0x8005060C; // LIBETC INTR member .text+0xc4 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-StopCallback = 0x8005063C; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-RestartCallback = 0x8005066C; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-CheckCallback = 0x8005069C; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-GetIntrMask = 0x800506AC; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-SetIntrMask = 0x800506C4; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
 intr_trap_flag = 0x80096C0A; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x80097C98; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 intr_active_flag = 0x80096C08; // LIBETC INTR member backing static (halfword at the INTR state base; startIntr/stopIntr/restartIntr run gate); evidence under target: g3_eu
@@ -393,10 +373,6 @@ intr_imask_ptr = 0x80097C94; // LIBETC INTR member backing static (word pointer;
 intr_dicr_ptr = 0x80097C9C; // LIBETC INTR member backing static (word pointer; stopIntr ANDs its target with 0x77777777 - DMA DICR channel-disable semantics); evidence under target: g3_eu
 intr_stop_begin = 0x8004AD44; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (reads the state via s0; inside data_8004A828 - real code mis-typed data); evidence under target: g3_eu
 intr_stop_commit = 0x8004AE14; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside data_8004A828 - real code mis-typed data); evidence under target: g3_eu
-startIntr = 0x800506E0; // LIBETC INTR member .text+0x198 (extent 0xdc); sdk_members.py unique placement + sig-db agrees
-trapIntr = 0x800507BC; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
-setIntr = 0x800509A4; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-stopIntr = 0x80050AF8; // LIBETC INTR member .text+0x5b0 (extent 0xb0); sdk_members.py unique placement + sig-db agrees
 intr_start_aux1 = 0x8004A740; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
 intr_start_aux2 = 0x8004A76C; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
 intr_start_aux3 = 0x8004A2CC; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
@@ -404,64 +380,14 @@ intr_start_aux4 = 0x8004AA24; // INTR start-path aux 4, no-arg jal from startInt
 intr_start_aux5 = 0x8004A77C; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
 intr_start_aux6 = 0x8004AE94; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
 intr_start_tab = 0x80097C90; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
-restartIntr = 0x80050BA8; // LIBETC INTR member .text+0x660 (extent 0x88); sdk_members.py unique placement + sig-db agrees
 intr_restart_begin = 0x8004ADC4; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_commit = 0x8004AE64; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x8004A72C; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
-memclr = 0x80050C30; // LIBETC INTR member .text+0x6e8 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-startIntrVSync = 0x80051044; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-trapIntrVSync = 0x8005109C; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-setIntrVSync = 0x80051118; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
 intr_vb_cb_slots = 0x80097CCC; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
-VSync = 0x80051170; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
-v_wait = 0x800512B8; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
-GsInitCoordinate2 = 0x80055A08; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-GsInitCoord2param = 0x80055A84; // LIBGS MATRIX member .text+0x7c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-GsSetLsMatrix = 0x80055AB0; // LIBGS MATRIX member .text+0xa8 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-GsSetLightMatrix = 0x80055AE0; // LIBGS MATRIX member .text+0xd8 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
-GsSetLightMatrix2 = 0x80055B7C; // LIBGS MATRIX member .text+0x174 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-GsMulCoord0 = 0x80055BB0; // LIBGS MATRIX member .text+0x1a8 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsMulCoord2 = 0x80055C44; // LIBGS MATRIX member .text+0x23c (extent 0x84); sdk_members.py unique placement + sig-db agrees
-GsMulCoord3 = 0x80055CC8; // LIBGS MATRIX member .text+0x2c0 (extent 0x84); sdk_members.py unique placement + sig-db agrees
-print_matrix = 0x80055D4C; // LIBGS MATRIX member .text+0x344 (extent 0x70); sdk_members.py unique placement + sig-db agrees
-print_vector = 0x80055DBC; // LIBGS MATRIX member .text+0x3b4 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-GsSetDrawBuffClip = 0x80055DF0; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
-GsMapModelingData = 0x80055E88; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-GsGetLs = 0x80056114; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
-GsGetLw = 0x800563E8; // LIBGS MATRIX3 member .text+0x0 (extent 0x2c4); sdk_members.py unique placement
-GsSetAmbient = 0x800566AC; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
-GsInit3D = 0x800566D4; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-gte_rotate_z_matrix = 0x80056F88; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
-_make_packet = 0x800595C4; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF3NL = 0x8005A148; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4NL = 0x8005A334; // LIBGTE DVF4_02 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG3NL = 0x8005A570; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3L = 0x8005AAF8; // LIBGTE DVFT3_00 member .text+0x0 (extent 0x2f8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4L = 0x8005ADF0; // LIBGTE DVFT4_00 member .text+0x0 (extent 0x2a0); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4L = 0x8005B43C; // LIBGTE DVGT4_00 member .text+0x0 (extent 0x2ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF3 = 0x8005B728; // LIBGTE DVFT3_03 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG3 = 0x8005BD5C; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG4 = 0x8005BF98; // LIBGTE DVGT4_03 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4LFG = 0x8005E224; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3NL = 0x8005EAC8; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4NL = 0x8005ED50; // LIBGTE DVFT4_02 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG3NL = 0x8005EFD4; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4LFG = 0x80061934; // LIBGTE DVFT4_01 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4L = 0x80065430; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4L = 0x80065A10; // LIBGTE DVG4_00 member .text+0x0 (extent 0x2a8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF3 = 0x80065CB8; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF4 = 0x80065EA0; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNG4 = 0x80066404; // LIBGTE DVG4_03 member .text+0x0 (extent 0x258); sdk_members.py unique placement + sig-db agrees
-Gssub_make_matrix = 0x800675EC; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
-gte_init = 0x800676E8; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
-GsClearOt = 0x80067864; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
-GsSetLightMode = 0x800678BC; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
-GsGetActiveBuff = 0x80067948; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
-GsSetDrawBuffOffset = 0x80067958; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -475,74 +401,19 @@ PSDIDX = 0x80172734; // LIBGS GS_002 member bss static; evidence under target: m
 _svm_stereo_mono = 0x8016AC90; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
 SsSetMono = 0x80076A10; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x80076A24; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
-GsSwapDispBuff = 0x80068120; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
-MDEC_vlc_brk = 0x80068A98; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-MDEC_vlc = 0x80068AC8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
-StSetStream = 0x8006C7F4; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
-init_ring_status = 0x8006E01C; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
-StSetMask = 0x8006E05C; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
-StSetRing = 0x8006E07C; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-StClearRing = 0x8006E0AC; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
-data_ready_callback = 0x8006E300; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
-StFreeRing = 0x8006E368; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
-SpuQuit = 0x8006E424; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-_SpuDataCallback = 0x8006F898; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SsVabTransBodyPartly = 0x8006F9E4; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferMode = 0x8006FB54; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferStartAddr = 0x8006FB88; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
-_spu_setInTransfer = 0x8006FBC4; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_spu_getInTransfer = 0x8006FBF0; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x800AB0E8; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-SpuWritePartly = 0x8006FC00; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-SsUtGetVBaddrInSB = 0x8006FC8C; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-SpuSetNoiseVoice = 0x80075C24; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SpuInitMalloc = 0x80075C48; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
-_SpuSetAnyVoice = 0x80075C9C; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
-SpuVmVSetUp = 0x80075D50; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x80076A10; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x80076A24; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-SpuMalloc = 0x80077048; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
-SsVabFakeBody = 0x80077740; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SsUtGetVabHdr = 0x800777B8; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
-SsUtGetVagAtr = 0x8007789C; // LIBSND UT_GVA member .text+0x0 (extent 0x240); sdk_members.py unique placement + sig-db agrees
-SsSetMVol = 0x80077ADC; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-SsSetSerialVol = 0x80077FF0; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
-SsVabTransCompleted = 0x80078150; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-SpuIsTransferCompleted = 0x8007817C; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-SsSeqCalledTbyT = 0x80078224; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
-Snd_pause = 0x80078498; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
-Snd_nextpause = 0x80078538; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
-Snd_replay = 0x80078BD4; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
-Snd_play = 0x80078C3C; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_SsUtResolveADSR = 0x8007AF2C; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
-_SsUtBuildADSR = 0x8007AF88; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-SpuClearReverbWorkArea = 0x8007BF48; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
-SpuSetReverb = 0x8007C0F8; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
-SsUtSetVagAtr = 0x8007C1C8; // LIBSND UT_SVA member .text+0x0 (extent 0x1cc); sdk_members.py unique placement + sig-db agrees
-SsUtGetProgAtr = 0x8007C4B0; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
-SsSetSerialAttr = 0x8007CC7C; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
 
-// target: g3_jp  (110 sdk-member adoptions)
-startIntrDMA = 0x8005135C; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-trapIntrDMA = 0x800513AC; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
-setIntrDMA = 0x80051530; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-memclr = 0x800515D8; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-startIntrVSync = 0x800517E4; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-trapIntrVSync = 0x8005183C; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-setIntrVSync = 0x800518B8; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// target: g3_jp
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
 intr_vb_cb_slots = 0x800974B0; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
-VSync = 0x80051910; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
-v_wait = 0x80051A58; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
-SetVideoMode = 0x80055008; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-GetVideoMode = 0x80055020; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
@@ -573,50 +444,6 @@ intr_restart_tail = 0x8004ACEC; // INTR restart shared tail: restartIntr's closi
 restartIntr = 0x80051298; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800963EE; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x8009747C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
-GsInitCoordinate2 = 0x800561FC; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-GsInitCoord2param = 0x80056278; // LIBGS MATRIX member .text+0x7c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-GsSetLsMatrix = 0x800562A4; // LIBGS MATRIX member .text+0xa8 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-GsSetLightMatrix = 0x800562D4; // LIBGS MATRIX member .text+0xd8 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
-GsSetLightMatrix2 = 0x80056370; // LIBGS MATRIX member .text+0x174 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-GsMulCoord0 = 0x800563A4; // LIBGS MATRIX member .text+0x1a8 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsMulCoord2 = 0x80056438; // LIBGS MATRIX member .text+0x23c (extent 0x84); sdk_members.py unique placement + sig-db agrees
-GsMulCoord3 = 0x800564BC; // LIBGS MATRIX member .text+0x2c0 (extent 0x84); sdk_members.py unique placement + sig-db agrees
-print_matrix = 0x80056540; // LIBGS MATRIX member .text+0x344 (extent 0x70); sdk_members.py unique placement + sig-db agrees
-print_vector = 0x800565B0; // LIBGS MATRIX member .text+0x3b4 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-GsSetDrawBuffClip = 0x800565E4; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
-GsMapModelingData = 0x8005667C; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-GsGetTimInfo = 0x800566F4; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
-GsGetLw = 0x80056BDC; // LIBGS MATRIX3 member .text+0x0 (extent 0x2c4); sdk_members.py unique placement
-GsSetAmbient = 0x80056EA0; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
-GsInit3D = 0x80056EC8; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-gte_rotate_z_matrix = 0x8005777C; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
-RotMatrixC = 0x800579AC; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
-GsLinkObject4 = 0x800592A4; // LIBGS OBJT member .text+0x0 (extent 0x130); sdk_members.py unique placement + sig-db agrees
-_make_packet = 0x80059D90; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsDefDispBuff = 0x80059E24; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
-GsTMDdivF3NL = 0x8005A704; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG3NL = 0x8005AC5C; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4NL = 0x8005AE58; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4L = 0x8005B4DC; // LIBGTE DVFT4_00 member .text+0x0 (extent 0x2a0); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF3 = 0x8005BE14; // LIBGTE DVFT3_03 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF4 = 0x8005C098; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG4 = 0x8005C684; // LIBGTE DVGT4_03 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4LFG = 0x8005EDC4; // LIBGTE DVG4_01 member .text+0x0 (extent 0x2c0); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4NL = 0x8005F43C; // LIBGTE DVFT4_02 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG3NL = 0x8005F6C0; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4NL = 0x8005F8F4; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3LFG = 0x80061BF0; // LIBGTE DVFT3_01 member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4LFG = 0x80062540; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4L = 0x80065B1C; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF3 = 0x800663A4; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF4 = 0x8006658C; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNG3 = 0x800667C4; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-Gssub_make_matrix = 0x80066E58; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
-gte_init = 0x80066F54; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
-GsClearOt = 0x800670D0; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
-GsSetLightMode = 0x80067128; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
-GsGetActiveBuff = 0x800671B4; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
-GsSetDrawBuffOffset = 0x800671C4; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -630,70 +457,14 @@ PSDIDX = 0x80171E14; // LIBGS GS_002 member bss static; evidence under target: m
 _svm_stereo_mono = 0x8016AB68; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
 SsSetMono = 0x80075D28; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x80075D3C; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
-GsSwapDispBuff = 0x8006798C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
-MDEC_vlc_brk = 0x80068218; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-MDEC_vlc = 0x80068248; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
-CdInit = 0x8006BA48; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
-def_cbsync = 0x8006BAD8; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbready = 0x8006BB00; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbread = 0x8006BB28; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-CdRead2 = 0x8006BB60; // LIBCD CDREAD2 member .text+0x0 (extent 0xa4); sdk_members.py unique placement + sig-db agrees
-StSetStream = 0x8006BC04; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
-init_ring_status = 0x8006D55C; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
-StSetMask = 0x8006D59C; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
-StSetRing = 0x8006D5BC; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-StClearRing = 0x8006D5EC; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
-StGetNext = 0x8006D64C; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
-data_ready_callback = 0x8006D710; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
-StFreeRing = 0x8006D778; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
-_SpuDataCallback = 0x8006EFD0; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-_SpuInit = 0x8006EFF4; // LIBSPU S_INI member .text+0x0 (extent 0xc8); sdk_members.py unique placement + sig-db agrees
-SpuStart = 0x8006F0BC; // LIBSPU S_INI member .text+0xc8 (extent 0x84); sdk_members.py unique placement + sig-db agrees
-SsVabTransBodyPartly = 0x8006F140; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferMode = 0x8006F2B0; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferStartAddr = 0x8006F2E4; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
-_spu_setInTransfer = 0x8006F320; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_spu_getInTransfer = 0x8006F34C; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x800AA8AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-SsUtGetVBaddrInSB = 0x8006F518; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-SpuSetNoiseVoice = 0x80074E14; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SpuInitMalloc = 0x80074E38; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
-_SpuSetAnyVoice = 0x80074E8C; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x80075D28; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x80075D3C; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-SpuMalloc = 0x80076360; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
-_spu_gcSPU = 0x80076628; // LIBSPU S_M_INT member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
-SsVabFakeBody = 0x80076928; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SsUtGetVabHdr = 0x800769A0; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
-SsSetMVol = 0x80076DF4; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-SpuSetCommonAttr = 0x80076E44; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
-SsSetSerialVol = 0x800771D8; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
-SsVabTransCompleted = 0x80077338; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-SpuIsTransferCompleted = 0x80077364; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-Snd_decrescendo = 0x800777B0; // LIBSND DECRE member .text+0x0 (extent 0x4b0); sdk_members.py unique placement + sig-db agrees
-Snd_replay = 0x80077C60; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
-Snd_play = 0x80077CC8; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_SsUtResolveADSR = 0x8007A034; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
-_SsUtBuildADSR = 0x8007A090; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-_SpuIsInAllocateArea = 0x8007AF68; // LIBSPU S_M_UTIL member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
-_SpuIsInAllocateArea_ = 0x8007AFD8; // LIBSPU S_M_UTIL member .text+0x70 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SpuClearReverbWorkArea = 0x8007B050; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
-SpuSetReverb = 0x8007B200; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
-Snd_nextsep = 0x8007B2D0; // LIBSND NEXT member .text+0x0 (extent 0x100); sdk_members.py unique placement + sig-db agrees
-Snd_crescendo = 0x8007B6E0; // LIBSND CRES member .text+0x0 (extent 0x57c); sdk_members.py unique placement + sig-db agrees
-SsUtGetProgAtr = 0x8007BF4C; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
-Snd_pause = 0x8007C068; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
-Snd_nextpause = 0x8007C108; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
-Snd_tempo = 0x8007C16C; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
-SsSetSerialAttr = 0x8007C34C; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
 
-// target: g3org_eu  (103 sdk-member adoptions)
-SetVideoMode = 0x8004D254; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-GetVideoMode = 0x8004D26C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// target: g3org_eu
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
@@ -724,59 +495,11 @@ intr_restart_tail = 0x80047B80; // INTR restart shared tail: restartIntr's closi
 restartIntr = 0x8004DA0C; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800A3916; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800A49A4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
-startIntrDMA = 0x8004DAD0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-trapIntrDMA = 0x8004DB20; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
-setIntrDMA = 0x8004DCA4; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8004DD4C; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-startIntrVSync = 0x8004DD78; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-trapIntrVSync = 0x8004DDD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-setIntrVSync = 0x8004DE4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
 intr_vb_cb_slots = 0x800A49D8; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
-GsInitGraph = 0x80052110; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-gpu_init = 0x80052188; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
-GsInitGraph2 = 0x800522E0; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
-valiable_init = 0x80052358; // LIBGS EMULIB member .text+0x248 (extent 0x27c); sdk_members.py unique placement
-GsSortClear = 0x800525D4; // LIBGS EMULIB member .text+0x4c4 (extent 0x168); sdk_members.py unique placement
-GsSetDrawBuffClip = 0x80052C54; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
-GsMapModelingData = 0x80052CEC; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-GsGetTimInfo = 0x80052D64; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
-GsGetLs = 0x80052E48; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
-GsSetAmbient = 0x80053510; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
-GsInit3D = 0x80053538; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-gte_rotate_z_matrix = 0x80053DEC; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
-RotMatrixC = 0x8005401C; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
-GsSortSprite = 0x80055A6C; // LIBGS 2D_SP0 member .text+0x0 (extent 0x4fc); sdk_members.py unique placement + sig-db agrees
-_make_packet = 0x80056428; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsDefDispBuff = 0x800564BC; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
-GsTMDdivF3NL = 0x80056E7C; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG3NL = 0x800573D4; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4NL = 0x800575D0; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3L = 0x8005782C; // LIBGTE DVFT3_00 member .text+0x0 (extent 0x2f8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4L = 0x80058170; // LIBGTE DVGT4_00 member .text+0x0 (extent 0x2ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF4 = 0x80058810; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG3 = 0x80058A90; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4LFG = 0x8005AF58; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4LFG = 0x8005B53C; // LIBGTE DVG4_01 member .text+0x0 (extent 0x2c0); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3NL = 0x8005B7FC; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG3NL = 0x8005BE38; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4NL = 0x8005C06C; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3LFG = 0x8005E368; // LIBGTE DVFT3_01 member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4LFG = 0x8005E668; // LIBGTE DVFT4_01 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4LFG = 0x8005ECB8; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4L = 0x80062294; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF3 = 0x80062B1C; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF4 = 0x80062D04; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNG3 = 0x80062F3C; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-Gssub_make_matrix = 0x80064320; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
-gte_init = 0x8006441C; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
-GsClearOt = 0x800646C8; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
-GsSetLightMode = 0x80064720; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
-GsGetActiveBuff = 0x800647AC; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
-GsSetDrawBuffOffset = 0x800647BC; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -790,80 +513,19 @@ PSDIDX = 0x801803AC; // LIBGS GS_002 member bss static; evidence under target: m
 _svm_stereo_mono = 0x80178908; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
 SsSetMono = 0x80073874; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x80073888; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
-GsSetFlatLight = 0x800648D8; // LIBGS SCLIB member .text+0x0 (extent 0x4c4); sdk_members.py unique placement
-gte_set_lc = 0x80064D9C; // LIBGS SCLIB member .text+0x4c4 (extent 0x68); sdk_members.py unique placement
-gte_read_lc = 0x80064E04; // LIBGS SCLIB member .text+0x52c (extent 0x50); sdk_members.py unique placement
-MDEC_vlc_brk = 0x800658FC; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-MDEC_vlc = 0x8006592C; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
-CdInit = 0x8006937C; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
-def_cbsync = 0x8006940C; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbready = 0x80069434; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbread = 0x8006945C; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-StSetStream = 0x80069528; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
-init_ring_status = 0x8006AE80; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
-StSetMask = 0x8006AEC0; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
-StSetRing = 0x8006AEE0; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-StClearRing = 0x8006AF10; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
-StGetNext = 0x8006AF70; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
-data_ready_callback = 0x8006B034; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
-StFreeRing = 0x8006B09C; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
-SpuQuit = 0x8006B158; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-_SpuDataCallback = 0x8006C5CC; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SsVabTransBodyPartly = 0x8006C848; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferMode = 0x8006C9B8; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferStartAddr = 0x8006C9EC; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
-_spu_setInTransfer = 0x8006CA28; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_spu_getInTransfer = 0x8006CA54; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x800B7DF4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-SpuWritePartly = 0x8006CA64; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-SsUtGetVBaddrInSB = 0x8006CAF0; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-SpuSetNoiseVoice = 0x80072958; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SpuInitMalloc = 0x8007297C; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
-_SpuSetAnyVoice = 0x800729D0; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x80073874; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x80073888; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-SpuMalloc = 0x80073EAC; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
-_spu_gcSPU = 0x80074174; // LIBSPU S_M_INT member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
-SsVabFakeBody = 0x80074474; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SsUtGetVabHdr = 0x800744EC; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
-SsSetMVol = 0x80074940; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-SpuSetCommonAttr = 0x80074990; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
-SsSetSerialVol = 0x80074D24; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
-SsVabTransCompleted = 0x80074E84; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-SpuIsTransferCompleted = 0x80074EB0; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-Snd_pause = 0x800752FC; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
-Snd_nextpause = 0x8007539C; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
-Snd_tempo = 0x80075400; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
-Snd_replay = 0x80075A38; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
-Snd_play = 0x80075AA0; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_SsUtResolveADSR = 0x80077C60; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
-_SsUtBuildADSR = 0x80077CBC; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-_SpuIsInAllocateArea = 0x80078B94; // LIBSPU S_M_UTIL member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
-_SpuIsInAllocateArea_ = 0x80078C04; // LIBSPU S_M_UTIL member .text+0x70 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SpuClearReverbWorkArea = 0x80078C7C; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
-SpuSetReverb = 0x80078E2C; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
-SsUtGetProgAtr = 0x80079314; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
-SsSetSerialAttr = 0x80079AE0; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
 
-// target: g3org_jp  (100 sdk-member adoptions)
-startIntrDMA = 0x8004E208; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-trapIntrDMA = 0x8004E258; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
-setIntrDMA = 0x8004E3DC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8004E484; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-startIntrVSync = 0x8004E560; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-trapIntrVSync = 0x8004E5B8; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-setIntrVSync = 0x8004E634; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// target: g3org_jp
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
 intr_vb_cb_slots = 0x800A41F8; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
-SetVideoMode = 0x80051D84; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-GetVideoMode = 0x80051D9C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
@@ -894,45 +556,6 @@ intr_restart_tail = 0x80048188; // INTR restart shared tail: restartIntr's closi
 restartIntr = 0x8004E144; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800A3136; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800A41C4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
-GsSetDrawBuffClip = 0x80053490; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
-GsMapModelingData = 0x80053528; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-GsGetTimInfo = 0x800535A0; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
-GsGetLs = 0x80053684; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
-GsSetAmbient = 0x80053D4C; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
-GsInit3D = 0x80053D74; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-GsSetRefView2 = 0x80053DEC; // LIBGS MATRIX3 member .text+0x0 (extent 0x3c8); sdk_members.py unique placement
-scale_view_param = 0x800541B4; // LIBGS MATRIX3 member .text+0x3c8 (extent 0xf0); sdk_members.py unique placement
-select_max_param = 0x800542A4; // LIBGS MATRIX3 member .text+0x4b8 (extent 0xc8); sdk_members.py unique placement
-len_param = 0x8005436C; // LIBGS MATRIX3 member .text+0x580 (extent 0x1c); sdk_members.py unique placement
-gte_rotate_z_matrix = 0x80054628; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
-RotMatrixC = 0x80054858; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
-GsLinkObject4 = 0x80056150; // LIBGS OBJT member .text+0x0 (extent 0x130); sdk_members.py unique placement + sig-db agrees
-GsSortSprite = 0x80056280; // LIBGS 2D_SP0 member .text+0x0 (extent 0x4fc); sdk_members.py unique placement + sig-db agrees
-_make_packet = 0x80056C3C; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsDefDispBuff = 0x80056CD0; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
-GsTMDdivF3NL = 0x800575B0; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4NL = 0x8005779C; // LIBGTE DVF4_02 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4NL = 0x80057D04; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3L = 0x80057F60; // LIBGTE DVFT3_00 member .text+0x0 (extent 0x2f8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4L = 0x800588A4; // LIBGTE DVGT4_00 member .text+0x0 (extent 0x2ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF4 = 0x80058F44; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG3 = 0x800591C4; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG4 = 0x80059400; // LIBGTE DVGT4_03 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4LFG = 0x8005B68C; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3NL = 0x8005BF30; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4NL = 0x8005C1B8; // LIBGTE DVFT4_02 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4NL = 0x8005C7A0; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4LFG = 0x8005ED9C; // LIBGTE DVFT4_01 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4LFG = 0x8005F3EC; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4L = 0x80062E78; // LIBGTE DVG4_00 member .text+0x0 (extent 0x2a8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF4 = 0x80063438; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNG3 = 0x80063670; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNG4 = 0x8006386C; // LIBGTE DVG4_03 member .text+0x0 (extent 0x258); sdk_members.py unique placement + sig-db agrees
-gte_init = 0x80063E00; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
-GsClearOt = 0x80063F7C; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
-GsSetLightMode = 0x80063FD4; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
-GsGetActiveBuff = 0x80064060; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
-GsSetDrawBuffOffset = 0x80064070; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -946,67 +569,14 @@ PSDIDX = 0x8017FAC8; // LIBGS GS_002 member bss static; evidence under target: m
 _svm_stereo_mono = 0x8017881C; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
 SsSetMono = 0x80072AA4; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x80072AB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
-GsSwapDispBuff = 0x80064838; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
-MDEC_vlc_brk = 0x800650C4; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-MDEC_vlc = 0x800650F4; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
-CdInit = 0x800688F4; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
-def_cbsync = 0x80068984; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbready = 0x800689AC; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbread = 0x800689D4; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-CdRead2 = 0x80068A0C; // LIBCD CDREAD2 member .text+0x0 (extent 0xa4); sdk_members.py unique placement + sig-db agrees
-StSetStream = 0x80068AB0; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
-init_ring_status = 0x8006A408; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
-StSetMask = 0x8006A448; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
-StClearRing = 0x8006A498; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
-StGetNext = 0x8006A4F8; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
-data_ready_callback = 0x8006A5BC; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
-StFreeRing = 0x8006A624; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
-SpuQuit = 0x8006A6E0; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-_SpuInit = 0x8006BEA0; // LIBSPU S_INI member .text+0x0 (extent 0xc8); sdk_members.py unique placement + sig-db agrees
-SpuStart = 0x8006BF68; // LIBSPU S_INI member .text+0xc8 (extent 0x84); sdk_members.py unique placement + sig-db agrees
-SsVabTransBodyPartly = 0x8006BFEC; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferMode = 0x8006C15C; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferStartAddr = 0x8006C190; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
-_spu_setInTransfer = 0x8006C1CC; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_spu_getInTransfer = 0x8006C1F8; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x800B75F4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-SpuWritePartly = 0x8006C208; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-SsUtGetVBaddrInSB = 0x8006C294; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-SpuSetNoiseVoice = 0x80071CC0; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SpuInitMalloc = 0x80071CE4; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
-_SpuSetAnyVoice = 0x80071D38; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
-SpuVmVSetUp = 0x80071DEC; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x80072AA4; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x80072AB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-SpuMalloc = 0x800730DC; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
-SsVabFakeBody = 0x800737D4; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SsUtGetVabHdr = 0x8007384C; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
-SsUtGetVagAtr = 0x80073930; // LIBSND UT_GVA member .text+0x0 (extent 0x240); sdk_members.py unique placement + sig-db agrees
-SsSetMVol = 0x80073B70; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-SsSetSerialVol = 0x80074084; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
-SsVabTransCompleted = 0x800741E4; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-SpuIsTransferCompleted = 0x80074210; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-SsSeqCalledTbyT = 0x800742B8; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
-Snd_replay = 0x80074B0C; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
-Snd_play = 0x80074B74; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_SsUtResolveADSR = 0x80076EE0; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
-_SsUtBuildADSR = 0x80076F3C; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-SpuClearReverbWorkArea = 0x80077EFC; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
-SpuSetReverb = 0x800780AC; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
-Snd_nextsep = 0x8007817C; // LIBSND NEXT member .text+0x0 (extent 0x100); sdk_members.py unique placement + sig-db agrees
-SsUtSetVagAtr = 0x8007827C; // LIBSND UT_SVA member .text+0x0 (extent 0x1cc); sdk_members.py unique placement + sig-db agrees
-SsUtGetProgAtr = 0x80078CC8; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
-Snd_pause = 0x80078DE4; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
-Snd_nextpause = 0x80078E84; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
-SsSetSerialAttr = 0x800791F8; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
 
-// target: mainmenu_eu  (99 sdk-member adoptions)
-SetVideoMode = 0x8006797C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-GetVideoMode = 0x80067994; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+// target: mainmenu_eu
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
@@ -1037,10 +607,6 @@ intr_restart_tail = 0x8005EC08; // INTR restart shared tail: restartIntr's closi
 restartIntr = 0x80068134; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800B4476; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800B5504; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
-startIntrDMA = 0x800681F8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-trapIntrDMA = 0x80068248; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
-setIntrDMA = 0x800683CC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-memclr = 0x80068474; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 startIntrVSync = 0x800684A0; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x800684F8; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x80068574; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
@@ -1049,47 +615,6 @@ setIntrVSync = 0x80068574; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sd
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
 intr_vb_cb_slots = 0x800B5538; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
-VSync = 0x800686FC; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
-v_wait = 0x80068844; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
-GsInitGraph = 0x8006C838; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-gpu_init = 0x8006C8B0; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
-GsInitGraph2 = 0x8006CA08; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
-valiable_init = 0x8006CA80; // LIBGS EMULIB member .text+0x248 (extent 0x27c); sdk_members.py unique placement
-GsSortClear = 0x8006CCFC; // LIBGS EMULIB member .text+0x4c4 (extent 0x168); sdk_members.py unique placement
-GsSetDrawBuffClip = 0x8006D37C; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
-GsMapModelingData = 0x8006D414; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-GsGetTimInfo = 0x8006D48C; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
-GsGetLs = 0x8006D570; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
-GsSetAmbient = 0x8006DC38; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
-GsInit3D = 0x8006DC60; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
-gte_rotate_z_matrix = 0x8006E514; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
-RotMatrixC = 0x8006E744; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
-_make_packet = 0x80070B50; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
-GsDefDispBuff = 0x80070BE4; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
-GsTMDdivF3NL = 0x800715A4; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG3NL = 0x80071AFC; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4NL = 0x80071CF8; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF4L = 0x8007237C; // LIBGTE DVFT4_00 member .text+0x0 (extent 0x2a0); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF3 = 0x80072CB4; // LIBGTE DVFT3_03 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNF4 = 0x80072F38; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTNG3 = 0x800731B8; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4LFG = 0x80075680; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
-GsTMDdivG4LFG = 0x80075C64; // LIBGTE DVG4_01 member .text+0x0 (extent 0x2c0); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3NL = 0x80075F24; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG3NL = 0x80076560; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4NL = 0x80076794; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTF3LFG = 0x80078A90; // LIBGTE DVFT3_01 member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
-GsTMDdivTG4LFG = 0x800793E0; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
-GsTMDdivF4L = 0x8007C9BC; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF3 = 0x8007D244; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNF4 = 0x8007D42C; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
-GsTMDdivNG3 = 0x8007D664; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
-Gssub_make_matrix = 0x8007EA48; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
-gte_init = 0x8007F6C0; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
-GsClearOt = 0x8007F83C; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
-GsSetLightMode = 0x8007F894; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
-GsGetActiveBuff = 0x8007F920; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
-GsSetDrawBuffOffset = 0x8007F930; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -1103,72 +628,14 @@ PSDIDX = 0x80195748; // LIBGS GS_002 member bss static; evidence under target: m
 _svm_stereo_mono = 0x8018DB5C; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
 SsSetMono = 0x8008F304; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x8008F318; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
-GsSwapDispBuff = 0x800800F8; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
-_mk_spr_packet = 0x800801EC; // LIBGS 2D_COM0 member .text+0x0 (extent 0x40); sdk_members.py unique placement + sig-db agrees
-_mk_xpndsp = 0x8008022C; // LIBGS 2D_COM0 member .text+0x40 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
-_mk_normsp = 0x800804F4; // LIBGS 2D_COM0 member .text+0x308 (extent 0x268); sdk_members.py unique placement + sig-db agrees
-CdInit = 0x80084B90; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
-def_cbsync = 0x80084C20; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbready = 0x80084C48; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-def_cbread = 0x80084C70; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
-StSetStream = 0x80084D3C; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
-StSetChannel = 0x800858FC; // LIBCD CDROM member .text+0x0 (extent 0x34); sdk_members.py unique placement (sig-db elsewhere)
-init_ring_status = 0x80086910; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
-StSetMask = 0x80086950; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
-StSetRing = 0x80086970; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
-StClearRing = 0x800869A0; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
-StGetNext = 0x80086A00; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
-data_ready_callback = 0x80086AC4; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
-StFreeRing = 0x80086B2C; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
-SpuSetTransferMode = 0x80086E88; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
-_SpuDataCallback = 0x80086FE4; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SpuSetTransferStartAddr = 0x800883E0; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
-_spu_setInTransfer = 0x8008841C; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_spu_getInTransfer = 0x80088448; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x800C8DD4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-SpuWritePartly = 0x80088458; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-SsUtGetVBaddrInSB = 0x800884E4; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-SpuSetNoiseVoice = 0x8008E34C; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
-SpuInitMalloc = 0x8008E370; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
-SpuVmVSetUp = 0x8008E5A8; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
-SpuQuit = 0x8008F268; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x8008F304; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x8008F318; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-SpuMalloc = 0x8008F93C; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
-_spu_gcSPU = 0x8008FC04; // LIBSPU S_M_INT member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
-SsVabFakeBody = 0x8008FF04; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SsUtGetVagAtr = 0x80090190; // LIBSND UT_GVA member .text+0x0 (extent 0x240); sdk_members.py unique placement + sig-db agrees
-SsSetMVol = 0x800903D0; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-SpuSetCommonAttr = 0x80090420; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
-SsVabTransCompleted = 0x80090A44; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-SpuIsTransferCompleted = 0x80090A70; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-SsSeqCalledTbyT = 0x80090B18; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
-Snd_pause = 0x80090D8C; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
-Snd_nextpause = 0x80090E2C; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
-Snd_tempo = 0x80090E90; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
-Snd_replay = 0x800914C8; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
-Snd_play = 0x80091530; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-_SsUtResolveADSR = 0x80093820; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
-_SsUtBuildADSR = 0x8009387C; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
-_SpuIsInAllocateArea = 0x80094624; // LIBSPU S_M_UTIL member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
-_SpuIsInAllocateArea_ = 0x80094694; // LIBSPU S_M_UTIL member .text+0x70 (extent 0x78); sdk_members.py unique placement + sig-db agrees
-SpuClearReverbWorkArea = 0x8009470C; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
-SsUtSetVagAtr = 0x80094ABC; // LIBSND UT_SVA member .text+0x0 (extent 0x1cc); sdk_members.py unique placement + sig-db agrees
-SsUtGetProgAtr = 0x80094DA4; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
-SsSetSerialAttr = 0x80095570; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
 
-// target: mainmenu_jp  (115 sdk-member adoptions)
-startIntrDMA = 0x80068920; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
-trapIntrDMA = 0x80068970; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
-setIntrDMA = 0x80068AF4; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-memclr = 0x80068B9C; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
-startIntrVSync = 0x80068C78; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
-trapIntrVSync = 0x80068CD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-setIntrVSync = 0x80068D4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// target: mainmenu_jp
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: the LIBETC INTR_VB member's own .data+0 callback slot
 // array (8 words; member layout from psyq/3.3 LIBETC.LIB INTR_VB.OBJ:
 // .data 0x28 bytes = 8 zero slots +0x00..0x1f, exported Vcount +0x20,
@@ -1181,8 +648,6 @@ setIntrVSync = 0x80068D4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sd
 // Vcount and the +0x24 slot are NOT curated: the matched unit does not
 // reference them and the neighbouring asm rows keep their D_ rendering.
 intr_vb_cb_slots = 0x800B4D24;
-SetVideoMode = 0x8006C49C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
-GetVideoMode = 0x8006C4B4; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 // video_mode: role-descriptive name for the VMODE member's backing static
 // (0x800B4EC4, initial word 0 = MODE_NTSC). SetVideoMode reads it into $v0
 // then stores $a0 into it; GetVideoMode returns it — the pair proves the
@@ -1343,6 +808,649 @@ restartIntr = 0x8006885C; // LIBETC INTR member (extent 0x88; 34-slot masked-wor
 // the 3.3 header (sig-db labels + the bodies give the signatures).
 intr_trap_flag = 0x800B3C62; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800B4CF0; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
+// PSDIDX: the GS_002.OBJ member's own bss static for the active draw
+// buffer index (Psy-Q 3.3 sig-db: labels GsGetActiveBuff @0 /
+// GsSetDrawBuffOffset @0x10, sig bytes match retail lui+lh+jr+nop).
+// GsGetActiveBuff lh-loads it straight into $v0; GsSetDrawBuffOffset
+// re-reads it and scales it by two to index a two-entry offset table.
+// PSDIDX is the only halfword-sized bss symbol that OBJ carries. It
+// lives beyond the payload segment (EXE bss), so no dlabel renders -
+// the C resolves it extern. Full evidence under target: mainmenu_jp.
+PSDIDX = 0x80194E34; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ's backing flag for the Sound
+// System mono/stereo setters. Evidence: the local Psy-Q 3.3 LIBSND.LIB
+// archive carries member VS_MONO with source path E:\PS-X~~00\SRC\SND\
+// VM\VS_MONO.C, defined symbols SsSetMono + SsSetStereo, and exactly one
+// undefined external besides the pair: _svm_stereo_mono; the SVM cluster
+// (SpuVmInit et al.) references the same symbol, and the library symbol
+// directory groups it with the other _svm_* statics. The Psy-Q sig-db
+// VS_MONO.OBJ signature matches retail bytes on both bodies (ori
+// $v0,$zero,1 + lui/sh; lui/sh $zero + jr $ra/nop; labels @0 / @0x14).
+// LIBSND.H 3.3: `extern void SsSetMono (void);` / `extern void
+// SsSetStereo (void);` - no args, no return; the sh proves halfword
+// width, SsSetMono writes 1, SsSetStereo writes 0. The static sits
+// beyond the payload segment (EXE bss), so no dlabel renders - the C
+// resolves it extern.
+_svm_stereo_mono = 0x8018DA40; // LIBSND VS_MONO member bss static; evidence above
+SsSetMono = 0x8008E654; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x8008E668; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
+// _spu_inTransfer: the SPU in-transfer flag the S_ITC member's getter
+// polls. Psy-Q 2.60/3.00 sig-db: S_ITC.OBJ labels _spu_getInTransfer at
+// .text+0xdc and its signature bytes match retail exactly (lui/lw on
+// the flag, jr $ra with sltiu $v0,$v0,1 in the delay slot = return
+// flag == 0). S_ITC.OBJ carries no bss of its own - S_INI.OBJ defines
+// _spu_inTransfer (Psy-Q 2.60 xbss) and the getter reads it as an
+// extern. The flag sits beyond the payload segment (EXE bss; no dlabel
+// renders), resolved extern by the C. Full evidence under target:
+// mainmenu_jp.
+_spu_inTransfer = 0x800C85AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - the flag is 8 bytes per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+
+// target: sces_00269
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
+// video_mode: role-descriptive name for the VMODE member's backing
+// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
+// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
+// evidence block under target: mainmenu_jp.
+video_mode = 0x8004CF20; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+intr_active_flag = 0x8004CF24; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x8004CF56; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x8004CF58; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x8004DFB4; // LIBETC INTR member backing static (word pointer; the save/zero I_MASK port slot); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x8004DFB0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x8004DFB8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8002F388; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8002F458; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+stopIntr = 0x80030FEC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
+startIntr = 0x80030BD4; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
+intr_start_aux1 = 0x8002ED84; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
+intr_start_aux2 = 0x8002EDB0; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
+intr_start_aux3 = 0x8002E910; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
+intr_start_aux4 = 0x8002F068; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
+intr_start_aux5 = 0x8002EDC0; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
+intr_start_aux6 = 0x8002F4D8; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
+intr_start_tab = 0x8004DFAC; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
+intr_restart_begin = 0x8002F408; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
+intr_restart_commit = 0x8002F4A8; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
+intr_restart_tail = 0x8002ED70; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
+restartIntr = 0x8003109C; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x8011C07C; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
+// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
+// writes 0, both sh). Halfword bss beyond the payload segment
+// - extern-resolved by the C. Full evidence under target:
+// mainmenu_jp.
+_svm_stereo_mono = 0x80114578; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
+SsSetMono = 0x80049780; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
+SsSetStereo = 0x80049794; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x80065A68; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+
+// target: slps_00270
+// ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
+// PSDIDX: GS_002.OBJ member bss static (active draw buffer
+// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
+// bss beyond the payload segment - extern-resolved by the C.
+// Full evidence under target: mainmenu_jp.
+PSDIDX = 0x8011C304; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
+// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
+// bss beyond the payload). Full evidence under target: mainmenu_jp.
+_spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; evidence under target: mainmenu_jp
+// ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
+//
+// Evidence base: config/sdk_members.txt (tools/sdk_members.py)
+// at the Psy-Q release pinned in docs/MATCHING.md 3b, extents
+// from the archives' own .text symbol tables. Verdicts and the
+// collision rules are documented in tools/sdk_curated.py.
+// Names are applied by tools/scan_functions.py - symbols file
+// only, never subsegment names.
+
+// target: g3_eu  (109 sdk-member adoptions)
+SetVideoMode = 0x80050520; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+GetVideoMode = 0x80050538; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+ResetCallback = 0x80050548; // LIBETC INTR member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+InterruptCallback = 0x80050578; // LIBETC INTR member .text+0x30 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+DMACallback = 0x800505A8; // LIBETC INTR member .text+0x60 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+VSyncCallback = 0x800505D8; // LIBETC INTR member .text+0x90 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+VSyncCallbacks = 0x8005060C; // LIBETC INTR member .text+0xc4 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+StopCallback = 0x8005063C; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+RestartCallback = 0x8005066C; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+CheckCallback = 0x8005069C; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GetIntrMask = 0x800506AC; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+SetIntrMask = 0x800506C4; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
+startIntr = 0x800506E0; // LIBETC INTR member .text+0x198 (extent 0xdc); sdk_members.py unique placement + sig-db agrees
+trapIntr = 0x800507BC; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
+setIntr = 0x800509A4; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
+stopIntr = 0x80050AF8; // LIBETC INTR member .text+0x5b0 (extent 0xb0); sdk_members.py unique placement + sig-db agrees
+restartIntr = 0x80050BA8; // LIBETC INTR member .text+0x660 (extent 0x88); sdk_members.py unique placement + sig-db agrees
+memclr = 0x80050C30; // LIBETC INTR member .text+0x6e8 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+startIntrVSync = 0x80051044; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+trapIntrVSync = 0x8005109C; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+setIntrVSync = 0x80051118; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+VSync = 0x80051170; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
+v_wait = 0x800512B8; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
+GsInitCoordinate2 = 0x80055A08; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+GsInitCoord2param = 0x80055A84; // LIBGS MATRIX member .text+0x7c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+GsSetLsMatrix = 0x80055AB0; // LIBGS MATRIX member .text+0xa8 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+GsSetLightMatrix = 0x80055AE0; // LIBGS MATRIX member .text+0xd8 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
+GsSetLightMatrix2 = 0x80055B7C; // LIBGS MATRIX member .text+0x174 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+GsMulCoord0 = 0x80055BB0; // LIBGS MATRIX member .text+0x1a8 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsMulCoord2 = 0x80055C44; // LIBGS MATRIX member .text+0x23c (extent 0x84); sdk_members.py unique placement + sig-db agrees
+GsMulCoord3 = 0x80055CC8; // LIBGS MATRIX member .text+0x2c0 (extent 0x84); sdk_members.py unique placement + sig-db agrees
+print_matrix = 0x80055D4C; // LIBGS MATRIX member .text+0x344 (extent 0x70); sdk_members.py unique placement + sig-db agrees
+print_vector = 0x80055DBC; // LIBGS MATRIX member .text+0x3b4 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+GsSetDrawBuffClip = 0x80055DF0; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
+GsMapModelingData = 0x80055E88; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+GsGetLs = 0x80056114; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
+GsGetLw = 0x800563E8; // LIBGS MATRIX3 member .text+0x0 (extent 0x2c4); sdk_members.py unique placement
+GsSetAmbient = 0x800566AC; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
+GsInit3D = 0x800566D4; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+gte_rotate_z_matrix = 0x80056F88; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
+_make_packet = 0x800595C4; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF3NL = 0x8005A148; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4NL = 0x8005A334; // LIBGTE DVF4_02 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG3NL = 0x8005A570; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3L = 0x8005AAF8; // LIBGTE DVFT3_00 member .text+0x0 (extent 0x2f8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4L = 0x8005ADF0; // LIBGTE DVFT4_00 member .text+0x0 (extent 0x2a0); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4L = 0x8005B43C; // LIBGTE DVGT4_00 member .text+0x0 (extent 0x2ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF3 = 0x8005B728; // LIBGTE DVFT3_03 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG3 = 0x8005BD5C; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG4 = 0x8005BF98; // LIBGTE DVGT4_03 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4LFG = 0x8005E224; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3NL = 0x8005EAC8; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4NL = 0x8005ED50; // LIBGTE DVFT4_02 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG3NL = 0x8005EFD4; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4LFG = 0x80061934; // LIBGTE DVFT4_01 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4L = 0x80065430; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4L = 0x80065A10; // LIBGTE DVG4_00 member .text+0x0 (extent 0x2a8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF3 = 0x80065CB8; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF4 = 0x80065EA0; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNG4 = 0x80066404; // LIBGTE DVG4_03 member .text+0x0 (extent 0x258); sdk_members.py unique placement + sig-db agrees
+Gssub_make_matrix = 0x800675EC; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
+gte_init = 0x800676E8; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
+GsClearOt = 0x80067864; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
+GsSetLightMode = 0x800678BC; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
+GsGetActiveBuff = 0x80067948; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsSetDrawBuffOffset = 0x80067958; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+GsSwapDispBuff = 0x80068120; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
+MDEC_vlc_brk = 0x80068A98; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+MDEC_vlc = 0x80068AC8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
+StSetStream = 0x8006C7F4; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
+init_ring_status = 0x8006E01C; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
+StSetMask = 0x8006E05C; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
+StSetRing = 0x8006E07C; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+StClearRing = 0x8006E0AC; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
+data_ready_callback = 0x8006E300; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
+StFreeRing = 0x8006E368; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
+SpuQuit = 0x8006E424; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+_SpuDataCallback = 0x8006F898; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SsVabTransBodyPartly = 0x8006F9E4; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferMode = 0x8006FB54; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferStartAddr = 0x8006FB88; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
+_spu_setInTransfer = 0x8006FBC4; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_spu_getInTransfer = 0x8006FBF0; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+SpuWritePartly = 0x8006FC00; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+SsUtGetVBaddrInSB = 0x8006FC8C; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+SpuSetNoiseVoice = 0x80075C24; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SpuInitMalloc = 0x80075C48; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
+_SpuSetAnyVoice = 0x80075C9C; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
+SpuVmVSetUp = 0x80075D50; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
+SpuMalloc = 0x80077048; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
+SsVabFakeBody = 0x80077740; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SsUtGetVabHdr = 0x800777B8; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
+SsUtGetVagAtr = 0x8007789C; // LIBSND UT_GVA member .text+0x0 (extent 0x240); sdk_members.py unique placement + sig-db agrees
+SsSetMVol = 0x80077ADC; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+SsSetSerialVol = 0x80077FF0; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
+SsVabTransCompleted = 0x80078150; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SpuIsTransferCompleted = 0x8007817C; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+SsSeqCalledTbyT = 0x80078224; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
+Snd_pause = 0x80078498; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
+Snd_nextpause = 0x80078538; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
+Snd_replay = 0x80078BD4; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
+Snd_play = 0x80078C3C; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_SsUtResolveADSR = 0x8007AF2C; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
+_SsUtBuildADSR = 0x8007AF88; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+SpuClearReverbWorkArea = 0x8007BF48; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
+SpuSetReverb = 0x8007C0F8; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
+SsUtSetVagAtr = 0x8007C1C8; // LIBSND UT_SVA member .text+0x0 (extent 0x1cc); sdk_members.py unique placement + sig-db agrees
+SsUtGetProgAtr = 0x8007C4B0; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
+SsSetSerialAttr = 0x8007CC7C; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+
+// target: g3_jp  (108 sdk-member adoptions)
+startIntrDMA = 0x8005135C; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+trapIntrDMA = 0x800513AC; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
+setIntrDMA = 0x80051530; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+memclr = 0x800515D8; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+startIntrVSync = 0x800517E4; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+trapIntrVSync = 0x8005183C; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+setIntrVSync = 0x800518B8; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+VSync = 0x80051910; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
+v_wait = 0x80051A58; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
+SetVideoMode = 0x80055008; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+GetVideoMode = 0x80055020; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GsInitCoordinate2 = 0x800561FC; // LIBGS MATRIX member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+GsInitCoord2param = 0x80056278; // LIBGS MATRIX member .text+0x7c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+GsSetLsMatrix = 0x800562A4; // LIBGS MATRIX member .text+0xa8 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+GsSetLightMatrix = 0x800562D4; // LIBGS MATRIX member .text+0xd8 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
+GsSetLightMatrix2 = 0x80056370; // LIBGS MATRIX member .text+0x174 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+GsMulCoord0 = 0x800563A4; // LIBGS MATRIX member .text+0x1a8 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsMulCoord2 = 0x80056438; // LIBGS MATRIX member .text+0x23c (extent 0x84); sdk_members.py unique placement + sig-db agrees
+GsMulCoord3 = 0x800564BC; // LIBGS MATRIX member .text+0x2c0 (extent 0x84); sdk_members.py unique placement + sig-db agrees
+print_matrix = 0x80056540; // LIBGS MATRIX member .text+0x344 (extent 0x70); sdk_members.py unique placement + sig-db agrees
+print_vector = 0x800565B0; // LIBGS MATRIX member .text+0x3b4 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+GsSetDrawBuffClip = 0x800565E4; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
+GsMapModelingData = 0x8005667C; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+GsGetTimInfo = 0x800566F4; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
+GsGetLw = 0x80056BDC; // LIBGS MATRIX3 member .text+0x0 (extent 0x2c4); sdk_members.py unique placement
+GsSetAmbient = 0x80056EA0; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
+GsInit3D = 0x80056EC8; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+gte_rotate_z_matrix = 0x8005777C; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
+RotMatrixC = 0x800579AC; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
+GsLinkObject4 = 0x800592A4; // LIBGS OBJT member .text+0x0 (extent 0x130); sdk_members.py unique placement + sig-db agrees
+_make_packet = 0x80059D90; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsDefDispBuff = 0x80059E24; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
+GsTMDdivF3NL = 0x8005A704; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG3NL = 0x8005AC5C; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4NL = 0x8005AE58; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4L = 0x8005B4DC; // LIBGTE DVFT4_00 member .text+0x0 (extent 0x2a0); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF3 = 0x8005BE14; // LIBGTE DVFT3_03 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF4 = 0x8005C098; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG4 = 0x8005C684; // LIBGTE DVGT4_03 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4LFG = 0x8005EDC4; // LIBGTE DVG4_01 member .text+0x0 (extent 0x2c0); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4NL = 0x8005F43C; // LIBGTE DVFT4_02 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG3NL = 0x8005F6C0; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4NL = 0x8005F8F4; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3LFG = 0x80061BF0; // LIBGTE DVFT3_01 member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4LFG = 0x80062540; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4L = 0x80065B1C; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF3 = 0x800663A4; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF4 = 0x8006658C; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNG3 = 0x800667C4; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+Gssub_make_matrix = 0x80066E58; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
+gte_init = 0x80066F54; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
+GsClearOt = 0x800670D0; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
+GsSetLightMode = 0x80067128; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
+GsGetActiveBuff = 0x800671B4; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsSetDrawBuffOffset = 0x800671C4; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+GsSwapDispBuff = 0x8006798C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
+MDEC_vlc_brk = 0x80068218; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+MDEC_vlc = 0x80068248; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
+CdInit = 0x8006BA48; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
+def_cbsync = 0x8006BAD8; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbready = 0x8006BB00; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbread = 0x8006BB28; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+CdRead2 = 0x8006BB60; // LIBCD CDREAD2 member .text+0x0 (extent 0xa4); sdk_members.py unique placement + sig-db agrees
+StSetStream = 0x8006BC04; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
+init_ring_status = 0x8006D55C; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
+StSetMask = 0x8006D59C; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
+StSetRing = 0x8006D5BC; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+StClearRing = 0x8006D5EC; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
+StGetNext = 0x8006D64C; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
+data_ready_callback = 0x8006D710; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
+StFreeRing = 0x8006D778; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
+_SpuDataCallback = 0x8006EFD0; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+_SpuInit = 0x8006EFF4; // LIBSPU S_INI member .text+0x0 (extent 0xc8); sdk_members.py unique placement + sig-db agrees
+SpuStart = 0x8006F0BC; // LIBSPU S_INI member .text+0xc8 (extent 0x84); sdk_members.py unique placement + sig-db agrees
+SsVabTransBodyPartly = 0x8006F140; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferMode = 0x8006F2B0; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferStartAddr = 0x8006F2E4; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
+_spu_setInTransfer = 0x8006F320; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_spu_getInTransfer = 0x8006F34C; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+SsUtGetVBaddrInSB = 0x8006F518; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+SpuSetNoiseVoice = 0x80074E14; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SpuInitMalloc = 0x80074E38; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
+_SpuSetAnyVoice = 0x80074E8C; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
+SpuMalloc = 0x80076360; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
+_spu_gcSPU = 0x80076628; // LIBSPU S_M_INT member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
+SsVabFakeBody = 0x80076928; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SsUtGetVabHdr = 0x800769A0; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
+SsSetMVol = 0x80076DF4; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+SpuSetCommonAttr = 0x80076E44; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
+SsSetSerialVol = 0x800771D8; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
+SsVabTransCompleted = 0x80077338; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SpuIsTransferCompleted = 0x80077364; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+Snd_decrescendo = 0x800777B0; // LIBSND DECRE member .text+0x0 (extent 0x4b0); sdk_members.py unique placement + sig-db agrees
+Snd_replay = 0x80077C60; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
+Snd_play = 0x80077CC8; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_SsUtResolveADSR = 0x8007A034; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
+_SsUtBuildADSR = 0x8007A090; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+_SpuIsInAllocateArea = 0x8007AF68; // LIBSPU S_M_UTIL member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
+_SpuIsInAllocateArea_ = 0x8007AFD8; // LIBSPU S_M_UTIL member .text+0x70 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SpuClearReverbWorkArea = 0x8007B050; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
+SpuSetReverb = 0x8007B200; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
+Snd_nextsep = 0x8007B2D0; // LIBSND NEXT member .text+0x0 (extent 0x100); sdk_members.py unique placement + sig-db agrees
+Snd_crescendo = 0x8007B6E0; // LIBSND CRES member .text+0x0 (extent 0x57c); sdk_members.py unique placement + sig-db agrees
+SsUtGetProgAtr = 0x8007BF4C; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
+Snd_pause = 0x8007C068; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
+Snd_nextpause = 0x8007C108; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
+Snd_tempo = 0x8007C16C; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
+SsSetSerialAttr = 0x8007C34C; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+
+// target: g3org_eu  (101 sdk-member adoptions)
+SetVideoMode = 0x8004D254; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+GetVideoMode = 0x8004D26C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+startIntrDMA = 0x8004DAD0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+trapIntrDMA = 0x8004DB20; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
+setIntrDMA = 0x8004DCA4; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+memclr = 0x8004DD4C; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+startIntrVSync = 0x8004DD78; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+trapIntrVSync = 0x8004DDD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+setIntrVSync = 0x8004DE4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+GsInitGraph = 0x80052110; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+gpu_init = 0x80052188; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
+GsInitGraph2 = 0x800522E0; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
+valiable_init = 0x80052358; // LIBGS EMULIB member .text+0x248 (extent 0x27c); sdk_members.py unique placement
+GsSortClear = 0x800525D4; // LIBGS EMULIB member .text+0x4c4 (extent 0x168); sdk_members.py unique placement
+GsSetDrawBuffClip = 0x80052C54; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
+GsMapModelingData = 0x80052CEC; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+GsGetTimInfo = 0x80052D64; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
+GsGetLs = 0x80052E48; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
+GsSetAmbient = 0x80053510; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
+GsInit3D = 0x80053538; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+gte_rotate_z_matrix = 0x80053DEC; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
+RotMatrixC = 0x8005401C; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
+GsSortSprite = 0x80055A6C; // LIBGS 2D_SP0 member .text+0x0 (extent 0x4fc); sdk_members.py unique placement + sig-db agrees
+_make_packet = 0x80056428; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsDefDispBuff = 0x800564BC; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
+GsTMDdivF3NL = 0x80056E7C; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG3NL = 0x800573D4; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4NL = 0x800575D0; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3L = 0x8005782C; // LIBGTE DVFT3_00 member .text+0x0 (extent 0x2f8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4L = 0x80058170; // LIBGTE DVGT4_00 member .text+0x0 (extent 0x2ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF4 = 0x80058810; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG3 = 0x80058A90; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4LFG = 0x8005AF58; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4LFG = 0x8005B53C; // LIBGTE DVG4_01 member .text+0x0 (extent 0x2c0); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3NL = 0x8005B7FC; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG3NL = 0x8005BE38; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4NL = 0x8005C06C; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3LFG = 0x8005E368; // LIBGTE DVFT3_01 member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4LFG = 0x8005E668; // LIBGTE DVFT4_01 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4LFG = 0x8005ECB8; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4L = 0x80062294; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF3 = 0x80062B1C; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF4 = 0x80062D04; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNG3 = 0x80062F3C; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+Gssub_make_matrix = 0x80064320; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
+gte_init = 0x8006441C; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
+GsClearOt = 0x800646C8; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
+GsSetLightMode = 0x80064720; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
+GsGetActiveBuff = 0x800647AC; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsSetDrawBuffOffset = 0x800647BC; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+GsSetFlatLight = 0x800648D8; // LIBGS SCLIB member .text+0x0 (extent 0x4c4); sdk_members.py unique placement
+gte_set_lc = 0x80064D9C; // LIBGS SCLIB member .text+0x4c4 (extent 0x68); sdk_members.py unique placement
+gte_read_lc = 0x80064E04; // LIBGS SCLIB member .text+0x52c (extent 0x50); sdk_members.py unique placement
+MDEC_vlc_brk = 0x800658FC; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+MDEC_vlc = 0x8006592C; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
+CdInit = 0x8006937C; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
+def_cbsync = 0x8006940C; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbready = 0x80069434; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbread = 0x8006945C; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+StSetStream = 0x80069528; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
+init_ring_status = 0x8006AE80; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
+StSetMask = 0x8006AEC0; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
+StSetRing = 0x8006AEE0; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+StClearRing = 0x8006AF10; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
+StGetNext = 0x8006AF70; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
+data_ready_callback = 0x8006B034; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
+StFreeRing = 0x8006B09C; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
+SpuQuit = 0x8006B158; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+_SpuDataCallback = 0x8006C5CC; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SsVabTransBodyPartly = 0x8006C848; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferMode = 0x8006C9B8; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferStartAddr = 0x8006C9EC; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
+_spu_setInTransfer = 0x8006CA28; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_spu_getInTransfer = 0x8006CA54; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+SpuWritePartly = 0x8006CA64; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+SsUtGetVBaddrInSB = 0x8006CAF0; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+SpuSetNoiseVoice = 0x80072958; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SpuInitMalloc = 0x8007297C; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
+_SpuSetAnyVoice = 0x800729D0; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
+SpuMalloc = 0x80073EAC; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
+_spu_gcSPU = 0x80074174; // LIBSPU S_M_INT member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
+SsVabFakeBody = 0x80074474; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SsUtGetVabHdr = 0x800744EC; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
+SsSetMVol = 0x80074940; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+SpuSetCommonAttr = 0x80074990; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
+SsSetSerialVol = 0x80074D24; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
+SsVabTransCompleted = 0x80074E84; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SpuIsTransferCompleted = 0x80074EB0; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+Snd_pause = 0x800752FC; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
+Snd_nextpause = 0x8007539C; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
+Snd_tempo = 0x80075400; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
+Snd_replay = 0x80075A38; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
+Snd_play = 0x80075AA0; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_SsUtResolveADSR = 0x80077C60; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
+_SsUtBuildADSR = 0x80077CBC; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+_SpuIsInAllocateArea = 0x80078B94; // LIBSPU S_M_UTIL member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
+_SpuIsInAllocateArea_ = 0x80078C04; // LIBSPU S_M_UTIL member .text+0x70 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SpuClearReverbWorkArea = 0x80078C7C; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
+SpuSetReverb = 0x80078E2C; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
+SsUtGetProgAtr = 0x80079314; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
+SsSetSerialAttr = 0x80079AE0; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+
+// target: g3org_jp  (98 sdk-member adoptions)
+startIntrDMA = 0x8004E208; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+trapIntrDMA = 0x8004E258; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
+setIntrDMA = 0x8004E3DC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+memclr = 0x8004E484; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+startIntrVSync = 0x8004E560; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+trapIntrVSync = 0x8004E5B8; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+setIntrVSync = 0x8004E634; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SetVideoMode = 0x80051D84; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+GetVideoMode = 0x80051D9C; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+GsSetDrawBuffClip = 0x80053490; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
+GsMapModelingData = 0x80053528; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+GsGetTimInfo = 0x800535A0; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
+GsGetLs = 0x80053684; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
+GsSetAmbient = 0x80053D4C; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
+GsInit3D = 0x80053D74; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+GsSetRefView2 = 0x80053DEC; // LIBGS MATRIX3 member .text+0x0 (extent 0x3c8); sdk_members.py unique placement
+scale_view_param = 0x800541B4; // LIBGS MATRIX3 member .text+0x3c8 (extent 0xf0); sdk_members.py unique placement
+select_max_param = 0x800542A4; // LIBGS MATRIX3 member .text+0x4b8 (extent 0xc8); sdk_members.py unique placement
+len_param = 0x8005436C; // LIBGS MATRIX3 member .text+0x580 (extent 0x1c); sdk_members.py unique placement
+gte_rotate_z_matrix = 0x80054628; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
+RotMatrixC = 0x80054858; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
+GsLinkObject4 = 0x80056150; // LIBGS OBJT member .text+0x0 (extent 0x130); sdk_members.py unique placement + sig-db agrees
+GsSortSprite = 0x80056280; // LIBGS 2D_SP0 member .text+0x0 (extent 0x4fc); sdk_members.py unique placement + sig-db agrees
+_make_packet = 0x80056C3C; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsDefDispBuff = 0x80056CD0; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
+GsTMDdivF3NL = 0x800575B0; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4NL = 0x8005779C; // LIBGTE DVF4_02 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4NL = 0x80057D04; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3L = 0x80057F60; // LIBGTE DVFT3_00 member .text+0x0 (extent 0x2f8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4L = 0x800588A4; // LIBGTE DVGT4_00 member .text+0x0 (extent 0x2ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF4 = 0x80058F44; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG3 = 0x800591C4; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG4 = 0x80059400; // LIBGTE DVGT4_03 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4LFG = 0x8005B68C; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3NL = 0x8005BF30; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4NL = 0x8005C1B8; // LIBGTE DVFT4_02 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4NL = 0x8005C7A0; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4LFG = 0x8005ED9C; // LIBGTE DVFT4_01 member .text+0x0 (extent 0x2a4); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4LFG = 0x8005F3EC; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4L = 0x80062E78; // LIBGTE DVG4_00 member .text+0x0 (extent 0x2a8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF4 = 0x80063438; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNG3 = 0x80063670; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNG4 = 0x8006386C; // LIBGTE DVG4_03 member .text+0x0 (extent 0x258); sdk_members.py unique placement + sig-db agrees
+gte_init = 0x80063E00; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
+GsClearOt = 0x80063F7C; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
+GsSetLightMode = 0x80063FD4; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
+GsGetActiveBuff = 0x80064060; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsSetDrawBuffOffset = 0x80064070; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+GsSwapDispBuff = 0x80064838; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
+MDEC_vlc_brk = 0x800650C4; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+MDEC_vlc = 0x800650F4; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
+CdInit = 0x800688F4; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
+def_cbsync = 0x80068984; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbready = 0x800689AC; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbread = 0x800689D4; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+CdRead2 = 0x80068A0C; // LIBCD CDREAD2 member .text+0x0 (extent 0xa4); sdk_members.py unique placement + sig-db agrees
+StSetStream = 0x80068AB0; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
+init_ring_status = 0x8006A408; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
+StSetMask = 0x8006A448; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
+StClearRing = 0x8006A498; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
+StGetNext = 0x8006A4F8; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
+data_ready_callback = 0x8006A5BC; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
+StFreeRing = 0x8006A624; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
+SpuQuit = 0x8006A6E0; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+_SpuInit = 0x8006BEA0; // LIBSPU S_INI member .text+0x0 (extent 0xc8); sdk_members.py unique placement + sig-db agrees
+SpuStart = 0x8006BF68; // LIBSPU S_INI member .text+0xc8 (extent 0x84); sdk_members.py unique placement + sig-db agrees
+SsVabTransBodyPartly = 0x8006BFEC; // LIBSND VS_VTBP member .text+0x0 (extent 0x170); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferMode = 0x8006C15C; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferStartAddr = 0x8006C190; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
+_spu_setInTransfer = 0x8006C1CC; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_spu_getInTransfer = 0x8006C1F8; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+SpuWritePartly = 0x8006C208; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+SsUtGetVBaddrInSB = 0x8006C294; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+SpuSetNoiseVoice = 0x80071CC0; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SpuInitMalloc = 0x80071CE4; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
+_SpuSetAnyVoice = 0x80071D38; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
+SpuVmVSetUp = 0x80071DEC; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
+SpuMalloc = 0x800730DC; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
+SsVabFakeBody = 0x800737D4; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SsUtGetVabHdr = 0x8007384C; // LIBSND UT_GVH member .text+0x0 (extent 0xe4); sdk_members.py unique placement + sig-db agrees
+SsUtGetVagAtr = 0x80073930; // LIBSND UT_GVA member .text+0x0 (extent 0x240); sdk_members.py unique placement + sig-db agrees
+SsSetMVol = 0x80073B70; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+SsSetSerialVol = 0x80074084; // LIBSND SCSSVOL member .text+0x0 (extent 0x160); sdk_members.py unique placement + sig-db agrees
+SsVabTransCompleted = 0x800741E4; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SpuIsTransferCompleted = 0x80074210; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+SsSeqCalledTbyT = 0x800742B8; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
+Snd_replay = 0x80074B0C; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
+Snd_play = 0x80074B74; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_SsUtResolveADSR = 0x80076EE0; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
+_SsUtBuildADSR = 0x80076F3C; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+SpuClearReverbWorkArea = 0x80077EFC; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
+SpuSetReverb = 0x800780AC; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_members.py unique placement + sig-db agrees
+Snd_nextsep = 0x8007817C; // LIBSND NEXT member .text+0x0 (extent 0x100); sdk_members.py unique placement + sig-db agrees
+SsUtSetVagAtr = 0x8007827C; // LIBSND UT_SVA member .text+0x0 (extent 0x1cc); sdk_members.py unique placement + sig-db agrees
+SsUtGetProgAtr = 0x80078CC8; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
+Snd_pause = 0x80078DE4; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
+Snd_nextpause = 0x80078E84; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
+SsSetSerialAttr = 0x800791F8; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+
+// target: mainmenu_eu  (97 sdk-member adoptions)
+SetVideoMode = 0x8006797C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+GetVideoMode = 0x80067994; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
+startIntrDMA = 0x800681F8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+trapIntrDMA = 0x80068248; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
+setIntrDMA = 0x800683CC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+memclr = 0x80068474; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+VSync = 0x800686FC; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
+v_wait = 0x80068844; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
+GsInitGraph = 0x8006C838; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+gpu_init = 0x8006C8B0; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
+GsInitGraph2 = 0x8006CA08; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
+valiable_init = 0x8006CA80; // LIBGS EMULIB member .text+0x248 (extent 0x27c); sdk_members.py unique placement
+GsSortClear = 0x8006CCFC; // LIBGS EMULIB member .text+0x4c4 (extent 0x168); sdk_members.py unique placement
+GsSetDrawBuffClip = 0x8006D37C; // LIBGS EMULIB member .text+0x0 (extent 0x98); sdk_members.py unique placement
+GsMapModelingData = 0x8006D414; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+GsGetTimInfo = 0x8006D48C; // LIBGS SCLIB member .text+0x0 (extent 0xe4); sdk_members.py unique placement
+GsGetLs = 0x8006D570; // LIBGS MATRIX3 member .text+0x0 (extent 0x2d4); sdk_members.py unique placement
+GsSetAmbient = 0x8006DC38; // LIBGS SCLIB member .text+0x0 (extent 0x28); sdk_members.py unique placement
+GsInit3D = 0x8006DC60; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
+gte_rotate_z_matrix = 0x8006E514; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
+RotMatrixC = 0x8006E744; // LIBGTE COR_00 member .text+0x0 (extent 0x180); sdk_members.py unique placement + sig-db agrees
+_make_packet = 0x80070B50; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+GsDefDispBuff = 0x80070BE4; // LIBGS SCLIB member .text+0x0 (extent 0xa0); sdk_members.py unique placement
+GsTMDdivF3NL = 0x800715A4; // LIBGTE DVF3_02 member .text+0x0 (extent 0x1ec); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG3NL = 0x80071AFC; // LIBGTE DVG3_02 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4NL = 0x80071CF8; // LIBGTE DVG4_02 member .text+0x0 (extent 0x25c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF4L = 0x8007237C; // LIBGTE DVFT4_00 member .text+0x0 (extent 0x2a0); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF3 = 0x80072CB4; // LIBGTE DVFT3_03 member .text+0x0 (extent 0x284); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNF4 = 0x80072F38; // LIBGTE DVFT4_03 member .text+0x0 (extent 0x280); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTNG3 = 0x800731B8; // LIBGTE DVGT3_03 member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4LFG = 0x80075680; // LIBGTE DVF4_01 member .text+0x0 (extent 0x270); sdk_members.py unique placement + sig-db agrees
+GsTMDdivG4LFG = 0x80075C64; // LIBGTE DVG4_01 member .text+0x0 (extent 0x2c0); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3NL = 0x80075F24; // LIBGTE DVFT3_02 member .text+0x0 (extent 0x288); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG3NL = 0x80076560; // LIBGTE DVGT3_02 member .text+0x0 (extent 0x234); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4NL = 0x80076794; // LIBGTE DVGT4_02 member .text+0x0 (extent 0x28c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTF3LFG = 0x80078A90; // LIBGTE DVFT3_01 member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
+GsTMDdivTG4LFG = 0x800793E0; // LIBGTE DVGT4_01 member .text+0x0 (extent 0x304); sdk_members.py unique placement + sig-db agrees
+GsTMDdivF4L = 0x8007C9BC; // LIBGTE DVF4_00 member .text+0x0 (extent 0x26c); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF3 = 0x8007D244; // LIBGTE DVF3_03 member .text+0x0 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNF4 = 0x8007D42C; // LIBGTE DVF4_03 member .text+0x0 (extent 0x238); sdk_members.py unique placement + sig-db agrees
+GsTMDdivNG3 = 0x8007D664; // LIBGTE DVG3_03 member .text+0x0 (extent 0x1fc); sdk_members.py unique placement + sig-db agrees
+Gssub_make_matrix = 0x8007EA48; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
+gte_init = 0x8007F6C0; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_members.py unique placement
+GsClearOt = 0x8007F83C; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
+GsSetLightMode = 0x8007F894; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
+GsGetActiveBuff = 0x8007F920; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsSetDrawBuffOffset = 0x8007F930; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
+GsSwapDispBuff = 0x800800F8; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
+_mk_spr_packet = 0x800801EC; // LIBGS 2D_COM0 member .text+0x0 (extent 0x40); sdk_members.py unique placement + sig-db agrees
+_mk_xpndsp = 0x8008022C; // LIBGS 2D_COM0 member .text+0x40 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
+_mk_normsp = 0x800804F4; // LIBGS 2D_COM0 member .text+0x308 (extent 0x268); sdk_members.py unique placement + sig-db agrees
+CdInit = 0x80084B90; // LIBCD EVENT member .text+0x0 (extent 0x90); sdk_members.py unique placement + sig-db agrees
+def_cbsync = 0x80084C20; // LIBCD EVENT member .text+0x90 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbready = 0x80084C48; // LIBCD EVENT member .text+0xb8 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+def_cbread = 0x80084C70; // LIBCD EVENT member .text+0xe0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+StSetStream = 0x80084D3C; // LIBCD CDROM member .text+0x0 (extent 0x88); sdk_members.py unique placement (sig-db elsewhere)
+StSetChannel = 0x800858FC; // LIBCD CDROM member .text+0x0 (extent 0x34); sdk_members.py unique placement (sig-db elsewhere)
+init_ring_status = 0x80086910; // LIBCD CDROM member .text+0x0 (extent 0x40); sdk_members.py unique placement (sig-db elsewhere)
+StSetMask = 0x80086950; // LIBCD CDROM member .text+0x0 (extent 0x20); sdk_members.py unique placement (sig-db elsewhere)
+StSetRing = 0x80086970; // LIBCD CDROM member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
+StClearRing = 0x800869A0; // LIBCD CDROM member .text+0x0 (extent 0x60); sdk_members.py unique placement (sig-db elsewhere)
+StGetNext = 0x80086A00; // LIBCD CDROM member .text+0x0 (extent 0xc4); sdk_members.py unique placement (sig-db elsewhere)
+data_ready_callback = 0x80086AC4; // LIBCD CDROM member .text+0x0 (extent 0x68); sdk_members.py unique placement (sig-db elsewhere)
+StFreeRing = 0x80086B2C; // LIBCD CDROM member .text+0x0 (extent 0xbc); sdk_members.py unique placement (sig-db elsewhere)
+SpuSetTransferMode = 0x80086E88; // LIBSPU S_STM member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
+_SpuDataCallback = 0x80086FE4; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SpuSetTransferStartAddr = 0x800883E0; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
+_spu_setInTransfer = 0x8008841C; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_spu_getInTransfer = 0x80088448; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
+SpuWritePartly = 0x80088458; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+SsUtGetVBaddrInSB = 0x800884E4; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+SpuSetNoiseVoice = 0x8008E34C; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
+SpuInitMalloc = 0x8008E370; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees
+SpuVmVSetUp = 0x8008E5A8; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
+SpuQuit = 0x8008F268; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+SpuMalloc = 0x8008F93C; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
+_spu_gcSPU = 0x8008FC04; // LIBSPU S_M_INT member .text+0x0 (extent 0x300); sdk_members.py unique placement + sig-db agrees
+SsVabFakeBody = 0x8008FF04; // LIBSND VS_VFB member .text+0x0 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SsUtGetVagAtr = 0x80090190; // LIBSND UT_GVA member .text+0x0 (extent 0x240); sdk_members.py unique placement + sig-db agrees
+SsSetMVol = 0x800903D0; // LIBSND SCSMVOL member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+SpuSetCommonAttr = 0x80090420; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
+SsVabTransCompleted = 0x80090A44; // LIBSND VS_VTC member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SpuIsTransferCompleted = 0x80090A70; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+SsSeqCalledTbyT = 0x80090B18; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
+Snd_pause = 0x80090D8C; // LIBSND PAUSE member .text+0x0 (extent 0xa0); sdk_members.py unique placement + sig-db agrees
+Snd_nextpause = 0x80090E2C; // LIBSND PAUSE member .text+0xa0 (extent 0x64); sdk_members.py unique placement + sig-db agrees
+Snd_tempo = 0x80090E90; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
+Snd_replay = 0x800914C8; // LIBSND REPLAY member .text+0x0 (extent 0x68); sdk_members.py unique placement + sig-db agrees
+Snd_play = 0x80091530; // LIBSND PLAY member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+_SsUtResolveADSR = 0x80093820; // LIBSND ADSR member .text+0x0 (extent 0x5c); sdk_members.py unique placement + sig-db agrees
+_SsUtBuildADSR = 0x8009387C; // LIBSND ADSR member .text+0x5c (extent 0x8c); sdk_members.py unique placement + sig-db agrees
+_SpuIsInAllocateArea = 0x80094624; // LIBSPU S_M_UTIL member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
+_SpuIsInAllocateArea_ = 0x80094694; // LIBSPU S_M_UTIL member .text+0x70 (extent 0x78); sdk_members.py unique placement + sig-db agrees
+SpuClearReverbWorkArea = 0x8009470C; // LIBSPU S_CRWA member .text+0x0 (extent 0x1a0); sdk_members.py unique placement + sig-db agrees
+SsUtSetVagAtr = 0x80094ABC; // LIBSND UT_SVA member .text+0x0 (extent 0x1cc); sdk_members.py unique placement + sig-db agrees
+SsUtGetProgAtr = 0x80094DA4; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); sdk_members.py unique placement + sig-db agrees
+SsSetSerialAttr = 0x80095570; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
+
+// target: mainmenu_jp  (113 sdk-member adoptions)
+startIntrDMA = 0x80068920; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
+trapIntrDMA = 0x80068970; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
+setIntrDMA = 0x80068AF4; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
+memclr = 0x80068B9C; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+startIntrVSync = 0x80068C78; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+trapIntrVSync = 0x80068CD0; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+setIntrVSync = 0x80068D4C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+SetVideoMode = 0x8006C49C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
+GetVideoMode = 0x8006C4B4; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GsInitGraph = 0x8006D064; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement
 gpu_init = 0x8006D0DC; // LIBGS EMULIB member .text+0x78 (extent 0x158); sdk_members.py unique placement
 GsInitGraph2 = 0x8006D234; // LIBGS EMULIB member .text+0x1d0 (extent 0x78); sdk_members.py unique placement
@@ -1389,32 +1497,6 @@ gte_scale_matrix = 0x8007EE40; // LIBGS SCLIB member .text+0x0 (extent 0x124); s
 GsSetLightMode = 0x8007F138; // LIBGS SCLIB member .text+0x0 (extent 0x8c); sdk_members.py unique placement
 GsGetActiveBuff = 0x8007F1C4; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8007F1D4; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
-// PSDIDX: the GS_002.OBJ member's own bss static for the active draw
-// buffer index (Psy-Q 3.3 sig-db: labels GsGetActiveBuff @0 /
-// GsSetDrawBuffOffset @0x10, sig bytes match retail lui+lh+jr+nop).
-// GsGetActiveBuff lh-loads it straight into $v0; GsSetDrawBuffOffset
-// re-reads it and scales it by two to index a two-entry offset table.
-// PSDIDX is the only halfword-sized bss symbol that OBJ carries. It
-// lives beyond the payload segment (EXE bss), so no dlabel renders -
-// the C resolves it extern. Full evidence under target: mainmenu_jp.
-PSDIDX = 0x80194E34; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
-// _svm_stereo_mono: LIBSND VS_MONO.OBJ's backing flag for the Sound
-// System mono/stereo setters. Evidence: the local Psy-Q 3.3 LIBSND.LIB
-// archive carries member VS_MONO with source path E:\PS-X~~00\SRC\SND\
-// VM\VS_MONO.C, defined symbols SsSetMono + SsSetStereo, and exactly one
-// undefined external besides the pair: _svm_stereo_mono; the SVM cluster
-// (SpuVmInit et al.) references the same symbol, and the library symbol
-// directory groups it with the other _svm_* statics. The Psy-Q sig-db
-// VS_MONO.OBJ signature matches retail bytes on both bodies (ori
-// $v0,$zero,1 + lui/sh; lui/sh $zero + jr $ra/nop; labels @0 / @0x14).
-// LIBSND.H 3.3: `extern void SsSetMono (void);` / `extern void
-// SsSetStereo (void);` - no args, no return; the sh proves halfword
-// width, SsSetMono writes 1, SsSetStereo writes 0. The static sits
-// beyond the payload segment (EXE bss), so no dlabel renders - the C
-// resolves it extern.
-_svm_stereo_mono = 0x8018DA40; // LIBSND VS_MONO member bss static; evidence above
-SsSetMono = 0x8008E654; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
-SsSetStereo = 0x8008E668; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x8007F99C; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x800808C8; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x800808F8; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -1440,16 +1522,6 @@ _SpuDataCallback = 0x80086580; // LIBSPU S_DCB member .text+0x0 (extent 0x24); s
 SpuSetTransferStartAddr = 0x80087B74; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x80087BB0; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x80087BDC; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
-// _spu_inTransfer: the SPU in-transfer flag the S_ITC member's getter
-// polls. Psy-Q 2.60/3.00 sig-db: S_ITC.OBJ labels _spu_getInTransfer at
-// .text+0xdc and its signature bytes match retail exactly (lui/lw on
-// the flag, jr $ra with sltiu $v0,$v0,1 in the delay slot = return
-// flag == 0). S_ITC.OBJ carries no bss of its own - S_INI.OBJ defines
-// _spu_inTransfer (Psy-Q 2.60 xbss) and the getter reads it as an
-// extern. The flag sits beyond the payload segment (EXE bss; no dlabel
-// renders), resolved extern by the C. Full evidence under target:
-// mainmenu_jp.
-_spu_inTransfer = 0x800C85AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - the flag is 8 bytes per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x80087BEC; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x80087C78; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x8008D6A4; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -1457,8 +1529,6 @@ SpuInitMalloc = 0x8008D6C8; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); s
 _SpuSetAnyVoice = 0x8008D71C; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
 SpuVmVSetUp = 0x8008D7D0; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
 SpuQuit = 0x8008E5B8; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x8008E654; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x8008E668; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 SsVabOpenHead = 0x8008E678; // LIBSND VS_VH member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
 SsVabOpenHeadSticky = 0x8008E6AC; // LIBSND VS_VH member .text+0x34 (extent 0x34); sdk_members.py unique placement + sig-db agrees
 SsVabFakeHead = 0x8008E6E0; // LIBSND VS_VH member .text+0x68 (extent 0x34); sdk_members.py unique placement + sig-db agrees
@@ -1486,35 +1556,9 @@ SsUtGetProgAtr = 0x80094748; // LIBSND UT_GPA member .text+0x0 (extent 0x10c); s
 Snd_tempo = 0x80094A98; // LIBSND TEMPO member .text+0x0 (extent 0x1e0); sdk_members.py unique placement + sig-db agrees
 SsSetSerialAttr = 0x80094C78; // LIBSND SCSSATTR member .text+0x0 (extent 0x94); sdk_members.py unique placement + sig-db agrees
 
-// target: sces_00269  (73 sdk-member adoptions)
+// target: sces_00269  (71 sdk-member adoptions)
 SetVideoMode = 0x800308E4; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x800308FC; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
-// video_mode: role-descriptive name for the VMODE member's backing
-// static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
-// returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
-// evidence block under target: mainmenu_jp.
-video_mode = 0x8004CF20; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
-intr_active_flag = 0x8004CF24; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x8004CF56; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x8004CF58; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_mask_ptr = 0x8004DFB4; // LIBETC INTR member backing static (word pointer; the save/zero I_MASK port slot); evidence under target: mainmenu_jp
-intr_imask_ptr = 0x8004DFB0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
-intr_dicr_ptr = 0x8004DFB8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x8002F388; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x8002F458; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
-stopIntr = 0x80030FEC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
-startIntr = 0x80030BD4; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
-intr_start_aux1 = 0x8002ED84; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
-intr_start_aux2 = 0x8002EDB0; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
-intr_start_aux3 = 0x8002E910; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
-intr_start_aux4 = 0x8002F068; // INTR start-path aux 4, no-arg jal from startIntr after the gate set; return stored through intr_start_tab+0x14; evidence under target: mainmenu_jp
-intr_start_aux5 = 0x8002EDC0; // INTR start-path aux 5, no-arg jal from startIntr after aux4; return stored through intr_start_tab+4; evidence under target: mainmenu_jp
-intr_start_aux6 = 0x8002F4D8; // INTR start-path aux 6, jal from startIntr with (*intr_start_tab) arg; return unused; evidence under target: mainmenu_jp
-intr_start_tab = 0x8004DFAC; // LIBETC INTR member backing static (word pointer, mask-8; startIntr loads it twice and stores aux returns at +0x14/+0x4 through it); evidence under target: mainmenu_jp
-intr_restart_begin = 0x8002F408; // INTR restart cluster entry 1, jal from restartIntr with the arg (INTR state + 0x38) set up in the call delay slot; the same entry startIntr calls; evidence under target: mainmenu_jp
-intr_restart_commit = 0x8002F4A8; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
-intr_restart_tail = 0x8002ED70; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
-restartIntr = 0x8003109C; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
 startIntrVSync = 0x80031538; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x80031590; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
 setIntrVSync = 0x8003160C; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
@@ -1533,19 +1577,6 @@ gte_init = 0x8003AA60; // LIBGS SCLIB member .text+0x0 (extent 0x4c); sdk_member
 GsClearOt = 0x8003ABDC; // LIBGS SCLIB member .text+0x0 (extent 0x58); sdk_members.py unique placement
 GsGetActiveBuff = 0x8003AC34; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8003AC44; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
-// PSDIDX: GS_002.OBJ member bss static (active draw buffer
-// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
-// bss beyond the payload segment - extern-resolved by the C.
-// Full evidence under target: mainmenu_jp.
-PSDIDX = 0x8011C07C; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
-// _svm_stereo_mono: LIBSND VS_MONO.OBJ bss static backing the
-// mono/stereo setter pair (SsSetMono writes 1, SsSetStereo
-// writes 0, both sh). Halfword bss beyond the payload segment
-// - extern-resolved by the C. Full evidence under target:
-// mainmenu_jp.
-_svm_stereo_mono = 0x80114578; // LIBSND VS_MONO member bss static; evidence under target: mainmenu_jp
-SsSetMono = 0x80049780; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
-SsSetStereo = 0x80049794; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 GsSwapDispBuff = 0x8003AD60; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc2 = 0x8003BB6C; // LIBPRESS VLC2 member .text+0x0 (extent 0x3dc); sdk_members.py unique placement + sig-db agrees
 ivlc_dct_dc_size = 0x8003BF48; // LIBPRESS VLC2 member .text+0x3dc (extent 0x214); sdk_members.py unique placement + sig-db agrees
@@ -1566,11 +1597,6 @@ SpuSetTransferMode = 0x800411D4; // LIBSPU S_STM member .text+0x0 (extent 0x34);
 _SpuDataCallback = 0x80041330; // LIBSPU S_DCB member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x80042898; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x800428C4; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
-// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
-// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
-// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
-// bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x80065A68; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 SpuWritePartly = 0x800428D4; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x80042960; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuSetNoiseVoice = 0x800487C8; // LIBSPU S_SNV member .text+0x0 (extent 0x24); sdk_members.py unique placement + sig-db agrees
@@ -1578,8 +1604,6 @@ SpuInitMalloc = 0x800487EC; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); s
 _SpuSetAnyVoice = 0x80048840; // LIBSPU S_SAV member .text+0x0 (extent 0xb4); sdk_members.py unique placement + sig-db agrees
 SpuVmVSetUp = 0x800488F4; // LIBSND VM_VSU member .text+0x0 (extent 0xd4); sdk_members.py unique placement + sig-db agrees
 SpuQuit = 0x800496E4; // LIBSPU S_Q member .text+0x0 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
-SsSetMono = 0x80049780; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
-SsSetStereo = 0x80049794; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 SsVabOpenHead = 0x800497A4; // LIBSND VS_VH member .text+0x0 (extent 0x34); sdk_members.py unique placement + sig-db agrees
 SsVabOpenHeadSticky = 0x800497D8; // LIBSND VS_VH member .text+0x34 (extent 0x34); sdk_members.py unique placement + sig-db agrees
 SsVabFakeHead = 0x8004980C; // LIBSND VS_VH member .text+0x68 (extent 0x34); sdk_members.py unique placement + sig-db agrees
@@ -1626,11 +1650,6 @@ _make_packet = 0x8003A39C; // LIBGS 2D_COM1 member .text+0x0 (extent 0x94); sdk_
 Gssub_make_matrix = 0x8003AE9C; // LIBGS SCLIB member .text+0x0 (extent 0xc8); sdk_members.py unique placement
 GsGetActiveBuff = 0x8003B29C; // LIBGS EMULIB member .text+0x0 (extent 0x10); sdk_members.py unique placement
 GsSetDrawBuffOffset = 0x8003B2AC; // LIBGS EMULIB member .text+0x10 (extent 0x11c); sdk_members.py unique placement
-// PSDIDX: GS_002.OBJ member bss static (active draw buffer
-// index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
-// bss beyond the payload segment - extern-resolved by the C.
-// Full evidence under target: mainmenu_jp.
-PSDIDX = 0x8011C304; // LIBGS GS_002 member bss static; evidence under target: mainmenu_jp
 GsSwapDispBuff = 0x8003B3C8; // LIBGS EMULIB member .text+0x0 (extent 0xf4); sdk_members.py unique placement
 MDEC_vlc_brk = 0x8003BC54; // LIBPRESS VLC member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 MDEC_vlc = 0x8003BC84; // LIBPRESS VLC member .text+0x30 (extent 0x334); sdk_members.py unique placement + sig-db agrees
@@ -1653,16 +1672,6 @@ _SpuDataCallback = 0x80041690; // LIBSPU S_DCB member .text+0x0 (extent 0x24); s
 SpuSetTransferStartAddr = 0x80042C84; // LIBSPU S_STSA member .text+0x0 (extent 0x3c); sdk_members.py unique placement + sig-db agrees
 _spu_setInTransfer = 0x80042CC0; // LIBSPU S_IT member .text+0x0 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
 _spu_getInTransfer = 0x80042CEC; // LIBSPU S_IT member .text+0x2c (extent 0x10); sdk_members.py unique placement + sig-db agrees
-// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
-// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
-// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
-// bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
-// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
-// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
-// bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; evidence under target: mainmenu_jp
 SpuWritePartly = 0x80042CFC; // LIBSPU S_WP member .text+0x0 (extent 0x8c); sdk_members.py unique placement + sig-db agrees
 SsUtGetVBaddrInSB = 0x80042D88; // LIBSND UT_GVBA member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 SpuInitMalloc = 0x800487D8; // LIBSPU S_M_INIT member .text+0x0 (extent 0x54); sdk_members.py unique placement + sig-db agrees

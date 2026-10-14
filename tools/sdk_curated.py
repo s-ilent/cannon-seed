@@ -255,6 +255,29 @@ def main(argv):
         head = CURATED.read_text(errors="replace")
         cut = head.find(MARKER)
         if cut >= 0:
+            # GUARD: lines below the marker that this run would not
+            # reproduce are hand-authored content living inside the
+            # generated block - a re-run would silently delete them
+            # (measured 2026-10-14: 219 entries / 530 lines, incl. the
+            # LIBETC INTR backing-static evidence blocks). Refuse loudly
+            # instead; move hand facts above the marker first.
+            import collections
+            cur_below = [l for l in head[cut:].splitlines()
+                         if l.strip() and l != MARKER]
+            want = collections.Counter(
+                l for l in "\n".join(blocks).splitlines()
+                if l.strip() and l != MARKER)
+            extra = collections.Counter(cur_below) - want
+            if extra:
+                n = sum(extra.values())
+                sample = [l for l in head[cut:].splitlines()
+                          if extra[l] > 0][:5]
+                raise SystemExit(
+                    f"sdk_curated: refusing to write - {n} line(s) below "
+                    "the marker would be lost (hand-authored content "
+                    "inside the generated block). Move them ABOVE the "
+                    "marker first. Sample:\n  "
+                    + "\n  ".join(sample))
             head = head[:cut].rstrip("\n") + "\n"
         CURATED.write_text(head + "\n".join(blocks).rstrip("\n") + "\n")
         print(f"sdk_curated: {adopted} adoptions -> "
