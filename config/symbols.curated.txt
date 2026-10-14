@@ -1034,6 +1034,14 @@ startIntrDMA = 0x800681F8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sd
 trapIntrDMA = 0x80068248; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x800683CC; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
 memclr = 0x80068474; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+startIntrVSync = 0x800684A0; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
+trapIntrVSync = 0x800684F8; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees
+setIntrVSync = 0x80068574; // LIBETC INTR_VB member .text+0xd4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+// intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
+// member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
+// const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
+// Full evidence under target: mainmenu_jp.
+intr_vb_cb_slots = 0x800B5538; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
 VSync = 0x800686FC; // LIBETC VSYNC member .text+0x0 (extent 0x148); sdk_members.py unique placement + sig-db agrees
 v_wait = 0x80068844; // LIBETC VSYNC member .text+0x148 (extent 0x9c); sdk_members.py unique placement + sig-db agrees
 GsInitGraph = 0x8006C838; // LIBGS EMULIB member .text+0x0 (extent 0x78); sdk_members.py unique placement

@@ -58,6 +58,11 @@ dlabel intr_start_aux4
     /* 3F74C 8005EF4C 0D80023C */ .word 0x3C02800D
     /* 3F750 8005EF50 20A84294 */ .word 0x9442A820
     /* 3F754 8005EF54 0D80033C */ .word 0x3C03800D
+enddlabel intr_start_aux4
+
+nonmatching D_8005EF58
+
+dlabel D_8005EF58
     /* 3F758 8005EF58 E0A86384 */ .word 0x8463A8E0
     /* 3F75C 8005EF5C EFFF4230 */ .word 0x3042FFEF
     /* 3F760 8005EF60 0D80013C */ .word 0x3C01800D
@@ -89,6 +94,11 @@ dlabel intr_start_aux4
     /* 3F7C8 8005EFC8 7B63010C */ .word 0x0C01637B
     /* 3F7CC 8005EFCC 00000000 */ .word 0x00000000
     /* 3F7D0 8005EFD0 0D80023C */ .word 0x3C02800D
+enddlabel D_8005EF58
+
+nonmatching D_8005EFD4
+
+dlabel D_8005EFD4
     /* 3F7D4 8005EFD4 4893428C */ .word 0x8C429348
     /* 3F7D8 8005EFD8 00000000 */ .word 0x00000000
     /* 3F7DC 8005EFDC 48005110 */ .word 0x10510048
@@ -100,6 +110,11 @@ dlabel intr_start_aux4
     /* 3F7F4 8005EFF4 0D80013C */ .word 0x3C01800D
     /* 3F7F8 8005EFF8 E8AB30A4 */ .word 0xA430ABE8
     /* 3F7FC 8005EFFC 5F0A010C */ .word 0x0C010A5F
+enddlabel D_8005EFD4
+
+nonmatching func_8005F000
+
+dlabel func_8005F000
     /* 3F800 8005F000 00000000 */ .word 0x00000000
     /* 3F804 8005F004 0D80023C */ .word 0x3C02800D
     /* 3F808 8005F008 20AA4284 */ .word 0x8442AA20
@@ -111,7 +126,7 @@ dlabel intr_start_aux4
     /* 3F820 8005F020 00000000 */ .word 0x00000000
     /* 3F824 8005F024 17004014 */ .word 0x14400017
     /* 3F828 8005F028 00000000 */ .word 0x00000000
-enddlabel intr_start_aux4
+enddlabel func_8005F000
 
 nonmatching func_8005F02C
 

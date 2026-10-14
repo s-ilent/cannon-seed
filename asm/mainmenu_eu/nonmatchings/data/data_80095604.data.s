@@ -46720,6 +46720,11 @@ nonmatching D_800B5534
 
 dlabel D_800B5534
     /* 95D34 800B5534 517B6AF6 */ .word 0xF66A7B51
+enddlabel D_800B5534
+
+nonmatching intr_vb_cb_slots
+
+dlabel intr_vb_cb_slots
     /* 95D38 800B5538 2605A6BE */ .word 0xBEA60526
     /* 95D3C 800B553C B0584710 */ .word 0x104758B0
     /* 95D40 800B5540 C4F4DDB5 */ .word 0xB5DDF4C4
@@ -46728,14 +46733,19 @@ dlabel D_800B5534
     /* 95D4C 800B554C 1A7972B6 */ .word 0xB672791A
     /* 95D50 800B5550 BF762EE4 */ .word 0xE42E76BF
     /* 95D54 800B5554 58B982BD */ .word 0xBD82B958
-enddlabel D_800B5534
+enddlabel intr_vb_cb_slots
 
 nonmatching D_800B5558
 
 dlabel D_800B5558
     /* 95D58 800B5558 A52C5E67 */ .word 0x675E2CA5
-    /* 95D5C 800B555C 724A8B47 */ .word 0x478B4A72
 enddlabel D_800B5558
+
+nonmatching D_800B555C
+
+dlabel D_800B555C
+    /* 95D5C 800B555C 724A8B47 */ .word 0x478B4A72
+enddlabel D_800B555C
 
 nonmatching D_800B5560
 
