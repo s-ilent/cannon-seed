@@ -1369,3 +1369,60 @@ Next queue for this lane:
 3. Then flip mainmenu_jp first, roll out with the byte-fingerprint
    method (0x11c extent, guard-lh prologue, the two-table shape are
    address-free identifiers).
+
+## 2026-10-14 (later): GsSetDrawBuffOffset round-2 probes - else-path closed, at-factoring isolated
+
+Probe rounds s05/s06 (scripts/gsdbo/, repo-external) on the round-1
+shape. Real-chain cross-check: tools/cc.sh -S output diffs IDENTICALLY
+to the probe chain (125 normalized lines both) - the harness is
+faithful, every probe diff is a true toolchain divergence.
+
+- ELSE-PATH SHAPE CLOSED (s05). Opaque la-bases for the two table
+  pointers (the stopIntr/setIntr opaque mechanism) produce retail's
+  increment arms: `addu v0,v0,2` instead of the per-arm constant
+  re-materialization, register-relative `lh v0,0(v0)` loads, cond CSE'd
+  into one register across both bnez diamonds, sums and arg moves in
+  the right delay slots. The else-path is now shape-correct end to end;
+  what remains there is register naming (retail reads D_80189224 into
+  a0 and keeps sums in s1/s0; probe shifts one slot) and two
+  micro-ordering nits (&T2 materialization landed in bne#1's delay
+  slot; retail fills it with nop and materializes after the first lh).
+- INTCAST NEGATIVE (s06). `*(u16 *)((long)T1 + (idx << 1))` does NOT
+  block the %lo fold: GCC's mips legitimize_address re-splits
+  symbol+offset+reg into hi-in-reg + %lo-in-load-offset. The probe
+  output is byte-identical to s05's table blocks. Cast-through-integer
+  is therefore NOT a lever for the at-factoring (but the negative is
+  worth having banked - it rules out the cheapest candidate).
+- AT-FACTORING ISOLATED. Retail: `lui at,%hi(T1); addiu at,at,%lo(T1);
+  addu at,at,v1; lhu a1,0(at)`. cc1 (any shape tried): `lui at,%hi(T1);
+  addu at,at,idx; lhu v1,%lo(T1)($at)`. Resistant to: pointer vars
+  (s02), opaque bases (s03/s05 - only works under conditionals),
+  intcast (s06). The two forms are instruction-count-identical, so the
+  transform is mechanical as a POST-PASS rule:
+  [lui $X,%hi(S); addu $X,$X,$Y; load $Z,%lo(S)($X)] ->
+  [lui $X,%hi(S); addiu $X,$X,%lo(S); addu $X,$X,$Y; load $Z,0($X)].
+  This is the same expansion-policy class as the setIntr lane's
+  la-track maspsx pass (their local commit 611fa36 - NOT in this
+  sandbox's clone, upstream mkst/maspsx is at e85ecb3). COORDINATION
+  NOTE: do not implement a parallel refold pass in this sandbox - the
+  policy belongs with the setIntr lane's maspsx work; propose the rule
+  there (it may subsume into their tracker).
+- IDX-REG SWAP remaining: retail keeps PSDIDX's shifted index in v1 and
+  the table value in a1; probe swaps them (opaque-pout pins a0, the
+  rest shifts one slot). Next lever is allocno-dump analysis (cc1 -da)
+  rather than more shape blind probes.
+
+Probe inventory: s01 structural, s02 pointer-vars, s03 opaque-pout,
+s04 if-selects + long sums, s05 opaque table bases (BEST, 125 lines),
+s06 intcast (negative). All at -O2 with -O1/-O3 spot checks.
+
+Next queue for this lane:
+1. cc1 -da allocno dump on s05 to steer the idx->v1 / value->a1
+   allocation (then-path), and the two else-path micro-orders.
+2. Coordinate the at-factoring refold rule with the setIntr lane's
+   maspsx work before any policy lands.
+3. The flip attempt waits for 1+2: the shape is close enough that
+   verify diffs would be pure allocation/factoring - do not burn the
+   yaml flip until those close.
+4. Carve round (attribution, independent of 1-2): name
+   func_800604E0 / func_80062FCC / the D_80072DB8 cluster entry.
