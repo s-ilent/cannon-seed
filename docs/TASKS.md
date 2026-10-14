@@ -110,6 +110,18 @@ head hunt, first fully-worked example of the pathology):
   transition will re-derive, and (b) leave island 1 (the framing-split
   twin) unfixable anyway. Re-derive from the de-framed payload; the head
   hunt is closed, not abandoned.
+* Cross-target addendum (same window): the family is a TRIO, not a pair.
+  Every game-module target has exactly 3 hits of the twin-head byte
+  pattern (`addu $t7,$a0,$zr; addu $v0,$a1,$zr`), zero in the boot EXEs;
+  the three 0x198 siblings sit runtime-contiguous at a 0x1A0 stride
+  (0x198 + 8 B pad — plausibly the X/Y/Z axis variants of one helper).
+  Where the framing pocket falls differs per region exactly as the sector
+  grid predicts: mainmenu_eu pockets 1↔2 and is contiguous 2↔3;
+  mainmenu_jp is contiguous 1↔2 (carve 0x800666EC→0x8006688C, 0x1A0
+  apart) and pockets 2↔3; g3/g3org show the same 3-hit shape at their own
+  depths. Same runtime code, different sector alignment per region — the
+  trio is the cleanest demonstration that the carve view's row structure
+  is a per-region artifact of where 304-byte gaps happen to land.
 
 ### Carve the code out of the `data` rows — the other direction
 
