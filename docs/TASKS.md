@@ -1426,3 +1426,37 @@ Next queue for this lane:
    yaml flip until those close.
 4. Carve round (attribution, independent of 1-2): name
    func_800604E0 / func_80062FCC / the D_80072DB8 cluster entry.
+
+## 2026-10-14 (later): GsSetDrawBuffOffset carve-prep - the three code addresses decoded (mainmenu_jp)
+
+Byte-driven decode of the three non-row addresses the member touches
+(baseline disassembly, word-at-a-time so data desyncs cannot hide):
+
+- func_800604E0 (inside data row data_80060368, 0x178 into it): an
+  8-INSTRUCTION STUB with no return - `move t0,zero; ori t1,zero,1;
+  addiu a3,zero,-1; lui a1,0x800d; lh a1,-0x5f3c(a1); lhu v0,0x38(v1);
+  nop; sh v0,0x3a(v1)` - then the stream degenerates into words whose
+  opcodes (ldc1, ldc2, cache, swr-with-at, jalx) CANNOT occur in mips1
+  GCC output. The callee region is a code fragment polluted by data:
+  there is no whole function to carve here. The calling then-path is
+  plausibly DEAD in this link (its guard D_80194E3C == 0 at runtime),
+  which is consistent with a shipped library path whose callee tail
+  never needed to link coherently. Implication for the flip: the C
+  side needs only the stub address to resolve (curated-name-only or
+  existing auto-name); no extent carve.
+- func_80062FCC (mid-entry inside asm blob func_80062B04): genuine
+  code - gp-relative halfword stores (0xf6e/0xf70($gp)), a conditional
+  tail `j 0x8005a4f8` deeper into the blob, and a `lw ra,0x30($sp)`
+  epilogue. A foreign mid-function splice sharing the enclosing
+  function's frame: the g3_jp-splice class. Curated-name-only
+  treatment; no row split.
+- D_80072DB8 (inside data row data_80072B20, 0x298 into it): genuine,
+  continuous mips1 - GsSort-style primitive copying (lwl/lwr/swl/swr
+  8-byte struct moves over s0/s2/s3/s6, offset-table walks). A REAL
+  cluster entry worth a proper carve later, but the row is 0x49c and
+  the block's start/end boundaries need the full-row pass.
+
+Carve-round verdict: NOTHING blocks the flip mechanically - the C
+references resolve through existing auto-names + curated entries. The
+carve round is now pure attribution quality (the D_80072DB8 cluster)
+and rolls into the fingerprint/rollout phase rather than gating it.
