@@ -2169,3 +2169,108 @@ Next queue:
 4. Parallel lanes stay theirs: setIntr base->a1 steering, startIntr
    reopen, trapIntr fingerprint.
 5. Runtime gate-family: still blocked (fresh-checked this window).
+
+## 2026-10-15 - func #56's "blob" is the CD file \SE.VH;1: the member void's game-code cluster is the SE ADPCM bank initializer
+
+The size-delta addendum left the +0x800 blob as an open content
+question; the fan-out addendum mapped its loader call into a data row.
+This window decodes the loader end to end. Everything below is the
+de-framed runtime view (payload offset = runtime - 0x80020000; jal =
+region-OR law). Script repo-external
+(scripts/blob_getter_and_content.py, full disasm in blob_out.txt).
+
+THE FUNCTION IS THE SOUND-EFFECT (ADPCM) BANK INITIALIZER. func #56
+(slps 0x8002C110 / sces 0x8002BF38) runs the same 14-call sequence in
+both boots; decoded in order:
+
+- Calls 1-2 (0x800436B8/0x800438D8 slps): setup, $s1 = 0x80016600.
+- Call 3 is the "blob getter" - and it is NOT a rodata getter: it is
+  a RETRY-FILE-LOAD wrapper. Shape: up to 4096 attempts (lui $s0,0xfff
+  / ori 0xffff + bnez loop); each attempt = inner worker (0x8002CA84
+  slps / 0x8002C8A0 sces) = a game-internal FLOAD: open the file,
+  read its size from the handle, n = ceil(size/2048) (the sra 0xb /
+  sll 0xb / addiu 1 dance), malloc (0x8002DBE0 slps) n*2048 bytes,
+  CD-read into it (0x8002DBF0 slps), return the heap pointer.
+  Open failure or malloc failure => panic reporter (0x8002DC10 slps /
+  0x8002DA04 sces) printing "FLOAD:fault!\n" (0x80020910 slps /
+  0x800208E4 sces), return 0.
+- The argument passed to call 3 is the rodata string "\SE.VH;1"
+  (slps 0x8004C3FC / sces 0x8004C0A0) - a Psy-Q ADPCM VOICE HEADER.
+  THE BLOB IS A CD FILE, NOT EMBEDDED RODATA.
+- The copy: 0x8620 (slps) / 0x7E20 (sces) bytes => 0x80016604 via the
+  already-documented alignment-dispatch loop pair; the ori+addu
+  expansion exists ONLY in slps because 0x8620 > 0x7FFF.
+- Call 4 = free() of the heap buffer (0x8002EAA0 slps / 0x8002E644
+  sces - exactly the fan-out addendum's target-4 free-thunk
+  attribution, now with its calling context).
+- Call 5 (0x800440D8 slps / 0x800440F4 sces) takes the copied VH at
+  0x80016604 with arg -1 and (by elimination the only caller of the
+  VH copy before the record getter reads them) populates the sound
+  system's per-record pointer table + gate-byte array in its runtime
+  workspace: pointer table 0x80114F48 slps / 0x801144CC sces, gate
+  bytes 0x8012A894 slps / 0x80129E10 sces. NOTE: the EXE headers
+  declare NO bss at all (b_addr = b_size = 0; t_size 0x46800, image
+  ends 0x80066800, initial $sp = 0x801FFFF0) - the sound system's
+  work areas are runtime-allocated between image end and stack top,
+  which is why every one of these constants differs per boot.
+- Call 6 (0x8002C7C8 slps / 0x8002C5E4 sces - the fan-out addendum's
+  label-artifact pair) = the same retry-load shape for "\SE.VB;1"
+  (the ADPCM VOICE BANK; slps 0x8004C408 / sces 0x8004C0AC = name
+  + 0xC), second arg = sign16(call-5 result); its result lands in
+  *(0x80016600) (store in call 7's delay slot, 0x80043CE8 slps).
+- Call 9 (0x80044BFC slps / 0x80044C18 sces) is a per-index record
+  getter: gate byte at (0x8012A894 + i) slps must equal 1, record =
+  *(pointer table + i*4), then it copies fields +0x0/+0x4/+0x8
+  (words), +0x12/+0x14/+0x16 (halfwords), +0x18 (byte) - the
+  VagAtr-shaped 32-B tone record - into a 0x20-B struct. func #56
+  calls it ONCE with the struct at 0x800D19C4 slps / 0x800D166C sces
+  (one slot below the walk base).
+- The LOOP (bound slti 0x3E = 62 slps / 0x3A = 58 sces - the per-boot
+  literal the size-delta addendum flagged) calls call 10
+  (0x80044CE0 slps / 0x80044CFC sces) per entry i with a3 = walk base
+  0x800D19E4 + i*0x20 slps / 0x800D168C + i*0x20 sces and a0 =
+  *(0x80016600) (the VB result): registering each tone against the
+  VB.
+- Tail: halfword defaults into image data globals - slps sh 0x5A =>
+  0x8006504/0x80064FC, sh 0x65|0x7F (selected by lh 0x800689C) =>
+  0x800650C/0x8006514; sces mirrors: 0x80061A0/0x8006198 and
+  0x80061A8/0x80061B0 (selector lh 0x80066544). Same values both
+  boots, different global addresses.
+
+WHAT THIS ANSWERS (the size-delta addendum's content question):
+
+- The +0x800 blob delta is EXACTLY ONE 2048-B MODE2 SECTOR of
+  per-region SE.VH content. The copy sizes are per-boot literals
+  (0x8620 vs 0x7E20) matching per-boot tone-record counts (62 vs 58;
+  the record-array share of the delta is 4 x 0x20 = 0x80; the rest
+  rides in the VH's parallel per-record tables - the exact file-level
+  decomposition needs the discs, see blocker).
+- The +0xC func-#56 size delta is now content-causal END TO END:
+  JP's SE.VH is one sector bigger => JP's copy-size literal 0x8620
+  exceeds signed-16-bit => ori+addu expansion in slps only.
+- The "\SE.VH;1" / "\SE.VB;1" / "FLOAD:fault!" string trio appears in
+  ALL 8 targets (FLOAD:fault! x2 in the boots + g3/g3org, x1 in
+  mainmenu): every module embeds its own copy of this loader cluster,
+  and every region's disc ships SE.VH/SE.VB for it.
+
+BLOCKER (disc side): the disk/ CHDs were eaten by the sandbox
+re-provision again - the JP/EU SE.VH byte-level diff (which records
+differ; true file sizes vs the copy literals) waits on disc
+re-provision. docs/MATCHING.md §3 regenerates the extracted trees
+FROM the CHDs; the CHDs themselves are not repo-recoverable.
+
+No carve-side action (same rule as the fan-out addendum): the loader
+cluster is already-labeled code and the disc files are outside the
+EXEs entirely. Docs-only: matched 174, ratchets 365/0, 8/8 verify
+GREEN unchanged.
+
+Next queue:
+1. func #18's rodata preset family decode (runtime slps 0x800207CC..;
+   carve first data row +0x8fc/+0x90c/+0xa70/+0xaa0 per the fan-out
+   addendum) stays queued - cheap, independent.
+2. Disc-side follow-up when CHDs return: extract SE.VH/SE.VB from
+   both regions (tools/iso9660_extract.py), diff, decompose the
+   0x800, reconcile true file sizes with the 0x8620/0x7E20 literals.
+3. GSD round-5 (db2f96e) adopt/reject stays with the lane owner;
+   setIntr base->a1 steering, startIntr reopen, trapIntr fingerprint
+   stay theirs; runtime gate-family still blocked.
