@@ -2729,3 +2729,111 @@ Next queue:
 4. GSD round-5 adopt/reject stays with the lane owner; setIntr steering
    / startIntr reopen / trapIntr fingerprint stay theirs; BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16 - SE.VH layout closes against the real bytes: the parser is Psy-Q libsnd SsVabOpenHead-shaped, the size table sums the VB exactly, the JP/EU audio divergence is mapped per VAG
+
+Queue item 1 of cron-20261015-1642. Window opened on sandbox rollback #N:
+repo rolled back to 7623cd2, disk/ and the repo-external scripts of the
+last two windows eaten; recovered per protocol (fetch + reset to
+90c65b4; CHD links still live, both refetched + sha256-verified - the
+recreated cron prompt's disc-assets section exercised for real). All
+true-content extractions redone. New repo-external scripts:
+vh_parser_xref.py (+_out.txt), vh_size_table_test.py, func56_callsite
+disasm (func56_callsite_out.txt).
+
+THE CALL-5 PARSER DECODED (slps 0x800440D8 -> 0x80044174; true-payload
+disasm, payload = runtime - 0x80020000):
+- It is Psy-Q libsnd SsVabOpenHead-shaped. 16 VAB slots: vab_id -1
+  (SsVAB_AUTO) scans the gate bytes 0x8012A894[0..15] for a zero slot,
+  claims it (gate = 1), and stores the VH base at 0x80114F48[slot] -
+  BOTH are per-VAB tables, NOT per-record (correction below).
+- Header checks: word0 >> 8 == 0x564142 ("VAB") and byte3 == 'p';
+  version = word+4; stride = 0x40 (ver<5) / 0x80 (ver>=5), kept at
+  0x80115070; count = lhu +0x12 (62/58), must be <= stride.
+- Program loop: stride x 0x10-B records from VH+0x20 (128 x 0x10 =
+  0x800 for ver>=5). +0 = tones count; RUNTIME patches (file holds
+  placeholders): +8 = sequential program id for every nonzero-tones
+  program; +0xC/+0xE = VB offsets of tones 2p/2p+1 - two tones per
+  program max, VAG i belongs to program i/2.
+- VAG area = VH+0x820, count x 0x200-B blocks; VagAtr records sit at
+  0x20 stride (Call 10 reads attr bytes 0..9 from a slot-scaled
+  runtime pointer 0x801150F0 + (0x8012A87B_byte*16 + a2)*0x20).
+- SIZE TABLE = VH+0x820 + count*0x200 (the LAST 0x200 block): 2-B
+  entries; VAG body bytes = entry << 3 for ver>=5 (sll 3 at
+  0x800443F8; ver<5 = << 2). Cumulative sum = the running VB offset
+  (with a base arg a3); total sanity-checked against 0x80000.
+
+CORRECTIONS to the 2026-10-15 func #56 section (its disasm-derived
+field map was right, its SEMANTICS were not):
+- Call 9 (0x80044BFC) is NOT a per-tone record getter: call site
+  0x8002C248/0x8002C380 passes a0 = *(0x80016600) = the VAB ID (see
+  below), a1 = 0x800D19C4. It checks gate[vab_id] == 1, loads the VH
+  base from 0x80114F48[vab_id*4], and copies the VabHdr fields:
+  word+0 = "VABp" magic, word+4 = version, word+8 = id, halfwords
+  +0x12/+0x14/+0x16 = the count x3, bytes +0x18..1B = 7f 40 00 00.
+  The "VagAtr-shaped 32-B tone record" reading is REFUTED - func #56
+  was fetching the bank's metadata (incl. the count).
+- *(0x80016600) holds Call 6's result = the VAB ID, not a VB heap
+  pointer: Call 6 (0x8002C7C8) is SsVabOpenBody-shaped - args are the
+  "\SE.VB;1" load + sign16(Call-5 result), i.e. (file, vab_id) - and
+  returns the id. Call 5 = SsVabOpenHead(VH copy, -1).
+- Call 10 (0x80044CE0) call site 0x8002C3C8: args (vab_id, tone i,
+  0, 0x800D19E4 + i*0x20) - the "a0 = VB result" reading was the same
+  misidentification. gate[vab_id] again; the per-tone attr bytes land
+  in the walk-base structs.
+
+FILE LAYOUT (both regions, now closed byte-exact against the discs):
+  0x000   VabHdr 0x20 B ("VABp", ver 6, id 0, fsize = VH+VB sum,
+          0xEEEE marker, count x3 at 0x12/0x14/0x16, 7f 40 00 00,
+          ffffffff)
+  0x020   program table, 128 x 0x10 B (file placeholders at +8/+0xC/
+          +0xE are runtime-patched)
+  0x820   VAG area, count x 0x200 blocks; VagAtr 0x20-B records at
+          0x820+i*0x20; the rest of the area is pre-initialized
+          template records (b1 b2 tags + c0/c1/c2/c3 halfword runs)
+  0x820+count*0x200   size table, count+1 2-B entries
+  total   = 0x820 + (count+1) x 0x200  (JP 0x8620, EU 0x7E20)
+
+THE SIZE TABLE SUMS THE VB EXACTLY, both regions:
+- JP: 63 entries at 0x8420, sum << 3 = 0x62450 == len(SE.VB;1) EXACT.
+- EU: 59 entries at 0x7C20, sum << 3 = 0x5E420 == len(SE.VB;1) EXACT.
+- entry[0] = 0 and entry[count] = 0x3B2 (7568 B) in both; the table
+  carries count+1 entries - the "+1" of the block law is real on BOTH
+  sides (one extra size entry AND the size table's own block). Whether
+  VAG 62 (the 0x3B2 tail body at VB 0x606C0..0x62450) is registered by
+  a path outside func #56's 62-loop is open.
+
+JP/EU AUDIO DIVERGENCE MAP (per VAG, from the size tables + bodies):
+- VAGs 0..28: bodies byte-identical (same sizes, same offsets).
+- VAG 29: first divergence - VB first diff 0x39150 = VAG 29's body
+  offset (0x39130 both) + 0x20; same nominal start, region-tuned
+  after 0x20 B; size entries already differ here.
+- VAGs 30..48 and 57: size entries differ (region-tuned lengths).
+- VAGs 58..61: JP-ONLY (offsets 0x59060/0x5A360/0x5C910/0x5F090,
+  body sizes 0x1300/0x25B0/0x2780/0x1630).
+- Net: sum(JP entries)<<3 - sum(EU common)<<3 = 0x4030 = the VB size
+  delta, witnessed from the file side end to end.
+
+gp-4 SETTLED (cron-20261015-1642 queue item 2): payload gp-4 =
+0x000A7325 in BOTH boots (identical bytes 25 73 0a 00, zeros after).
+sces's 0x80020040 at gp+0 is therefore a genuine one-word INSERT in
+the sces .sdata pool, not a shifted mirror of an slps word - the
+per-region slot maps are mandatory, exactly as banked.
+
+Gates: docs-only; 8/8 verify GREEN untouched; matched 174; ratchets
+365/0. No carve-side action.
+
+Next queue:
+1. VAG record field decode: Call 10's attr source (0x801150F0 +
+   (0x8012A87B_byte*16 + a2)*0x20) against the real 0x20-B records at
+   VH+0x820+i*0x20 - pin pitch/vol/pan/ADSR offsets; identify the
+   template records' role (the 0x7440 B between the real records and
+   the size table).
+2. func #56 tail semantics: whether VAG 62 (entry[count] = 0x3B2) is
+   registered anywhere; the 0x80043490 helper (Call 10's first jal);
+   the re-open path at 0x8002C360 (Call 5 wrapper variant with
+   explicit id).
+3. .sdata: build the per-region gp-relative slot maps; identify what
+   0xA7325 (gp-4, both boots) and 0x80020040 (sces gp+0) reference.
+4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr); BIG
+   de-frame coordination-gated; runtime gate-family blocked.
