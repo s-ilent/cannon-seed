@@ -243,6 +243,38 @@ head hunt, first fully-worked example of the pathology):
   No carve-side pin (same rule as the twins): the de-frame transition
   re-derives them.
 
+* Boot rand caller site census addendum (2026-10-15, de-framed payload;
+  closes the census's one optional item): the boots' 7 `rand` callers are
+  all in ONE runtime routine — a 0x1C8-byte loop (head runtime 0x80023474
+  slps / 0x8002349C sces, the +0x28 shift the two boots carry at this
+  depth; prologue `addiu $sp,-0x28` + ra/s3/s2/s1/s0 saves, `$s0` = output
+  pointer param) that fills a 10-entry, 0x10-stride table with
+  `rand()`-derived halfwords: 7 `rand` calls per entry (`s3` counts to 0xA
+  — 70 `rand()` calls per fill), signed-%512/%511/%3-style mods via the
+  gcc `div`/`mfhi`+`break 6/7` idiom, halfword stores at +0/+2/+4/+0xa/
+  +0xc, back-edge `bnez` to the first site. Cross-boot: the routine is
+  byte-identical over 420 bytes head-to-tail — the ONLY 7 differing words
+  are the `jal` fields themselves (0x0C00BAAC vs 0x0C00B995, the two
+  boots' rand thunks), so it is the same source in both boots with only
+  the call encodings differing. Exactly one parent `jal` per boot (slps
+  runtime 0x80022254 / sces 0x8002234C) and the parent also sits in a
+  data-labeled region (slps `data_80021810`, sces `data_8002287C`);
+  deeper chain not chased. Carve-view contrast (the Witness A trio's
+  per-region-artifact law, once more): slps's carve labels the whole
+  routine's region `data_8002376C` (data, 0x8002376C..0x80024BFC) — real
+  code, data-labeled — while sces's carve labels the same code
+  `func_8002392C` (asm, 0x8002392C..0x80024080). The wider boot mirror
+  census: most boot thunk callers live in data-labeled rows too (slps:
+  strncmp 2/5 + strncpy 3/3 in `data_80028428`, the SpuVm curated-member
+  region; free 3/5 + exit 1 in `data_8002E578`; exit 2 more in
+  `data_80021810`; sces the same shape under its own row split) — the
+  boots carry the "12.9% of data is code" pathology with live callers.
+  Method: jal-encoding scan of the de-framed payload (runtime = payload +
+  0x80020000), mapped back with `tools/deframe.py --map-runtime`; mapping
+  validated — every thunk's mapped carve address reproduces the pinned
+  member rows exactly (slps 0x80030E20..0x80030E60, sces
+  0x80030894..0x800308D4). No carve-side pin (same rule).
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
