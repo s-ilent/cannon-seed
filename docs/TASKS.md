@@ -265,8 +265,9 @@ head hunt, first fully-worked example of the pathology):
   code, data-labeled — while sces's carve labels the same code
   `func_8002392C` (asm, 0x8002392C..0x80024080). The wider boot mirror
   census: most boot thunk callers live in data-labeled rows too (slps:
-  strncmp 2/5 + strncpy 3/3 in `data_80028428`, the SpuVm curated-member
-  region; free 3/5 + exit 1 in `data_8002E578`; exit 2 more in
+  strncmp 2/5 + strncpy 3/3 in `data_80028428` — game code, per the
+  library census addendum below; the SpuVmDamperOn pin sits just BEFORE
+  it at 0x80028414; free 3/5 + exit 1 in `data_8002E578`; exit 2 more in
   `data_80021810`; sces the same shape under its own row split) — the
   boots carry the "12.9% of data is code" pathology with live callers.
   Method: jal-encoding scan of the de-framed payload (runtime = payload +
@@ -274,6 +275,37 @@ head hunt, first fully-worked example of the pathology):
   validated — every thunk's mapped carve address reproduces the pinned
   member rows exactly (slps 0x80030E20..0x80030E60, sces
   0x80030894..0x800308D4). No carve-side pin (same rule).
+
+* Boot library census addendum (2026-10-15, de-framed payload; the
+  follow-up the rand census set up): which Psy-Q members did the boots
+  link, and what is the caller-cluster region really made of? Method:
+  `tools/sdk_members.py`'s parser + placer over the DE-FRAMED payloads
+  (748 members with `.text` from the 3.3 archives; runtime = payload +
+  0x80020000 — the de-framed view is the stricter instrument: a member
+  split by a 0x130 framing gap can never match in the framed view the
+  committed reports slide). slps: 254 placements (36 anchors, 91
+  sig-agree); sces: 234 (27 anchors, 78 sig-agree). Roster shape, both
+  boots: LIBGS `EMULIB` opens; LIBSND `VM_DON` (0x14, sig-agree) — which
+  IS the carve's pinned `SpuVmDamperOn` row (runtime 0x80027244 ↔ carve
+  0x80028414 slps / 0x8002728C ↔ 0x8002845C sces, exact via deframe.py;
+  the member object is named VM_DON, the exported symbol
+  SpuVmDamperOn — one label each, the name-dup note's boot copy); LIBSND
+  `VM_DEBUG` sig only; LIBETC kernel block after the thunks (`INTR`
+  0x714 ANCHOR+agree, `INTR_DMA`, `INTR_VB`, `PAD`, `VSYNC`, `VMODE` —
+  link order differs: slps VMODE sits late at 0x80032650, sces VMODE
+  opens the block at 0x8002E674); LIBAPI 0x10 veneer rows; LIBC/LIBC2
+  stubs; LIBSN `LIBGCC2`. THE ANSWER: the strncmp/strncpy/free caller
+  cluster sits in a **member void** — runtime slps 0x80027258..0x8002C7B0
+  (0x5558 B) ↔ carve 0x80028428..0x8002E560, sces 0x800272A0..0x8002C5CC
+  ↔ 0x80028470..0x8002E37C — with NO 3.3 member `.text` placement and NO
+  sig hit covering any of the nine callers (3+3+3 per boot). The cluster
+  is the boot's OWN game code living in data-labeled carve rows: the
+  boots' "data is code" pathology is game code, not hidden library
+  members (only LIBSND's two stubs and the kernel block are library).
+  Both void ends corroborated by the repo's own pinned sdk rows: VM_DON
+  opens it, the EMULIB 0x18 rows close it (`func_8002E560` slps /
+  `func_8002E37C` sces, the "0x18 sdk" rows). No carve-side action — the
+  de-frame transition re-derives; the void is game code for the C lane.
 
 ### Carve the code out of the `data` rows — the other direction
 
