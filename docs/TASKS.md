@@ -2898,3 +2898,89 @@ the full build is unaffected.
 Validated: 104/104 c units EXACT across all 8 targets (the judge agrees
 with the green oracle everywhere); negative control (>= for !=) flags
 slt/bnez rewrite, size delta, and per-word diffs with disasm.
+## 2026-10-16: the SE.VH tone records decode - one real tone per VAG, 1-based VAG
+## numbering closes the +1 entry, region divergence is 13 pitch bytes + 22 sizes
+
+Fresh per-sector SE.VH;1 both regions (JP 0x8620, EU 0x7E20 - the fsize-law
+holds), Psy-Q 3.3 LIBSND.H pulled (sozud/psy-q sparse INCLUDE; VabHdr/ProgAtr/
+VagAtr structs) and every field checked against the real bytes.
+
+CORRECTION - the VAG area is NOT packed records. It is the standard blocked
+layout: count blocks of 0x200 = 16 VagAtr slots each, block v at
+0x820+v*0x200, slot t at +t*0x20. Call 10's runtime formula
+(byte@0x8012A87B*16 + a2)*0x20 IS block*16+tone addressing - the runtime
+already knew. The 2026-10-15 "packed at 0x820+i*0x20" reading was an aliasing
+artifact: packed slot i is block i/16 slot i%16.
+
+EVERY BLOCK'S SLOT 0 IS A REAL TONE (62/58 real records, not one). All are
+identical except two link halfwords:
+  vol=127 pan=64 center=84 shift=0 min=0 max=127 adsr1=0x80FF adsr2=0x1FC0
+  (prior/mode/vib/por/pb all 0; B1 B2 sentinels @0x0E/0F, C0..C3 @0x18..1F)
+  u16@0x14 (VagAtr.prog) = block index p = parent program
+  u16@0x16 (VagAtr.vag)  = p+1 = the VAG that tone plays
+So the bank is a strict 1:1 chain: program p (tones=1) -> tone at block p
+slot 0 -> VAG p+1. Psy-Q field names fit with no reinterpretation.
+
+TEMPLATE SLOTS (the other 15 of each block) measured, both regions: 14 zero
+bytes, B1 B2 @0x0E/0F, adsr 0, u16@0x14 = the block's own index, 0 @0x16,
+C0 00 C1 00 C2 00 C3 00 @0x18..1F. JP 930/930, EU 870/870 slots match this
+form exactly. Role: the file ships the FULL runtime tone table pre-filled
+(same tool wrote real + template records - these are not Psy-Q zero-fills),
+so SsVabOpenHead's copy needs no per-slot construction; only the program
+records' link placeholders (+8 = ffffffff, +0xC/+0xE = ffff) get patched.
+
+VAG NUMBERING IS 1-BASED - the count+1 size-table mystery closes:
+  entry[k] of the size table = VAG k's body size, k = 1..count;
+  entry[0] = 0 is the NULL VAG, not a VAG. There is no 63rd VAG and no
+  out-of-band registration path: VAG 62 IS block 61 (its tone's vag field =
+  62), inside func #56's 62-loop. The 2026-10-15 open item ("is VAG 62
+  registered anywhere?") is CLOSED - the "+1 entry" was the null entry[0].
+  Verification: sum(entries[0..28])<<3 = 0x39130 = VAG 29's body offset in
+  both regions (matches the VB first-diff witness); totals sum to the VB
+  sizes exactly. The 0x3B2 tail sample is VAG 62 (JP, VB 0x606C0) / VAG 58
+  (EU, VB 0x5C690) and is BYTE-IDENTICAL between regions (one shared SFX).
+  The earlier "JP-only VAGs 58..61" list was entry indices under the old
+  numbering; corrected below.
+
+REGION DIVERGENCE MAP, complete (file side, every byte accounted):
+- Program table: every record differs in prior/mode (bytes 2/3) ONLY -
+  JP 00/36, EU 7f/ff, real and template records alike. EU programs 58..61
+  are tone-less templates (tones=0) where JP 58..61 are real programs.
+- VAG area: 13 differing bytes total, ALL in slot-0 real records, columns
+  center (0x04) / shift (0x05):
+    VAG 17: JP center 84 / EU 60      VAG 30: JP 60 / EU 84 (mirror)
+    VAG 46: JP 84 / EU 60 (mirror)
+    VAGs 54..58: JP center 74 + shift 84 / EU center 84 + shift 0
+  (a transpose: JP detunes the note and bends it a semitone, EU plays the
+  plain center - the three mirrors suggest the JP bank is the odd one out)
+- Size entries: VAGs 29..48, 57, 58 differ (22 common entries); VAGs
+  59..62 JP-only (0x4B6/0x4F0/0x2C6/0x3B2 <<3 = 0x9030/0x9380/0x7180/0x6C80
+  bytes). VAG 58 is common but region-sized (608 vs 946).
+
+FIELD-OFFSET PINS for VagAtr as this file uses it (all verified against
+nonzero data, not inferred): vol@0x02, pan@0x03, center@0x04, shift@0x05,
+max@0x07, adsr1@0x10, adsr2@0x12, prog@0x14, vag@0x16; prior/mode/min/
+vibW..pbmax are 0 in every record so their offsets are Psy-Q-named, not
+pinned. Call 10's "attr bytes 0..9" = prior..vibT: the game reads the
+static voice shape (vol/pan/center/min/max/vib) per tone at load.
+
+Program-table template census: JP templates 62..127 = 00 00 00 36 00...,
+EU templates 58..127 = 00 00 7f ff 00... - the mode bytes differ per region
+even in padding, so the VH builder was run per region, not shared.
+
+Gates: docs-only (analysis repo-external: scripts/vag_record_decode.py,
+vag_region_diff.py; psyq headers re-pulled by the sparse recipe); no carve
+action; 8/8 verify GREEN untouched; matched 174; ratchets 365/0.
+
+Next queue:
+1. func #56 tail semantics (previous queue item 2, mostly superseded): the
+   re-open path at 0x8002C360 (Call 5 wrapper with explicit id) and the
+   0x80043490 helper (Call 10's first jal) - now against a fully decoded
+   tone table.
+2. .sdata per-region gp slot maps (queue item 3): gp-4 = 0xA7325 settled;
+   what 0x80020040 (sces gp+0) references + the full slot map.
+3. Call 9/10 runtime tables: 0x80114F48 (VH bases), 0x801150F0 (tone table
+   base) and 0x8012A87B/0x8012A894 (current-VAB byte + gate array) - how
+   the runtime reorganizes the blocked table after the copy.
+4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr); BIG
+   de-frame coordination-gated; runtime gate-family blocked.
