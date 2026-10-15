@@ -9,6 +9,19 @@ boot files). Usage:
 
 With no iso paths, lists the whole tree. Paths are like SYSTEM.CNF;1 or
 DRAGOON/FILE.DAT;1 (directory separator '/').
+
+DEFAULT READ IS CONTIGUOUS (historical, kept for byte-compatibility): it
+starts at lba*2352+24 and reads `size` raw bytes straight across sector
+boundaries — every following sector's 280-byte EDC/ECC tail plus 24-byte
+sync/addr/subheader gets WOVEN INTO the extracted file, and the tail user
+data beyond `size` raw bytes is LOST. That is exactly the corruption the
+baselines/*.bin carry (see docs/TASKS.md, "the boot load model closes").
+
+Pass --per-sector to get the TRUE file content instead: USER_LEN bytes per
+sector across ceil(size/2048) sectors, truncated to the recorded size —
+what the console's CD file layer actually delivers. A fresh extraction
+with --per-sector will NOT match the committed SHA-1 oracles (they encode
+the contiguous corruption); it is for the de-frame transition.
 """
 
 import struct
@@ -21,8 +34,9 @@ USER_LEN = 2048        # form1 user data
 
 
 class Iso:
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, per_sector: bool = False):
         self.f = open(path, "rb")
+        self.per_sector = per_sector
         self.f.seek(16 * SEC + USER_OFF)
         pvd = self.f.read(USER_LEN)
         if pvd[1:6] != b"CD001":
@@ -67,8 +81,19 @@ class Iso:
     def read(self, node: dict) -> bytes:
         if node["flags"] & 2:
             raise ValueError("is a directory")
-        self.f.seek(node["lba"] * SEC + USER_OFF)
-        return self.f.read(node["size"])
+        lba_off = node["lba"] * SEC + USER_OFF
+        size = node["size"]
+        if not self.per_sector:
+            self.f.seek(lba_off)
+            return self.f.read(size)
+        # TRUE file content: join USER_LEN user-data bytes per sector across
+        # ceil(size/2048) sectors, then truncate to the recorded size.
+        out = bytearray()
+        n_sect = (size + USER_LEN - 1) // USER_LEN
+        for k in range(n_sect):
+            self.f.seek(lba_off + k * SEC)
+            out += self.f.read(min(USER_LEN, size - len(out)))
+        return bytes(out)
 
     def walk(self, node=None, prefix=""):
         node = node or self.root
@@ -83,10 +108,13 @@ class Iso:
 
 
 def main():
-    iso = Iso(Path(sys.argv[1]))
-    outdir = Path(sys.argv[2])
-    paths = sys.argv[3:]
-    print(f"volume: {iso.volume_id!r}")
+    per_sector = "--per-sector" in sys.argv
+    argv = [a for a in sys.argv if a != "--per-sector"]
+    iso = Iso(Path(argv[1]), per_sector=per_sector)
+    outdir = Path(argv[2])
+    paths = argv[3:]
+    print(f"volume: {iso.volume_id!r}  read mode: "
+          + ("per-sector (true content)" if per_sector else "contiguous (woven, historical)"))
     if not paths:
         for name, e in iso.walk():
             kind = "DIR " if e["flags"] & 2 else "file"
