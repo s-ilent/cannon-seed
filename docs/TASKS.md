@@ -2984,3 +2984,98 @@ Next queue:
    the runtime reorganizes the blocked table after the copy.
 4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr); BIG
    de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16: the weave law closes at 100 percent - baselines are a pure
+## re-layout; true-EXE SHA-1 witnesses banked; the boots' .sdata slot maps decode
+
+The missing-tail witness unit ran with the discs fresh (per-sector EXEs for
+all 8 targets; scripts tail_witness.py, weave_law_test.py, sdata_slot_map.py
+- repo-external).
+
+THE WEAVE LAW, proven at 100 percent on all 8 targets: wherever the
+committed baseline HAS a byte, baseline[k*2352+j] == true[k*2048+j] exactly
+(2048-B user data per disc sector + the 304-B sync/header/EDC/ECC overhead
+woven between; zero violations across ~2600 sectors). The baselines are a
+PURE DETERMINISTIC RE-LAYOUT of the true EXEs - the "corruption" is
+placement, not content. Consequences: the drift at true offset T is
+(T>>11)*304 in file space; the de-frame recipe for baseline-present bytes
+is mechanical (take 2048 of every 2352); no information is lost in the
+baseline-present region.
+
+THE MISSING TAILS (quantified; disc-only bytes): the contiguous read ran
+out of file before the true sectors did, so every baseline ends early:
+  slps/sces:    true 0x3DDF0..0x47000 missing (37392 B = 1 partial + 17
+                full sectors; sector 123 is 1520/2048 present)
+  mainmenu_jp:  0x94800..0xAA800 (90112 B, 44 full)
+  mainmenu_eu:  0x94800..0xAB000 (90288 B, 44 full + 1 partial)
+  g3_jp:        0x7A000..0x8C800 (74176 B)  g3_eu: 0x7A800..0x8D000 (74480)
+  g3org_jp:     0x85800..0x99800 (81168)    g3org_eu: 0x86000..0x9A000 (81472)
+Content: boots' region = the 8-B pattern 00 00 00 00 02 00 00 fe with the
+.sdata windows embedded (90c65b4's dumps); mainmenu_jp head = zeros,
+mainmenu_eu head = a real word table (45 f9 81 0e 4b f9 84 0e ...);
+g3_jp = 06 00 1f 7c pattern; g3_eu = mixed real words + pattern; g3org
+both = palette-like data. Every tail ends in >= 0x40 zero bytes. File-size
+law: ISO size = 0x800 + t_size EXACTLY (zero pad); EU game modules are
+each exactly one 2048-B sector larger than JP. Correction: the earlier
+"every byte above payload 0x3D5F0" for the boots -> measured 0x3DDF0.
+
+TRUE-EXE SHA-1 WITNESSES (the de-frame transition's future oracles; the
+committed config/sha1 oracles remain the framed pipeline's gate and were
+re-verified 8/8 this window):
+  slps fa9474b4e6ecf08e0bfc182fee776cf71f6d8195
+  sces 06b4bda68dce0f3734cfb7cbb76913a6e7fa2dc9
+  mainmenu_jp d637286a60e36dfeee10c0441509c98b2f952d48
+  mainmenu_eu f9f29eebb419b5e957ce2389d33caeedbb93685e
+  g3_jp 994a680cd139069404e5c6d6c51d3796a728f2ec
+  g3_eu 39030a759e8462575b709f77eed1050f7bbaa572
+  g3org_jp 2b2a42250b9fe8849bbd791515ce341a678ddef0
+  g3org_eu 01b37b4e01afe69acd2a46e69359dadd4a20877b
+
+THE BOOTS' .sdata SLOT MAPS (true bytes; runtime gp = 0x8006632C slps /
+0x80065FC4 sces; windows [gp, gp+0xD0) / [gp, gp+0xD4)):
+- ALIGNMENT LAW: 52/52 pairs, sces[X] == slps[X-4] for every X >= 4. The
+  sces window is the slps window with ONE word inserted at gp+0
+  (0x80020040) and 4 extra zero bytes at the tail; all other content is
+  byte-identical. The "genuine one-word INSERT" call is proven.
+- CORRECTION to the "payload gp-4 = 0xA7325" note: gp-4 is 0 in both
+  boots. 0x000A7325 sits at gp-0x10 (slps payload 0x4631C, sces 0x45FB4)
+  and IS THE ASCII STRING "%s\n\0" (25 73 0a 00) - a printf format, not a
+  pointer. Three more copies live in the boots' early string pool (slps
+  payload 0x11BF/0x142C/0x14AE - odd offsets, string region, not code).
+- Content map (common; slps frame; sces = +4):
+  gp+0x00  u32 1          (scses slot replaced by the 0x80020040 insert =
+                           pointer to the boot string table @payload 0x40:
+                           "\W16.DAT;1", "VOICE=%d", "%s(%d):I" ...)
+  gp+0x04  rank-name table, 8-B slots: "NONE" "FRANK" "REIKO" "JOHNSON"
+           "SHARK" "GHOST" (ends gp+0x34)
+  gp+0x34  u32 1, 0, 1, 0, 0x003C0000, 0
+  gp+0x4C  "NONE" (second copy)
+  gp+0x54  u32 0xffffffff, then zeros to gp+0x70
+  gp+0x70  seat-label suffixes, 8-B slots: " (1)" " (2)" " (A)" " (B)"
+           " (C)" " (D)" (ends gp+0xA0)
+  gp+0xA0  "bu00:\0" memory-card slot path (slps gp+0xA0 / sces gp+0xA4 -
+           the member-void landing prediction confirmed exactly)
+  gp+0xA8  u16 0x8169 zero-padded = Shift-JIS fullwidth （
+  gp+0xAC  u16 0x816A zero-padded = Shift-JIS fullwidth ）
+  gp+0xB0  u32 0x2A (42), then zeros to the window end (sces: +4 zeros)
+The member-void gp+0xa0..0xb0 reads = memory-card path + the fullwidth
+paren pair + the 42. The window is file-initialized .sdata exactly as the
+load model concluded: rank display + memory-card strings for the boot.
+
+Gates: docs-only (true-EXE hashes are hashes, not extracted assets; the
+missing-tail bytes stay disc-derived per the no-commit rule); no carve
+action; 8/8 verify GREEN untouched; matched 174; ratchets 365/0.
+
+Next queue:
+1. Boot CRT0 follow-ups now unambiguous: who reads gp+0 (1 / the 0x80020040
+   string-table pointer), the gp+0x34..0x4C consts, and which call prints
+   via the gp-0x10 "%s\n" format. The 1642-era "pointer at gp-4" question
+   is closed (it is a string, one word earlier than thought).
+2. The de-frame transition's evidence base is now COMPLETE (weave law +
+   missing-tail extents + true-EXE oracles); the decision remains
+   coordination-gated - do NOT start unilaterally.
+3. Call 9/10 runtime tables (0x80114F48 / 0x801150F0 / 0x8012A87B/894) -
+   how SsVabOpenHead reorganizes the blocked tone table; re-open path
+   0x8002C360; 0x80043490 helper.
+4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); runtime gate-family blocked.
