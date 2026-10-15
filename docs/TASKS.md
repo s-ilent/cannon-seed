@@ -307,6 +307,53 @@ head hunt, first fully-worked example of the pathology):
   `func_8002E37C` sces, the "0x18 sdk" rows). No carve-side action — the
   de-frame transition re-derives; the void is game code for the C lane.
 
+* Member void anatomy census addendum (2026-10-15, de-framed payload; the
+  follow-up the library census set up): what IS the void, function by
+  function? Method: prologue census over the de-framed payloads (the boot
+  convention is `addiu $sp,-N` FIRST, then `sw $ra,N($sp)` — verified on
+  the rand census's routine head, `27bdffd8`/`afbf0020`), a `jal` census
+  with runtime targets, and each external target classified by deframe
+  mapping to its containing carve row plus exact match against the pinned
+  member runtimes. THE SHAPE: 63 prologue-bearing function heads in BOTH
+  boots (min 8, max 705 words; a lower bound — frameless leaves are
+  invisible); 93 internal `jal`s into 37 distinct internal targets in
+  BOTH boots; the prologue-site offsets are void-relative equal for sites
+  #0–18, then shifted 0x220 for sites #19–56 and 0x22C for sites #57–62 —
+  the same 63-function sequence in the same order with the same sizes
+  except TWO size deltas (one slps function among the first 19 is 0x220
+  larger, one more 0xC larger between sites 56–57), and the internal call
+  sites are void-relative equal across the whole pre-shift segment. Byte
+  identity does NOT hold (42% word equality over the common void range;
+  first divergence at void+0x18, an `addiu` %low literal): unlike the
+  byte-identical rand routine, the void's functions carry absolute
+  address literals and their external call targets sit at different
+  runtimes per boot (strcat slps `0x8002DC00` vs sces `0x8002D9F4`) — the
+  linked SDK layout differs (254 vs 234 placements). THE CALL ROSTER
+  (what the boot's own game code does): the libc string/printf set
+  (strcat x14 slps / x18 sces, strcpy x8, printf x5, strlen, strncat,
+  bzero), the whole LIBCARD file API (open x6, close x9, read/write/lseek
+  x2 each, firstfile, nextfile, delete, format, OpenEvent x8, EnableEvent
+  x8, TestEvent x16), card control (InitCARD, StartCARD, _bu_init,
+  _new_card, _card_load/_info/_auto/_clear/_read), the streaming API
+  (StSetStream, StSetRing, StGetNext, StFreeRing), CdRead2, and the SN
+  audio family (SsSetStereo, SsSetMVol, SsSetSerialVol x5,
+  SsSetSerialAttr, SsVabOpenHead, SsVabFakeHead/Body, SsUtGetVabHdr/
+  VagAtr, SsUtGetVBaddrInSB) — every one an exact match against a pinned
+  member runtime. The three apparent roster differences (CdRead2/
+  SsSetStereo/_card_clear "slps-only") are pin-state artifacts, not
+  linkage: sces calls the same members from unpinned rows at
+  shift-aligned sites (`data_8003F3A0`+0, `c:func_80049794`,
+  `data_8004F980`+0). The void also calls ~14 distinct GAME-code targets
+  outside itself, most in data-labeled rows deeper in the file
+  (`data_8003BFB8`+0x8ac.. slps / `data_8003C15C`+0x2bc.. sces; some
+  MID-ROW: `func_8003B4F0`+0x30/+0xfc/+0x180 slps — rows holding several
+  functions each), plus 2 into the rows right after the void
+  (`data_8002E578`+0x0/+0x384 slps) — the boots' "data is code" pathology
+  is load-bearing for the void's call graph too. Carve view: the void
+  spans 10 rows slps (`data_80028428` 0x354C through `func_8002DDE0`) and
+  16 rows sces (`data_80028470` through `func_8002DEE4`). The C lane's
+  first boot work item is 63 functions. No carve-side action (same rule).
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
