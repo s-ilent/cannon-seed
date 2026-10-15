@@ -3176,3 +3176,115 @@ pointer table at payload 0x20, then "\W16.DAT;1" and "VOICE=%d". Both
 boots run the SAME loader; slps passes the table pointer as immediates
 (main tail), sces through the .sdata variable at gp+0. The one-word insert
 is fully explained: no content difference, only pointer routing.
+
+## 2026-10-16 late: the SE.VH runtime tables decode - the "reorganization" is
+## pointer tables + two patched fields, and the docs' 0x8012A87B/94 were hi/lo
+## composition errors
+
+Queue item 3. All runtime-table work is static analysis of the boots' true
+payloads (scripts rt_xref.py, dump_dis.py, gate_census.py, repo-external;
+manual MIPS-I field decode + capstone context - no .mem nesting traps). The
+libsnd code is WORD-IDENTICAL between slps and sces except the four data
+immediates (proven by word-diff at the Call 9 twin, code delta +0x1C), so
+every semantic below is region-independent; only the BSS addresses move.
+
+ADDRESS CORRECTIONS (both docs' values were composed without the %hi sign
+adjustment: lui 0x8012 + addiu 0xA894 = 0x80120000 - 0x576C, not
+0x8012A894):
+  slps: gate array 0x8011A894 (not 0x8012A894), cur-block byte 0x8011A87B
+        (not 0x8012A87B)
+  sces: gate array 0x80119E10, cur-block byte 0x80119DF7
+All other documented addresses (0x80114F48/0x801150F0) had positive %lo and
+were already correct. sces moves the whole cluster by roughly -0xA7C (each
+table pinned individually, shifts -0xA78..-0xA88, non-uniform).
+
+THE FULL PER-VAB TABLE CLUSTER (slps; sces twin in parentheses) - Call 5
+(0x80044174 parser) fills ALL of these, none existed in the docs before:
+  0x8011A894 (0x80119E10)  gate[16] bytes: 0 free / 1 head-claimed / 2 fully
+                           open
+  0x80114F48 (0x801144CC)  VH base pointer per VAB (POINTER store - no copy;
+                           the "runtime copy" premise is refuted)
+  0x80114EE0 (0x80114464)  VH+0x20 pointer per VAB (program table)
+  0x80114F8C (0x80114510)  VH+0x820 pointer per VAB (VAG area)
+  0x8011C3A8 (0x80119228)  size-table pointer per VAB (VH+0x820+count*0x200)
+  0x8011C360 (0x801191E0)  VB RAM base per VAB (from the 0x800445BC allocator
+                           or the explicit-base variant)
+  0x8011C31C (0x8011919C)  VB total bytes per VAB
+  0x80115070 (0x801145F0)  stride u16 (0x40 ver<5 / 0x80 ver>=5) - global
+  0x8011C35C (0x801191DC)  open counter u16 (increment on claim, decrement
+                           on every bail past the claim - a refcount)
+CURRENT-CONTEXT GLOBALS (single slots, written by the select helper only):
+  0x801150F0 (0x80114668)  cur VAG-area pointer - 40 readers across the whole
+                           voice/seq machinery, ONE writer (helper)
+  0x801150E8 (0x80114670)  cur VH pointer - also written by Call 9
+  0x801150A0 (0x80114620)  cur program-table pointer
+  0x8011A875/87A/87B (0x80119DF1/DF6/DF7)  cur vab / cur program / cur block
+                           bytes
+THE 0x80043490 HELPER = the select (SsVabSelect-shaped): (vab_id, program);
+requires gate==1 and program < stride/0x10... (program < stride count),
+loads VH/PROG/VAG pointers from the per-VAB tables, publishes the five
+context globals, and sets cur-block = PROG[program].+8 - THE RUNTIME-PATCHED
+SEQUENTIAL PROGRAM ID.
+
+CALL 10'S FORMULA BYTE DECODED: (byte@0x8011A87B*16 + a2)*0x20 indexes the
+cur VAG area = block*16+tone addressing because the byte is the +8 field
+Call 5's patch loop wrote (sequential index among tone-ful programs), which
+for this strict 1:1 bank equals the block index. The runtime "already knew"
+the blocked layout because its own patcher wrote the block number into the
+program record. Call 10 (0x80044CE0): gate==1 check, jal 0x80043490(vab,
+program), then copies VagAtr bytes 0..9 from cur VAG area +
+(cur_block*16+tone)*0x20 to the out pointer. Call 9 (0x80044BFC, leaf):
+gate==1, loads VH_BASES[vab], copies VabHdr words +0/+4/+8, halfwords
++0x12/+0x14/+0x16, bytes +0x18..0x1B to the out struct, storing the VH
+pointer into the cur-VH global as a side effect.
+
+THE PROGRAM-RECORD PATCH LOOP DECODED (Call 5, 0x800444CC..0x80044558): the
+size-table read pulls the WHOLE last block (256 u16 entries) into a stack
+array, <<3 each (ver>=5), total capped by the 0x80000 sltu check; then for
+i in 0..count-1: prog[i/2].+0xC (even i) / .+0xE (odd i) =
+(vb_base + inclusive cumulative size thru entry i) >> 3. With entry[0]=0
+and 1-based VAGs this puts VAG p+1's body start into program p's tone-0
+offset field - exact consistency with the file-side chain, no off-by-one.
+
+GATE STATE MACHINE (all sites classified, 19 total): 0x80040400 loop =
+SsVabInit (open counter + all 16 gates cleared); Call 5 claims 1, on full
+success (VB registered, patch loop done) sets 2, every bail past the claim
+clears its byte and decrements the open counter; Call 9 / Call 10 / helper
+/ 0x8003E518 (gate==1-checked VB-base getter) / 0x80048CC8 / 0x800495E0
+(the seq-player attr readers) all REQUIRE gate==1; 0x8003CD90 checks ==2
+and reclaims to 1 (0x8003CECC) after teardown work; 0x80044B84 = the
+reclaimer for the re-open path (gate==2 -> 1, returns vab; else -1).
+
+THE RE-OPEN PATH (0x8002C318 function; the 0x8002C360 jal) decoded end to
+end: teardown helpers (0x800436D8, 0x800438D8(1), 0x80043CE8,
+0x80044F20(0x7F,0x7F)), then jal 0x80044140 = the THIRD Call 5 wrapper
+(explicit VB base: a2 flag=1 skips the allocator, a3 = base) with a0 =
+*(0x80016604), a1 = *(0x80016600) (the VAB id), a2 = *(0x8001EC24) - a
+stashed copy of VB_BASE[vab] that the SE-walk function's tail saved via
+the 0x8003E518 getter; then 0x80044B84 flips the gate 2->1 and Call 9
+re-fetches the metadata (its result is actually checked here, unlike the
+first walk). The wrapper trio at 0x800440D8/0x8004410C/0x80044140 = the
+same parser with (flag, base) = (0, alloc) / (1, caller) / (1, caller).
+
+BIG-PICTURE ANSWER for the queue item: the runtime does NOT reorganize the
+blocked tone table. SsVabOpenHead leaves the VH bytes in place, stores six
+per-VAB pointers, patches program records +8/+0xC/+0xE only, and all later
+access goes through the select helper's current-context globals with the
+block*16+tone formula. The "0x801150F0 tone table base" is a single global
+(the current VAB's VAG-area pointer), not a table.
+
+Gates: docs-only; no carve action; matched 174; ratchets 365/0; 8/8 verify
+GREEN untouched (no build-side file touched). Disc assets re-provisioned
+this window first (CHDs re-fetched, sha256 verified; all 8 true-EXE SHA-1
+witnesses re-matched), so the analysis ran on the same bytes the banked
+witnesses pin.
+
+Next queue:
+1. The seq-player attr readers (0x80048CC8/0x800495E0 clusters) now have
+   their key decoded (cur VAG area + cur block byte) - a natural follow-up
+   for the audio lane.
+2. The 0x8003CD90 function (gate==2 checker, indirect-called - no direct
+   jal): find its dispatch site (function-pointer table) and identify it.
+3. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); BIG de-frame coordination-gated; runtime gate-family
+   blocked.
