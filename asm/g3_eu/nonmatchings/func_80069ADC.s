@@ -131,7 +131,7 @@ nonmatching func_80069C04, 0x24
 glabel func_80069C04
     /* 4A404 80069C04 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 4A408 80069C08 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 4A40C 80069C0C FB88010C */  jal        func_800623EC
+    /* 4A40C 80069C0C FB88010C */  jal        NormalColorDpq3
     /* 4A410 80069C10 00000000 */   nop
     /* 4A414 80069C14 0100422C */  sltiu      $v0, $v0, 0x1
     /* 4A418 80069C18 1000BF8F */  lw         $ra, 0x10($sp)

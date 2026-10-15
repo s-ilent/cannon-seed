@@ -918,7 +918,7 @@ _spu_inTransfer = 0x80065DE4; // LIBSPU S_INI member bss static; evidence under 
 // Names are applied by tools/scan_functions.py - symbols file
 // only, never subsegment names.
 
-// target: g3_eu  (248 sdk-member adoptions)
+// target: g3_eu  (250 sdk-member adoptions)
 GsSetOrign = 0x80028D5C; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x800294BC; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8004DB14; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -934,6 +934,7 @@ memchr = 0x8004E814; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py un
 strncmp = 0x8004E9D4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 strncpy = 0x8004E9E4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x8004E9F4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x8004EA04; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 PCopen = 0x8004EA14; // LIBSN ? member .text+0x0 (extent 0x20); sdk_members.py unique placement
 PClseek = 0x8004EA34; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py unique placement
 PCclose = 0x8004EA58; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1162,13 +1163,14 @@ _card_auto = 0x8007CD30; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 _card_write = 0x8007CD70; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x8007CD80; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x8007CD90; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x8007CDA0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x8007CDB0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x8007CDC0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 PAD_dr = 0x8007E260; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8007E270; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8007E280; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: g3_jp  (218 sdk-member adoptions)
+// target: g3_jp  (220 sdk-member adoptions)
 GsSetOrign = 0x80028D60; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x800294C0; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8004DEAC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1183,6 +1185,7 @@ memmove = 0x8004EF2C; // LIBC ? member .text+0x0 (extent 0x90); sdk_members.py u
 strncmp = 0x8004EFBC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 strncpy = 0x8004EFCC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x8004EFDC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x8004EFEC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 PCopen = 0x8004EFFC; // LIBSN ? member .text+0x0 (extent 0x20); sdk_members.py unique placement
 PClseek = 0x8004F01C; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py unique placement
 PCclose = 0x8004F040; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1383,12 +1386,13 @@ _card_clear = 0x8007C410; // LIBCARD ? member .text+0x0 (extent 0x30); sdk_membe
 _card_write = 0x8007C440; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x8007C450; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x8007C460; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x8007C470; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x8007C480; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x8007C490; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8007D900; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8007D910; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: g3org_eu  (196 sdk-member adoptions)
+// target: g3org_eu  (198 sdk-member adoptions)
 GsSetOrign = 0x80029AEC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8002A24C; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8004A978; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1404,6 +1408,7 @@ memchr = 0x8004B678; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py un
 strncmp = 0x8004B708; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 strncpy = 0x8004B718; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x8004B728; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x8004B738; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 PCopen = 0x8004B748; // LIBSN ? member .text+0x0 (extent 0x20); sdk_members.py unique placement
 PClseek = 0x8004B768; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py unique placement
 PCclose = 0x8004B78C; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1580,13 +1585,14 @@ _card_auto = 0x80079B94; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 _card_write = 0x80079BD4; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x80079BE4; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x80079BF4; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x80079C04; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x80079C14; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x80079C24; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 PAD_dr = 0x8007B0C4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8007B0D4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8007B0E4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: g3org_jp  (218 sdk-member adoptions)
+// target: g3org_jp  (220 sdk-member adoptions)
 GsSetOrign = 0x80029B38; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8002A298; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8004AD58; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1603,6 +1609,7 @@ memmove = 0x8004BDD8; // LIBC ? member .text+0x0 (extent 0x90); sdk_members.py u
 strncmp = 0x8004BE68; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 strncpy = 0x8004BE78; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x8004BE88; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x8004BE98; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 PCopen = 0x8004BEA8; // LIBSN ? member .text+0x0 (extent 0x20); sdk_members.py unique placement
 PClseek = 0x8004BEC8; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py unique placement
 PCclose = 0x8004BEEC; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1801,12 +1808,13 @@ _card_clear = 0x800792BC; // LIBCARD ? member .text+0x0 (extent 0x30); sdk_membe
 _card_write = 0x800792EC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x800792FC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x8007930C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x8007931C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x8007932C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x8007933C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8007A7AC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8007A7BC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: mainmenu_eu  (172 sdk-member adoptions)
+// target: mainmenu_eu  (174 sdk-member adoptions)
 GsSetOrign = 0x8003D35C; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8003F2A8; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x800651CC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1822,6 +1830,7 @@ memchr = 0x80065ECC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py un
 strncmp = 0x80065F5C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 strncpy = 0x80065F6C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x80065F7C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x80065F8C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 SetVideoMode = 0x8006797C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x80067994; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 setjmp = 0x800681E8; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1974,13 +1983,14 @@ _card_auto = 0x80095624; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 _card_write = 0x80095664; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x80095674; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x80095684; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x80095694; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x800956A4; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x800956B4; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 PAD_dr = 0x80096B54; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x80096B64; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x80096B74; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: mainmenu_jp  (202 sdk-member adoptions)
+// target: mainmenu_jp  (204 sdk-member adoptions)
 GsSetOrign = 0x8003D3C4; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8003F2F0; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8006559C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1997,6 +2007,7 @@ memmove = 0x8006661C; // LIBC ? member .text+0x0 (extent 0x90); sdk_members.py u
 strncmp = 0x800666AC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 strncpy = 0x800666BC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x800666CC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x800666DC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 setjmp = 0x80068910; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x80068920; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x80068970; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -2179,12 +2190,13 @@ _card_clear = 0x80094D3C; // LIBCARD ? member .text+0x0 (extent 0x30); sdk_membe
 _card_write = 0x80094D6C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x80094D7C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x80094D8C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x80094D9C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x80094DAC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x80094DBC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8009622C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8009623C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: sces_00269  (154 sdk-member adoptions)
+// target: sces_00269  (156 sdk-member adoptions)
 GsSetOrign = 0x80027CFC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8002845C; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8002FB04; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2201,6 +2213,7 @@ strncmp = 0x80030894; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py u
 strncpy = 0x800308A4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x800308B4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 rand = 0x800308C4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x800308D4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 SetVideoMode = 0x800308E4; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 GetVideoMode = 0x800308FC; // LIBETC VMODE member .text+0x18 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 setjmp = 0x80031150; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2334,13 +2347,14 @@ _card_auto = 0x8004F970; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 _card_write = 0x8004F9B0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x8004F9C0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x8004F9D0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x8004F9E0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x8004F9F0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x8004FA00; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 PAD_dr = 0x80050FD0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x80050FE0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x80050FF0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 
-// target: slps_00270  (183 sdk-member adoptions)
+// target: slps_00270  (185 sdk-member adoptions)
 GsSetOrign = 0x80027CB4; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x80028414; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
 bzero = 0x8002FD10; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2358,6 +2372,7 @@ strncmp = 0x80030E20; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py u
 strncpy = 0x80030E30; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 free = 0x80030E40; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 rand = 0x80030E50; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+exit = 0x80030E60; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 trapIntrDMA = 0x80031714; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x80031898; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
 memclr = 0x80031940; // LIBETC INTR_DMA member .text+0x27c (extent 0x2c); sdk_members.py unique placement + sig-db agrees
@@ -2520,6 +2535,7 @@ _card_clear = 0x8004FE4C; // LIBCARD ? member .text+0x0 (extent 0x30); sdk_membe
 _card_write = 0x8004FE7C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitCARD = 0x8004FE8C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 StartCARD = 0x8004FE9C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+_bu_init = 0x8004FEAC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBAPI+LIBCARD twins)
 _new_card = 0x8004FEBC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_read = 0x8004FECC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8005133C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement

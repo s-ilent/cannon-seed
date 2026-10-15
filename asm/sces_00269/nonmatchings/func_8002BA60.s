@@ -260,7 +260,7 @@ glabel func_8002BD2C
     /* C530 8002BD30 80000534 */   ori       $a1, $zero, 0x80
     /* C534 8002BD34 F5AC000C */  jal        func_8002B3D4
     /* C538 8002BD38 00000000 */   nop
-    /* C53C 8002BD3C D825010C */  jal        func_80049760
+    /* C53C 8002BD3C D825010C */  jal        CloseEvent
     /* C540 8002BD40 00000000 */   nop
     /* C544 8002BD44 21200002 */  addu       $a0, $s0, $zero
     /* C548 8002BD48 21280000 */  addu       $a1, $zero, $zero

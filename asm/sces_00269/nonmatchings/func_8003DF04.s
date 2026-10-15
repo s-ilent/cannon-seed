@@ -409,7 +409,7 @@ glabel func_8003E390
     /* 1EBC0 8003E3C0 40128424 */  addiu      $a0, $a0, %lo(D_80021240)
     /* 1EBC4 8003E3C4 DEBC000C */  jal        func_8002F378
     /* 1EBC8 8003E3C8 00000000 */   nop
-    /* 1EBCC 8003E3CC 28E90008 */  j          func_8003A4A0
+    /* 1EBCC 8003E3CC 28E90008 */  j          ReadSXSYfifo
     /* 1EBD0 8003E3D0 16000434 */   ori       $a0, $zero, 0x16
 endlabel func_8003E390
 

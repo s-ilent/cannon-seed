@@ -97520,7 +97520,7 @@ enddlabel D_800B8AF0
 nonmatching D_800B8AF8
 
 dlabel D_800B8AF8
-    /* 992F8 800B8AF8 FC670580 */ .word func_800567FC
+    /* 992F8 800B8AF8 FC670580 */ .word ReadSZfifo3
     /* 992FC 800B8AFC 80420580 */ .word 0x80054280
 enddlabel D_800B8AF8
 

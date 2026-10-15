@@ -50,8 +50,8 @@
 //   0x8004e9d4 LIBC      ?              unique     strncmp adoptable
 //   0x8004e9e4 LIBC      ?              unique     strncpy adoptable
 //   0x8004e9f4 LIBC      ?              unique     free adoptable
-//   0x8004ea04 LIBC      ?              ambiguous  exit
-//   0x8004ea04 LIBC2     ?              ambiguous  exit
+//   0x8004ea04 LIBC      ?              ambiguous  exit adoptable
+//   0x8004ea04 LIBC2     ?              ambiguous  exit adoptable
 //   0x8004ea14 LIBSN     ?              unique     PCopen adoptable
 //   0x8004ea34 LIBSN     ?              unique     PClseek adoptable
 //   0x8004ea58 LIBSN     ?              unique     PCclose adoptable
@@ -390,8 +390,8 @@
 //   0x8007cd70 LIBCARD   ?              unique     _card_write adoptable
 //   0x8007cd80 LIBCARD   ?              unique     InitCARD adoptable
 //   0x8007cd90 LIBCARD   ?              unique     StartCARD adoptable
-//   0x8007cda0 LIBAPI    ?              ambiguous  _bu_init
-//   0x8007cda0 LIBCARD   ?              ambiguous  _bu_init
+//   0x8007cda0 LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x8007cda0 LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x8007cdb0 LIBCARD   ?              unique     _new_card adoptable
 //   0x8007cdc0 LIBCARD   ?              unique     _card_read adoptable
 //   0x8007e260 LIBAPI    ?              unique     PAD_dr adoptable
@@ -416,8 +416,8 @@
 //   0x8004efbc LIBC      ?              unique     strncmp adoptable
 //   0x8004efcc LIBC      ?              unique     strncpy adoptable
 //   0x8004efdc LIBC      ?              unique     free adoptable
-//   0x8004efec LIBC      ?              ambiguous  exit
-//   0x8004efec LIBC2     ?              ambiguous  exit
+//   0x8004efec LIBC      ?              ambiguous  exit adoptable
+//   0x8004efec LIBC2     ?              ambiguous  exit adoptable
 //   0x8004effc LIBSN     ?              unique     PCopen adoptable
 //   0x8004f01c LIBSN     ?              unique     PClseek adoptable
 //   0x8004f040 LIBSN     ?              unique     PCclose adoptable
@@ -722,8 +722,8 @@
 //   0x8007c440 LIBCARD   ?              unique     _card_write adoptable
 //   0x8007c450 LIBCARD   ?              unique     InitCARD adoptable
 //   0x8007c460 LIBCARD   ?              unique     StartCARD adoptable
-//   0x8007c470 LIBAPI    ?              ambiguous  _bu_init
-//   0x8007c470 LIBCARD   ?              ambiguous  _bu_init
+//   0x8007c470 LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x8007c470 LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x8007c480 LIBCARD   ?              unique     _new_card adoptable
 //   0x8007c490 LIBCARD   ?              unique     _card_read adoptable
 //   0x8007d900 LIBAPI    ?              unique     SysDeqIntRP adoptable
@@ -747,8 +747,8 @@
 //   0x8004b708 LIBC      ?              unique     strncmp adoptable
 //   0x8004b718 LIBC      ?              unique     strncpy adoptable
 //   0x8004b728 LIBC      ?              unique     free adoptable
-//   0x8004b738 LIBC      ?              ambiguous  exit
-//   0x8004b738 LIBC2     ?              ambiguous  exit
+//   0x8004b738 LIBC      ?              ambiguous  exit adoptable
+//   0x8004b738 LIBC2     ?              ambiguous  exit adoptable
 //   0x8004b748 LIBSN     ?              unique     PCopen adoptable
 //   0x8004b768 LIBSN     ?              unique     PClseek adoptable
 //   0x8004b78c LIBSN     ?              unique     PCclose adoptable
@@ -1019,8 +1019,8 @@
 //   0x80079bd4 LIBCARD   ?              unique     _card_write adoptable
 //   0x80079be4 LIBCARD   ?              unique     InitCARD adoptable
 //   0x80079bf4 LIBCARD   ?              unique     StartCARD adoptable
-//   0x80079c04 LIBAPI    ?              ambiguous  _bu_init
-//   0x80079c04 LIBCARD   ?              ambiguous  _bu_init
+//   0x80079c04 LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x80079c04 LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x80079c14 LIBCARD   ?              unique     _new_card adoptable
 //   0x80079c24 LIBCARD   ?              unique     _card_read adoptable
 //   0x8007b0c4 LIBAPI    ?              unique     PAD_dr adoptable
@@ -1046,8 +1046,8 @@
 //   0x8004be68 LIBC      ?              unique     strncmp adoptable
 //   0x8004be78 LIBC      ?              unique     strncpy adoptable
 //   0x8004be88 LIBC      ?              unique     free adoptable
-//   0x8004be98 LIBC      ?              ambiguous  exit
-//   0x8004be98 LIBC2     ?              ambiguous  exit
+//   0x8004be98 LIBC      ?              ambiguous  exit adoptable
+//   0x8004be98 LIBC2     ?              ambiguous  exit adoptable
 //   0x8004bea8 LIBSN     ?              unique     PCopen adoptable
 //   0x8004bec8 LIBSN     ?              unique     PClseek adoptable
 //   0x8004beec LIBSN     ?              unique     PCclose adoptable
@@ -1368,8 +1368,8 @@
 //   0x800792ec LIBCARD   ?              unique     _card_write adoptable
 //   0x800792fc LIBCARD   ?              unique     InitCARD adoptable
 //   0x8007930c LIBCARD   ?              unique     StartCARD adoptable
-//   0x8007931c LIBAPI    ?              ambiguous  _bu_init
-//   0x8007931c LIBCARD   ?              ambiguous  _bu_init
+//   0x8007931c LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x8007931c LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x8007932c LIBCARD   ?              unique     _new_card adoptable
 //   0x8007933c LIBCARD   ?              unique     _card_read adoptable
 //   0x8007a7ac LIBAPI    ?              unique     SysDeqIntRP adoptable
@@ -1393,8 +1393,8 @@
 //   0x80065f5c LIBC      ?              unique     strncmp adoptable
 //   0x80065f6c LIBC      ?              unique     strncpy adoptable
 //   0x80065f7c LIBC      ?              unique     free adoptable
-//   0x80065f8c LIBC      ?              ambiguous  exit
-//   0x80065f8c LIBC2     ?              ambiguous  exit
+//   0x80065f8c LIBC      ?              ambiguous  exit adoptable
+//   0x80065f8c LIBC2     ?              ambiguous  exit adoptable
 //   0x8006797c LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x80067994 LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x800681e8 LIBC      ?              unique     setjmp adoptable
@@ -1657,8 +1657,8 @@
 //   0x80095664 LIBCARD   ?              unique     _card_write adoptable
 //   0x80095674 LIBCARD   ?              unique     InitCARD adoptable
 //   0x80095684 LIBCARD   ?              unique     StartCARD adoptable
-//   0x80095694 LIBAPI    ?              ambiguous  _bu_init
-//   0x80095694 LIBCARD   ?              ambiguous  _bu_init
+//   0x80095694 LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x80095694 LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x800956a4 LIBCARD   ?              unique     _new_card adoptable
 //   0x800956b4 LIBCARD   ?              unique     _card_read adoptable
 //   0x80096b54 LIBAPI    ?              unique     PAD_dr adoptable
@@ -1684,8 +1684,8 @@
 //   0x800666ac LIBC      ?              unique     strncmp adoptable
 //   0x800666bc LIBC      ?              unique     strncpy adoptable
 //   0x800666cc LIBC      ?              unique     free adoptable
-//   0x800666dc LIBC      ?              ambiguous  exit
-//   0x800666dc LIBC2     ?              ambiguous  exit
+//   0x800666dc LIBC      ?              ambiguous  exit adoptable
+//   0x800666dc LIBC2     ?              ambiguous  exit adoptable
 //   0x80068910 LIBC      ?              unique     setjmp adoptable
 //   0x80068920 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x80068970 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
@@ -1986,8 +1986,8 @@
 //   0x80094d6c LIBCARD   ?              unique     _card_write adoptable
 //   0x80094d7c LIBCARD   ?              unique     InitCARD adoptable
 //   0x80094d8c LIBCARD   ?              unique     StartCARD adoptable
-//   0x80094d9c LIBAPI    ?              ambiguous  _bu_init
-//   0x80094d9c LIBCARD   ?              ambiguous  _bu_init
+//   0x80094d9c LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x80094d9c LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x80094dac LIBCARD   ?              unique     _new_card adoptable
 //   0x80094dbc LIBCARD   ?              unique     _card_read adoptable
 //   0x8009622c LIBAPI    ?              unique     SysDeqIntRP adoptable
@@ -2011,8 +2011,8 @@
 //   0x800308a4 LIBC      ?              unique     strncpy adoptable
 //   0x800308b4 LIBC      ?              unique     free adoptable
 //   0x800308c4 LIBC      ?              unique     rand adoptable
-//   0x800308d4 LIBC      ?              ambiguous  exit
-//   0x800308d4 LIBC2     ?              ambiguous  exit
+//   0x800308d4 LIBC      ?              ambiguous  exit adoptable
+//   0x800308d4 LIBC2     ?              ambiguous  exit adoptable
 //   0x800308e4 LIBETC    VMODE          unique     SetVideoMode adoptable  (sig-db agree)
 //   0x800308fc LIBETC    VMODE          unique     GetVideoMode adoptable  (sig-db agree)
 //   0x80031150 LIBC      ?              unique     setjmp adoptable
@@ -2255,8 +2255,8 @@
 //   0x8004f9b0 LIBCARD   ?              unique     _card_write adoptable
 //   0x8004f9c0 LIBCARD   ?              unique     InitCARD adoptable
 //   0x8004f9d0 LIBCARD   ?              unique     StartCARD adoptable
-//   0x8004f9e0 LIBAPI    ?              ambiguous  _bu_init
-//   0x8004f9e0 LIBCARD   ?              ambiguous  _bu_init
+//   0x8004f9e0 LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x8004f9e0 LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x8004f9f0 LIBCARD   ?              unique     _new_card adoptable
 //   0x8004fa00 LIBCARD   ?              unique     _card_read adoptable
 //   0x80050fd0 LIBAPI    ?              unique     PAD_dr adoptable
@@ -2282,8 +2282,8 @@
 //   0x80030e30 LIBC      ?              unique     strncpy adoptable
 //   0x80030e40 LIBC      ?              unique     free adoptable
 //   0x80030e50 LIBC      ?              unique     rand adoptable
-//   0x80030e60 LIBC      ?              ambiguous  exit
-//   0x80030e60 LIBC2     ?              ambiguous  exit
+//   0x80030e60 LIBC      ?              ambiguous  exit adoptable
+//   0x80030e60 LIBC2     ?              ambiguous  exit adoptable
 //   0x800316b4 LIBC      ?              unique     setjmp
 //   0x800316c4 LIBETC    INTR_DMA       unique     startIntrDMA adoptable  (sig-db agree)
 //   0x80031714 LIBETC    INTR_DMA       unique     trapIntrDMA adoptable  (sig-db agree)
@@ -2560,8 +2560,8 @@
 //   0x8004fe7c LIBCARD   ?              unique     _card_write adoptable
 //   0x8004fe8c LIBCARD   ?              unique     InitCARD adoptable
 //   0x8004fe9c LIBCARD   ?              unique     StartCARD adoptable
-//   0x8004feac LIBAPI    ?              ambiguous  _bu_init
-//   0x8004feac LIBCARD   ?              ambiguous  _bu_init
+//   0x8004feac LIBAPI    ?              ambiguous  _bu_init adoptable
+//   0x8004feac LIBCARD   ?              ambiguous  _bu_init adoptable
 //   0x8004febc LIBCARD   ?              unique     _new_card adoptable
 //   0x8004fecc LIBCARD   ?              unique     _card_read adoptable
 //   0x8005133c LIBAPI    ?              unique     SysDeqIntRP adoptable
