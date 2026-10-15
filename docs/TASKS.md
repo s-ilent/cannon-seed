@@ -3079,3 +3079,83 @@ Next queue:
    0x8002C360; 0x80043490 helper.
 4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); runtime gate-family blocked.
+
+## 2026-10-16 late: the boots' window readers decode - gp+0 is read exactly once (sces only, the string-table pointer), the "consts" are live rank-cluster state, gp-0x10 is the InitPAD version buffer
+
+Queue item 1 (CRT0 follow-ups). Both boots re-extracted per-sector from the
+re-fetched CHDs (sha256 verified; true-EXE SHA-1s match the banked
+witnesses: slps fa9474b4, sces 06b4bda6). Scripts repo-external:
+boot_gp_scan.py, boot_window_scan.py, boot_window_sweep.py,
+boot_gp_rel_scan.py. TOOLING WARNING for future windows: capstone 5 nests
+MEM operand fields under `.mem` (`.mem.base`/`.mem.disp`) - flat `.base`
+raises, and an `except: pass` silently empties the result set (two early
+"zero gp-relative ops" scans were exactly this artifact; a third scan
+conflated `w & 0x3F` with the I-type immediate). Every count below is from
+the fixed, capstone-detail scanners.
+
+FINDING 1 - gp+0 IS read, exactly once, sces only. sces 0x800222DC
+`lw $a0, ($gp)` loads the inserted word (0x80020040 = the boot string-table
+pointer: "VOICE=%d", "%s(%d):Invalid mission value in set_game_info()",
+"gameinfo.c", ...) and passes it to 0x8002d5b8, a parser over the table
+(calls 0x8002d620, result compared against a -1 sentinel). slps has ZERO
+gp+0 readers (no gp-relative op at disp 0, no %hi/%lo materialization, no
+data pointer): its u32 1 is dead data. slps consumes the SAME string table
+via immediates instead: main's tail 0x800218E4 materializes 0x80020040
+("VOICE=%d") and calls the A0#0x51 (sprintf) thunk 0x8002f92c with
+0x801FFF00; 0x80021A1C/21DE4/21F08 materialize 0x80020018/0x80020028. So
+the EU one-word insert = the string-table pointer promoted into .sdata (EU
+codegen routed the table through a variable; JP used immediates). The
+alignment law sces[X] == slps[X-4] stays exact for every other word.
+
+FINDING 2 - the window has REAL gp-relative traffic; the de-frame item's
+"no gp-relative access" premise is refuted. slps: 114 gp-relative mem ops
+(110 in-window-band), sces: 111. Every slps op at +X has its sces twin at
++X+4 - the alignment law confirmed at INSTRUCTION level, 110/111 (the +1
+is the sces-only gp+0 read). Reader map (slps frame; sces = +4):
+  gp+0x04/0x08  rank names read as data: lw 4($gp) = "NONE"; the GHOST
+                copy is lw 0x2c($gp) + lh 0x30($gp) (0x80024BA4/8) - the
+                compiler knew these .sdata objects and used $gp directly
+  gp+0x34..0x48 LIVE u32/u16 state of the rank-display cluster (NOT
+                read-only consts): dedicated leaf setters 0x80024EE8/EF4
+                (*(gp+0x34) = 0/1), 0x80024F04/F10 (*(gp+0x3C) = 0/1);
+                rw traffic 0x80024F20..0x80025Axx; u16s at +0x40/+0x42/
+                +0x44/+0x46/+0x48 - the file's 0x003C0000 u32 initializer
+                is the u16 pair 0x0000/0x003C at +0x44/+0x46
+  gp+0x54       rw (0x80025F28..0x80026290; 0xffffffff sentinel init)
+  gp+0x68       u16 counter rw (0x800260FC..)
+  gp+0x6A/6C/6E three u16 counters (0x80028BB0/4/8 clears; lh/sh pairs;
+                slti 0x2710 = 10000 cap, 0x28 = 40 clamp at 0x80028BC4..)
+  gp+0xE0       .sbss (beyond window end) rw
+The content map's "zeros" zones are runtime state arrays, not padding.
+
+FINDING 3 - gp-0x10 "%s\n" is the InitPAD version buffer (closed). 0x8004AB68
+(sces mirror 0x8004A79C) = boot-local InitPAD(buf1, 0x22, buf2, 0x22): its
+caller 0x80025C4C fills two 0x22-byte (34 = the Psy-Q pad buffer size)
+buffers at 0x80079304/0x8007932C with 0xFF, then calls InitPAD, then
+0x8004ac30 (StartPAD-shaped) + 0x8002f93c. InitPAD strcpy's (A0#0x3F thunk
+0x8002dc10) "PS-X Control PAD Driver  Ver 3.0" (string at payload 0x462F0
+slps / 0x45F88 sces; pointer loaded from 0x800662EC / 0x80065F84) INTO
+gp-0x10 - the "%s\n" file initializer is dead data overwritten before any
+use; zero other references to gp-0x10 in either boot. InitPAD also saves
+its 4 args to 0x80066570/74/80/84 (pad buffer descriptors) and zeroes the
+0x80066560 flag (slps; sces 0x80066208 via stub 0x8004a938). The other
+three "%s\n" copies (payload 0x11BF/0x142C/0x14AE slps; 0x119B/0x1438/0x14BA
+sces - odd offsets, the gameinfo.c string pool) are the real printf-format
+copies. A0 thunks pinned: 0x8002dc10 = A0#0x3F strcpy, 0x8002dc00 =
+A0#0x15 strcat, 0x8002f92c = A0#0x51 sprintf (the $t1/$t2 convention).
+
+Gates: docs-only; matched 174; ratchets 365/0; 8/8 verify GREEN untouched
+(no build-side file touched).
+
+Next queue:
+1. Rank-display cluster semantic decode (slps 0x80023BB8..0x80025Axx): the
+   gp+0x34..0x48 fields' game meaning (the u16 counters' 10000-cap/40-clamp
+   pair suggests a ratio/pct pair feeding the rank screen).
+2. sces 0x8002d5b8 string-table parser decode (what it looks up; the
+   "VOICE=%d" consumer path).
+3. Call 9/10 runtime tables (0x80114F48 / 0x801150F0 / 0x8012A87B/894) -
+   how SsVabOpenHead reorganizes the blocked tone table; re-open path
+   0x8002C360; 0x80043490 helper.
+4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); BIG de-frame coordination-gated; runtime gate-family
+   blocked.
