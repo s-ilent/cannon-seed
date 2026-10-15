@@ -196,6 +196,27 @@ head hunt, first fully-worked example of the pathology):
   round-trip); it is the sole SUSPECT in the screens (opfrac 0.42).
   Deferred to the de-frame transition with the rest of the family.
 
+* Thunk runtime + caller census addendum (2026-10-15, de-framed payload;
+  independent scan that converged on the same identification): runtime
+  addresses straight from the de-framed payload, no drift arithmetic —
+  mainmenu_eu's 4-thunk block runs 0x8005CE7C..0x8005CEBC, immediately
+  followed by island 1 at 0x8005CEBC, so thunks + transform helper are
+  ONE runtime library region the framing splits (the block's runtime
+  addresses cannot be recovered from the carve view: splat-map and
+  runtime differ by the ~0x9880 local skew here). Payload offsets of the
+  block head: game modules 0x3CE7C mainmenu_eu / 0x3D49C mainmenu_jp /
+  0x28E5C g3_jp / 0x28874 g3_eu / 0x262F8 g3org_jp / 0x25CC8 g3org_eu
+  (4-thunk variant), boots 0xEA80 slps / 0xE624 sces (5-thunk variant
+  confirmed: strncmp→strncpy→free→rand→exit walked byte for byte in the
+  de-framed payloads). Real `jal` callers exist in every module —
+  mainmenu: strncmp 5 / strncpy 9 / free 4 / exit 5 (exit from runtime
+  0x80023C28, 0x80024F34, ...); the g3/g3org family: 5/3/5/3, identical
+  counts across all four; boots: 5/3/5 and rand 7 / exit 4, identical in
+  both — so these are live library thunks, not dead bytes, and they join
+  the twins as runtime-real members unrepresentable in the carve view.
+  No carve-side pin (same rule as the twins): the de-frame transition
+  re-derives them.
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
