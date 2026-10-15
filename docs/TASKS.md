@@ -2635,3 +2635,97 @@ Next queue:
 4. GSD round-5 (db2f96e) adopt/reject stays with the lane owner; setIntr
    base->a1 steering, startIntr reopen, trapIntr fingerprint stay theirs;
    BIG de-frame stays coordination-gated; runtime gate-family blocked.
+
+## 2026-10-15 late (window cron-20261015-1642) - the discs return: CHD re-provision oracle-proven; the boots' .sdata windows dump; SE.VH's "+0x800" becomes 4 VAGs x 16 slot-groups
+
+Trigger: Silent handed fresh Discord CDN links for both discs into #dragoon
+(links expire ~2026-10-16 09:54 UTC; the cron task prompt now carries them
+with sha256s - the job was recreated as 461868 after 449530). This window
+fetched, verified and banked the first true-content bytes the project has
+ever had. scripts/disc_reprovision.py + parse_vh_counts.py (repo-external)
+produced scripts/disc_reprovision_out.txt.
+
+Disc re-provision (disk/, git-ignored; CHD v5 "MComprHD"):
+- Galaxian3_Europe.chd 382,613,010 B, sha256
+  98ccd87749918a3ac2e072f1ab9c7649eae567627c3edd62f8154c4b98cf165c;
+  Galaxian3_Japan.chd 382,607,234 B, sha256
+  a6025267f57392e178a2feace611a28e5ffd8ee2819358596f0879130fc73d08.
+- chd_extract.py: EU 267,752 sectors / JP 267,504 sectors, 4 tracks
+  (track 4 audio), map types {NONE, cdlzma, cdzl, flac} as expected.
+- ORACLE PROOF: contiguous (default) extraction of ALL 8 EXE targets is
+  byte-identical to baselines/*.bin; the boots reproduce the committed
+  SHA-1 oracles (slps_00270 f2a13b52..., sces_00269 19698984...). The
+  CHDs are the original media; the whole CHD -> bin -> ISO9660 -> file
+  chain is exact on both regions.
+- True content via the opt-in --per-sector read (last window's tooling,
+  first real-disc exercise): both boots + SE.VH;1 + SE.VB;1 per region.
+
+The boots' .sdata windows (queue item 3 of the boot-load-model section):
+- slps payload 0x4632C..0x463FC (0xD0 B) and sces 0x45FC4..0x46098
+  (0xD4 B) dumped from the TRUE files. Both sit in file sector 141/142 -
+  fully inside the contiguous baseline's woven tail; the baseline bytes
+  at the same offsets are pure framing (a repeating 02 00 00 fe pattern).
+  These bytes have never been seen by the project before this window.
+- Content decodes as a small .sdata pool: pilot-name C strings NONE /
+  FRANK / REIKO / JOHNSON / SHARK / GHOST (the DRAGOON/*.DAT cast), an
+  ints cluster (1, 0, 1 and a 0x3C-scaled field), a second NONE +
+  0xFFFFFFFF, six 8-B button-label slots " (1)" " (2)" " (A)" " (B)"
+  " (C)" " (D)", the string "bu00:" and halfwords 0x8169 / 0x816A, tail
+  word 0x2A.
+- LAYOUT DIVERGENCE: the two windows hold the same pool but NOT at the
+  same slot indices. sces[gp+0] is the runtime pointer 0x80020040 and the
+  common content starts one word later than slps (hence 0xD4 vs 0xD0 B,
+  4 spare zero bytes at the sces tail). Whether slps carries the same
+  pointer at gp-4 is outside the window (CRT0 decode will tell). The
+  member void's gp+0xa0..0xb0 reads therefore land on different fields
+  per region ("bu00:" at slps gp+0xA0 vs sces gp+0xA4). Per-region
+  gp-relative slot maps are MANDATORY before any .sdata symbol work; a
+  one-word shift is exactly what a shared map would silently corrupt.
+
+SE.VH;1 / SE.VB;1 (the func #56 follow-up, blocked since the blob window):
+- SE.VH head: "VABp", ver 6, id 0, and fsize == VH+VB combined size
+  EXACTLY per region (JP 0x8620+0x62450 = 0x6AA70; EU 0x7E20+0x5E420 =
+  0x66240). 0x10 = 0xEEEE marker; the region's VAG count (0x3E = 62 /
+  0x3A = 58) sits in THREE halfword slots 0x12/0x14/0x16 - the same
+  numbers func #56's slti loop bounds use: the game trusts the header's
+  own count field.
+- 0x20..0x820: 128 x 16-B program records ("01 00 00 36 ..." templates);
+  per-program field diffs every 0x10 between the regions (134 diff runs
+  inside the first 0x800) - region tuning lives here.
+- VAG table from 0x820 (0x20-B slots): SLOT-COUNT LAW - region size ==
+  (numVags+1) x 16 slots x 0x20 B, HOLDS in both regions (JP (62+1) x 16
+  x 0x20 = 0x7E00; EU (58+1) x 16 x 0x20 = 0x7600). The JP file is the
+  EU file with a 0x800 insert at the region start (12 of 14 0x10-aligned
+  shift probes match) = 4 extra VAGs x 16-slot groups = EXACTLY one
+  2048-B sector. func #56's "+0x800 = one sector" copy-size observation
+  now has a mechanism.
+- Record fields carry a repeating template (b1 b2 tags, c0/c1/c2/c3
+  halfword runs); the VAG body-size field is NOT yet identified (sweeps
+  over u16 fields x 1/0x10/0x80/0x200/0x800 units found no sum equal to
+  the VB size) - the Call-5 parser disasm is the cross-reference that
+  will pin the field offsets. 481 differing bytes in the common region,
+  one 107-B run.
+- SE.VB;1: JP 0x62450 / EU 0x5E420 (delta 0x4030). The first 0x39150 B
+  (233 KB, ~45%) are byte-identical; divergence is 15-B-period runs
+  inside 16-B ADPCM blocks (75 of 189 sectors touched) - shared early
+  VAG bodies, region-specific audio later, and JP carries the extra
+  bodies for its 4 extra VAGs in the 0x4030 tail.
+
+Gates: docs-only (plus git-ignored disk/ + repo-external scripts); 8/8
+verify GREEN untouched; matched 174; ratchets 365/0. No carve-side action.
+
+Next queue:
+1. SE.VH record field decode: cross-ref func #56's Call-5 parser (the
+   0x8002CA84 slps worker) field offsets against the real bytes; pin the
+   VAG body-size field, re-walk the VB with it, and map the 4 extra JP
+   VAGs to their VB offsets (the 0x4030 delta tail).
+2. The .sdata windows feed the de-frame item: build the per-region
+   gp-relative slot maps (slps 0xD0 / sces 0xD4 B) before any .sdata
+   symbols are authored; note the sces one-word lead (0x80020040 at
+   gp+0) and settle whether slps mirrors it at gp-4 via the CRT0 decode.
+3. True re-extraction bookkeeping (de-frame transition prep): the
+   --per-sector boots are the FUTURE oracles' source; config/sha1 stays
+   untouched until the coordination gate flips.
+4. GSD round-5 adopt/reject stays with the lane owner; setIntr steering
+   / startIntr reopen / trapIntr fingerprint stay theirs; BIG de-frame
+   coordination-gated; runtime gate-family blocked.
