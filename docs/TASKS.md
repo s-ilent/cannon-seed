@@ -175,6 +175,27 @@ head hunt, first fully-worked example of the pathology):
   immediates, so the identification is address-independent and survives
   the de-frame transition unchanged.
 
+* Witness B — the j-target rescue victim `func_80061780` (mainmenu_eu,
+  2026-10-15, found reviewing the sdk-landing screens): the 8a66466
+  re-partitioning left a 0x60 row at carve `0x80061780` whose 24/24 words
+  decode as nothing (spimdisasm emits them as `.word`, several marked
+  invalid instructions; no prologue, no zero runs, no ASCII — a
+  high-entropy blob). Pre-landing the same bytes were interior `.word`
+  data inside the big walk row `func_8006107C` (0x764). The scanner heads
+  there on every re-scan because FOUR real `jal`s decode into it
+  (`0x8005B060`, `0x8005B2CC`, `0x8005B8B0`, `0x8005B968`, words
+  `0x0C185E0X`) — the v4 j-target rescue law "a tail call only ever
+  targets code" doing exactly what it is told, on drifted fields. This is
+  Witness A's law seen from the rescue side: the fields are
+  runtime-encoded; decoded as carve addresses they land below the true
+  target, here at a depth where the skew has grown past Witness A's
+  0x9210 (consistent with the ~304 B/sector growth). Consequence, same
+  call as Witness A: no carve-side fix — a data pin would fight the
+  rescue on every scan and claim a carve identity the de-frame
+  transition will re-derive; the row is verify-neutral (bytes
+  round-trip); it is the sole SUSPECT in the screens (opfrac 0.42).
+  Deferred to the de-frame transition with the rest of the family.
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
