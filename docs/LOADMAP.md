@@ -36,11 +36,11 @@ Entry disassembly:
 
 ```mips
   80047B58:  07006214  bne $v1, $v0, 0x80047b78
-  80047B5C:  00000000  nop 
+  80047B5C:  00000000  nop
   80047B60:  2f13010c  jal 0x80044cbc
   80047B64:  06000434  ori $a0, $zero, 6
   80047B68:  160a0108  j 0x80042858
-  80047B6C:  00000000  nop 
+  80047B6C:  00000000  nop
   80047B70:  0b80013c  lui $at, 0x800b
   80047B74:  bcc820a4  sh $zero, -0x3744($at)
   80047B78:  1800bf8f  lw $ra, 0x18($sp)
@@ -50,15 +50,15 @@ Entry disassembly:
   80047B88:  2000bd27  addiu $sp, $sp, 0x20
   80047B8C:  0b80023c  lui $v0, 0x800b
   80047B90:  14cc4294  lhu $v0, -0x33ec($v0)
-  80047B94:  00000000  nop 
+  80047B94:  00000000  nop
   80047B98:  20004230  andi $v0, $v0, 0x20
   80047B9C:  13004010  beqz $v0, 0x80047bec
-  80047BA0:  00000000  nop 
+  80047BA0:  00000000  nop
   80047BA4:  0b80033c  lui $v1, 0x800b
   80047BA8:  04cc638c  lw $v1, -0x33fc($v1)
-  80047BAC:  00000000  nop 
+  80047BAC:  00000000  nop
   80047BB0:  00006294  lhu $v0, ($v1)
-  80047BB4:  00000000  nop 
+  80047BB4:  00000000  nop
 ```
 
 ### `g3_jp`
@@ -74,11 +74,11 @@ Entry disassembly:
 
 ```mips
   80047EF0:  07006214  bne $v1, $v0, 0x80047f10
-  80047EF4:  00000000  nop 
+  80047EF4:  00000000  nop
   80047EF8:  1514010c  jal 0x80045054
   80047EFC:  06000434  ori $a0, $zero, 6
   80047F00:  fc0a0108  j 0x80042bf0
-  80047F04:  00000000  nop 
+  80047F04:  00000000  nop
   80047F08:  0b80013c  lui $at, 0x800b
   80047F0C:  6cc020a4  sh $zero, -0x3f94($at)
   80047F10:  1800bf8f  lw $ra, 0x18($sp)
@@ -88,15 +88,15 @@ Entry disassembly:
   80047F20:  2000bd27  addiu $sp, $sp, 0x20
   80047F24:  0b80023c  lui $v0, 0x800b
   80047F28:  c4c34294  lhu $v0, -0x3c3c($v0)
-  80047F2C:  00000000  nop 
+  80047F2C:  00000000  nop
   80047F30:  20004230  andi $v0, $v0, 0x20
   80047F34:  13004010  beqz $v0, 0x80047f84
-  80047F38:  00000000  nop 
+  80047F38:  00000000  nop
   80047F3C:  0b80033c  lui $v1, 0x800b
   80047F40:  b4c3638c  lw $v1, -0x3c4c($v1)
-  80047F44:  00000000  nop 
+  80047F44:  00000000  nop
   80047F48:  00006294  lhu $v0, ($v1)
-  80047F4C:  00000000  nop 
+  80047F4C:  00000000  nop
 ```
 
 ### `g3org_eu`
@@ -113,9 +113,9 @@ Entry disassembly:
 ```mips
   80044FAC:  01000234  ori $v0, $zero, 1
   80044FB0:  0401010c  jal 0x80040410
-  80044FB4:  00000000  nop 
+  80044FB4:  00000000  nop
   80044FB8:  ba000108  j 0x800402e8
-  80044FBC:  00000000  nop 
+  80044FBC:  00000000  nop
   80044FC0:  0b030234  ori $v0, $zero, 0x30b
   80044FC4:  0c80013c  lui $at, 0x800c
   80044FC8:  349722a4  sh $v0, -0x68cc($at)
@@ -126,7 +126,7 @@ Entry disassembly:
   80044FDC:  3f000434  ori $a0, $zero, 0x3f
   80044FE0:  0c80023c  lui $v0, 0x800c
   80044FE4:  e4964284  lh $v0, -0x691c($v0)
-  80044FE8:  00000000  nop 
+  80044FE8:  00000000  nop
   80044FEC:  02004014  bnez $v0, 0x80044ff8
   80044FF0:  2d000234  ori $v0, $zero, 0x2d
   80044FF4:  3c000234  ori $v0, $zero, 0x3c
@@ -134,7 +134,7 @@ Entry disassembly:
   80044FFC:  c49522a4  sh $v0, -0x6a3c($at)
   80045000:  0c80023c  lui $v0, 0x800c
   80045004:  dc954294  lhu $v0, -0x6a24($v0)
-  80045008:  00000000  nop 
+  80045008:  00000000  nop
 ```
 
 ### `g3org_jp`
@@ -151,9 +151,9 @@ Entry disassembly:
 ```mips
   8004538C:  01000234  ori $v0, $zero, 1
   80045390:  fc01010c  jal 0x800407f0
-  80045394:  00000000  nop 
+  80045394:  00000000  nop
   80045398:  b2010108  j 0x800406c8
-  8004539C:  00000000  nop 
+  8004539C:  00000000  nop
   800453A0:  0b030234  ori $v0, $zero, 0x30b
   800453A4:  0c80013c  lui $at, 0x800c
   800453A8:  208f22a4  sh $v0, -0x70e0($at)
@@ -164,7 +164,7 @@ Entry disassembly:
   800453BC:  3f000434  ori $a0, $zero, 0x3f
   800453C0:  0c80023c  lui $v0, 0x800c
   800453C4:  d08e4284  lh $v0, -0x7130($v0)
-  800453C8:  00000000  nop 
+  800453C8:  00000000  nop
   800453CC:  02004014  bnez $v0, 0x800453d8
   800453D0:  2d000234  ori $v0, $zero, 0x2d
   800453D4:  3c000234  ori $v0, $zero, 0x3c
@@ -172,7 +172,7 @@ Entry disassembly:
   800453DC:  b08d22a4  sh $v0, -0x7250($at)
   800453E0:  0c80023c  lui $v0, 0x800c
   800453E4:  c88d4294  lhu $v0, -0x7238($v0)
-  800453E8:  00000000  nop 
+  800453E8:  00000000  nop
 ```
 
 ### `mainmenu_eu`
@@ -188,9 +188,9 @@ Entry disassembly:
 
 ```mips
   8005C160:  3c510108  j 0x800544f0
-  8005C164:  00000000  nop 
+  8005C164:  00000000  nop
   8005C168:  3763010c  jal 0x80058cdc
-  8005C16C:  00000000  nop 
+  8005C16C:  00000000  nop
   8005C170:  0d80033c  lui $v1, 0x800d
   8005C174:  88ad6394  lhu $v1, -0x5278($v1)
   8005C178:  01000234  ori $v0, $zero, 1
@@ -204,7 +204,7 @@ Entry disassembly:
   8005C198:  0d80013c  lui $at, 0x800d
   8005C19C:  88ad23a4  sh $v1, -0x5278($at)
   8005C1A0:  1000bf8f  lw $ra, 0x10($sp)
-  8005C1A4:  00000000  nop 
+  8005C1A4:  00000000  nop
   8005C1A8:  0800e003  jr $ra
   8005C1AC:  1800bd27  addiu $sp, $sp, 0x18
   8005C1B0:  e8ffbd27  addiu $sp, $sp, -0x18
@@ -266,7 +266,7 @@ Entry disassembly:
   8002D908:  eeffc814  bne $a2, $t0, 0x8002d8c4
   8002D90C:  1000e724  addiu $a3, $a3, 0x10
   8002D910:  31af0008  j 0x8002bcc4
-  8002D914:  00000000  nop 
+  8002D914:  00000000  nop
   8002D918:  0000c28c  lw $v0, ($a2)
   8002D91C:  0400c38c  lw $v1, 4($a2)
   8002D920:  0800c48c  lw $a0, 8($a2)
@@ -282,9 +282,9 @@ Entry disassembly:
   8002D948:  6861848c  lw $a0, 0x6168($a0)
   8002D94C:  bc00828f  lw $v0, 0xbc($gp)
   8002D950:  10008594  lhu $a1, 0x10($a0)
-  8002D954:  00000000  nop 
+  8002D954:  00000000  nop
   8002D958:  06004514  bne $v0, $a1, 0x8002d974
-  8002D95C:  00000000  nop 
+  8002D95C:  00000000  nop
   8002D960:  12008394  lhu $v1, 0x12($a0)
   8002D964:  c000828f  lw $v0, 0xc0($gp)
 ```
@@ -307,14 +307,14 @@ Entry disassembly:
   8002DB20:  cc64848c  lw $a0, 0x64cc($a0)
   8002DB24:  b800828f  lw $v0, 0xb8($gp)
   8002DB28:  10008594  lhu $a1, 0x10($a0)
-  8002DB2C:  00000000  nop 
+  8002DB2C:  00000000  nop
   8002DB30:  06004514  bne $v0, $a1, 0x8002db4c
-  8002DB34:  00000000  nop 
+  8002DB34:  00000000  nop
   8002DB38:  12008394  lhu $v1, 0x12($a0)
   8002DB3C:  bc00828f  lw $v0, 0xbc($gp)
-  8002DB40:  00000000  nop 
+  8002DB40:  00000000  nop
   8002DB44:  04004310  beq $v0, $v1, 0x8002db58
-  8002DB48:  00000000  nop 
+  8002DB48:  00000000  nop
   8002DB4C:  12008294  lhu $v0, 0x12($a0)
   8002DB50:  b80085af  sw $a1, 0xb8($gp)
   8002DB54:  bc0082af  sw $v0, 0xbc($gp)
