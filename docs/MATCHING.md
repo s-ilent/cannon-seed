@@ -80,6 +80,17 @@ git clone --depth 1 https://github.com/sozud/psy-q ~/psyq     # 3.3 is the pinne
 python3 tools/sdk_symbols.py --libs ~/psyq/3.3/PSX/LIB        # writes the report
 ```
 
+The archive trees are all the tool reads, so on a fresh machine the cheap
+variant is a sparse clone (and the sig-db is a separate repo, pinned to
+version `330` to match 3.3):
+
+```sh
+git clone --depth 1 --filter=blob:none --sparse https://github.com/sozud/psy-q ~/psyq
+git -C ~/psyq sparse-checkout set 3.3/PSX/LIB
+git clone --depth 1 --filter=blob:none --sparse https://github.com/lab313ru/psx_psyq_signatures ~/psyq-sigs
+git -C ~/psyq-sigs sparse-checkout set 330
+```
+
 That parses the SDK's own archives and rewrites `config/sdk_symbols.txt`, a
 report of every pure veneer in the tree with the library member it dispatches
 to. Check it after any re-split: newly resolved rows are names someone can
