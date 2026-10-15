@@ -3159,3 +3159,20 @@ Next queue:
 4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); BIG de-frame coordination-gated; runtime gate-family
    blocked.
+
+ADDENDUM (same window): the gp+0 consumer decodes as the FLOAD path. sces
+0x8002d5b8 = retry wrapper (call 0x8002d620(strtab) until it returns
+!= -1, up to 0x0FFFFFFF tries; exhaustion -> error glue with the string at
+payload 0xA80 = "FLOAD:fault!\n"). 0x8002d620 = the load prep: if
+*(gp+0xD0) != 0 first calls 0x8002e644 (teardown of the previous load);
+0x8003b36c(sp+0x18, strtab) parses/loads; the value at sp+0x1C is rounded
+UP to a 2048 multiple (+1 sector if exact - the classic CD-read rounding);
+0x8002d9d4(0x00066000) allocates; the rounded size lands in *(gp+0xD0);
+zero -> "FLOAD:fault!\n" path. So gp+0xD0 - the sces window's "4 extra
+zero bytes" - is the loaded-file size state, and its slps twin is gp+0xCC
+(the alignment law's +4 again). The string pool both loaders consume sits
+at payload 0x10.. in each boot: "EXE;1", "file not found\n", a 6-entry
+pointer table at payload 0x20, then "\W16.DAT;1" and "VOICE=%d". Both
+boots run the SAME loader; slps passes the table pointer as immediates
+(main tail), sces through the .sdata variable at gp+0. The one-word insert
+is fully explained: no content difference, only pointer routing.
