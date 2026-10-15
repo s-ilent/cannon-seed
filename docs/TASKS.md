@@ -6,6 +6,32 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### State checkpoint (2026-10-15, `d3434c3`): gates green, sdk adoption closed
+
+First independent full-gate audit since the anchor landing (`8a66466`) and the
+adoption lands (`7cce6f3`/`0ad2d31`/`f276290`):
+
+* `make verify` GREEN 8/8; ratchets 365/0 == baseline; matched 174, progress
+  TOTAL 14590 (census grew 13659→14590 with the anchor rows — filesystem
+  heuristic, the oracle is unaffected); screens cover 2651 asm/c subsegs (was
+  1813 pre-landing). 1 SUSPECT total: Witness B's `func_80061780`
+  (mainmenu_eu, 96 B, opfrac 0.417 — the documented, deferred row; no new
+  suspect). 27 DATA flags, all score-40 padding-class: slps/sces 24 B = the
+  adjudicated SetDQB tail; the rest are 96–244 B member-tail zero12/zero13
+  paddings. One spot-checked flag (mainmenu_jp `func_8007EFDC`, 244 B) is real
+  INTR-handler code (`mfc0 $13`, `sw $ra,0x7C($k0)`) with a nop tail — a
+  heuristic false-positive on code-with-padding, left untouched (INTR lane).
+* sdk adoption residue = ZERO: a fresh `tools/sdk_curated.py` run over the
+  psyq 3.3 archives reproduces `config/symbols.curated.txt` byte-identical —
+  1607 adoptions, skips all justified (name-dup "both copies real; one label
+  each" for the GsSetOrign/SpuVmDamperOn/memclr/Snd_play second copies,
+  addr-curated for the hand rows), guard block silent. The adoption queue
+  from the anchor landing is CLOSED; nothing left to adopt until a new member
+  report lands.
+* Housekeeping: the "Teach `sdk_members.py` the 0xF000 archives" and "Retire
+  the MODE2-framing rows" headers below are DONE (cc7ae6f, 87f84d1); they stay
+  listed as history.
+
 ### Teach `tools/sdk_members.py` the `0xF000`-section archives (LIBC/LIBAPI/…)
 
 TOOL + REPORT DONE 2026-10-15 (see Log): `parse_archive()` now canonicalizes
