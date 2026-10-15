@@ -2380,3 +2380,118 @@ Next queue:
    setIntr base->a1 steering, startIntr reopen, trapIntr fingerprint
    stay theirs; BIG de-frame stays coordination-gated; runtime
    gate-family still blocked.
+
+## 2026-10-15 late - func #18's descriptor fields decode: four desc pointers + a size travel through a stack-struct into 0x8002ADA0; plus a Witness on the boot load model
+
+Queue item 1 of the presets section. De-framed runtime view throughout;
+script repo-external (scripts/descriptor_semantics.py, output
+descriptor_out.txt). Fixes three details of the presets section along
+the way.
+
+THE RECORD LAYOUT (sp-relative vs record-relative correction): the
+record base is $s0 = sp+0x80, so the presets section's "record fields
+0xe4/0xe8/0xec/0xf0/0xf4" are SP offsets - record-relative they are
++0x64/+0x68/+0x6C/+0x70/+0x74. The "sh 0x11" lands at record+0x20
+(sp+0xa0), immediately before the mode-title copy zone at record+0x22
+(sp+0xa2). The title string itself starts at record+0x00.
+
+DEAD HEADER STORES (both boots): func #18 first stores the gp+0xa0
+word and gp+0xa4 halfword into record+0x00/+0x04, then strcat(disc-ID)
+overwrites record+0x00 from index 0. The header stores are dead in the
+final record - a source-level aliasing artifact (probably a union or a
+hand-typed overlapping assignment), reproduced identically in both
+boots, so the rebuild must keep them.
+
+MODE-DEPENDENT SIZE CONSTANT: rec+0x74 gets 0x5600 for modes 0/1
+(0x80029D14 slps) but 0xB80 for modes 2/3 (0x80029F04 slps) - the
+presets section's "0xf4 the constant 0x5600" holds only for the PLAY
+branch.
+
+THE HANDOFF IS THE COMMON TAIL (correction): after the mode dispatch,
+the tail copy loop (0x80029F0C slps) moves record+0xC..+0x78 (0x6C B)
+to sp+0x10 and calls the inner void helper (0x8002A71C slps /
+0x8002A544 sces) with a0 = func #18's own a0 (s3) and a1/a2/a3 =
+record words 0/1/2 - an o32 struct-by-value pass. ALL modes reach it;
+the size-delta addendum's "in the >=2 mode also calls an internal void
+helper" misread the join. Record struct layout (0x78 B): +0x00 title
+string (BISLPS-00270/BESCES-00269 + arg), +0x20 halfword 0x11, +0x22
+mode title + fullwidth arg, +0x64 desc base ptr, +0x68/+0x6C/+0x70
+desc+0x2C successor ptr (same value three times), +0x74 size
+(0x5600/0xB80).
+
+HELPER INTERNALS (0x8002A71C slps, 0x28 frame): calls 0x8002AC5C(s3)
+for an id/handle (-1 -> return -0xA); calls 0x8002AD0C(id, 0) for a
+status (3 -> early return 0, nonzero -> return -1); then formats two
+nibbles of the id ASCII (sra 4/andi 0xF, +0x30 - digits '0'-'9' only)
+into a local buffer; loads struct+0x14 (rec+0x20, the 0x11 halfword)
+as a1, struct+0x58 (rec+0x64, desc base) as a3, and struct+0x5C..0x68
+(rec+0x68/6C/70/74) as four stack args; tail-calls 0x8002ADA0(buf,
+0x11, buf2, desc_base, [desc_succ, desc_succ, desc_succ, size]).
+
+CONSUMER HEAD (0x8002ADA0, slps): takes desc base -> s3, first stack
+arg (desc+0x2C) -> s0, and the size arg (+0x200, then round up to
+0x2000 granularity via the sra/sll 13 dance, plus another +0x2000 when
+the rounded value differs) - allocation-shaped arithmetic. The size is
+NOT the desc blob length: the two desc units sit only 0xC0 apart.
+
+THE DESCRIPTOR BLOBS: byte-equal pairwise across boots (re-confirmed).
+desc0 (modes 0/1) vs desc2 (modes 2/3) differ in 72 of the first 0xC0
+bytes - bands +0x04..0x27 and +0x82..0xBE; both carry `8c 00 00 00 00
+0X 00 0Y` at +0x20 with X=02 for the PLAY pair and X=03 for the
+MISSION pair (Y=00/01). desc0's head ramp descends as byte pairs
+(0xbfd5..0x9008), desc2's as halfwords (0x7e10..0x7c08). No TIM magic
+(0x00000010) anywhere in either - content stays unidentified beyond
+the earlier gradient/palette reading.
+
+CALLERS: two per boot, both inside the member void (slps 0x80029214 /
+0x800295C4; sces 0x8002925C / 0x8002960C). func #18's a0 flows into
+0x8002AC5C as a handle. The gp+0xa0/a4 slots are read at 8 sites
+(func #18 x2, several void siblings) - and written NOWHERE in the
+image (see Witness).
+
+WITNESS (new, for the de-frame lane): the boot load model does not
+close. (a) The de-framed CRT0 at pc0 (0x8002DB14 slps / 0x8002D908
+sces) is coherent: zero-clear 0x800663FC..0x8012C3F4, $sp = [0x8002DBC4]
+| 0x80000000, $ra saved at 0x80066524, $gp = 0x8006632C slps /
+0x80065FC4 sces, then a BIOS A0-thunk table at 0x8002F94C (t2=0xa0,
+t1=0x39), then main 0x80021800. (b) The raw/carve-linear load model is
+REJECTED: pc0 under file-linear mapping lands on mid-function garbage
+(payload 0xBE94), while the de-framed position decodes as the CRT0
+above. (c) BUT every link-view address the CRT0 touches ($gp window
+0x8006632C..0x800663FC, bss from 0x800663FC) lies BEYOND the de-framed
+image end (0x8005D5F0; t_size 0x46800 = the raw remainder including
+framing, de-framed content 0x3D5F0). (d) Nothing in the image writes
+the gp slots - zero gp-relative stores in the 0x9c..0xb0 window, no
+la materializations of 0x800663CC-class addresses; the provisioning of
+that 0xD0-B sdata window (and the bss that follows it) happens outside
+the de-framed image, by a mechanism this window did not find. (e) The
+gp-init pair exists TWICE in the payload (de-framed 0x8002DB94 and
+again at 0x8002E394+0x70 - the +0x20800 shift lands on the known
+func_8002E394 row the fan-out addendum flagged as "same function,
+opposite labels"). (f) config/splat.slps_00270.yaml's gp_value
+0x8006322C is a digit-substitution typo of the true $gp 0x8006632C -
+the substitution 663->632 appears three times (the gp_value itself and
+the comment's example slots 0x80063268/0x80063294, which decode to
+0x80066368/0x80066394 off the actual pair). It is inert for the build
+(matched C compiles -G0, so no GPREL16 references _gp; the crt0 pair
+is a literal in the asm tree), but it poisons any address arithmetic
+derived from it - this window nearly did.
+
+No carve-side action; docs-only: matched 174, ratchets 365/0, 8/8
+verify GREEN unchanged (slps_00270 re-verified after this window's
+reset forward).
+
+Next queue:
+1. Resolve the boot sdata provisioning (the Witness): who fills
+   0x8006632C..0x800663FC before func #18 reads gp+0xa0? Check main
+   (0x80021800) head, the region above the de-framed image end, and
+   whether the boots de-frame via a mechanism the game modules don't
+   use. Feeds the coordination-gated BIG de-frame item directly.
+2. gp_value typo fix (config/splat.slps_00270.yaml 0x8006322C ->
+   0x8006632C) - coordinate with the scan lane owner: gen_ld.py emits
+   _gp from it; verify blast radius before landing.
+3. Descriptor blob content identification (icon/palette candidates) -
+   low value, optional.
+4. Disc-side SE.VH/SE.VB diff still waits on CHD re-provision; GSD
+   round-5 stays with the lane owner; BIG de-frame stays
+   coordination-gated; runtime gate-family still blocked.
