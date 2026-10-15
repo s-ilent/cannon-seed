@@ -354,6 +354,64 @@ head hunt, first fully-worked example of the pathology):
   16 rows sces (`data_80028470` through `func_8002DEE4`). The C lane's
   first boot work item is 63 functions. No carve-side action (same rule).
 
+* Member void size-delta localization addendum (2026-10-15, de-framed
+  payload; the follow-up the anatomy census set up): WHICH two functions
+  carry the size deltas, and what exactly differs? Method: the prologue
+  census reproduced over the de-framed payloads (63 sites both boots;
+  the shift structure reproduces exactly — +0x0 sites #0–18, +0x220
+  #19–56, +0x22C #57–62 — an independent audit pass), per-index size
+  pairing, common prefix/suffix word analysis, word-level diff of the
+  two delta middles, and a capstone decode under the region-bit jal law
+  (target = (PC & 0xF0000000) | (idx << 2); adding the load base
+  0x80020000 instead skews every target +0x20000 — caught immediately
+  because the corrected strcat targets landed on the anatomy census's
+  documented runtimes 0x8002DC00/0x8002D9F4). THE ANSWER:
+  - Delta 1 = function #18 (head void+0x2890 both boots → slps
+    0x80029AE8 / sces 0x80029B30; slps 0x4A4 B vs sces 0x284 B). A
+    descriptor/string composer: builds a fixed-format record on the
+    stack from rodata presets selected by a mode dispatch (`sltiu` 2 /
+    `bnez`), composes a string, tail-calls function #19 (both boots —
+    the next void function's head, 0x80029F8C / 0x80029DB4), and in the
+    >=2 mode also calls an internal void helper (0x8002A71C /
+    0x8002A544). strcat 4x slps vs 8x sces — the anatomy roster's whole
+    strcat delta (x14 vs x18) lives in this one function. The +0x220 is
+    codegen shape, not functionality: slps expands each fixed-size
+    rodata→stack copy as an alignment-dispatch loop pair (`andi` 3 →
+    lwl/lwr 16 B-per-iter loop vs lw/sw loop + byte tail, `j` into
+    shared tails), one full expansion per preset (0x30 B and 0x20 B
+    sizes x2 modes), while sces emits straight-line lwl/lwr single-shot
+    copies for the same transfers. 9 common head words, 8 common tail
+    words; first divergence at function word 9 — the gp-relative load
+    slot (0xa0($gp) slps vs 0xa4($gp) sces, the differing .sdata
+    layouts).
+  - Delta 2 = function #56 (head slps 0x8002C110 / sces 0x8002BF38;
+    slps 0x208 B vs sces 0x1FC B). The void's external game-code
+    fan-out: 14 jals to 14 DISTINCT targets outside the void, the same
+    call sequence in both boots at per-boot layout offsets (slps
+    0x800436B8/0x800438D8/0x8002CA1C/0x8002EAA0/0x800440D8/0x8002C7C8/
+    0x80043CE8/0x80044F20/0x80044BFC/0x80044CE0/0x800499C8/0x80045304/
+    0x800440C8/0x8003E518; sces each a few words into its own layout;
+    3 sit just past the void end 0x8002C7B0, 11 deeper in the file).
+    The same function also materializes a blob into low memory with an
+    identical structure both boots (jal a getter, alignment-dispatch
+    copy loop to dest 0x80016604, a 0x20-stride table-walk loop of
+    calls, halfword stores into 0x8006xxxx globals). The +0xC is
+    immediate-range fallout of a GENUINE content difference: the blob
+    is 0x8620 B in slps vs 0x7E20 B in sces (+0x800), so slps's size
+    and end immediates (0x8620/0x8624) exceed the signed-16-bit
+    addiu/sw range and force 2-instruction ori+addu / ori+sw expansions
+    at exactly 3 sites (+3 words = +0xC); sces's 0x7E20/0x7E24 fit
+    single instructions. Bonus content delta in the same function: the
+    table-walk bound is `slti` 0x3E (62 entries) slps vs `slti` 0x3A
+    (58) sces — size-neutral, another real per-boot difference. Word
+    diff ratio 0.747; every other REPLACE block is a per-boot literal
+    (jal fields, gp/data slots, rodata addresses).
+  - Census law confirmed: both deltas are real content/codegen
+    differences, not prologue-census artifacts; the other 61 functions
+    pair at equal sizes. No carve-side action (same rule) — the
+    de-frame transition re-derives; functions #18 and #56 are the
+    boots' first two shape-known C-lane targets.
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
