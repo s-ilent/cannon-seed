@@ -1,0 +1,96 @@
+# decomp_settings project file (https://github.com/ethteck/decomp_settings).
+# Community-standard metadata so coddog / m2c / permuter-style tools can read
+# the project without bespoke glue. sha1 values are the retail oracles in
+# config/sha1/; the elf/compiled_target paths are build products (git-ignored).
+name: Galaxian^3
+repo: https://github.com/s-ilent/cannon-seed
+platform: psx
+versions:
+- name: slps_00270
+  fullname: Japan (slps_00270)
+  sha1: f2a13b5270876e8117ddcc38fb99716124195c46
+  paths:
+    target: baselines/slps_00270.bin
+    build_dir: build
+    compiled_target: build/slps_00270.bin
+    map: build/slps_00270.map
+    elf: build/slps_00270.elf
+    asm: asm/nonmatchings
+    nonmatchings: asm/nonmatchings
+- name: sces_00269
+  fullname: Europe (sces_00269)
+  sha1: 1969898477965aefa053fabd07cd6c410e816986
+  paths:
+    target: baselines/sces_00269.bin
+    build_dir: build
+    compiled_target: build/sces_00269.bin
+    map: build/sces_00269.map
+    elf: build/sces_00269.elf
+    asm: asm/sces_00269/nonmatchings
+    nonmatchings: asm/sces_00269/nonmatchings
+- name: mainmenu_jp
+  fullname: Japan (mainmenu_jp)
+  sha1: ec26c6964ede52114254013c2b3da81c84d9aaa2
+  paths:
+    target: baselines/mainmenu_jp.bin
+    build_dir: build
+    compiled_target: build/mainmenu_jp.bin
+    map: build/mainmenu_jp.map
+    elf: build/mainmenu_jp.elf
+    asm: asm/mainmenu_jp/nonmatchings
+    nonmatchings: asm/mainmenu_jp/nonmatchings
+- name: mainmenu_eu
+  fullname: Europe (mainmenu_eu)
+  sha1: cbad60dc66b4d0c5b8f559c269b18ae2288ed8c5
+  paths:
+    target: baselines/mainmenu_eu.bin
+    build_dir: build
+    compiled_target: build/mainmenu_eu.bin
+    map: build/mainmenu_eu.map
+    elf: build/mainmenu_eu.elf
+    asm: asm/mainmenu_eu/nonmatchings
+    nonmatchings: asm/mainmenu_eu/nonmatchings
+- name: g3_jp
+  fullname: Japan (g3_jp)
+  sha1: 6ab446ff7a802d95fba7efce8dae4bdb5457ff3a
+  paths:
+    target: baselines/g3_jp.bin
+    build_dir: build
+    compiled_target: build/g3_jp.bin
+    map: build/g3_jp.map
+    elf: build/g3_jp.elf
+    asm: asm/g3_jp/nonmatchings
+    nonmatchings: asm/g3_jp/nonmatchings
+- name: g3_eu
+  fullname: Europe (g3_eu)
+  sha1: 80acb6d1ecccfcf2ee2f7e05b357b8331ef24e03
+  paths:
+    target: baselines/g3_eu.bin
+    build_dir: build
+    compiled_target: build/g3_eu.bin
+    map: build/g3_eu.map
+    elf: build/g3_eu.elf
+    asm: asm/g3_eu/nonmatchings
+    nonmatchings: asm/g3_eu/nonmatchings
+- name: g3org_jp
+  fullname: Japan (g3org_jp)
+  sha1: 5923d4eb4b239630286ab4f9b26b88186690def9
+  paths:
+    target: baselines/g3org_jp.bin
+    build_dir: build
+    compiled_target: build/g3org_jp.bin
+    map: build/g3org_jp.map
+    elf: build/g3org_jp.elf
+    asm: asm/g3org_jp/nonmatchings
+    nonmatchings: asm/g3org_jp/nonmatchings
+- name: g3org_eu
+  fullname: Europe (g3org_eu)
+  sha1: c83138e295864531c0cb7234b6059b340803eb9b
+  paths:
+    target: baselines/g3org_eu.bin
+    build_dir: build
+    compiled_target: build/g3org_eu.bin
+    map: build/g3org_eu.map
+    elf: build/g3org_eu.elf
+    asm: asm/g3org_eu/nonmatchings
+    nonmatchings: asm/g3org_eu/nonmatchings

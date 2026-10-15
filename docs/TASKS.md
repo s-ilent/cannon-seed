@@ -2837,3 +2837,33 @@ Next queue:
    0xA7325 (gp-4, both boots) and 0x80020040 (sces gp+0) reference.
 4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr); BIG
    de-frame coordination-gated; runtime gate-family blocked.
+## 2026-10-16: coddog trial - PSX mipsel WORKS, region-pair similarity baselined
+
+ethteck/coddog (coddog-cli 0.6.3, `cargo install --git ... coddog-cli`) runs on
+this project unmodified: it reads the per-target build .elf symtabs through the
+new root decomp.yaml (decomp_settings format; its 0.0.10 parser REQUIRES the
+`map` path field even though nothing reads it). All PSX skepticism resolved -
+MIPS el works fine.
+
+compare2 on the four same-program region pairs (-t 0.5, reports in
+build/coddog.*.txt, git-ignored):
+
+  pair                    pairs   100.00%   95-99.99%   80-94.99%   <80%
+  slps_00270-sces_00269     698       97        195          62       344
+  mainmenu_jp-mainmenu_eu  1845      149        773         216       707
+  g3_jp-g3_eu              1453      180        461         188       624
+  g3org_jp-g3org_eu        1763      209        675         215       664
+
+Reading: 635 exact pairs = match-once-transplant (setIntrVSync rollout,
+automated); ~2100 at 95-99.99% = the imm-diff class, one C source + per-target
+externs usually covers both regions; <80% mixes true region divergence
+(screen-title composer class) with aligner mispairings, so treat that bucket
+as untrusted at -t 0.5.
+
+cluster finds in-binary twins: slps_00270 has 43 groups, 23 with 3+ members
+(several are already-curated LIBGS/LIBSND members shipped twice). Needs a TTY
+for its version picker (`printf '\n' | script -qec "coddog cluster" /dev/null`).
+
+Workflow adopted: JP stays the matching target; after each JP match, its EU
+counterpart comes off this report - exact pairs get the same C renamed,
+95-99.99% pairs get the imm-diff treatment before a probe.
