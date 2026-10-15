@@ -146,12 +146,7 @@ if [ -d src ]; then
     # gp-relative small data (yaml options.gp_value, _gp in the linker
     # script). Targets without a gp base keep cc1's bare-symbol form;
     # with -G0 gas expands it to the absolute lui/$at pair retail shows.
-    GP_REWRITE=$("$PY" - "$TARGET" <<'EOF'
-import sys, yaml
-cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
-print("1" if cfg["options"].get("gp_value") is not None else "0")
-EOF
-)
+    GP_REWRITE=$("$PY" tools/gp_flags.py rewrite "$TARGET")
     # Range data for the gp_rel rewrite (PYSEC below): %gp_rel is legal
     # only within +/-0x7FFF of the gp base, and retail's own libraries
     # use absolute lui+lo for anything farther (e.g. LIBETC's video-mode
@@ -160,31 +155,7 @@ EOF
     # a bare load/store only when the symbol is known and in range
     # (unknown names keep the old behavior and fail loudly at link time
     # if they are genuinely out of range).
-    GP_INFO=$("$PY" - "$TARGET" <<'EOF'
-import sys, yaml, re
-cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
-gp = cfg["options"].get("gp_value") or 0
-addr = {}
-# A curated entry may carry a 'gp:absolute' marker when retail provably
-# loads that symbol with an absolute lui+lo pair even though it sits
-# inside +/-32 KB of the gp base (first case: LIBSPU's _spu_inTransfer,
-# an 8-byte S_INI flag that S_ITC loads absolutely in slps_00270, while
-# same-range 4-byte flags like boot_flag_0 are gp-relative there). The
-# range test alone cannot know this - it is per-symbol retail evidence -
-# so the marker flags the name (a '!' suffix in the PYSEC table) and the
-# rewrite skips it, keeping the absolute form the non-gp targets prove.
-for ln in open(f"config/symbols.{sys.argv[1]}.txt"):
-    m = re.match(r"^(\w+) = 0x([0-9A-Fa-f]+);", ln)
-    if m:
-        # splat's native absolute:true boolean (curated gp:absolute) marks
-        # per-symbol retail evidence: load it absolutely even in range.
-        # The '!' suffix tells PYSEC to skip the rewrite for this name
-        # (exclusion alone would fall into the unknown-name rewrite path).
-        marked = "absolute:true" in ln
-        addr[m.group(1) + ("!" if marked else "")] = int(m.group(2), 16)
-print(f"{gp:#x} " + " ".join(f"{n}:{a:#x}" for n, a in sorted(addr.items())))
-EOF
-)
+    GP_INFO=$("$PY" tools/gp_flags.py info "$TARGET")
     "$PY" - "$TARGET" > "$c_list" <<EOF || fail "could not list C subsegments"
 import sys, yaml
 cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
@@ -242,56 +213,7 @@ PYUNITS
         fi
         csec=$(printf '%08X' "0x${crom}")
         staged="build/src/${cname}.r.s"
-        "$PY" - "build/src/${cname}.mas.s" "$staged" "$csec" "$GP_REWRITE" "$GP_INFO" <<'PYSEC' || fail "C staging failed: ${cname}"
-import re, sys
-src, dst, sec, gp_rewrite, gp_info = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
-text = open(src).read()
-text = re.sub(r"^\s*\.text\s*$",
-              f'.section .r_{sec}, "awx", @progbits', text, flags=re.M)
-# Small-data rewrite, gp targets only (GP_REWRITE=1: yaml options.gp_value
-# exists, _gp is in the linker script): cc1 -G8 emits bare-symbol memory
-# operands for gp-relative globals (aspsx would relax them via .extern
-# size + -G). maspsx only registers .comm/.sdata symbols, so
-# extern-referenced globals pass through bare - GNU as would emit
-# HI16/LO16 (absolute), which does NOT round-trip when retail used
-# gp-relative form. Convert to the explicit form; the linker resolves
-# GPREL16 against _gp. Targets WITHOUT a gp base (GP_REWRITE=0) keep the
-# bare form; with -G0 gas expands it to the absolute lui/$at pair that
-# those targets' retail shows.
-if gp_rewrite == "1":
-    gp_base_str, _, tbl = gp_info.partition(" ")
-    gp_base = int(gp_base_str, 16)
-    symaddr = {}
-    gp_abs = set()
-    for tok in tbl.split():
-        n, _, a = tok.rpartition(":")
-        if not n:
-            continue
-        if n.endswith("!"):
-            # curated gp:absolute marker (splat absolute:true): retail
-            # provably loads this datum absolutely; never rewrite it.
-            gp_abs.add(n[:-1])
-            n = n[:-1]
-        symaddr[n] = int(a, 16)
-
-    def gp_rewrite_one(m):
-        name = m.group(2)
-        base_name = name.split("+", 1)[0]
-        if base_name in gp_abs:
-            return m.group(0)
-        a = symaddr.get(base_name)
-        if a is None or abs(a - gp_base) <= 0x7FFF:
-            return f"{m.group(1)}%gp_rel({name})($gp)"
-        return m.group(0)
-
-    text = re.sub(
-        r"(?m)^(\s*(?:lb|lbu|lh|lhu|lw|lwl|lwr|sb|sh|sw|swl|swr)\s+\$[a-z0-9]+,)"
-        r"([A-Za-z_][A-Za-z0-9_]*(?:\+[0-9]+)?)\s*$",
-        gp_rewrite_one,
-        text,
-    )
-open(dst, "w").write(text)
-PYSEC
+        "$PY" tools/stage_c.py "build/src/${cname}.mas.s" "$staged" "$csec" "$GP_REWRITE" "$GP_INFO" || fail "C staging failed: ${cname}"
         if ! "$AS" $ASFLAGS -o "build/src/${cname}.o" "$staged" 2> "build/src/${cname}.aserr"; then
             echo "as FAILED: src/${cname}.c" >&2
             head -5 "build/src/${cname}.aserr" >&2
@@ -357,58 +279,7 @@ fi
 rm -f build/undef_syms.ld
 "$LD" -N -T "$LD_SCRIPT" --no-check-sections -o "$OUT_ELF" 2> build/ld.err || true
 if grep -q "undefined reference" build/ld.err; then
-    "$PY" - "$TARGET" <<EOF
-import re, sys
-errs = open("build/ld.err", errors="replace").read()
-names = sorted(set(re.findall(r"undefined reference to \`([A-Za-z_.][A-Za-z0-9_.]*)'", errs)))
-# Committed per-target symbols file: the retail placement of every
-# curated name. Symbols the tree already knows by real name (Psy-Q bss
-# statics beyond the payload segment, like LIBGS's PSDIDX) carry no
-# address in their spelling and no dlabel renders for them, so the
-# address-encoded fallbacks below cannot see them. Their address in
-# this file IS the retail value - the same principle as the encoded
-# names, just spelled out in the table instead of the symbol.
-symaddr = {}
-try:
-    for ln in open(f"config/symbols.{sys.argv[1]}.txt"):
-        m = re.match(r"^(\\w+) = 0x([0-9A-Fa-f]+);", ln)
-        if m:
-            symaddr[m.group(1)] = int(m.group(2), 16)
-except FileNotFoundError:
-    pass
-out, bad = [], []
-for n in names:
-    # spimdisasm names unresolved references after their runtime value;
-    # values may be real addresses (8 hex) or address-like constants
-    # (e.g. the 0x7FFFFF bitmask via lui/addiu) with fewer digits.
-    m = re.match(r"^[A-Za-z_]+_([0-9A-Fa-f]{1,8})$", n)
-    if m:
-        out.append(f"{n} = 0x{m.group(1)};")
-        continue
-    # .L<8hex> local labels are spimdisasm's intra-body jump targets;
-    # maspsx promotes them to linkable symbols, and after an asm->c flip
-    # their definition is gone while the jumpers (other asm files) remain.
-    # The address is in the name, so define it there - same principle as
-    # the func_/D_ forms above (first exercised by func_8003B568's
-    # j .L80037CB0 into the C-matched func_80037CAC).
-    m = re.match(r"^\.L([0-9A-Fa-f]{8})$", n)
-    if m:
-        out.append(f"{n} = 0x{m.group(1)};")
-        continue
-    a = symaddr.get(n)
-    if a is not None:
-        out.append(f"{n} = 0x{a:X};")
-        continue
-    bad.append(n)
-if bad:
-    sys.stderr.write("build: unresolved symbols without address-encoded names:\\n"
-                     + "\\n".join(bad) + "\\n")
-    sys.exit(2)
-with open("build/undef_syms.ld", "w") as f:
-    f.write("/* generated by tools/build.sh - auto-resolved spimdisasm symbols */\\n")
-    f.write("\\n".join(out) + "\\n")
-print(f"build: auto-defined {len(out)} unresolved symbols")
-EOF
+    "$PY" tools/undef_syms.py "$TARGET" build/ld.err > build/undef_syms.ld || fail "unresolved symbols"
     "$LD" -T "$LD_SCRIPT" -T build/undef_syms.ld --no-check-sections -o "$OUT_ELF" \
         || fail "link failed (second pass)"
 fi

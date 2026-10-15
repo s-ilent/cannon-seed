@@ -2867,3 +2867,34 @@ for its version picker (`printf '\n' | script -qec "coddog cluster" /dev/null`).
 Workflow adopted: JP stays the matching target; after each JP match, its EU
 counterpart comes off this report - exact pairs get the same C renamed,
 95-99.99% pairs get the imm-diff treatment before a probe.
+
+## 2026-10-16: unit judge - the per-unit candidate screen (the decomp.wtf loop, native)
+
+tools/judge_unit.py compiles ONE c unit through the build's own pipeline and
+judges its bytes against the retail baseline slice: cc.sh -S ->
+tools/stage_c.py -> mipsel-as (build ASFLAGS), then a MINI LINK of the unit
+alone at its retail VA (yaml offset IS the baseline file offset; VA =
+0x80020000 + offset - 0x800) with the build's two-pass undefined-symbol
+resolution, then objcopy --only-section and word compare with capstone
+disasm of the first diffs. ~0.1 s/unit; all 16 mainmenu_jp units in 1.6 s
+vs ~53 s per full build. ~26x faster feedback for the match-edit loop.
+
+Made possible by extracting build.sh's three inline Python heredocs into
+shared tools (verbatim, so build and judge cannot drift): gp_flags.py
+(gp rewrite inputs), stage_c.py (the .text rename + gp_rel rewrite),
+undef_syms.py (two-pass symbol resolution). build.sh calls them; the judge
+reuses them. Verdicts are screens, never acceptance: whole-image
+`make verify` stays the oracle; the judge cannot see other units or the
+link layout.
+
+Judge-only fix worth banking: judged alone, a unit lacks the objects that
+define its neighbours (func_8002C478's extern state_block_N jump targets
+are defined by a data row's labels in the full link); left undefined, the
+suffix-regex fallback resolves state_block_0 AT 0x0. The judge therefore
+preloads every config/symbols.<TARGET>.txt entry as a linker-script prelude
+to both passes; script assignments cannot override object definitions, so
+the full build is unaffected.
+
+Validated: 104/104 c units EXACT across all 8 targets (the judge agrees
+with the green oracle everywhere); negative control (>= for !=) flags
+slt/bnez rewrite, size delta, and per-word diffs with disasm.
