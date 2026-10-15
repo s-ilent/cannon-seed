@@ -412,6 +412,53 @@ head hunt, first fully-worked example of the pathology):
     de-frame transition re-derives; functions #18 and #56 are the
     boots' first two shape-known C-lane targets.
 
+* Func #56 fan-out row-containment addendum (2026-10-15, de-framed
+  payload; the follow-up the size-delta localization queued): WHERE do
+  the 14 external targets live in the carve? Method: `deframe.py`'s
+  runtime_to_framed per target + yaml row containment over
+  `config/splat.<t>.yaml` (336 rows slps / 325 sces), cross-checked
+  against the pinned member rows. THE SHAPE (both boots, same call-site
+  order): 10–11 of 14 targets land at ROW STARTS of rows the carve
+  already labels code — 9 asm `func_` rows slps (10 sces, one of them
+  `func_8002E394`, the row right after the void), sces target 13 is
+  type `c` (16-byte matched-C row) where slps's counterpart is asm —
+  plus ONE mid-row asm target each (+0x154 into `func_800489B4` slps /
+  +0x14c into `func_800489C8` sces — rows holding several functions,
+  the census's `func_8003B4F0` pattern again); the remaining 3–4 land
+  in DATA-labeled rows: slps 4 (`data_80048C84`+0x1d4 and +0x5e4
+  mid-row x2, `data_8002E578`+0x0 and +0x384), sces 3
+  (`data_80048CAC`+0x1b8 and +0x5c8 mid-row x2, `data_8002E5E0`+0x138).
+  ATTRIBUTIONS:
+  - The anatomy census's "plus 2 into the rows right after the void
+    (`data_8002E578`+0x0/+0x384 slps)" are BOTH func #56's calls
+    (targets 6 and 3) — and the blob-getter call is one of them
+    (target 3): slps `data_8002E578`+0x384 vs sces
+    `data_8002E5E0`+0x138 — different rows entirely (the per-region
+    row split differs there: slps one 0x11C4-byte row, sces a
+    0x1A0-byte row).
+  - Target 6 (0x8002C7C8 slps / 0x8002C5E4 sces) is a LABEL ARTIFACT
+    PAIR: slps buries it at `data_8002E578`+0x0 (data), sces labels
+    the same call target `func_8002E394` (asm, row start) — the same
+    function, opposite labels per region.
+  - Target 4 is the free() BIOS THUNK: carve `func_80030E40` slps /
+    `func_800308B4` sces, both `= free; // type:func (pinned member
+    row)` in the symbols files — func #56 calls free() (the release
+    side of its blob materialization).
+  - Target 13 is a 16-byte row with per-region type disagreement: slps
+    `func_80049778` (asm) vs sces `func_80049794` (c, matched-C) — an
+    sdk-thunk-class row labeled asm in one boot and c in the other.
+  - func #18's rodata presets sit in the carve's FIRST data row
+    `data_80020000` near its head (+0x8fc/+0x90c/+0xa70/+0xaa0 slps,
+    +0x908/+0x918/+0xa60/+0xa7c sces); its descriptor pointers
+    (0x8004BF18/0x8004BF44 slps) sit in the tail mega-row
+    `data_8005135C` at +0x143c/+0x1468.
+  - Net: the void's external fan-out is MOSTLY into properly-labeled
+    code — func #56's own "data is code" instances are the 3–4
+    data-row targets above; the anatomy census's deeper data-row
+    examples (`data_8003BFB8`+0x8ac, `func_8003B4F0` mid-row) remain
+    attributed to other void functions. No carve-side action (same
+    rule).
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
