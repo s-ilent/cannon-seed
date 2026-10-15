@@ -96,6 +96,15 @@ Their SHA-1s match `config/sha1/**`, so the disc really does hold the framed
 file — this is not an extraction bug. `docs/GRID.md` found the `0x930` grid but
 did not draw the consequence.
 
+**UPDATE 2026-10-15 (Log, "the boot load model closes"): the premise above is
+REFUTED** — it IS an extraction artifact. `Iso.read()` reads `size` bytes
+contiguously from `lba*2352+24`, weaving in every sector's 280-byte EDC/ECC +
+24-byte sync header and truncating the tail user data (~12.9-13% of every
+payload). ECC regenerates 100% (genuine woven sectors); `t_size ==
+len(baseline)-0x800` for all 8; the boots' .sdata window is provisioned by the
+load and its bytes are disc-only. The queued "decide what make verify
+compares" sharpens to corrupt-extraction-vs-true-file.
+
 The game de-frames at load. Verified against the running game through the GDB
 stub (`tools/gdb_stub_proxy.py`), 2026-10-13:
 
@@ -2495,3 +2504,134 @@ Next queue:
 4. Disc-side SE.VH/SE.VB diff still waits on CHD re-provision; GSD
    round-5 stays with the lane owner; BIG de-frame stays
    coordination-gated; runtime gate-family still blocked.
+
+## 2026-10-15 late - the boot load model closes: the baselines are a corrupted extraction (contiguous raw read); .sdata is provisioned by the load; the gp_value "typo" is refuted
+
+Queue item 1 (and item 2's blast-radius check) of the descriptor section.
+Script repo-external (scripts/boot_load_model.py, output
+boot_load_model_out.txt). The Witness's open question - who fills
+$gp window 0x8006632C..0x800663FC - has a structural answer, it corrects
+the de-frame item's premise, and the item-2 verify check FAILED in an
+instructive way (reverted; the failure is the finding).
+
+THE MECHANISM (named): tools/iso9660_extract.py's `Iso.read()` is
+`seek(lba*2352 + USER_OFF); return f.read(size)` - a CONTIGUOUS read. It
+never steps per-sector to take only the 2048-byte user data
+(USER_OFF/USER_LEN serve the PVD/directory reads, which stay inside one
+sector; the file read forgot the de-interleave). The extracted file is
+therefore the raw bytes from the extent's first user-data byte, weaving in
+every following sector's 280-byte EDC/ECC tail plus the next sector's
+24-byte sync/addr/subheader (304 B per 2048 B delivered), and it STOPS
+after `size` bytes - mid-extent, because the raw stream consumes 2352 raw
+bytes per 2048 delivered. The queued de-frame item's "the disc really does
+hold the framed file - this is not an extraction bug" is REFUTED: it is an
+extraction artifact, and the oracle's SHA-1 consistency only proves the
+oracle was computed from the same extraction. The GDB-verified de-framed
+RAM needs no exotic mechanism: the drive delivers user data per sector.
+
+THE PROOF (measured this window, all 8 targets):
+- Sync weave: slps carries 123 syncs at 0x918 + k*0x930, ALL gaps exactly
+  2352 - a perfect raw-sector weave (first sector's 24-byte header is the
+  only one skipped, hence first gap 0x118).
+- MSF addresses are BCD and advance +1 per sector (0x25, 0x26, ... 0x29,
+  0x30 - BCD carry). The banked sector_edc_proof run's "MSF monotonic:
+  False" was a checker bug (binary frame arithmetic; frames are BCD). The
+  sequence is perfect.
+- ECC VERIFIES: regenerating P/Q parity with the project's own MAME-derived
+  tables (chd_extract.ecc_generate) reproduces 172/172 P and 104/104 Q
+  parity bytes of a sampled woven sector. The sectors are genuine MODE2
+  form1 records. (EDC still mismatches - 0/122, same as the banked run -
+  but with genuine ECC over [12..2076) that is a mastering-tool quirk, not
+  a structural doubt; the 4 EDC bytes even interrupt real Shift-JIS user
+  text, "オ・システム", at the exact spec offset.)
+- t_size == len(baseline)-0x800 EXACTLY for all 8: every header is a normal
+  EXE header authored against the true file (payload = filesize - 2048).
+- len(payload) == the 0x930-grid prediction for all 8 (123 data areas for
+  the boots ... 268 for g3org_eu): deframe() is the user-data join of the
+  truncated stream.
+
+THE ARITHMETIC: the true payload is t_size bytes; the baseline carries only
+the data areas that fit in `size` contiguous raw bytes; so every target is
+MISSING the tail of its true payload:
+  missing = t_size - len(payload) =
+  slps 0x9210, sces 0x9210, mainmenu_jp 0x16000, mainmenu_eu 0x160B0,
+  g3_jp 0x121C0, g3_eu 0x122F0, g3org_jp 0x13D10, g3org_eu 0x13E40
+  (= 12.9-13.0% of every payload)
+and by algebra (t_size = len-0x800) missing == the baseline's total framing
+exactly: the extraction swapped the tail user data 1:1 for sector overhead.
+The last ~19 sectors' user data of every file exists ONLY on the disc.
+
+THE RESOLUTION (boots): the BIOS loads t_size bytes of TRUE content (user
+data) at 0x80020000, so RAM = the plain payload with NO framing anywhere.
+The CRT0 decodes coherently from it and reproduces every Witness number:
+slps pc0 0x8002DB14 = zero-clear 0x800663FC..0x8012C3F4, $sp =
+[0x8002DBC0]|0x80000000, $ra saved at 0x80066524, $gp = 0x8006632C, jal
+0x8002F94C (the A0-thunk table); sces pc0 0x8002D908 = clear
+0x80066098..0x8012C16C, $gp = 0x80065FC4 (pair at 0x8002D988). THE .sdata
+WINDOW IS PROVISIONED BY THE LOAD: [gp, clear_start) = 0x8006632C..
+0x800663FC slps (0xD0) / 0x80065FC4..0x80066098 sces (0xD4) lies INSIDE
+the loaded payload (payload offsets 0x4632C..0x463FC / 0x45FC4..0x46098).
+No code needs to write it because .sdata initializers live in the FILE -
+the Witness's "written nowhere in the image" is exactly what a
+file-initialized .sdata looks like - and the zero-clear starting at the
+window's end is the normal linker layout (initialized data ends, bss
+begins; the image tail [.., 0x80066800) inside the cleared range is
+zero-padding the CRT0 also re-wipes, and it hosts the 0x80066524 $ra slot
+AFTER the clear). The window's bytes sit in the MISSING TAIL (payload
+0x4632C > 0x3D5F0) - disc-only until the CHDs return, like every byte
+above payload offset 0x3D5F0 in both boots.
+
+THE gp DUALITY (item 2 refuted by its own blast-radius check): changing
+yaml gp_value 0x8006322C -> 0x8006632C broke verify with 46 single-byte
+diffs, every one a gp-relative displacement. Link math on the first diff:
+built imm 0xCF2C = tree symbol 0x80063258 - new _gp 0x8006632C; retail imm
+0x2C = 0x80063258 - 0x8006322C. So the retail's gp-relative ENCODINGS are
+authored against 0x8006322C in carve space, and the tree (adopted symbol
+addresses + _gp + build.sh's gp_rel rewrite) reproduces them with that
+value - the two "wrong" terms cancel. 0x8006322C is the CARVE-SPACE gp
+base; 0x8006632C is the TRUE-RUNTIME $gp the CRT0 sets; 0x3100 = the
+dual-view offset at that depth. Both facts are real and must not be
+"fixed" into each other: the yaml value stays, and any TRUE-runtime
+address arithmetic (de-framed scans) must use the CRT0 value instead.
+The gen_ld comment's stale "at 0x800304D4" citation was left as-is
+(neither the payload nor the baseline decodes as a gp-set there; the
+CRT0 pair above is the anchor now).
+
+COROLLARIES for the coordination-gated BIG de-frame item:
+1. The drift law (carve = runtime + 0x130*(1+sector)) is this extraction
+   artifact's byte-shift, here measured at tail depth: the carve address
+   of the slps window (0x8006632C) holds real user data of true payload
+   0x3CA4C (local skew 0x98E0); sces's window carve address lands in pure
+   overhead. Witness A/B are instances of the same law.
+2. The carve's tail region [len(payload)..t_size) of every target holds
+   duplicated lower content plus overhead, and the true payload tail is
+   absent from every local artifact. The de-frame transition therefore
+   REQUIRES the disc: a per-sector re-extraction yields the true EXEs and
+   new SHA-1 oracles. Until then today's framed oracle remains the only
+   self-consistent gate (it is byte-preserving; matching discipline
+   continues unchanged; only address DERIVATION is poisoned).
+3. The queued "decide what make verify compares" sharpens: the real choice
+   is corrupt-extraction-vs-true-file, not framed-vs-de-framed policy.
+4. tools/iso9660_extract.py needs a per-sector read path (join USER_LEN
+   per sector across ceil(size/2048) sectors, truncate to size) behind an
+   OPT-IN flag - opt-in, because flipping the default would silently
+   change what a fresh extraction reproduces and desync it from the
+   committed oracles.
+
+No carve-side action (same rule). Docs-only: matched 174, ratchets 365/0;
+make verify slps_00270 re-run GREEN after the revert (28 s), the other
+targets untouched.
+
+Next queue:
+1. iso9660_extract.py opt-in per-sector read flag + a synthetic-sector
+   unit test (3 fake sectors, join arithmetic, truncate-to-size) so the
+   re-extraction recipe is correct the day the CHDs return.
+2. CHD re-provision now unblocks THREE standing items (SE.VH/SE.VB diff,
+   the missing tails, the true re-extraction) - raise its priority.
+3. The boots' .sdata window content (both 0xD0/0xD4-byte blocks) is
+   disc-only; when the disc returns, dump payload 0x4632C..0x463FC slps /
+   0x45FC4..0x46098 sces first and identify the gp+0xa0..0xb0 slots the
+   member void reads.
+4. GSD round-5 (db2f96e) adopt/reject stays with the lane owner; setIntr
+   base->a1 steering, startIntr reopen, trapIntr fingerprint stay theirs;
+   BIG de-frame stays coordination-gated; runtime gate-family blocked.
