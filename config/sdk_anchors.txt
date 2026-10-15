@@ -2,10 +2,14 @@
 //
 // Evidence base: config/sdk_members.txt (tools/sdk_members.py) + the
 // Psy-Q archives' own .text symbol tables. One row per report
-// placement whose verdict is `anchored` or `unique` - NOT `ambiguous`
-// (near-identical library stubs; not evidence) - with the function's
-// extent from its member: next .text symbol's offset, or .text size
-// for the last symbol.
+// placement whose verdict is `anchored` or `unique` - or `agree`:
+// an `ambiguous` address (NOT evidence as a rule - near-identical
+// library stubs) where two or more DISTINCT members claim the same
+// spot and all define the same symbol name, so the bytes matched
+// every claimant and the NAME is evidence even though the
+// provenance is not (exit: LIBC+LIBC2; _bu_init: LIBAPI+LIBCARD).
+// Extent from the member: next .text symbol's offset, or .text
+// size for the last symbol.
 //
 // The scanner (tools/scan_functions.py) carves these spans out of the
 // rows the map labels `data` as pinned-class asm rows at their exact
@@ -17,7 +21,7 @@
 //
 //   0x<vram> 0x<size> <symname> <member> <lib> <verdict>
 
-// target: g3_eu  (255 anchors)
+// target: g3_eu  (257 anchors)
 0x80028D5C 0x18 GsSetOrign EMULIB LIBGS unique
 0x800294BC 0x14 SpuVmDamperOn VM_DON LIBSND unique
 0x8002BBA4 0x18 GsSetOrign EMULIB LIBGS unique
@@ -35,6 +39,7 @@
 0x8004E9D4 0x10 strncmp ? LIBC unique
 0x8004E9E4 0x10 strncpy ? LIBC unique
 0x8004E9F4 0x10 free ? LIBC unique
+0x8004EA04 0x10 exit ? LIBC agree
 0x8004EA14 0x20 PCopen ? LIBSN unique
 0x8004EA34 0x24 PClseek ? LIBSN unique
 0x8004EA58 0x10 PCclose ? LIBSN unique
@@ -268,13 +273,14 @@
 0x8007CD70 0x10 _card_write ? LIBCARD unique
 0x8007CD80 0x10 InitCARD ? LIBCARD unique
 0x8007CD90 0x10 StartCARD ? LIBCARD unique
+0x8007CDA0 0x10 _bu_init ? LIBAPI agree
 0x8007CDB0 0x10 _new_card ? LIBCARD unique
 0x8007CDC0 0x10 _card_read ? LIBCARD unique
 0x8007E260 0x10 PAD_dr ? LIBAPI unique
 0x8007E270 0x10 SysDeqIntRP ? LIBAPI unique
 0x8007E280 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: g3_jp  (226 anchors)
+// target: g3_jp  (228 anchors)
 0x80028D60 0x18 GsSetOrign EMULIB LIBGS unique
 0x800294C0 0x14 SpuVmDamperOn VM_DON LIBSND unique
 0x8002BBB4 0x18 GsSetOrign EMULIB LIBGS unique
@@ -292,6 +298,7 @@
 0x8004EFBC 0x10 strncmp ? LIBC unique
 0x8004EFCC 0x10 strncpy ? LIBC unique
 0x8004EFDC 0x10 free ? LIBC unique
+0x8004EFEC 0x10 exit ? LIBC agree
 0x8004EFFC 0x20 PCopen ? LIBSN unique
 0x8004F01C 0x24 PClseek ? LIBSN unique
 0x8004F040 0x10 PCclose ? LIBSN unique
@@ -497,12 +504,13 @@
 0x8007C440 0x10 _card_write ? LIBCARD unique
 0x8007C450 0x10 InitCARD ? LIBCARD unique
 0x8007C460 0x10 StartCARD ? LIBCARD unique
+0x8007C470 0x10 _bu_init ? LIBAPI agree
 0x8007C480 0x10 _new_card ? LIBCARD unique
 0x8007C490 0x10 _card_read ? LIBCARD unique
 0x8007D900 0x10 SysDeqIntRP ? LIBAPI unique
 0x8007D910 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: g3org_eu  (203 anchors)
+// target: g3org_eu  (205 anchors)
 0x80029AEC 0x18 GsSetOrign EMULIB LIBGS unique
 0x8002A24C 0x14 SpuVmDamperOn VM_DON LIBSND unique
 0x8002C934 0x18 GsSetOrign EMULIB LIBGS unique
@@ -520,6 +528,7 @@
 0x8004B708 0x10 strncmp ? LIBC unique
 0x8004B718 0x10 strncpy ? LIBC unique
 0x8004B728 0x10 free ? LIBC unique
+0x8004B738 0x10 exit ? LIBC agree
 0x8004B748 0x20 PCopen ? LIBSN unique
 0x8004B768 0x24 PClseek ? LIBSN unique
 0x8004B78C 0x10 PCclose ? LIBSN unique
@@ -701,13 +710,14 @@
 0x80079BD4 0x10 _card_write ? LIBCARD unique
 0x80079BE4 0x10 InitCARD ? LIBCARD unique
 0x80079BF4 0x10 StartCARD ? LIBCARD unique
+0x80079C04 0x10 _bu_init ? LIBAPI agree
 0x80079C14 0x10 _new_card ? LIBCARD unique
 0x80079C24 0x10 _card_read ? LIBCARD unique
 0x8007B0C4 0x10 PAD_dr ? LIBAPI unique
 0x8007B0D4 0x10 SysDeqIntRP ? LIBAPI unique
 0x8007B0E4 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: g3org_jp  (226 anchors)
+// target: g3org_jp  (228 anchors)
 0x80029B38 0x18 GsSetOrign EMULIB LIBGS unique
 0x8002A298 0x14 SpuVmDamperOn VM_DON LIBSND unique
 0x8002C98C 0x18 GsSetOrign EMULIB LIBGS unique
@@ -726,6 +736,7 @@
 0x8004BE68 0x10 strncmp ? LIBC unique
 0x8004BE78 0x10 strncpy ? LIBC unique
 0x8004BE88 0x10 free ? LIBC unique
+0x8004BE98 0x10 exit ? LIBC agree
 0x8004BEA8 0x20 PCopen ? LIBSN unique
 0x8004BEC8 0x24 PClseek ? LIBSN unique
 0x8004BEEC 0x10 PCclose ? LIBSN unique
@@ -930,12 +941,13 @@
 0x800792EC 0x10 _card_write ? LIBCARD unique
 0x800792FC 0x10 InitCARD ? LIBCARD unique
 0x8007930C 0x10 StartCARD ? LIBCARD unique
+0x8007931C 0x10 _bu_init ? LIBAPI agree
 0x8007932C 0x10 _new_card ? LIBCARD unique
 0x8007933C 0x10 _card_read ? LIBCARD unique
 0x8007A7AC 0x10 SysDeqIntRP ? LIBAPI unique
 0x8007A7BC 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: mainmenu_eu  (177 anchors)
+// target: mainmenu_eu  (179 anchors)
 0x8003D35C 0x18 GsSetOrign EMULIB LIBGS unique
 0x8003EB48 0x18 GsSetOrign EMULIB LIBGS unique
 0x8003F2A8 0x14 SpuVmDamperOn VM_DON LIBSND unique
@@ -953,6 +965,7 @@
 0x80065F5C 0x10 strncmp ? LIBC unique
 0x80065F6C 0x10 strncpy ? LIBC unique
 0x80065F7C 0x10 free ? LIBC unique
+0x80065F8C 0x10 exit ? LIBC agree
 0x8006797C 0x18 SetVideoMode VMODE LIBETC unique
 0x80067994 0x10 GetVideoMode VMODE LIBETC unique
 0x800681E8 0x10 setjmp ? LIBC unique
@@ -1108,13 +1121,14 @@
 0x80095664 0x10 _card_write ? LIBCARD unique
 0x80095674 0x10 InitCARD ? LIBCARD unique
 0x80095684 0x10 StartCARD ? LIBCARD unique
+0x80095694 0x10 _bu_init ? LIBAPI agree
 0x800956A4 0x10 _new_card ? LIBCARD unique
 0x800956B4 0x10 _card_read ? LIBCARD unique
 0x80096B54 0x10 PAD_dr ? LIBAPI unique
 0x80096B64 0x10 SysDeqIntRP ? LIBAPI unique
 0x80096B74 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: mainmenu_jp  (210 anchors)
+// target: mainmenu_jp  (212 anchors)
 0x8003D3C4 0x18 GsSetOrign EMULIB LIBGS unique
 0x8003EB90 0x18 GsSetOrign EMULIB LIBGS unique
 0x8003F2F0 0x14 SpuVmDamperOn VM_DON LIBSND unique
@@ -1133,6 +1147,7 @@
 0x800666AC 0x10 strncmp ? LIBC unique
 0x800666BC 0x10 strncpy ? LIBC unique
 0x800666CC 0x10 free ? LIBC unique
+0x800666DC 0x10 exit ? LIBC agree
 0x80068910 0x10 setjmp ? LIBC unique
 0x80068920 0x50 startIntrDMA INTR_DMA LIBETC unique
 0x80068970 0x184 trapIntrDMA INTR_DMA LIBETC unique
@@ -1321,12 +1336,13 @@
 0x80094D6C 0x10 _card_write ? LIBCARD unique
 0x80094D7C 0x10 InitCARD ? LIBCARD unique
 0x80094D8C 0x10 StartCARD ? LIBCARD unique
+0x80094D9C 0x10 _bu_init ? LIBAPI agree
 0x80094DAC 0x10 _new_card ? LIBCARD unique
 0x80094DBC 0x10 _card_read ? LIBCARD unique
 0x8009622C 0x10 SysDeqIntRP ? LIBAPI unique
 0x8009623C 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: sces_00269  (172 anchors)
+// target: sces_00269  (174 anchors)
 0x80027CFC 0x18 GsSetOrign EMULIB LIBGS unique
 0x8002845C 0x14 SpuVmDamperOn VM_DON LIBSND unique
 0x8002E37C 0x18 GsSetOrign EMULIB LIBGS unique
@@ -1344,6 +1360,7 @@
 0x800308A4 0x10 strncpy ? LIBC unique
 0x800308B4 0x10 free ? LIBC unique
 0x800308C4 0x10 rand ? LIBC unique
+0x800308D4 0x10 exit ? LIBC agree
 0x800308E4 0x18 SetVideoMode VMODE LIBETC unique
 0x800308FC 0x10 GetVideoMode VMODE LIBETC unique
 0x80031150 0x10 setjmp ? LIBC unique
@@ -1494,13 +1511,14 @@
 0x8004F9B0 0x10 _card_write ? LIBCARD unique
 0x8004F9C0 0x10 InitCARD ? LIBCARD unique
 0x8004F9D0 0x10 StartCARD ? LIBCARD unique
+0x8004F9E0 0x10 _bu_init ? LIBAPI agree
 0x8004F9F0 0x10 _new_card ? LIBCARD unique
 0x8004FA00 0x10 _card_read ? LIBCARD unique
 0x80050FD0 0x10 PAD_dr ? LIBAPI unique
 0x80050FE0 0x10 SysDeqIntRP ? LIBAPI unique
 0x80050FF0 0x10 SysEnqIntRP ? LIBAPI unique
 
-// target: slps_00270  (199 anchors)
+// target: slps_00270  (201 anchors)
 0x80027CB4 0x18 GsSetOrign EMULIB LIBGS unique
 0x80028414 0x14 SpuVmDamperOn VM_DON LIBSND unique
 0x8002E560 0x18 GsSetOrign EMULIB LIBGS unique
@@ -1519,6 +1537,7 @@
 0x80030E30 0x10 strncpy ? LIBC unique
 0x80030E40 0x10 free ? LIBC unique
 0x80030E50 0x10 rand ? LIBC unique
+0x80030E60 0x10 exit ? LIBC agree
 0x800316B4 0x10 setjmp ? LIBC unique
 0x800316C4 0x50 startIntrDMA INTR_DMA LIBETC unique
 0x80031714 0x184 trapIntrDMA INTR_DMA LIBETC unique
@@ -1696,6 +1715,7 @@
 0x8004FE7C 0x10 _card_write ? LIBCARD unique
 0x8004FE8C 0x10 InitCARD ? LIBCARD unique
 0x8004FE9C 0x10 StartCARD ? LIBCARD unique
+0x8004FEAC 0x10 _bu_init ? LIBAPI agree
 0x8004FEBC 0x10 _new_card ? LIBCARD unique
 0x8004FECC 0x10 _card_read ? LIBCARD unique
 0x8005133C 0x10 SysDeqIntRP ? LIBAPI unique
