@@ -2274,3 +2274,109 @@ Next queue:
 3. GSD round-5 (db2f96e) adopt/reject stays with the lane owner;
    setIntr base->a1 steering, startIntr reopen, trapIntr fingerprint
    stay theirs; runtime gate-family still blocked.
+
+## 2026-10-15 late - func #18's rodata presets decode: the member-void screen-title composer (JP full-title copies vs EU prefix+suffix composition)
+
+The size-delta addendum localized func #18's +0x220 to "codegen form";
+the fan-out addendum mapped four preset carve locations. This window
+decodes the presets' CONTENT and finds the real root: the two regions
+organize the same titles differently, and the composition code follows.
+De-framed runtime view throughout; script repo-external
+(scripts/f18_presets.py, output f18_out.txt; regenerate blob_out.txt
+note: the 1212-window scripts were eaten again, f18_presets.py is the
+surviving artifact).
+
+THE PRESET FAMILY (cp932/Shift-JIS decoded):
+
+- slps 0x800207CC / sces 0x800207D8: the disc-ID ASCII string,
+  "BISLPS-00270" / "BESCES-00269" - strcat'd into the record first.
+- slps has FOUR complete per-mode titles (copied wholesale):
+  mode 0 0x800207DC (0x33 B): "ＧＡＬＡＸＩＡＮ３　ドラグーンプレイレコーディング"
+  mode 1 0x80020810 (0x2F B): "ＧＡＬＡＸＩＡＮ３　ガーブプレイレコーディング"
+  mode 2 0x80020840 (0x2F B): "ＧＡＬＡＸＩＡＮ３　ドラグーンミッションデータ"
+  mode 3 0x80020870 (0x2F B): "ＧＡＬＡＸＩＡＮ３　ガーブミッションデータ"
+  (ガーブ = GOURB in katakana; the presets are packed contiguously:
+  0x207DC + 0x33 = 0x20810 - 1... each string NUL-terminated, next
+  preset starts immediately.)
+- sces has FIVE presets composed prefix+suffix:
+  prefix 0x800207E8 (0x15 B incl NUL): "ＧＡＬＡＸＩＡＮ３　"
+  suffixes: mode 0 0x80020800 "ＤＲＡＧＯＯＮ：ＰＬＡＹ", mode 1 0x8002081C
+  "ＧＯＵＲＢ：ＰＬＡＹ", mode 2 0x80020834 "ＤＲＡＧＯＯＮ：ＭＩＳＳＩＯＮ",
+  mode 3 0x80020854 "ＧＯＵＲＢ：ＭＩＳＳＩＯＮ" - full-width ASCII for the
+  module names where the JP boot uses katakana.
+- Mode->title map matches across boots: DRAGOON/GOURB x PLAY/MISSION
+  (JP "プレイレコーディング"/"ミッションデータ" vs EU "：ＰＬＡＹ"/"：ＭＩＳＳＩＯＮ").
+  Modes >= 4 fall through to the inner helper (0x8002A71C slps /
+  0x8002A544 sces) unchanged from the size-delta addendum.
+
+THE COMPOSITION (both boots, same skeleton):
+
+- Stack record at sp+0x80 (frame 0x130): header = word+halfword from
+  the .sdata slots (slps 0xa0/0xa4($gp), sces 0xa4/0xa8($gp) - the
+  known +4 .sdata shift); strcat(disc-ID); strcat(arg string s1);
+  func #19(sp+0xF8, s1); sh 0x11 record field.
+- func #19 is an ASCII->FULL-WIDTH SHIFT-JIS CONVERTER: per char,
+  (c+0xBF)<0x1A selects A-Z and (c+0xD0)<0xA selects 0-9, emitted as
+  lead 0x82 + (c+0x1F) (0x41->0x8260 'Ａ', 0x30->0x824F '０'); other
+  bytes via the 0x81 lead path; reads its trailing fields from the
+  .sdata slots (0xa8/0xaa($gp) slps, 0xac/0xae($gp) sces).
+- Per mode: the preset lands at sp+0xA2, then strcat(sp+0xA2,
+  sp+0xF8) appends the fullwidth-converted argument; record fields
+  0xe4/0xe8/0xec/0xf0 get the descriptor pointers (+0x2C thrice) and
+  0xf4 the constant 0x5600.
+
+THE ROOT OF THE +0x220 (upgrade of the size-delta addendum):
+
+- slps: each mode's COMPLETE title is a fixed-size copy - the
+  alignment-dispatch loop pairs already documented (m0 0x33 B via
+  0x30-loop + lh/lb tail; m1/m2/m3 0x2F B via 0x20-loop + 0xE tail,
+  m2/m3 sharing their tail). All mode paths j into shared tails, so
+  the static strcat count is 4 (2 head + 2 shared tails) - the
+  census's "strcat x4 slps" now has its mechanism.
+- sces: the 0x15-B prefix is an INLINE SINGLE-SHOT copy (six lwl/lwr
+  pairs + lb, exactly the NUL-terminated string length), then each
+  mode strcat's its suffix AND the shared scratch: 8 static strcat
+  sites (2 head + 2 per mode pair) - the "x8 sces" mechanism.
+- Same sentence content, different string-data organization => both
+  the copy-form difference AND the strcat-count difference are
+  content-causal, completing the func-#56 pattern: every member-void
+  size delta so far traces to per-region CONTENT, never to arbitrary
+  codegen variance.
+
+DESCRIPTORS ARE BYTE-IDENTICAL ACROSS BOOTS:
+
+- slps 0x8004BF18 (modes 0/1) + 0x8004BFD8 (modes 2/3) vs sces
+  0x8004BBBC / 0x8004BC7C - same 0xC0 stride per boot, contents
+  byte-equal pairwise. Each is a 0x2C-B record (00 00 ff ff / 10 10
+  or 04 40 header, then a descending ramp table - gradient/palette-
+  shaped; field semantics not pursued this window); the +0x2C
+  successor record is referenced three times per composition.
+
+CORRECTIONS TO THE FAN-OUT ADDENDUM's preset carve list:
+
+- Its four offsets per boot were the disc-ID string + modes 0-2
+  only. The code-derived family (10 address materializations):
+  slps carve +0x8fc/+0x90c/+0xa70/+0xaa0 PLUS mode 3 at +0xad0
+  (runtime 0x80020870); sces +0x908/+0x918/+0xa60/+0xa7c PLUS
+  +0xa94/+0xab4 (runtime 0x80020834/0x80020854). The drift model
+  carve = runtime + 0x130 + 0x130*sector is confirmed on all ten
+  mappings (0x130 = the first-sector gap at the image head).
+
+BONUS (entry-point fact): pc0 (0x8002DB14 slps / 0x8002D908 sces)
+begins with the huge zero-clear loop 0x800663FC..0x8012C3F4 slps /
+0x80066098..0x8012C16C sces - the undeclared-bss zeroing that
+provisions the sound-system work areas the SE.VH window found at
+0x800Dxxxx-0x8012xxxx.
+
+No carve-side action: the presets and descriptors are already-labeled
+rodata; the composition code is already-labeled code. Docs-only:
+matched 174, ratchets 365/0, 8/8 verify GREEN unchanged.
+
+Next queue:
+1. Descriptor field semantics (the 0x2C-B gradient records + the
+   0x5600 constant + the 0x11 record field) - low value, optional.
+2. Disc-side SE.VH/SE.VB diff still waits on CHD re-provision.
+3. GSD round-5 (db2f96e) adopt/reject stays with the lane owner;
+   setIntr base->a1 steering, startIntr reopen, trapIntr fingerprint
+   stay theirs; BIG de-frame stays coordination-gated; runtime
+   gate-family still blocked.
