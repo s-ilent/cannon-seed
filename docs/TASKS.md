@@ -4657,3 +4657,90 @@ Next queue (amends the 4th-window list, items 3/4 unchanged):
    struct's consumer semantics.
 3. read entry head (~0x8003E48C per this session's boundary scan: frame
    0x20, contains 0x8003E4CC) + 0x8003E334's body - both disc-less.
+
+## 2026-10-16 (6th window): the dispatcher's arg-slot mapping closes and the
+## outer frame resolves into an SE-command interpreter over 43-word records -
+## the dispatcher's s0 = the record's command byte at +0x15 and s1 = the
+## interpreter's own byte arg, the record's +0x16 byte picks repeat-N
+## (a2 = 0..N-1) vs single-shot (a2 = the byte), 0x800495C8 is the parameter
+## expander feeding the marshalled block, and 0x80047B70/0x80047BCC are an
+## MM:SS:FF position codec
+
+All slps addresses; disc-less on the de-framed payload (anchors
+re-validated after another sandbox rollback; scripts/cd_outer_frame.py
+repo-external). The 12:49 window's commits (1daf70d, 40968ab) are HEAD;
+nothing was lost this time beyond scratch/scripts, which were regenerated.
+
+### The two-caller function = the SE record interpreter (head 0x80046E04, frame 0x108)
+
+Boundary scan pins the head: body [0x80046E04, 0x800473DC). It operates on
+2D records: row-pointer table at 0x8011C274 indexed by (short)a0, rows of
+exactly 43 words (172 B; the multiply chain 2x+x, <<2, -x, <<2, -x, <<2 =
+x*43 then <<2 = byte offset). Record fields used: +0x10 (byte, once-flag),
++0x12 (byte, an offset into +0x2C), +0x15 (byte, THE COMMAND),
++0x16 (byte, mode), +0x27 (byte, ==1 gate), +0x28 (stored a2),
++0x29/+0x2A (bytes), +0x2C+s7 (byte, an arg), +0x4C (halfword arg).
+
+Entry: a0/a1 -> shorts (record indices), a2 -> s6 (a byte arg),
+a3 -> fp. It calls 0x800495C8(record[0x4C], record[0x2C+s7], &sp[0x48],
+...) - the PARAMETER EXPANDER that fills the interpreter's local block
+(sp+0x48 count byte, sp+0x58/0x5A halfwords, sp+0x5C..0x88 words). Then
+the dispatch loop (record[0x16] == 0x10 path): N = (u8)sp[0x48];
+for s1 = 0..N-1 it marshals:
+
+* dispatcher a0 = (short)record[0x4C], a1 = (u8)record[0x2C+s7],
+  a2 = (short)s1 (the iteration counter), a3 = t2 | (a3<<16) composed from
+  sp+0x58/0x5A,
+* swl/swr copies move the expander's words sp+0x5C/0x60/0x64/0x68 ->
+  its own sp+0x10/0x14/0x18/0x1C and sp+0x6C/0x70/0x74 -> sp+0x20/0x24/0x28
+  (the outgoing stack-arg area), plus sp+0x78..0x84 -> sp+0x2C..0x38,
+* sp+0x40 = record[0x15] (command), sp+0x44 = (u8)s6,
+* jal 0x800473E4.
+
+So the dispatcher's parked arg-slot mapping CLOSES: its s0 (the 22-way
+switch command) = record[0x15], its s1 (the byte arg reaching wrappers
+F1-F4) = the interpreter's own a2 byte. The record[0x16] != 0x10 path is
+the single-shot twin (a2 = record[0x16] instead of the counter; one call).
+After either path: 0x80047AB4((short)a0, (short)a1) - whose head is
+`(a0 <<16)>>0xE` = a0/4 signed scaled plus *3 on a1 (position math, tail
+not chased). Early-out at entry: record[0x27] == 1 && record[0x10] != 0
+sets record[0x28] = a2, record[0x10] = 1 and tails out; record[0x16]
+values 0x1E/0x14 branch early too.
+
+### The position codec helpers
+
+* 0x80047B70(x, y, out) - unpacks two packed 16-bit position words into a
+  0x12-byte struct: out[0] = (x>>8)&0x7F (minutes), out[4] = (x>>4)&0xF,
+  out[8] = x&0xF (frames), flag halfwords out[0xA] = x&0x8000,
+  out[0xC] = y&0x8000, out[0xE] = y&0x20, out[0x10] = y&0x4000 (sweep tail
+  parked).
+* 0x80047BCC(struct, a1, a2) - repacks: word0 = flags-from-0xA/0xC/0x10
+  (bit 0x8000 when struct[0xC] != 0, 0x4000 when struct[0x10] != 0 and
+  struct[0xA] != 0) | (struct[0]<<8 & 0x7F00) | (struct[2]<<4 & 0xF0) |
+  (struct[4] & 0xF), stored `sh` at (a1); second half = 0x8000/0x4000
+  flags | (struct[6]<<6 & 0x1FC0) | (struct[8] & 0x1F) returned in v0.
+  MM:SS:FF-style fields to the CdlLOC bit layout - the wrappers' argument
+  encoding.
+* 0x8003E334(-2|other, pos) - the cursor-set helper: if *0x80065DD4 != 0,
+  align pos UP to the *0x80065DDC granularity when the remainder is
+  nonzero ((pos + div) & ~*0x80065DE0), then pos >>= *0x80065DD8 (the
+  shift), compares a0 against -2 (tail parked) - the read entry's
+  seek-to-end call lands here.
+
+### Parked
+
+0x80044CE0 and 0x80048CAC share an identical prologue shape (frame 0x20,
+s1 = a2, (short)a0) - bodies decoded next window; the interpreter's
+0x800495C8 expander body; the 0x8011C274 row-pointer table's provenance
+(0x8011xxxx = the SE/audio runtime region the earlier recon mapped);
+0x80047AB4's tail.
+
+Next queue (amends items 3/4 of the 4th-window list; items unchanged):
+1. fresh CHD links (standing request, 3rd reminder sent).
+2. Decode 0x80044CE0/0x80048CAC/0x800495C8 bodies + the 0x8003E334 tail;
+   then tie the wrapper-arg semantics (the /63 scalars, the position
+   codec) to the record-driven command stream.
+3. read entry 0x8003E48C body (its 0x8003E4CC site is already decoded).
+4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated; runtime gate-family blocked.
