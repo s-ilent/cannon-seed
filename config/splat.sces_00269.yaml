@@ -235,12 +235,12 @@ segments:
       - [0x1A534, data, data_80039D34]   # 0x1c4
       - [0x1A6F8, asm, func_80039EF8]   # 0x4fc sdk
       - [0x1ABF4, asm, func_8003A3F4]   # 0x80 sdk
-      - [0x1AC74, asm, func_8003A474]   # 0x14 sdk
-      - [0x1AC88, asm, func_8003A488]   # 0x18 sdk
-      - [0x1ACA0, asm, func_8003A4A0]   # 0x14 sdk
-      - [0x1ACB4, asm, func_8003A4B4]   # 0x14 sdk
-      - [0x1ACC8, asm, func_8003A4C8]   # 0x20 sdk
-      - [0x1ACE8, asm, func_8003A4E8]   # 0xc sdk
+      - [0x1AC74, c, ReadSZfifo3]   # 0x14 sdk
+      - [0x1AC88, c, ReadSZfifo4]   # 0x18 sdk
+      - [0x1ACA0, c, ReadSXSYfifo]   # 0x14 sdk
+      - [0x1ACB4, c, ReadRGBfifo]   # 0x14 sdk
+      - [0x1ACC8, c, ReadGeomOffset]   # 0x20 sdk
+      - [0x1ACE8, c, ReadGeomScreen]   # 0xc sdk
       - [0x1ACF4, data, data_8003A4F4]   # 0x288
       - [0x1AF7C, asm, func_8003A77C]   # 0x134
       - [0x1B0B0, data, data_8003A8B0]   # 0x4 pinned

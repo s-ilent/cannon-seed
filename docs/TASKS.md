@@ -2747,6 +2747,50 @@ Next queue:
    / startIntr reopen / trapIntr fingerprint stay theirs; BIG de-frame
    coordination-gated; runtime gate-family blocked.
 
+## 2026-10-17 (window cron-20261016-2127): the GTE fifo-reader sextet lands across seven targets - the cop2 inline-asm pattern is banked
+
+Queue item: roll the region-pair exact clusters (matching lane). The
+pair-report top lists are dominated by two never-C classes - the
+A0/B0 BIOS-dispatch thunks (addiu $t2,$zero,0xA0/0xB0; jr $t2;
+addiu $t1,$zero,N: hand-written SDK asm, already curated-pinned, not
+compiler output) and the cop2 GTE families. The smallest GTE family is
+the fifo-reader sextet (0x80 B: ReadSZfifo3/4, ReadSXSYfifo,
+ReadRGBfifo, ReadGeomOffset, ReadGeomScreen), standalone rows in seven
+of the eight targets.
+
+* THE PATTERN (banks the whole GTE volume for the lane): volatile
+  inline asm for the cop2 ops (swc2/cfc2 are not reachable from plain
+  C), with the swc2 address operand bound as an "r" input - gcc
+  satisfies it from the incoming argument register and retail's
+  swc2 $17, 0($a0) form falls out. ReadGeomOffset pins the cfc2
+  destinations with local register asm variables (asm("$8")/("$9"),
+  the gcc 2.6.3 mips reg-name form) and does the >>16 unpacking in
+  plain signed C so the sra comes from the compiler.
+* THE DELAY-SLOT LAW (the one non-first-shot fix): retail keeps
+  ReadGeomOffset's second store BEFORE the return jump with a nop
+  delay slot; gcc sinks the independent store into the jr delay slot
+  (body shrinks 32->28 B). A trailing `__asm__ volatile("" ::: 
+  "memory")` barrier after the stores blocks the sinking; nothing
+  else needed a barrier - the other five were first-shot EXACT.
+* ROLLOUT: 6 rows x 7 targets flipped (g3org_jp/eu, g3_jp/eu, boots
+  x2, mainmenu_eu); 42 stale .s deleted (slps's in the shared
+  asm/nonmatchings/, sces's in its own dir - the split-location
+  asymmetry is real, the boots are not uniform); 6 C sources serve
+  all targets (region-pair 100.00% byte twins). judge_unit 36/36
+  EXACT; make verify GREEN x8 (mainmenu_jp untouched as control);
+  ratchets 365/0 == baseline; screens: no new DATA/SUSPECT (the
+  mainmenu_eu 1 SUSPECT is the documented deferred Witness B row);
+  progress matched 182->224 (TOTAL 14590 census, 1.54%).
+* mainmenu_jp DOES NOT carry the cluster: its layout at the EU
+  cluster's offsets is a 4-B data row + a 0x130 sdk row
+  (func_80070868) - the JP module's LIBGTE link set / walk differs
+  and the JP twins are unnamed inside bigger rows. Rescue belongs to
+  a JP curated/scan pass, not to this lane's rollout mechanics.
+* RotTransPers4 (0x78, the 7th member heading the slps/g3 7-func
+  clusters) stays asm: a full mtc2/ctc2 cop2 prologue grind, now
+  tractable with the banked pattern - the lane's next natural pick
+  after the _SsUtBuildADSR probe matrix.
+
 ## 2026-10-17: the matching lane opens - the region-pair report replaces coddog-cli, _SsUtResolveADSR matches all eight targets
 
 Sandbox rebuild lost coddog-cli (no cargo); the lane needed its reports back.
