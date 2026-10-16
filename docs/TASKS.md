@@ -3397,3 +3397,111 @@ Next queue:
 5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); BIG de-frame coordination-gated; seq-player attr readers
    (0x80048CC8/0x800495E0) per the previous queue.
+
+## 2026-10-16 late: the runtime-tables sces column rebuilds from the sces
+## parser's own stores - the C-cluster shifts -0x288, the pointer cluster
+## splits into three sub-shifts, and the docs' cur-VAG/cur-VH sces twins were
+## transposed; the setter and poll sces twins pin from caller-jal pairing
+
+Queue item 1 (d4040af), plus queue item 3 closed on the way. All analysis on
+the boots' per-sector true payloads (CHDs re-fetched a FOURTH time this
+sandbox cycle, sha256 exact: EU 98ccd877..., JP a6025267...; true-EXE SHA-1s
+re-matched: slps fa9474b4, sces 06b4bda6; all four contiguous game-EXE
+extractions byte-equal the committed baselines). Script repo-external:
+scripts/rt_sces_rebuild.py - code-identity twin search (pure-word anchors +
+full-window word scoring) then a linear decode with light backward
+const-propagation reporting every load/store's materialized table base.
+
+METHOD VALIDATED ON SLPS FIRST: the decoder run on the slps parser
+(0x80044174..+0x420) reproduces the documented slps column EXACTLY - gate
+0x8011A894, VH-base 0x80114F48, VH+0x20 0x80114EE0, VH+0x820 0x80114F8C,
+size-table 0x8011C3A8, VB-base 0x8011C360, VB-total 0x8011C31C, stride
+0x80115070 (sh base lui 0x8011 + 0x5070), open-counter 0x8011C35C (the lui
+0x8012 + addiu -0x3CA4 pair the docs' composed arithmetic mishandled). Only
+then is the sces column read off the sces twin's own stores.
+
+THE REBUILT SCES COLUMN (sces twin found by word-match: parser
+0x80044190 229/264 words, select helper 0x800434A4 49/64, Call 9
+0x80044C18 33/36):
+  per-VAB cluster (Call 5 parser stores):
+    gate[16]            slps 0x8011A894 -> sces 0x80119E10   (-0xA84)
+    VH-base-ptr table   slps 0x80114F48 -> sces 0x801144CC   (-0xA7C)
+    VH+0x20-ptr table   slps 0x80114EE0 -> sces 0x80114464   (-0xA7C)
+    VH+0x820-ptr table  slps 0x80114F8C -> sces 0x80114510   (-0xA7C)
+    size-table-ptr      slps 0x8011C3A8 -> sces 0x8011C120   (-0x288)
+    VB-RAM-base table   slps 0x8011C360 -> sces 0x8011C0D8   (-0x288)
+    VB-total table      slps 0x8011C31C -> sces 0x8011C094   (-0x288)
+    open-counter u16    slps 0x8011C35C -> sces 0x8011C0D4   (-0x288)
+    stride u16 (global) slps 0x80115070 -> sces 0x801145F0   (-0xA80)
+  current-context globals (select-helper stores; Call 9 stores cur-VH):
+    cur VAG-area ptr    slps 0x801150F0 -> sces 0x80114670   (-0xA80)
+    cur VH ptr          slps 0x801150E8 -> sces 0x80114668   (-0xA80)
+    cur program-table   slps 0x801150A0 -> sces 0x80114620   (-0xA80)
+    cur vab byte        slps 0x8011A875 -> sces 0x80119DF1   (-0xA84)
+    cur prog byte       slps 0x8011A87A -> sces 0x80119DF6   (-0xA84)
+    cur block byte      slps 0x8011A87B -> sces 0x80119DF7   (-0xA84)
+  transfer globals (setter stores):
+    transfer-mode A     slps 0x80065940 -> sces 0x800655D0   (-0x370)
+    transfer-mode B     slps 0x80065DCC -> sces 0x80065A5C   (-0x370)
+
+INDEPENDENT CROSS-CHECKS ALL HOLD: VB-base/VB-total match the two member
+immediates (d4040af), gate matches the doc-confirmed value, cur-block
+matches the b7fb28b correction 0x80119DF7, and the poll wrapper reads
+0x80045480 exactly as d4040af pinned it. Five independent anchors, zero
+conflicts.
+
+CORRECTIONS TO THE RUNTIME-TABLES SECTION (b7fb28b):
+  - Its C-cluster sces values (0x8011919C/0x801191E0/0x80119228/0x801191DC
+    and the claimed -0xA78..-0xA88 window for that cluster) are WRONG: the
+    C-cluster shifts -0x288 as the member immediates said. The composed
+    values sat in a different BSS area entirely.
+  - Its cur-VAG/cur-VH sces twins are TRANSPOSED: 0x801150F0 (cur VAG-area)
+    -> 0x80114670 and 0x801150E8 (cur VH) -> 0x80114668, not the reverse.
+    The store order in the select helper fixes the assignment.
+  - The pointer cluster is NON-UNIFORM even among itself: -0xA7C (the three
+    VH tables), -0xA80 (stride + the three context pointers), -0xA84 (gate
+    + the three context bytes) - three distinct BSS sub-shifts, consistent
+    with per-variable .sbss/.bss placement differences between the boots.
+
+CODE-SHIFT LAW (or lack of one): sces code shifts are PER-MEMBER, as static
+archive linking predicts - select helper +0x14, parser +0x1C, Call 9 +0x1C,
+SsVabTransBodyPartly -0x20C, the setter -0x20C (same member neighborhood as
+TransBodyPartly), the chunked loader -0x1E4. No uniform code shift exists;
+every twin must be found individually (the composed-column root cause).
+
+QUEUE ITEM 3 CLOSED: the setter (slps 0x8003CF00, right after
+SsVabTransBodyPartly) is at sces 0x8003CCF4, found via the TransBodyPartly
+twins' jal pairing (jal@0x8003CE1C -> 0x8003CF00 | jal@0x8003CC10 ->
+0x8003CCF4); both transfer-mode globals shift -0x370, uniform with the
+transfer-remaining/cur-transfer-vab pair already pinned. The poll wrapper
+confirms at sces 0x80045480 (from the loader twin's own jal).
+
+SIDEBANK (from the same decodes, for the sdk lane and the loader decode):
+  - chunked loader sces start 0x8002C65C (derived from the documented call
+    sites); its full jal fan-out pairs: 0x8003b578/0x8003b36c (the struct
+    fill), 0x8002dc10/0x8002da04 x3, allocator 0x8002dbe0/0x8002d9d4 +
+    0x8002dbf0/0x8002d9e4, CD read cluster 0x8003933C/0x80038ef0 (a fifth,
+    earlier cluster call the docs' list lacked), 0x80039238/0x80038dec,
+    0x80038d34/0x800388e8, 0x800391b8/0x80038d6c, 0x80039198/0x80038d4c,
+    bail 0x8002eaa0/0x8002e644 x2.
+  - the SPU transfer primitive set all shifts -0x428: 0x8003e414 ->
+    0x8003dfec (transfer-start-addr), 0x8003e450 -> 0x8003e028,
+    0x8003e48c -> 0x8003e064 (the SPU write), 0x8003e47c -> 0x8003e054.
+
+Gates: docs-only (addresses and shifts, no extracted assets); no carve
+action; matched 174; ratchets 365/0; 8/8 verify GREEN untouched. Disc
+assets re-provisioned repo-external this window (disc_j/ disc_e/ contiguous
+key files, true_j/ true_e/ per-sector true payloads; contiguous boots
+byte-equal the baselines).
+
+Next queue:
+1. Queue item 2 stands (the chunked loader 0x8002C840/0x8002C65C deserves
+   its own decode - who calls IT, and the CD read cluster's roles; the sces
+   column above gives its BSS frame for free).
+2. sdk lane: the boots' libsnd/libspu adoption rows now have the COMPLETE
+   sces column - adoption ready when the lane picks it up.
+3. The seq-player attr readers (0x80048CC8/0x800495E0) sces twins are now a
+   mechanical exercise with the proven twin-search + decode script.
+4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); BIG de-frame coordination-gated; runtime gate-family
+   blocked.
