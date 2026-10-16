@@ -3766,3 +3766,111 @@ Next queue:
    survived the rollback).
 5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16: the game-side exact-jal-word census closes "who calls the
+## readers" three ways - zero game-to-boot calls (the two word hits are
+## intra-module jumps under the shared 0x80020000 link base), the measured
+## load map makes resident-boot calls impossible (every target's t_addr is
+## 0x80020000, full-overwrite chain), and the boot's file-I/O cluster is the
+## SAME LINKED SOURCE as all six game modules (byte-exact windows, exact
+## 0x208 reader-pair spacing) - the boot's uncalled members are library
+## members its link never exercises
+
+The queue item asked for an exact-jal-word scan over the six game baselines
+for the boot cluster (carve-independent: the encoded WORD of a jal is
+layout-independent; the woven framing shifts positions, never values).
+Method: census every 4-byte aligned word W in
+baselines/{mainmenu,g3,g3org}_{jp,eu}.bin with (W & 0xFC000000) in
+{0x0C000000 jal, 0x08000000 j} whose target decodes to a boot-cluster
+member: seek helper 0x8002C030 -> 0x0C00B00C/0x0800B00C, orchestrator
+0x8002C110 -> 0x0C00B044, chunked retry 0x8002C7C8 -> 0x0C00B1F2, chunked
+loader 0x8002C840 -> 0x0C00B210, fload3 wrapper 0x8002CA1C -> 0x0C00B287,
+fload3 body 0x8002CA84 -> 0x0C00B2A1, reader A 0x8002D8F4 -> 0x0C00B63D,
+reader B 0x8002DA8C -> 0x0C00B6A3, plus the boot libcd cluster (issuer
+0x80038D34, CdSync 0x80038CAC/0x800398F8, read kickoff 0x800391B8, kicker
+0x8003AAFC, poll 0x8003ABF4, low-level 0x80039E2C, post-sync 0x8003A830).
+
+RESULT 1 - ZERO jal hits anywhere; exactly two j-word hits in the whole
+census, both g3org_jp, both encoding j 0x8003AAFC (payload 0x1E894 and
+0x1EB00). Classified by disassembly: REAL code (j + nop delay slot, branch/jal
+context: jal 0x32BC0 / jal 0x3793C immediately before, lhu 0x84($s4) after) -
+but g3org's OWN function at 0x8003AAFC, not the boot's. With every target
+loading at t_addr 0x80020000 (config/exe.json, measured in Phase 1 and
+guarded by the 8/8 GREEN oracle), a game module's jal into 0x8002xxxx is a
+call to its own same-address code by construction; the two hits are that
+coincidence observed live. The census also kill-shots the docs' "candidate
+callers = game-module resident-boot calls" hypothesis structurally: the boot
+payload is 0x46800 at 0x80020000..0x80066800 and mainmenu's 0xAA000 payload
+overwrites it entirely before the game's first instruction runs - the chain
+is boot -> mainmenu -> g3/g3org with full overwrite at every hop. What DOES
+survive the hop is data (the parsed SE.VH tables parked at 0x8011A87B by
+malloc), not code.
+
+RESULT 2 - the same-source law. 16-byte windows carved from the boot's
+cluster functions were searched byte-exactly across all six game baselines.
+Distinctive windows (exactly ONE hit per module, all six modules) cover:
+chunked loader head 0x8002C840+0 ("010063240002622cf9ff401453000234") and
++0x80 ("0400a3b80b00a4a80800a4b80f00628a"); fload3 body tail 0x8002CA84+0x1B0
+("00000000251007020300423017004010"); reader A +0x30
+("2198a00021a0c0008000113c21204002"), +0x50
+("07000016ffff312611002012ffff0224") and +0x160
+("0200023430006216000000001000a28f"); reader B +0xA0
+("00000000060045140000000012008394"); seek helper +0x20
+("1a006210feff022418006014ffff0224"). Negative controls stayed absent:
+orchestrator +0x20 and fload3 head +0 ("12f9b77f...", high-entropy - likely
+a mis-picked window at a row seam, not evidence of absence; fload3's presence
+is carried by its tail window). Generic windows discarded as non-distinctive:
+reader A +0x0/+0x10/+0xA0 are prologue/epilogue idioms (hundreds of hits),
+reader B +0x40 a same-register store run. The killer detail is LAYOUT: the
+reader A internal deltas (+0x30 -> +0x50 = 0x20, +0x30 -> +0x160 = 0x130) and
+the reader A -> reader B spacing (anchor +0x30 to +0xA0 = 0x208, exactly the
+boot's 0x8002DB2C - 0x8002D924) reproduce EXACTLY in all six modules - same
+compilation unit, same padding, different link order (games place the reader
+pair ~0x4E00-0x5200 bytes BEFORE the seek/chunked zone: mainmenu_jp readers
+at file 0x1CF88..0x1D190 vs seek 0x21F60/chunked 0x22750/fload3-tail 0x22A14;
+the boot's order is seek < chunked < fload3 < reader A < reader B).
+
+CONSEQUENCE for the second reader family's zero boot-side callers: they are
+members of a file-I/O library linked into the boot AND every game module; the
+boot's link exercises only the fload3 path (orchestrator -> fload3, the
+\SE.VB;1 load), so its copies of reader A/B, the seek helper, and the chunked
+loader sit uncalled in the boot while their game-side twins carry the real
+call sites. The remaining per-module question - enumerate the game-side
+callers of each module's OWN copies - needs exact runtime addresses for the
+copies, which the FRAMED baselines cannot give (framed position -> runtime is
+drifted ~0x130/sector, a 0x6AB0-wide uncertainty at the readers' depth); that
+enumeration lands for free once the de-framed payload view exists (the BIG
+coordination-gated item's payoff list grows by one entry).
+
+ALSO CLOSED (sdk lane item 4's naming debt): the boot's CD commands are
+named against psyq 3.3 LIBCD.H (repo-external /home/z/my-project/psyq/3.3/
+PSX/INCLUDE/LIBCD.H, $PSLibId Runtime Library Version 3.3): command 0x15 =
+CdlSeekL (logical seek, 4-byte position param - fload3's "&rec" IS the
+CdlLOC), command 0x09 = CdlPause, result 2 = CdlComplete (the CdSync gate).
+The read kickoff's a2 = 0x80 is CdlModeSpeed (double speed). The docs'
+command-issuer/first-param story needs no correction - only the names land.
+
+Tooling (repo-external, reusable): scripts/game_jal_scan.py (census),
+scripts/boot_func_window_search.py (window probe v1),
+scripts/boot_cluster_verify2.py (hit classification + extended probes +
+layout-delta table). Session restored the wiped disc assets first: both CHDs
+re-fetched and sha256-exact (EU 98ccd8..., JP a60252...), raw extraction
+launched repo-external; baselines/ survived the rollback intact.
+
+Gates: docs-only; matched 174; ratchets 365/0; 8/8 verify GREEN untouched;
+runtime gate-family still blocked; BIG de-frame stays coordination-gated.
+
+Next queue:
+1. libcd engine depth: 0x8003ABF4's poll against the parked globals (buf
+   0x8006582C / count 0x80065830 / mode 0x8006581C / state 0x8006580C /
+   status-code 0x80065820); how a count=1 kickoff drains a whole file.
+2. Boot CRT0/main follow-ups: the init-chain function at 0x80021800 (its
+   call list is now known; name the row boundary); the standing gp+0 reads
+   item from 30264d2.
+3. sdk lane: A0#0x3F print-shaped witnesses (strcpy pin re-review) remains;
+   the command naming debt is CLOSED (this section).
+4. Post-de-frame follow-up (parked on the BIG item): enumerate each game
+   module's callers of its OWN copies of reader A/B, the seek helper, the
+   chunked loader and fload3 - exact copy addresses need the de-framed view.
+5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); runtime gate-family blocked.
