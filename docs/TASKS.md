@@ -3874,3 +3874,137 @@ Next queue:
    chunked loader and fload3 - exact copy addresses need the de-framed view.
 5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); runtime gate-family blocked.
+
+## 2026-10-16: the libcd read engine decodes end to end - the parked struct at
+## 0x8006580C is a 10-word read state (state/count/dest/cursor/mode/
+## sector-words/remaining/result/saved-callbacks x2), the "buf" and "count"
+## slots the docs parked at 0x8006582C/30 are actually the SAVED USER
+## CALLBACKS, the per-sector drain is a CDROM DMA (MADR/BCR/CHCR programmed
+## per DataReady), and the docs' "count=1 kickoff" was a misread: fload3's
+## kickoff first arg is the FILE'S SECTOR COUNT, set in a beq delay slot
+
+The queue's "libcd engine depth" item, decoded against the DE-FRAMED boot
+payload (tools/deframe.py --payload slps_00270; the payload is 251,376 =
+0x3D610 bytes - the framed 290,816 file carries 0x9210 framing bytes, the
+Witness A drift number at full depth). All addresses below are RUNTIME
+addresses, anchored on the fload3 fault strings landing byte-exactly at the
+docs' addresses (0x800209EC/0x80020988/0x80020A0C).
+
+THE STATE STRUCT at 0x8006580C (base; every field via base+offset):
+  +0x00 state         (kicker parks 8; the issuer unwinds it counting down)
+  +0x04 0x80065810 SECTOR COUNT  (kicker parks a1; issuer seeds remaining)
+  +0x08 0x80065814 DEST          (kicker parks a0 = fload3's gp+0xC0 buffer)
+  +0x0C 0x80065818 CURSOR        (issuer: cursor <- dest; drain: += sector bytes)
+  +0x10 0x8006581C MODE          (0x80 = CdlModeSpeed; only drives the
+                                  status-code derivation and Setmode param)
+  +0x14 0x80065820 SECTOR-WORDS  (mode & 0x30 -> 0x200 / 0x249 / 0x246 =
+                                  2048 / 2340 / 2328 BYTES / 4 - the docs'
+                                  "normalized status codes" are the SECTOR
+                                  SIZE IN WORDS)
+  +0x18 0x80065824 REMAINING     (issuer: <- sector count; drain: -- per
+                                  sector; -1 parked on unwind/error)
+  +0x1C 0x80065828 RESULT/timeout anchor (poll engine reads it as $s2; the
+                                  issuer and the engine park ret(0x8002F678)
+                                  + 0x1E0 here - a deadline, not a value)
+  +0x20 0x8006582C SAVED DataReady-callback   (NOT "buf")
+  +0x24 0x80065830 SAVED Complete-callback    (NOT "count")
+The docs' parked-global names for +0x20/+0x24 were WRONG: the kicker READS
+0x8006552C/0x80065530 (the callback slots) and parks their old values there;
+the drain's done path stores them BACK (the restore) - a save/restore pair
+around the read, which is why the payload-wide scan finds no other writers.
+
+THE KICKER 0x8003AAFC (wrapper 0x800391B8 = 3-attempt retry around it, a0<->a1
+swap confirmed at 0x800391E8): parks mode, derives sector-words from
+mode & 0x30 (0x30 bits: 0x20=CdlModeSize1 -> 0x249 words = 2340 B;
+0x246 = 2328 B = CdlModeSize0; else 0x200 = 2048 B), parks dest/count,
+SAVES both callback slots, state = 8, then if (drive status & 0xE0) issue
+CdlPause(9), CdSync(0,0), 0x8003A830, return 0 / -1.
+
+THE POLL ENGINE 0x8003ABF4 (tail-thunk target of 0x80039198, itself a clean
+2-instruction thunk: jal 0x8003ABF4; verified - the docs' claim stands):
+saves a0/a1 to s6/s7, parks the deadline anchor (0x8002F678(-1) + 0x1E0) at
+0x800D29A8 with a spin counter at 0x800D29AC (cap 0x1E0000) and a code
+pointer 0x80021290 at 0x800D29B0, then pumps: reads state bytes
+0x80065809/0x8006580A, indexes the dispatch table at 0x800655D0, faults via
+0x8002DC10(string 0x800211A0) + 0x8003A3A0 on table miss, then loops
+0x800393BC (the low-level int processor) dispatching *(0x80065530) with byte
+0x8006580A (Complete class) and *(0x8006552C) with byte 0x80065809
+(DataReady class) until the int flags (reg ptr table 0x800657F0..FC = the
+0x1F801800 CD register shadows) clear.
+
+THE ISSUER (tail of the post-sync function 0x8003A830, 0x8003A86C..): a
+state-unwind loop (state counts down; >= 7 faults with the three bytes at
+0x80065548/49/4A), a shell-open retry loop (status & 0x10 = CdlStatShellOpen:
+print string 0x80021244, CdlNop, wait 0x3C ticks x7), then the command
+sequence: CdlSetmode(0x0E, param = mode byte 0x80), CdlSetloc(0x02, params =
+the BCD loc at 0x80065548 - the position the SEEK parked), registers the
+read-complete handler 0x8003B1C8 into 0x80065530, cursor <- dest, issues
+CdlReadN(6, 0, 0, 1), parks ret(0x8002F678(-1)) + 0x1E0 as the result
+deadline, remaining <- *(base+4) = THE SECTOR COUNT. CdInit itself is
+0x8003A574 (zeroes the callback slots + the 10-word struct, registers the
+event pump 0x8003B0E8 for event 2 via 0x8002EB00); a second init variant at
+0x8003A5DC prints string 0x80021258 with &0x80065834 first.
+
+THE DRAIN 0x8003B1D8 (pumped per DataReady): entry compares the event byte
+with the expected one (mismatch parks -1 at remaining); while remaining > 0:
+call the SECTOR CONSUMER 0x8003AFF8(cursor, sector-words), then cursor +=
+sector-words*4 (one sector's bytes), remaining--; then park the result
+deadline; if remaining < 0 and state > 0 call 0x8003A830; if remaining > 0
+RETURN (the drive keeps streaming - no re-issue needed); else (done): RESTORE
+the saved callbacks into 0x8006552C/0x80065530, issue CdlPause(9), call the
+user completion callback *(0x80065534) with a0 = 2 (CdlComplete) or 5
+(CdlDiskError) and a1 = the event byte.
+THE SECTOR CONSUMER 0x8003AFF8 is a CDROM DMA PROGRAMMER: clears the command
+reg, writes 0x80 to the int-flag reg, 0x00200943 to *(0x80065848), 0x1323 to
+*(0x80065800), sets bit 15 of *(0x8006584C), then programs the CDROM DMA
+channel through the pointer slots 0x80065848/4C/50/54/58 (the 0x1F8010C8-
+class register shadows libcd init parks): MADR <- cursor, BCR <- (1 << 16) |
+sector-words (ONE chunk of exactly one sector), CHCR <- 0x11000000 (start),
+then spins on the DMA busy bits. ONE DMA PER SECTOR, inside the interrupt
+path, into the caller's buffer at the advancing cursor.
+
+THE COUNT MYSTERY (docs: "how a count=1 kickoff drains a whole file") IS
+CLOSED AS A DOCS MISREAD: fload3's kickoff call at 0x8002CB94 is
+kickoff(n_sectors, buf, 0x80) - $a0 = $s1 = the FILE'S SECTOR COUNT, set in
+the beq delay slot at 0x8002CB74 (move $a0, $s1) right after the CdSync
+result==2 check; $s1 is the signed-ceil sector count fload3 computed for the
+malloc ((size + 0x7FF) >> 11, +1 when the size is not sector-aligned, per
+the afc4540 decode). The '1's the old reading anchored on (ori $a0, 1 at
+0x8002CBA0/0x8002CBE0) are the fault-print argument for strings 0x80020A28 /
+0x80020A44. So: remaining = n_sectors, the drive streams n sectors via
+DataReady interrupts, each DMA'd one sector at a time into gp+0xC0, and
+remaining==0 stops the drive. No count=1 anywhere.
+
+ALSO CORRECTED: the docs' poll-engine name "reads 0x80065828" is the RESULT/
+deadline slot (the engine parks and compares the deadline); the wrapper
+0x800391B8's "3 attempts" retry wraps the whole park+sync+issue; and
+0x80039198 is confirmed as a pure 2-insn thunk (jal 0x8003ABF4; nop; epilogue)
+- the docs' tail-thunk claim stands, the earlier suspicion was this session's
+own 0x800-byte header-offset bug (the --payload output carries the 2048-byte
+PS-X EXE header prefix; string anchors proved the alignment).
+
+Tooling (repo-external): scripts/libcd_poll_decode.py (engine), _decode2.py
+(fload3 call sites + pump), _decode3.py (string anchors), _globals_scan.py
+(payload-wide parked-global reference scan - the tool that killed the
+buf/count reading: 3 refs for "buf", 4 for "count"), _drain_decode.py +
+_kicker_decode.py (drain + kicker + issuer + consumer). All take the
+de-framed payload; the 0x800 header-prefix offset is handled.
+
+Gates: docs-only (no carve action, no extracted assets committed); matched
+174; ratchets 365/0; 8/8 verify GREEN untouched; runtime gate-family still
+blocked; BIG de-frame stays coordination-gated. Disc assets re-provisioned
+again this window (rollback wiped them a 4th time; CHDs sha256-exact, raw
+extraction relaunched).
+
+Next queue:
+1. The 0x800655D0 dispatch table: dump its entries (state byte -> handler
+   pairs), name the low-level processor 0x800393BC's event classes, and the
+   0x80065534 user-callback protocol (code 2/5 + event byte).
+2. Boot CRT0/main follow-ups: the init-chain function at 0x80021800 (name the
+   row boundary); the standing gp+0 reads item from 30264d2.
+3. sdk lane: A0#0x3F print-shaped witnesses (strcpy pin re-review) remains.
+4. Post-de-frame follow-up (parked on the BIG item): enumerate each game
+   module's callers of its OWN reader A/B, seek-helper, chunked-loader and
+   fload3 copies - exact copy addresses need the de-framed view.
+5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); runtime gate-family blocked.
