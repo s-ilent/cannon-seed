@@ -4602,3 +4602,58 @@ Next queue:
 4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16 (5th window, same session): the outer frame partially closes -
+## the 22-way command dispatcher 0x800473E4 owns all four wrapper call sites
+## plus both mode thunks (jump table 0x80021774, in-payload), its cases 4-14
+## assemble a halfword struct via the inner table 0x800217D4, and its two
+## static callers marshal swl/swr word blocks - the exact arg-slot mapping
+## is parked with the callers' head unpinned
+
+All slps addresses; everything below the 0x3D5F0 cutoff, decoded disc-less
+from the de-framed payload (same session, scripts/cd_consumer_family2.py
+census + raw sweeps).
+
+* The dispatcher 0x800473E4 (frame 0x30, body to 0x800476A8) has TWO static
+  jal callers (0x80047260, 0x80047368) - a plain function, not an exception
+  path. It switches on s0 = word at sp+0x70 (>= 0x17 -> exit) through a
+  22-entry jump table at 0x80021774 (single reader; in-payload values):
+  [0]->8004747c [1]->80047484 [2]->800474f4 [3]->800474fc
+  [4..14]->80047528 [15]->8004764c [16]->8004765c [17]->80047670
+  [18]->80047680 [19]->80047680 [20,21]->80047688 (no-op).
+* Case map: 0/1/2/3 = store the byte arg to sp+0x3C/0x3D (0,1) or
+  sp+0x42/0x43 (2,3), then 0x80048CAC((short)a0,(short)a1,(short)a2,&pair);
+  case 0 additionally toggles the mode by the (u8) byte arg via the thunks
+  (0 -> 0x80047C78, 1/2/3 -> none, 4 -> 0x80047C58). 4-14 (11 cases) =
+  lhu sp[0x4C], lhu sp[0x4E] args, 0x80047B70(x, y, &sp[0x5C]) (its head:
+  `v0 = a0 & 0x8000; a2[0xA] = v0` - a flag-bit into the struct), then the
+  INNER switch on (s3-4) 0..0xA through 11-entry table 0x800217D4 (single
+  reader) filling halfword fields of the struct at sp+0x5C..0x6C
+  (0x5C=byte, 0x5C+flag 0x66=1, 0x5E, 0x60+0x68=0, 0x62+0x68=1, 0x62+0x6A=0,
+  0x64+0x6A=1, 0x6C by a 0/0x40 range split, plus byte cases 0x45/0x46),
+  then 0x80047BCC(&struct, &sp[0x4C], &sp[0x4E]) (head: `a3 = a0;
+  a0 = -0x8000`), then 0x80048CAC(a0,a1,a2,&sp[0x3C]). 15-18 = THE FOUR
+  WRAPPERS with the byte arg: F1(s1), F2(s1, s1), F3(s1), F4(s1); 18/19
+  share the F4 case.
+* The two callers sit in ONE large function (epilogue 0x800473DC; head
+  BEFORE 0x80046F80 - not yet pinned) that loops (back-edge 0x80047178,
+  s1 counter vs (u8)sp[0x48]) and at both call sites marshals three words
+  to its sp+0x20/0x24/0x28 with swl/swr unaligned stores (one source word
+  read from its own sp+0x74 via lwr), passes (short)a0/a1/a2 and a
+  t2|a3<<16-composed a3. The dispatcher reads s0 = caller_sp+0x40 and
+  s1 = (u8) caller_sp+0x44 - the exact arg-slot correspondence needs the
+  callers' full frame; PARKED (head + frame size next).
+* F2's second caller 0x800464F4 lives in another large function (no
+  prologue/epilogue within 0x80046380..0x80046520); parked the same way.
+* Helper heads banked: 0x80044CE0 (frame 0x20, called pre-switch),
+  0x80048CAC (frame 0x20, the case-0/2/3/4-14 executor), 0x80047B70 (leaf,
+  flag-bit store), 0x80047BCC (struct finalize).
+
+Next queue (amends the 4th-window list, items 3/4 unchanged):
+1. fresh CHD links (unchanged - standing request).
+2. The dispatcher's outer frame: pin the head+frame of the two-caller
+   function (scan < 0x80046F80) and of F2's second caller; decode
+   0x80044CE0/0x80048CAC/0x80047B70/0x80047BCC bodies; then the case-4-14
+   struct's consumer semantics.
+3. read entry head (~0x8003E48C per this session's boundary scan: frame
+   0x20, contains 0x8003E4CC) + 0x8003E334's body - both disc-less.
