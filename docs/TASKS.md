@@ -4265,3 +4265,147 @@ Next queue:
 4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16 (3rd window): the libcd consumers decode disc-less - the
+## baseline de-frames to the TRUE user data below the 0x3D5F0 tail cutoff
+## (proven on five banked anchors), the 0x80045464/90 state machine is the
+## 0xF0000009/0x20 event waiter and sits ON the SE.VH/SE.VB load path (func
+## #56 -> 0x8002C7C8 -> wrapper re-poll per 0x80 chunk), the "0xF0 stride-3
+## record walk" is REFUTED as a calibrated busy-wait, and the 0x8002EB30
+## registrant is an indirect dispatch through the psyq int.c manager table
+## whose slot-1 member is runtime-installed (file-NULL)
+
+Disc state first: the rollback wiped the discs a 7th time and the 2026-10-15
+CDN links expired 09:54 UTC before this window opened (10:19 UTC). Fresh-link
+request sent to Silent in #dragoon. Work continued on the LOCAL baselines
+alone; the section below is the law that makes that work.
+
+### The disc-less law: `deframe.py --payload` on a baseline IS the true EXE
+below the tail cutoff
+
+`tools/deframe.py --payload <t> out` (already in-repo, unchanged) takes the
+framed baseline, walks the 123 MODE2 syncs, and concatenates each 2048-byte
+user-data window: header 0x800 + payload 0x3D5F0 for BOTH boots. The framing
+bytes are pure interleaving pollution, never user-data damage, so the
+de-framed payload equals the `--per-sector` extraction for every byte the
+contiguous raw read actually captured - and its end (0x3D5F0) IS the
+"everything above is disc-only" cutoff the 7768ca4 window measured. The
+~13% tail (deep statics 0x80065xxx values, dispatch tables, the .sdata
+window at file 0x46B2C) still needs the disc; every SHALLOW code address
+does not.
+
+Validation (scripts/validate_deframed_boot.py, repo-external) - five
+independent anchors banked by earlier per-sector windows, all PASS on both
+boots: pc0 0x8002DB14 (slps); 'CD_ready' at true-file 0x1A18 exactly as the
+7768ca4 window banked; the rand-routine head at runtime 0x80023474 slps /
+0x8002349C sces (the +0x28 shift reproduces) = 27bdffd8 afbf0020; the 7
+`rand` jal fields all equal the census words 0x0C00BAAC / 0x0C00B995. A
+decode made below the cutoff is therefore a decode of the true bytes.
+
+### Queue item 1: the 0xF0000009/0x20 consumers (all shallow - decoded from
+the de-framed slps payload; tooling repo-external scripts/libcd_consumers_
+decode{,2,3}.py)
+
+- THE STATE MACHINE: 0x80045464 is a halfword sign-extend wrapper; the real
+  body 0x80045490 is the EVENT WAITER for the 0xF0000009/0x20 pair. Sticky
+  once-flag 0x80065DE4: once it holds 1, every call returns 1 immediately.
+  Gate *0x80065940 == 1 also short-circuits. arg != 1 = one non-blocking
+  TestEvent (B(0B) stub 0x8002F99C) poll at 0x800454D8, result parked into
+  0x80065DE4 only when it returns 1; arg == 1 = blocking spin at
+  0x800454F8 until TestEvent fires.
+- IT IS ON THE SE.VH/SE.VB LOAD PATH - the queue item's confirmation
+  question answers YES. Exactly one direct caller of the wrapper:
+  0x8002C9B4, inside the function whose head is 0x8002C7C8, which calls the
+  wrapper with a0=0 (non-blocking poll) in a re-poll-until-nonzero loop -
+  a blocking wait per 0x80-byte step of the boot's chunked-load loop (the
+  back-edge increments $s0 by 0x80 and re-enters at 0x8002C914). The
+  0x8002C7C8 function is itself called by func #56 (0x8002C110, the boot's
+  SE ADPCM bank initializer / orchestrator) at 0x8002C210 - corroborating
+  the banked fan-out target 6 = 0x8002C7C8. The boot's chunked load of the
+  SE bank waits on the polling event between chunks. (The census's
+  "chunked loader 0x8002C840" label is an interior address: head-finding
+  puts the function head at 0x8002C7C8 and 0x8002C840 mid-body, called at
+  0x8002C7EC from the same function.)
+- THE CHUNKED READER: the docs' 0x80048A40 is MID-FUNCTION - the head is
+  0x8004892C (0x114 earlier; 0x80048A30/38/4C issuer call sites are inside
+  it, which is what flagged the mislabel). Shape: a0 = device index, valid
+  0..9 (sltiu 0xa; out of range returns -1); a0 indexes the 10-entry word
+  table 0x80065E0C (file values disc-only; the guarded CD-init region
+  0x8003CF90 also references the table), validity checker 0x800488B4 (3
+  users: 0x80047F00, the reader, 0x80048B40); computes chunk masks via the
+  shift static *0x80065DD8 (0x10/0xfff0 << shift for dev 0, 0x10000 - 
+  table[dev] arithmetic otherwise); saves/clears/restores hook 0x80065DE8
+  around the wait exactly as banked; per 0x400-byte chunk issues
+  issuer(2, s2); issuer(1, s2); issuer(3, 0x800659A8, len) - the banked
+  a0=3 call confirmed - then WaitEvent (B(0A) stub 0x80048ACC) on id
+  *0x80065998, loops until s1 exhausted; consumes/restores *0x80065DCC.
+  ONE direct caller: 0x800482F0 inside the 0x80047E64 function (which also
+  hits the checker at 0x80047F00 and later issues a0=0xD1 with *0x80065960
+  through 0x8003E2EC).
+- THE ISSUER 0x8003DF54 = the drive-status command set over the object at
+  *0x80065DB4 (halfword +0x1A6 data, +0x1AA status), all spins capped at
+  0xF01 with return -2 on timeout: cmd 2 parks 0x80065DB0 = a1 >>
+  *0x80065DD8 and writes obj->1A6 = the same halfword; cmd 1 clears guard2
+  *0x80065E00, spins until obj->1A6 == parked, then obj->1AA =
+  (obj->1AA & 0xFFCF) | 0x20; cmd 0 spins until obj->1A6 == parked, then
+  obj->1AA |= 0x30 AND sets guard2 = 1; cmd 3 spins until (obj->1AA &
+  0x30) == (*0x80065E00 == 1 ? 0x20 : 0x30), then derefs *0x80065DC8 with
+  a 0xF0FFFFFF mask prep (tail decoded, not fully chased). The 0xFFCF /
+  0x30 / 0x20 bit semantics are exactly the drive-status notifier's own
+  protocol (7768ca4) - the issuer is the notifier's in-band software twin.
+- 0x8003DBB8 CORRECTED: the "0xF0 stride-3 record walk writing pattern
+  0xD" reading is REFUTED by the true bytes. The function is: one-shot
+  guard *0x80065E00 (skip if set), THREE identical spin loops
+  (`v = 0xD; do { v *= 3; c++ } while (c < 0xF0)`) with NO memory stores
+  at all - a calibrated busy-wait - then the real work: obj = *0x80065DB4;
+  obj->1AA &= 0xFFCF (clear the 0x30 bits); spin <=0xF01 while
+  (obj->1AA & 0x30) != 0; then the hook *0x80065DE8 handling. It is a
+  drive-idle wait primitive, not a data walk.
+
+### Queue item 2: the 0x8002EB30(a0=4, handler) registration decodes to its
+mechanism; the member itself is runtime-installed
+
+0x8002EB30 is a dispatch thunk, not a registrar: `v0 = *0x8004E324;
+jalr v0[1](a0, a1)`. The root *0x8004E324 = 0x8004E304 points at a
+descriptor table whose +0 is NOT a function but the psyq kernel int.c RCS
+banner "$Id: int.c ... 1.17 1997/09/29 ... suz Exp $" (followed at
+0x80020B2C by the retail-typo string "unexepected interrupt(%04x)\n") -
+the interrupt-manager's own descriptor. Table slots +4 and +0x14 are
+file-NULL (runtime-installed members; the boot works, so init fills them);
+the other slots are shallow functions (0x8002EF2C, 0x8002EC68, 0x8002F080,
+0x8002F130, 0x8004D29C). So 0x8002EB30(4, 0x8003DBB8) = an indirect call
+into the int.c manager's runtime-installed member with a0 = 4 - "object
+index 4" is that member's first argument (handler/event slot selector),
+and WHICH code runs is not recoverable from the file image. Parked with
+the exact statics named (table 0x8004E304, slot +4 = 0x8004E308) for the
+disc return or a runtime pass. Sibling thunk 0x8002EB60 dispatches
+table[+0x14] as (0, a0).
+
+BONUS CENSUS (strings, shallow): the boot links the FULL libcd surface -
+CdSearchFile ('CdSearchFile: searching %s...'), CD_newmedia (PVD/PT
+parsing), CD_cachefile, engine names beyond the three banked ones
+('CD_cw' 0x8002123C, 'CD_datasync' 0x80021298, 'CD open(%02x)...',
+'CD read retry %2d(%02x:%02x:%02x)') and the retail typo
+'waring:old type streaming mode in CdRead2' - plus SPU DMA wait strings
+('SPU:T/O [%s]', 'wait (reset)', 'wait (wrdy H -> L)',
+'wait (dmaf clear/W)').
+
+Gates: docs-only window (no carve action, no extracted asset committed, no
+build-adjacent file touched); make verify slps_00270 spot-checked GREEN on
+the reset tree (7768ca4); matched 174, ratchets 365/0, 8/8 stands by
+construction; runtime gate-family still blocked; BIG de-frame stays
+coordination-gated.
+
+Next queue:
+1. On fresh CHD links: refetch, sha256-verify, re-extract (boots +
+   SE.VH/SE.VB per-sector) - then the deep-tail statics (0x80065xxx file
+   values incl. the 0x80065E0C device table and 0x8004E304 slot +4) close
+   the two identities parked above.
+2. Disc-less shallow follow-ups: the issuer cmd-3 tail (0x80065DC8 deref,
+   0xF0FFFFFF mask) and the 0x80047E64 consumer family (4 callers; the
+   0xD1/*0x80065960 call through 0x8003E2EC).
+3. Boot CRT0/main follow-ups (standing): the init-chain function 0x80021800
+   row boundary.
+4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated; runtime gate-family blocked.
