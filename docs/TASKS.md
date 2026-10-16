@@ -3288,3 +3288,112 @@ Next queue:
 3. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); BIG de-frame coordination-gated; runtime gate-family
    blocked.
+
+## 2026-10-16 late: the "indirect-called gate==2 checker" is SsVabTransBodyPartly -
+## direct-called from the chunked VB loader; the gate labels flip; the docs' sces
+## VB-table twins were refuted by two library members' own immediates
+
+Queue item 2 of the SE.VH runtime-tables window. All analysis on the boots'
+per-sector true payloads (CHDs re-fetched a third time, sha256 exact; true-EXE
+SHA-1s re-matched: slps fa9474b4, sces 06b4bda6). Scripts repo-external:
+cd90_dispatch.py, cd90_xref2.py, cd90_caller.py, cd90_full.py.
+
+THE PREMISE WAS A CARVE-VIEW ARTIFACT. Static searches for 0x8003CD90 in the
+true payloads: pointer word 0 hits, lui/addiu materialization 0 pairs (both
+the addiu hi=0x8004 idiom and the ori hi=0x8003 idiom), j 0 hits - but the
+jal word scan hits: slps 0x8002C9A8 jal 0x8003CD90 (word 0x0C00F364), sces
+0x8002C7C4 jal 0x8003CB84. "No direct jal" was true only in the framed view:
+the caller sits in the game-side region whose carve addresses drift (slps
+drift 0x44E0 at the 0x8004xxxx depth), so the carve-decoded jal target
+matches nothing - the same poisoning that hides the twin islands, now
+confirmed on the caller side too.
+
+THE CALLER (slps 0x8002C840..0x8002CA18, sces twin shifted -0x1E4 at the
+call site) IS THE CHUNKED VB BODY LOADER: a0/handle in, reads the size at
+stack+0x14 of a 0x8003b578-filled struct, s2 = ceil(size/2048) = sector
+count; allocates a 0x40000 (256 KB = 128-sector) buffer via 0x8002dbe0
+(clears it via 0x8002dbf0); walks the CD read cluster (0x80039238 /
+0x80038d34 / 0x800391b8 / 0x80039198 poll) one 0x80-sector chunk at a time
+with s0/s3 counting sectors; per chunk: a1 = 0x40000, or the tail remainder
+(size & 0x3FFFF for the last chunk); jal SsVabTransBodyPartly(buffer, a1,
+vab); then polls 0x80045464(0) until nonzero (wrapper -> 0x80045490, which
+dispatches on the transfer-mode global slps 0x80065940) - wait for the SPU
+write to drain before feeding the next chunk. Returns the last
+TransBodyPartly result (s16); negative -> bail with 0x8002eaa0(handle).
+
+IDENTITY: the callee is psyq libsnd's SsVabTransBodyPartly, VERBATIM. The
+committed census already carried it: config/sdk_anchors.txt rows
+"SsVabTransBodyPartly VS_VTBP LIBSND unique", slps framed 0x80041270 / sces
+framed 0x80041064, extent 0x170. Byte-check: census bytes == the true-runtime
+functions exactly (0x16C code + 4 zero pad = 0x170 member extent). True
+runtime addresses: slps 0x8003CD90, sces 0x8003CB84 (framed census address -
+drift: 0x44E0 both regions at that depth). The member is word-identical
+across regions modulo references: 19/91 words differ, every one an
+address-bearing immediate (tables, globals, jal/branch targets).
+
+SEMANTICS (slps; sces = same code, shifted refs): (addr a0, size a1, vabid
+a2). (u16)vabid >= 0x11 -> -1. gate[vab] != 2 -> -1. First chunk (the
+transfer-remaining u32 at 0x80065934 == 0): cur-transfer-vab u16 at
+0x80065938 = vab, remaining = VB-total[vab] (0x8011C31C), 0x8003cf00(0)
+stores the transfer-mode globals (0x80065940 / 0x80065DCC), and
+0x8003e414(VB-base[vab] from 0x8011C360) sets the SPU transfer start addr
+(census: SpuSetTransferStartAddr S_STSA / _spu_setInTransfer S_IT /
+SpuWritePartly S_WP all in the slps cluster). Wrong vab mid-transfer -> -1.
+Size clamped to remaining; 0x8003e450(1); 0x8003e48c(addr, size) = the SPU
+write; remaining -= size. remaining != 0 -> return -2 (FEED ME MORE).
+Completion: cur-transfer-vab = -1, remaining = 0, gate[vab] = 1 (the store
+at 0x8003CECC), return vab. The caller's loop reads exactly this protocol:
+-2 -> next chunk, >= 0 -> done.
+
+GATE MACHINE REFINED (three members anchor it now): SsUtGetVBaddrInSB
+requires gate==1 and returns VB_base[vab]; SsVabTransBodyPartly requires
+gate==2 and completes to 1; the re-open reclaimer 0x80044B84 flips 2->1.
+Coherent values: 0 = free, 2 = head parsed + VB base registered (body
+transfer armed), 1 = READY (what every reader requires). The runtime-tables
+section's labels ("1 head-claimed / 2 fully open") are inverted for these
+two values, and its "reclaims to 1 (0x8003CECC) after teardown work" was a
+misreading: 0x8003CECC is the transfer-COMPLETION store; the function tears
+nothing down. (Call 5's transient claim writing 1 mid-parse remains as
+decoded - value collision with READY, harmless in the single-threaded boot.)
+
+SCES TWINS RE-PINNED FROM MEMBER IMMEDIATES (two independent members agree):
+  VB-total per VAB   slps 0x8011C31C -> sces 0x8011C094   (shift -0x288)
+  VB-base per VAB    slps 0x8011C360 -> sces 0x8011C0D8   (shift -0x288)
+  gate array         slps 0x8011A894 -> sces 0x80119E10   (doc confirmed)
+  transfer remaining slps 0x80065934 -> sces 0x800655C4   (shift -0x370)
+  cur-transfer vab   slps 0x80065938 -> sces 0x800655C8   (shift -0x370)
+CORRECTION: the runtime-tables section's parenthesized sces twins for
+VB-total/VB-base (0x8011919C / 0x801191E0) are REFUTED - SsVabTransBodyPartly
+and SsUtGetVBaddrInSB both read 0x8011C094/0x8011C0D8 in sces, and the
+refuted values also sit outside that section's own claimed -0xA78..-0xA88
+shift window. That section's sces column needs a rebuild from member
+immediates (its Call 5 derivation must be re-run against them).
+
+NAMED AS A SIDE EFFECT: the doc's "0x8003E518 (gate==1-checked VB-base
+getter)" is SsUtGetVBaddrInSB - census UT_GVBA row (slps framed 0x80042D88)
+byte-matches true 0x8003E518 exactly; sces twin true 0x8003E0F0 (framed
+0x80042960). Also pinned: the poll wrapper slps 0x80045464 -> 0x80045490,
+sces 0x80045480.
+
+Gates: docs-only (hashes and addresses, no extracted assets); no carve
+action; matched 174; ratchets 365/0; 8/8 verify GREEN untouched. No curated
+name adoption performed - the boots' libsnd/libspu adoption rows belong to
+the sdk lane; the true-runtime addresses they need are banked here.
+
+Next queue:
+1. The runtime-tables section's sces column rebuild: Call 5's sces twin must
+   store VB-total/VB-base at 0x8011C094/0x8011C0D8 (and the size-table
+   pointer / VB RAM base rows shift by -0x288 too, per the two members) -
+   re-derive from the parser bytes, not from the refuted composed values.
+2. The chunked loader 0x8002C840 (slps) deserves its own decode: the CD read
+   cluster 0x80039238/0x80038d34/0x800391b8/0x80039198, the 0x8002dbe0/
+   0x8002dbf0 allocator pair, and who calls the loader (one jal away from
+   the SE walk's VB step).
+3. The setter 0x8003cf00 + poll 0x80045490 pair: transfer-mode globals
+   0x80065940/0x80065DCC (slps) - sces twins unpinned.
+4. sdk lane: boots' libsnd/libspu census rows now have true-runtime addresses
+   (drift 0x44E0 at the 0x8003C..0x8004B depth) - adoption ready when the
+   lane picks it up.
+5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); BIG de-frame coordination-gated; seq-player attr readers
+   (0x80048CC8/0x800495E0) per the previous queue.
