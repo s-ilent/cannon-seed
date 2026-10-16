@@ -314,7 +314,7 @@ segments:
       - [0x35A94, asm, func_80055294]   # 0x18 sdk
       - [0x35AAC, data, data_800552AC]   # 0x75c
       - [0x36208, asm, func_80055A08]   # 0x7c sdk
-      - [0x36284, asm, func_80055A84]   # 0x2c sdk
+      - [0x36284, c, GsInitCoord2param]   # 0x2c sdk
       - [0x362B0, asm, func_80055AB0]   # 0x30 sdk
       - [0x362E0, asm, func_80055AE0]   # 0x9c sdk
       - [0x3637C, asm, func_80055B7C]   # 0x34 sdk
