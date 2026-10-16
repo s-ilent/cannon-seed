@@ -4154,3 +4154,114 @@ Next queue:
 4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16 (2nd window): the three registered boot-side CD callbacks decode
+## end to end - all three are psyq-libcd stock DeliverEvent wrappers over one
+## shared B0-syscall stub, class 0xF0000003 has ZERO openers in the boot (the
+## stock deliveries are kernel no-ops), and the boot's REAL completion
+## machinery is the int processor + engine chain already decoded; the separate
+## 0xF0000009/0x20 polling-event pair (opened by CD init, delivered by the
+## drive-status notifier, consumed by TestEvent-spins and a chunked
+## hook-guarded WaitEvent reader) is fully mapped. The queue item's expected
+## "0x8003B414 wakes the fload3 poll loop" is REFUTED: fload3 waits via
+## CdSync(0)==2 and the read wrapper, never via the user callback.
+
+MAPPING LAW (measured this window, now explicit): the libcd lane's runtime
+addresses decode against the TRUE per-sector EXE (tools/iso9660_extract.py
+--per-sector), file offset = runtime - 0x80020000 + 0x800. Proof: 'CD_ready'
+sits at true-file 0x1A18 -> runtime 0x80021218, exactly the address the
+a87aa14 decode parked at 0x80039BC8. The contiguous baseline (== default
+extraction, byte-identical re-verified) differs from the true EXE in 245287
+of 290816 bytes for the boot file - the woven-ECC corruption is dense there;
+any decode against the baseline produces garbage (byte-shifted prologues,
+phantom code). Tooling this window: scripts/libcd_callbacks_decode.py,
+libcd_event_census.py, libcd_wake_sites.py, libcd_wake_chain.py,
+libcd_hook_check.py (repo-external; capstone LITTLE-endian - PSX is LE).
+
+THE THREE CALLBACKS (registered once by CD setup 0x8003B334 via the setter
+family; call sites now code-exact: 0x80038CEC<-0x8003B3C4 sync,
+0x80038D04<-0x8003B3EC ready, 0x80038D1C<-0x8003B414 user):
+- ALL THREE are thin wrappers over ONE shared stub 0x8003B43C:
+  addiu $sp,-0x18; sw $ra,0x10($sp); a0 = 0xF0000003; jal 0x8003B43C with
+  a1 = 0x20 (sync) / 0x40 (ready) / 0x40 (user completion); epilogue; jr.
+- 0x8003B43C = the B0-syscall stub: addiu $t2,$zero,0xB0; jr $t2; addiu
+  $t1,$zero,7 = B(07h) DeliverEvent(class, spec, mode=$a2-as-is). It ignores
+  its incoming a0/a1 protocol args COMPLETELY - the "a0=2/5 by remaining,
+  a1=event byte" contract stands as the drain's call convention, but the
+  boot's registered stock handlers never read either register.
+- Census: 0xF0000003 materializes at EXACTLY the three callback bodies
+  (0x8003B3CC/F4/1C) and nowhere else; NO OpenEvent in the boot opens class
+  0xF0000003 spec 0x20/0x40. Therefore, as registered by the boot's init,
+  all three stock deliveries are kernel no-ops (no matching open events).
+  They are the psyq libcd stock notification shape, present because CdInit
+  registers them unconditionally. NOTHING in the boot depends on them.
+
+THE B-STUB LIBRARY (census of addiu $t2,$zr,0xB0; jr $t2; addiu $t1,$zr,N
+triples): 29 distinct ordinals live at 0x8002F85C..0x8002F9FC and singles at
+0x80044094/0x800440A4/0x80048ACC/0x80049Axx - incl. B(07) DeliverEvent
+0x8003B43C, B(08) OpenEvent 0x8002F97C, B(09) CloseEvent 0x80044094,
+B(0A) WaitEvent 0x80048ACC, B(0B) TestEvent 0x8002F99C, B(0C) EnableEvent
+0x8002F8CC, B(0D) DisableEvent 0x800440A4 (standard kernel B-table ordinals,
+same naming method as the docs' A0#0x15/0x51 attributions). Raw-syscall
+shortcuts also live in the library: 0x8002F87C (a0=1) and 0x8002F9AC (a0=2)
+bracket the one-shot CD init - the kernel Enter/ExitCriticalSection pair by
+position; exact ordinal attribution pending a kernel-reference cross-check.
+
+THE REAL WAKE CHAIN (refutes the queue item's expectation): fload3's tail
+(0x8002CB00.., decoded live and matching the established facts) waits via
+CdSync(0,&buf) through the CD_sync engine thunk 0x80038CAC until the result
+== 2 (CdlComplete), then kicks the read through the 3-attempt wrapper
+0x800391B8 with mode 0x80 (CdlModeSpeed) - the chain is CDROM interrupt ->
+int processor 0x800393BC parks class bytes -> pump -> engines with deadline
+loops -> drain DMA per DataReady. The user-callback slot 0x80065534 fires
+0x8003B414 on completion, which DeliverEvents into the void. Zero code paths
+connect 0x8003B414 to any fload3 poll state.
+
+THE 0xF0000009/0x20 POLLING-EVENT PAIR (new subsystem, fully mapped):
+- OPEN (inside the one-shot guarded CD init at 0x8003CFxx..0x8003D078,
+  guard static 0x80065DA8, EnterCrit/ExitCrit bracketed): registers handler
+  0x8003DBB8 via 0x8002EB30(a0=4, handler); then OpenEvent(0xF0000009,
+  0x20, 0x2000, NULL) -> id stored to 0x80065998; EnableEvent(id). The
+  one-shot helper 0x8003DBB8 (second guard 0x80065E00) walks 0xF0 stride-3
+  records writing pattern 0xD - kernel event-queue shape, exact identity
+  follow-up.
+- DELIVER: the drive-status notifier at 0x8003DD4C (spin loop on the
+  0x1AA($a0) status halfword, mask 0xFFCF, test 0x30, cap 0xF00 iterations):
+  if hook 0x80065DE8 non-null -> jalr hook(0xF0000000); else DeliverEvent(
+  0xF0000009, 0x20) - matching the open event exactly. The hook is only
+  ever WRITTEN ZERO boot-side (init 0x8003D6C4, teardown 0x80044044; the
+  0x80048A98 write is a save/restore of the same static), so the notifier
+  always takes the DeliverEvent path in the boot.
+- CONSUME: (a) TestEvent spins 0x800454D8/0x800454F8 (the second is a tight
+  beqz-to-self spin) inside a state-machine function at 0x80045xxx;
+  (b) a chunked synchronous reader in the 0x80048A40 function: per 0x400-
+  byte chunk calls 0x8003DF54(a0=3, buf 0x800659A8, n), then WaitEvent
+  (B(0A) stub) on id 0x80065998 - and it CLEARS hook 0x80065DE8 around the
+  wait and restores it after (0x80048A0C/A98), forcing the notifier down
+  the kernel-event path; (c) teardown at 0x80044xxx: clears guard 0x80065DA8,
+  EnterCrit, zeroes the hook pair, re-runs 0x8003D080, CloseEvent(B09) on
+  the id (0x8004405C/6C readers). Subsystem identity of the 0x80045xxx/
+  0x80048xxx consumers = follow-up (shapes say libcd's synchronous
+  CdRead-flavored waiters, not the card library - the card library's 8
+  OpenEvents are class 0xF4000001 specs 4/0x100/0x2000/0x8000 mode 0x2000
+  handler NULL at 0x8002A364..0x8002A444, ids to 0x8006648C+).
+
+Gates: docs-only (no carve action, no extracted asset committed); matched
+174; ratchets 365/0; 8/8 verify GREEN untouched (no build-adjacent file
+touched); runtime gate-family still blocked; BIG de-frame stays
+coordination-gated. Disc assets re-provisioned (6th wipe, ~50 min inside
+the CDN link window): CHDs re-fetched and sha256-verified, raw bins
+regenerated, disc_j/ (contiguous SLPS_002.70) and disc_j_true/ (per-sector)
+re-extracted repo-external at /home/z/my-project/.
+
+Next queue:
+1. The 0xF0000009/0x20 consumers: name the 0x80045xxx state machine and the
+   0x80048A40 chunked reader (0x8003DF54's a0=3 command set); confirm
+   whether either is on the SE.VB/SE.VH load path.
+2. The 0x8002EB30(a0=4, handler) registration: what object index 4 is
+   (interrupt descriptor? queue?); and 0x8003DBB8's 0xF0x3 record walk.
+3. Boot CRT0/main follow-ups (standing): the init-chain function 0x80021800
+   row boundary; the 0x8002196C CD-setup call site is now an anchor for it.
+4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated; runtime gate-family blocked.
