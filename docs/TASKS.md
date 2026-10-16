@@ -3620,3 +3620,13 @@ Next queue:
    verified) + the sces descriptor/thunk-twin columns for the chain above.
 4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); BIG de-frame coordination-gated; runtime gate-family blocked.
+5. Matching lane IS the unattended-agent lane (it is the long grind): work
+   the coddog region-pair reports (2026-10-16 entry; regenerate
+   `coddog compare2 decomp.yaml A decomp.yaml B -t 0.5` per pair, output in
+   build/coddog.*.txt). Loop per cluster: pick the densest 100.00%-pair
+   cluster in a JP target -> write C against `tools/judge_unit.py <target>
+   <unit>` (~0.1 s/attempt) -> judge-sweep the target -> `make verify` ->
+   roll the same C to the EU twins (100% pairs rename; 95-99.99% pairs get
+   the imm-diff treatment first). Curate every new name in
+   config/symbols.curated.txt; commit per landed cluster; the judge is a
+   screen, verify is the gate.
