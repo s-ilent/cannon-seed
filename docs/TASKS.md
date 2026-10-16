@@ -2747,6 +2747,64 @@ Next queue:
    / startIntr reopen / trapIntr fingerprint stay theirs; BIG de-frame
    coordination-gated; runtime gate-family blocked.
 
+## 2026-10-17 (window cron-20261016-2242): GsInitCoord2param lands 2/2; GsMapModelingData's walk-fold law banked after a 7-shape probe
+
+Queue item: matching lane region-pair clusters. Two picks from the pick
+list, one landed, one retired to the queue with its census:
+
+* GsInitCoord2param (0x2c, g3_jp/g3_eu twins) MATCHED 2/2: three chained
+  assignments - the zero halfword trio stated FIRST (retail schedules the
+  sh group before the sw group), the 0x1000 diag trio second, the zero
+  tail trio last; frameless leaf, the final sw rides the return delay
+  slot. judge EXACT 2/2, make verify GREEN on both g3 targets. Progress
+  matched 228->230 (TOTAL 14590, 1.58%); ratchets 365/0.
+* GsMapModelingData (0x78, g3+g3org x2, TMD map: flag&1 guard, count,
+  count x 0x1c records, three offset fields +0x00/+0x08/+0x10 rebased to
+  base = mdata+2 words) NOT matched - kept asm after 7 judge-probed
+  shapes. The retail head is: [bnez flag&1, delay = addiu sp,-8; ori;
+  sw flag; addiu a0,4; move a2,zero(i=0); lw a3,0(a0); hazard-nop;
+  blez a3, delay = addiu a0,4; body]. LAWS (all judge-verified):
+  1. LOCAL pointer walks FOLD: p = mdata+1; n = *p; p++ compiles to one
+     addiu a0,8 plus a +4-displacement load - the parameter-register
+     walk (mdata++ twice) stays split with the disp-0 load.
+  2. volatile pointer locals SPILL TO THE STACK in gcc 2.6.3 (frame
+     grows to 0x10, sw/lw sp traffic) - never for pointer shaping.
+  3. empty "r"-input asms steal a register and re-shape the whole
+     allocation (p landed in a2, everything shifted) - the sextet's
+     swc2-address trick does not transfer to address-register walking.
+  4. memory-clobber barriers near the head DISPLACE the prologue pad
+     out of the bnez delay slot (and two barriers inflated the body).
+  5. The one remaining delta across all viable shapes: retail places
+     move a2,zero (i=0) BETWEEN the first addiu and the count load
+     (hence the hazard nop and p2 sinking into the blez delay slot);
+     every rotated-for shape schedules it after the guard; every
+     explicit-guard shape re-arranges the prologue. Open probe for the
+     next window: i initialized at declaration (top of function, before
+     the flag test), or the count load via mdata[1] with the walk used
+     only for the base after the guard. Shapes census + shelf source at
+     scripts/GsMapModelingData.c.shelf (repo-external).
+* tools: pair_report now counts curated-name C rows as matched (c-row VA
+  set from the splat yaml; yaml offsets are file offsets, VA = off +
+  0x80020000 - 0x800). Pre-fix false flags: memclr's six placements.
+  Fresh post-verify lists: g3_jp-g3_eu widens to 223 pairs / 106 exact
+  (the old build .elf was stale), 96 exact-unmatched in 24 clusters, the
+  24-func BIOS-thunk run (puts/PAD_dr/lseek/close/write/SetMem...,
+  0x1ac) heads it - that class stays pinned (hand-written SDK asm).
+
+Gates: only g3_jp/g3_eu touched and verified GREEN; the other six
+targets untouched; matched 230; ratchets 365/0 == baseline; no new
+screens risk (2 c-row flips only).
+
+Next queue:
+1. GsMapModelingData resume: the two open probes above; if neither
+   lands, park the row as a documented scheduling corner (the fold law
+   and the pad-displacement law stand regardless).
+2. GTE families per the cron-20261016-2127 queue (g3org's 17-func
+   RotTransPers cluster, 11-func LightColor, 19-func SetVertex) - the
+   two banked cop2 patterns apply.
+3. _SsUtBuildADSR probe matrix (standing); lanes stay theirs; BIG
+   de-frame coordination-gated; runtime gate-family blocked.
+
 ## 2026-10-17 (window cron-20261016-2127, same session): RotTransPers4 lands 4/4 - the asm-block decomposition class is banked
 
 The 7th GTE member (0x78 + 8 zero pad bytes inside the 0x80 row) lands
