@@ -14,6 +14,8 @@
 /lib/
 /include/psyq/
 /assets/
+/disc_j/
+/disc_e/
 
 # The retail executable(s) you verify against live here:
 /baselines/*
