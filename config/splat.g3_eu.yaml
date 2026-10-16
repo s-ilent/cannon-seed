@@ -348,7 +348,7 @@ segments:
       - [0x39294, asm, func_80058A94]   # 0x1c sdk
       - [0x392B0, data, data_80058AB0]   # 0x50c
       - [0x397BC, asm, func_80058FBC]   # 0x278
-      - [0x39A34, asm, func_80059234]   # 0x80 sdk
+      - [0x39A34, c, RotTransPers4]   # 0x80 sdk
       - [0x39AB4, c, ReadSZfifo3]   # 0x14 sdk
       - [0x39AC8, c, ReadSZfifo4]   # 0x18 sdk
       - [0x39AE0, c, ReadSXSYfifo]   # 0x14 sdk
