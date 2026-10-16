@@ -4008,3 +4008,149 @@ Next queue:
    fload3 copies - exact copy addresses need the de-framed view.
 5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); runtime gate-family blocked.
+
+## 2026-10-16: the libcd dispatch machinery decodes end to end from the TRUE
+## EXE - the "dispatch table" at 0x800655D0 is the interrupt-CLASS NAME table
+## (NoIntr/DataReady/Complete/Acknowledge/DataEnd/DiskError/?/?), the 32-word
+## table at 0x80065550 is the COMMAND name table (CdlSync..CdlReadS with the
+## retail typo "CdlBackword"), the low-level int processor 0x800393BC only
+## PARKS class bytes and response copies (0x80065809=sync / 0x8006580A=ready /
+## 0x8006580B=DataEnd), three wait engines named 'CD_sync'/'CD_ready'/'CD_read'
+## share the deadline machinery and cross-pair the callbacks (slot 0x80065530
+## receives the READY byte, slot 0x8006552C the SYNC byte - the 69ef6a6 slot
+## names were inverted), and the 0x80065534 user-callback protocol is
+## code-exact: a0 = 2 (remaining==0) / 5 (error), a1 = the event byte
+
+Queue item 1 of 69ef6a6, decoded against the TRUE per-sector boot EXE. The
+rollback had wiped the discs a 5th time; the CDN links were re-fetched ~2h
+before expiry (both sha256-exact) and the boots + SE.VH/SE.VB re-extracted
+with iso9660_extract --per-sector. THE TAIL-BYTE LAW that makes this read
+possible: file offset = runtime - 0x80020000 + 0x800 (header pc0 0x8002DB14,
+t_addr 0x80020000, t_size 0x46800 - all LE-encoded). Verified against three
+banked anchors before use: the .sdata window reproduces the cron-20261015
+dump byte-exactly at file 0x46B2C (NONE/FRANK/REIKO/JOHNSON/SHARK/GHOST, the
+" (1)".." (D)" labels, "bu00:", 0x8169/0x816A, tail 0x2A). Everything above
+de-framed payload 0x3D5F0 is disc-only - the dispatch tables live there and
+read TRUE bytes for the first time.
+
+THE TWO NAME TABLES (file-initialized; default string 0x800210B8 = "?",
+API out-of-range string 0x8002105C = "none"):
+- 0x80065550, 32 words, exposed by CdComName 0x80038C3C (bounds < 0x1C = 28):
+  CdlSync, CdlNop, CdlSetloc, CdlPlay, CdlForward, CdlBackword (RETAIL TYPO,
+  not "Backward"), CdlReadN, CdlStandby, CdlStop, CdlPause, CdlReset,
+  CdlMute, CdlDemute, CdlSetfilter, CdlSetmode, ?, CdlGetlocL, CdlGetlocP, ?,
+  CdlGetTN, CdlGetTD, CdlSeekL, CdlSeekP, ?, ?, ?, ?, CdlReadS, ? x4. This
+  matches the psyq 3.3 LIBCD.H constants 1:1 - the command naming debt from
+  the census window is confirmed a second way, from retail data.
+- 0x800655D0, 8 words, exposed by CdIntName 0x80038C74 (bounds < 7):
+  NoIntr, DataReady, Complete, Acknowledge, DataEnd, DiskError, ?, ?. The
+  69ef6a6 reading "dispatch table ... faults on table miss" is CORRECTED:
+  the poll engines index it to PRINT the parked class names in the timeout
+  fault - there is no control-flow dispatch through it at all.
+- The timeout print, fully decoded: '%s:(%s) timeout Sync=%s, Ready=%s\n'
+  (0x800211A0) with args ('CD_sync'|'CD_ready'|'CD_read', CdComName of the
+  current command 0x8006554C, nameB[*(0x80065809)], nameB[*(0x8006580A)]),
+  then the fatal helper 0x8003A3A0. The docs' "code pointer 0x80021290
+  parked at 0x800D29B0" is the STRING 'CD_read' - engine names, not code.
+
+THE LOW-LEVEL INT PROCESSOR 0x800393BC (called per pump iteration; returns
+flags: 2 = sync byte parked, 4 = ready byte parked, 0 = nothing):
+- head: if byte 0x80065808 != 0: clear it, issue CdlNop(1) through reg
+  R[0], write 7 to 0x1F801803 (ack) and 0x1F801802 (enable) via R[3]/R[2].
+- reads int flags at 0x1F801803 (R[3]), class = flags & 7; class 1 parks the
+  incoming a0 at 0x80065808, other classes issue a0 as a command via R[0]
+  then ack/enable 7s.
+- reads the 8 response bytes (0x1F801800 status + 0x1F801801..03 + pad) into
+  a stack buffer; a class-3 gate indexes 0x800656F0[*(0x8006554C)] to decide
+  whether the response parks into 0x8006553C/40 (with a 0x10&0x10 retry
+  counter at 0x80065544).
+- class 5: faults '%s: DiskError(%02x:%02x)\n' (0x800211C4) with the current
+  command's NAME from table A; unknown class: 'CDROM: unknown intr(%d)\n'
+  (0x800211E0) + return -1.
+- the 5-class jump table at 0x800211FC (class1->0x80039770, class2->
+  0x80039724, class3->0x80039620, class4->0x800397BC, class5->0x80039844)
+  parks: DataReady -> ready byte 0x8006580A = 1 (or 5 on status&0x1D error),
+  resp -> 0x800D2998, ret 4; Complete -> sync byte 0x80065809 = 2 (or 5),
+  resp -> 0x800D2990, ret 2; Acknowledge -> sync byte = 5 on error, else
+  0x800655F0[cmd] ? 3 : 2, resp -> 0x800D2990, ret 2; DataEnd ->
+  0x8006580B = 4 AND ready byte = 4, resp -> 0x800D29A0, ret 4; DiskError ->
+  ready byte = 5 AND sync byte = 5, resp -> both buffers.
+- every register write goes through the 0x800657F0 pointer table
+  ([0x1F801800 cmd/status, 0x1F801801, 0x1F801802 int-enable, 0x1F801803
+  int-flag, 0x1F801020, 0x1F801C00]).
+
+THE THREE WAIT ENGINES (shared deadline statics 0x800D29A8/AC/B0; deadline =
+ret(0x8002F678)(-1) + 0x1E0; spin counter cap 0x1E0000): 'CD_sync'
+0x800398F8 (reached via API thunk 0x80038CAC), 'CD_ready' 0x80039B6C (thunk
+0x80038CCC; parks 'CD_ready' 0x80021218 at 0x80039BC8), 'CD_read' 0x8003ABF4
+(thunk 0x80039198 under the 3-attempt retry wrapper 0x800391B8 - the fload3/
+reader path: wrapper callers 0x8002C938/0x8002CB94 = fload3 body, 0x8002D924
+= reader A, 0x8002DABC = reader B, 0x8003BF1C). THE CROSS-PAIRING IS
+CODE-EXACT: the pump loop calls the int processor, then dispatches
+*(0x80065530) with the READY byte (0x8006580A) + ready resp 0x800D2998, and
+*(0x8006552C) with the SYNC byte (0x80065809) + sync resp 0x800D2990; the
+loop exits when the sync byte is 2 or 5, REWRITES the sync byte to 2, copies
+the 8-byte sync resp to the caller's buffer (a1) and returns the class
+(2/5, 0 = single poll not done, -1 = timeout + fault print).
+- SLOT SEMANTICS CORRECTED: 0x8006552C = the SYNC-side callback (receives
+  Complete-class events), 0x80065530 = the READY-side callback (receives
+  DataReady/DataEnd events). The drain 0x8003B1C8 that the issuer registers
+  into 0x80065530 is therefore the READY callback - consistent with it
+  draining per DataReady. The 69ef6a6 names ("DataReady callback" at 2C /
+  "Complete callback" at 30) were INVERTED; the save/restore pair in the
+  kicker/drain covers exactly these two slots.
+
+THE 0x80065534 USER-CALLBACK PROTOCOL (queue item closed code-exact): the
+drain's done path restores the saved pair into 0x8006552C/30, issues
+CdlPause(9) via 0x80039E2C, then if *(0x80065534): jalr it with a0 = 2
+(remaining == 0) / 5 (remaining != 0), a1 = the event byte. Registration:
+the ONLY writer is the return-old setter 0x80038D1C, called once from
+0x8003B380 inside the CD setup function 0x8003B334 - itself called once
+from the boot init chain at 0x8002196C - registering 0x8003B3C4 (sync side),
+0x8003B3EC (ready side), 0x8003B414 (user completion). The setup wraps the
+init dispatcher 0x80038B98 (a0==2 -> CdInit 0x8003A574; else CdInit2
+0x8003A5DC + hw check 0x8003A480) in a 4-attempt retry, failing with string
+0x800212A4.
+- the setter family is a clean return-old strip: 0x80065538 (0x80038C24),
+  0x8006552C (0x80038CEC), 0x80065530 (0x80038D04), 0x80065534 (0x80038D1C).
+  Independent ready-callback users: 0x8002B6EC (boot file-I/O tear-down:
+  unregister the ready callback, then CdlPause via 0x80038FB8) and
+  0x8003B4C4 (register 0x8003BFC0, then CdlReadS 0x1B via 0x80038D34).
+- the name APIs CdComName/CdIntName have ZERO direct callers (dead exported
+  surface - the engines inline their table lookups); the drain thunk
+  0x8003B1C8 and event pump 0x8003B0E8 likewise have zero direct callers
+  (pointer-registered).
+
+ALSO BANKED (new file-initialized data, first read): the per-command flag
+tables 0x800655F0 ("Ack not final": nonzero at cmds 7,8,9,10,18,21,22 within
+the 28-command span = Standby/Stop/Pause/Reset/?/SeekL/SeekP), 0x800656F0
+(response-park gate), 0x80065700 ([1]x12, 0, 0, [1]x14, 0, 0, 3, 0),
+0x80065670; extents/owners beyond the code-shown uses = follow-up. The
+DMA/IO pointer pool at 0x80065844 = [0x1F801018 CD-com timing, 0x1F8010F0
+DPCR, 0x1F8010B0/B4/B8 = CDROM DMA ch3 MADR/BCR/CHCR] - true register names
+for the sector consumer's slots (the 69ef6a6 "0x1F8010C8-class" guess was
+one channel off; ch3 is the CDROM DMA).
+
+Tooling (repo-external): scripts/dispatch_dump.py (annotated runtime dumps
+of the tail), libcd_dispatch_decode.py/_decode2/_decode3/_decode4.py
+(stub/table/engine disassembly), libcd_ref_census.py (the whole-text
+lui-0x8006/addiu census that mapped every global ref 0x5500..0x5900 - 62852
+instructions). All read disc_j/SLPS_002.70;1 (git-ignored disc asset).
+
+Gates: docs-only (no carve action, no extracted asset committed); matched
+174; ratchets 365/0; 8/8 verify GREEN untouched; runtime gate-family still
+blocked; BIG de-frame stays coordination-gated. Disc assets re-provisioned
+(5th wipe) with ~2h of CDN-link lifetime to spare.
+
+Next queue:
+1. The three registered boot-side callbacks 0x8003B3C4 (sync side),
+   0x8003B3EC (ready side), 0x8003B414 (user completion): decode what they
+   do - 0x8003B414's wake target is the fload3 poll loop's expected
+   hand-off.
+2. The remaining per-command flag tables (0x80065670/0x800656F0/0x80065700):
+   readers at 0x80039EA0/0x80039FA4/0x80039FB4 (CD_ready engine), extents.
+3. Boot CRT0/main follow-ups (standing): the init-chain function 0x80021800
+   row boundary; the 0x8002196C CD-setup call site is now an anchor for it.
+4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated; runtime gate-family blocked.
