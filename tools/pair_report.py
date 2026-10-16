@@ -8,7 +8,10 @@ functions by NAME across the two regions, compares their baseline bytes
 buckets by byte-equality ratio exactly like the banked coddog table
 (100.00 / 95-99.99 / 80-94.99 / <80).
 
-Flags: M = matched (src/<name>.c exists), U = unmatched (asm .s only).
+Flags: M = matched (src/<name>.c exists, or the target's splat yaml row
+at that VA is already a `c` row - curated-name C rows keep the func_
+row name, so the file-existence test alone false-flags them unmatched),
+U = unmatched (asm .s only).
 Also emits, per pair, the contiguous runs ("clusters") of exact (100.00%)
 UNMATCHED pairs ordered by density - the matching lane's pick list.
 
@@ -16,6 +19,7 @@ Usage: pair_report.py [--clusters N] [pair ...]
 Default pairs: the four same-program region pairs.
 """
 import os
+import re
 import struct
 import sys
 
@@ -76,8 +80,31 @@ def baseline_bytes(target, va, size):
     return d[off:off + size]
 
 
-def is_matched(target, name):
-    return os.path.exists(os.path.join(REPO, f"src/{name}.c"))
+_C_ROWS = {}
+
+
+def c_row_vas(target):
+    """VAs of the target's splat yaml rows already flipped to C."""
+    vas = set()
+    path = os.path.join(REPO, f"config/splat.{target}.yaml")
+    with open(path) as f:
+        for line in f:
+            m = re.search(r"\[0x([0-9A-Fa-f]+),\s*c,", line)
+            if m:
+                # yaml offsets are file offsets (baseline .bin offsets,
+                # 0x800 header included): VA = off + 0x80020000 - 0x800
+                vas.add(int(m.group(1), 16) + BASE_VA - HDR)
+    return vas
+
+
+def is_matched(target, name, va=None):
+    if os.path.exists(os.path.join(REPO, f"src/{name}.c")):
+        return True
+    if va is None:
+        return False
+    if target not in _C_ROWS:
+        _C_ROWS[target] = c_row_vas(target)
+    return va in _C_ROWS[target]
 
 
 def sim(a, b):
@@ -119,7 +146,7 @@ def main():
             sb = baseline_bytes(b, va2, size2)
             s = sim(sa, sb)
             rows.append((name, va, size, va2, size2, s,
-                         is_matched(a, name), is_matched(b, name)))
+                         is_matched(a, name, va), is_matched(b, name, va2)))
         counts = {}
         for r in rows:
             counts[bucket(r[5])] = counts.get(bucket(r[5]), 0) + 1
