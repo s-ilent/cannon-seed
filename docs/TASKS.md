@@ -3505,3 +3505,118 @@ Next queue:
 4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
    transplant); BIG de-frame coordination-gated; runtime gate-family
    blocked.
+
+## 2026-10-16 late: the chunked VB loader's caller chain closes - retry wrapper,
+## SE.VH orchestrator, fload3 staging, the "handle" is the \SE.VB;1 filename, the
+## CD read cluster is the libcd Pos/Int pair plus the command issuer, and the
+## loader's "bail" is the A0#0x34 free() thunk
+
+Queue item 2 of 1b036cd. All analysis on the boots' per-sector true payloads
+(CHDs re-fetched a FIFTH time this sandbox cycle, sha256 exact; true-EXE SHA-1s
+re-matched: slps fa9474b4, sces 06b4bda6; contiguous boots byte-equal the
+committed baselines: slps f2a13b52, sces 19698984). Scripts repo-external:
+scripts/cloader_xref.py, cloader_pass2.py, cloader_pass3.py.
+
+THE CALLER CHAIN (slps; sces per-hop shifts below):
+  chunked loader 0x8002C840 (d4040af)
+    <- retry wrapper 0x8002C7C8   (sces 0x8002C5E4, -0x1E4)
+    <- SE.VH orchestrator 0x8002C110 (sces jal site 0x8002C030, -0x1E0;
+       sces head-scan candidate 0x8002BE54 is the seek helper's twin, not the
+       orchestrator - the sces head needs the same boundary fix, ~0x8002BF34)
+The wrapper decodes as the boot's standard retry idiom (structurally identical
+to the fload3 retry wrapper 0x8002CA1C): s0 = 0x0FFFFFFF retries; loop
+a1 = (s16)a1 sign-extended; jal loader; on (s16)return == -1 retry; on
+exhaustion a0 = "FLOAD:fault!\n" (0x80020910, sces 0x800208E4) ->
+jal A0#0x3F thunk 0x8002DC10 (sces 0x8002DA04) -> return 0; else return the
+loader's s16.
+
+THE ORCHESTRATOR (0x8002C110): s1 = 0x80016600; the (0,0,0) thunk 0x8002C788
+-> 0x80045304 (an SE-side primitive, a1 clamped to 0x7F; unnamed); then
+jal 0x8002CA1C with a0 = 0x8004C3FC - and the descriptors are INLINE FILENAME
+STRINGS: 0x8004C3FC "\SE.VH;1", 0x8004C408 "\SE.VB;1" (plus "\MOV.STR;1" at
+0x8004C330). 0x8002CA1C = the fload3 retry wrapper over 0x8002CA84 (fault
+"Cannot find file(%s) in fload3()" 0x800209C0): fills the ISO file-record
+struct via 0x8003B578(stack+0x18, filename), size at stack+0x1C, sectors =
+(size+0x7FF)>>11, malloc n*2048 (the docs' boot-load-model malloc row), seek +
+read (its body owns the cd_c/cd_d/cd_e calls at 0x8002CB50/94/C8). Returns the
+staged buffer. The orchestrator copies 0x8620 bytes - EXACTLY the SE.VH size,
+34336 - from the staged buffer to 0x80016604 (word loop when staged&3==0,
+lwl/lwr/swl/swr path otherwise), then jal 0x8002EAA0(staged) and
+0x800440D8(0x80016604, -1), then the retry wrapper(a0 = 0x8004C408, a1 = (s16)v0).
+
+THREE CORRECTIONS/NAMES LAND HERE:
+  - 0x8002EAA0 is NOT a panic bail: its body is addiu $t2,0xa0 / jr $t2 /
+    addiu $t1,0x34 = the A0#0x34 free() thunk (docs already pin A0#0x34 free).
+    The loader's "negative -> bail with 0x8002eaa0(handle)" (d4040af) FREES the
+    0x40000 staging buffer; the orchestrator's call frees the staged SE.VH
+    after the copy. No panic primitive is involved.
+  - the loader's a0 "handle" is the "\SE.VB;1" FILENAME STRING (0x8004C408),
+    and a1 is the vab id returned by the open. The chunked loader re-fills the
+    same file-record struct for the VB name and reads the size from it; the
+    VB is read straight off the CD in 0x80-sector chunks into the malloc'd
+    0x40000 buffer, TransBodyPartly per chunk.
+  - 0x800440D8 = the PUBLIC SsVabOpenHead-shaped wrapper: (a0 = VH address,
+    a1 = requested id) -> sign-extend a1, a2 = 0, a3 = 0, jal the parser
+    0x80044174, sign-extend result. Its sibling 0x8004410C is the a2 = 1
+    variant. The orchestrator opens the staged copy at 0x80016604 with
+    requested id -1 (auto-assign), and the returned id feeds the VB step.
+
+THE CD READ CLUSTER NAMED (slps/sces; word-identity check at shift -0x44C):
+  - 0x8003933C / 0x80038EF0 = CdPosToInt: CdlPOS BCD (minute, second, frame
+    at (a0)) -> LBA, the tail addiu -0x96 = -150 lead-in. Word-identical in
+    both boots (0 diffs in 32 words) - a pure-arithmetic leaf.
+  - 0x80039238 / 0x80038DEC = CdIntToPos: LBA -> CdlPOS BCD at (a1), the head
+    addiu +0x96 = +150. Also word-identical (0 diffs).
+  - 0x80038D34 / 0x800388E8 = the CD command issuer: a0 = command byte
+    (a0&0xFF), a1/a2 params; 3 attempts; per-command pointer table at
+    0x800654AC -> sces 0x80065130 (-0x37C), ring-pointer global 0x8006552C ->
+    0x800651B0, status byte 0x8006553C -> 0x800651C0; callee 0x8003A308 ->
+    sces 0x80039EF8 (-0x410) is the drive-ready wait whose fault path reports
+    "CD open(%02x)..." (0x80021244) via the same A0#0x3F thunk; low-level
+    command writer 0x80039E2C.
+  - 0x800391B8 / 0x80038D6C = a 3-attempt wrapper (args a0/a1 SWAPPED into the
+    call) over 0x8003AAFC -> sces 0x8003A8E0 (-0x21C), which parks a2 at
+    0x8006581C and maps status bits 0x30 to codes 0x200/0x249/0x246 (a
+    completion/error normalizer).
+  - 0x80039198 / 0x80038D4C = a tail-thunk to 0x8003ABF4 -> sces 0x8003A9D8
+    (-0x21C); args pass through; its role needs its own decode.
+  The loader calls ALL FIVE in sequence (jals at 0x8002C900/918/928/938/948):
+  the per-chunk GetTD/seek-read/issue/wait setup. Fan-in census: the cluster
+  also serves the fload3 body (0x8002CB50/94/C8), a second reader family
+  (0x8002D8F4/24/48, 0x8002DA8C/BC/DC), and the libcd-engine depth
+  (0x8003B468/4D4/BD38, 0x8003BEFC/0x8003BF0C/1C/28).
+
+THE SEEK HELPER: 0x8002C030 (slps) / 0x8002BE54 (sces, calls the sces (0,0,0)
+thunk 0x8002C5A4): cd_c(0x10 = CdlGetTD, 0, stack buf) -> BCD bytes -> a stack
+CdlPOS -> CdPosToInt = track-1 start LBA; target = start + a0; CdIntToPos;
+0x8002BC38(POS, 1) issues the seek. No direct jal callers found in the boot
+text (indirect call or orphaned variant - open).
+
+THE ALLOCATOR PAIR: 0x8002DBE0 = the A0#0x33 malloc thunk and 0x8002DBF0 = the
+A0#0x2B (43) thunk (ordinal in the $t1 delay slot; the pair sits in the boot's
+A0-thunk farm 0x8002DBE0..0x8002DC5C: 0x33, 0x2B, 0x15 strcat, 0x3F, 0x1B,
+0x17, 0x19, 0x16). 0x8002DBE0's malloc identity was already pinned by the
+boot-load-model entry; 0x8002DBF0 is the loader's buffer-clear step (zero-fill
+semantics from usage; ordinal 43 unnamed in the census).
+
+A0#0x3F CONFLICT FLAG: the docs pin A0#0x3F = strcpy from the InitPAD site;
+BOTH fault-report sites decoded here pass a bare literal string with no
+argument setup ("FLOAD:fault!\n", "CD open(%02x)...") - print-shaped. The
+strcpy pin needs re-review in the sdk lane before adoption.
+
+Gates: docs-only (addresses and strings, no extracted assets); no carve
+action; matched 174; ratchets 365/0; 8/8 verify GREEN untouched. Disc assets
+re-provisioned repo-external this window (disk/*.chd + *.bin, disc_j/ disc_e/
+contiguous, true_j/ true_e/ per-sector boots).
+
+Next queue:
+1. fload3 body 0x8002CA84 full decode (the seek/read/alloc flow, the second
+   reader family 0x8002D8xx-0x8002DADC, and who calls fload3 - the file table
+   drivers, one step from the boot load model's own loader).
+2. sdk lane: 0x80045304, 0x8003ABF4, and the cd_c callees need census rows at
+   their true-runtime addresses; A0#0x2B/A0#0x3F ordinals re-pin; the
+   libsnd/libspu adoption rows stand.
+3. sces orchestrator head pin (candidate ~0x8002BF34; jal site 0x8002C030
+   verified) + the sces descriptor/thunk-twin columns for the chain above.
+4. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); BIG de-frame coordination-gated; runtime gate-family blocked.
