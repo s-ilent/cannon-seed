@@ -4876,3 +4876,168 @@ Next queue (amends the 6th-window list):
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated (its evidence base now includes this region as true
    bytes); runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261016-1742): the chunked reader 0x8004892C decodes
+## end to end - it is the SE-bank SPU-RAM loader (top-allocated banks in /8
+## units, a 0x400 chunk loop that parks the SPU transfer addr, kicks the SPU
+## DMA write and Waits the completion event per chunk); the issuer's cmd-3
+## kickoff corrects to MADDR = dest through a frame-pair indirection, and the
+## "helper" 0x80048ACC re-identifies as the stock LIBAPI WaitEvent thunk
+
+Provenance: queue item 1 of the cron-20261017-0027 section. Worklog had rolled
+back to the cron-20261014-2112 tail again (restore note + compact span summary
+appended to /home/z/my-project/worklog.md, reconstructed from git history +
+this file; this file remains the authoritative record). Disc re-provision REDONE
+from the still-valid links (expire ~2026-10-17 09:54 UTC): both CHDs sha256
+exact; contiguous boots reproduce the committed baselines (slps f2a13b52,
+sces 19698984); per-sector boots reproduce the banked true witnesses (slps
+fa9474b4, sces 06b4bda6). Decode on the true (de-framed) payloads, runtime =
+0x80020000 + payload_index; script repo-external
+(scripts/reader_8004892C.py, capstone under the region-bit jal law).
+
+### The reader 0x8004892C (sces twin 0x80048A28, +0xFC): full body
+
+    int reader(int dev) {                 // 0x8004892C, frame 0x38
+      if ((u32)dev >= 10) return -1;
+      if (checker(device_table[dev]) != 0) return -1;   // busy/already-resident gate
+      if (dev == 0) { size = 0x10 << shift; base = 0xFFF0 << shift; }   // OVERRIDE
+      else { size = (0x10000 - device_table[dev]) << shift;
+             base = device_table[dev] << shift; }
+      if (*0x80065DCC == 1) { *0x80065DCC = 0; restore_dcc = 1; }   // park alt-read mode
+      if (*0x80065DE8 != 0) { saved_hook = *0x80065DE8; *0x80065DE8 = 0; }  // park hook
+      do {
+        n = (remaining <= 0x400) ? remaining : 0x400;   // last chunk flags exit
+        issuer(2, base_cursor);            // SPU transfer addr = cursor/8 (+ shadow static)
+        issuer(1);                         // SPUCNT transfer mode = DMA write, guard2 = 0
+        issuer(3, 0x800659A8, n);          // staging buffer; the SPU DMA write kickoff
+        WaitEvent(*0x80065998);            // B0#0x0A thunk at 0x80048ACC - per chunk
+        remaining -= 0x400; base_cursor += 0x400;
+      } while (!last);
+      if (restore_dcc) *0x80065DCC = old;  // un-park
+      if (saved_hook)    *0x80065DE8 = saved_hook;
+      return 0;
+    }
+
+* The 10 "devices" are SE sound banks, TOP-ALLOCATED in SPU-RAM: with shift =
+  *0x80065DD8 = 3, size = (0x10000 - table[dev]) << 3 bytes and base =
+  table[dev] << 3, so size + base = 0x10000 << 3 = 0x80000 EXACTLY - every
+  bank ends at the 512 KiB SPU-RAM top. The table values are stored as
+  0x10000 - size_units, i.e. NEGATIVE distances from the top in 8-byte units
+  (the SPU transfer-address register 0x1F801DA6 encodes addr/8 - cmd 2's
+  >>shift and the tables' <<3 are the same /8 law seen from both sides).
+* dev 0 OVERRIDES its own table entry (0xFFFE = would be 16 B at 0x7FFF0)
+  with the constants 0x10/0xFFF0 -> a 0x80-byte chunk at 0x7FF80 - the
+  0x80-byte chunk step of the SE-bank chunked loader (func #56 path), now
+  proven at the load site. The checker still tests the UN-overridden
+  0x7FFF0<<... = table[0]<<3 address for dev 0 (retail inconsistency,
+  harmless: the overlap test is conservative).
+* Bank sizes (bytes, computed by the reader): dev0 0x80@0x7FF80, dev1
+  0x26C0@0x7D940, dev2 0x1F40@0x7E100, dev3 0x4840@0x7B7C0, dev4
+  0x6FE0@0x79020, dev5 0xADE0@0x75220, dev6 0xF6C0@0x70940, dev7
+  0x18040@0x67FC0, dev8 0x18040@0x67FC0, dev9 0x3C00@0x7C400.
+* TABLE CORRECTIONS (both regions byte-exact twins at delta -0x37C; sces
+  complement table re-located at 0x80065AB8 by exact byte search - the
+  0x80065B58 spot checks different data): the tables are U32-STRIDED (value
+  + 0x0000 pad); the earlier u16 view silently read only the low halves.
+  The complement law "complement = 0x10000 - table[i]" holds for 9/10 and
+  FAILS at dev 2 in BOTH regions: stored 0x3D8 (984 units = 7872 B) vs
+  computed 0x3E8 (1000 units = 8000 B) - a genuine retail data quirk, not a
+  transcription slip. The READER never reads the complement table (it
+  computes 0x10000 - table[dev] inline); the stored complement table's
+  consumer, if any, is parked. The banked "for all 10" claim in the
+  cron-20261017-0027 section needs this dev-2 exception.
+* The checker 0x800488B4 (sces 0x800489B0): a0 = table[dev] << shift (the
+  bank base in bytes); walks the runtime region map at *0x80066294
+  (FILE-NULL - built at runtime; entries {u32 start, u32 len}): entries with
+  start bit31 set are skipped; start bit30 set -> return 0 (not busy,
+  end-of-allocations marker); return 1 (busy) iff (start >= base) OR
+  (base < start + len) - together the full overlap test of [base, 0x80000)
+  against the map. So the map is the SPU-RAM allocation list and the reader
+  refuses to re-load a bank whose top-anchored region intersects any
+  allocation - the already-resident/idempotence gate.
+* The chunk loop: chunks are 0x400 bytes (last chunk = remaining, exit when
+  remaining <= 0x400). Per chunk: issuer(2, cursor), issuer(1),
+  issuer(3, staging 0x800659A8, n), then WaitEvent(*0x80065998).
+* THE "HELPER" 0x80048ACC IS NOT A FUNCTION: it is the stock Psy-Q 3.3
+  LIBAPI **WaitEvent** thunk linked verbatim (`addiu $t2,0xb0; jr $t2;
+  addiu $t1,0xa`), byte-identical to the LIBAPI.LIB member body - the
+  ordinal mapping proven against the archive members themselves
+  (DeliverEvent 0x07, OpenEvent 0x08, CloseEvent 0x09, **WaitEvent 0x0A**,
+  TestEvent 0x0B, EnableEvent 0x0C, DisableEvent 0x0D, UnDeliverEvent
+  0x20). a0 = *0x80065998 = the runtime event descriptor (file-NULL; the
+  init chain installs it). This LOCATES the banked "0xF0000009/0x20
+  event-waiter ON the SE.VH/SE.VB load path" (c9176dd) at instruction
+  level: the reader waits the SPU-DMA completion event once per chunk.
+  The mode toggle 0x80048ADC follows immediately (the thunk sits in the
+  pad/alignment gap before it).
+* Region twins: the reader body (0x19C B) is instruction-identical to the
+  sces twin modulo statics + call encodings only (20 differing words, all
+  of them lui/addiu static fields or jal/j encodings - itemized in the
+  decode script output). Same for the issuer body 0x2A4 B (30 words, same
+  classes). The one-linked-source law extends to both; NEW static facts:
+  staging 0x800659A8 -> sces 0x8006562C (-0x37C) but the event-descriptor
+  static *0x80065998 -> sces 0x80065628 (-0x370) - the mixed-shift
+  boundary crosses BETWEEN the two adjacent statics (0x10 apart in slps,
+  4 apart in sces: re-laid data).
+* Carve containment (framed view): the reader sits MID-ROW inside the big
+  data row data_8004557C (slps) at row offset +0x2BB0 - the boots' "data is
+  code" pathology again; no carve-side action (the de-frame transition
+  re-derives; same rule as the whole family).
+
+### The issuer 0x8003DF54 cmd-3 kickoff: the D4_MADDR wiring CORRECTED
+
+The issuer's prologue is the key: `sw $a2,8($sp); addiu $a2,$sp,4; ...;
+sw $a0,($sp); sw $a1,4($sp)` - the THIRD arg slot is OVERWRITTEN with
+$sp+4, i.e. a2 becomes a pointer to the frame pair {saved_a1, saved_a2} =
+{dest, len}. The cmd-3 tail then walks THAT pair (a2 += 4; a0 = *(a2-4);
+a0 = *a2):
+
+    *0x80065E04 = dest;                        // read-state dest slot
+    **0x80065DB8 = dest;                       // D4_MADDR (0x1F8010C0) = THE RAM ADDRESS
+    *0x80065E08 = ceil(len/0x40);              // block count (word-exact law)
+    **0x80065DBC = (ceil(len/0x40) << 16) | 0x10;   // D4_BCR (0x1F8010C4)
+    **0x80065DC0 = (guard2 == 1) ? 0x01000200 : 0x01000201;  // D4_CHCR (0x1F8010C8)
+
+The 4th-window banked reading "**0x80065DB8 = a2 (the raw length)" was a
+misread of this indirection (it took the pair pointer for the value):
+MADDR gets the DEST (main-RAM staging address), the LEN feeds only BCR -
+hardware-correct. Two more corrections in the same tail: the DICR write
+through *0x80065DC8 (0x1F801014) is `(*DICR & 0xF0FFFFFF) | 0x22000000`
+(bits 29+25, consistent with psx-spx's nonzero-24..30-field stability
+note) in BOTH guard2 paths - the two paths are a DUPLICATED (not folded)
+block with identical semantics, and the OR constant is 0x22000000, not
+the banked 0x20000000; and cmd 2 also updates the u16 SHADOW static
+*0x80065DB0 (= addr >> shift, same value it stores to obj->0x1A6), which
+is what cmd 0/1's spin compares obj->0x1A6 against (cap 0xF01, -2 on
+timeout) - the parked-position handshake is register-vs-shadow.
+
+### Parked (honest opens from this decode)
+
+* Where the DISC data enters staging 0x800659A8: the reader's loop is pure
+  SPU-side (staging -> SPU-RAM DMA + WaitEvent); the disc->staging fill
+  lives in the caller chain (func #56's chunked VB loader / fload3 staging)
+  or the parked hook *0x80065DE8 machinery (the reader parks the hook for
+  the duration of its own loop - the hint that the hook normally feeds the
+  same staging). Next session: walk the consumer's caller chain (queue item
+  3's 0x80044CE0/0x80048CAC/0x800495C8 bodies) with the staging address as
+  the anchor.
+* The allocation-map producer behind *0x80066294 and the exact
+  OpenEvent(class/mode) call that installs *0x80065998's descriptor.
+* The stored complement table's consumer (the reader does not use it).
+
+Gates: docs-only (decode + corrections banked; the byte windows and the
+decode stay repo-external per the no-commit rule); no carve action;
+matched 174; ratchets 365/0; 8/8 verify GREEN untouched (nothing
+build-adjacent touched).
+
+Next queue:
+1. The disc->staging fill: walk the consumer's callers (0x8004764C,
+   0x800464F4/0x80047660, 0x80047670, 0x80047680) and the read entry
+   0x8003E48C head with staging 0x800659A8 as the anchor (disc-less).
+2. Reverb-preset lane (unchanged): record templates -> 0x1F801DC0+ register
+   file map; wrappers as SPU ops.
+3. 0x80044CE0/0x80048CAC/0x800495C8 bodies + the 0x8003E334 tail (unchanged,
+   disc-less).
+4. sdk A0#0x3F witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated; runtime gate-family blocked.
