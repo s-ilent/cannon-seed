@@ -2747,6 +2747,34 @@ Next queue:
    / startIntr reopen / trapIntr fingerprint stay theirs; BIG de-frame
    coordination-gated; runtime gate-family blocked.
 
+## 2026-10-17 (window cron-20261016-2127, same session): RotTransPers4 lands 4/4 - the asm-block decomposition class is banked
+
+The 7th GTE member (0x78 + 8 zero pad bytes inside the 0x80 row) lands
+on g3_jp/eu + both boots. Two new facts for the lane:
+
+* THE ASM-BLOCK CLASS: for bodies whose insn order crosses gcc's
+  scheduler in both directions (arg loads that must come AFTER a
+  transform, but plain-C decomposition lets gcc float them BEFORE,
+  while memory clobbers force them ALL to entry), the winning shape is
+  ONE volatile asm block with the retail register assignments
+  hardcoded, referencing the o32 arg registers $4-$7 directly, GTE
+  command aliases as their exact retail .word encodings (rtpt
+  0x4A280030, rtps 0x4A180001 - GNU as knows neither mnemonic), and
+  only the return-value sra in plain C on a $2 register-var output so
+  it fills the jr delay slot. gcc re-allocates "r"-bound inputs ($2
+  for a0) - never trust them for address registers.
+* THE PAD LAW: judge_unit SIZE verdicts on rows whose function is
+  shorter than the row are a SCREEN LIMITATION, not a failure - the
+  inter-row gap is ld's zero padding in the real build and make
+  verify is GREEN. Do NOT emit the pad from the C file: a file-scope
+  __asm__ pad lands BEFORE the function in the gcc 2.6.3 output and
+  shifts the whole row.
+
+Progress matched 224->228. Lane next: the remaining GTE families
+(g3org's 17-func RotTransPers cluster, the 11-func LightColor cluster,
+the 19-func SetVertex cluster) are all tractable with the two banked
+patterns; _SsUtBuildADSR probe matrix still open.
+
 ## 2026-10-17 (window cron-20261016-2127): the GTE fifo-reader sextet lands across seven targets - the cop2 inline-asm pattern is banked
 
 Queue item: roll the region-pair exact clusters (matching lane). The
