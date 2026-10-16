@@ -4409,3 +4409,196 @@ Next queue:
 4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-16 (4th window): the issuer cmd-3 tail closes (completion-flag
+## write + DMA-style kickoff law) and the whole 0x80047E64 consumer family
+## decodes disc-less - the consumer is a device command dispatcher over a
+## param block {cmd, dev, extent...}, the 4 callers are cmd wrappers (1/6/
+## 8/0x10), the 0xD1 call-through write is obj->0x1A2 = (u16)device-descriptor,
+## the record processor is a mask-driven halfword copier into obj->0x1C0..,
+## and the EU boot proves the family is one linked source in TWO separately
+## shifted code clusters (consumer side +0xFC, issuer side -0x428)
+
+Provenance: the 11:34 UTC window completed this decode but was rolled back
+before commit; the 12:49 window re-lands it. Everything below was
+re-derived on regenerated de-framed payloads (anchors re-validated: pc0
+0x8002DB14; 'CD_ready' at true-file 0x1A18; rand heads 0x80023474 slps /
+0x8002349C sces), the 54 spot-check words match (19/19 cmd-3 deref/mask
+block + 35/35 DMA-kickoff block), the corrected census reproduces every
+site list, and the EU signature search reproduces every location. Decode
+script repo-external (scripts/cd_consumer_family2.py, re-landed with the
+checks built in).
+
+Disc state: still no fresh CHD links (the 10:19 window's request stands);
+this work is again 100% disc-less on the de-framed baselines. One method
+warning worth banking: the first jal-site census computed site vram as
+BASE+file_offset and double-counted the 0x800 EXE header - every reported
+site was +0x800. The corrected census (site = BASE + payload_index)
+reproduces the banked facts exactly (reader's single caller 0x800482F0,
+checker users 0x80047F00/0x80048974/0x80048B40). Same vram/file-offset
+lesson as the 0x1411 record, now in census form.
+
+### The issuer 0x8003DF54 cmd-3 tail: fully decoded
+
+After the banked spin (`(obj->0x1AA & 0x30) == (*0x80065E00 == 1 ? 0x20 :
+0x30)`, cap 0xF01, -2 on timeout) the tail derefs the pointer at
+*0x80065DC8 and the 0xF0FFFFFF mask resolves as a completion-flag write,
+not a status read:
+
+* guard2 == 1: `*ptr = 0xF0FFFFFF` - the compiler folded
+  `(*ptr & 0xF0FFFFFF) | 0xF0FFFFFF` into a constant store (0xF0FFFFFF
+  already has bits 27-24 clear).
+* guard2 != 1: `*ptr = (*ptr & 0xF0FFFFFF) | 0x20000000` - bits 27-24 and
+  23-0 cleared, bit 29 set, high nibble bits 31-30/28 preserved.
+
+Then the DMA-style kickoff law, in order (a0..a2 = the issuer's cmd, dest,
+len args saved to the stack frame at entry):
+1. `*0x80065E04 = a1` (the destination buffer pointer - the read state's
+   dest slot),
+2. `**0x80065DB8 = a2` (the raw length stored through the pointer static),
+3. `*0x80065E08 = ceil(a2 / 0x40)` - word-exact: `(a2 >> 6) + ((a2 &
+   0x3F) != 0)`, the 0x10-word block count (0x10 words = 0x40 bytes),
+4. `**0x80065DBC = (ceil(a2/0x40) << 16) | 0x10` - the classic
+   block-count<<16 | block-size form (0x10-word blocks; the /0x40 above is
+   the same law seen from the byte side),
+5. `**0x80065DC0 = *0x80065E00 == 1 ? 0x1000201 : 0x1000200` - a CHCR-like
+   start word, differing in bit 0 and bit 9 by guard2,
+6. `v0 = 0`; the issuer's shared exit is 0x8003E1F4 (`jr $ra`) - so the
+   issuer is exactly [0x8003DF54, 0x8003E1F8).
+
+### The call-through 0x8003E2EC = the drive-object halfword setter
+
+Complete in 17 instructions: `obj->(2*a0) (u16) = a2 == 0 ? (u16)a1 :
+(u16)(a1 >> *0x80065DD8)`; obj = *0x80065DB4. The 0xD1 selector therefore
+writes obj->0x1A2; with a2 != 0 it is the shifted (LBA->device) form, the
+same `>> shift` the issuer's cmd 2 uses. Its 2 callers: 0x8003CFB8 (the
+CD-init region) and 0x80048308 (the consumer).
+
+### The consumer 0x80047E64 = a device command dispatcher (block API)
+
+Signature: `consumer(u32 block[])` with block at **0x800F3554 (slps BSS)**.
+Shape, all addresses slps:
+
+1. cmd = block[0]; for cmd == 0 or odd cmds: dev = (int16)block[4]; the
+   0x100 flag clears to fp = 1 (negative-device encoding: F1 stores
+   `|dev| | 0x100` for negative devs, verified against the raw words incl.
+   the j delay slot); dev >= 0xa returns -1; desc = device_table[dev] at
+   0x80065E0C (10 words); `checker(desc) != 0` returns -1 immediately, so
+   the checker is a busy/error test and s4 = 1 marks the device usable.
+2. `*0x80065950 = dev`, `*0x80065960 = desc`, then a 67-byte copy from
+   record_table 0x80065E5C + dev*0x44 (stride 68, one byte shy - the copy
+   is 0x43 bytes) into the stack frame at sp+0x10.
+3. dev == 7 sets (*0x80065958, *0x8006595C) = (0x7F, 0x7F); dev == 8 sets
+   (8, 0); else (0, 0).
+4. cmd-bit regions gate on bits 3/4/5 of cmd (dev == *0x80065950, only
+   devs 7/8): for bit-3 ops with s4 set, the copied record's first word is
+   PATCHED to 0x0C011C00, and six halfword fields are filled with
+   X/63-scaled values where X1 = block[0xC] << 13, X2 = block[0xC] << 12,
+   divided by 63 via the gcc magic 0x81020409 shift-38 signed idiom:
+   copy[0x18] = X1/63 - copy[4]; copy[0x1A] = X2/63 - copy[6]; copy[0x1C]
+   = X2/63 + copy[0x1E]; copy[0x24] = X2/63 + copy[0x26]; copy[0x38] =
+   X2/63 + copy[0x3C]; copy[0x3A] = X2/63 + copy[0x3E]. (F2's block[8]/
+   block[0xA] use the same /63 magic on a0*0x7FFF and a1*0x7FFF.)
+5. obj->0x184/0x186 = 0, *0x80065954/0x80065956 = 0.
+6. if (s4 || s6 || s7) call the record processor (below) with &copy.
+7. if (fp) the chunked reader 0x8004892C(*0x80065950) runs.
+8. if (s4) THE 0xD1 CALL: `call_through(0xD1, *0x80065960, 0)` = 
+   `obj->0x1A2 = (u16)desc` - the queue item's identity closes.
+9. if (copy[0x48] != 0) obj->0x1AA |= 0x80; return 0 (or the -1s above).
+
+The record processor 0x80048374 = mask-driven halfword copier: word0 of
+the record is a bitmask, and for each set bit k it stores rec[4+2k] (u16)
+into obj->0x1C0 + 2k (bits 0..8 verified in the raw sweep: obj fields
+0x1C0/1C2/1C4/1C6/1C8/1CA/1CC/1CE/1D0). The consumer's 0x0C011C00 patch
+selects exactly bits {10,11,12,16,24,25,26,27} - the six computed
+coordinate fields plus two template fields - so patch, fills, and
+processor agree field-for-field. The "jal-shaped" 0x0C011C00 is a mask
+value, not a call: no indirect call exists anywhere in the processor.
+
+### The wrappers: the 4 callers are the public API
+
+All four fill block[0] then call the consumer with a0 = &block
+(0x800F3554); the consumer's 4 jal sites (0x80047D14/DCC/E0C/E4C) sit in
+four separate 0x18-frame functions, not one:
+
+* F1 0x80047C98: block = {1, dev} - dev = (int16)a0, negative encodes as
+  |dev| | 0x100, (u16)|dev| >= 0xa returns -1; when dev == 0 it also calls
+  the mode toggle 0x80048ADC(0) first.
+* F2 0x80047D4C: block = {6, - , (a0*0x7FFF)/63, (a1*0x7FFF)/63} (the /63
+  magic; the mults sit BEFORE the frame setup, so the documented
+  "prologue at 0x80047D80" is mid-function - head is 0x80047D4C).
+* F3 0x80047DE4: block = {0x10, - , - , (int16)a0 at +0x10}.
+* F4 0x80047E24: block = {8, - , - , (int16)a0 at +0xC}.
+
+Plus two 4-instruction thunks 0x80047C58/0x80047C78 = mode_toggle(1)/
+mode_toggle(0). The mode toggle 0x80048ADC(m): returns the old
+*0x80065944; sets *0x80065944 = m; m == 1 keeps obj->0x1AA bit 7 only when
+*0x80065948 == 1 or `checker(*0x80065960) != 0`, else clears it; m == 0
+leaves obj->0x1AA unchanged and zeroes *0x80065944; other m values just
+return the old state. Its checker call is the census's third user
+(0x80048B40).
+
+### The read stack closes to the top
+
+* Read dispatch 0x8003E1FC(dest, len): if *0x80065DCC == 0 ->
+  issuer(2, (u16)*0x80065DB0 << shift) [restore the parked position],
+  issuer(1), issuer(3, dest, len); else -> alt-read 0x8003D874(dest, len)
+  (which writes obj->0x1A6 = (u16)*0x80065DB0 directly and runs the 0xD/
+  x3 calibrated wait shape). Return value = len.
+* Sibling 0x8003E284: identical but issuer(0) instead of issuer(1) - and
+  it has ZERO static callers in the whole boot payload (jal AND j census):
+  parked as a kept-but-unused sibling of the dispatch (the *0x80065DCC
+  file value decides which pairing runs; disc-only).
+* The read entry above it (~0x8003E4A0, head not yet pinned): len capped
+  at 0x0700F000, read_dispatch(parked << shift, len), then
+  0x8003E334(-1, end = pos + len) (the cursor-set/seek helper directly
+  after the call-through), then the hook *0x80065DE8 dance and
+  *0x80065DB0 = new cursor.
+* The CD-init region function (contains 0x8003CFB8): zeroes
+  *0x80065940/44/48/54/56/58/5C and *0x80065DCC, then parks the descriptor
+  through the same call: `call_through(0xD1, device_table[*0x80065950],
+  0)` - the consumer's step 8 is this init sequence's runtime twin.
+
+### EU cross-check: one linked source, TWO separately shifted clusters
+
+Signature search on the de-framed sces payload finds every family member
+(instruction-identical):
+
+* issuer 0x8003DB2C, call-through 0x8003DEC4, triplets 0x8003DE0C+/
+  0x8003DE88+ - the LOW cluster moves -0x428 vs slps.
+* consumer 0x80047F60, wrappers 0x80047D94+ (F1 verified word-exact), the
+  checker 0x800489B0, reader 0x80048A28, processor 0x80048470, patch
+  constant at 0x80048158 - the HIGH cluster moves +0xFC.
+* Data re-laid per region: obj static 0x80065DB4 -> 0x80065A38 (-0x37C),
+  desc static 0x80065960 -> 0x800655F0 (-0x370), block BSS 0x800F3554 ->
+  0x800F32D8 (-0x27C). The consumer's tail is instruction-identical
+  modulo those statics.
+
+So the boot's libcd/file-driver cluster is the same linked source on both
+discs but its two code clusters shift DIFFERENTLY between regions
+(-0x428 vs +0xFC) - an insertion/deletion sits between 0x8003E3xx and
+0x80047C58. Cross-cluster calls survive (the EU reader jals the EU issuer
+at 0x80048B2C/34/48). Any future framed-view carves in this range must
+treat the two clusters as independent relocations, not one block.
+
+### Parked for the disc return (values only, all relationships known)
+
+*0x80065DB8/DBC/DC0/DC8 identities (the DMA-side pointer statics), the
+device table 0x80065E0C's 10 words and the record table 0x80065E5C's
+68-byte records (dev 7/8's coordinate templates), *0x80065DCC, and
+*0x80065948. Everything CODE-side above decodes from the baselines alone.
+
+Next queue:
+1. On fresh CHD links: refetch, sha256-verify, re-extract - the deep-tail
+   statics then close: 0x80065E0C/0x80065E5C identities (what the 10
+   devices and their 68-byte records ARE), 0x80065DB8/DBC/DC0/DC8, and
+   the 0x8004E304 slot +4 member.
+2. The consumer family's outer frame: who calls the four wrappers and the
+   two mode thunks (F1 <- 0x8004764C; F2 <- 0x800464F4 + 0x80047660; F3 <-
+   0x80047670; F4 <- 0x80047680) - one head each, decodable disc-less;
+   plus the read entry's head (~0x8003E440) and 0x8003E334's body.
+3. Boot CRT0/main follow-ups (standing): the init-chain function 0x80021800
+   row boundary.
+4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated; runtime gate-family blocked.
