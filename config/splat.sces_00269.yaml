@@ -346,7 +346,7 @@ segments:
       - [0x2C014, asm, func_8004B814]   # 0x68 sdk
       - [0x2C07C, asm, func_8004B87C]   # 0x2c sdk
       - [0x2C0A8, data, data_8004B8A8]   # 0x22c4
-      - [0x2E36C, asm, func_8004DB6C]   # 0x5c sdk
+      - [0x2E36C, c, _SsUtResolveADSR]   # 0x5c sdk
       - [0x2E3C8, asm, func_8004DBC8]   # 0x8c sdk
       - [0x2E454, data, data_8004DC54]   # 0xe4c
       - [0x2F2A0, asm, func_8004EAA0]   # 0x70 sdk

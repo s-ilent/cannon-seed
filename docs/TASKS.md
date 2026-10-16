@@ -6,6 +6,23 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### Matching lane: roll the region-pair exact clusters (the unattended-agent grind)
+
+OPEN — first fruits landed 2026-10-17 (see Log): `tools/pair_report.py` (the
+plain-ELF coddog-compare2 replacement; coddog-cli itself is not installable in
+the rebuilt sandbox — no cargo) re-derives the four region-pair reports from
+the build .elf symtabs + baselines and emits per-target exact-unmatched pick
+lists to build/pairs_<jp>_exact.txt. `_SsUtResolveADSR` matched 8/8 (the
+whole-function region-pair 100.00% quartet). BLOCKED inside the same cluster:
+`_SsUtBuildADSR` (.text+0x5c, 0x8c) — every C shape tried folds the retail
+`addu $t0,$t1,$zero` copy-before-branch + `ori $t0,$t1,0x4000` under GCC
+2.6.3 (-O2 and -O1 both probed; -O1 additionally emits schedule nops and an
+arg-move). The copy survives in retail, so the libsnd UT member's build
+differs from ours somehow: probe matrix next (GCC 2.6.3 flag axes —
+-fschedule-insns? -fdelayed-branch? — and the sdk-built-vs-game-built
+compiler-provenance question the sdk-aspsx note already raised). Until that
+lands the pair stays 1/2; do not hand-pin.
+
 ### State checkpoint (2026-10-15, `d3434c3`): gates green, sdk adoption closed
 
 First independent full-gate audit since the anchor landing (`8a66466`) and the
@@ -2729,6 +2746,48 @@ Next queue:
 4. GSD round-5 adopt/reject stays with the lane owner; setIntr steering
    / startIntr reopen / trapIntr fingerprint stay theirs; BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17: the matching lane opens - the region-pair report replaces coddog-cli, _SsUtResolveADSR matches all eight targets
+
+Sandbox rebuild lost coddog-cli (no cargo); the lane needed its reports back.
+`tools/pair_report.py` re-derives them without coddog: parse each target's
+build .elf symtab (plain struct, STT_FUNC sized), pair by name across the
+four same-program region pairs, byte-compare the baseline slices, bucket
+100.00/95-99.99/80-94.99/<80 exactly like the banked table, and emit the
+exact-UNMATCHED contiguous-cluster pick lists (matched = src/<name>.c
+exists). Method note for honest comparison: coddog counted ALL symbol pairs
+(698 boots / 1845 mainmenu); this report counts sized-function pairs only
+(92 / 287) — the buckets below it are the matching lane's real worklist.
+
+Top pick list finding: `_SsUtResolveADSR` + `_SsUtBuildADSR` are one
+contiguous 0xE8 LIBSND UT member, byte-identical 100.00% in ALL FOUR region
+pairs — one C source per function serves all eight targets.
+
+* `_SsUtResolveADSR` (.text+0x0, 0x5c) MATCHED 8/8: u16 params force the
+  `andi $v1,$a0,0xFFFF` re-materialization before the srl chains (o32
+callees may not assume zero-extension); the nine halfword stores land in
+program order (+0xA,+0xC,+0x10,+0xE flags first, then +0x0..+0x8 fields,
+last store in the return delay slot); frameless leaf, no cc-post marker.
+Judge EXACT 8/8 then `make verify` GREEN 8/8. Progress matched 174→182
+(TOTAL 14590, 1.25%); ratchets untouched at 365/0 (curated real-name sdk
+row - unknown_function does not move).
+* `_SsUtBuildADSR` (.text+0x5c, 0x8c) NOT matched — kept asm: retail holds
+`addu $t0,$t1,$zero` (copy of the +0xC flag mask) BEFORE the `beqz` with
+`ori $t0,$t1,0x4000` in the fallthrough and the +0xA mask's `and $t2` in
+the branch delay slot. Every C shape folds the copy under GCC 2.6.3 -O2
+(CSE rewrites `t0 = t1 | 0x4000` to t0-based via the copy equivalence,
+then t1 dies and flow propagation eats the copy); -O1 folds it too and
+adds schedule nops + an `addu $9,$5,$zero` arg move. The pattern is unique
+to this member in the unmatched set. Probe matrix queued (flag axes,
+compiler provenance) — see the Queued entry above.
+
+Rollout mechanics banked for the next clusters: flip the yaml row
+`asm,func_<ADDR>` → `c,_SsUtResolveADSR` (curated names already in
+symbols.curated.txt), delete the stale .s (NOTE: the boots' split lives in
+the SHARED top-level asm/nonmatchings/, not asm/slps_00270/), judge-sweep,
+`make verify` per target. Keep function signatures on ONE line —
+progress.py's definition heuristic checks brace-on-next-line within 3
+lines and a wrapped signature undercounts matched.
 
 ## 2026-10-16 - SE.VH layout closes against the real bytes: the parser is Psy-Q libsnd SsVabOpenHead-shaped, the size table sums the VB exactly, the JP/EU audio divergence is mapped per VAG
 
