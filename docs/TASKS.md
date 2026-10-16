@@ -3630,3 +3630,139 @@ Next queue:
    the imm-diff treatment first). Curate every new name in
    config/symbols.curated.txt; commit per landed cluster; the judge is a
    screen, verify is the gate.
+
+## 2026-10-16 late: fload3's body decodes end to end - signed-ceil sector law,
+## gp+0xC0 staging, the libcd call sequence, CdSync named, the orchestrator's
+## caller is the boot init chain, and the boot has no file-table dispatch to
+## fload3
+
+Queue item 1 of 937f0d4. All analysis on the slps boot via weave-mapped reads
+of the committed baseline (true file offset F -> baseline (F>>11)*2352 +
+(F&0x7FF)) + linear disasm. Script repo-external: scripts/fload3_decode.py.
+
+METHOD WARNING for every future boot/code scan on this pipeline: the
+baseline/carve view stores MIPS words LITTLE-ENDIAN (the whole toolchain is
+mipsel; the PS-EXE header fields are sane only as LE: slps pc0 0x8002DB14,
+t_addr 0x80020000, t_size 0x46800). capstone must run in its DEFAULT
+(little-endian) mode - CS_MODE_BIG_ENDIAN produced total garbage. A raw-word
+xref that unpacks with ">I" finds NOTHING (this window's first jal xref
+returned zero hits and briefly resurrected the "file table drivers" theory);
+every word scan on baselines must unpack "<I". The LE disasm reproduces every
+known anchor exactly (retry-wrapper shape, all five fault strings, the
+thunks, the orchestrator's 0x8620 copy).
+
+FLOAD3 RETRY WRAPPER 0x8002CA1C: confirmed as documented (s0 = 0x0FFFFFFF
+attempts; jal 0x8002CA84; (s16)-1 retry; exhaustion -> a0 = "FLOAD:fault!\n"
+(0x80020910) -> jal 0x8002DC10 (the A0#0x3F thunk) -> return 0; else return
+the body's s16).
+
+FLOAD3 BODY 0x8002CA84..0x8002CBF8 (0x174; the whole cluster sits in carve
+data row data_8002C7C0 - the walk refused it, the bytes are code):
+  1. a1 = a0; jal 0x8003B578(&rec @sp+0x18, filename) - the ISO file-record
+     fill; size lands at sp+0x1C. On 0: a0 = "Cannot find file(%s) in
+     fload3()\n,filename" (0x800209C0) -> A0#0x3F thunk -> return -1. NOTE:
+     the (%s) is passed NO argument (a1 never set) - the THIRD print-shaped
+     witness for the A0#0x3F conflict (with "FLOAD:fault!\n" and
+     "CD open(%02x)..."); the strcpy pin needs its sdk-lane re-review.
+  2. size = rec.size (sp+0x1C); n = ceil(size/0x800) via GCC's signed
+     division idiom (bgez-guarded addiu 0x7FF, sra 11 = floor; rounddown
+     compare; +1 when the size is not sector-aligned) - malloc size is
+     n<<11 EXACTLY (sector-granular, one notch sharper than the earlier
+     "(size+0x7FF)>>11" reading).
+  3. jal 0x8002DBE0 (the A0#0x33 malloc thunk), a0 = n<<11; result stored to
+     GP+0XC0 - fload3's staging global (sits in the zero region of the
+     .sdata window beyond gp+0xB0: file-initialized zeros, runtime state, the
+     load model picture holds). 0 -> "No enough memory in fload3()\n"
+     (0x800209EC) -> return 0.
+  4. "Enough memory\n" (0x80020988) printed via the thunk BEFORE the clear -
+     a progress trace.
+  5. memset(buf, 0, n<<11) via 0x8002DBF0, args (buf, 0, size) - the
+     A0#0x2B thunk's zero-fill semantics CONFIRMED at the call site.
+  6. jal 0x80038D34 (the CD command issuer), a0 = 0x15, a1 = &rec, a2 = 0,
+     retried while it returns 0 (the file record IS the param buffer).
+  7. CDSYNC NAMED: jal 0x80038CAC(0, &result @sp+0x10) - a tail wrapper over
+     0x800398F8 (the impl); result must be 2 (libcd CdlComplete) else
+     "Fault CdSync in fload3()\n" (0x80020A0C) -> return -1.
+  8. read kickoff: jal 0x800391B8(a0=1, a1=buf, a2=0x80) - FULLY DECODED:
+     3 attempts (s0 counts down); the inner call SWAPS a0/a1 -> jal
+     0x8003AAFC(buf, 1, 0x80) (the docs' swap note confirmed at instruction
+     level); inner returns 0 ok / -1 fail (tail = negu(slti(x,1))); wrapper
+     returns 1 / 0-after-3-fails; 0 -> fault 0x80020A28 -> return -1.
+     The inner 0x8003AAFC = the libcd read-request kicker: parks a2 (mode
+     0x80 = double-speed) at 0x8006581C, reads it back (the interrupt
+     handler's view), normalizes status bits 0x30 -> codes 0x200/0x249/0x246
+     stored at 0x80065820 (docs confirmed); parks a0 (buf) at 0x8006582C and
+     a1 (count = 1) at 0x80065830; state 8 -> 0x8006580C; a1-mode word ->
+     0x80065810; conditional low-level issue jal 0x80039E2C(9, 0, 0, 0)
+     gated on (status & 0xE0); then jal 0x800398F8 (the CdSync impl) and
+     0x8003A830 before the 0/-1 return.
+  9. poll loop: jal 0x80039198(1, 0) - a pure tail-thunk to 0x8003ABF4 (args
+     pass through; its size is 0x1F4). fload3's loop: return <= 0 (and not
+     -1) -> done -> return gp+0xC0 (the buffer); -1 -> poll again; any other
+     positive -> fault 0x80020A44 -> return -1. 0x8003ABF4 reads
+     0x800655D0/0x80065809/0x8006580A/0x80065828 and touches free-RAM state
+     0x800D29A8/AC - the libcd-engine depth stays its own item (the docs'
+     flag stands); the parked globals above are the handle list for it.
+  Shared exit: every `j 0x8002CBF8` tail lands on the NEXT carve row's head -
+  func_8002CBF8 opens with fload3's own epilogue (lw ra,0x38(sp); lw s1; lw
+  s0; jr ra; addiu sp,0x40): a false function head (shared-exit), same
+  boundary-caution class as the other boot heads.
+
+CALLER GRAPH (whole-payload xref, jal + absolute words + lui/addiu computed
+pointers; ALL endianness-corrected):
+  jal @0x80021838 -> SE.VH orchestrator 0x8002C110   (its ONLY boot caller)
+  jal @0x8002C140 -> fload3 wrapper  0x8002CA1C      (its ONLY boot caller)
+  jal @0x8002C210 -> chunked retry   0x8002C7C8      (the VB step; docs-consistent)
+  jal @0x8002C7EC -> chunked loader  0x8002C840
+  jal @0x8002CA38 -> fload3 body     0x8002CA84
+  ZERO absolute words and ZERO lui+addiu computed pointers to any cluster
+  member anywhere in the boot. The queue's "file table drivers" hypothesis
+  is RESOLVED NEGATIVE for the boot: fload3 has exactly one caller chain
+  (boot init -> orchestrator -> fload3), no dispatch table in this payload.
+  The orchestrator's caller context is the boot's linear init chain:
+  head 0x80021800 (addiu sp,-0x28; sw ra/s0) -> 0x8002DB0C -> 0x8002F8BC(2)
+  -> 0x80021964 -> 0x80023AB0 -> 0x800252A0 -> [SE.VH+SE.VB load] ->
+  0x800219F0 -> 0x8002FA0C(0) -> ... The carve types the region as data
+  (data_80021810 spans runtime 0x80021810..0x80022F30) but the bytes are the
+  init code - the boot's early code zones are carve-data, same refusal class
+  as the fload3 cluster.
+  The SECOND READER FAMILY (0x8002D8F4.., 0x8002DA8C..): ZERO boot-side
+  callers of any kind - the same no-direct-caller class as the seek helper
+  0x8002C030. Their shape is fload3's read half parameterized: command-0x15
+  issuer + CdSync + 0x800391B8(count, buf, 0x80) + poll; family A sources
+  buf from GP+0XCC, family B from its a1 (count in a0 for both). Candidate
+  callers remain game-module resident-boot calls or jr dispatch - the clean
+  tool is an exact-jal-WORD scan over the six game baselines (carve-side jals
+  decode wrong per the skew law, but the encoded WORD of a jal into the boot
+  is layout-independent).
+
+STRING-TABLE NOTES: sces payload 0x40 = "\W16.DAT;1" CONFIRMED byte-exactly
+(the 30264d2 quote is sces-side); the slps table at payload 0x27..0x3F is a
+6-word error-message pointer table (0x80021E10/30/44/68/98/BC) and payload
+0x40 holds "VOICE=%d"; "\W16.DAT;1" appears NOWHERE in the slps payload -
+per-region string-table divergence, same family as the sces .sdata one-word
+insert. "bu00:" is absent from the slps readable region (the .sdata window
+lives in the missing tail - consistent).
+
+Gates: docs-only (addresses, strings, no extracted assets; no carve action);
+disc assets re-provisioned repo-external this window (both CHDs sha256 exact
+x2: EU 98ccd8..., JP a60252...; raw .bin extraction launched); matched 174;
+ratchets 365/0; 8/8 verify GREEN untouched.
+
+Next queue:
+1. Game-side exact-jal-word scan over the six game baselines for the boot
+   cluster (fload3 0x0C00B287-class encodings, the chunked loader, the
+   second reader family) - carve-independent, immune to the skew; closes
+   "who calls the readers" if the game modules reach them.
+2. libcd engine depth: 0x8003ABF4's poll against the parked globals (buf
+   0x8006582C / count 0x80065830 / mode 0x8006581C / state 0x8006580C /
+   status-code 0x80065820); how a count=1 kickoff drains a whole file.
+3. Boot CRT0/main follow-ups: the init-chain function at 0x80021800 (its
+   call list is now known; name the row boundary); the standing gp+0 reads
+   item from 30264d2.
+4. sdk lane: A0#0x3F now has THREE print-shaped witnesses (strcpy pin
+   re-review); A0#0x2B zero-fill confirmed at the fload3 call; command 0x15
+   and 9 need their libcd names against the psyq headers (/home/z/psyq
+   survived the rollback).
+5. Lanes stay theirs (GSD round-5, setIntr/startIntr/trapIntr, coddog
+   transplant); BIG de-frame coordination-gated; runtime gate-family blocked.
