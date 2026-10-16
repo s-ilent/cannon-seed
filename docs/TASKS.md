@@ -5041,3 +5041,132 @@ Next queue:
 4. sdk A0#0x3F witnesses; lanes stay theirs (GSD round-5,
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261016-1857): the reader is a TWO-EXTENT function
+## - extent 2 (0x8004EB00..0x8004EC24) carries the chunk loop's tail with the
+## staging materialization; the read entry 0x8003E48C is the mid-function
+## re-entry of the CD-init function 0x8003E464; fload3's buffer law closes
+## (disc -> malloc'd heap buffer parked at gp+0xC0, NOT staging); staging
+## 0x800659A8 has exactly ONE reference in the whole payload
+
+Provenance: fresh window after another sandbox rollback (repo fell back to
+7623cd2; fast-forwarded to a719bff; worklog tail stale at
+cron-20261014-2112, queue re-derived from this file). disk/*.chd re-fetched
+via the prompt's live links, both sha256 exact; all 8 baselines byte-exact
+against RECON.md's table. Tooling: scripts/staging_fill_walk.py (repo-external
+whole-payload census + capstone disasm on the framed baseline).
+
+View discipline: everything below is the FRAMED carve view (census ran on
+baselines/slps_00270.bin). The banked de-framed-era addresses in this zone
+agree with the framed bytes (fload3 0x8002CA84, wrapper 0x8002CA1C, fault
+strings 0x800209EC/0x80020988/0x80020A0C read back from encoded constants) -
+zero local drift, same rule as every decoded zone below the transitions.
+HONEST DISCREPANCY: the banked carve-containment line "reader MID-ROW inside
+data_8004557C at +0x2BB0" does not reproduce arithmetically against the
+reader head 0x8004892C (0x8004557C + 0x2BB0 = 0x8004812C); re-check that
+line's arithmetic when the de-frame lane revisits the region.
+
+### The reader 0x8004892C has a SECOND EXTENT
+
+Extent 2 = [0x8004EB00, 0x8004EC24): frame 0x38, ra at 0x30, epilogue
+0x8004EC04..24. Reached from extent 1 by forward branch (0x61D4 away, in
+range); two jumps back into extent 1: `j 0x800489C8` (0x8004EB08) and
+`j 0x80048A2C` (0x8004EB80, the remaining>0x400 clamp path). Flow:
+
+* s1 = (v0 - table[dev]) << *0x80065DD8, s2 = table[dev] << shift (the
+  top-anchored bank base/cursor pair);
+* *0x80065DCC consumed (==1 -> cleared + s5 = 1 restore flag, restored at
+  0x8004EBD8); hook *0x80065DE8 saved to sp+0x10 and cleared (s3 = 1 rides
+  the beqz delay slot), restored from sp+0x10 at 0x8004EBF0..FC;
+* clamp s0 = min(s1, 0x400); per chunk: issuer(2, s2); issuer(1, s2);
+  issuer(3, 0x800659A8, s0) - THE STAGING MATERIALIZATION at 0x8004EBA4-8
+  (lui a1,0x8006; addiu a1,a1,0x59A8) - then WaitEvent(*0x80065998) via the
+  extent-1 thunk 0x80048ACC (jal 0x8004EBC0); s1 -= 0x400; s2 += 0x400;
+  back-edge bnez s3 -> 0x8004EB78 (re-clamp); on exit restore *0x80065DCC
+  (s5) and the hook, return 0.
+* The issuer sequence therefore exists in BOTH extents (extent 1's at
+  0x80048A30/38/4C per the banked decode) - a loop-rotation duplicate, the
+  last chunk peeled inline. The banked "body 0x19C B" was an extent-1-only
+  undercount.
+* A second pad-gap copy of the stock WaitEvent thunk (addiu t2,0xb0;
+  jr t2; addiu t1,0xa) sits at 0x8004EC2C..EC38; NO jal targets it - the
+  only WaitEvent-thunk jal in the payload remains 0x8004EBC0 -> 0x80048ACC.
+
+### The reader's caller map (whole-payload jal+j census)
+
+Exactly ONE direct jal into 0x8004892C: **0x8004E320**. The banked "single
+caller 0x800482F0" is REFUTED at instruction level: 0x800482F0 is
+`lhu a0,(v1)` mid-function; no other jal/j hit anywhere. The caller:
+
+* frame 0x90 (ra at 0x8C), epilogue 0x8004E370..0x8004E39C;
+* error cleanup jal 0x80048374(sp+0x10) when s4/s6/s7 flags set;
+* if fp != 0: a0 = *0x80065950 (file-zero static = the runtime-installed
+  dev index), jal reader;
+* then a0 = 0xD1, a1 = *0x80065960, jal 0x8003E2EC (the call-through);
+* if sp+0x58 flag: obj (*0x80065DB4 = the SPU block) -> 0x1AA (SPUCNT)
+  |= 0x80.
+
+This tail matches the banked consumer semantics - the consumer decode
+extends across this extent. The banked "checker at 0x80047F00" is likewise
+refuted in this view: checker jals = 0x8004DE00, 0x8004EAD4, 0x8004ECA0.
+F1-F4 wrappers (0x8004764C/5C/70/80) have ZERO direct jals - entries only
+via the dispatcher's jump table, as banked.
+
+### The read entry 0x8003E48C = mid-function re-entry of CD-init 0x8003E464
+
+Real head 0x8003E464 (addiu sp,-0x18; ra at 0x10) - the boundary scan's
+"frame 0x20 head ~0x8003E48C" misread a mid-stream lui as a prologue.
+Shared tail from the 0x8003E48C re-entry: wipe the 10-word read state
+0x8006580C..0x80065830 (sw-zero loop v0 = 9..0), zero 0x80065530/0x8006552C/
+0x8006553C (the wait-engine callback slots), jal 0x8002ead0, a0 = 2 +
+a1 = 0x8003B0E8 -> jal 0x8002eb00 (re-register the CD event pump), return.
+The full head adds: the drive-status init byte dance through the CD
+register-shadow pointers *0x800657F0/F4/F8/FC (0x80; sp[0..3] = 2,0,0,0
+written back; 3; 0x20) with the &7 status spin on *0x800657FC (exit when
+zero), the sync/ready/DataEnd class bytes (0x80065809 = 2, 0x8006580A
+copy), and the head call 0x8002DC10(string 0x80021258, &0x80065834) -
+EXACTLY the banked "second init variant prints string 0x80021258 with
+&0x80065834 first". So the read entry is CdInit's state-reset + re-register
+re-entry; its single census caller 0x80041368 reuses it as a reset-CD-read-
+state step (recovery class).
+
+### fload3's buffer law closes - the disc->staging question sharpens
+
+gp+0xC0 (0x800663EC, inside the file-initialized .sdata window) census:
+exactly 4 refs. sw v0,0xC0(gp) at 0x8002E9E4 = fload3 parks the MALLOC'D
+buffer pointer (malloc 0x8002DBE0, a0 = the sector-aligned size from the
+signed-ceil law); lw at 0x8002EA18 = the memset arg (0x8002DBF0(buf, 0,
+size)); lw at 0x8002EA70 = the read kickoff's a1 (jal 0x800391B8(n_sectors
+= s1, buf, mode = 0x80)); lw at 0x8002EA9C = the return value. gp+0xD0:
+zero code refs. CONSEQUENCE: disc data lands in the malloc'd HEAP buffer,
+NOT at staging 0x800659A8 - fload3 reads the whole file to the heap; the
+SE.VB body travels heap -> staging -> SPU-RAM in the chunk loop.
+
+STAGING ANCHOR CENSUS (negative, decisive as far as it goes): the ONLY
+absolute materialization of 0x800659A8 - or of ANY 0x800659xx address - in
+the whole payload is the reader's own issuer arg at 0x8004EBA4-8. Zero
+gp-relative refs at gp-0x984 (staging), gp-0x994 (*0x80065998), gp-0x9A4/
+-0x9A8. Zero addiu-chain computed pointers from the read-state base
+0x8006580C (+0x19C) or the 0x80065834 struct (+0x174). So the heap->staging
+copy reaches the buffer through a RUNTIME-INSTALLED POINTER (the file-zero
+statics 0x80065940..0x800659A8 - *0x80065948/50/54/56/58/5C/60 are the
+natural candidates; the caller already loads *0x80065950/60 as args) or a
+mem-op offset from an adjacent base - parked with this exact census recipe.
+
+Gates: docs-only (census + decode banked; byte windows stay repo-external
+per the no-commit rule); no carve action; matched 174; ratchets 365/0;
+8/8 verify GREEN untouched (nothing build-adjacent touched).
+
+Next queue:
+1. The heap->staging fill site: census mem-op (lw/sw) offsets 0x174/0x19C
+   from the 0x80065834/0x8006580C bases; decode who INSTALLS the file-zero
+   pointer statics (*0x80065948/50/54/56/58/5C/60 writers); then the
+   0x8002C840 chunked loader's per-0x80-step body with the heap buffer
+   (gp+0xC0) as the source anchor.
+2. The frame-0x90 orchestrator: boundary pass for its true head (does it
+   own 0x80047E64?) + full decode; the checker users 0x8004DE00/0x8004EAD4/
+   0x8004ECA0.
+3. 0x80044CE0/0x80048CAC/0x800495C8 bodies + the 0x8003E334 tail (standing).
+4. Reverb-preset lane (standing); sdk A0#0x3F witnesses; lanes stay theirs
+   (GSD round-5, setIntr/startIntr/trapIntr, coddog transplant); BIG
+   de-frame coordination-gated; runtime gate-family blocked.
