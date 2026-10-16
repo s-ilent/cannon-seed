@@ -4744,3 +4744,135 @@ Next queue (amends items 3/4 of the 4th-window list; items unchanged):
 4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
    setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
    coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261017-0027): the fresh CHD links land and the
+## deep-tail statics close - the parked "drive/device" family IS THE SPU
+## audio-bank driver (DMA4 pointer statics, SPUCNT/transfer-addr control,
+## reverb preset records, the complement table stored in the clear)
+
+Provenance: Silent's fresh links (expire ~2026-10-17 09:54 UTC) live in the
+recreated Job 463901 (set up by the interactive manual-20261016-1507 session,
+whose worklog section this window restored verbatim after ANOTHER rollback:
+repo was 7623cd2, worklog tail cron-20261014-2112, disk/ empty). Tooling:
+scripts/disc_return_statics.py (repo-external) dumps/annotates the parked
+windows from the TRUE payloads and locates the EU twins by exact byte search.
+
+Re-provision gates, all four exact: both CHDs sha256 match the payload
+constants; contiguous boots reproduce the committed baselines (slps
+f2a13b52, sces 19698984); per-sector boots reproduce the banked true-EXE
+witnesses (slps fa9474b4, sces 06b4bda6). Raw bins: EU 629,752,704 B /
+JP 629,169,408 B - NOTE: chd_extract's "raw sha1 (expected)" print covers a
+different extent than the emitted 2352-B-sector file (dedca88f/86699dfc
+computed); do NOT gate on it, the file-level oracles above are the gate.
+First-time SE witnesses (per-sector true): SE.VH JP 2838d9ff... EU
+69b18e50...; SE.VB JP b119cb23... EU 6498bcf5... (sizes 402,512/386,080 -
+the 0x4030 delta confirmed on true bytes).
+
+### The parked pointer statics resolve to HARDWARE - the family re-identifies
+
+*0x80065DB4 = 0x1F801C00 = THE SPU REGISTER BLOCK. The "drive object" is
+the SPU I/O map, and the family's code roles re-identity it as the SPU
+audio-bank management driver:
+- obj->0x1A6 = 0x1F801DA6 = the SPU transfer-address register (issuer
+  cmd-2's parked/written "data", through the >> *0x80065DD8 shift);
+- obj->0x1AA = 0x1F801DAA = SPUCNT; (obj->1AA & 0xFFCF) | 0x20 / | 0x30 =
+  the transfer-mode field set to DMA-Write / DMA-Read (cmd 1 / cmd 0; the
+  loader path's |0x20 precedes the 0x1000201 write-kickoff, cmd 3's
+  "spin until mode applied" polls this field);
+- obj->0x1A2 = 0x1F801DA2 (the 0xD1 call-through's (u16)desc target);
+- obj->0x1C0..0x1D0 = 0x1F801DC0.. = THE REVERB CONFIG REGISTER FILE: the
+  record processor's mask-driven halfword writes (bits 0..8 -> +0x1C0..)
+  are reverb-preset loads;
+- obj->0x184/0x186 = 0x1F801D84/86 (zeroed by the consumer).
+*0x80065DB8/DBC/DC0 = 0x1F8010C0/C4/C8 = DMA4 (SPU) MADDR/BCR/CHCR: the
+banked "DMA-style kickoff law" is literally the standard SPU DMA recipe
+(blocksize 10h words = 0x40 B, control 01000201h DMA-Write / 01000200h
+DMA-Read - verbatim nocash/psx-spx). *0x80065DC4 = 0x1F8010F0 = DPCR, with
+0x80065DF0 = 0x07070707 = the all-priorities-7 init value. *0x80065DC8 =
+0x1F801014 = DICR: the cmd-3 tail's 0xF0FFFFFF mask + 0x20000000 set =
+DICR maintenance touching bits 27-24 - the field psx-spx requires nonzero
+(220931E1h) for STABLE SPU DMA reads.
+True file values of the cursor/gate statics: *0x80065DD4=2, *0x80065DD8=3
+(the shift), *0x80065DDC=8 + *0x80065DE0=7 (align-up-to-8 via &~7, then
+>>3), *0x80065DE4=1 (!! the sticky 0xF0000009/0x20 event-waiter once-flag
+is FILE-INITIALIZED to 1), *0x80065DE8 hook=0, *0x80065DCC=0 (default =
+the restore-park read pairing), *0x80065E00 guard2=0 (default DMA-Read
+control), *0x80065E04/E08=0, and 0x80065940..0x800659A8 (incl. 0x80065948,
+0x80065950/54/56/58/5C/60, 0x80065998, staging 0x800659A8) ALL file-zero.
+Consequence: the disc-less "device command dispatcher / drive-status /
+drive object" naming was wrong about the HARDWARE (right about the code
+structure): the parked family is the SPU bank-DMA + reverb engine; the
+0xF0000009/0x20 event = the SPU-DMA completion event. psyq libcd names
+banked elsewhere (CdSync, CdlSeekL/CdlPause in the fload3 cluster) are
+different functions - unaffected.
+
+### The bank table + the complement table (both regions, exact)
+
+device_table[0..9] @ slps 0x80065E0C (sces twin 0x80065A90, EXACT 0x28-byte
+match, delta -0x37C):
+  FFFE FB28 FC18 F6F8 F204 EA44 E128 CFF8 CFF8 F880
+Immediately after (slps 0x80065E34, sces device+0x28): the complement table
+IN THE CLEAR:
+  0002 04D8 03D8 0908 0DFC 15BC 1ED8 3008 3008 0780
+  = 0x10000 - device_table[i] for all 10 (the reader's "0x10000 -
+  table[dev]" arithmetic re-derives a stored constant)
+dev 0 special-cases to 0x10/0xFFF0 << shift(3) = 0x80/0x7FF80 - the
+0x80-byte chunk step of the SE-bank chunked loader (func #56 path).
+The 10 magnitudes (2, 1240, 984, 2312, 3580, 5564, 7896, 12296, 12296,
+1920): per-bank constants, semantics PARKED for the reader 0x8004892C body
+decode; the dev7/dev8 twin constants (0x3008/0x3008) pair with the twin
+records below.
+
+### The 68-byte records = reverb preset templates (both regions exact)
+
+10 x 0x44 @ slps 0x80065E5C / sces 0x80065AE0 (EXACT 0x2A0-byte match,
+delta -0x37C; device->record gap 0x50 in BOTH regions - one data cluster).
+word0 mask = 0x00000000 in FILE for all 10 (the consumer's 0x0C011C00
+"patch" ORs the full field-select into a file-zero word). dev 0 record =
+all zeros; dev 1..9 carry halfword templates (record hex banked in the
+script output, repo-external); dev 7/8 = twins differing only in the +0x10
+word (0x00000081 vs 0) and ending in the 0x8000,0x8000 flag pair. The six
+X/63-scaled fills add depth-scaled deltas onto these templates - reverb
+depth from a 0..63 arg, straight onto 0x1F801DC0+.
+
+### The tail neighborhood: SPU-RAM offset map, IRQ statics, pad driver
+
+0x80066108..0x80066288: 193 ascending halfwords 0x1000..0x2000 (non-uniform
+stride 0x0E..0x30) = the SE bank's sound-RAM offset map. 0x8006629C =
+0x10003000; 0x800662A0 = 0xBF; 0x800662A8 = 0x3FFF3FFF. 0x800662CC/0x800662D0
+= 0x1F801070/0x1F801100 = I_STAT/I_MASK pointer statics with constants
+0x10/0x20/0x40/0x01 (the IRQ-hook machinery around the saved/cleared hook
+*0x80065DE8). 0x800662EC = pointer to 'PS-X Control PAD Driver  Ver 3.0'
+(the pad driver descriptor: 0x80066314 = 0x1F801040 JOY_DATA, 0x80066318 =
+0x1F801070 I_STAT); 0x8006631C = 0x000A7325 = "%s\n\0" (re-confirms the
+slot-map correction on true bytes). The .sdata window re-witnessed byte-exact
+(sha256 slps 0065e323..., sces 823e9768... - 90c65b4's map stands).
+
+### int.c descriptor table 0x8004E304: true bytes CORRECT the banner
+
+table+0 = 0x80020AF8 = POINTER to the true banner
+'$Id: intr.c,v 1.71 1995/08/29 11:01:44 suzu Exp $' - the banked "$Id:
+int.c ... 1.17 1997/09/29 ... suz" quote was a garbled transcription
+(intr/int, 1.71/1.17, 1995/1997, 08/09, suzu/suz). Slots +4/+0x14 =
+file-NULL CONFIRMED on true bytes (runtime-installed members stand);
++8/+0xC/+0x10/+0x18/+0x1C = 0x8002EF2C/0x8002EC68/0x8002F080/0x8002F130/
+0x8004D29C exactly as banked; *0x8004E324 root = 0x8004E304. The "slot +4
+member" identity stays runtime-only (file-NULL; the disc adds no evidence).
+
+Gates: docs-only (decoded values + addresses banked; the byte windows stay
+repo-external per the no-commit rule); no carve action; matched 174;
+ratchets 365/0; 8/8 verify GREEN untouched (nothing build-adjacent touched).
+
+Next queue (amends the 6th-window list):
+1. The reader 0x8004892C body decode (disc-less now - everything it touches
+   is banked): name the 10 bank magnitudes, the chunk-mask arithmetic, and
+   the D4_MADDR slot wiring of the cmd-3 kickoff.
+2. The reverb-preset lane: map the record templates' halfword offsets onto
+   the 0x1F801DC0+ register file, then re-derive the wrappers' cmd
+   semantics as SPU ops (bank-select/reverb/volume).
+3. 6th-window items 2/3 stand unchanged (0x80044CE0/0x80048CAC/0x800495C8
+   bodies + the 0x8003E334 tail; read entry 0x8003E48C body) - disc-less.
+4. sdk lane A0#0x3F print-shaped witnesses; lanes stay theirs (GSD round-5,
+   setIntr/startIntr/trapIntr, coddog transplant); BIG de-frame
+   coordination-gated (its evidence base now includes this region as true
+   bytes); runtime gate-family blocked.
