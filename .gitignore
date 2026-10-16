@@ -16,6 +16,8 @@
 /assets/
 /disc_j/
 /disc_e/
+/disc_j_true/
+/disc_e_true/
 
 # The retail executable(s) you verify against live here:
 /baselines/*
