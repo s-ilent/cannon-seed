@@ -116,10 +116,11 @@ if [ "$agent_session" = 1 ] && [ "${ALLOW_OWNER_IDENT:-}" != "1" ]; then
 fi
 
 # --- 5. Trailing whitespace in staged sources -------------------------------
-# CI's lint job rejects trailing whitespace across tracked sources; the long
-# doc appends reintroduce it, so catch it here instead of in a red run.
+# CI's lint job rejects trailing whitespace across tracked code; catch it here
+# instead of in a red run. *.md is exempt (two trailing spaces are a markdown
+# hard line break).
 staged_ws="$(
-    for f in $(git diff --cached --name-only --diff-filter=ACM -- '*.c' '*.h' '*.inc' '*.py' '*.yaml' '*.md'); do
+    for f in $(git diff --cached --name-only --diff-filter=ACM -- '*.c' '*.h' '*.inc' '*.py' '*.yaml'); do
         git show ":$f" 2>/dev/null | grep -nE ' +$' | sed "s|^|  $f:|" || true
     done
 )"

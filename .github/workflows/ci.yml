@@ -26,9 +26,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Trailing whitespace in tracked sources
+      - name: Trailing whitespace in tracked code
         run: |
-          if git grep -InE ' +$' -- '*.c' '*.h' '*.inc' '*.py' '*.yaml' '*.md' | grep -v 'docs/PSX-Decompilation-Methodology-Report.pdf'; then
+          # *.md is exempt: two trailing spaces are a markdown hard line
+          # break, so the rule would police a legitimate formatting feature.
+          if git grep -InE ' +$' -- '*.c' '*.h' '*.inc' '*.py' '*.yaml'; then
             echo "::error::trailing whitespace found"; exit 1
           fi
       - name: Merge-conflict markers
