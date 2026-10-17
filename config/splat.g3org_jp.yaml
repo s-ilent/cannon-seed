@@ -479,8 +479,8 @@ segments:
       - [0x400BC, asm, func_8005F8BC]   # 0x44 sdk
       - [0x40100, asm, func_8005F900]   # 0x28 sdk
       - [0x40128, asm, func_8005F928]   # 0x24 sdk
-      - [0x4014C, asm, func_8005F94C]   # 0x24 sdk
-      - [0x40170, asm, func_8005F970]   # 0x10 sdk
+      - [0x4014C, c, NormalClip]   # 0x24 sdk
+      - [0x40170, c, NormalClipS]   # 0x10 sdk
       - [0x40180, asm, func_8005F980]   # 0x10 sdk
       - [0x40190, asm, func_8005F990]   # 0x10 sdk
       - [0x401A0, data, data_8005F9A0]   # 0xa0

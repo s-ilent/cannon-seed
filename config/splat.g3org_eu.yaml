@@ -443,8 +443,8 @@ segments:
       - [0x3F988, asm, func_8005F188]   # 0x44 sdk
       - [0x3F9CC, asm, func_8005F1CC]   # 0x28 sdk
       - [0x3F9F4, asm, func_8005F1F4]   # 0x24 sdk
-      - [0x3FA18, asm, func_8005F218]   # 0x24 sdk
-      - [0x3FA3C, asm, func_8005F23C]   # 0x10 sdk
+      - [0x3FA18, c, NormalClip]   # 0x24 sdk
+      - [0x3FA3C, c, NormalClipS]   # 0x10 sdk
       - [0x3FA4C, asm, func_8005F24C]   # 0x10 sdk
       - [0x3FA5C, asm, func_8005F25C]   # 0x10 sdk
       - [0x3FA6C, data, data_8005F26C]   # 0xb8
