@@ -350,10 +350,10 @@ segments:
       - [0x3259C, c, func_80051D9C]   # 0x10 sdk
       - [0x325AC, asm, func_80051DAC]   # 0x10 sdk
       - [0x325BC, data, data_80051DBC]   # 0x8e0
-      - [0x32E9C, asm, func_8005269C]   # 0x10 sdk
-      - [0x32EAC, asm, func_800526AC]   # 0x10 sdk
-      - [0x32EBC, asm, func_800526BC]   # 0x10 sdk
-      - [0x32ECC, asm, func_800526CC]   # 0x20 sdk
+      - [0x32E9C, c, SetVertex0]   # 0x10 sdk
+      - [0x32EAC, c, SetVertex1]   # 0x10 sdk
+      - [0x32EBC, c, SetVertex2]   # 0x10 sdk
+      - [0x32ECC, c, SetVertexTri]   # 0x20 sdk
       - [0x32EEC, asm, func_800526EC]   # 0x14 sdk
       - [0x32F00, asm, func_80052700]   # 0x14 sdk
       - [0x32F14, asm, func_80052714]   # 0xc sdk

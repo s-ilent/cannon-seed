@@ -279,10 +279,10 @@ segments:
       - [0x35820, c, func_80055020]   # 0x10 sdk
       - [0x35830, asm, func_80055030]   # 0x10 sdk
       - [0x35840, data, data_80055040]   # 0x8e0
-      - [0x36120, asm, func_80055920]   # 0x10 sdk
-      - [0x36130, asm, func_80055930]   # 0x10 sdk
-      - [0x36140, asm, func_80055940]   # 0x10 sdk
-      - [0x36150, asm, func_80055950]   # 0x20 sdk
+      - [0x36120, c, SetVertex0]   # 0x10 sdk
+      - [0x36130, c, SetVertex1]   # 0x10 sdk
+      - [0x36140, c, SetVertex2]   # 0x10 sdk
+      - [0x36150, c, SetVertexTri]   # 0x20 sdk
       - [0x36170, asm, func_80055970]   # 0x14 sdk
       - [0x36184, asm, func_80055984]   # 0x14 sdk
       - [0x36198, asm, func_80055998]   # 0xc sdk
