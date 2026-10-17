@@ -51,7 +51,8 @@
     "walk at func_80026288; set-site outside the current scan). Evidence per name",
     "in config/symbols.curated.txt. unknown_data is now empty by construction:",
     "future D_ tokens re-raise the ratchet the day they appear.",
-    "unknown_function 365->370 (2026-10-17): five empty void stubs (0x8, jr $ra; nop delay) split out of the walked func_80030348 row (mainmenu_jp 0x740) and the pinned func_80030270 row (mainmenu_eu 0x800) and matched as C in both regions: 0x80030978/80/88/90/C8 - 5 auto-named definitions, no externs, no static references (pointer-called stubs or dead). Judge 5/5 EXACT per region then whole-image verify GREEN x2. Same class as the 2026-10-11 trivial trio."
+    "unknown_function 365->370 (2026-10-17): five empty void stubs (0x8, jr $ra; nop delay) split out of the walked func_80030348 row (mainmenu_jp 0x740) and the pinned func_80030270 row (mainmenu_eu 0x800) and matched as C in both regions: 0x80030978/80/88/90/C8 - 5 auto-named definitions, no externs, no static references (pointer-called stubs or dead). Judge 5/5 EXACT per region then whole-image verify GREEN x2. Same class as the 2026-10-11 trivial trio.",
+    "unknown_function 370->374 (2026-10-17): four more empty void stubs (0x8, jr $ra; nop delay) split out and matched as C in both regions: func_8002E3C0 + func_8002E3C8 (out of the walked func_8002DE00 row: mainmenu_jp 0x800 / mainmenu_eu 0x82c, tail parts func_8002E3D0 0x230/0x25c) + func_8002FF04 (out of the pinned func_8002F940 row 0x800, tail part func_8002FF0C 0x234 pinned kept) + func_80025E04 (out of the walked func_80025D58 row 0x28c g3org_jp / func_80025D40 row 0x2bc g3org_eu, tail parts func_80025E0C 0x1d8/0x1f0). 4 auto-named definitions, no externs, zero static references in all four targets (pointer-called stubs or dead hooks). Judge 8/8 EXACT (3 rows mainmenu + 1 row g3org, x2 regions) then whole-image verify GREEN x8. Same class as the 2026-10-11 trivial trio and the quintet."
   ],
   "patterns": [
     {
@@ -64,7 +65,7 @@
     }
   ],
   "baselines": {
-    "unknown_function": 370,
+    "unknown_function": 374,
     "unknown_data": 0
   }
 }

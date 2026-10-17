@@ -60,7 +60,9 @@ segments:
       - [0x5BD4, data, data_800253D4]   # 0xa8
       - [0x5C7C, asm, func_8002547C]   # 0x7dc
       - [0x6458, data, data_80025C58]   # 0x100
-      - [0x6558, asm, func_80025D58]   # 0x28c
+      - [0x6558, asm, func_80025D58]   # 0xac
+      - [0x6604, c, func_80025E04]  # 0x8
+      - [0x660C, asm, func_80025E0C]   # 0x1d8
       - [0x67E4, data, data_80025FE4]   # 0x44
       - [0x6828, asm, func_80026028]   # 0x4f4
       - [0x6D1C, data, data_8002651C]   # 0xbc
