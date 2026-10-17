@@ -62,6 +62,8 @@ BASE="$(basename "$SRC" .c)"
 STEM="${OUT%.o}"
 
 CC1FLAGS="-quiet -mips1 -O2 -G8 -funsigned-char -fno-builtin $INCS"
+# probe hook: extra cc1 flags without editing the pinned set (judge probes only)
+CC1FLAGS="$CC1FLAGS ${CC1FLAGS_EXTRA:-}"
 
 # The Psy-Q cc1 wants preprocessed input (it rejects unstripped
 # comments), so run the bundled cpp first — same as the original

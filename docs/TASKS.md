@@ -6110,3 +6110,66 @@ Next queue:
 4. Disc-gated items (EU "VOICE=%d" directory listing, SE.VH/SE.VB diff,
    tail witnesses) still blocked: disk/ wiped again this window, CDN links
    expired ~2026-10-17 09:54 UTC - fresh links requested in #dragoon.
+
+## 2026-10-17 (window cron-20261017-1342): GsMapModelingData's body closes -
+## indexed r[i] + field order [+0x00, +0x08, +0x10] is register-for-register
+## EXACT; the corner narrows to one head instruction (i=0 / walk2 / nop)
+
+Resumed the parked row per the 1227 recipe (attack cluster item 1 from the
+v3 for-form). Ten judged variants (repo-external scratch source, judged
+through tools/judge_unit.py with the row temporarily flipped to c and
+reverted after - tree clean, row stays asm):
+
+* THE BODY IS SOLVED. `r[i].f0 / r[i].f8 / r[i].f10 += (long)mdata` in THAT
+  statement order (+0x00, +0x08, +0x10) compiles register-for-register
+  identical to retail's 12-insn loop body: i in a2 (addiu at body head),
+  records in a1 with disps 0/0x10/8, base in a0 (addu v0,a0,v0 x3), v0/v1
+  temps, slt a2-vs-a3 tail, backedge addiu a1,0x1c in the bnez delay slot.
+* CLUSTER ITEM 1 (the p+8 CSE) IS DEAD: the split second IV comes from the
+  r++ WALKING pointer form (two givs r and r+8, combined as $5=$6+8), not
+  from long*-indexing vs struct fields - struct fields split identically.
+  The INDEXED r[i] form (pointer fixed, index walks) reduces to ONE address
+  giv with constant disps. This is what defeated all 7 census shapes + both
+  probes: they all walked the record pointer.
+* CLUSTER ITEM 4 (walk2 temperizes) DISSOLVES with the indexed body: r's
+  init no longer shares the increment result (the giv init takes the copy
+  role) and walk2 lands in place as addu $4,$4,4. Items 2-3 (i++ first,
+  load hoisting) reproduce with the same body; item 3's load order is the
+  STATEMENT order [+0x00, +0x08, +0x10] (any other order swaps the 2nd/3rd
+  loads).
+* THE HEAD IS THE LAST CORNER, and it is one insn-shaped delta. Retail:
+  [walk1 addiu a0,4][i=0 addu a2][lw count][nop][blez + walk2-in-delay]
+  [giv copy]. Every shape tested collapses to [walk1][lw][walk2][blez +
+  i=0-in-delay][giv copy] (SIZE 116 = retail 120 - 4: walk2 fills the
+  lw->blez hazard slot so the nop never appears, and i=0 sinks into the
+  blez delay slot). Shapes tried: comma-init for (canonicalizes to the
+  separate-load form), separate count load, post-inc vs pre-inc r-init,
+  explicit `i = 0;` statement + empty-init for (gcc sinks it below the
+  load anyway), separate base local (allocator moves base to a3), base =
+  mdata + 1 (sum lands in a1, not a0), cond-form count `i < *mdata`
+  (NOT hoisted: per-iteration reload + in-loop nop, SIZE 124 - rejected).
+  gcc 2.6.3's pipeline refuses to place the biv zero-init between the
+  parameter walk and the count load.
+* FLAG EVIDENCE: -fno-strength-reduce (via the new cc.sh CC1FLAGS_EXTRA
+  hook) also kills the IV split but LOSES the vars=8 pad (frameless, SIZE
+  116) - the pad needs the for-form biv slot that only strength-reduce's
+  loop pass allocates. Retail's flags keep strength-reduce ON; the pad law
+  and the one-pointer body are both satisfied ONLY by indexed-form +
+  default flags.
+* g3_jp re-verified GREEN with the cc.sh hook in place (default path
+  byte-identical). Row reverted to asm; no carve/ratchet movement; the
+  match attempt does NOT land this window.
+
+Next queue:
+1. GsMapModelingData head: the i=0/walk2/nop delta is now a pure loop-pass
+   ordering question. Next probes: flag variants through CC1FLAGS_EXTRA
+   (-frerun-loop-opt, -fexpensive-optimizations, -fno-... loop toggles
+   that cc1 2.6.3 accepts), and re-judging the documented v3 for-head
+   against the NEW exact body (the body change alters the giv landscape;
+   that combination never ran). If the head lands, the match is a 4-row
+   flip (g3_jp/g3_eu/g3org_jp/g3org_eu, byte-identical twins).
+2. Disc-gated items (EU "VOICE=%d" listing, SE.VH/SE.VB diff, tail
+   witnesses) still blocked: disk/ wiped, CDN links dead; re-ping sent in
+   #dragoon this window.
+3. Lanes stay theirs (SsUtBuildADSR, setIntr/startIntr/trapIntr); BIG
+   de-frame coordination-gated; runtime gate-family blocked.
