@@ -490,6 +490,50 @@ head hunt, first fully-worked example of the pathology):
     attributed to other void functions. No carve-side action (same
     rule).
 
+Thunk alias-resolution addendum (2026-10-17, contiguous-baseline census;
+independent scan that converges on the LIBC identification above and adds
+two names plus a quantitative drift re-proof):
+
+* Method: byte census over the committed baselines (`addiu
+  $t2,0xa0/0xb0/0xc0; jr $t2; addiu $t1,N`) finds 57-59 thunks per target
+  in 15-16 blocks, the same compiler-generated set in all eight; each
+  mainmenu_eu block head mapped carve→runtime with
+  `tools/deframe.py --map-framed` and matched against the jal-decoded
+  aliases the scanner left in the tree.
+* Two more thunks get their names out of it — the head block's
+  A0#0x3F `printf` (runtime 0x8005C25C) and A0#0x1B `strlen`
+  (runtime 0x8005C26C), identified by exact alias match: the tree's
+  `jal func_8005C25C`/`func_8005C26C` fields carry those runtime targets,
+  and their call-site shapes agree (`lui/addiu $a0,<msg>; jal <printf
+  alias>` immediately before both `exit` aliases — a fatal
+  print-then-exit idiom, nothing follows the call; and in
+  `func_80033060`'s strlen→strncpy pipeline the strlen result rides out
+  in `$v0`/`$s0` while the delay slot keeps the earlier helper's return,
+  the copy destination). The carve rows sitting at those addresses are
+  drift victims as in Witness B's case: `data_8005CE7C` is 4 words of
+  unrelated data, and the `func_8005C25C/26C` alias rows are
+  mid-function fragments of real code.
+* Drift ladder, 15 anchors in one target: block-head drift runs
+  **0x8FB0 → 0x90E0 → 0x95A0 → 0x96D0 → 0x9CC0 → 0xC650 → 0xD100 →
+  0xE660 → 0xF110 → 0xF370 → 0xF5D0** — monotone with depth, constant
+  inside a block, every step exactly 0x130. The +0x130 step between the
+  head block and the quartet is exactly Witness A's pocket at carve
+  0x800660E0..0x80066210, which sits between the two blocks on the disc.
+  The quartet's local skew is thus exactly 0x90E0 (= splat-map head
+  0x80065F5C minus runtime head 0x8005CE7C, both already banked above).
+* Carve-view caller blindness, complementary to the de-framed caller
+  census: the carve tree shows ZERO decoded `jal`s to the strncmp alias
+  (the de-framed census counts 5 real callers) — drift does not only
+  misplace targets, it can hide callers entirely, because the rescue
+  refuses fields that decode into `data` rows. Carve-side call-site
+  counts are lower bounds, never evidence of absence.
+* Cross-check that needed no new work: the census's quartet file offsets
+  (mainmenu_eu 0x4675C, mainmenu_jp 0x46EAC, g3_eu 0x2F1D4, g3_jp
+  0x2F7BC, g3org_eu 0x2BF08, g3org_jp 0x2C668, slps_00270 0x11620,
+  sces_00269 0x11094) land exactly in the banked splat-map rows — and
+  the boots' fifth sibling slots between `free` and `exit`, the `rand`
+  member the LIBC identification already named.
+
 ### Carve the code out of the `data` rows — the other direction
 
 The landed carve-pin patch handles `asm` rows whose bytes are data. The mirror
