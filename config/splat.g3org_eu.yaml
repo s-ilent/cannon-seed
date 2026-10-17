@@ -433,20 +433,20 @@ segments:
       - [0x3F7BC, c, RotTransPers]   # 0x2c sdk
       - [0x3F7E8, c, RotTransPers3]   # 0x54 sdk
       - [0x3F83C, c, RotTrans]   # 0x28 sdk
-      - [0x3F864, asm, func_8005F064]   # 0x24 sdk
-      - [0x3F888, asm, func_8005F088]   # 0x1c sdk
-      - [0x3F8A4, asm, func_8005F0A4]   # 0x1c sdk
+      - [0x3F864, c, LocalLight]   # 0x24 sdk
+      - [0x3F888, c, DpqColor]   # 0x1c sdk
+      - [0x3F8A4, c, NormalColor]   # 0x1c sdk
       - [0x3F8C0, asm, func_8005F0C0]   # 0x3c sdk
-      - [0x3F8FC, asm, func_8005F0FC]   # 0x24 sdk
+      - [0x3F8FC, c, NormalColorDpq]   # 0x24 sdk
       - [0x3F920, asm, func_8005F120]   # 0x48 sdk
-      - [0x3F968, asm, func_8005F168]   # 0x20 sdk
+      - [0x3F968, c, NormalColorCol]   # 0x20 sdk
       - [0x3F988, asm, func_8005F188]   # 0x44 sdk
-      - [0x3F9CC, asm, func_8005F1CC]   # 0x28 sdk
-      - [0x3F9F4, asm, func_8005F1F4]   # 0x24 sdk
+      - [0x3F9CC, c, ColorDpq]   # 0x28 sdk
+      - [0x3F9F4, c, ColorCol]   # 0x24 sdk
       - [0x3FA18, c, NormalClip]   # 0x24 sdk
       - [0x3FA3C, c, NormalClipS]   # 0x10 sdk
-      - [0x3FA4C, asm, func_8005F24C]   # 0x10 sdk
-      - [0x3FA5C, asm, func_8005F25C]   # 0x10 sdk
+      - [0x3FA4C, c, AverageSZ3]   # 0x10 sdk
+      - [0x3FA5C, c, AverageSZ4]   # 0x10 sdk
       - [0x3FA6C, data, data_8005F26C]   # 0xb8
       - [0x3FB24, data, data_8005F324]   # 0x98 pinned
       - [0x3FBBC, data, data_8005F3BC]   # 0x60
