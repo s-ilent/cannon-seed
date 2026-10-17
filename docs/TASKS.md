@@ -6217,3 +6217,78 @@ Next queue:
    #dragoon this window.
 3. Lanes stay theirs (SsUtBuildADSR, setIntr/startIntr/trapIntr); BIG
    de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (user-triggered, 1716 UTC): the discs return on Silent's fresh links; the cron task is rebuilt (463901 -> 465618); the EU "VOICE=%d" directory prediction is REFUTED - no VOICE-named file exists on either disc
+
+Trigger: Silent handed fresh Discord CDN links into #dragoon (links issued
+per their ex/is params 2026-10-17 09:54 UTC, sent 17:16 UTC, EXPIRE
+~2026-10-18 09:54 UTC). The cron continuation job was recreated as **465618**
+(old 463901 deleted, same fixed_rate 4500 s schedule) carrying the new links
++ sha256s; first fire of the new phase 2026-10-18 03:04:49 +08.
+
+Disc re-provision (disk/, git-ignored):
+- Galaxian3_Europe.chd 382,613,010 B sha256 98ccd877...cf165c; Galaxian3_
+  Japan.chd 382,607,234 B sha256 a6025267...c73d08 - BOTH byte-identical to
+  the banked 2026-10-15 values (same media re-uploaded).
+- chd_extract.py reproduces the banked geometry exactly: EU 267,752 sectors
+  / JP 267,504, 4 tracks (track 4 audio), same map-type census.
+- ORACLE RE-PROVEN on the fresh links: contiguous extraction of ALL 8
+  targets byte-compares EQUAL to baselines/*.bin (boots, both MAINMENU.EXEs,
+  both G3.EXEs, both G3ORG.EXEs) - 8/8 MATCH. The CHD -> bin -> ISO9660 ->
+  baseline chain is exact on the new upload.
+
+THE VOICE TEST (cron-20261017-1227 queue item 1, the testable prediction):
+- Method: the repo tool's directory walk reads extents CONTIGUOUSLY (its
+  --per-sector flag only affects file reads), so a multi-sector directory
+  could in principle weave 304 B/sector of sync/header/EDC/ECC into the
+  record stream. scripts/disc_dirlist_persector.py (repo-external,
+  regenerable) re-parses every directory extent per-sector and diffs the
+  record lists against the contiguous parse. Result: every directory
+  extent on both discs (root, DRAGOON/, GOURB/) is exactly ONE 2048-B
+  sector, and the two parses agree record-for-record - no parser artifact
+  is possible.
+- RESULT: EU tree = 50 files, JP tree = 47 files; ZERO entries matching
+  VOICE* anywhere. The literal "VOICE=%d" file does NOT exist on the EU
+  disc, and the JP disc shows no VOICE=0..N family either. The prediction
+  ("the EU disc's ISO9660 directory contains a file literally named
+  VOICE=%d") is REFUTED; its contrapositive premise (the JP formatter's
+  output family mastered as files) is also absent.
+- Full listings banked repo-external (disc_work/eu_listing.txt,
+  eu_dirlist_persector.txt, jp_*); regenerable from the discs.
+- IMPLICATIONS for the boot-decode lane (the chain must give somewhere,
+  since EU retail demonstrably boots): (a) the VOICE open path is not
+  reached at retail boot - gated upstream by something the decode missed;
+  (b) the name IS formatted before FLOAD in EU too, and the "raw template
+  feed" observation belongs to a different consumer; (c) the open-retry
+  loop is bounded/abandoned (0x0FFFFFFF may bound a different loop than
+  read); (d) the template string feeds a non-FLOAD mechanism (in-memory
+  record table keyed differently). Re-derive from the 0x8002CBA0 consume
+  shape and the FLOAD wrapper's actual argument provenance before
+  re-theorizing; the directory empirical is now a hard constraint.
+
+Tree facts banked while the discs were open (all in both listings):
+- All three EU game EXEs are exactly one 2048-B sector LARGER than JP
+  (MAINMENU 700416 vs 698368; G3.EXE 577536 vs 575488; G3ORG.EXE 630784 vs
+  628736); the boots are the same size (290816) in both regions.
+- SE.VH/SE.VB sizes confirm the banked record (JP 34336/402512, EU
+  32288/386080). JP has no TIM2.DAT anywhere; TIM/TMD DAT sizes differ per
+  region (JP TIM 354508, EU 253160; JP root TMD 107048 vs EU 105128).
+- EU-only root file: W16.DAT (327700 B, lba 166 - sits between the boots'
+  region and SE.VH; unexamined so far).
+
+Gates: docs-only commit (plus git-ignored disk/ + repo-external scripts/
+disc_work/); no build run this window (nothing carve-side moved);
+worklog updated.
+
+Next queue:
+1. Boot lane: reconcile the refuted VOICE prediction with the live chain
+   (the four implications above; the FLOAD wrapper argument provenance is
+   the first re-read).
+2. W16.DAT (EU root, 327700 B) - unexamined file sitting at lba 166 next
+   to SE.VH/SE.VB; identify (header sniff + JP absence rationale).
+3. Remaining standing disc items are already banked (.sdata windows decode,
+   SE.VH/VB layout + divergence map, missing-tail witnesses from the
+   2026-10-15/16 windows) - re-dump only if a lane needs the raw bytes.
+4. Lanes stay theirs (matching lane clusters, GSD round-5, setIntr/
+   startIntr/trapIntr); BIG de-frame coordination-gated; runtime
+   gate-family blocked.
