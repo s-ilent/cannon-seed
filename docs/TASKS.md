@@ -6630,8 +6630,18 @@ fingerprints.
   streaming state before re-arming.
 - 0x80038CAC = CdSync(mode, result) over impl 0x800398F8 (banked "CDSYNC NAMED"; now
   header-backed): the required result 2 = CdlComplete, and the parked read mode
-  0x80 = CdlModeSpeed (double speed). The "command 0x15 and 9 need their libcd names"
-  sub-item (2026-10-16 late queue item 4) is CLOSED.
+  0x80 = CdlModeSpeed (double speed).
+- CORRECTION / CREDIT (landed in the follow-up commit, same window): the Cdl
+  CONSTANTS above were already named by the game-side census window (a182fba3,
+  2026-10-16): command 0x15 = CdlSeekL ("&rec" IS the CdlLOC), 0x09 = CdlPause,
+  result 2 = CdlComplete, mode 0x80 = CdlModeSpeed, against the same LIBCD.H 3.3.
+  The 2104 window re-queued the 2026-10-16 late entry's item 4 without noticing
+  a182fba3 had closed it 48 minutes after that entry was written. This window's
+  work is therefore an independent re-verification from a fresh psyq checkout, plus
+  two things the census did NOT bank: the issuer function attribution
+  (0x80038D34 = CdControl, shape-exact, retry-while-0 = busy-queue semantics) and
+  the full-Cd*-list check that psyq 3.3 ships no 4-arg command issuer (the (9,0,0,0)
+  kicker is game-internal).
 
 ### Member IDs (the queue item's ask)
 
