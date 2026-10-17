@@ -5623,3 +5623,131 @@ Next queue (matching lane):
 3. The 42b4e1b boot-side queue items (gp+0xCC installer zone 0x8002D6xx-
    0x8002D9xx; sces twin columns for the staging map) stay open and
    unclaimed.
+
+## 2026-10-17 (window cron-20261017-0727): the gp+0xCC island decodes end to
+## end - a fixed 0x66000 heap arena, a dead-in-the-boot install graph, and the
+## sces static columns shift +4 while the SPU cluster shifts -0x37C
+
+Provenance: recovered from another sandbox rollback (local snapshot 7623cd2,
+worklog tail cron-20261014-2112; reset forward to 418164b - 64 commits, the
+lost windows' prose stays lost, git history is the record per the earlier
+matching-lane note). CHDs re-fetched a SIXTH time this sandbox cycle, sha256
+exact on the first try; per-sector boots reproduce the banked true-EXE
+witnesses (slps fa9474b4, sces 06b4bda6); contiguous 504/508 words differ in
+the zone - the contiguous view is UNDECODABLE here, everything below is true
+-view. Tooling: scripts/decode_gp0cc.py + decode_gp0cc_part2.py (repo-external
+; capstone dumps + gp-offset censuses + jal-word xref + sces code-identity
+search). Sanity gates live: sw v0,0xCC($gp) word AF8200CC at 0x8002D8A4 and
+sw zero at 0x8002D7B0 hit exactly; make verify TARGET=slps_00270 re-run GREEN
+(30.8 s).
+
+### The installer's context: family A is a whole-file reader over a fixed
+### 0x66000 heap arena (slps true view)
+
+The gp+0xCC installer sits INSIDE the second-reader-family member 0x8002D82C
+(retry wrapper 0x8002D7C4 -> body; 0x10000 attempts, exhaustion -> fault
+string 0x8002AAC-class -> 0x8002DC10 thunk -> return 0):
+  1. free() the previous *gp+0xCC through the 0x8002EAA0 thunk when nonzero
+     - the slot holds a REUSABLE arena across calls;
+  2. ISO record fill 0x8003B578(&rec @sp+0x18, filename=a0); on 0 return -1;
+  3. malloc via the A0#0x33 thunk 0x8002DBE0 with a0 = CONSTANT 0x66000
+     (204 sectors; 417,792 B - SE.VB-sized: JP SE.VB 402,512 B fits, EU
+     386,080 B fits) - NOT fload3's n<<11; *gp+0xCC = result @0x8002D8A4;
+     on 0 -> fault string 0x8002AABC -> return 0;
+  4. progress string 0x8002AAD0 printed BEFORE the clear (the fload3
+     "Enough memory\n" trace pattern, different strings per member);
+  5. memset(buf, 0, 0x66000) via the A0#0x2B thunk 0x8002DBF0;
+  6. issuer 0x80038D34(0x15, &rec, 0) retried while 0 (the record IS the
+     param buffer, same as fload3);
+  7. CdSync 0x80038CAC(0, &result @sp+0x10) must return 2 (CdlComplete)
+     else -1;
+  8. count s0 = rec.size (sp+0x1C) rounded by GCC's signed-division idiom:
+     floor(size/0x800), +1 ONLY when size is not sector-aligned = ceil;
+     read kickoff 0x800391B8(count, *gp+0xCC, 0x80=CdlModeSpeed) - the
+     WHOLE file in one kickoff (fload3 kicks count=1);
+  9. poll 0x80039198 loop: r <= 0 -> RETURN *gp+0xCC (the buffer - the
+     exit site 0x8002D93C RELOADS the slot into v0; a return contract the
+     banked family notes did not carry), r == -1 -> return -1.
+So family A = "read a whole file into the persistent 0x66000 arena parked at
+gp+0xCC and hand the pointer back". The clear-consumer 0x8002D79C is its
+bookend: free(*gp+0xCC); *gp+0xCC = 0.
+
+### Family B's destination CORRECTED: the fixed 0x80010E00 arena, not a1
+
+The banked caller-graph note "family B sources buf from its a1" is WRONG.
+Member 0x8002DA20: s1 (the kickoff's a1) = the RETURN of 0x80025288, captured
+in the jal 0x8003B578 delay slot before the record fill clobbers v0 - legal
+GCC scheduling. 0x80025288 is a constant thunk returning 0x80010E00 (its
+neighbor 0x80025294 returns 0x80013200; the arena is init'd by 0x800252A0:
+sh clears at 0x80010E00/02/04, sh -1 at 0x80010E06, memset(0x80010E0A, 0,
+0x52FC), memset(0x80016106, 0, 0x298) - ~0x55A0 B of disc-less state in the
+0x8001 data segment). Family B = same issuer/CdSync/kickoff/poll skeleton,
+count = ceil(rec.size/0x800), dest = THE FIXED ARENA, returns the arena
+pointer on completion. Size class: ~21 KB -> the W16.DAT-class file (the
+sces string table's "\W16.DAT;1"; slps carries no such string).
+
+### The island is dead in the boot - gp+0xCC never installs
+
+jal-word census over the whole true payload: family A's ONLY caller is retry
+-A (jal @0x8002D7E0) whose own caller count is 0; family B's only caller is
+retry-B (@0x8002D9D4), 0 callers; the builder 0x8002D38C and the
+clear-consumer 0x8002D79C have 0 callers each. The LIVE edges are exactly
+two: jal @0x800238E8 -> the table accessor 0x8002D974 (returns
+word[i] of *gp+0xCC truncated to 4 via C division semantics) and jal
+@0x8002D214 -> the record walker 0x8002D5AC (whose caller lives in the
+func_8002D094 event-install region). With BOTH gp+0xCC writers dead (the
+clear-consumer's sw zero @0x8002D7B0 and the installer's sw v0 @0x8002D8A4),
+the boot NEVER installs gp+0xCC: the static stays 0 for the boot's lifetime
+and the 42b4e1b open question resolves NEGATIVE for the boot payload - no
+live path lets a disc read reach a runtime-parked buffer through gp+0xCC in
+the boot. The island is the game modules' linked source riding along dead;
+its LIVE copies are per-module (the accessor/walker edges above are boot
+-internal consumers of a slot only the dead family would fill - in the boot
+they are unreachable in practice; the census boundary: j/jr dispatch and
+absolute-word pointers not swept, the standard exact-jal-word method).
+
+### The sces twin columns: this cluster shifts +4 (not -0x37C)
+
+Full gp-offset censuses both regions (true view): the SE/CD static cluster
+maps slot-by-slot as slps -> sces:
+  fload3 staging    gp+0xC0 -> gp+0xC4   (slps 4 sites @0x8002CB04/CB38/CB90/CBBC
+                                          <-> sces 4 sites @0x8002C920/C954/C9AC/C9D8)
+  walker index      gp+0xC4 -> gp+0xC8
+  walker flag       gp+0xC8 -> gp+0xCC   (slps sw s4 @0x8002D6AC <-> sces sw s7
+                                          @0x8002D494; sces init clears it
+                                          @0x8002CF20)
+  family-A buffer   gp+0xCC -> gp+0xD0   (sces 8-site census @0x8002D590/D5A4/
+                                          D62C/D698/D6CC/D710/D730/D778 is
+                                          shape-identical to slps gp+0xCC's 8)
+Independent witnesses: the init-tail clear PAIRS (slps {C8 @0x8002D100, C4
+@0x8002D104} <-> sces {CC @0x8002CF20, C8 @0x8002CF24}, same flag-then-index
+order, both preceded by the event-class installs against the 0x8011 table -
+0x80115328 slps / 0x801148A4 sces, the -0xA84 class). So the sces .sdata
+one-word insert sits BELOW this cluster and pushes it up exactly +4, while
+the SPU/reader cluster's statics shift -0x37C - NO single static-shift law;
+per-cluster maps are the bookkeeping unit. Region CODE divergence inside the
+walker: sces carries a THIRD dispatch arm (three setter-twin 0x8002D4FC calls
+vs slps's two 0x8002D708 calls; its setter twin sits at -0x20C, the walker at
+~-0x1F4 - the -0x1E4 call-site law is per-member, not global).
+
+Gates: docs-only (decode + censuses banked; the scripts and dumps stay
+repo-external per the no-commit rule; nothing build-adjacent touched). matched/ratchets/progress untouched by this window; 8/8 verify GREEN stands
+(slps_00270 re-run live 30.8 s); ratchets state read as committed (3-key
+file, zero ratchets owed).
+
+Next queue:
+1. sces family-A/B wrappers: locate the sces retry wrappers + their caller
+   census (the +4 slot map predicts sces family A at the 0x8002D5xx cluster;
+   the 8 issuer-0x15 words exist in BOTH regions - the family is present
+   both sides; the sces .sdata one-word insert's OWNER static, the 2-site
+   sces gp+0xC0 member @0x8002BCE4/BCFC, is the next identity to name).
+2. The live accessor caller 0x800238E8's function: decode what it indexes
+   out of the gp+0xCC table (in the game modules the same source is LIVE;
+   the boot-side twin's shape is the spec).
+3. The 0x8004D054 record walker's table identity (the 0x20-stride records
+   the walker consumes) and the three 0x800D setter tables (0x800D2224/
+   0x800D2464/0x800D26EC, 0x2C stride) - likely the SE queue state; ties
+   the island to the SE-command interpreter map.
+4. Lanes stay theirs (matching lane: GTE families + _SsUtBuildADSR register
+   permutation; GSD round-5; setIntr/startIntr/trapIntr; coddog transplant);
+   BIG de-frame coordination-gated; runtime gate-family blocked.
