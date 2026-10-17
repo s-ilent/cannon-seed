@@ -5932,3 +5932,120 @@ This window, offline (disk/ wiped in this sandbox, no discs):
 548fdca's next queue stands as written (VOICE runtime mechanism, the
 0x8002228C consumer decode, the other record-fill callers, lanes stay
 theirs).
+
+## 2026-10-17 (window cron-20261017-1112) - the VOICE runtime mechanism closes:
+## the sces chain is live end to end, nothing rewrites the gp+0 template pointer,
+## the wrapper retry bound corrects to 0x0FFFFFFF, and the EU disc must ship a
+## file literally named "VOICE=%d"
+
+Address spaces first: this entry decodes from the CONTIGUOUS baselines in the
+repo carve space (splat linear map, carve VA = file - 0x800 + 0x80020000) and
+cross-references 548fdca's TRUE-space numbers. jal/j words always encode
+RUNTIME targets (the Witness A law), so every call edge below is stated in
+runtime VAs with the carve position alongside. deframe.py's per-sector model
+is exact for the boots at k >= 1 (all conversions below landed on 548fdca's
+addresses exactly); measured carve-vs-runtime drift is +0x5F0 at the consumer
+depth, +0x2010 at the wrapper/body depth, +0x4150 at the record-fill depth -
+monotonic, as the framing accumulation predicts. One k=0 artifact: the
+"VOICE=%d" bytes sit at contiguous file 0x97C, which the model maps to
+0x8002004C; the true address is 0x80020040 (slps's own lui/addiu constant and
+548fdca's true-view dump agree), so the model's first data area is +0xC off.
+No decode below touches k=0.
+
+### The sces chain is live, single-caller at every link, no pointer dispatch
+
+crt0 entry pc0 0x8002D908 (= yaml header): sets $sp top, computes the heap
+extent, SAVES $ra to 0x800661C0, sets $gp = 0x80065FC4 at pc0+0x80
+(0x8002D988/0x8002D98C - the ONLY materialization of that address in the
+payload), calls the crt helper 0x8002F448, restores $ra, then jals main
+0x8002180C at pc0+0xA0 (0x8002D9A8) and `break 0,1` after it returns. main
+0x8002180C (frame 0x28, the yaml's data_8002181C region; never carved as
+code): jal 0x8002D900, sh 0 -> 0x80066544, 0x8002F3C8(2), 0x8002E674(1),
+0x800219BC, then at main+0x30 (0x8002183C) the VOICE consumer 0x8002228C,
+then 0x80023AD8/0x800252C8/0x8002BF38 and the menu-display sequence. Consumer
+0x8002228C (frame 0x40; carve 0x8002287C = exactly the head of yaml data row
+data_8002287C, again never carved as code): 0x8002F508(0); stack arg 0;
+0x80032B74(0x280,0xF0,0,0); 0x800370E4(0,0,0,0xF0); 0x8003331C; 0x8002F90C(0)
+- the fade-out block; then lw $a0,0($gp) (the ONE sces gp+0 read, 0x800222DC)
+feeding jal 0x8002D5B8 (0x800222E0); beqz $v0 -> epilogue (return); on success
+a0 = buffer, jal 0x8002CBA0(buffer, sp+0x18) - the consume; then 0x8002F508(1)
+(fade-in), 0x80037590, and a 0x96-iteration loop of 0x8002F194(0) (the
+post-play hold); epilogue. The wrapper 0x8002D5B8's only caller is the
+consumer; the body 0x8002D620's only caller is the wrapper (0x8002D5D4). NO
+32-bit data word anywhere in the payload equals 0x8002228C, 0x8002180C,
+0x8002D5B8, 0x8002D620 or 0x80065FC4 - the chain has no jump-table/function-
+pointer entry, so reachability is proven from pc0 alone.
+
+### Nothing can rewrite the name - four exhaustive sweeps (whole payload)
+
+(1) sw to gp+0: zero (the only gp+0 access in sces is the consumer's lw).
+(2) lui/addiu materializations of 0x80065FC4: exactly one, the crt0 $gp init.
+(3) 32-bit words == 0x80065FC4: zero. (4) materializations of the template
+address 0x80020040: zero (slps has exactly one - its formatter). The .sdata
+one-word insert is therefore consumed AS INITIALIZED: the filename handed to
+the record fill is the literal template "VOICE=%d".
+
+### Wrapper/body failure path - retry bound correction + the open-forever loop
+
+Correction to 548fdca: the wrapper's retry counter is lui 0xFFF + ori 0xFFFF
+= 0x0FFFFFFF (~2.7e8), not 0xFFF. Body 0x8002D620: free old arena
+(*(gp+0xD0), bookend 0x8002E644); record fill 0x8003B36C(&rec, filename) ->
+beqz -> return -1 (the j 0x8002D758 / addiu $v0,-1 path); on a filled record:
+fixed malloc(0x66000) via the A(0x33) thunk 0x8002D9D4, *(gp+0xD0) = arena,
+print 0x8002_0AA4, arena clear via A(0x2B) thunk 0x8002D9E4(arena,0,0x66000),
+then jal 0x800388E8(0x15, &rec, 0) - open-by-record into the handle table at
+0x80065130 - with `beqz $v0 -> re-issue` = a LOOP-FOREVER open retry that
+only runs after a successful record fill. The record fill itself uses the
+cached in-memory directory (statics 0x800651C8/0x80065500, one-shot refresh
+0x8003B678, '\' path-split then in-memory scan), so retries are cheap - but
+they never get that far: a missing file means -1 forever, and the wrapper
+would spin 0x0FFFFFFF record fills. EU retail demonstrably boots, and the
+chain is live: therefore the EU disc's ISO9660 directory contains a file
+literally named "VOICE=%d" (the localization mastered the template name as a
+real file). TESTABLE PREDICTION, disc-gated: one iso9660_extract --per-sector
+directory listing of the EU disc settles it; JP's disc should show the
+VOICE=0..N family instead. The consume shape 0x8002CBA0 reads a 0x10-magic
+overlay script (halfword coord records drawn via 0x8002FBD0) - what the EU
+intro would show if the load succeeds, consistent with the 0x96-frame hold.
+
+### The slps contrast: JP formats the name; the regions use different loader families
+
+slps crt0 pc0 0x8002DB14 sets $gp = 0x8006632C at pc0+0x80 (same shape, $ra
+to 0x80066524) and jals main 0x80021800 at pc0+0xA0 (0x8002DBB4, break after).
+main+0xB54 (0x80022354) calls the voice-grid fn 0x8002285C (frame 0x30;
+5 x 10 loops over the 0x800D62CC/0x800D54B8/0x801153A0 tables - pilot-grid
+shaped), which calls the formatter 0x80023644(ptr): sprintf(bss 0x80066E34,
+"VOICE=%d", lh 0x80066614) via the stdarg worker 0x8002DC60, then
+0x80023698(ptr, 1, -0xE0, -0x50) whose loop feeds 0x80066E34 + i*0x100 (the
+table the sprintf filled) to 0x80023A18 at (-0xE0,-0x50) - the formatted name
+reaches the load/draw path. Single caller at every link, no pointer words.
+Combined with 548fdca's caller-less slps FLOAD-wrapper island: JP implements
+the VOICE intro through the formatted-name path (0x80023A18 family), EU
+through the FLOAD-wrapper family (0x8002D5B8 family) fed the raw template -
+one feature, two loader generations, and only JP's formats the %d.
+
+### Carve-side note and next queue
+
+Both live functions sit inside data rows (main in data_8002181C, the consumer
+at the head of data_8002287C) - the scanner's walks died on the framing
+pockets exactly as the drift law predicts. Per the func_80066388 precedent:
+no hand pins; the de-frame transition re-derives them as functions with these
+runtime addresses as the expected heads. Docs-only window: matched 291,
+ratchets 374/0, progress TOTAL 14590 unchanged, 8/8 verify GREEN stands
+(both boots re-run live this window after the 67-commit reset-forward).
+
+Next queue:
+1. Disc-gated (when discs return): the EU directory listing - confirm the
+   literal "VOICE=%d" file; confirm JP's VOICE=0..N family; then the SE.VH/
+   SE.VB JP/EU diff and the missing-tail witness dumps from the standing
+   queue.
+2. The other record-fill callers (0x8002B780, 0x8002C68C, 0x8002C8B4) and the
+   second family body -> the complete sces reader-family map (548fdca item 3,
+   still open, offline-doable).
+3. Consume-shape follow-up: decode the 0x10-magic overlay record semantics
+   (0x8002FBD0 draw records) far enough to name the VOICE file's content
+   format; also 0x800219BC/0x8002D900 (main's first two callees) for the
+   boot-init picture.
+4. Lanes stay theirs (matching lane: GTE families + _SsUtBuildADSR register
+   permutation; GSD round-5; setIntr/startIntr/trapIntr; coddog transplant);
+   BIG de-frame coordination-gated; runtime gate-family blocked.
