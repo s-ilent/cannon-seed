@@ -5891,3 +5891,44 @@ Next queue:
 4. Lanes stay theirs (matching lane: GTE families + _SsUtBuildADSR register
    permutation; GSD round-5; setIntr/startIntr/trapIntr; coddog transplant);
    BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261017-0957) - contiguous-view cross-check of
+## the boots' .sdata windows; the window constants land in-repo as
+## tools/boot_window_dump.py
+
+Written against the rolled-back local snapshot 7623cd2 before seeing
+548fdca (this sandbox's rollback had eaten the 65-commit reset-forward);
+reconciled after rebase. The definitive slot map and content decode are
+548fdca's - this entry banks the contiguous-view counterpart and makes
+the window offsets rollback-proof in-repo.
+
+This window, offline (disk/ wiped in this sandbox, no discs):
+- Both boots re-verified GREEN first (slps_00270, sces_00269), then the
+  queue's windows were dumped from the CONTIGUOUS baselines: slps payload
+  0x4632C..0x463FC (0xD0 B, VA 0x8006632C..0x800663FC, sha256
+  223a0296e5f61e8305dae9d4042e5bd6bddec217310545c9252d1f63938d5ebb), sces
+  payload 0x45FC4..0x46098 (0xD4 B, VA 0x80065FC4..0x80066098, sha256
+  38ca453a41d2ac647affb87207e1551f4adb084425012a17533ae72028ad6c55).
+  Witness hexdumps + sha256 manifest stay repo-external.
+- Cross-view relation: in the contiguous view, sces window == zero word +
+  slps window BYTE-EXACT - the same +4 shift 548fdca proves for the true
+  view (sces word i == slps word i-1, all 52 words). Two views, one
+  conclusion: the EU window is the JP pool shifted one word with one extra
+  head word.
+- Contiguous-view structure at those offsets: both windows decompose
+  exactly into 8-byte records {u32 0xFE000002, u32 0} - 26 each - inside
+  larger 8-byte-periodic regions (slps one region 0x4620C..EOF with header
+  byte 0x72; sces two regions 0x458DC..0x460E4 (0x71) and 0x46208..EOF
+  (0x72), entropy blob between). This is the woven re-layout's
+  presentation of the tail, NOT .sdata content - 548fdca's true-view slot
+  map (gameinfo pool: DRAGOON cast, button labels, "bu00:", the VOICE=%d
+  pointer) is the content of record.
+- tools/boot_window_dump.py lands the window constants, the record
+  decomposition and the region walk in-repo: upstream window tooling is
+  repo-external and rollback-vulnerable (regenerate-from-worklog), this
+  one regenerates from the baselines alone. True-view dumps need the
+  per-sector trees and stay disc-gated.
+
+548fdca's next queue stands as written (VOICE runtime mechanism, the
+0x8002228C consumer decode, the other record-fill callers, lanes stay
+theirs).
