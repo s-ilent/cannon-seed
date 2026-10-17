@@ -5751,3 +5751,143 @@ Next queue:
 4. Lanes stay theirs (matching lane: GTE families + _SsUtBuildADSR register
    permutation; GSD round-5; setIntr/startIntr/trapIntr; coddog transplant);
    BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261017-0842) - the boots' .sdata windows close:
+## the definitive per-region slot map, the sces one-word insert is the
+## VOICE=%d filename pointer, and the sces family wrapper sits where predicted
+
+### The definitive slot map (content-correlated, not inferred)
+
+Windows dumped from the true-view boots (discs re-provisioned a SEVENTH time
+this sandbox cycle, sha256 exact on both; boots re-extracted per-sector and
+sha1 re-matched: slps fa9474b4, sces 06b4bda6; the window bytes sit in the
+missing tail, so the contiguous view was never touched). slps window
+$gp+0x000..0xCC = 52 words (0xD0 B, $gp 0x8006632C); sces $gp+0x000..0xD0 =
+53 words (0xD4 B, $gp 0x80065FC4). gp-4 reads 0 in both regions - no pointer
+hidden below .sdata.
+
+Cross-correlation is DECISIVE: sces word i == slps word i-1 for ALL 52
+comparable words (shift d=-1: 52 matches, 0 diffs; every other shift -8..+8
+scores <=20 with diffs >=30). The sces window = [one extra word] + [the slps
+pool VERBATIM] + [one trailing zero word]. There are NO mid-window inserts:
+the +4 shift starts at the very bottom of .sdata. The extra words are:
+sces gp+0x000 = 0x80020040 (the insert, identified below) and sces gp+0xD0 =
+0 spare (the window tail).
+
+The common pool (byte-identical both regions, slps offsets): gp+0x000 = 1;
+gp+0x004 "NONE"+pad; five 8-byte pilot names "FRANK" "REIKO" "JOHNSON"
+"SHARK" "GHOST" at gp+0x00C..0x033 (the DRAGOON cast); gp+0x034 = 1, +0x038
+= 0, +0x03C = 1, +0x040 = 0, +0x044 = halfwords 0x0000/0x003C (the 0x3C
+field); +0x048 = 0; +0x04C "NONE"+pad; +0x054 = -1; +0x058..0x06C six zero
+words; the six 8-byte button labels " (1)" " (2)" " (A)" " (B)" " (C)" " (D)"
+at gp+0x070..0x09F; "bu00:" at gp+0x0A0..0xA7 (8 B) with the Shift-JIS
+fullwidth halfwords 0x8169 / 0x816A at gp+0xA8 and gp+0xAC (zero-padded
+words); word 0x2A at gp+0xB0; gp+0xB4..0xCC seven zero words.
+
+CORRECTIONS to the 2026-10-15 prose: 0x2A sits at slps gp+0xB0, not the
+window tail; the halfword pair sits at gp+0xA8/gp+0xAC (not adjacent
+halfwords). The member-void gp+0xa0..0xb0 reads therefore land on the
+"bu00:" path string + fullwidth pair + the 0x2A word (slps), +4 in sces.
+The SE/CD cluster statics (fload3 staging gp+0xC0/C4, walker index
+gp+0xC4/C8, walker flag gp+0xC8/CC, family-A arena gp+0xCC/D0) ALL init 0 -
+the "stays 0 for the boot's lifetime" claim is now byte-confirmed.
+
+### The sces one-word insert identified: the VOICE=%d filename pointer
+
+sces gp+0x000 inits to 0x80020040. The .data neighborhood is the
+set_game_info() template/diagnostic block: "VOICE=%d" at 0x80020040 itself,
+then "%s(%d):Invalid mission value in set_game_info()", "gameinfo.c",
+"%s(%d):Invalid TV_MODE value in set_game_info()", "%s(%d):Invalid
+PAUSE_DISP value in set_game_info()". The insert is a .sdata char*
+initialized to the "VOICE=%d" template.
+
+Consumer census (base-$gp offset 0, whole payload): exactly ONE sces site,
+0x800222DC lw $a0,0($gp), feeding jal 0x8002D5B8 at 0x800222E0 inside the
+function whose nearest preceding jr $ra boundary is 0x8002228C (frame 0x40;
+0x8002F508(0), display-class calls 0x80032B74(0x280,0xF0,0,0) /
+0x800370E4(0,0,0,0xF0) / 0x8003331C / 0x8002F90C(0), then the load, then
+0x8002F508(1)); on non-zero return it calls 0x8002CBA0(v0, sp+0x18). slps
+has NO offset-0 $gp access anywhere, and its only 0x80020040 materialization
+is one lui/addiu pair at 0x80023664 - used as a FORMAT argument: function
+0x80023644 (frame 0x18) calls the stdarg worker 0x8002DC60 (frame 0x258,
+a0..a3 spilled consecutively = va_start shape) as
+sprintf(bss 0x80066E34, "VOICE=%d", lh@bss 0x80066614), then
+0x80023698(s0,1,-0xE0,-0x50); both bss targets are runtime-populated.
+
+So the +4 window insert is one source-level reference-form difference:
+sces holds the template in a .sdata pointer variable consumed by a file
+load; slps uses the same literal as a sprintf format into a bss buffer.
+Which mechanism feeds the FINAL filename at runtime (template as-is vs
+repointed vs formatted-in-place) stays open: sces has NO base-$gp offset-0
+store, so a reassignment would go through a copied $gp or in-place .data
+formatting. A file literally named VOICE=%d cannot exist, so the record-fill
+failure path through the 0xFFF wrapper is the boot-visible behavior unless
+the pointer/content is rewritten first.
+
+### The sces family wrapper found where the +4 map predicted (queue item 1)
+
+sces retry wrapper 0x8002D5B8 (frame 0x20): s0 = 0xFFF;
+loop { v1 = body(a0); if (v1 != -1) return v1; } until s0 == 0; on
+exhaustion a0 = 0x80020A80 ("FLOAD:fault!\n"), jal 0x8002DA04 (the fault
+printer), return 0. Failure contract 0; success returns the body's buffer
+pointer. Body 0x8002D620 (frame 0x38): a0 = *(gp+0xD0) (the family-A arena
+pointer); nonzero -> free bookend 0x8002E644; ISO record fill
+0x8003B36C(&rec @sp+0x18, filename) - the sces twin of slps 0x8003B578;
+then the exact ceil(size/0x800) idiom (bgez / addiu 0x7FF / sra 0xB). The
+family A/B skeleton verbatim.
+
+jal census (exact-jal-word; standard caveat: j/jr dispatch and absolute-word
+pointers not swept): wrapper 0x8002D5B8 -> 1 caller (0x800222E0, the VOICE
+consumer); body 0x8002D620 -> 1 caller (the wrapper); record fill
+0x8003B36C -> 5 sites (0x8002B780, 0x8002C68C, 0x8002C8B4, 0x8002D648,
+0x8002D834 - the last two inside the sces family bodies); free bookend
+0x8002E644 -> 5 sites (0x8002C010, 0x8002C78C, 0x8002C800, 0x8002D59C,
+0x8002D63C). The 0x8002D5B8/0x8002D620 pair sits inside the predicted
+0x8002D5xx cluster (the gp+0xD0 8-site census range) - the placement
+prediction landed.
+
+DIVERGENCE FLAG: unlike slps (both wrappers caller-less, the island dead),
+the sces VOICE wrapper HAS a caller chain (the 0x8002228C-boundary function).
+The dead-island conclusion was slps-specific; whether the sces VOICE load
+succeeds at runtime hangs on the open filename mechanism above, and the
+sces gp+0xD0 arena CAN be installed by this path (the body's malloc-store
+site is in the banked 8-site census).
+
+### The 2-site gp+0xC0 member named: a cached-halfword PAIR, not the insert
+
+sces gp+0xC0 (lw @0x8002BCE4, sw @0x8002BCFC, lhu @0x8002BD08) is the SECOND
+half of a two-halfword shadow-cache pair with sces gp+0xBC (lw @0x8002BCCC,
+sw @0x8002BCF8, lhu @0x8002BD00). Shape: v0 = gp[0xBC] vs live
+a1 = lhu(struct+0x10); v1 = lhu(struct+0x12) vs v0 = gp[0xC0]; on mismatch
+BOTH refresh (sw a1 -> gp+0xBC, sw v0 -> gp+0xC0); then stamp
+lhu(gp+0xBC) -> s2+0x14 and lhu(gp+0xC0) -> s2+0x16 and s2+0x22. The struct
+pointer comes from *(0x80066168) sces / *(0x800664CC) slps - BOTH NULL at
+load, runtime-populated (an earlier session note's sces slot 0x80068168 was
+a decode slip; corrected here). The slps twin runs the identical dance at
+gp+0xB8/gp+0xBC (sites 0x8002BEBC/0x8002BED4/0x8002BEE0) - the pair is
+shift-invariant, just +4 in sces; word-shaped lw/sw accesses wrapping
+lhu-compared halfwords; init 0 both regions. The Log's appositive (the
+insert's owner = the 2-site gp+0xC0 member) is REFUTED by content: the pair
+shifts with the cluster; the insert is the gp+0x000 pointer.
+
+Gates: docs-only; nothing build-adjacent touched. matched 291, ratchets
+374/0, progress TOTAL 14590 (1.99%) as committed at 0845954; 8/8 verify
+GREEN stands (slps_00270 re-run live this window after the 65-commit
+reset-forward from the rolled-back local snapshot 7623cd2). Tooling stays
+repo-external per the no-commit rule (window dump + correlation, gp census,
+consumer decodes, wrapper census - regenerate per the worklog if a rollback
+eats /home/z/my-project/scripts).
+
+Next queue:
+1. The VOICE runtime mechanism: who formats/repoints the sces gp+0 filename
+   (the sces formatting twin of slps 0x80023644), and the boot-visible
+   behavior when the record fill fails on the template name (0xFFF fast
+   retries -> "FLOAD:fault!\n" -> skip).
+2. The consumer function (jr-boundary 0x8002228C) full decode + reachability
+   on the boot's live path; the 0x8002CBA0 consume shape.
+3. The other record-fill callers (0x8002B780, 0x8002C68C, 0x8002C8B4) and
+   the second family body -> the complete sces reader-family map (the sces
+   mirror of the slps family A/B/walker census).
+4. Lanes stay theirs (matching lane: GTE families + _SsUtBuildADSR register
+   permutation; GSD round-5; setIntr/startIntr/trapIntr; coddog transplant);
+   BIG de-frame coordination-gated; runtime gate-family blocked.
