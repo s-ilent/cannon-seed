@@ -2904,7 +2904,7 @@ of the eight targets.
 * THE DELAY-SLOT LAW (the one non-first-shot fix): retail keeps
   ReadGeomOffset's second store BEFORE the return jump with a nop
   delay slot; gcc sinks the independent store into the jr delay slot
-  (body shrinks 32->28 B). A trailing `__asm__ volatile("" ::: 
+  (body shrinks 32->28 B). A trailing `__asm__ volatile("" :::
   "memory")` barrier after the stores blocks the sinking; nothing
   else needed a barrier - the other five were first-shot EXACT.
 * ROLLOUT: 6 rows x 7 targets flipped (g3org_jp/eu, g3_jp/eu, boots
@@ -4571,7 +4571,7 @@ decode{,2,3}.py)
   table 0x80065E0C (file values disc-only; the guarded CD-init region
   0x8003CF90 also references the table), validity checker 0x800488B4 (3
   users: 0x80047F00, the reader, 0x80048B40); computes chunk masks via the
-  shift static *0x80065DD8 (0x10/0xfff0 << shift for dev 0, 0x10000 - 
+  shift static *0x80065DD8 (0x10/0xfff0 << shift for dev 0, 0x10000 -
   table[dev] arithmetic otherwise); saves/clears/restores hook 0x80065DE8
   around the wait exactly as banked; per 0x400-byte chunk issues
   issuer(2, s2); issuer(1, s2); issuer(3, 0x800659A8, len) - the banked
@@ -4740,7 +4740,7 @@ Shape, all addresses slps:
 5. obj->0x184/0x186 = 0, *0x80065954/0x80065956 = 0.
 6. if (s4 || s6 || s7) call the record processor (below) with &copy.
 7. if (fp) the chunked reader 0x8004892C(*0x80065950) runs.
-8. if (s4) THE 0xD1 CALL: `call_through(0xD1, *0x80065960, 0)` = 
+8. if (s4) THE 0xD1 CALL: `call_through(0xD1, *0x80065960, 0)` =
    `obj->0x1A2 = (u16)desc` - the queue item's identity closes.
 9. if (copy[0x48] != 0) obj->0x1AA |= 0x80; return 0 (or the -1s above).
 
