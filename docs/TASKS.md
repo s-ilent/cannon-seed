@@ -6694,3 +6694,113 @@ Next queue:
 2. (2104 item 3, still open) The 0x80010000 config-area ownership question.
 3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr);
    BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-18 (window cron-20261017-2334): the A0/B0/C0 thunk census closes for both
+## boots - 59/58 linker stubs, every ordinal exactly once, the psyq map derived from
+## the SDK's OWN 16-byte members, three banked addresses reconcile exactly, two
+## banked readings sharpen (fload_open_prep's alloc/teardown are the bare malloc/
+## free stubs), and the boots' only census diff is one stub: slps links PAD_init,
+## sces does not
+
+Queue item 1 of 06aafdda (2104 item 2). Method (script repo-external:
+scripts/boot_thunk_census.py): a BIOS call is the fixed 12-byte sequence addiu
+$t2,$0,0xA0|0xB0|0xC0 (0x240A0000|table); jr $t2 (0x01400008); addiu $t1,$0,ordinal
+(0x24090000|ordinal) - the $t1/$t2 convention. The boots' TRUE per-sector views were
+re-extracted from freshly sha256-verified CHDs (both 290,816 B, PS-X EXE headers sane:
+t_addr 0x80020000, tsize 0x46800 x2) and scanned with that byte pattern. The
+ordinal->name map needs NO external table: psyq's own LIBAPI/LIBC/LIBC2/LIBCARD/
+LIBCOMB members are exactly such 16-byte stubs, so scanning the parsed archives'
+member .text (tools/sdk_members.py OMF machinery, 0xF0-section vintage handled)
+yields 129 distinct (table, ordinal) -> SDK symbol pairs, attested by the SDK itself.
+
+### The census (TRUE views; every site is a 16-byte stub at the visible 0x10 stride)
+
+- slps_00270: 59 sites, 59 DISTINCT ordinals - a linker-built stub table, one slot
+  per BIOS function the boot's link references. Layout: libc group 0x8002DBD0..0x50
+  (bzero, malloc, memset, strcat, printf, strlen, strcmp, strcpy, strncat), mem/str
+  group 0x8002E9E0..0xC0 (memchr, strncmp, strncpy, free, rand, exit), kernel/file
+  group 0x8002F85C..0x8002F9FC (puts..ReturnFromException), memcpy 0x80032640 +
+  GPU_cw 0x80032678, FlushCache 0x80037934, DeliverEvent 0x8003B43C, event pair
+  0x80044094/0xA4, WaitEvent 0x80048ACC, card group 0x80049A5C..0x80049B0C, C0 int
+  pair 0x8004AD1C/0x2C.
+- sces_00269: 58 sites, 58 distinct ordinals - same groups, same order, shifted
+  (libc group 0x8002D9C4..0x8002DA44, ..., card group 0x800496C0..0x80049770, tail
+  0x8004A9B0..0x8004A9D0). The single census DIFF: sces has NO B0#0x15 PAD_init stub
+  anywhere (58 vs 59), and its B0#0x16 PAD_dr stub is RELOCATED to the tail next to
+  the C0 int pair (0x8004A9B0) where slps keeps it inside the kernel group
+  (0x8002F86C, second slot after puts). Every other ordinal appears in both boots.
+- The psyq-attested map (highlights): A0#0x15 strcat, 0x17 strcmp, 0x18 strncmp,
+  0x19 strcpy, 0x1A strncpy, 0x1B strlen, 0x28 bzero, 0x2A memcpy, 0x2B memset,
+  0x2E memchr, 0x2F rand, 0x33 malloc, 0x34 free, 0x39 InitHeap, 0x3F printf,
+  0x44 FlushCache, 0x49 GPU_cw, 0x51 LoadExec, 0x70 _bu_init, 0x71/0x72 _96_init/
+  _96_remove, 0x9F SetMem, 0xAB/0xAC/0xAD _card_info/_card_load/_card_auto;
+  B0#0x07 DeliverEvent, 0x08 OpenEvent, 0x09 CloseEvent, 0x0A WaitEvent, 0x0B
+  TestEvent, 0x0C EnableEvent, 0x0D DisableEvent, 0x15 PAD_init, 0x16 PAD_dr,
+  0x17 ReturnFromException, 0x18 ResetEntryInt, 0x19 HookEntryInt, 0x32 open,
+  0x33 lseek, 0x34 read, 0x35 write, 0x36 close, 0x38 exit, 0x3F puts, 0x41 format,
+  0x42/0x43 firstfile/nextfile, 0x45 delete, 0x4A/0x4B InitCARD/StartCARD, 0x4E/0x4F
+  _card_write/_card_read, 0x50 _new_card, 0x5B ChangeClearPAD; C0#0x02 SysEnqIntRP,
+  0x03 SysDeqIntRP, 0x0A ChangeClearRCnt.
+
+### Banked reconciliations - the census validates three old addresses exactly
+
+- slps 0x8002DBE0 = the A0#0x33 malloc stub and 0x8002DBF0 = the A0#0x2B memset
+  stub, exactly as the fload3 decode banked ("jal 0x8002DBE0 (the A0#0x33 malloc
+  thunk)"; "memset via 0x8002DBF0"). slps 0x8002DC10 = the A0#0x3F printf stub -
+  the "panic reporter at 0x8002DC10" is a direct call into the linker's printf
+  stub slot. slps 0x80048ACC = the B0#0x0A WaitEvent stub, exactly as the chunked
+  reader banked. All four land on census stubs byte-exactly.
+- NEW PRECISION on the sces fload_open_prep decode (the 3395 addendum): the banked
+  "0x8002d9d4(0x00066000) allocates" - 0x8002D9D4 IS the A0#0x33 malloc stub; the
+  "fixed allocator" is plain malloc(0x66000). The banked "0x8002e644 (teardown of
+  the previous load)" - 0x8002E644 IS the A0#0x34 free stub; the "teardown helper"
+  is plain free(prev). fload_open_prep's alloc/teardown pair carries NO bespoke
+  helpers: it is free(prev); malloc(0x66000); size state to gp+0xD0. The 08459544
+  "fixed 0x66000 heap arena" reading stands, now with its mechanism named.
+- A0#0x3F SETTLED as printf by the SDK's own stub: the psyq member that carries the
+  (table 0xA0, ordinal 0x3F) stub is named printf. The banked A0#0x3F conflict
+  (three print-shaped witnesses vs one strcpy-shaped pin) resolves in favor of
+  printf - the stub table carries strcpy and printf as SEPARATE slots (slps
+  0x8002DC40 vs 0x8002DC10), and the print-shaped readings were right. The strcpy
+  pin re-review (sdk lane) can close: the (%s)-with-no-argument sites are printf
+  sites.
+
+### The one-stub diff is a real region fact for the CRT0 decode
+
+- slps links PAD_init (B0#0x15); sces does NOT. Neither boot links B0#0x12
+  InitPAD, B0#0x13 StartPAD, or B0#0x14 StopPAD - the only BIOS pad entries linked
+  at all are PAD_dr (both boots) and PAD_init (slps only). Question opened for the CRT0 region decode (next queue): how
+  does the sces boot bring its pads up - its own controller polling, or a PAD
+  path reached without the stub? The gp-0x10 "InitPAD version buffer" (4fee98b2)
+  now has a per-region wrinkle to explain.
+- The PAD_dr stub's link position differs (slps: kernel group slot 2; sces: tail,
+  adjacent to the C0 pair) - the two boots' links differ by exactly one 16-byte
+  stub slot's worth of object ordering, consistent with the boots being the same
+  source linked twice with one object set difference.
+
+### Method warning (a live drift demonstration)
+
+- The first census pass ran over the committed baselines/*.bin with LINEAR
+  VA = vram + (off - start) math and placed the stub table at 0x8002FD10 - 0x2140
+  above the true 0x8002DBD0. That is the framing skew law live: the baseline is
+  the contiguous raw-read (0x930-byte sectors), ~0x130 of framing per 0x800 of
+  user data, and 26 sectors of drift at that depth ≈ 0x1EE0 + the header offset.
+  ALL boot code addressing must use the TRUE per-sector view (or the weave
+  mapping (F>>11)*0x930+(F&0x7FF) when reading the baseline); the banked true VAs
+  only reconcile on the true view. The committed baselines stay the verify
+  oracle - this warning is about ADDRESSING, not about bytes.
+
+Gates: docs-only commit; no carve/build action (the boots' oracle view untouched);
+matched 174, ratchets 365/0, 8/8 verify GREEN unchanged. Disc assets re-provisioned
+this window (both CHDs sha256-exact x2 again; raw bins + per-sector boots under
+repo-external disk/ and disc_work/).
+
+Next queue:
+1. The sces PAD question: how does the EU boot bring pads up without a PAD_init
+   stub - find the controller-init path in the sces CRT0/init chain (its stub
+   table has PAD_dr only); reconcile with the gp-0x10 InitPAD version buffer.
+2. (carried) The 0x80010000 config-area ownership question.
+3. sdk lane: A0#0x3F = printf is now SDK-attested - close the strcpy pin re-review
+   and re-emit the curated/sdk notes that cited the conflict.
+4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr);
+   BIG de-frame coordination-gated; runtime gate-family blocked.
