@@ -6292,3 +6292,100 @@ Next queue:
 4. Lanes stay theirs (matching lane clusters, GSD round-5, setIntr/
    startIntr/trapIntr); BIG de-frame coordination-gated; runtime
    gate-family blocked.
+
+## 2026-10-17 (window cron-20261017-1834): W16.DAT is the EU anti-piracy warning screen - the boot config-template pool is decoded and the VOICE paradox gets its mechanism
+
+Sandbox rollback hit this window (repo back to 7623cd2, disk/ wiped, worklog
+rolled back past the 1612/1716 records - both reconstructed from git
+119c560/343e090/8d791ab + the TASKS.md entries; no knowledge lost). Discs
+re-fetched from Silent's links (both sha256 byte-identical to the banked
+values), raw bins re-extracted, same geometry. Repo reset forward to
+867de98 (the parallel lint commits on top of 8d791ab).
+
+### W16.DAT (EU-only root file, 327700 B, lba 166) - IDENTIFIED
+
+- TIM image: magic 0x10, flag 0x2, one image block (no CLUT), VRAM position
+  (0,0), 640x256, 16 bpp; data 0x50000 B + 0x14 header = 0x50014 exactly.
+  True per-sector read (the slot after the boots region - JP parks SE.VH
+  in the same lba slot).
+- Content: the STANDARD SONY PAL ANTI-PIRACY WARNING screen - white rules
+  + cyan text on black, the "unauthorised reproduction ... criminal
+  offence" + "PIRACY harms Consumers ... Customer Service number given in
+  the manual" paragraphs. 64 unique colors, 26,626 non-black pixels in
+  rows 0..215. Render banked repo-external (disc_work/w16_render.png,
+  scripts/w16_render.py - pypng, no numpy/PIL needed).
+- EU-only: no W16 string in ANY other module; the file exists only on the
+  EU disc (JP parks SE.VH at that lba).
+
+### The sces boot's config-template pool (the W16 loader context)
+
+- baselines/sces_00269.bin carries the literal `\W16.DAT;1` at file 0x970
+  (VA 0x80020170), immediately followed by `VOICE=%d` at 0x97C - AFTER the
+  `cdrom:\MAINMENU.EXE;1` / `file not found\n` strings and a 6-entry
+  FUNCTION-pointer table (0x80021E68..0x80021F14 - boot-stage hooks, code
+  not strings), and BEFORE the gameinfo.c assert strings
+  ("%s(%d):Invalid mission value in set_game_info()" etc).
+- slps carries the SAME pool layout with `VOICE=%d` at the SAME file
+  offset 0x970 but NO W16 string: the EU pool = JP pool + a 0xC-byte
+  `\W16.DAT;1` insertion, shifting everything after by 0xC (assert strings
+  +0xC; the pool pointer-table targets +0x58 total = the 0xC shift plus
+  ~0x4C of additional EU strings further in the pool).
+- ZERO pointer words and ZERO lui/addiu immediates reference ANY pool
+  string in either boot - because the pool is not consumed by la-style
+  references at all.
+
+### The consumer: the config-template initializer family (the mechanism)
+
+- Both boots carry an initializer family in the file 0x4ff8..0x52d0 band
+  (sces VA 0x80024800-ish, slps 0x800247d0-ish) whose repeated shape is:
+    move $a0, $s0
+    andi $v0, $a0, 0xffff
+    sltiu $v0, $v0, 2        # if ((u16)mode < 2)
+    bnez -> skip
+    (delay) j ... / sh $s0, 0xb28+2k($a1)   # else: store the u16 VALUE
+    lui $a0, 0x8002; addiu $a0, <template_k> # from the pool
+    lui $a1, 0x8002; addiu $a1, <working base>
+    jal <region copy worker>  (sces 0x8002DA04, slps 0x8002DC10)
+    ori $a2, <len_k>
+  i.e. per-mode conditional copies of config TEMPLATES from the pool into
+  a fixed working struct head (sces dst 0x8002008C, slps 0x80020080 - the
+  two bases differ by exactly the 0xC W16 insertion), with an else-path
+  that stores the numeric mode value into a SERIES of u16 slots at
+  0x80020080+0xb28/0xb2a/0xb2c/0xb2e/0xb30/0xb32 (a ~0xB30-byte config
+  struct).
+- The templates include the shared high-entropy block at file 0x8C0..0x8EF
+  (partly byte-identical between slps and sces - shared binary config,
+  not code) plus the strings; lens seen 0xcf/0xd6/0xe2/0xea.
+
+### The VOICE paradox resolution (leading hypothesis, testable in decode)
+
+`VOICE=%d` and `\W16.DAT;1` are CONFIG-TEMPLATE FIELDS, not free-standing
+FLOAD literals. The mode-gate resolves the cron-20261017-1227 paradox:
+retail runs with mode >= 2, the else-path stores NUMBERS into the config
+slots, and the literal-string default (mode < 2) branches - the only paths
+that would open a file literally named "VOICE=%d" or "\W16.DAT;1" - never
+execute. The 1227 window's "raw template feed" observation at the FLOAD
+wrapper family was a pointer INTO the working struct under the default
+branch. W16.DAT's warning display is likewise expected on the gated
+branch (EU shows it when the region/anti-modchip check selects the warning
+mode); retail boot takes the numeric path and execs MAINMENU.EXE.
+Testable: decode the mode source ($s0 provenance at the initializer's
+caller) and the working-struct consumer that builds FOpen args.
+
+Gates: docs-only commit (plus git-ignored disk/ + repo-external
+scripts/disc_work); no build run (nothing carve-side moved); worklog
+re-synced after the rollback.
+
+Next queue:
+1. Boot lane: decode the initializer's caller - where does $s0 (the mode)
+   come from, which modes are < 2, and does ANY retail path reach the
+   template-copy branches (that decides whether W16 is shown at every EU
+   boot or only on a failed check).
+2. Identify the region copy workers (sces 0x8002DA04, slps 0x8002DC10) -
+   memcpy or a field-wise format engine (lens 0xcf..0xea vs pool geometry
+   will tell).
+3. The shared high-entropy block at file 0x8C0..0x8EF (identical across
+   regions) - likely the region-check/license binary blob the boots
+   validate; map it against the 0x80020080/0x8002008C struct fields.
+4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+   trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
