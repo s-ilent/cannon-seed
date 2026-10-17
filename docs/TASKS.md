@@ -6490,3 +6490,94 @@ Next queue:
    screen flow; also finish the .sdata window + missing-tail witnesses from the same dump.
 5. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr); BIG
    de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-18 (window cron-20261017-2104): the W16 loader closes - the missing tail is
+## the boots' gp-anchored .sdata, the EU-only warning call is unconditional in the boot
+## main, and 0x8002CBA0 is the TIM loader
+
+Discs re-provisioned from Silent's links (both sha256 byte-identical to the banked
+values), raw bins re-extracted (267,752 / 267,504 sectors), boots extracted PER-SECTOR
+(true user data): SCES_002.69;1 and SLPS_002.70;1 both 290,816 B, PS-X EXE header
+fields little-endian (pc0 0x8002D908 / 0x8002DB14, t_addr 0x80020000 @0x18, tsize
+0x46800 @0x1C - all LE). Scripts repo-external: scripts/boot_tail_hunt.py +
+boot_window_words.py; artifacts disc_work/boot_tail_{sces,slps}.bin,
+boot_window_*.bin, boot_strip_*.bin.
+
+### The de-frame law re-derived empirically, and the per-sector view validates it exactly
+
+- The contiguous baseline lands ONE SECTOR EARLY: chunk k = bl[(k+1)*0x930 : +0x800]
+  is file sector k+1 (file[(k+1)*0x800 : +0x800]); the 2048-B PS-X EXE header (file
+  sector 0) is never present in the baseline. Syncs verified at 0x918 + k*0x930 (123).
+- 122 full chunks + a 0x5F0 partial: the de-framed overlap == the per-sector file
+  BYTE-FOR-BYTE for both boots (zero mismatches over file 0x800..0x3DDF0). Captured
+  payload = 0x3D5F0 and missing tail = 0x9210 exactly as banked (1949); the woven
+  framing never corrupts user data on the boots - it only truncates the view.
+- The tail payload [0x3D5F0, 0x46800) = VA 0x8005D5F0..0x80066800 exists ONLY in the
+  per-sector view. Identified residents: the CD command-name pointer table
+  (0x800651D4..0x80065270, words -> 'CdlSync'..'DiskError' psyq strings), the bios.c
+  $Id string (0x800654D4, v1.71 1995/12/01 makoto), the .sdata window (below), then an
+  all-zero strip to payload end (loaded-but-zeroed BSS extension).
+
+### The .sdata windows decode: they are the boots' _gp anchor area
+
+- sces window payload 0x45FC4..0x46098 (53 words): word 0 = 0x80020040 = pointer to
+  '\W16.DAT;1' - THE EU-ONLY VARIABLE. The remaining 52 words are REGION-SHARED
+  (sces[4:] == slps[:] byte-exact in the true view): default pilot/high-score names as
+  packed ASCII ('NONE', 'FRANK', 'REIKO', 'JOHNSON', 'SHARK', 'GHOST'), controller-tag
+  fragments ' (1)'..' (D)', the CD device prefix 'bu00:', and constants 0x6981/0x6A81/
+  0x2A. slps window payload 0x4632C..0x463FC (52 words) = the same table with NO W16
+  word - the +4 shift the contiguous view showed is exactly the missing variable.
+- CRT0 sets $gp to the window start: sces 0x8002D988 (lui $gp,0x8006; addiu
+  $gp,0x5FC4 -> $gp = 0x80065FC4), slps 0x8002DB94 ($gp = 0x8006632C). The zero-clear
+  ranges start at the window END (sces clears 0x80066098..0x8012C16C, slps
+  0x800663FC..0x8012C3F4 - both banked numbers re-confirmed against the true view).
+- The pool strings are NOT lui/addiu-referenced because the pool (0x80020000-0x80021FFF
+  area) is OUTSIDE every gp window's +/-0x8000 reach; the tail data is INSIDE it. That
+  is the encoding law behind the 1834/1949 "zero la-style references" observation.
+
+### THE W16 LOADER CLOSES: sces-only function 0x8002228C, called unconditionally by the boot main
+
+- sces boot main 0x8002180C (called from CRT0 0x8002D9A8) call sequence: stub 0x8002D900,
+  config-slot clear, inits 0x8002F3C8(2)/0x8002E674(1), sub-init 0x800219BC, then at
+  0x8002183C an UNCONDITIONAL jal 0x8002228C, then 0x80023AD8/0x800252C8/0x8002BF38...
+- 0x8002228C (frame 0x40): ResetGraph-shaped 0x8002F508(0); video setup with 640x240
+  geometry (0x80032B74(0x280,0xF0,0,0); 0x800370E4(0,0,0,0xF0)); clear + sync
+  (0x8003331C); then lw $a0,($gp) = the '\W16.DAT;1' pointer (the ONLY gp+0 load in
+  either boot), jal 0x8002D5B8 (file open; calls the 0x8002D620 worker, -1-checked).
+  If the open returns 0 -> skip silently (epilogue). Else jal 0x8002CBA0 (a0 = handle,
+  a1 = stack buffer) - THE BANKED 0x8002CBA0 CONSUMER SHAPE IDENTIFIED: it validates
+  u32 == 0x10 (the TIM magic) at the buffer head, parses the TIM header fields
+  (lhu 0x1C/0x1E/0x20), and loads the image - it is the boot's TIM loader/renderer.
+  Then 0x8002F508(1), 0x80037590, and a bounded VSync wait: s0 = 0x96 (150 frames),
+  0x8002F194(0) per frame - the warning shows for 150 VSyncs (~2.5 s at 60 Hz, 3 s at
+  PAL 50 Hz), then boot proceeds.
+- slps: boot main 0x80021800 (CRT0 0x8002DBB4) NEVER calls it - the call sequence has
+  no such slot (0x8002F8BC(2), 0x80021964, then straight to 0x80023AB0/0x800252A0/
+  0x8002C110/0x800219F0), and no gp+0 load exists anywhere in the image. The W16
+  display path is EU-only end to end: string (pool) + pointer variable (.sdata word 0)
+  + loader function + call site, all present only in sces.
+- RESOLUTION of the queue item: the EU boot shows the Sony PAL anti-piracy warning on
+  EVERY boot - there is no region/modchip gate at the call site; the only condition is
+  the file open succeeding (a copied disc lacking \W16.DAT;1 boots straight through).
+  It is a marking, not a check. And the reason 1949 found ZERO references in the
+  runtime image: the reference is SPLIT ACROSS VIEWS - the consuming code
+  (0x800222DC lw $a0,($gp)) lives in the base, the pointer variable lives in the
+  missing tail (.sdata word 0), and the string is reached only through $gp. Neither
+  view alone contains the whole chain.
+
+Gates: docs-only commit; no build run (nothing carve-side moved; the boots' carve/
+oracle view is untouched - matching discipline continues on the framed oracle).
+matched 174, ratchets 365/0, 8/8 verify GREEN unchanged. The 2026-10-15 disc-follow-up
+queue items ".sdata window dumps" and "missing-tail witnesses" are now DONE (windows
+decoded above; tail witnesses = disc_work/boot_tail_*.bin + the residents listed).
+
+Next queue:
+1. Boot FLoad family member IDs: 0x8002D620 (open worker behind 0x8002D5B8) and the
+   snd_fload3_TransBody/fload3 cluster (pool strings 0x800208E4..0x80020A38) - name
+   them against psyq's FileRead/EdOpen/etc or the project's own FLoad lane.
+2. The A0/B0/C0 thunk census for both boots (1949 queue item 2, still open) - the sig-
+   table recipe is banked; feeds the sdk lane and the CRT0 region decode.
+3. The 0x80010000 config-area ownership question (1949 queue item 1, still open) -
+   who owns it at runtime, map the getter-exposed slots against MAINMENU's early reads.
+4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr); BIG
+   de-frame coordination-gated; runtime gate-family blocked.
