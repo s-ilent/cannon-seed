@@ -6581,3 +6581,106 @@ Next queue:
    who owns it at runtime, map the getter-exposed slots against MAINMENU's early reads.
 4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr); BIG
    de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-18 (window cron-20261017-2219): the boot FLoad family member IDs close -
+## the family is project source (zero psyq hits across 16 LIBs and 35 headers), the
+## psyq callees take their libcd names (CdControl / CdlSeekL / CdlPause / CdSync /
+## CdlComplete / CdlModeSpeed), and the snd_fload3_TransBody placeholder retires as
+## SsVabTransBodyPartly
+
+Queue item 1 of 8b828be2 (the 2104 window). Method: psyq 3.3 re-provisioned
+repo-external with the banked sparse recipe (git clone --depth 1 --filter=blob:none
+--sparse sozud/psy-q, then sparse-checkout 3.3/PSX/LIB + 3.3/PSX/INCLUDE;
+psx_psyq_signatures 330 alongside) - seconds, exactly as recorded. Before naming any
+address, the whole shipped library surface was interrogated for the family's own
+fingerprints.
+
+### The psyq-negative proof: the FLoad family is NOT psyq
+
+- Every string that names the family - "fload3", "FLOAD:fault!\n", "Cannot find
+  file(%s) in fload3()\n", "No enough memory in fload3()\n", "Enough memory\n",
+  "Fault CdSync in fload3()\n" - was binary-grepped against ALL 16 psyq 3.3 archives
+  (LIBAPI LIBC LIBC2 LIBCARD LIBCD LIBCOMB LIBETC LIBGPU LIBGS LIBGTE LIBMATH LIBPRESS
+  LIBSN LIBSND LIBSPU LIBTAP): zero hits. All 35 shipped headers grepped for "fload":
+  zero hits. The queue's FileRead/EdOpen guesses do not exist in psyq 3.3 at all.
+- The ONLY family-adjacent hit in the entire library set: LIBSND's symbol table
+  carries SsVabTransBody and SsVabTransBodyPartly - the snd lane's verbatim-psyq
+  member (banked 3530/3562), re-verified at the archive level this window.
+- Conclusion: the boot FLoad family (retry wrappers, load preps, read halves) and
+  fload3 are the PROJECT'S OWN source - consistent with the 2026-10-16 census (the
+  boot's file-I/O cluster is the same linked source as all six game modules) and the
+  8-target "\SE.VH;1"/"\SE.VB;1"/"FLOAD:fault!" string trio. The naming therefore
+  closes "against the project's own FLoad lane", and the lane's provisional names
+  become the member IDs below.
+
+### The psyq-positive half: what the family CALLS takes its libcd name
+
+- 0x80038D34 (fload3 step 6, the "CD command issuer": (0x15, &rec, 0), retried while
+  it returns 0) = CdControl(u_char com, u_char *param, u_char *result) - shape-exact
+  against LIBCD.H 3.3; the retry-while-0 loop is the busy-queue semantics of the
+  async command issuer.
+- The command constant: 0x15 = CdlSeekL (psyq 3.3 define table). fload3 seeks to the
+  parsed ISO file record before reading - the record it filled at step 1 IS the seek
+  parameter (banked verbatim at step 6). The flow is the canonical libcd idiom:
+  parse record -> CdControl(CdlSeekL, &rec, 0) -> CdSync -> read.
+- 0x8003AAFC (the read-request kicker) parks buf/count/mode globals, then issues
+  (9, 0, 0, 0) gated on (status & 0xE0): 9 = CdlPause. psyq 3.3 ships NO 4-arg
+  command issuer (the full Cd* declaration list checked), so the kicker is
+  game-internal and the extra args are call-site padding; the pause clears prior
+  streaming state before re-arming.
+- 0x80038CAC = CdSync(mode, result) over impl 0x800398F8 (banked "CDSYNC NAMED"; now
+  header-backed): the required result 2 = CdlComplete, and the parked read mode
+  0x80 = CdlModeSpeed (double speed). The "command 0x15 and 9 need their libcd names"
+  sub-item (2026-10-16 late queue item 4) is CLOSED.
+
+### Member IDs (the queue item's ask)
+
+- slps 0x8002CA84 = fload3, the body - and the source name is PROVEN by the
+  function's own panic strings, which embed it: "Cannot find file(%s) in fload3()\n"
+  (0x800209C0), "No enough memory in fload3()\n" (0x800209EC), "Fault CdSync in
+  fload3()\n" (0x80020A0C). A function whose fault strings say "in fload3()" is named
+  fload3 in the source that printed them. (The (%s) print-shaped caveat stays with
+  the A0#0x3F sdk-lane item; the name evidence is the string TEXT itself, independent
+  of the printf-conflict question.)
+- slps 0x8002CA1C = the fload3 retry wrapper (0x0FFFFFFF attempts; exhaustion ->
+  "FLOAD:fault!\n" -> A0#0x3F thunk -> 0). No string embeds ITS own name; provisional
+  ID fload3_retry.
+- sces 0x8002D5B8 / 0x8002D620 = the W16 open path's pair (the 3395 addendum): retry
+  wrapper (same 0x0FFFFFFF law; exhaustion glue -> "FLOAD:fault!\n") + load prep
+  (teardown 0x8002E644 when *(gp+0xD0) != 0; parse 0x8003B36C; fixed-0x66000 staging
+  alloc via 0x8002D9D4; size state gp+0xD0). Provisional pair ID: fload_open_retry /
+  fload_open_prep - the "plain FLoad" flavor; no "in fload3()" string sits on its
+  path, so its source name is unattested.
+- The slps twins of this flavor are the census's "second reader family" read halves
+  (0x8002D8F4 = family A, staging GP+0xCC - the +4-alignment-law twin of sces
+  gp+0xD0; 0x8002DA8C = family B): slps ships the flavor UNCALLED; sces exercises it
+  for the anti-piracy warning (2104). Family membership now closes in both
+  directions: fload3 is the snd-orchestrator flavor, fload_open is the boot-warning
+  flavor, one linked source.
+- "snd_fload3_TransBody" (the 2104 queue's placeholder) RETIRES: the snd-lane callee
+  is psyq libsnd's SsVabTransBodyPartly - VERBATIM psyq with the sig-table
+  confirmation ("SsVabTransBodyPartly VS_VTBP LIBSND unique", 3530/3562); the LIBSND
+  archive symbols re-verified this window. Nothing remains provisional in the
+  fload3/snd naming.
+
+### Bookkeeping and gates
+
+- Disc re-provision for future raw needs: both CHDs re-fetched on Silent's links, EU
+  sha256 98ccd877... exact; JP a60252... exact (worklog). psyq trees are
+  repo-external and re-provisionable by the banked recipe in seconds - note for the
+  sdk lane: the sig tables at /home/z/psyq-sigs/330 are back too.
+- Stays open: the game-internal CD engine depth (0x8003ABF4 poll vs the parked
+  globals 0x800658xx) remains its own item; A0#0x3F strcpy-conflict stays with the
+  sdk lane; the slps twin ADDRESSES of fload_open_retry/prep are unlocated (expected
+  present-but-uncalled; findable by the same string-xref recipe when a lane needs
+  them).
+- Gates: docs-only commit; no carve/build action; matched 174, ratchets 365/0, 8/8
+  verify GREEN unchanged.
+
+Next queue:
+1. (2104 item 2, still open) The A0/B0/C0 thunk census for both boots - now cheaper:
+   psyq 3.3 headers + LIBs and the sig tables are re-provisioned, and this window's
+   A0#0x3F/0x33/0x2B citations slot straight into it.
+2. (2104 item 3, still open) The 0x80010000 config-area ownership question.
+3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr);
+   BIG de-frame coordination-gated; runtime gate-family blocked.
