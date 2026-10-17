@@ -354,19 +354,19 @@ segments:
       - [0x32EAC, c, SetVertex1]   # 0x10 sdk
       - [0x32EBC, c, SetVertex2]   # 0x10 sdk
       - [0x32ECC, c, SetVertexTri]   # 0x20 sdk
-      - [0x32EEC, asm, func_800526EC]   # 0x14 sdk
-      - [0x32F00, asm, func_80052700]   # 0x14 sdk
-      - [0x32F14, asm, func_80052714]   # 0xc sdk
-      - [0x32F20, asm, func_80052720]   # 0x20 sdk
-      - [0x32F40, asm, func_80052740]   # 0x20 sdk
-      - [0x32F60, asm, func_80052760]   # 0x14 sdk
-      - [0x32F74, asm, func_80052774]   # 0x18 sdk
-      - [0x32F8C, asm, func_8005278C]   # 0x14 sdk
-      - [0x32FA0, asm, func_800527A0]   # 0x14 sdk
-      - [0x32FB4, asm, func_800527B4]   # 0x14 sdk
-      - [0x32FC8, asm, func_800527C8]   # 0xc sdk
-      - [0x32FD4, asm, func_800527D4]   # 0x18 sdk
-      - [0x32FEC, asm, func_800527EC]   # 0xc sdk
+      - [0x32EEC, c, SetRGBfifo]   # 0x14 sdk
+      - [0x32F00, c, SetIR123]   # 0x14 sdk
+      - [0x32F14, c, SetIR0]   # 0xc sdk
+      - [0x32F20, c, SetBackColor]   # 0x20 sdk
+      - [0x32F40, c, SetFarColor]   # 0x20 sdk
+      - [0x32F60, c, SetSZfifo3]   # 0x14 sdk
+      - [0x32F74, c, SetSZfifo4]   # 0x18 sdk
+      - [0x32F8C, c, SetSXSYfifo]   # 0x14 sdk
+      - [0x32FA0, c, SetRii]   # 0x14 sdk
+      - [0x32FB4, c, SetMAC123]   # 0x14 sdk
+      - [0x32FC8, c, SetData32]   # 0xc sdk
+      - [0x32FD4, c, SetGeomOffset]   # 0x18 sdk
+      - [0x32FEC, c, SetGeomScreen]   # 0xc sdk
       - [0x32FF8, asm, func_800527F8]   # 0xc sdk
       - [0x33004, asm, func_80052804]   # 0x18 sdk
       - [0x3301C, data, data_8005281C]   # 0xc74

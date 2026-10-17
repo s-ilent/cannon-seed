@@ -166,19 +166,19 @@ segments:
       - [0x16368, c, SetVertex1]   # 0x10 sdk
       - [0x16378, c, SetVertex2]   # 0x10 sdk
       - [0x16388, c, SetVertexTri]   # 0x20 sdk
-      - [0x163A8, asm, func_80035BA8]   # 0x14 sdk
-      - [0x163BC, asm, func_80035BBC]   # 0x14 sdk
-      - [0x163D0, asm, func_80035BD0]   # 0xc sdk
-      - [0x163DC, asm, func_80035BDC]   # 0x20 sdk
-      - [0x163FC, asm, func_80035BFC]   # 0x20 sdk
-      - [0x1641C, asm, func_80035C1C]   # 0x14 sdk
-      - [0x16430, asm, func_80035C30]   # 0x18 sdk
-      - [0x16448, asm, func_80035C48]   # 0x14 sdk
-      - [0x1645C, asm, func_80035C5C]   # 0x14 sdk
-      - [0x16470, asm, func_80035C70]   # 0x14 sdk
-      - [0x16484, asm, func_80035C84]   # 0xc sdk
-      - [0x16490, asm, func_80035C90]   # 0x18 sdk
-      - [0x164A8, asm, func_80035CA8]   # 0xc sdk
+      - [0x163A8, c, SetRGBfifo]   # 0x14 sdk
+      - [0x163BC, c, SetIR123]   # 0x14 sdk
+      - [0x163D0, c, SetIR0]   # 0xc sdk
+      - [0x163DC, c, SetBackColor]   # 0x20 sdk
+      - [0x163FC, c, SetFarColor]   # 0x20 sdk
+      - [0x1641C, c, SetSZfifo3]   # 0x14 sdk
+      - [0x16430, c, SetSZfifo4]   # 0x18 sdk
+      - [0x16448, c, SetSXSYfifo]   # 0x14 sdk
+      - [0x1645C, c, SetRii]   # 0x14 sdk
+      - [0x16470, c, SetMAC123]   # 0x14 sdk
+      - [0x16484, c, SetData32]   # 0xc sdk
+      - [0x16490, c, SetGeomOffset]   # 0x18 sdk
+      - [0x164A8, c, SetGeomScreen]   # 0xc sdk
       - [0x164B4, asm, func_80035CB4]   # 0xc sdk
       - [0x164C0, asm, func_80035CC0]   # 0x18 sdk
       - [0x164D8, data, data_80035CD8]   # 0x224
