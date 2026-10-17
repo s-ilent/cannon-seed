@@ -6389,3 +6389,104 @@ Next queue:
    validate; map it against the 0x80020080/0x8002008C struct fields.
 4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
    trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261017-1949): the boots de-frame and the "config-template pool" turns out to be the gameinfo.c assert family - the VOICE paradox closes for real and the 1834 mechanism inverts
+
+Sandbox rollback hit again (worklog and repo reverted past cron-20261014-2112; disk/ wiped;
+baselines/ SURVIVED). Repo recovered by fetch + reset --hard origin/main (b35c9465); worklog
+restored with RESTORE NOTE. baselines/ intact made this window disc-free.
+
+### The boots de-frame from their own baselines (new tool, disc not needed)
+
+- scripts/boot_deframe.py (repo-external) parses the woven grid out of baselines/{sces_
+  00269,slps_00270}.bin directly. MEASURED layout (both boots identical): payload [0,0x118)
+  = the PRECEDING disc sector's EDC/ECC (280 B - the extraction's seek lands one sector
+  early at +2072, so sector 0's own user data is NOT in the file); syncs at payload
+  0x118 + k*0x930 (123 of them, verified (p-0x918) mod 0x930 == 0 x123); user chunk k =
+  [0x130 + k*0x930, 0x930 + k*0x930) = 2048 B = TRUE payload [k*0x800, (k+1)*0x800); EDC/ECC
+  = [0x930 + k*0x930, +280); chunk 122 truncated to 1520 B by the size stop.
+- Runtime image = concat(chunks 0..122) at 0x80020000 = 0x3D5F0 B; missing tail 0x9210
+  EXACTLY as banked. PROOF: the CRT0 decodes verbatim at the banked pc0s - slps 0x8002DB14
+  = zero-clear 0x800663FC..0x8012C3F4, sces 0x8002D908 = clear 0x80066098..0x8012C16C.
+  The carve<->runtime map: drift = carve - runtime = 0x130*(k+1) for chunk k - the
+  documented drift law re-derived from first principles, now with the boots' own numbers
+  (0x130*123 = 0x9210 at the window depth).
+- EVERY authored absolute address in the boots (jal/j targets, lui/addiu immediates,
+  branch targets) is a RUNTIME address. Any carve-space decode of boot code above chunk 0
+  reads real instruction bytes from the WRONG runtime offset and mis-aimed every reference.
+
+### CORRECTION: the 1834 "config-template initializer family" is the gameinfo.c assert/warning family
+
+The 1834 entry read carve bytes at runtime-authored addresses (templates, worker, controller,
+struct) - the mechanism it banked inverts and re-identifies as follows (all runtime-space,
+scripts/boot_runtime_decode.py + boot_phase5/6/7.py):
+
+- The "template copy workers" (sces 0x8002DA04, slps 0x8002DC10) are A0-BIOS-call thunks:
+  `addiu $t2,0xa0; jr $t2; addiu $t1,0x3F` = the $t1/$t2 convention. 0x3F = printf per
+  psyq's own stubs (re-provisioned /home/z/psyq-sigs/330 LIB*.LIB.json; the sig table
+  confirms strcmp=A0:0x17, strlen=0x1B, strcpy=0x19, memcpy=0x2A, memset=0x2B, InitHeap=
+  0x39, printf=0x3F; sprintf's workhorse with a 0x280 stack buffer sits at sces 0x8002DA54).
+- The "working struct 0x8002008C" = the string "gameinfo.c" (the __FILE__ argument). The
+  "template pool" = printf FORMAT STRINGS. The family is 12+ assert/warning members:
+  printf("%s(%d):Invalid <FIELD> value in set_game_info()", "gameinfo.c", line) for
+  mission(200), TV_MODE(207), PAUSE_DISP(214), MUTEKI_MODE(226), MAP_COUNTER_DISP(234),
+  TUNE_LEVE[L](250), LEVEL(264), "Too long PARTNER NAME"(276), PLAY_RECORDING(284),
+  CLEAR_LEVEL(300), PARTNER_G_NUM(316), SUPER_BLASTER(340), plus the >17 default
+  "Invalid mode switch"(320). The boots literally carry gameinfo.c.
+- POLARITY INVERTED vs 1834: each member tests `sltiu v0,(u16)value,2; bnez -> store` -
+  value in {0,1} = VALID = stored into the config slots; value >= 2 = INVALID = the printf
+  warning. The 1834 "retail runs mode >= 2 so the literal branches never execute" is
+  exactly backwards - and harmless either way, because the member's own a0/a1/a2 fully
+  replace the caller's args (the invalid value is never printed; the %d gets the line
+  number). printf goes to the TTY/serial - invisible on retail TVs, the shipped behavior.
+- Structure: setter dispatcher 0x80023DC0 (frame 0x20, s0 = the value arg) - reads a
+  halfword at FIXED 0x80010000, picks base s1 = 0x800100B8 or 0x800105F0, switch(a0) over
+  an 18-entry jump table at 0x80020320; cases 3/6/7 store unconditionally (sh s0,0xb2a/
+  0xb30/0xb32($a1) with a1 still = 0x80010000), the others validate. Paired getter
+  dispatcher 0x80024174 (table 0x80020398) returns the fields (lh (a1), lhu 2(a1),
+  lhu 0xb28(a1)...). The config area lives at 0x80010000 + {0,2,0xb28..0xb36,...} - BELOW
+  the boot's own load address, i.e. written where the next stage will find it.
+- The setter's only 3 static callers (0x80025BE8/0x80025C34/0x80025C44, one function) are
+  the PAL-mode config reset: gate = video-mode call 0x80025570 == 2 + (u16)val < 4 +
+  a bit-test in D_8006671C, then setter(5,-1) / setter(3,-1) / setter(4, 0x80066014) -
+  "reset MAP_COUNTER_DISP / slot 0xb2a / MUTEKI_MODE" when the console is PAL.
+- VOICE PARADOX CLOSED: `VOICE=%d` is consumed ONCE, at 0x8002368C (sces; slps 0x80023664):
+  sprintf(D_8006ADDC, "VOICE=%d", (s16)D_800662BC) then an on-screen text call (a0=saved
+  arg, 1, -0xE0, -0x50 - overlay coordinates). It is a DEBUG STATUS OVERLAY format string
+  for a voice/audio parameter - never a filename, never a config field. The 1227 window's
+  FLOAD-template observation and the 1834 mode-gate hypothesis are both superseded.
+- `\W16.DAT;1` (sces pool 0x80020040): ZERO references in the extracted runtime image
+  (no lui/addiu pair within 8 insns, no pointer words). Its consumer lives in the missing
+  tail (payload >= 0x3D5F0, disc-only) or is dead. Disc-gated, not decodable from
+  baselines. The EU-only W16.DAT warning screen remains identified (1834 entry); only its
+  loader address is unknown.
+- Queue item 3 of 1834 REFUTED: the "shared high-entropy block at file 0x8C0..0x8EF" =
+  payload 0xC0..0xEF sits INSIDE the leading 280-B EDC/ECC zone [0,0x118) - it is the
+  preceding disc sector's parity, not a config/license blob. (The zone's bytes differ
+  between sces/slps - different preceding sectors.)
+- The 1834 "6-entry FUNCTION-pointer table" at 0x80021E68..0x80021F14 = inline A0-call
+  code sequences (`ori $s7,N; ori $s6,2; jal 0x8002C2A4` with N = 0x815/0x6EF/0x5B10/
+  0xE10/0x909...) - not pointers; the wrapper 0x8002C2A4 and the N semantics stay
+  unidentified (next-queue material).
+
+Gates: docs-only commit plus repo-external scripts/ and disc_work/boot_runtime_*.bin;
+no build run (nothing carve-side moved; the boots' carve/oracle view is untouched -
+matching discipline continues on the framed oracle). matched 174, ratchets 365/0, 8/8
+GREEN unchanged.
+
+Next queue:
+1. The 0x80010000 config area: who owns it at runtime (kernel boot-arg region vs
+   pre-staged MAINMENU load region) - map the slots the getter exposes (0, 2, 0xb28..)
+   against MAINMENU's own early reads; the boots' .sdata-window dumps (2026-10-15) may
+   already hold part of the answer.
+2. Full A0/B0/C0 thunk census for both boots via the sig-table method (every
+   addiu $t2,0xa0/b0/c0; jr $t2; addiu $t1,N sequence named) - cheap now that the recipe
+   is banked; feeds the sdk lane and the CRT0 region decode.
+3. The getter dispatcher's callers (0x80024ACC/AD8 = getter(6)/getter(7), 0x80024B84,
+   0x80024C24, 0x80025540): decode each into the gameinfo field map (field index ->
+   name from the assert table above).
+4. W16 loader: disc-gated (missing tail). When the discs are up: extract the boots
+   per-sector, dump payload 0x3D5F0..0x46800, hunt the W16.DAT reference and the warning-
+   screen flow; also finish the .sdata window + missing-tail witnesses from the same dump.
+5. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr); BIG
+   de-frame coordination-gated; runtime gate-family blocked.
