@@ -13,15 +13,20 @@ plain-ELF coddog-compare2 replacement; coddog-cli itself is not installable in
 the rebuilt sandbox — no cargo) re-derives the four region-pair reports from
 the build .elf symtabs + baselines and emits per-target exact-unmatched pick
 lists to build/pairs_<jp>_exact.txt. `_SsUtResolveADSR` matched 8/8 (the
-whole-function region-pair 100.00% quartet). BLOCKED inside the same cluster:
-`_SsUtBuildADSR` (.text+0x5c, 0x8c) — every C shape tried folds the retail
-`addu $t0,$t1,$zero` copy-before-branch + `ori $t0,$t1,0x4000` under GCC
-2.6.3 (-O2 and -O1 both probed; -O1 additionally emits schedule nops and an
-arg-move). The copy survives in retail, so the libsnd UT member's build
-differs from ours somehow: probe matrix next (GCC 2.6.3 flag axes —
--fschedule-insns? -fdelayed-branch? — and the sdk-built-vs-game-built
-compiler-provenance question the sdk-aspsx note already raised). Until that
-lands the pair stays 1/2; do not hand-pin.
+whole-function region-pair 100.00% quartet). `_SsUtBuildADSR` (.text+0x5c,
+0x8c) probe matrix RUN 2026-10-17 (see the Log entry at the bottom for the
+full record): the old "every shape folds the copy" is REFUTED — the copy
+survives in the right position under plain -O2 once the mask constants are
+signed and the loads are init-decls; the body is structurally exact at
+33/35 insns and the ONLY remaining delta is a cyclic register permutation
+of the three temps (built mask1/copy/mask2 = $8/$10/$9 vs retail $9/$8/$10).
+Next axes: the copy-target pseudo must be created before the first mask's
+without an extra insn (no source-level steer found yet — 192-combo brute
+force + decl-order + dead-init + goto-else all fail), or the member's
+compiler provenance differs (a cc1 variant whose local_alloc orders the
+allocnos the other way). Harness: repo-external scripts/probe_buildadsr.py
++ brute_buildadsr.py (recreatable; dialect-normalizing compare vs the
+committed retail row). Until it lands the pair stays 1/2; do not hand-pin.
 
 ### State checkpoint (2026-10-15, `d3434c3`): gates green, sdk adoption closed
 
@@ -5535,3 +5540,86 @@ Next queue:
    families; GSD round-5 adopt/reject; setIntr/startIntr/trapIntr; coddog
    transplant); BIG de-frame coordination-gated; runtime gate-family
    blocked.
+
+## 2026-10-17: _SsUtBuildADSR probe matrix run - the signed-const law, the
+## init-decl load-order law, the copy survives (T4 shape, 33/35 at plain -O2),
+## and the one remaining delta is a cyclic temp-register permutation
+
+Matching-lane window (unattended agent). Sandbox rolled back again: local
+worklog stale at the cron-20261014-2112 tail while origin had moved
+7623cd2..42b4e1b (58 commits, the 2026-10-15/16 windows' work - their
+worklog sections are lost locally; git history is the record, do NOT
+re-append them). disk/*.chd eaten; refetched both, sha256s exact on the
+first try (links still live). baselines/ survived; `make verify
+TARGET=slps_00270` re-run GREEN (28.6 s) as the sanity gate. psyq sparse
+clone re-provisioned per the recipe; 3.3/PSX/INCLUDE added: LIBSND.H does
+NOT export SsUtBuildADSR/SsUtResolveADSR (internal UT members), VagAtr is a
+different struct (tone attrs, adsr1/adsr2 at +0x1A/+0x1C), and 3.5/PSYQ/SRC
+carries no libsnd sources; a web search found no public source either - the
+shape stays reconstructed.
+
+Harness (repo-external, recreatable): scripts/probe_buildadsr.py (pipeline +
+normalizer) and scripts/brute_buildadsr.py (grid driver) - cpp -> cc1<flags>
+-> maspsx --expand-div, then a dialect-normalizing compare against the
+committed retail row asm/nonmatchings/func_8004DACC.s. Normalizer laws
+(same encoding, different printers): maspsx renders the 0x8000-immediate
+as "-32768 & 0xFFFF"; beq $x,$zero == beqz; subu $x,$zero,$x == negu;
+j $reg == jr; numeric registers == named; offsets decimal.
+
+FOUR NEW LAWS (all measured against the retail row):
+
+1. SIGNED-CONST LAW: retail materializes the mask constant as
+   `addiu $a0,$zero,-0x8000` + `and $t1,$v0,$a0` - the original C expressed
+   the 0x8000 flag masks as SIGNED values (`fC ? -0x8000 : 0` class; GCC
+   never picks andi 0x8000 for these sites). Every `& 0x8000` / andi-form
+   candidate is dead on arrival. The signed-sloppiness also explains the
+   absent truncations: the mask webs carry 0xFFFF8000-class upper garbage
+   that the final `sh` stores never see.
+2. INIT-DECL LOAD-ORDER LAW: the head loads +0xC then +0x10 back-to-back
+   and the +0xA load sits between mask1 and the copy. That exact order
+   falls out of C89 init-decls (`int fC = s[6]; int f10 = s[8]; int t1 =
+   fC ? -0x8000 : 0; int fA = s[5];`); the same reads written as
+   ASSIGNMENT statements let GCC hoist the +0xA load above the mask chain
+   (wrong order, reproducibly).
+3. THE COPY SURVIVES: with laws 1+2 plus the statement order [copy t0 = t1;
+   mask2 (its `and` fills the beqz delay slot); `if (f10) t0 = t1 | 0x4000`
+   with ori reading t1 in the fallthrough], the T4 shape reproduces the
+   retail body 33/35 insns at PLAIN -O2 - the copy-before-branch, the
+   delay-slot and, the whole word1/word2 or-chain layout, all exact. The
+   old "every shape folds the copy" was a shape statement, not an
+   impossibility. -O1's documented schedule-nop + arg-move divergence
+   reproduced by the harness (the TASKS note above stands).
+4. THE REMAINING BLOCKER IS ONE ALLOCNO DECISION: a cyclic permutation of
+   the three temps - built (mask1,copy,mask2) = ($8,$10,$9) vs retail
+   ($9,$8,$10); retail's `ori` reads $9 and the copy writes $8, ours mirror.
+   GCC 2.6.3's local_alloc merges the first mask's web into the copy
+   target's register in every steer tried: decl-order variants (5), the
+   dead-init pseudo-creation trick (the dead store is deleted and takes
+   the pseudo with it), the goto-else class from the GSD round-5 lesson
+   (keeps the insn order, not the allocation), a 192-combo brute force
+   (load-form x copy-pos x if-body x types x dead-init x w1-order x
+   f10-position), and flag axes (-O1, -fschedule-insns, -fschedule-insns2,
+   -fno-delayed-branch, -fno-expensive-optimizations, -fno-cse-follow-jumps,
+   -fno-thread-jumps, -fno-caller-saves, -fno-force-mem,
+   -fno-rerun-cse-after-loop). Note the retail insn COUNT equals the T4
+   count (35): the real source created the copy-target pseudo before
+   mask1's WITHOUT any extra surviving insn - no source-level construction
+   found that does that in our cc1.
+
+Gates: docs-only this window (nothing build-adjacent touched; the probe
+scripts and candidates stay repo-external per the no-commit rule); matched
+230, ratchets 365/0, 8/8 verify GREEN stands (slps_00270 re-run live).
+
+Next queue (matching lane):
+1. The register-permutation axis: (a) prove the local_alloc prefer-merge
+   direction with a minimal two-var experiment (copy-dest coalescing into
+   the first mask's web) - if confirmed, no C shape can win and the
+   compiler-provenance axis becomes the primary one (the libsnd member may
+   be built by a different cc1 patch whose allocno order differs; the
+   sdk-built-vs-game-built question from the sdk-aspsx note); (b) if a
+   second cc1 is obtainable, rerun the harness against it unchanged.
+2. pair_report pick lists need a re-derive after any landing; baselines
+   are present, the reports are cheap.
+3. The 42b4e1b boot-side queue items (gp+0xCC installer zone 0x8002D6xx-
+   0x8002D9xx; sces twin columns for the staging map) stay open and
+   unclaimed.
