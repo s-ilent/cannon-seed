@@ -5359,3 +5359,179 @@ Next queue:
 4. Reverb-preset lane (standing); sdk A0#0x3F witnesses; lanes stay theirs
    (GSD round-5, setIntr/startIntr/trapIntr, coddog transplant); BIG
    de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261016-2357): the staging question closes as a
+## boot-side negative - the VB path never touches staging (disc -> malloc
+## 0x40000 -> SsVabTransBodyPartly), the file-zero statics get their first
+## writer map (cur-dev index + device_table[dev], NOT pointers), the
+## 0xF0000009/0x20 event install site decodes, and the fload3 site addresses
+## in the 1857 section are FRAMED-VAs (true-VAs 0x1EE0 lower, byte-proven)
+
+Provenance: queue item 1 of the cron-20261016-1857 section. Worklog had
+rolled back to the cron-20261014-2112 tail AGAIN (restore note + compact
+span summary appended locally; docs/TASKS.md remains the authoritative
+record). Repo fast-forwarded 7623cd2 -> 1526801 (the matching lane's
+GsInitCoord2param push, matched now 230). Disc re-provision REDONE from the
+prompt's still-valid links: both CHDs sha256 exact; per-sector boots
+reproduce the banked true witnesses (slps fa9474b4, sces 06b4bda6). Tool:
+scripts/staging_fill2.py (repo-external; capstone linear sweep of the slps
+TRUE payload + brute word scans; output scripts/staging_fill2_out.txt).
+
+VIEW DISCIPLINE (the window's meta-finding): EVERY address below is a
+TRUE-payload VA (file + 0x8001F800, payload_index = file - 0x800), anchored
+by the d4040af-era jal sites that reproduce exactly (jal 0x0C00B210 at
+0x8002C7EC -> the loader head; jal 0x8003CD90 at 0x8002C9A8). The
+cron-20261016-1857 section's fload3 gp+0xC0 site addresses
+(0x8002E9E4/EA18/EA70/EA9C) are FRAMED-VAs on baselines/slps_00270.bin:
+brute word scan proves the same four instructions (sw rt=v0, lw rt=a0,
+lw rt=a1, lw rt=v0 - all disp 0xC0($gp)) exist ONCE PER VIEW, true file
+0xD304/338/390/3BC vs baseline file 0xF1E4/218/270/29C - the weave
+re-layout shift is +0x1EE0 in that zone. Both views are self-consistent;
+the older jal-site addresses were TRUE-VAs all along. Future windows in
+this lane: annotate every address with its view before comparing.
+
+### The chunked VB loader 0x8002C840..0x8002CA18 (slps, true view) - full body
+
+    int loader(handle a0, int vab a1) {        // 0x8002C840, frame 0x60
+      if (!fill_struct(&st, handle))           // 0x8003B578; st at sp+0x10
+        { print(0x80020920); return -1; }
+      n_sect = ceil(size/2048);                // st+0x14 = size: srl 0xB +
+                                               // andi 0x7FF + addiu 1
+      buf = malloc(0x40000);                   // 0x8002DBE0; lui a0,4
+      if (!buf) { print(0x8002095C); return 0; }
+      print(0x80020988);                       // progress, pre-memclr
+      memclr(buf, 0, 0x40000);                 // 0x8002DBF0
+      pos = cd_0x8003933C(&st);                // FIFTH cluster member: the
+                                               // position-handle provider
+      if (!n_sect) goto done;
+      for (s0 = 0; s0 < n_sect; s0 += 0x80) {
+        a0 = 2; cd_0x80038D34(2, cd_0x80039238(pos, &sp+0x28), 0); // CdlSeekL
+        if (!read_kickoff(0x80, buf, 0x80))    // 0x800391B8: 0x80 sectors
+            { }                                // into the MALLOC'D buffer
+        else while ((r = cd_0x80039198(1, 0)) > 0 && r != -1) ; // poll spin
+        if (poll error) { print(0x80020998); free(buf); return -1; }
+        a1 = (s0 + 0x80 < n_sect) ? 0x40000 : size & 0x3FFFF;  // last chunk
+        r = SsVabTransBodyPartly(buf, a1, (s16)vab);  // 0x8003CD90; sll/sra
+        while (poll_wrapper_0x80045464(0) == 0) ;     // SPU write drains
+        if (r >= 0) break;                     // done (s4 = r)
+      }
+    done:
+      free(buf);                               // 0x8002EAA0 = A0#0x34
+      return (s16)r;                           // last TransBodyPartly result
+    }
+
+Confirms d4040af's semantics line by line and adds: the FIFTH CD-cluster
+member 0x8003933C(&st) -> pos (advancing +0x80 per chunk, feeding
+0x80039238 = the CdPosToInt-style converter); the four print strings
+0x80020920 (struct fill failed) / 0x8002095C (malloc failed) / 0x80020988
+(progress) / 0x80020998 (poll error); the read kickoff call is
+(0x80 sectors, buf, mode 0x80) with the mode constant in BOTH a0 and a2
+slots' delay; the vab arg is (s16)-cast via sll/sra; the TransBodyPartly
+poll spin and the bgez exit; free() on BOTH exits.
+
+CONSEQUENCE (sharpened): the VB data path is disc -> loader's OWN
+malloc(0x40000) buffer -> SsVabTransBodyPartly (whose internal 0x8003E48C
+write consumes the buffer address directly) -> SPU-RAM. fload3's gp+0xC0
+whole-file buffer is NOT this loader's source, and staging 0x800659A8 is
+NOT in this path at all. The banked "SE.VB body travels heap -> staging ->
+SPU-RAM" reading (cron-20261016-1857) is REFUTED for the func-#56 path.
+
+### The staging question closes as a boot-side negative (three censuses)
+
+1. DISP CENSUS: zero lw/sw/sh/sb with displacement 0x174 or 0x19C anywhere
+   in the payload (62,542 linearly decoded insns, brute-checked). The two
+   hypothesized base+offset paths (read-state 0x8006580C+0x19C, struct
+   0x80065834+0x174) DO NOT EXIST at mem-op level.
+2. MATERIALIZATION CENSUS: exactly ONE lui+addiu pair produces 0x800659A8
+   in the whole payload - the reader extent-1 issuer arg at 0x80048A44-48
+   (lui a1,0x8006; addiu 0x59a8; jal 0x8003DF54 at 0x80048A4C). The
+   extent-2 duplicate the 1857 section banked at framed-VA 0x8004EBA4-8 is
+   the loop-rotated copy of the same materialization.
+3. READ-DEST CENSUS: all FOUR jal sites of the read kickoff 0x800391B8
+   enumerated: 0x8002C938 (the chunked loader -> its own malloc'd buffer),
+   0x8002CB94 (a1 = lw 0xC0($gp) - fload3's heap buffer), 0x8002D91C
+   (a1 = lw 0xCC($gp) - the gp+0xCC static, see below), 0x8002DABC
+   (a1 = s1, register-held). NO site passes staging; together with (1)+(2)
+   and the 1857 negatives (zero gp-relative refs, zero addiu-chains), NO
+   static path in the boot payload writes staging.
+4. HOOK CENSUS: the reader-parked hook *0x80065DE8 has NO nonzero writer in
+   the boot payload (writers: init zero 0x8003D6C8, zero 0x80044048, the
+   reader's own park/restore pair 0x80048A10/0x80048A9C). Its installer is
+   runtime/game-side - the hook hypothesis for the staging fill survives
+   as the ONLY remaining boot-side candidate, but the boot never arms it.
+
+CONCLUSION: within the boot payload the staging fill does not exist as a
+static path. The fill (if the reader's banks are ever loaded from disc
+through it) must arrive through a runtime-computed pointer parked in one of
+the still-unattributed file-zero slots (below) or through the game-side
+linked copy of this cluster. The reader decode's own semantics give the
+alternative: its banks may be fed by the SE-command interpreter's record
+stream, not by a disc read at all - parked.
+
+### The file-zero statics get their first writer map (slps, true view)
+
+Init 0x8003CF34 (s0 = a0 in): jal 0x8002EAD0(a0); jal 0x8003D134(a0=s0);
+jal 0x8003CFFC (the event installer); then *0x80065950 = 0;
+*0x80065954/56 = 0 (sh); *0x80065958/5C = 0; a1 = device_table[*0x80065950]
+(the 0x80065E0C table read through <<2); *0x80065944 = 0; *0x80065948 = 0;
+*0x80065960 = a1; jal 0x8003E2EC(0xD1, device_table[dev], 0) - the
+call-through fires AT INIT with the bank constant; then *0x80065940 = 0;
+*0x80065DCC = 0; *0x80065994 = 0; *0x800659A0 = 0; *0x800659A4 = 0.
+Setter 0x8003CF00(a0): validates {0,1}, *0x80065940 = a0, *0x80065DCC =
+(a0 == 0). THE TRANSFER-MODE PAIR IS (0x80065940, 0x80065DCC) - one
+function owns both, confirming the reader's park/restore pairing.
+Installer 0x8003CFFC: once-flag *0x80065DA8 (file-zero, set to 1);
+*0x8006593C = 0; jal 0x8002F87C; a0 = 0x8004DBB8 ->
+jal 0x8003D080 -> jal 0x8002EB30(4, 0x8004DBB8) - handler 0x8004DBB8
+registered through the int.c manager under class 4; then
+OpenEvent(0xF0000009, 0x20, 0x2000, 0) via 0x8002F97C with a3 = 0 ->
+*0x80065998 = desc; jal 0x8002F8CC; jal 0x8002F9AC (EnableEvent-class
+pair). THE BANKED 0xF0000009/0x20 event-waiter now has its INSTALL SITE.
+Slot identities so far: *0x80065950 = cur-dev INDEX (not a pointer);
+*0x80065960 = device_table[cur_dev] bank constant (not a pointer) - both
+corrections to the 1857 "pointer statics" hypothesis; *0x80065954/56/58/5C
+= the issuer-arg slot quad the wrapper zone (0x80047Fxx-0x800482xx) reads
+and writes; *0x80065944/48/94/A0/A4/93C still unattributed.
+
+### gp+0xCC is a real second buffer static (the 4th read-dest's source)
+
+Brute census (both views agree, 8 hits each): gp+0xCC = 0x800663F8 is read
+7x / written 2x in the 0x8002D79C..0x8002D984 zone: sw zero 0x8002D7B0
+(clear), sw v0 0x8002D8A4 (THE INSTALLER - value source not yet decoded),
+and the read kickoff's a1 at 0x8002D91C after a jal 0x80038CAC(a0=0,
+a1=sp+0x10) + bne v0,2 status gate. gp+0xC4/gp+0xC8 (0x800663F0/F4) form a
+slot pair in the same zone (cleared 0x8002D100-D104; writers 0x8002D6AC/
+D6D4). The zone 0x8002D6xx-0x8002D9xx = the next decode target: whoever
+installs gp+0xCC decides whether a disc read can reach a runtime-parked
+buffer that the SE path consumes.
+
+### Read-state + TransBodyPartly static access map (census F, abridged)
+
+The read-state window 0x8006580C..0x80065830 is touched by the
+0x8003A57C..0x8003AC44 cluster: the drain machinery materializes the DEST
+field 0x80065814 (0x8003AB68) and the per-slot writers 0x8003AB7C (state+4)
+/ 0x8003AB98 (state) / 0x8003ABA4-AC (saved callbacks 0x8006582C/30) /
+0x8003AB3C-5C (cursor 0x80065820). The TransBodyPartly statics map clean:
+remaining 0x80065934 + cur-vab 0x80065938 written only inside 0x8003CDEC..
+0x8003CEC8 (the member's own body) and read at 0x8003CE64/94.
+
+Gates: docs-only (decode + censuses banked; the byte windows and scripts
+stay repo-external per the no-commit rule); no carve action; matched 230;
+ratchets 365/0; 8/8 verify GREEN untouched (nothing build-adjacent
+touched); the disc re-provision was re-exercised for the fourth time
+(sha256s exact, true witnesses reproduced).
+
+Next queue:
+1. The 0x8002D6xx-0x8002D9xx zone: decode the gp+0xCC installer (0x8002D8A4
+   context) and the 4th read-dest path (0x8002DABC's a1 = s1 source); then
+   the same zone's status-gate function around jal 0x80038CAC.
+2. sces twin columns for today's map (the -0x1E4 call-site / -0x370
+   static-shift laws apply; brute word scans per view, then code-identity
+   anchors) - cheap and closes the region-pair bookkeeping.
+3. The reader's remaining opens stay parked (allocation-map producer, the
+   OpenEvent descriptor's DeliverEvent path, complement-table consumer);
+   the frame-0x90 orchestrator head boundary (standing).
+4. Lanes stay theirs (matching lane: GsMapModelingData probes + GTE
+   families; GSD round-5 adopt/reject; setIntr/startIntr/trapIntr; coddog
+   transplant); BIG de-frame coordination-gated; runtime gate-family
+   blocked.
