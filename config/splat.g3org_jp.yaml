@@ -466,9 +466,9 @@ segments:
       - [0x3FAF4, data, data_8005F2F4]   # 0xec
       - [0x3FBE0, asm, func_8005F3E0]   # 0xc
       - [0x3FBEC, asm, func_8005F3EC]   # 0x304 sdk
-      - [0x3FEF0, asm, func_8005F6F0]   # 0x2c sdk
-      - [0x3FF1C, asm, func_8005F71C]   # 0x54 sdk
-      - [0x3FF70, asm, func_8005F770]   # 0x28 sdk
+      - [0x3FEF0, c, RotTransPers]   # 0x2c sdk
+      - [0x3FF1C, c, RotTransPers3]   # 0x54 sdk
+      - [0x3FF70, c, RotTrans]   # 0x28 sdk
       - [0x3FF98, asm, func_8005F798]   # 0x24 sdk
       - [0x3FFBC, asm, func_8005F7BC]   # 0x1c sdk
       - [0x3FFD8, asm, func_8005F7D8]   # 0x1c sdk

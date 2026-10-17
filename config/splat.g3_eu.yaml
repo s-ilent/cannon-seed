@@ -335,7 +335,7 @@ segments:
       - [0x37668, data, data_80056E68]   # 0x120
       - [0x37788, asm, func_80056F88]   # 0xb8 sdk
       - [0x37840, data, data_80057040]   # 0x1860
-      - [0x390A0, asm, func_800588A0]   # 0x28 sdk
+      - [0x390A0, c, LightColor]   # 0x28 sdk
       - [0x390C8, asm, func_800588C8]   # 0x28 sdk
       - [0x390F0, asm, func_800588F0]   # 0x3c sdk
       - [0x3912C, asm, func_8005892C]   # 0x24 sdk
@@ -422,9 +422,9 @@ segments:
       - [0x42134, asm, func_80061934]   # 0x2a4 sdk
       - [0x423D8, data, data_80061BD8]   # 0x6a8
       - [0x42A80, c, func_80062280]   # 0x8
-      - [0x42A88, asm, func_80062288]   # 0x2c sdk
-      - [0x42AB4, asm, func_800622B4]   # 0x54 sdk
-      - [0x42B08, asm, func_80062308]   # 0x28 sdk
+      - [0x42A88, c, RotTransPers]   # 0x2c sdk
+      - [0x42AB4, c, RotTransPers3]   # 0x54 sdk
+      - [0x42B08, c, RotTrans]   # 0x28 sdk
       - [0x42B30, asm, func_80062330]   # 0x24 sdk
       - [0x42B54, asm, func_80062354]   # 0x1c sdk
       - [0x42B70, asm, func_80062370]   # 0x1c sdk

@@ -223,7 +223,7 @@ segments:
       - [0x19C50, data, data_80039450]   # 0x1a0
       - [0x19DF0, asm, func_800395F0]   # 0x3bc
       - [0x1A1AC, data, data_800399AC]   # 0x4
-      - [0x1A1B0, asm, func_800399B0]   # 0x28 sdk
+      - [0x1A1B0, c, LightColor]   # 0x28 sdk
       - [0x1A1D8, asm, func_800399D8]   # 0x28 sdk
       - [0x1A200, asm, func_80039A00]   # 0x3c sdk
       - [0x1A23C, asm, func_80039A3C]   # 0x24 sdk
