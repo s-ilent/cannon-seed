@@ -6049,3 +6049,64 @@ Next queue:
 4. Lanes stay theirs (matching lane: GTE families + _SsUtBuildADSR register
    permutation; GSD round-5; setIntr/startIntr/trapIntr; coddog transplant);
    BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-17 (window cron-20261017-1227): GsMapModelingData probes A+B run -
+## the pad's source is the FOR form itself, probe A is anti-productive there,
+## probe B is analytically incompatible; the row parks as a scheduling corner
+
+Resumed the 2026-10-16 walk-fold census's two open probes (queue item 1 of
+cron-20261016-2242). The eaten shelf was re-derived from the census text
+itself; the shape battery + per-shape gcc dumps live repo-external at
+scripts/gmmd_probe*.sh + scripts/gmmd_out/ (regenerable; the repo-side tree
+was restored to HEAD before commit - no yaml row flipped, no src added).
+
+* THE PAD LAW, SOURCE FOUND: the FOR form generates the retail 8-byte
+  prologue pad. `for (i = 0; i < count; i++)` makes gcc allocate vars=8
+  (the induction variable's frame slot - reserved, never stored; i itself
+  stays in $7) and schedules `addiu sp,-8` into the guard bnez's delay
+  slot with `addiu sp,8` at the join - exactly retail's placement and
+  size (judge SIZE 120 on g3_jp). Every do-while/decl-init shape is
+  frameless (SIZE 112 = 0x70).
+* PROBE A REJECTED for the for-family: decl-init i (top of function)
+  makes gcc sink `move $7,$0` into the OUTER bnez delay slot, un-constfold
+  the entry test (blez -> slt/beq pair, +2 insns) AND drop the frame
+  (SIZE 124 -> wrong insns, not just placement). On the do-while family
+  it lands i=0 in the bnez delay slot - still the wrong slot. The i=0
+  position cannot come from source order; it must come from scheduler
+  pressure occupying the delay slots (the pad itself, if the body shape
+  ever lets the pad and the walk2 share the two delay slots correctly).
+* PROBE B REJECTED analytically: `count = mdata[1]` is one disp-4 load;
+  retail is addiu a0,4 + disp-0 load + a SECOND addiu a0,4 (delayed into
+  the blez delay slot). No C shape emits the two-addiu walk through a
+  mdata[1] read - insn-count mismatch before the judge runs.
+* for-header `i++, p += 7` also drops the frame and adds the slt/beq
+  entry test (SIZE 124). The v3 for-form stays the best head shape.
+* The remaining coupled delta cluster (all measured, g3_jp judge): (1) the
+  body's pointer split - gcc CSEs p+8 into a derived register and walks
+  it in the backedge delay slot; retail keeps ONE pointer (a1) with disps
+  0/0x10/8; (2) i++ schedules second, retail first; (3) the p[4] load
+  stays below the p[0] store, retail hoists both loads above it; (4) the
+  second walk eager-temperizes ($6 = a0+4 + copy-back) instead of sinking
+  into the blez delay slot; (5) i=0 in the blez delay slot instead of
+  between walk 1 and the count load. Items 1-4 are one scheduler shape;
+  5 is the census's standing law-5 delta.
+* PARKED per the resume queue's own park rule. The fold law, the
+  pad-displacement law and the new frame law stand regardless. A future
+  attempt should start from the v3 for-form (scripts/gmmd_out/v3_for.gcc.s
+  is the closest built shape: frame + delay-slot pad + blez entry test
+  all correct) and attack cluster item 1 first - defeating the p+8 CSE
+  without volatile (law 2's 0x10 frame) and without barrier displacement
+  (law 4).
+
+Next queue:
+1. GsMapModelingData stays parked as above (one scheduler shape from
+   EXACT; v3_for is the base to iterate from).
+2. _SsUtBuildADSR register permutation (standing, lane-owned).
+3. The exact-100% pick list is otherwise walk fragments (func_8002E148 +
+   func_8002E1A8 in the func_8002DE00 parent branch into each other and
+   tail-jump into labels inside the func_8002C478 region - Witness-A-class
+   carve-view fragments, not standalone functions; the singleton 0x10/0x8
+   rows are epilogue fragments of walked parents). Do NOT carve them as C.
+4. Disc-gated items (EU "VOICE=%d" directory listing, SE.VH/SE.VB diff,
+   tail witnesses) still blocked: disk/ wiped again this window, CDN links
+   expired ~2026-10-17 09:54 UTC - fresh links requested in #dragoon.
