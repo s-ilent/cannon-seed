@@ -7547,3 +7547,130 @@ Next queue:
    pocket-split caveat as the setter: de-frame territory).
 4. GsMapModelingData stays the matching lane's; BIG de-frame
    coordination-gated.
+
+## 2026-10-18 (window cron-20261018-1049): the rec1 writer/reader pair closes
+## as the first fully-decoded true-view artifacts - the case->offset map, the
+## dead 22nd store bodies, the blind-anchor jtbl confirmation, and the named
+## structural blocker that moves the switch-class C match to the de-frame
+## transition
+
+Queue item 1 (the 0934 window's next queue): pair the gameinfo family's first
+C candidates JP/EU and try the C match. Sandbox rollback pre-window: repo back
+to 7623cd2, worklog tail lost past cron-20261014-2112 (TASKS.md remains the
+authoritative history), disk/*.chd + disc_work + repo-external scripts eaten,
+and tools/cc.sh's exec bit flipped off (build.sh calls it directly; chmod is
+git-invisible, tree stays clean). Recovered 7623cd2 -> 85abac11 (fetch +
+reset; origin had moved: the gameinfo carve pair 2be1f211/5d3de8e4 and the
+matching lane's GsMapModelingData opening 74237696/5bb585d5 landed in
+parallel). Disc assets: both CHDs missing AND the 2026-10-17 CDN links past
+their ~09:54 UTC expiry - the standing rule's both-conditions-met case - so a
+fresh-link request went to Silent in #dragoon at window start. The window
+runs repo-side only; baselines/ survived this rollback.
+
+THE JP/EU PAIRING (region-pair discipline, proved at word level): the writer
+(slps carve func_80024D90 = true 0x800242E0, 0x144; sces carve func_80024DB8 =
+true 0x80024308, 0x144) and the reader (slps carve func_80024ED4 = true
+0x80024424, 0x1A8; sces carve func_80024EFC = true 0x8002444C, 0x1A8) have
+IDENTICAL instruction sequences in all four copies. True addresses differ by
+exactly +0x28 (the constant-stride law, now confirmed at instruction
+granularity); the only per-boot words are the dispatch table base, the assert
+string pairs and the assert callee. One compiled unit; one C source; two
+per-target files when the match lands.
+
+THE TRUE-VIEW DECODE (the conversion artifact this window produces): both
+boots' de-framed payloads extracted with tools/deframe.py --payload
+(repo-external, /home/z/disc_work/true/); scripts/true_view_gameinfo.py
+disassembles the four functions and decodes their dispatch tables at their
+TRUE addresses:
+
+- Dispatch tables: slps writer 0x8002040C, slps reader 0x8002056C, sces
+  writer 0x80020418, sces reader 0x80020578 - all true addresses, 0x49
+  entries each (switch value = id - 0x10, range-checked against 0x49).
+- Every entry: 21 wired case bodies + 52 default entries. Default = the
+  assert/report tail, which is ALSO the bne target - the C source is a
+  switch with 21 cases and a default that calls the reporter; GCC emits
+  the range guard to the default and fills unwired entries with it.
+- The case->offset map (entry = 44 bytes at 0x80010008 + idx*44, 22
+  halfwords; f = e + 3 halfwords): 0x10 e[0], 0x11 e[1], 0x12 e[2];
+  0x20 f[0], 0x21 f[1], 0x22 f[2], 0x23 f[3], 0x24 f[4]; 0x30 f[5];
+  0x40 f[6], 0x41 f[7], 0x42 f[8]; 0x50 f[9], 0x51 f[10], 0x52 f[12],
+  0x53 f[14], 0x54 f[16], 0x55 f[18], 0x56 f[11], 0x57 f[13], 0x58 f[15].
+  Halfword f[17] (entry byte 0x28) has NO case in either function.
+- THE DEAD 22ND BODY: each function carries one more store/load body than
+  the table wires (writer sh 0x22(v1) = f[17] between the 0x58 and 0x55
+  bodies; reader lhu 0x22(v1) likewise). A whole-payload scan finds ZERO
+  j/jal/branch references to those bodies in EITHER boot - the original
+  compiled unit emitted dead store code its own jump table never
+  selects. Byte-faithful C must reproduce it; a plain 21-case switch
+  emits 21 bodies. Open shaping question.
+- Assert facts: writer id 0x1EA (slps string true 0x800203D4, sces
+  0x800203E0; callee true 0x8002DC10 slps / 0x8002DA04 sces), reader id
+  0x241 (slps string true 0x80020534, sces 0x80020540); name-string
+  0x80020080 slps / 0x8002008C sces. Reader join: case bodies end
+  [lhu s0][j join][sll v0,s0,16 in the delay slot] into the shared
+  sra/lw/lw/jr epilogue; the assert path re-enters at the same sll.
+- Writer base materialization is lui+ori 0x80010008 (ori, not addiu) -
+  matches the probe idiom; the *44 expansion is sll/addu/sll/subu/sll.
+
+THE BLIND-ANCHOR CONFIRMATION (5a4cc6d6's mechanism, now witnessed at the
+byte level): splat names jtbl_8002040C/jtbl_8002056C at the CARVE positions
+of the encoded reference values - but those encodings are TRUE addresses, so
+the carve labels sit 0x130 early and cover string bytes ("(info tag...\n)"
+and friends), while the real table words live at carve 0x8002053C/0x8002068C.
+Same law for every j/jal in the family: the carve `j D_80024414` case tails
+encode the TRUE epilogue 0x80024414, and the build stays byte-exact only
+because a (blind) data label exists at carve 0x80024414 for the assembler to
+re-encode. The carve view is self-consistent byte-wise and wrong code-wise;
+the true view is self-consistent both ways.
+
+THE STRUCTURAL BLOCKER (why the switch-class C match moves to the de-frame
+transition): a carve-space C recompile of either function re-encodes every
+address-bearing word at its carve address, and the retail bytes hold true
+addresses. Three independent failures: (a) the C-emitted jump table would
+extend the row past the pin boundary into the reader row (the retail table
+lives 0x130 earlier in carve terms); (b) the table entries would encode
+carve case-body addresses (0x80024DFC-form) where retail holds true
+(0x8002434C-form); (c) the case j targets, assert jal and assert string
+pairs all shift by the local drift the same way. The pinned-asm round-trip
+survives only through blind-anchor labels; no C source can. Measured pairs
+banked: case j retail 0x80024414 vs carve-link 0x80024EC4; assert jal retail
+0x8002DC10 (slps true) vs carve-link 0x8002DC10-at-carve (the label position,
+0x1C80 above the true callee).
+
+THE C DRAFTS (probes/gcc263/gameinfo_rec1.c, not part of any build target):
+both functions drafted from the decode - exact case map, switch + default
+form, e/f pointer pair. cc.sh -S shaping ledger: draft writer 101 insns vs
+retail 81; already exact are the *44 expansion, the lui+ori base, fid's
+addiu/sll/sra shortening, f = e+3 hoisted into the guard branch's delay
+slot, the dispatch train, and the [j epilogue][sh] body shape. Open deltas:
+the guard form (draft sltu imm + beq-over vs retail ori 0x49 + sltu v0,v0,a0
++ bne-to - the (const, a0) operand order with the constant materialized; the
+explicit const-first `if` variant tried and rejected at 120 insns - it
+defeats the guard/default merge), the dead 22nd body's source form, and
+default-body block placement. These converge at the de-frame transition,
+where the encodings can be checked against the true view directly.
+
+Gates: make verify slps_00270 GREEN (290,816 bytes exact, pc0 0x8002DB14) and
+sces_00269 GREEN (290,816 bytes exact, pc0 0x8002D908) after the rollback
+recovery; the window touches only probes/ + docs, so the other six targets'
+inputs are byte-unchanged and the last full 8/8 proof stands; matched 174;
+ratchets untouched (365/0). Tree clean, pushed.
+
+Next queue:
+1. The de-frame transition now has THREE concrete drivers banked (the twin
+   islands, the gameinfo carve family, the rec1 switch pair): the true-view
+   decode artifacts are ready and the blocker is structural. Still
+   coordination-gated - the lane owner decides the oracle question (framed
+   vs de-framed) and the transition plan.
+2. slps_00270's parallel scan (0934 queue item 2, lane owner): its committed
+   asm tree still shows the pre-carve partitioning (func_80024D90 splits
+   0x100+0x1C+0x28; func_80024ED4 splits 0xC+0x16C+0x2C+0x4) - bytes
+   identical, verify green, but the extract predates the pin. The next live
+   scan/extract converges it; the walk across the pre-builder cluster should
+   reproduce the sces finding at -0x28.
+3. The setter dispatcher (true 0x80023DC0, left as data with its islands):
+   its own jump table sits at carve 0x80020444 (entries = true setter-island
+   addresses 0x80023E00..0x8002427C, decode-ready with the same script) - the
+   same true-view treatment applies when its turn comes.
+4. GsMapModelingData stays the matching lane's; disc re-provision follow-ups
+   wait on the fresh CDN links (requested in #dragoon).
