@@ -7467,3 +7467,83 @@ Next queue:
    pocket-split caveat as the setter: de-frame territory).
 4. The func_80025AB0 ghost cleanup; GsMapModelingData stays the parallel
    lane's; BIG de-frame coordination-gated.
+
+## 2026-10-18 (window cron-20261018-0934): sces_00269 gets the same gameinfo
+## treatment and the region pair lands - the deframe map puts the family at
+## carve positions 0x28 below-and-right of slps's, four member islands are
+## pinned free plus the shrunk getter row, and the scanner answers the pin
+## boundary by freeing the pre-builder code cluster on its own
+
+Queue item 1 (the 0819 window's next queue). Sandbox rollback pre-window:
+worklog tail lost past cron-20261014-2112 (TASKS.md remains the authoritative
+per-window history), disc/*.chd + disc_work + repo-external scripts eaten;
+both CHDs re-fetched foreground while the CDN links were still live and
+sha256-exact x2 - this was the last valid window before the ~09:54 UTC
+expiry. Repo recovered 7623cd2 -> 5a4cc6d6.
+
+THE CONSTANT-STRIDE LAW, now proven on a second boot: the family layout is
+identical in both boots (same compiled unit, same relative offsets). Predicted
+sces members = slps members + 0x28, and every prediction decoded byte-clean
+from the per-sector TRUE view on the first try:
+
+- builder        0x80023AD8 -> carve 0x80024458, extent 0x2E8, pocket-free
+                 (head lui a3,0x8001 / sh zero,0(a3) - the slps head exactly)
+- setter disp.   0x80023DC0 -> carve 0x80024740, true extent 0x3B4, left as
+                 data (data_80024740, 0x4E4 incl. the 0x130 pocket at carve
+                 0x80024980..0x80024AB0 - the SAME carve pocket as slps)
+- getter disp.   0x80024174 -> carve 0x80024C24 = the EXISTING func_80024C24
+                 row; true extent 0x194 (old row 0x6c8 was walk-inflated)
+- rec1 writer    0x80024308 -> carve 0x80024DB8, extent 0x144, pocket-free
+- rec1 reader    0x8002444C -> carve 0x80024EFC, extent 0x1A8, pocket-free
+- B-tail member  0x800245F4 -> carve 0x800250A4, true extent 0x234
+
+THE ONE SCE-SPECIFIC WRINKLE: the +0x28 carve shift pushes the B-tail's last
+0x28 true bytes past pocket P2 (carve [0x800252B0..0x800253E0), identical
+position in both boots - the pocket grid is file-absolute). slps's B-tail
+true extent fits entirely before its pocket; sces's leaves a 0x28 remainder
+that lands inside data_800252EC. Mirror of slps applied: the pin runs to the
+row boundary (0x248 = 0x20C true code + 0x3C pocket head), the remainder
+stays data in data_800252EC. The de-frame transition re-derives both.
+
+THE SCANNER'S ANSWER (new evidence, accepted): with the pins in place the
+scan walked carve [0x4974..0x4C58) as func_80024174 (0x2e4) and closed
+exactly at the builder pin's start - the pin-boundary closure mechanism
+working as designed. The content is REAL pre-builder code (clean loops, an
+internal jal, epilogues at true 0x80023AC8/0x80023AD0, builder prologue
+follows). Two facts banked: (a) the walk head includes the 0xC pocket-P0
+tail, so spimdisasm words out the head and re-syncs at func_800241A4 -
+byte-preserving, verify-exact; (b) the stem is a DRIFT NAME: carve
+0x80024174 names this cluster, while TRUE runtime 0x80024174 is the getter
+dispatcher. True identity of the walk: carve [0x4980..0x4C58) = true
+[0x80023800..0x80023AD8). The deframe map reconciles; do not confuse the
+two namespaces when carrying census evidence.
+
+SYMBOLS-FILE ANNOTATION NOTE (not a regression): the scan stripped 25
+"(pinned member row)" suffixes from c rows (SetVertex0-class, 17 GTE names +
+8 more). That is 0211cde's documented writer contract applied live for the
+first time on this target (c rows emit plain type:func; the C object file
+defines the real symbol). The other seven targets' symbols files are stale
+on this annotation class - their next live re-scans will converge; no
+action needed now. Also gone: the 13 ghost branch-target symbols inside the
+old inflated getter row (they named bytes the repartition re-owned), and
+the getter's curated-name entry moved to the walked row per the writer's
+ranges emission.
+
+Gates: make verify sces_00269 GREEN (290,816 bytes exact, pc0 0x8002D908);
+back-to-back scan idempotent (yaml + symbols byte-identical); only
+sces_00269 split rows touched - the other seven targets' inputs are
+byte-unchanged and the last full 8/8 proof stands; matched 174; ratchets
+untouched (365/0).
+
+Next queue:
+1. The family's first C candidates: rec1 writer (0x144) and rec1 reader
+   (0x1A8) are small register-indexed leaves, now pinned in BOTH boots -
+   pair them JP/EU per the region-pair discipline and try the C match.
+2. slps_00270's parallel scan: its data_8002376C still covers the
+   pre-builder cluster; its next live scan should find the same walk
+   (predicted: carve [0x4974..0x4C30) closing at slps's builder pin) - the
+   lane owner applies the same acceptance and documentation.
+3. Array-writer and deep-writer islands after their host rows split (same
+   pocket-split caveat as the setter: de-frame territory).
+4. GsMapModelingData stays the matching lane's; BIG de-frame
+   coordination-gated.
