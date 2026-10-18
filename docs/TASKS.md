@@ -3381,6 +3381,11 @@ three "%s\n" copies (payload 0x11BF/0x142C/0x14AE slps; 0x119B/0x1438/0x14BA
 sces - odd offsets, the gameinfo.c string pool) are the real printf-format
 copies. A0 thunks pinned: 0x8002dc10 = A0#0x3F strcpy, 0x8002dc00 =
 A0#0x15 strcat, 0x8002f92c = A0#0x51 sprintf (the $t1/$t2 convention).
+[SUPERSEDED 2026-10-18: A0#0x3F is printf, SDK-attested (psyq 3.3 LIBAPI:
+A0 0x3F = printf, strcpy is the separate A0 0x19 slot) - 0x8002dc10 is the
+printf stub. The InitPAD readings above also predate the pad-cluster
+closure (61c376d8: no InitPAD stub exists in either boot). See the A0#0x3F
+closure entry at the end of this log.]
 
 Gates: docs-only; matched 174; ratchets 365/0; 8/8 verify GREEN untouched
 (no build-side file touched).
@@ -3840,7 +3845,9 @@ semantics from usage; ordinal 43 unnamed in the census).
 A0#0x3F CONFLICT FLAG: the docs pin A0#0x3F = strcpy from the InitPAD site;
 BOTH fault-report sites decoded here pass a bare literal string with no
 argument setup ("FLOAD:fault!\n", "CD open(%02x)...") - print-shaped. The
-strcpy pin needs re-review in the sdk lane before adoption.
+strcpy pin needs re-review in the sdk lane before adoption. [CLOSED
+2026-10-18: settled for printf, SDK-attested - see the A0#0x3F closure
+entry at the end of this log.]
 
 Gates: docs-only (addresses and strings, no extracted assets); no carve
 action; matched 174; ratchets 365/0; 8/8 verify GREEN untouched. Disc assets
@@ -3902,6 +3909,7 @@ data row data_8002C7C0 - the walk refused it, the bytes are code):
      the (%s) is passed NO argument (a1 never set) - the THIRD print-shaped
      witness for the A0#0x3F conflict (with "FLOAD:fault!\n" and
      "CD open(%02x)..."); the strcpy pin needs its sdk-lane re-review.
+     [CLOSED 2026-10-18: printf, SDK-attested.]
   2. size = rec.size (sp+0x1C); n = ceil(size/0x800) via GCC's signed
      division idiom (bgez-guarded addiu 0x7FF, sra 11 = floor; rounddown
      compare; +1 when the size is not sector-aligned) - malloc size is
@@ -6681,7 +6689,7 @@ fingerprints.
   sdk lane: the sig tables at /home/z/psyq-sigs/330 are back too.
 - Stays open: the game-internal CD engine depth (0x8003ABF4 poll vs the parked
   globals 0x800658xx) remains its own item; A0#0x3F strcpy-conflict stays with the
-  sdk lane; the slps twin ADDRESSES of fload_open_retry/prep are unlocated (expected
+  sdk lane [closed 2026-10-18: printf, SDK-attested - see the closure entry]; the slps twin ADDRESSES of fload_open_retry/prep are unlocated (expected
   present-but-uncalled; findable by the same string-xref recipe when a lane needs
   them).
 - Gates: docs-only commit; no carve/build action; matched 174, ratchets 365/0, 8/8
@@ -6959,3 +6967,55 @@ Next queue:
    setter, [0x10] 0x8002f080 and [0x18] 0x8002f130 flag-gated pair, and the
    runtime-installed [0x4]/[0x14] handlers) are one decode away each if a
    future window wants the rest of the family named.
+
+## 2026-10-18 (window cron-20261018-0319): the A0#0x3F strcpy pin re-review
+## closes - printf stands SDK-attested, the curated placements needed no edit,
+## and the four stale doc pins are marked superseded inline
+
+Method: the psyq 3.3 assets were re-provisioned repo-external (sozud/psy-q
+sparse clone: 21 LIBs + 36 headers; sigs pending re-clone), and the (vector,
+index) -> member-name table was rebuilt first-hand over the LIBs (126 names,
+tools/sdk_symbols.py build_table) rather than cited from the census.
+
+- THE ATTESTATION, FIRST-HAND: A0 0x3F = printf, and strcpy is a DIFFERENT
+  member with its OWN ordinal (A0 0x19 = strcpy). Neighbours confirmed
+  against the banked census: A0 0x15 = strcat, 0x17 = strcmp, 0x18 =
+  strncmp, 0x1A = strncpy, 0x1B = strlen, 0x2B = memset, 0x33 = malloc,
+  0x34 = free, 0x39 = InitHeap, 0x3A = _exit; B0 0x12/0x13/0x14 =
+  InitPAD/StartPAD/StopPAD, 0x15 = PAD_init, 0x16 = PAD_dr. The census's
+  54dc17f8 names reproduce exactly.
+- THE CURATED FILE NEEDED NO EDIT: both boots already carry printf and
+  strcpy as separate sdk_members placements (sces_00269 printf 0x8002FB44 /
+  strcpy 0x8002FB74; slps_00270 printf 0x8002FD50 / strcpy 0x8002FD80). The
+  slps strcpy carve pin 0x8002FD80 reconciles with the census's true-view
+  stub-table facts by exactly the census's drift law (+0x2140 at that
+  depth, the method warning's own figure), and the printf/strcpy slots sit
+  +0x30 apart in BOTH boots in BOTH views (true: 0x8002DC10 vs 0x8002DC40).
+  sdk_members.py's "unique placement" evidence was right for both members
+  all along; the error lived only in the docs' ordinal attribution.
+- THE PIN'S ORIGIN, RE-ATTRIBUTED: the pin grew from the InitPAD-site banner
+  copy ("PS-X Control PAD Driver  Ver 3.0" through the 0x8002dc10 thunk).
+  With A0#0x3F = printf the site is a printf site; the (%s)-with-no-argument
+  witnesses ("FLOAD:fault!\n", "CD open(%02x)...", the fload3() panic) stand
+  as the print-shaped readings. The passage that seeded the pin is
+  superseded on TWO counts - the ordinal (printf, not strcpy) and the pad
+  reading itself (61c376d8: no InitPAD stub exists in either boot; the pair
+  it describes is linked-but-unreached dead code).
+- INLINE MARKERS PLANTED at the four stale sites (original text stands, a
+  superseded/closed pointer appended; no history rewritten): the "A0 thunks
+  pinned" list (0x8002dc10 = A0#0x3F strcpy), the A0#0x3F CONFLICT FLAG
+  paragraph, the fload3() third-witness note, and the "stays with the sdk
+  lane" queue line.
+- Gates: docs-only; matched 174, ratchets 365/0, 8/8 verify GREEN unchanged
+  (no build-side file touched; no curated/scanner file touched).
+
+Next queue:
+1. The intr family's remaining members ([0x8] 0x8002ef2c, [0x10] 0x8002f080,
+   [0x18] 0x8002f130, runtime-installed [0x4] 0x8002f9dc / [0x14]
+   0x8002f1f4) - this window proceeds to them if the session allows; psyq
+   LIBETC.H's declared callback API (CheckCallback/ResetCallback/
+   RestartCallback/StopCallback/VSyncCallback/VSyncCallbacks) is now
+   available as naming evidence.
+2. (carried) The 0x80010000 config-area ownership question.
+3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+   trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
