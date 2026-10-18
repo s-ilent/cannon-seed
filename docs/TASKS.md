@@ -8528,3 +8528,98 @@ Next queue:
    class.
 4. make verify 8/8 true remains the gate once the name layer settles;
    audit_sizes + the judge sweep stand behind it.
+
+## 2026-10-19 (window cron-20261018-2334): the full per-target clash census - 94 dlabel clashes + 87 cross-file glabel dupes = 181 ld blockers across the 8 targets, one class, one re-scan fixes all
+
+Resumed per the 2219 queue's first item. HEAD was 7623cd2 (a NINTH
+rollback, this sandbox; the local worklog's post-cron-20261014-2112
+sections are gone from the local copy again - TASKS.md stays the
+authority). Reset forward to 6c88f316.
+
+BASELINE RE-WITNESS (again): disk/*.chd and the true baselines were
+eaten - baselines/ held the woven Oct-10 files (slps f2a13b52...). Both
+CHDs re-fetched from the still-valid CDN links (EU 382613010 / JP
+382607234 B, sha256 equal to the recorded values), raw images extracted
+(JP 267,504 sectors / EU 267,752), all 8 EXEs re-extracted --per-sector
+into baselines/. All 8 sha1s equal the committed true oracles
+byte-for-byte (slps fa9474b4, sces 06b4bda6, mainmenu_jp d637286a,
+mainmenu_eu f9f29eeb, g3_jp 994a680c, g3_eu 39030a75, g3org_jp 2b2a4225,
+g3org_eu 01b37b4e). The disc witness reproduces from a second cold
+sandbox; the CDN links stay valid until ~2026-10-19 09:54 UTC (no
+refresh needed, none requested).
+
+THE AUDIT TOOL IS NOW IN THE REPO: the 2219 window's repo-external
+audit script died with its rollback. tools/audit_flip_clashes.py
+re-creates it - post-extract .s parsing, a clash = a name exported as a
+glabel by one file AND placed as a dlabel inside a DIFFERENT file - and
+VALIDATES against the 2219 ground truth: slps_00270 reproduces exactly
+the 8 named instances with the same owner rows. Same-file
+glabel+dlabel pairs and cross-file glabel duplicates are reported as
+ERRORs. Committed this time: the census instrument must survive
+rollbacks.
+
+CENSUS BASIS: per-target WIPED extract (rm -rf the target's asm/
+subtree, then make extract). HEAD's asm/ carries stale woven-era rows
+splat never deletes - a fresh slps split drops 9 data rows +
+func_80031940 that HEAD's asm/ still holds - so an unwiped extract
+audits a polluted name space; the wiped basis is what the next
+split+link will actually see. asm/ was restored to HEAD after the
+audits; the census commits no generated output.
+
+THE CENSUS (dlabel-class / glabel-dupe-class / total):
+  slps_00270   8 /  1 /  9
+  sces_00269   2 /  6 /  8
+  mainmenu_jp 12 / 14 / 26
+  mainmenu_eu 14 / 13 / 27
+  g3_jp       15 / 12 / 27
+  g3_eu       10 / 12 / 22
+  g3org_jp    14 / 14 / 28
+  g3org_eu    19 / 15 / 34
+  TOTAL       94 / 87 / 181
+Full name-to-owner lists: wipe the target's asm/ subtree, make extract
+TARGET=<t>, then python3 tools/audit_flip_clashes.py <t> - deterministic,
+0.1 s, no inputs beyond the split output.
+
+THE NEW CLASS (same root cause, different spimdisasm path): the
+dlabel class is a context symbol inside a DATA row; the glabel-dupe
+class is a context symbol inside another FUNC row's true span -
+spimdisasm follows it as code and emits a nested "nonmatching func_X,
+0xNN" block with its own glabel, while the row named func_X also
+exports its glabel, giving two definitions of one name (ld "multiple
+definition"; INFERRED blocker - not yet link-witnessed; the link will
+trip it as soon as a target's dlabel class clears). Mechanism example
+(slps): the symbol func_8003BB78 sits at true address 0x8003BB78 inside
+func_8003FAA0's true span [0x8003B820,0x8003C000) - the woven-era name
+is a true-position address of a different row, exactly the 2219
+mechanism with the func-row path instead of the data-row path. Cascade
+chains exist: mainmenu_jp's func_80044D24 is nested in func_8004A38C.s
+while func_8004A38C is itself nested in func_800504F0.s. The re-scan
+(re-derive the woven-space names on the true baselines) resolves BOTH
+classes with one stroke; 181 instances is the bounded work order.
+
+PSYQ BEYOND-PAYLOAD STATICS (2219 queue item 3, evidence completed):
+the warning is on ALL EIGHT targets, not just mainmenu_jp - slps_00270:
+PSDIDX (0x8011C304) only; every other target: _svm_stereo_mono +
+PSDIDX (sces 0x80114578/0x8011C07C, mainmenu_jp 0x8018DA40/0x80194E34,
+mainmenu_eu 0x8018DB5C/0x80195748, g3_jp 0x8016AB68/0x80171E14,
+g3_eu 0x8016AC90/0x80172734, g3org_jp 0x8017881C/0x8017FAC8,
+g3org_eu 0x80178908/0x801803AC). The entries are byte-identical
+pre/post flip (the 2219 finding), so the warning is flip-INDEPENDENT -
+the woven pipeline hit it too (extract exits 0 regardless), and the
+woven LINK resolved the names, so a woven-era placement mechanism did
+exist; the lane's question stands - find it before touching the
+entries. splat's own hint: absolute:True (or a segment).
+
+Next queue:
+1. The re-scan/re-derivation of the woven-space names on the true
+   baselines (the yaml header's own phase; the flip lane's
+   adjudication) - the census above is the work order; both classes
+   are one fix.
+2. Witness the glabel-dupe class at the link (any target's first link
+   attempt after its dlabel class clears; sces_00269 has only 8
+   blockers total and is the cheapest full witness).
+3. psyq statics: identify the woven-era placement mechanism (splat
+   version behaviour? a since-changed yaml field?), then absolute:True
+   vs a passthrough class.
+4. make verify 8/8 true remains the gate once the name layer settles;
+   audit_sizes + the judge sweep stand behind it.
