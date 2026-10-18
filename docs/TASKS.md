@@ -7019,3 +7019,119 @@ Next queue:
 2. (carried) The 0x80010000 config-area ownership question.
 3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
    trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-18 (window cron-20261018-0319): the intr.c control-struct family
+## closes - every member named or shape-settled from psyq's own API and
+## LIBAPI table: [0x8] = the indexed callback setter (LIBETC.H's
+## VSyncCallbacks(int ch, void (*f)())), [0x10] = StopCallback, [0x18] =
+## RestartCallback, table[0x4] = the per-DMA-channel callback setter,
+## table[0x14] = the indexed side-table setter; the census's unnamed A0
+## ordinals settle as setjmp/_96_init/_96_remove; one delay-slot correction
+## to the banked reset reading
+
+Method: both boots re-extracted per-sector TRUE from the sha256-exact CHDs
+(disc_work/; head validation before use: sync pattern 0 bad over the checked
+window, PVD tag 01 CD001, "PS-X EXE" at LBA 24). Scripts repo-external:
+scripts/boot_true.py (true-view builder), scripts/intr_decode.py (capstone
+disasm + annotated lui/addiu pairing + payload-wide caller census with
+region-correct jal/j targets). psyq 3.3 assets re-provisioned repo-external
+(sozud/psy-q sparse: 21 LIBs + 36 headers; the (vector,index) -> name table
+rebuilt first-hand, 126 names).
+
+- THE STRUCT (slps 0x8004E304; sces 0x8004DF8C): [0x0] RCSid (intr.c v1.71 /
+  v1.73); [0x4] and [0x14] zero in file, runtime-filled at reset (see the
+  delay-slot correction below); [0x8] 0x8002EF2C / 0x8002EAF8; [0xc]
+  0x8002EC68 / 0x8002E834 (the banked reset/init); [0x10] 0x8002F080 /
+  0x8002EC4C; [0x18] 0x8002F130 / 0x8002ECFC; [0x1c] pool 0x8004D29C /
+  0x8004CF24; [0x20] self-pointer; [0x24] 0x1F801070. HW-cell block:
+  &I_STAT, &I_MASK, &DICR (0x8004E328/E32C/E330 slps), timeout counter
+  0x8004E334, plus two zeroed-at-init 8-word side tables at 0x8004E33C (DMA
+  handlers) and 0x8004E360, VBANK counter 0x8004E380, and a 0x107 seed cell.
+- [0x8] 0x8002EF2C = THE INDEXED (ch, handler) SETTER: node store/clear at
+  pool+0x4+ch*4 (0x8004D2A0..), enable-mask halfword pool+0x30
+  (0x8004D2CC), I_MASK shadowed to 0 across the update and restored; root
+  counter side-hooks per channel: ch 0 -> ChangeClearPAD(B0#0x5B)(installed)
+  + ChangeClearRCnt(C0#0x0A)(3, on/off); ch 4/5/6 -> ChangeClearRCnt(0/1/2,
+  on/off). Signature exactly matches LIBETC.H's declared VSyncCallbacks(int
+  ch, void (*f)()) - the only declared psyq 3.3 API with that shape; the
+  body manages ALL channels (0..10), so the name is the 3.3-era declared
+  spelling of the indexed interrupt-callback setter (the concept psyq later
+  spells InterruptCallback). Returns the previous handler.
+- [0x10] 0x8002F080 = StopCallback (flag-gated: must be initialized): saves
+  I_MASK -> pool+0x32 and DICR -> pool+0x34, masks everything (I_MASK = 0),
+  DICR &= 0x77777777, runs the a0=1 raw-syscall idiom, clears the flag,
+  returns 0.
+- [0x18] 0x8002F130 = RestartCallback (flag-gated: must NOT be initialized):
+  re-hooks HookEntryInt(B0#0x19) on the node 0x8004D2D4, restores the saved
+  I_MASK and DICR, sets the flag, runs the a0=2 raw-syscall tail. ZERO
+  payload callers - linked but unreached in the boot, the symmetric
+  complement of [0x10].
+- DELAY-SLOT CORRECTION to the 0204 reset reading: the two "runtime-fill"
+  stores sit in the DELAY SLOTS of the FOLLOWING calls, so they store the
+  PREVIOUS callee's return: table[0x14] = 0x8002F54C's return (0x8002F620),
+  table[0x4] = 0x8002F1F4's return (0x8002F3C8). The calls to 0x8002F1F4
+  and 0x8002F9DC do happen; the latter's (A0#0x72) return is discarded.
+- table[0x4] = 0x8002F3C8 = THE PER-DMA-CHANNEL CALLBACK SETTER
+  (DMACallback-shaped; psyq 3.3 declares no DMACallback/InterruptCallback
+  in any of the 36 headers, so the shape stands without a declared name):
+  indexed over the zeroed 8-word table 0x8004E33C, enables the channel via
+  DICR |= (1 << (ch+0x10)) | 0x80000000 (and clears it on uninstall),
+  returns the previous handler. 7 payload callers through the [0x4]
+  dispatcher 0x8002EB30 (0x8002FD6C, 0x80031C44, 0x80031EAC, 0x80037D58,
+  0x80037D7C, 0x80039160, 0x8003D08C) - the boot's DMA callback
+  registrations.
+- table[0x14] = 0x8002F620 = an indexed setter over the OTHER zeroed 8-word
+  side table 0x8004E360 (store-if-changed semantics). Its two dispatcher
+  shapes (0x8002EB64/0x8002EB94) have ZERO payload callers - kernel-reached
+  only. The 0x8004E360 table's consumers are not decoded this window.
+- THE INIT CHAIN, now end to end: [0xc] (banked) -> flag set -> 0x8002F54C:
+  *(seed cell) = 0x107, zeroes VBANK counter 0x8004E380, memclr(0x8004E360,
+  8) via the 0x8002F64C copy of the u32-zero loop, registers the VBANK
+  handler 0x8002F5A4 on channel 0 through [0x8] (VSyncCallbacks(0, ...)),
+  returns 0x8002F620 -> stored to table[0x14]; then 0x8002F1F4:
+  memclr(0x8004E33C, 8) via the 0x8002F470 copy, zeroes the timeout
+  counter, registers the DMA dispatcher 0x8002F244 on CHANNEL 3 through
+  [0x8] (VSyncCallbacks(3, ...)), returns 0x8002F3C8 -> stored to
+  table[0x4]. The DMA dispatcher's body (walks the 0x8004E33C table by the
+  top-byte flags of *(0x8004E338), masks 0xFFFF|per-channel) is visible at
+  0x8002F244 and coherent with the setter.
+- THE CENSUS'S THREE UNNAMED A0 ORDINALS SETTLE FROM PSYQ'S OWN TABLE: A0
+  0x13 = setjmp (the "probe": a0 = 0x8004D2D4 - INSIDE THE POOL - passed in
+  the jal's delay slot, correcting the census's "no args"; the non-zero
+  continuation is the longjmp re-entry arm), A0 0x71 = _96_init, A0 0x72 =
+  _96_remove (the reset's tail call 0x8002F9DC runs for side effect with a0
+  = the table pointer, return discarded). Also named: B0 0x17 =
+  ReturnFromException (the dispatcher-tail thunk 0x8002F9FC), B0 0x19 =
+  HookEntryInt (banked), C0 0x0A = ChangeClearRCnt (the RC hooks), B0 0x5B
+  = ChangeClearPAD (the ch-0 hook). The a0=1 and a0=2 raw-syscall idioms
+  (0x8002F87C / 0x8002F9AC) are not attributed to kernel dispatch ids from
+  primary evidence this window.
+- DISPATCHER CALLER CENSUS (region-correct jal/j + lui/addiu pools): [0xc]
+  0x8002EAD0 = 8 callers, EXACTLY the 0204 list (0x8002223C, 0x8002F4BC,
+  0x8002FA58, 0x80037BD0, 0x8003A5B4, 0x8003A634, 0x8003CF40, 0x80043570) -
+  independently re-verified; [0x8] 0x8002EB00 = 7 (0x8002F224 inside
+  0x8002F1F4, 0x8002F584 inside 0x8002F54C, 0x8003A5C4, 0x8003A644 -
+  adjacent to the [0xc] callers, 0x80043C78, 0x80043CC0, 0x80043DA0);
+  [0x4] = 7 (above); [0x10] 0x8002EBC4 = 4 (0x800218BC, 0x80021A2C,
+  0x80021F18, 0x8002D03C); [0x14] x2 and [0x18] = 0.
+- FRESH INDEPENDENT WITNESS for the A0#0x3F = printf settlement: the
+  default-handler/dispatcher 0x8002ED44 prints "unexpected interrupt(%04x)"
+  and "intr timeout(%04x:%04x)" through the 0x8002DC10 stub - the same slot
+  the old strcpy pin had claimed.
+- SCES CROSS-CHECK: the family is common to both boots at the banked object
+  shift - [0x18] sces 0x8002ECFC and [0x10] sces 0x8002EC4C are
+  shape-identical to slps modulo the shifted immediates (saved cells at
+  pool+0x32/+0x34, pool 0x8004CF24, HookEntryInt analog 0x8002F408, a0=2
+  syscall analog 0x8002F4A8). The intr machinery adds NO new per-region
+  diff beyond the banked one-caller [0xc] delta.
+- Gates: docs-only; disc assets re-provisioned repo-external (both CHDs
+  sha256-exact x2 again); matched 174, ratchets 365/0, 8/8 verify GREEN
+  unchanged (no build-side file touched; no curated/scanner file touched).
+
+Next queue:
+1. The 0x8004E360 side table's consumers (what the kernel calls table[0x14]
+   FOR) and the a0=1/a0=2 raw-syscall ids - the last open threads of the
+   intr family; low-priority footnotes now that every member is shaped.
+2. (carried) The 0x80010000 config-area ownership question.
+3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+   trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
