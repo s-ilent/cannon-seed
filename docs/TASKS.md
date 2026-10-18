@@ -7781,3 +7781,150 @@ Next queue:
 3. GsMapModelingData stays the matching lane's; disc re-provision follow-ups
    wait on the fresh CDN links (re-requested in #dragoon); BIG de-frame
    coordination-gated.
+
+## 2026-10-18 (window cron-20261018-1334): the setter dispatcher true-view
+## decode closes - set_game_info/get_game_info emerge with their retail names
+## from the binary's own assert strings, the mission-selector routing and the
+## 0x538 record array (A/B/C) are mapped field by field, and the rec1 pair is
+## cross-named set_player_info/get_player_info
+
+Queue item 1 (the 1204 window's next queue): the setter dispatcher true-view
+decode. Sixth sandbox rollback pre-window: repo back to 7623cd2, worklog tail
+lost past cron-20261014-2112 again (TASKS.md remains the authoritative
+history), disk/ + /home/z/scripts + /home/z/disc_work eaten. Recovered
+7623cd2 -> 1bed5005 (fetch + reset; origin had moved five commits during the
+five summary-consumed windows 0704..1204: the gameinfo carve pair
+2be1f211/5d3de8e4, the region-pair docs 5a4cc6d6/85abac11, the rec1 true-view
+decode 19112515, and the slps re-scan convergence 3185c691/1bed5005). Disc
+re-provision: the session prompt carried Silent's fresh CDN links (refreshed
+2026-10-18 12:14 UTC, expire ~2026-10-19 09:54 UTC) - both CHDs refetched
+foreground, sha256-exact (EU 98ccd877..f165c, JP a6025267..73d08); the
+standing "expired AND discs missing" condition resolved without a fresh
+#dragoon request. De-framed payloads regenerated from the surviving baselines
+via tools/deframe.py --payload (repo-external, no disc reads needed).
+
+THE DISPATCHER IS THE API (slps true view, sces mirrors below):
+0x80023D98 is not a wrapper - it is set_game_info() entire. Prologue saves
+ra/s1/s0, s0 = a1 (the value), then lui a1,0x8001 makes a1 = 0x80010000
+PERMANENTLY (the config-area base) and lh v0,(a1) loads the selector
+halfword in the same breath. The selector routes s1: v0==0 -> s1 =
+0x800100B8 (record A), v0!=0 -> s1 = 0x800105F0 (record B) - the census's two
+0x538-apart bases, now mission-routed by the function's own case 0. Guard:
+sll/sra sign-extend a0, ori v0,zero,0x11, sltu v0,v0,v1, bnez -> default
+(the const-first materialized sltu idiom the rec1 ledger banked, witnessed
+again). Table: 18 words at TRUE 0x80020314 (carve 0x80020444 -> true
+0x80020314 by the deframe map), all 18 wired, NO default fill - unlike the
+rec1 pair's 21/0x49. jr v0 dispatch; single join at 0x80024138 (lw
+ra/s1/s0, jr ra); default 0x80024120 asserts and falls into the join (the
+reporter is non-fatal, as the rec1 decode found).
+
+THE CASE->FIELD MAP (validation, store, and the assert string that names it):
+- id 0 "mission value": (v&0xffff)<2 else assert 0x8002004C line 200;
+  sh -> 0x80010000 - it writes the selector halfword itself
+- id 1 TV_MODE: <2 else 0x8002008C line 207; sh -> 0x80010002
+- id 2 LEVEL: v in [1,4] else 0x8002019C line 265; sh -> record+0x00
+- id 3: no validation; sh -> record+0x02
+- id 4 PARTNER NAME: jal 0x8002DC20 (length check; ret>=0xa asserts
+  "Too long PARTNER NAME" 0x800201CC line 276), then jal
+  0x8002DC40(record+4, v) - the copy runs even after a failed check
+  (report-and-continue); the bnez delay slot materializes a0=s1+4 on both
+  paths
+- id 5 PLAY_RECORDING: v in [-1,3] else 0x80020200 line 283; sh ->
+  record+0x0E
+- id 6 CLEAR_LEVEL: v<5 else 0x80020238 line 290; sh -> record+0x10
+- id 7: read-modify-write on record+0x12 - v==0 stores zero, else
+  lhu/or/sh (bitwise OR-set)
+- id 8 PAUSE_DISP: <2 else 0x800200C0 line 214; sh -> 0x80010B28
+- id 9: no validation; sh -> 0x80010B2A
+- id 10 MUTEKI_MODE: <2 else 0x800200F4 line 226; sh -> 0x80010B2C
+- id 11 MAP_COUNTER_DISP: <2 else 0x8002012C line 234; sh -> 0x80010B2E
+- id 12 SUPER_BLASTER: v in [-1,0] else 0x800202A8 line 313; sh ->
+  record+0x536
+- id 13: no validation; sh -> 0x80010B30
+- id 14: no validation; sh -> 0x80010B32
+- id 15 TUNE_LEVE (sic, truncated in the retail string): <2 else
+  0x80020168 line 250; sh -> 0x80010B34
+- id 16 PARTNER_G_NUM: v<4 else 0x80020270 line 305; sh -> record+0x534
+- id 17: no validation; sh -> 0x80010B36
+Assert strings live at 0x8002004C..0x800202E0 (12 case strings + the default
+"Invalid mode switch in set_game_info()" 0x800202E0 line 320); the
+per-case line numbers rise monotonically with case order (200..320), the
+classic switch-shaped source file.
+
+THE 0x538 RECORD ARRAY: record-relative stores reach +0x00, +0x02, +0x04
+(name buffer), +0x0E, +0x10, +0x12, +0x534, +0x536 - the last two pin the
+record size at 0x538. Record A = 0x800100B8, record B = 0x800105F0 =
+A+0x538, and the a1-based stores (0x80010B28..0x80010B36) = record C at
+B+0x538, fields +0x00..+0x0E: a THIRD config block the census's two-base
+picture did not know. The mission selector (case 0, validated <2) is the
+routing halfword itself: missions {0,1} map to records {A,B}, while the
+C-block cases (8,9,10,11,13,14,15,17 - PAUSE_DISP, MUTEKI_MODE,
+MAP_COUNTER_DISP, TUNE_LEVE and three unvalidated slots) write the
+mission-independent block unconditionally. The census's "record B tail
+slots" region gets its true identity here.
+
+THE NAMES (decoded from the binary's own assert strings): the reporter
+signature is (fmt, file, line) with a1 = 0x80020080 = "gameinfo.c" (slps) /
+0x8002008C (sces) - the same name-string the rec1 pair uses - and the
+per-case fmt strings all say "in set_game_info()". So 0x80023D98 =
+set_game_info and the twin at 0x8002414C = get_game_info (its default
+string 0x8002035C = "Invalid mode switch in get_game_info()"). Cross
+-confirmation the rec1 pair: 1049 banked the writer's assert string at
+slps 0x800203D4 / sces 0x800203E0 - that string reads "Invalid mode switch
+in set_player_info()", so the rec1 writer = set_player_info and its
+0x80024424 twin = get_player_info. gameinfo.c's API surface now carries
+retail names decoded from the binary itself: set_game_info / get_game_info
+(18-case) + set_player_info / get_player_info (0x49-entry, 21 wired).
+
+THE GETTER (first pass, decode-ready): get_game_info 0x8002414C slps
+(sp-0x18, ra/s0), same selector routing into v1, same guard with the
+shortened id in a0, 18-entry table at TRUE 0x8002038C (the +0xC data-drift
+law), islands 0x800241AC..0x8002427C, two joins (0x800242CC/0x800242D0),
+default 0x800242B4. Read-side sweep: a1-based lhu at +2 and +0xB28..+0xB36
+(the C block), v1-based loads for the record cases; getter case 12 loads
+BOTH 0x5EE(a1) = recA+0x536 and 0xB26(a1) = recB+0x536 - SUPER_BLASTER is
+read from both mission records. Full island decode is the next queue item.
+
+PAIR LAW AND DRIFT: every sces structure mirrors slps - code +0x28 (API
+0x80023DC0, islands, join 0x80024160, default 0x80024148, getter
+0x80024174, getter default 0x800242DC), data +0xC (tables 0x80020320 /
+0x80020398, strings, name-string 0x8002008C), reporter cluster -0x20C
+(assert callee 0x8002DC10 -> 0x8002DA04, helpers 0x8002DC20/0x8002DC40 ->
+0x8002DA14/0x8002DA34), matching the rec1 pair's callee law exactly.
+Island instruction sequences identical 18/18 (zero shape mismatches,
+sces+0x28 per island). Whole-payload j/jal census: set_game_info has 3
+callers (0x80025BC0/0x80025C0C/0x80025C1C slps - the census's setter 3),
+get_game_info has 5 (0x80024AA4/0x80024AB0/0x80024B5C/0x80024BFC/
+0x80025518 - the census's getter 5); the assert callee has 99 refs slps /
+95 sces.
+
+STRUCTURAL NOTE (de-frame driver set, fifth member): set/get_game_info is
+a second switch-class unit with the rec1 shape - table entries encode TRUE
+addresses, so the carve-space C recompile blocker applies unchanged (the
+carve jtbl label sits at the encoded value's position, 0x130 early, over
+string bytes, exactly as 1049 banked for the rec1 tables). The decode
+artifacts (case map, guard idiom, join shape, reporter facts) are banked
+above; C drafts can start from the rec1 ledger's open deltas with the
+guard form now witnessed twice (ori 0x11 here, ori 0x49 in rec1).
+
+Gates: make verify slps_00270 GREEN post-recovery (290,816 bytes exact,
+pc0 0x8002DB14). The window touches only docs (decode scripts and
+de-framed payloads are repo-external scratch): the other seven targets'
+inputs are byte-unchanged and the last full 8/8 proof stands; matched 174;
+ratchets untouched (365/0). Tree clean, pushed.
+
+Next queue:
+1. get_game_info island decode (read side): per-case load offsets including
+   the dual-record case 12, the two joins' split condition, and the
+   validation-free cases - same script treatment, closes the pair at the
+   same fidelity as the setter.
+2. The builder (0x80023AB0, the boot defaults stager): same true-view
+   treatment; its own assert strings should name it and its table decode
+   should complete gameinfo.c's member map.
+3. C drafts for set/get_game_info (probes/gcc263/): start from this decode +
+   the rec1 shaping ledger; the guard idiom and the report-and-continue
+   tail are the two forms to reproduce.
+4. GsMapModelingData stays the matching lane's; disc re-provision follow-ups
+   (boots' .sdata windows dump, SE.VH/SE.VB diff, missing-tail witness
+   dumps) are unblocked by this window's CHD restoration; BIG de-frame
+   coordination-gated.
