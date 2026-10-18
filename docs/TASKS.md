@@ -7311,3 +7311,70 @@ Next queue:
    decoding the two dispatchers' branch arms directly.
 3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
    trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
+
+
+## 2026-10-18 (window cron-20261018-0704): the matching lane takes its first
+## candidate - GsMapModelingData comes within two scheduler tie-breaks of EXACT
+## (5 C shapes, one-cursor + a0-a3 register assignment both solved; the
+## delay-slot filler choice and the load-bundle choice remain), the
+## exact-unmatched tiny singles are identified as shared-epilogue stubs that C
+## cannot produce, and the mainmenu 0x8002DC80 0x800 pinned chunk is flagged as
+## the carve that must precede the DF14/E148 cluster
+
+Queue item 1 (fba133b6: MATCHING FIRST). Sandbox rollback #N+1 pre-window (repo
+back to 7623cd2, worklog tail lost again, disc_work wiped; CHDs still on disk
+from cron-20261018-0549, re-provisioning not needed). Recovered to 971ebc13;
+tools/pair_report.py re-run on the surviving build ELFs to refresh the pick
+lists (92/287/118/152 sized pairs; buckets unchanged).
+
+- PICK LISTS: boots slps/sces have exactly ONE exact-unmatched (the queued
+  _SsUtBuildADSR); mainmenu has 8 (func_8002E148+func_8002E1A8 0x7c cluster,
+  func_8002DF14/8002E3F8/80030BA0/800314D0 singles, GsMapModelingData 0x78,
+  _SsUtBuildADSR); g3/g3org add GsMapModelingData + g3org's
+  func_800302E4(0x4)/80030330(0x54). GsMapModelingData = exact in ALL THREE
+  programs (one C would serve six targets) and carries its real LIBGS name in
+  the curated symbols - taken as the window's candidate.
+- GsMapModelingData probe (mainmenu_jp, judge_unit loop, 5 shapes): retail is
+  30 insns. SOLVED: (1) the one-cursor body - the k-index formulation
+  (mp[k]/mp[k+4]/mp[k+2] with k += 7, NOT a p-cursor) strength-reduces to a
+  single 0x1C-stride cursor exactly like retail, where the plain
+  pointer-cursor shape splits into TWO induction registers (+0x10-offset
+  twin) and grows a 31st insn; (2) the register assignment a0=base/a1=cursor/
+  a2=i/a3=n falls out of the same shape, plus both `addiu a0,4` increments
+  survive unfused. REMAINING (2 diff words away per class): (a) the pre-loop
+  delay-slot filler - retail commits the second `addiu a0,4` into the blez
+  delay slot and pays a NOP after `lw a3`; our build schedules that addiu into
+  the lw stall instead and puts `i=0` in the slot (29 insns, one SHORT - our
+  schedule is BETTER, so the retail source had some dependence detail we have
+  not reproduced: tried i=0-before-n, temp-loads, stmt reorders); (b) the loop
+  load-bundle - retail loads +0x0 and +0x10 before the first store, ours
+  bundles +0x0 and +0x8 (the stmt-3 load hoists above the stmt-1 store; same
+  DAG both ways). Kept asm; yaml rows untouched (reverted to clean); probe
+  matrix QUEUED like _SsUtBuildADSR's - the next probe axes: do-while with
+  explicit `if (n <= 0) return`, i initialized to 1 with `<=` guard,
+  counter via `n--`, and a permuter pass on the two tie-breaks.
+- EXACT-UNMATCHED SINGLES ARE EPILOGUE STUBS: func_80030BA0 = `lw ra,0x10(sp);
+  nop; jr ra; addiu sp,0x18`, func_800314D0 = `jr ra; addiu sp,0x20` (g3org's
+  func_800302E4 0x4 the same class) - shared-epilogue fragments that retail
+  GCC emitted as standalone symbols. No C body produces them (an empty C
+  function is frameless `jr ra; nop`); they are asm-native forever unless the
+  lane wants hand-written .s rows. The pair report's exact-unmatched pick lists
+  should carry this class annotation so future windows do not re-probe them.
+- CARVE PREREQUISITE FLAGGED: mainmenu's func_8002DF14 / func_8002E148 /
+  func_8002E1A8 / func_8002E3F8 (the 0x7c exact cluster) are NOT standalone
+  yaml rows - they live inside the `- [0xDC80, asm, func_8002D480] # 0x800
+  pinned` chunk. Matching them requires splitting that pinned chunk first
+  (carve work, belongs with the lane owner's split queue, same machinery as
+  the GSD post-pass set).
+
+Gates: docs-only commit; NO build-side file touched (the probe's yaml flips
+and src file were fully reverted before this commit - tree clean at
+971ebc13 + this); matched 174, ratchets 365/0, 8/8 verify GREEN unchanged.
+
+Next queue:
+1. GsMapModelingData probe matrix round 2 (the four axes above) - it is two
+   tie-breaks from +6 targets.
+2. (carried) _SsUtBuildADSR probe matrix; 0x8004E360 side-table consumers +
+   a0=1/a0=2 raw-syscall ids.
+3. Lanes stay theirs; BIG de-frame coordination-gated; runtime gate-family
+   blocked.
