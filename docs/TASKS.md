@@ -8057,3 +8057,96 @@ Next queue:
 4. GsMapModelingData stays the matching lane's; BIG de-frame
    coordination-gated.
 
+## 2026-10-18 (window cron-20261018-1719): the set/get_game_info C drafts
+## land in probes/gcc263 and the cc1 compile loop corrects the decode - case
+## 12 returns the -1 sentinel via negu, the validated setter cases are
+## report-and-skip with the store on the valid branch's join-jump delay,
+## all six validations refine to unsigned-short-masked compares with
+## subtract forms for the ranges, and the shaping ledger banks the getter
+## at 99/101 insns with the residual in register/scheduling class
+
+Queue item 1 (the 1604 window's next queue): the C drafts for
+set/get_game_info, following the rec1 template (probes/gcc263/gameinfo_rec1.c)
+and its ledger discipline. Eighth sandbox rollback pre-window: repo back to
+7623cd2 again, /home/z scratch wiped, baselines/ survived; recovered
+7623cd2 -> 52ba2426 (the 1604 window's own push), true views regenerated via
+tools/deframe.py --payload, and the rollback flipped tool exec bits again
+(chmod +x tools/* - second window in a row; the probe compiles re-prove the
+toolchain in place of a full verify run: no build-adjacent input is touched
+this window, so the last full 8/8 proof stands).
+
+THE PROBE (probes/gcc263/gameinfo_pair.c): both API members as C, encoding
+the 1604 decode - one config-base materialization reused for selector,
+TV_MODE and the C block; record base routed by the mission selector; the
+18-case maps; the getter's validation-free islands, pointer return at case
+4, dual-record case 12, and the join-stub + epilogue pair. Compiled with
+STOP_AT_ASM=1 tools/cc.sh (cc1 2.6.3-psx + maspsx, the same front end as
+the retail) and word-compared against the retail true-view bodies.
+
+THE COMPILE LOOP CORRECTED THE DECODE THREE WAYS, each cross-checked
+against the retail islands directly:
+1. CASE 12 RETURNS -1, NOT 1: the retail tail is nor/sltiu/negu - the
+   sltiu yields 0/1 and negu negates it, so the returned value is the -1
+   sentinel, not a boolean. Super blaster reads as armed (-1) iff BOTH
+   mission records' +0x536 are -1, else 0 - the same {-1,0} domain the
+   setter validates, which is why the API compares against -1.
+   [SUPERSEDES the 1604 entry's "returns 1 iff both are -1".]
+2. THE VALIDATED SETTER CASES ARE REPORT-AND-SKIP: every retail island
+   puts its store on the bnez-TAKEN path (the sh rides the join-jump's
+   delay slot) and the assert path joins WITHOUT storing - only case 4
+   continues after its report (the name copy runs after a failed length
+   check). [SUPERSEDES the 1604 generalization "every validated case is
+   report-and-continue"; that reading is true of case 4 alone.]
+3. THE SIX VALIDATIONS ARE UNSIGNED-SHORT-MASKED COMPARES: retail emits
+   andi+sltiu from (unsigned short)val - case 0/1/8/10/11/15 <2, case 6
+   <5, case 16 <4 - and the SUBTRACT form for the ranges: [1,4] as
+   (u16)(val-1) < 4 (addiu -1/andi/sltiu), [-1,3] as (u16)(val+1) < 5,
+   [-1,0] as (u16)(val+1) < 2. The andi presence refines the 1334 map's
+   signed-range readings ("v in [1,4]") to u16-masked semantics.
+
+SHAPING LEDGER (probe header, cc.sh 2026-10-18): getter draft 99 insns vs
+retail 101; setter draft 197 vs retail 237. ALREADY EXACT (getter): the
+routing arm order (bnez-taken = record B via delay ori, A on fall-through),
+the sll/sra guard, the 18-entry dispatch train, case 4's pointer return,
+case 12's full consensus block (addiu -1/bne/move-delay/nor/sltiu/j/
+negu-delay), the join-stub + epilogue pair, the 6-insn default assert
+block. ALREADY EXACT (setter): the report-and-skip island architecture
+with the sh in the join-jump delay, all six validation idioms incl. the
+subtract forms, the RMW case 7 (bnez / j+sh-zero / lhu+or+sh), the case-4
+double call, the single join. OPEN DELTAS (same ledger classes as rec1):
+(1) guard form - draft sltu v0,a0,18 + beq-over vs retail ori 0x11 +
+sltu v0,v0,a0 + bne-to-assert: rec1's open delta (1) now witnessed on an
+18-case switch too (two independent switches, same form - the permuter/
+comparison-tree hunt has a second witness); (2) dispatch table base -
+draft %hi/%lo pair vs retail lui+addiu absolute (probe-link artifact);
+(3) getter tail - int v gives the retail move-tail but gcc then narrows
+case 3's load to lh (retail keeps lhu+tramp) and adds a scheduling nop at
+case 15; short v keeps the lhu forms but adds a tail sll/sra promotion;
+(4) setter value plumbing - retail materializes val into a0 per island
+(move a0,s0; sh a0,N) and leaves some bnez delays NOP, the draft keeps
+val in s0 and fills the delays with the string lui; (5) setter base
+register - retail reuses a1 (temp) for the config base, the draft pays a
+third callee-save (s2). (3)-(5) are register-allocation/scheduling
+variance: permuter/flag-lane territory, not source-shape questions - the
+C source that reproduces the retail ARCHITECTURE is now witnessed for
+both members.
+
+Gates: docs + probe only (no build-adjacent input touched; the probe
+compiles prove the toolchain post-rollback); matched 174; ratchets
+untouched (365/0); tree clean, pushed.
+
+Next queue:
+1. The builder's C draft (probes/gcc263/): the table-free member - loops,
+   store lists, the four 0x140 table addresses - true-view-matchable
+   without the jtbl blocker resolution.
+2. Guard-form hunt round 2 with the second witness: the 18-case switch
+   and rec1's 0x49-case switch both show ori+sltu+bne vs the drafts'
+   sltu+beq - retry the comparison-tree order / permuter forms against
+   both.
+3. set/get_player_info case-map re-derivation against the builder's four
+   0x2C player rows (still open).
+4. The boots' .sdata window witness (partner-name global) and the SE.VH/
+   SE.VB diff (still open); GsMapModelingData stays the matching lane's;
+   BIG de-frame coordination-gated.
+
+
