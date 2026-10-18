@@ -19,6 +19,7 @@ glabel Snd_play
     /* 2C094 8004B894 032C0500 */   sra       $a1, $a1, 16
     /* 2C098 8004B898 1000BF8F */  lw         $ra, 0x10($sp)
     /* 2C09C 8004B89C 1800BD27 */  addiu      $sp, $sp, 0x18
+  alabel D_8004B8A0
     /* 2C0A0 8004B8A0 0800E003 */  jr         $ra
     /* 2C0A4 8004B8A4 00000000 */   nop
 endlabel Snd_play

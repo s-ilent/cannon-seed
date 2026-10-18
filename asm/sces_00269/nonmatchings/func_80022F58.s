@@ -694,6 +694,10 @@ glabel func_80023728
     /* 3F50 80023750 96930155 */ .word 0x55019396
     /* 3F54 80023754 EE1D514C */ .word 0x4C511DEE /* invalid instruction */
     /* 3F58 80023758 F4509623 */ .word 0x239650F4
+
+nonmatching func_8002375C
+
+alabel func_8002375C
     /* 3F5C 8002375C 703DD338 */ .word 0x38D33D70
     /* 3F60 80023760 2CA59B76 */ .word 0x769BA52C /* invalid instruction */
     /* 3F64 80023764 833B3ACC */ .word 0xCC3A3B83

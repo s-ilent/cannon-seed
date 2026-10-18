@@ -76,6 +76,7 @@ glabel func_8004A990
     /* 2B1D4 8004A9D4 00A00534 */   ori       $a1, $zero, 0xA000
     /* 2B1D8 8004A9D8 3C140108 */  j          func_800450F0
     /* 2B1DC 8004A9DC 00B00534 */   ori       $a1, $zero, 0xB000
+  alabel D_8004A9E0
     /* 2B1E0 8004A9E0 3C140108 */  j          func_800450F0
     /* 2B1E4 8004A9E4 00C00534 */   ori       $a1, $zero, 0xC000
     /* 2B1E8 8004A9E8 3C140108 */  j          func_800450F0
