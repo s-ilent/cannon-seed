@@ -7169,7 +7169,11 @@ jal-target set).
   0x80010032, 0x80010514-0x8001051C, the 0x80010E00..0x80010E0A array, and the
   deep cluster 0x80013200 / 0x80016106 / 0x80016AD4 / 0x80016600-04 present in
   BOTH stages. The initializer (the record builder writing 0x8000FFD8..0xFFFE
-  plus 0x80010000..0x80010008 - it STRADDLES the 64K boundary) is called
+  plus 0x80010000..0x80010008 - it STRADDLES the 64K boundary [SUPERSEDED
+  2026-10-18 cron-20261018-0549: the 0x8000FFD8..0xFFFE half does not exist on
+  the true view - zero writes/reads/computed addresses below 0x80010000 in all
+  four stages; the builder writes 0x80010000..0x80010008 and the full record A,
+  nothing straddles - see the latest entry]) is called
   EXACTLY ONCE per stage: slps 0x80021828, sces 0x80021844, mmjp 0x8002405C,
   mmeu 0x80024050.
 - THE CALLER CENSUS RE-DERIVES THE BANKED ADDRESSES EXACTLY (sces): setter
@@ -7219,4 +7223,91 @@ Next queue:
 3. The gameinfo slot lifecycle (writer order across the two config bases) as
    CRT0-decode fodder - only once a boot matching target waits on it.
 4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+   trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
+
+
+## 2026-10-18 (window cron-20261018-0549): the gameinfo slot lifecycle closes on
+## the true view - the 0x8000FFD8 straddling record is REFUTED (a woven-view
+## artifact), the two config bases prove to be exactly one 0x538-byte record
+## apart with the builder filling record A and leaving record B to the runtime
+## API, and every banked census number reconciles exactly
+
+Queue item 2 of 226a7c28. Sandbox rollback hit again before this window (repo
+back to 7623cd2, worklog rolled back past the whole 10-15..10-18 rebuild, CHDs/
+psyq/repo-external scripts eaten - all re-provisioned; CHDs re-fetched and
+sha256-exact x2 again). HEAD recovered to 226a7c28; the parallel windows had
+already closed the census (54dc17f8) and the config-area ownership question
+(226a7c28), so this window took that entry's remaining footnote.
+
+Method (scripts repo-external: scripts/gameinfo_slot_lifecycle.py,
+gameinfo_functions.py, gameinfo_sweep.py): the four stage binaries re-extracted
+per-sector TRUE from the sha256-exact CHDs (sizes census-exact: boots 290,816
+x2, MAINMENU 698,368 JP / 700,416 EU; pc0 = the banked CRT0 entries 0x8002DB14
+/ 0x8002D908 / 0x8005C530 / 0x8005C160), then: (a) raw lui-0x8001 site scan
+with LE word decode per docs/TOOLCHAIN.md (73 sites per stage - the banked 72
+is the decodable-access subset), (b) an 8-insn continuation decode classifying
+every direct load/store EA, (c) full linear decodes of the builder family
+heads, (d) a whole-stage sweep of every load/store EA in
+[0x8000FF00,0x80017000) attributed to function heads via a jal-target set,
+plus a computed-address sweep and a family caller census. 187 in-region
+accesses per stage, structurally identical in all four stages.
+
+- THE STRADDLING RECORD IS REFUTED: across all four stages there is NOT ONE
+  write, read, or computed address in [0x8000FF00, 0x80010000). The gameinfo
+  area's low boundary is exactly the selector halfword at 0x80010000; nothing
+  lies below. The 226a7c28 sentence "the record builder writing 0x8000FFD8..
+  0xFFFE plus 0x80010000..0x80010008 - it STRADDLES the 64K boundary" was a
+  woven-view artifact (the ~304 B/sector drift class) and is now marked
+  superseded inline; the "double-buffer signature" question dissolves with it.
+- THE TWO CONFIG BASES ARE EXACTLY ONE RECORD APART: 0x800105F0 - 0x800100B8
+  = 0x538. The builder fills record A completely - 0x800100B8..0x800105EF
+  inclusive (0x538 B: the sh pair at 0xB8/0xBA, sb 0xC0, sh 0xC6..0xCA, sw
+  0xCC..0xE8, sw groups 0x8001020C..28 / 0x8001034C..68 / 0x8001048C..A8, the
+  0x800105CC..EE tail) - and record B's BODY gets no direct write anywhere in
+  any stage. Only record B's TAIL slots 0x80010B04..0x80010B20 are ever
+  written: once by the boot's one-caller member (slps 0x800245CC / sces
+  0x800245F4, 10 W spanning 0x80010004..0x80010B20), later again by MAINMENU's
+  own member (mmjp 0x80036290 / mmeu 0x80036230, 8 W). Reading: record A is
+  the boot-staged defaults instance; record B is the runtime-current instance
+  the setter/getter API writes through register-indexed addressing (base
+  picked by the selector halfword) - those stores are invisible to static
+  lui-tracking, and that evidence boundary is stated as-is.
+- THE BUILDER'S HEAD SWEEP (79 stores, slps 0x80023AB0 / sces 0x80023AD8 /
+  mmjp 0x800353DC / mmeu 0x8003537C, leaf, no args - the call's delay slot is
+  a nop): sh 0x80010000..0x80010032 (selector + the head slot run), record A,
+  then sh 0x80010B28..0x80010B36 (the slots just past record B).
+- THE FAMILY CALLER CENSUS RECONCILES EVERY BANKED NUMBER on the true view:
+  builder x1 call at exactly the banked sites (slps 0x80021828, sces
+  0x80021844, mmjp 0x8002405C, mmeu 0x80024050); setter 3/3/105/103; getter
+  5/105/105/105 (boots/boots/mmjp/mmeu). NEW members the earlier census had
+  not itemized: a record-1 writer (19 W @0x80010008..0x8001002C; slps
+  0x800242E0 / sces 0x80024308 / mmjp 0x80035C0C / mmeu 0x80035BAC) with 4
+  boot callers growing to 46 MAINMENU callers, a record-1 reader (19 R of the
+  same slots; slps 0x80024424 class) with 2 boot callers growing to 67, the
+  array writer x1 (slps 0x800252A0 class: 0x80010E00..0x80010E08) fronting a
+  six-function setter/getter micro-cluster (0x80010E02..0x80010E08 slots), a
+  deep-cluster writer (slps 0x8002C110 class: 0x80016614..0x80016620) with
+  readers at 0x80016600 and a lone 0x80016121 reader, and MAINMENU-only
+  extra selector readers (mmjp 0x80035F9C / 0x800361C4 / 0x80036300) plus
+  single-slot writers 0x80036330 (0x80010004) / 0x8003637C (0x80010006).
+- Cross-stage traffic now has its full slot-level map: the boot stages the
+  defaults (builder: selector + head run + record A; member: record-B tail;
+  array writer: the 0x80010E00 array), MAINMENU consumes through the
+  105-caller dispatcher API and extends (record-B tail re-writes, slots
+  04/06, the deep cluster). No slot is written by exactly one side only
+  except the deep cluster (MAINMENU-only writes; the boots only read).
+
+Gates: docs-only commit; disc assets re-provisioned repo-external (both CHDs
+sha256-exact, raw bins + per-sector true views under disc_work/); matched 174,
+ratchets 365/0, 8/8 verify GREEN unchanged (no build-side file touched; no
+curated/scanner file touched).
+
+Next queue:
+1. (carried, lowest open) the 0x8004E360 side table's consumers + the a0=1/
+   a0=2 raw-syscall ids - the last intr-family footnotes.
+2. The record-B runtime-instance reading above is bounded by static decode:
+   if the CRT0 decode ever needs it, the setter/getter dispatchers' base
+   pick (selector halfword -> 0x800100B8 vs 0x800105F0) can be settled by
+   decoding the two dispatchers' branch arms directly.
+3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
    trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
