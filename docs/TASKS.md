@@ -7378,3 +7378,10 @@ Next queue:
    a0=1/a0=2 raw-syscall ids.
 3. Lanes stay theirs; BIG de-frame coordination-gated; runtime gate-family
    blocked.
+
+Probe round 2 addendum (same window): the do-while + explicit-guard axis is
+TRIED and REJECTED - 28 insns, the early-return restructures (the shared exit
+splits, the speculative delay-slot increment disappears, the frame dance
+repositions). The 29-insn for-loop shape remains the leader. Remaining axes:
+i=1 with `<=` guard (retail's slt is i<n, so this needs care), countdown
+counter, and a permuter pass on the two tie-breaks.
