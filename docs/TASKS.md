@@ -8265,3 +8265,98 @@ Next queue:
    c. tool note: deframe_migrate.Framing.true_of quantizes some regions - use
       deframe.framed_to_runtime as the mapping authority (its None = framing
       region is the correct semantic).
+
+5. BIG DE-FRAME: AUTHORIZED by the owner 2026-10-18; prep COMPLETE
+   (tools/deframe_migrate.py, validated on all 8: migrated yamls all
+   splat-split clean, byte spot checks and doc-banked anchors reproduce; no
+   compiled-C row contains framing on any target, so matched content is
+   migration-safe). FLIP IS BLOCKED ON ONE INPUT: the disc CHDs - local
+   baselines are short by their tails, so deframe.py --payload cannot reach
+   the banked true-EXE SHA-1s. Flip checklist when discs land: full true
+   baselines + witness check 8/8 -> deframe_migrate.py -> re-derive
+   woven-space symbol names, re-author curated entries, gp_value flip (slps
+   0x8006322C -> 0x8006632C) -> make extract -> deliberate oracle re-baseline
+   (one --no-verify commit) -> make verify 8/8 true -> judge sweep.
+
+## 2026-10-18 (window cron-20261018-1949): the discs land and the true baselines witness 8/8 - the flip's only blocker is gone; the migration write validates against the FULL true files and the flip staging reaches the small-data curated-address class before the window closes
+
+Tenth sandbox rollback pre-window (repo to 7623cd2, repo-external scratch
+eaten, baselines/ survived); recovered to 77ab9590. The CHDs re-fetched
+from the still-valid CDN links (sha256 verified both) and extracted:
+g3_eu 267752 sectors / g3_jp 267504. All 8 EXEs re-extracted --per-sector;
+THE WITNESS CHECK PASSES 8/8 (every file's SHA-1 equals the banked
+true-EXE witness). True baselines staged at build/work/true/<t>.bin, woven
+baselines backed up at build/work/woven/<t>.bin (both git-ignored).
+
+TOOL FIX 1 (committed 147ffe1e): deframe_migrate cross_check compared the
+full 2048-byte chunk at the boundary sector where the woven baseline holds
+only a partial data area (1392 B for slps) - short-slice compare, guaranteed
+mismatch. Now compares only the overlap (every CAPTURED data byte), the
+tool's own documented semantics; the true file legitimately extends past
+the woven capture point (true [0x3DDF0, 0x47000) = 0x9210 B, 15716 non-zero,
+never woven-captured).
+
+MIGRATION WRITE VALIDATED ON THE FULL TRUE FILES: deframe_migrate --all
+--write --spotcheck runs clean (every captured byte re-verified against the
+true baselines; zero framing in any c row). LAST-ROW EXTENSION: the tool
+stops each target's last row at the woven capture point (a documented lower
+bound); with the tails on disc the last row must span to the file end (the
+build reproduces the tail from the re-emitted .data.s), so each migrated
+yaml's last row extends to the true file length (slps 0x2B53C + 0x1BAC4 ->
+0x47000 etc., all 8).
+
+THE FLIP STAGED (scripts repo-external, flip_reauthor.py; reproducible):
+- symbol re-authoring, three proven classes: (1) yaml row names map through
+  the framing (sanity: woven func_80024430 -> true 0x80023AB0, the banked
+  builder address); (2) ADDRESS-ENCODED names (func_/D_ whose digits equal
+  their own address) are RUNTIME values - the retail j/jal words encode
+  true addresses and the flip makes carve = runtime, so they pass through
+  IDENTITY; (3) semantic entries whose woven position lands in framing are
+  likewise already-true (recorded from the binary's own encodings) -
+  identity. Data-position semantic entries map exactly. 12541 entries
+  across 8 targets, every mapped entry proven at/inside its migrated row.
+- identity-vs-mapped duplicates (a runtime encoding targeting a row the
+  migration also names): the established row name wins, the clashing
+  identity entry drops with a FLIP-DUPE comment; C references rewritten to
+  the row name (slps: 8 files, intr_stop_begin -> data_80031E7C - same
+  target address, label-only change, encoding unaffected).
+- gp_value flipped (slps 0x8006322C -> 0x8006632C, per checklist); oracle
+  files staged with the banked true SHA-1s.
+- splat split runs CLEAN on the staged config (0 duplicates).
+
+TOOL FIX 2 (committed 147ffe1e): build.sh derived each staged file's
+section rom from the FILENAME's carve VA - wrong the moment rows move.
+Now looks the rom up by row name in a yaml map (identical on the woven
+pipeline - slps_00270 verify GREEN unchanged after the flip-config
+revert), with the filename decode as fallback.
+
+WHERE THE FLIP STALLS (next window's first item): a small class of
+curated SMALL-DATA addresses recorded from the woven lie do not retarget
+mechanically. Witness: boot_flag_0 (slps, curated 0x8005A778, a framing
+position -> identity-kept) but the C's sw is retail 0x3C($gp), whose true
+target is 0x80066368 (= true gp + 0x3C) - the staged address is neither
+the woven carve nor the true runtime value, and GP_INFO's range check
+then flips the compiled form (func_80025AE0 grows 0x10 -> 0x14,
+RotTransPers4 shrinks 0x80 -> 0x78). The boots' .sdata slot map (banked)
+gives the true addresses of every window datum - the fix is to re-point
+this curated class from the slot map (the runtime truth the encodings
+always meant), then re-run the staging, extract x8, the one --no-verify
+oracle re-baseline, verify 8/8 true, judge sweep. Everything upstream is
+validated; nothing about the flip sequence changes.
+
+Gates: tools + docs only (config/ and src/ reverted to the woven state
+after the staging exercise; baselines/ restored to the woven files from
+the backup; tree clean, slps_00270 verify GREEN re-proven post-revert);
+matched 174; ratchets untouched (365/0).
+
+Next queue:
+1. The flip, resumed: re-point the small-data curated class from the
+   boots' .sdata slot maps (true gp = 0x8006632C slps / 0x80065FC4 sces;
+   the banked content map names every window datum), re-stage, extract x8,
+   the one --no-verify oracle re-baseline commit, verify 8/8 true, judge
+   sweep.
+2. The boots' .sdata window witness and the SE.VH/SE.VB diff (still open;
+   the discs are on hand this window - the CHDs may not survive the next
+   rollback, CDN links expire ~2026-10-19 09:54 UTC).
+3. set/get_player_info case-map re-derivation (queue item of -1719).
+4. GsMapModelingData stays the matching lane's.
