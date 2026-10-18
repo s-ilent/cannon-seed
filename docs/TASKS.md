@@ -8242,14 +8242,26 @@ Next queue:
    runtime-provisioned region needs the de-frame transition (see item 5) or a
    runtime trace.
 4. GsMapModelingData stays the matching lane's.
-5. BIG DE-FRAME: AUTHORIZED by the owner 2026-10-18; prep COMPLETE
-   (tools/deframe_migrate.py, validated on all 8: migrated yamls all
-   splat-split clean, byte spot checks and doc-banked anchors reproduce; no
-   compiled-C row contains framing on any target, so matched content is
-   migration-safe). FLIP IS BLOCKED ON ONE INPUT: the disc CHDs - local
-   baselines are short by their tails, so deframe.py --payload cannot reach
-   the banked true-EXE SHA-1s. Flip checklist when discs land: full true
-   baselines + witness check 8/8 -> deframe_migrate.py -> re-derive
-   woven-space symbol names, re-author curated entries, gp_value flip (slps
-   0x8006322C -> 0x8006632C) -> make extract -> deliberate oracle re-baseline
-   (one --no-verify commit) -> make verify 8/8 true -> judge sweep.
+5. BIG DE-FRAME: AUTHORIZED; REHEARSED END TO END 2026-10-19 and rolled back
+   to woven at the symbol layer (tree verified green after rollback). Now in
+   hand: full true EXEs for all 8, sha1 = the banked witnesses exactly
+   (build/work/true/full/); woven baselines backed up (build/work/woven/);
+   migrated yamls reproduce the doc-banked true anchors byte-exactly. The
+   rehearsal surfaced the two REAL remaining layers:
+   a. CURATED DATA STATICS IN FRAMING-BEARING ROWS have no mechanical map:
+      their woven offsets can sit in framing interludes (deframe.framed_to_runtime
+      correctly returns None there); their true addresses must come from the
+      true image's own encoded references (lui/addiu XRef census per static).
+      Needed: a static resolver tool on that principle, validated against the
+      already-banked true-view statics (.sdata window starts slps 0x8006632C /
+      sces 0x80065FC4, gameinfo cluster, intr statics). Code entries are fine:
+      the jal/j-word census resolves them (keep-true vs map-woven, proven).
+   b. ALIAS COLLISIONS (~7 per target): the hand-curated intr_stop/restart/aux
+      cluster entries and the psyq member placements describe THE SAME BYTES
+      (witnessed: true stopIntr jal's the address curated as both
+      intr_stop_commit and ResetEntryInt). Adjudicate with psyq member bytes:
+      psyq name wins per repo convention, the intr_* alias retires with a
+      provenance note; C sources reference none of the collided names.
+   c. tool note: deframe_migrate.Framing.true_of quantizes some regions - use
+      deframe.framed_to_runtime as the mapping authority (its None = framing
+      region is the correct semantic).
