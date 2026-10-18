@@ -7135,3 +7135,80 @@ Next queue:
 2. (carried) The 0x80010000 config-area ownership question.
 3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
    trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
+
+
+## 2026-10-18 (window cron-20261018-0434): the 0x80010000 config-area ownership
+## question closes - neither a kernel boot-arg region nor a pre-staged MAINMENU
+## load region: it is the game's own fixed game-info block, compiled into BOTH
+## stage binaries at the same absolute addresses, deliberately placed below the
+## shared 0x80020000 load region so it survives the boot->MAINMENU stage swap
+
+Queue item carried since 1949 (through 2104/06aafdda/54dc17f8). Method (scripts
+repo-external: scripts/config_area_ownership.py, config_callers.py): all four
+stage binaries re-extracted per-sector TRUE from the sha256-exact CHDs
+(SLPS_002.70 / SCES_002.69 both 290,816 B - census-exact; MAINMENU.EXE 698,368 B
+JP / 700,416 B EU; PS-X EXE headers sane), then scanned for every lui $rX,0x8001
+page access (72 sites per stage; direct lh/lhu/lw/sw/sh decode within 8 insns +
+addiu/ori continuations), raw words in [0x80010000,0x80011000), and a region-
+correct jal/j/bal caller census over the family (function heads derived from the
+jal-target set).
+
+- THE GEOMETRY DECIDES THE QUESTION: MAINMENU.EXE's t_addr is 0x80020000 in
+  BOTH regions (pc0 0x8005C530 JP / 0x8005C160 EU; t_size 0xAA000 / 0xAA800) -
+  the SAME region the boots occupy (0x80020000..0x80066800). LoadExec swaps the
+  stage IN PLACE; the config area at 0x8000FFD8..0x80016AD4+ lies outside both
+  images and survives the swap untouched. "Pre-staged MAINMENU load region" is
+  geometrically wrong, and no kernel involvement is needed: the first writer of
+  the selector halfword is the game itself. Bonus fact: the boots' pc0 = the
+  CRT0 entries 0x8002DB14 (slps) / 0x8002D908 (sces), sitting just below the
+  libc stub group.
+- THE SAME gameinfo.c FAMILY IS COMPILED INTO ALL FOUR BINARIES AT THE SAME
+  ABSOLUTE ADDRESSES: 72 lui-0x8001 sites per stage, identical slot map - the
+  selector halfword 0x80010000 (the setter/getter base pick), the two config
+  bases 0x800100B8 / 0x800105F0, slots 0x80010002/4/6, 0x80010008, 0x80010014,
+  0x80010032, 0x80010514-0x8001051C, the 0x80010E00..0x80010E0A array, and the
+  deep cluster 0x80013200 / 0x80016106 / 0x80016AD4 / 0x80016600-04 present in
+  BOTH stages. The initializer (the record builder writing 0x8000FFD8..0xFFFE
+  plus 0x80010000..0x80010008 - it STRADDLES the 64K boundary) is called
+  EXACTLY ONCE per stage: slps 0x80021828, sces 0x80021844, mmjp 0x8002405C,
+  mmeu 0x80024050.
+- THE CALLER CENSUS RE-DERIVES THE BANKED ADDRESSES EXACTLY (sces): setter
+  dispatcher 0x80023DC0 with its 3 static callers 0x80025BE8/0x80025C34/
+  0x80025C44 = the PAL-mode config reset, exactly the 1949 decode; getter
+  dispatcher 0x80024174 with exactly the banked 5 callers 0x80024ACC/0x80024AD8/
+  0x80024B84/0x80024C24/0x80025540. slps analogs: setter 0x80023D98 (3 callers
+  0x80025BC0/0x80025C0C/0x80025C1C), getter 0x8002414C (5 callers 0x80024AA4/
+  0x80024AB0/0x80024B5C/0x80024BFC/0x80025518). Independent re-derivation from
+  the true view; the 1949 addresses were sces all along.
+- MAINMENU USES THE FAMILY PERVASIVELY: the two big dispatcher heads run
+  103-105 static jal callers each in both regions (mmjp 0x800356C4 x105 /
+  0x80035A78 x105; mmeu 0x80035664 x103 / 0x80035A18 x105) - the menu-side
+  game-info API, vs the boot's light use (setter 3 = the PAL reset, getter 5).
+  The boot stages the defaults (initializer record + selector + the
+  0x80010514-1C defaults via its one-caller 0x800245CC member); MAINMENU
+  consumes and extends the same slots. Cross-stage communication is real and
+  flows boot -> MAINMENU through this block.
+- RAW-WORD CENSUS: ZERO pool words in [0x80010000,0x80011000) in all four
+  payloads - the area is reached exclusively by lui+imm code pairs, never via
+  pointer tables. MAINMENU's own image bytes at the same payload offsets are
+  its string pool ("Too few TOC:", "INPUT GUNNER1 NAME", "INITIALIZING M.."..)
+  - further proof the area is not part of any stage's image. One stray
+  same-position site in boot and MAINMENU (slps 0x80025384 / mmjp 0x8005A08C)
+  pairs the selector write with an unrelated addiu base (0x800092F4 boot /
+  0x800176DC MAINMENU) - neighboring-data difference, not config traffic.
+- Remaining footnote (not ownership): which stage writes which of the two
+  config bases' fields in what order, and whether the 0x8000FFD8 straddling
+  record is a double-buffer signature - a slot-lifecycle pass if the CRT0
+  decode ever needs it.
+
+Gates: docs-only commit; disc assets re-provisioned (both CHDs sha256-exact;
+raw bins + per-sector true views repo-external under disc_work/); matched 174,
+ratchets 365/0, 8/8 verify GREEN unchanged (no build-side file touched).
+
+Next queue:
+1. (carried, now the lowest open item) the 0x8004E360 side table's consumers +
+   the a0=1/a0=2 raw-syscall ids.
+2. The gameinfo slot lifecycle (writer order across the two config bases) as
+   CRT0-decode fodder.
+3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+   trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
