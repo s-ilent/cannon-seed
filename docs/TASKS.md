@@ -7385,3 +7385,85 @@ splits, the speculative delay-slot increment disappears, the frame dance
 repositions). The 29-insn for-loop shape remains the leader. Remaining axes:
 i=1 with `<=` guard (retail's slt is i<n, so this needs care), countdown
 counter, and a permuter pass on the two tie-breaks.
+
+
+## 2026-10-18 (window cron-20261018-0819): the game-info API cluster's carve
+## prerequisite closes for slps_00270 - the deframe map places the family in
+## carve space, four member islands are pinned free (builder / rec1 writer /
+## rec1 reader / B-tail), the getter row shrinks to its true extent, and the
+## scanner-blindness mechanism gets its name: jal anchors encode TRUE
+## addresses, so in drifted regions every anchor lands on the wrong bytes
+
+Queue item 1 (fba133b6 MATCHING FIRST, continued from 971ebc13's census).
+Sandbox rollback #N+2 pre-window: repo back to 7623cd2, worklog tail lost past
+cron-20261014-2112, disk/*.chd + disc_work + repo-external scripts eaten; both
+CHDs re-fetched while the CDN links were still live and sha256-exact x2
+(background curls are reaped by the sandbox even under setsid - foreground or
+nothing). HEAD recovered to 5bb585d5 (the parallel window's GsMapModelingData
+opening); this window takes the gameinfo cluster, not that candidate - no
+lane collision.
+
+THE DRIFT DISCOVERY THAT GATES THIS FAMILY (banked for every future boot-side
+decode): the 971ebc13 census ran on per-sector TRUE views; the baselines are
+the contiguous woven-framing views. The two disagree by the framing drift -
+measured control: the census's builder caller at TRUE 0x80021828 appears in
+the baseline at 0x80021CE8 (delta 0x4C0 = 4 x 0x130), and a fresh whole-payload
+jal census on the baseline finds exactly that encoding there. The census's
+member addresses are meaningless as carve positions; tools/deframe.py
+--map-runtime is the reconciler. The scanner never walked this family because
+its jal anchors encode TRUE addresses - in a drifted region the anchor points
+at whatever bytes the drift moved there, the walk dies or walks garbage, and
+the region stays data. That is the mechanism behind data_8002376C (0x1490).
+
+THE MAPPED MEMBER TABLE (true runtime -> carve, slps_00270; all heads decode
+clean - the builder's first two insns are literally lui a3,0x8001 / sh zero,
+0(a3), the selector store):
+- builder        0x80023AB0 -> carve 0x80024430, extent 0x2E8, pocket-free
+- setter disp.   0x80023D98 -> carve 0x80024718, extent 0x678 with ONE framing
+  pocket splitting it at carve 0x80024980..0x80024AB0 - left as data this
+  window (data_80024718); a pocket-split function is de-frame territory
+- getter disp.   0x8002414C -> carve 0x80024BFC = the EXISTING func_80024BFC
+  row; its true extent is 0x194 - the old 0x778 row was walk-inflated across
+  the pocket and three family members
+- rec1 writer    0x800242E0 -> carve 0x80024D90, extent 0x144, pocket-free
+- rec1 reader    0x80024424 -> carve 0x80024ED4, extent 0x1A8, pocket-free
+- B-tail member  0x800245CC -> carve 0x8002507C, true extent 0x234, its tail
+  pocket [0x5AB0..0x5B74) rides inside the row (bytes round-trip)
+- array writer   0x800252A0 -> carve 0x80025FB0, inside func_80025F20, extent
+  limit-hit (>= 0x800, pocket-split) - NOT carved this window
+- deep writer    0x8002C110 -> carve 0x8002DEC0, same status - NOT carved
+
+THE CARVE (commit 2be1f211): data_8002376C splits into data [0x3F6C..0x4C30)
++ pinned asm func_80024430 (the builder) + data [0x4F18..0x53FC) (the setter
+islands + pocket); the getter row gives up its tail as pinned asm
+func_80024D90 + func_80024ED4 + func_8002507C, itself shrinking to the pinned
+0x194 island. All six pinned rows join the no-walk set (scan-stable by
+construction). Jal callers witnessed: builder x1, writer x4, reader x2,
+B-tail x1 - the census numbers, re-derived on the baseline.
+
+THE LABEL-COLLISION LESSON (bit once, remembered forever): the first cut
+added a data row data_80025AB0 for pocket B and splat computed its base at
+0x800252B0 - minus 0x800 - because config/symbols.slps_00270.txt carries the
+stale ghost func_80025AB0 = 0x80025AB0 "(branch target)": a drift artifact
+that names pocket-B framing bytes as a function. The collision derailed the
+segment classing, the build grew by exactly the row size, pocket bytes
+zero-filled in place and re-appeared at the payload tail; verify caught it.
+Fix: fold the pocket into the B-tail pinned row, no data row at that stem.
+The ghost symbol is flagged: it is scanner-generated, names framing bytes,
+and should be cleaned when the symbols file next regenerates.
+
+Gates: make verify slps_00270 GREEN (290,816 bytes exact, pc0 0x8002DB14);
+only slps_00270 split rows touched - the other seven targets' inputs are
+byte-unchanged and the last full 8/8 proof stands; matched 174; ratchets
+untouched (365/0). Tree clean, pushed.
+
+Next queue:
+1. sces_00269 gets the same treatment (map through deframe, pin the four
+   clean islands, shrink the getter row) - the region-pair discipline says
+   both boots land before any C candidate.
+2. Then the first C candidates of the family: rec1 writer (0x144) and rec1
+   reader (0x1A8) are small register-indexed leaves - pair them JP/EU.
+3. Array-writer and deep-writer islands after their host rows split (same
+   pocket-split caveat as the setter: de-frame territory).
+4. The func_80025AB0 ghost cleanup; GsMapModelingData stays the parallel
+   lane's; BIG de-frame coordination-gated.
