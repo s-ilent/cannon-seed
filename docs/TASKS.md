@@ -8150,3 +8150,96 @@ Next queue:
    BIG de-frame coordination-gated.
 
 
+
+## 2026-10-18 (window cron-20261018-1834): the builder's C draft lands in
+## probes/gcc263 and the re-derivation corrects the copy geometry - the
+## four table loops move 10 x 0x20 = 0x140 each (no overlap, no spill; the
+## 0x200 over-read reading is retired), the row-loop defaults enumerate all
+## 22 player-row halfwords for the rec1 case-map re-derivation, and the
+## compile loop adds a signed-char witness: the name global's 5th byte is
+## read with lb
+
+Ninth sandbox rollback pre-window: repo back to 7623cd2, /home/z scratch
+and the worklog's -1604/-1719 sections eaten (their TASKS.md entries stand
+as the record), baselines/ survived; recovered to c17882a0 (the -1719
+window's own push) and the true views were regenerated via
+tools/deframe.py --payload. The -1604/-1834 decode scratch was rebuilt
+repo-externally (capstone decode + word-compare scripts, true views).
+
+Queue item 1 (the -1719 window's next queue): the builder's C draft
+(probes/gcc263/gameinfo_build.c), compiled with STOP_AT_ASM=1 tools/cc.sh
+and word-compared against the re-derived true-view body (slps 0x80023AB0,
+0x2E8 = 186 insns; sces 0x80023AD8; 734/744 bytes word-identical JP vs EU,
+the 6 diff words all data plumbing: 2 gp-relative name loads and the 4
+table-source addiu immediates, sces = slps - 0x35C).
+
+GEOMETRY CORRECTION (re-derivation, superseding the -1604 entry's
+copy-shape note): each table loop runs 10 iterations x 0x20 (8 lw/sw
+pairs) = 0x140 bytes - NOT 0x200. The four 0x140 copies tile
+rec+0x14..rec+0x513 contiguously with no overlap and nothing spills past
+the 0x538 record stride; the C block (record C head) is NOT clobbered by
+any copy. The four source windows (slps 0x8004B97C/0x8004BABC/0x8004BBFC/
+0x8004BD3C, sces = slps - 0x35C) are consumed whole. Record content =
+head (2, -1, name[5], -1, 0, 0) + the four tables + the sparse tail
+(rec+0x514/0x51C/0x524/0x526/0x534/0x536 zeroed; gaps 0x515..0x51B,
+0x520..0x523, 0x528..0x533, 0x537 stay untouched by the builder).
+
+ROW DEFAULTS (ground truth for queue item 3, the set/get_player_info
+case-map re-derivation): the four 0x2C player rows initialize to
+{ 0,0,1,0, 2,3,5,0, 1,0,0x7f,0x2d, 0,-100,-100, 100,100, -100,-100,
+100,100, 0 } across the 22 halfwords - every slot the rec1 pair's case
+map can address, including f[17]'s dead-body slot (0 here) and the 0x7f /
+0x2d pair.
+
+GP WITNESS: the builder's gp bases are slps 0x8006632C / sces
+0x80065FC4 - exactly the queue's .sdata window starts (slps runtime
+0x8006632C..0x800663FC, sces 0x80065FC4..0x80066094), and the name
+global rides gp+4/gp+8 (slps) vs gp+8/gp+0xC (sces) as its first
+datum. The window dump item keeps its concrete witness question: what
+the runtime provisions into [gp, gp+0xD0] (the name global's 5 bytes
+included), which stays beyond the boot payload file (t_size runs to
+0x80066800, the payload file ends at 0x8005D5F0).
+
+SIGNED-CHAR WITNESS (compile loop): retail reads the name global's 5th
+byte with lb (signed); the probe's signed char global under the pinned
+-funsigned-char still compiles to lbu (the sb target kills the sign
+extension) - so the retail unit compiled with signed-char semantics
+(psyq default or explicit type). Same store semantics; recorded as a
+decode refinement on the -1604 entry's name-copy description.
+
+SHAPING LEDGER (probe header, cc.sh 2026-10-18): draft 190 insns vs
+retail 186; sequence ratio 0.745 with verbatim 22/24/24/21-insn blocks
+(row-loop body, record head + tail runs, all four copy loops). ALREADY
+EXACT: the config head's mixed form (one store via the retained base,
+three via per-store lui $at), the two-walker row loop (rowend walker at
+0x80010032, offsets -0x28..0, eight hoisted constants), the C block via
+the retained base, rec/tail derived from the base by addiu, the
+tail-walker store forms at the retail byte offsets, the four copy loops
+(delay-slot source advance, dest addiu from the record pointer), single
+exit. OPEN DELTAS: (1) table materialization - probe %hi/%lo la pairs
+(two hoisted by LIM, +2 move) vs retail lazy lui+negative-addiu per loop
+(probe-link artifact, +4); (2) walker rebase partitions (+1 sh/+2 addiu
+- canonical+rebased tail walker vs retail's single 0x5EE walker);
+(3) name load gp offset (probe .sdata layout, gp+0 vs gp+4/gp+8);
+(4) lbu vs lb (see the signed-char witness). (1)-(3) are probe-link/LIM/
+register-class variance: the C source reproducing the retail
+ARCHITECTURE is witnessed, and the builder remains the first gameinfo
+member matchable in the true view without the jtbl blocker.
+
+Gates: docs + probe only (no build-adjacent input touched; the probe
+compile proves the toolchain post-rollback); matched 174; ratchets
+untouched (365/0); tree clean, pushed.
+
+Next queue:
+1. set/get_player_info case-map re-derivation against the builder's row
+   defaults (now fully enumerated - queue item 3 of -1604/-1719).
+2. Guard-form hunt round 2 (the -1719 queue item 2, still open): the
+   18-case switch and rec1's 0x49-case switch both show ori+sltu+bne vs
+   the drafts' sltu+beq - retry comparison-tree order / permuter forms
+   against both.
+3. The boots' .sdata window witness (gp = 0x8006632C slps / 0x80065FC4
+   sces; name global = the first datum) and the SE.VH/SE.VB diff; the
+   runtime-provisioned region needs the de-frame transition or a runtime
+   trace - coordination-gated like the BIG item.
+4. GsMapModelingData stays the matching lane's; BIG de-frame
+   coordination-gated.
