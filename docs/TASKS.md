@@ -7206,9 +7206,17 @@ raw bins + per-sector true views repo-external under disc_work/); matched 174,
 ratchets 365/0, 8/8 verify GREEN unchanged (no build-side file touched).
 
 Next queue:
-1. (carried, now the lowest open item) the 0x8004E360 side table's consumers +
-   the a0=1/a0=2 raw-syscall ids.
-2. The gameinfo slot lifecycle (writer order across the two config bases) as
-   CRT0-decode fodder.
-3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+1. MATCHING FIRST - it is the long grind and it is the metric. Work the
+   coddog region-pair reports (2026-10-16 entry) and make the boot
+   .sdata/config-block findings the explicit next decode->match target (the
+   game-info API cluster, the boot defaults stager family). Decode only when
+   it unblocks a NAMED matching target, and end every decode pass with
+   converted artifacts (curations/carves/matches), never prose alone. Names
+   the sdk adoption machinery already curates are not to be hand-derived a
+   second time.
+2. (lowest open decode item) the 0x8004E360 side table's consumers + the
+   a0=1/a0=2 raw-syscall ids.
+3. The gameinfo slot lifecycle (writer order across the two config bases) as
+   CRT0-decode fodder - only once a boot matching target waits on it.
+4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
    trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
