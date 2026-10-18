@@ -10,8 +10,8 @@
 nonmatching ResetEntryInt, 0xC
 
 glabel ResetEntryInt
-    /* 2EA98 8004E298 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2EA9C 8004E29C 08004001 */  jr         $t2
-    /* 2EAA0 8004E2A0 18000924 */   addiu     $t1, $zero, 0x18
+    /* 28A68 80048268 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 28A6C 8004826C 08004001 */  jr         $t2
+    /* 28A70 80048270 18000924 */   addiu     $t1, $zero, 0x18
 endlabel ResetEntryInt
-    /* 2EAA4 8004E2A4 00000000 */  nop
+    /* 28A74 80048274 00000000 */  nop

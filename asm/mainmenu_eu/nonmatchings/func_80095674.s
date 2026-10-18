@@ -10,8 +10,8 @@
 nonmatching InitCARD, 0xC
 
 glabel InitCARD
-    /* 75E74 80095674 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 75E78 80095678 08004001 */  jr         $t2
-    /* 75E7C 8009567C 4A000924 */   addiu     $t1, $zero, 0x4A
+    /* 66B04 80086304 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 66B08 80086308 08004001 */  jr         $t2
+    /* 66B0C 8008630C 4A000924 */   addiu     $t1, $zero, 0x4A
 endlabel InitCARD
-    /* 75E80 80095680 00000000 */  nop
+    /* 66B10 80086310 00000000 */  nop

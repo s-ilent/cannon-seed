@@ -10,7 +10,7 @@
 nonmatching func_8005B21C, 0xC
 
 glabel func_8005B21C
-    /* 3BA1C 8005B21C 0000A2C8 */  lwc2       $2, 0x0($a1)
-    /* 3BA20 8005B220 0400A3C8 */  lwc2       $3, 0x4($a1)
-    /* 3BA24 8005B224 0000C4C8 */  lwc2       $4, 0x0($a2)
+    /* 33FCC 800537CC 0000A2C8 */  lwc2       $2, 0x0($a1)
+    /* 33FD0 800537D0 0400A3C8 */  lwc2       $3, 0x4($a1)
+    /* 33FD4 800537D4 0000C4C8 */  lwc2       $4, 0x0($a2)
 endlabel func_8005B21C

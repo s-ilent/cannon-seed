@@ -10,23 +10,23 @@
 nonmatching gte_init, 0x4C
 
 glabel gte_init
-    /* 1B260 8003AA60 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 1B264 8003AA64 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 1B268 8003AA68 B7DC000C */  jal        func_800372DC
-    /* 1B26C 8003AA6C 00000000 */   nop
-    /* 1B270 8003AA70 21200000 */  addu       $a0, $zero, $zero
-    /* 1B274 8003AA74 21280000 */  addu       $a1, $zero, $zero
-    /* 1B278 8003AA78 69CA000C */  jal        func_800329A4
-    /* 1B27C 8003AA7C 21300000 */   addu      $a2, $zero, $zero
-    /* 1B280 8003AA80 21200000 */  addu       $a0, $zero, $zero
-    /* 1B284 8003AA84 8ECA000C */  jal        func_80032A38
-    /* 1B288 8003AA88 21280000 */   addu      $a1, $zero, $zero
-    /* 1B28C 8003AA8C 1180013C */  lui        $at, %hi(D_801145F8)
-    /* 1B290 8003AA90 F84520A4 */  sh         $zero, %lo(D_801145F8)($at)
-    /* 1B294 8003AA94 1180013C */  lui        $at, %hi(D_801145F4)
-    /* 1B298 8003AA98 F44520A4 */  sh         $zero, %lo(D_801145F4)($at)
-    /* 1B29C 8003AA9C 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 1B2A0 8003AAA0 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 1B2A4 8003AAA4 0800E003 */  jr         $ra
-    /* 1B2A8 8003AAA8 00000000 */   nop
+    /* 17A90 80037290 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 17A94 80037294 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 17A98 80037298 B7DC000C */  jal        func_800372DC
+    /* 17A9C 8003729C 00000000 */   nop
+    /* 17AA0 800372A0 21200000 */  addu       $a0, $zero, $zero
+    /* 17AA4 800372A4 21280000 */  addu       $a1, $zero, $zero
+    /* 17AA8 800372A8 69CA000C */  jal        SetFarColor
+    /* 17AAC 800372AC 21300000 */   addu      $a2, $zero, $zero
+    /* 17AB0 800372B0 21200000 */  addu       $a0, $zero, $zero
+    /* 17AB4 800372B4 8ECA000C */  jal        SetGeomOffset
+    /* 17AB8 800372B8 21280000 */   addu      $a1, $zero, $zero
+    /* 17ABC 800372BC 1180013C */  lui        $at, %hi(D_801145F8)
+    /* 17AC0 800372C0 F84520A4 */  sh         $zero, %lo(D_801145F8)($at)
+    /* 17AC4 800372C4 1180013C */  lui        $at, %hi(D_801145F4)
+    /* 17AC8 800372C8 F44520A4 */  sh         $zero, %lo(D_801145F4)($at)
+    /* 17ACC 800372CC 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 17AD0 800372D0 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 17AD4 800372D4 0800E003 */  jr         $ra
+    /* 17AD8 800372D8 00000000 */   nop
 endlabel gte_init

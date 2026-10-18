@@ -10,8 +10,8 @@
 nonmatching delete, 0xC
 
 glabel delete
-    /* 49150 80068950 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 49154 80068954 08004001 */  jr         $t2
-    /* 49158 80068958 45000924 */   addiu     $t1, $zero, 0x45
+    /* 3FA80 8005F280 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 3FA84 8005F284 08004001 */  jr         $t2
+    /* 3FA88 8005F288 45000924 */   addiu     $t1, $zero, 0x45
 endlabel delete
-    /* 4915C 8006895C 00000000 */  nop
+    /* 3FA8C 8005F28C 00000000 */  nop

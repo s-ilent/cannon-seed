@@ -10,14 +10,14 @@
 nonmatching GsSetAmbient, 0x28
 
 glabel GsSetAmbient
-    /* 4E438 8006DC38 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 4E43C 8006DC3C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 4E440 8006DC40 03210400 */  sra        $a0, $a0, 4
-    /* 4E444 8006DC44 03290500 */  sra        $a1, $a1, 4
-    /* 4E448 8006DC48 078A010C */  jal        func_8006281C
-    /* 4E44C 8006DC4C 03310600 */   sra       $a2, $a2, 4
-    /* 4E450 8006DC50 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 4E454 8006DC54 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 4E458 8006DC58 0800E003 */  jr         $ra
-    /* 4E45C 8006DC5C 00000000 */   nop
+    /* 442B8 80063AB8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 442BC 80063ABC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 442C0 80063AC0 03210400 */  sra        $a0, $a0, 4
+    /* 442C4 80063AC4 03290500 */  sra        $a1, $a1, 4
+    /* 442C8 80063AC8 078A010C */  jal        func_8006281C
+    /* 442CC 80063ACC 03310600 */   sra       $a2, $a2, 4
+    /* 442D0 80063AD0 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 442D4 80063AD4 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 442D8 80063AD8 0800E003 */  jr         $ra
+    /* 442DC 80063ADC 00000000 */   nop
 endlabel GsSetAmbient

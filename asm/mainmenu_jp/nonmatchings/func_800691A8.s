@@ -10,8 +10,8 @@
 nonmatching InitHeap, 0xC
 
 glabel InitHeap
-    /* 499A8 800691A8 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 499AC 800691AC 08004001 */  jr         $t2
-    /* 499B0 800691B0 39000924 */   addiu     $t1, $zero, 0x39
+    /* 401A8 8005F9A8 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 401AC 8005F9AC 08004001 */  jr         $t2
+    /* 401B0 8005F9B0 39000924 */   addiu     $t1, $zero, 0x39
 endlabel InitHeap
-    /* 499B4 800691B4 00000000 */  nop
+    /* 401B4 8005F9B4 00000000 */  nop

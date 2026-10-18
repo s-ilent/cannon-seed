@@ -10,8 +10,8 @@
 nonmatching GPU_cw, 0xC
 
 glabel GPU_cw
-    /* 4CCC4 8006C4C4 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 4CCC8 8006C4C8 08004001 */  jr         $t2
-    /* 4CCCC 8006C4CC 49000924 */   addiu     $t1, $zero, 0x49
+    /* 42ED4 800626D4 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 42ED8 800626D8 08004001 */  jr         $t2
+    /* 42EDC 800626DC 49000924 */   addiu     $t1, $zero, 0x49
 endlabel GPU_cw
-    /* 4CCD0 8006C4D0 00000000 */  nop
+    /* 42EE0 800626E0 00000000 */  nop

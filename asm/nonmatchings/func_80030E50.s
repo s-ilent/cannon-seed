@@ -10,8 +10,8 @@
 nonmatching rand, 0xC
 
 glabel rand
-    /* 11650 80030E50 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 11654 80030E54 08004001 */  jr         $t2
-    /* 11658 80030E58 2F000924 */   addiu     $t1, $zero, 0x2F
+    /* F2B0 8002EAB0 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* F2B4 8002EAB4 08004001 */  jr         $t2
+    /* F2B8 8002EAB8 2F000924 */   addiu     $t1, $zero, 0x2F
 endlabel rand
-    /* 1165C 80030E5C 00000000 */  nop
+    /* F2BC 8002EABC 00000000 */  nop

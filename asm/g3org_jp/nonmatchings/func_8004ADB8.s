@@ -10,8 +10,13 @@
 nonmatching strcmp, 0xC
 
 glabel strcmp
-    /* 2B5B8 8004ADB8 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2B5BC 8004ADBC 08004001 */  jr         $t2
-    /* 2B5C0 8004ADC0 17000924 */   addiu     $t1, $zero, 0x17
+    /* 25CA8 800454A8 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 25CAC 800454AC 08004001 */  jr         $t2
+    /* 25CB0 800454B0 17000924 */   addiu     $t1, $zero, 0x17
 endlabel strcmp
-    /* 2B5C4 8004ADC4 00000000 */  nop
+
+nonmatching func_800454B4, 0x4
+
+glabel func_800454B4
+    /* 25CB4 800454B4 00000000 */  nop
+endlabel func_800454B4

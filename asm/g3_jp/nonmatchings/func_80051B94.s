@@ -10,8 +10,13 @@
 nonmatching HookEntryInt, 0xC
 
 glabel HookEntryInt
-    /* 32394 80051B94 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 32398 80051B98 08004001 */  jr         $t2
-    /* 3239C 80051B9C 19000924 */   addiu     $t1, $zero, 0x19
+    /* 2BC44 8004B444 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 2BC48 8004B448 08004001 */  jr         $t2
+    /* 2BC4C 8004B44C 19000924 */   addiu     $t1, $zero, 0x19
 endlabel HookEntryInt
-    /* 323A0 80051BA0 00000000 */  nop
+
+nonmatching func_8004B450, 0x4
+
+glabel func_8004B450
+    /* 2BC50 8004B450 00000000 */  nop
+endlabel func_8004B450

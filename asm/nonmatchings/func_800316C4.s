@@ -10,21 +10,21 @@
 nonmatching startIntrDMA, 0x44
 
 glabel startIntrDMA
-    /* 11EC4 800316C4 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 11EC8 800316C8 0580043C */  lui        $a0, %hi(D_8004E33C)
-    /* 11ECC 800316CC 3CE38424 */  addiu      $a0, $a0, %lo(D_8004E33C)
-    /* 11ED0 800316D0 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 11ED4 800316D4 1CBD000C */  jal        func_8002F470
-    /* 11ED8 800316D8 08000534 */   ori       $a1, $zero, 0x8
-    /* 11EDC 800316DC 03000434 */  ori        $a0, $zero, 0x3
-    /* 11EE0 800316E0 0580023C */  lui        $v0, %hi(D_8004E338)
-    /* 11EE4 800316E4 38E3428C */  lw         $v0, %lo(D_8004E338)($v0)
-    /* 11EE8 800316E8 0380053C */  lui        $a1, %hi(D_8002F244)
-    /* 11EEC 800316EC 44F2A524 */  addiu      $a1, $a1, %lo(D_8002F244)
-    /* 11EF0 800316F0 000040AC */  sw         $zero, 0x0($v0)
-    /* 11EF4 800316F4 C0BA000C */  jal        func_8002EB00
-    /* 11EF8 800316F8 00000000 */   nop
-    /* 11EFC 800316FC 0380023C */  lui        $v0, %hi(D_8002F3C8)
-    /* 11F00 80031700 C8F34224 */  addiu      $v0, $v0, %lo(D_8002F3C8)
-    /* 11F04 80031704 1000BF8F */  lw         $ra, 0x10($sp)
+    /* F9F4 8002F1F4 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* F9F8 8002F1F8 0580043C */  lui        $a0, %hi(D_8004E33C)
+    /* F9FC 8002F1FC 3CE38424 */  addiu      $a0, $a0, %lo(D_8004E33C)
+    /* FA00 8002F200 1000BFAF */  sw         $ra, 0x10($sp)
+    /* FA04 8002F204 1CBD000C */  jal        memclr
+    /* FA08 8002F208 08000534 */   ori       $a1, $zero, 0x8
+    /* FA0C 8002F20C 03000434 */  ori        $a0, $zero, 0x3
+    /* FA10 8002F210 0580023C */  lui        $v0, %hi(D_8004E338)
+    /* FA14 8002F214 38E3428C */  lw         $v0, %lo(D_8004E338)($v0)
+    /* FA18 8002F218 0380053C */  lui        $a1, %hi(trapIntrDMA)
+    /* FA1C 8002F21C 44F2A524 */  addiu      $a1, $a1, %lo(trapIntrDMA)
+    /* FA20 8002F220 000040AC */  sw         $zero, 0x0($v0)
+    /* FA24 8002F224 C0BA000C */  jal        func_8002EB00
+    /* FA28 8002F228 00000000 */   nop
+    /* FA2C 8002F22C 0380023C */  lui        $v0, %hi(setIntrDMA)
+    /* FA30 8002F230 C8F34224 */  addiu      $v0, $v0, %lo(setIntrDMA)
+    /* FA34 8002F234 1000BF8F */  lw         $ra, 0x10($sp)
 endlabel startIntrDMA

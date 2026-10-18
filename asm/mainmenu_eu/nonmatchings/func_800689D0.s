@@ -10,8 +10,8 @@
 nonmatching nextfile, 0xC
 
 glabel nextfile
-    /* 491D0 800689D0 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 491D4 800689D4 08004001 */  jr         $t2
-    /* 491D8 800689D8 43000924 */   addiu     $t1, $zero, 0x43
+    /* 3FB00 8005F300 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 3FB04 8005F304 08004001 */  jr         $t2
+    /* 3FB08 8005F308 43000924 */   addiu     $t1, $zero, 0x43
 endlabel nextfile
-    /* 491DC 800689DC 00000000 */  nop
+    /* 3FB0C 8005F30C 00000000 */  nop

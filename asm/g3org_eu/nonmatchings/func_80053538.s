@@ -10,34 +10,34 @@
 nonmatching GsInit3D, 0x78
 
 glabel GsInit3D
-    /* 33D38 80053538 1880023C */  lui        $v0, %hi(D_80178C08)
-    /* 33D3C 8005353C 088C428C */  lw         $v0, %lo(D_80178C08)($v0)
-    /* 33D40 80053540 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 33D44 80053544 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 33D48 80053548 C21F0200 */  srl        $v1, $v0, 31
-    /* 33D4C 8005354C 21104300 */  addu       $v0, $v0, $v1
-    /* 33D50 80053550 1880033C */  lui        $v1, %hi(D_80178C1C)
-    /* 33D54 80053554 1C8C638C */  lw         $v1, %lo(D_80178C1C)($v1)
-    /* 33D58 80053558 43100200 */  sra        $v0, $v0, 1
-    /* 33D5C 8005355C 1780013C */  lui        $at, %hi(D_80174100)
-    /* 33D60 80053560 004122A4 */  sh         $v0, %lo(D_80174100)($at)
-    /* 33D64 80053564 C2170300 */  srl        $v0, $v1, 31
-    /* 33D68 80053568 21186200 */  addu       $v1, $v1, $v0
-    /* 33D6C 8005356C 43180300 */  sra        $v1, $v1, 1
-    /* 33D70 80053570 1780013C */  lui        $at, %hi(D_80174102)
-    /* 33D74 80053574 024123A4 */  sh         $v1, %lo(D_80174102)($at)
-    /* 33D78 80053578 4F6E010C */  jal        func_8005B93C
-    /* 33D7C 8005357C 00000000 */   nop
-    /* 33D80 80053580 0A000234 */  ori        $v0, $zero, 0xA
-    /* 33D84 80053584 1880013C */  lui        $at, %hi(D_8017FB18)
-    /* 33D88 80053588 18FB22AC */  sw         $v0, %lo(D_8017FB18)($at)
-    /* 33D8C 8005358C FF3F0234 */  ori        $v0, $zero, 0x3FFF
-    /* 33D90 80053590 1880013C */  lui        $at, %hi(D_8017FB14)
-    /* 33D94 80053594 14FB20AC */  sw         $zero, %lo(D_8017FB14)($at)
-    /* 33D98 80053598 1880013C */  lui        $at, %hi(D_80178D5C)
-    /* 33D9C 8005359C 5C8D22AC */  sw         $v0, %lo(D_80178D5C)($at)
-    /* 33DA0 800535A0 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 33DA4 800535A4 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 33DA8 800535A8 0800E003 */  jr         $ra
-    /* 33DAC 800535AC 00000000 */   nop
+    /* 2D258 8004CA58 1880023C */  lui        $v0, %hi(D_80178C08)
+    /* 2D25C 8004CA5C 088C428C */  lw         $v0, %lo(D_80178C08)($v0)
+    /* 2D260 8004CA60 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2D264 8004CA64 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 2D268 8004CA68 C21F0200 */  srl        $v1, $v0, 31
+    /* 2D26C 8004CA6C 21104300 */  addu       $v0, $v0, $v1
+    /* 2D270 8004CA70 1880033C */  lui        $v1, %hi(D_80178C1C)
+    /* 2D274 8004CA74 1C8C638C */  lw         $v1, %lo(D_80178C1C)($v1)
+    /* 2D278 8004CA78 43100200 */  sra        $v0, $v0, 1
+    /* 2D27C 8004CA7C 1780013C */  lui        $at, %hi(D_80174100)
+    /* 2D280 8004CA80 004122A4 */  sh         $v0, %lo(D_80174100)($at)
+    /* 2D284 8004CA84 C2170300 */  srl        $v0, $v1, 31
+    /* 2D288 8004CA88 21186200 */  addu       $v1, $v1, $v0
+    /* 2D28C 8004CA8C 43180300 */  sra        $v1, $v1, 1
+    /* 2D290 8004CA90 1780013C */  lui        $at, %hi(D_80174102)
+    /* 2D294 8004CA94 024123A4 */  sh         $v1, %lo(D_80174102)($at)
+    /* 2D298 8004CA98 4F6E010C */  jal        GsSetDrawBuffOffset
+    /* 2D29C 8004CA9C 00000000 */   nop
+    /* 2D2A0 8004CAA0 0A000234 */  ori        $v0, $zero, 0xA
+    /* 2D2A4 8004CAA4 1880013C */  lui        $at, %hi(D_8017FB18)
+    /* 2D2A8 8004CAA8 18FB22AC */  sw         $v0, %lo(D_8017FB18)($at)
+    /* 2D2AC 8004CAAC FF3F0234 */  ori        $v0, $zero, 0x3FFF
+    /* 2D2B0 8004CAB0 1880013C */  lui        $at, %hi(D_8017FB14)
+    /* 2D2B4 8004CAB4 14FB20AC */  sw         $zero, %lo(D_8017FB14)($at)
+    /* 2D2B8 8004CAB8 1880013C */  lui        $at, %hi(D_80178D5C)
+    /* 2D2BC 8004CABC 5C8D22AC */  sw         $v0, %lo(D_80178D5C)($at)
+    /* 2D2C0 8004CAC0 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 2D2C4 8004CAC4 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2D2C8 8004CAC8 0800E003 */  jr         $ra
+    /* 2D2CC 8004CACC 00000000 */   nop
 endlabel GsInit3D

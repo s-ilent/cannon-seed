@@ -10,38 +10,38 @@
 nonmatching SpuStart, 0x84
 
 glabel SpuStart
-    /* 4C768 8006BF68 0B80023C */  lui        $v0, %hi(D_800B7A88)
-    /* 4C76C 8006BF6C 887A428C */  lw         $v0, %lo(D_800B7A88)($v0)
-    /* 4C770 8006BF70 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 4C774 8006BF74 19004014 */  bnez       $v0, .L8006BFDC
-    /* 4C778 8006BF78 1000BFAF */   sw        $ra, 0x10($sp)
-    /* 4C77C 8006BF7C 01000234 */  ori        $v0, $zero, 0x1
-    /* 4C780 8006BF80 0B80013C */  lui        $at, %hi(D_800B7A88)
-    /* 4C784 8006BF84 887A22AC */  sw         $v0, %lo(D_800B7A88)($at)
-    /* 4C788 8006BF88 1822010C */  jal        func_80048860
-    /* 4C78C 8006BF8C 00000000 */   nop
-    /* 4C790 8006BF90 0680043C */  lui        $a0, %hi(D_80061830)
-    /* 4C794 8006BF94 30188424 */  addiu      $a0, $a0, %lo(D_80061830)
-    /* 4C798 8006BF98 0B80013C */  lui        $at, %hi(D_800B761C)
-    /* 4C79C 8006BF9C 1C7620AC */  sw         $zero, %lo(D_800B761C)($at)
-    /* 4C7A0 8006BFA0 2388010C */  jal        func_8006208C
-    /* 4C7A4 8006BFA4 00000000 */   nop
-    /* 4C7A8 8006BFA8 00F0043C */  lui        $a0, (0xF0000009 >> 16)
-    /* 4C7AC 8006BFAC 09008434 */  ori        $a0, $a0, (0xF0000009 & 0xFFFF)
-    /* 4C7B0 8006BFB0 20000534 */  ori        $a1, $zero, 0x20
-    /* 4C7B4 8006BFB4 00200634 */  ori        $a2, $zero, 0x2000
-    /* 4C7B8 8006BFB8 5822010C */  jal        func_80048960
-    /* 4C7BC 8006BFBC 21380000 */   addu      $a3, $zero, $zero
-    /* 4C7C0 8006BFC0 21204000 */  addu       $a0, $v0, $zero
-    /* 4C7C4 8006BFC4 0B80013C */  lui        $at, %hi(D_800B7678)
-    /* 4C7C8 8006BFC8 787624AC */  sw         $a0, %lo(D_800B7678)($at)
-    /* 4C7CC 8006BFCC 2C22010C */  jal        func_800488B0
-    /* 4C7D0 8006BFD0 00000000 */   nop
-    /* 4C7D4 8006BFD4 6422010C */  jal        func_80048990
-    /* 4C7D8 8006BFD8 00000000 */   nop
-  .L8006BFDC:
-    /* 4C7DC 8006BFDC 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 4C7E0 8006BFE0 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 4C7E4 8006BFE4 0800E003 */  jr         $ra
-    /* 4C7E8 8006BFE8 00000000 */   nop
+    /* 42978 80062178 0B80023C */  lui        $v0, %hi(D_800B7A88)
+    /* 4297C 8006217C 887A428C */  lw         $v0, %lo(D_800B7A88)($v0)
+    /* 42980 80062180 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 42984 80062184 19004014 */  bnez       $v0, .L800621EC
+    /* 42988 80062188 1000BFAF */   sw        $ra, 0x10($sp)
+    /* 4298C 8006218C 01000234 */  ori        $v0, $zero, 0x1
+    /* 42990 80062190 0B80013C */  lui        $at, %hi(D_800B7A88)
+    /* 42994 80062194 887A22AC */  sw         $v0, %lo(D_800B7A88)($at)
+    /* 42998 80062198 1822010C */  jal        func_80048860
+    /* 4299C 8006219C 00000000 */   nop
+    /* 429A0 800621A0 0680043C */  lui        $a0, %hi(D_80061830)
+    /* 429A4 800621A4 30188424 */  addiu      $a0, $a0, %lo(D_80061830)
+    /* 429A8 800621A8 0B80013C */  lui        $at, %hi(D_800B761C)
+    /* 429AC 800621AC 1C7620AC */  sw         $zero, %lo(D_800B761C)($at)
+    /* 429B0 800621B0 2388010C */  jal        _SpuDataCallback
+    /* 429B4 800621B4 00000000 */   nop
+    /* 429B8 800621B8 00F0043C */  lui        $a0, (0xF0000009 >> 16)
+    /* 429BC 800621BC 09008434 */  ori        $a0, $a0, (0xF0000009 & 0xFFFF)
+    /* 429C0 800621C0 20000534 */  ori        $a1, $zero, 0x20
+    /* 429C4 800621C4 00200634 */  ori        $a2, $zero, 0x2000
+    /* 429C8 800621C8 5822010C */  jal        OpenEvent
+    /* 429CC 800621CC 21380000 */   addu      $a3, $zero, $zero
+    /* 429D0 800621D0 21204000 */  addu       $a0, $v0, $zero
+    /* 429D4 800621D4 0B80013C */  lui        $at, %hi(D_800B7678)
+    /* 429D8 800621D8 787624AC */  sw         $a0, %lo(D_800B7678)($at)
+    /* 429DC 800621DC 2C22010C */  jal        EnableEvent
+    /* 429E0 800621E0 00000000 */   nop
+    /* 429E4 800621E4 6422010C */  jal        func_80048990
+    /* 429E8 800621E8 00000000 */   nop
+  .L800621EC:
+    /* 429EC 800621EC 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 429F0 800621F0 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 429F4 800621F4 0800E003 */  jr         $ra
+    /* 429F8 800621F8 00000000 */   nop
 endlabel SpuStart

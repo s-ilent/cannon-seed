@@ -10,8 +10,8 @@
 nonmatching SysDeqIntRP, 0xC
 
 glabel SysDeqIntRP
-    /* 5EA70 8007E270 C0000A24 */  addiu      $t2, $zero, 0xC0
-    /* 5EA74 8007E274 08004001 */  jr         $t2
-    /* 5EA78 8007E278 03000924 */   addiu     $t1, $zero, 0x3
+    /* 527B0 80071FB0 C0000A24 */  addiu      $t2, $zero, 0xC0
+    /* 527B4 80071FB4 08004001 */  jr         $t2
+    /* 527B8 80071FB8 03000924 */   addiu     $t1, $zero, 0x3
 endlabel SysDeqIntRP
-    /* 5EA7C 8007E27C 00000000 */  nop
+    /* 527BC 80071FBC 00000000 */  nop

@@ -10,39 +10,38 @@
 nonmatching StSetStream, 0x88
 
 glabel StSetStream
-    /* 4C404 8006BC04 E0FFBD27 */  addiu      $sp, $sp, -0x20
-    /* 4C408 8006BC08 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 4C40C 8006BC0C 21808000 */  addu       $s0, $a0, $zero
-    /* 4C410 8006BC10 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 4C414 8006BC14 2188E000 */  addu       $s1, $a3, $zero
-    /* 4C418 8006BC18 1800B2AF */  sw         $s2, 0x18($sp)
-    /* 4C41C 8006BC1C 3000B28F */  lw         $s2, 0x30($sp)
-    /* 4C420 8006BC20 1C00BFAF */  sw         $ra, 0x1C($sp)
-    /* 4C424 8006BC24 538D010C */  jal        func_8006354C
-    /* 4C428 8006BC28 01000434 */   ori       $a0, $zero, 0x1
-    /* 4C42C 8006BC2C 01001032 */  andi       $s0, $s0, 0x1
-    /* 4C430 8006BC30 1780013C */  lui        $at, %hi(D_80171E0C)
-    /* 4C434 8006BC34 0C1E20AC */  sw         $zero, %lo(D_80171E0C)($at)
-    /* 4C438 8006BC38 1780013C */  lui        $at, %hi(D_8016AA44)
-    /* 4C43C 8006BC3C 44AA31AC */  sw         $s1, %lo(D_8016AA44)($at)
-    /* 4C440 8006BC40 1680013C */  lui        $at, %hi(D_801651DC)
-    /* 4C444 8006BC44 DC5130AC */  sw         $s0, %lo(D_801651DC)($at)
-    /* 4C448 8006BC48 1780013C */  lui        $at, %hi(D_8016AC64)
-    /* 4C44C 8006BC4C 64AC20AC */  sw         $zero, %lo(D_8016AC64)($at)
-    /* 4C450 8006BC50 1780013C */  lui        $at, %hi(D_8016AB60)
-    /* 4C454 8006BC54 60AB20AC */  sw         $zero, %lo(D_8016AB60)($at)
-  .L8006BC58:
-    /* 4C458 8006BC58 1680013C */  lui        $at, %hi(D_801651D8)
-    /* 4C45C 8006BC5C D85120A4 */  sh         $zero, %lo(D_801651D8)($at)
-    /* 4C460 8006BC60 1480013C */  lui        $at, %hi(D_801474D8)
-    /* 4C464 8006BC64 D87420AC */  sw         $zero, %lo(D_801474D8)($at)
-    /* 4C468 8006BC68 1780013C */  lui        $at, %hi(D_8016AA4C)
-    /* 4C46C 8006BC6C 4CAA32AC */  sw         $s2, %lo(D_8016AA4C)($at)
-    /* 4C470 8006BC70 1C00BF8F */  lw         $ra, 0x1C($sp)
-    /* 4C474 8006BC74 1800B28F */  lw         $s2, 0x18($sp)
-    /* 4C478 8006BC78 1400B18F */  lw         $s1, 0x14($sp)
-    /* 4C47C 8006BC7C 1000B08F */  lw         $s0, 0x10($sp)
-    /* 4C480 8006BC80 2000BD27 */  addiu      $sp, $sp, 0x20
-    /* 4C484 8006BC84 0800E003 */  jr         $ra
-    /* 4C488 8006BC88 00000000 */   nop
+    /* 42744 80061F44 E0FFBD27 */  addiu      $sp, $sp, -0x20
+    /* 42748 80061F48 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 4274C 80061F4C 21808000 */  addu       $s0, $a0, $zero
+    /* 42750 80061F50 1400B1AF */  sw         $s1, 0x14($sp)
+    /* 42754 80061F54 2188E000 */  addu       $s1, $a3, $zero
+    /* 42758 80061F58 1800B2AF */  sw         $s2, 0x18($sp)
+    /* 4275C 80061F5C 3000B28F */  lw         $s2, 0x30($sp)
+    /* 42760 80061F60 1C00BFAF */  sw         $ra, 0x1C($sp)
+    /* 42764 80061F64 538D010C */  jal        StSetMask
+    /* 42768 80061F68 01000434 */   ori       $a0, $zero, 0x1
+    /* 4276C 80061F6C 01001032 */  andi       $s0, $s0, 0x1
+    /* 42770 80061F70 1780013C */  lui        $at, %hi(D_80171E0C)
+    /* 42774 80061F74 0C1E20AC */  sw         $zero, %lo(D_80171E0C)($at)
+    /* 42778 80061F78 1780013C */  lui        $at, %hi(D_8016AA44)
+    /* 4277C 80061F7C 44AA31AC */  sw         $s1, %lo(D_8016AA44)($at)
+    /* 42780 80061F80 1680013C */  lui        $at, %hi(D_801651DC)
+    /* 42784 80061F84 DC5130AC */  sw         $s0, %lo(D_801651DC)($at)
+    /* 42788 80061F88 1780013C */  lui        $at, %hi(D_8016AC64)
+    /* 4278C 80061F8C 64AC20AC */  sw         $zero, %lo(D_8016AC64)($at)
+    /* 42790 80061F90 1780013C */  lui        $at, %hi(D_8016AB60)
+    /* 42794 80061F94 60AB20AC */  sw         $zero, %lo(D_8016AB60)($at)
+    /* 42798 80061F98 1680013C */  lui        $at, %hi(D_801651D8)
+    /* 4279C 80061F9C D85120A4 */  sh         $zero, %lo(D_801651D8)($at)
+    /* 427A0 80061FA0 1480013C */  lui        $at, %hi(D_801474D8)
+    /* 427A4 80061FA4 D87420AC */  sw         $zero, %lo(D_801474D8)($at)
+    /* 427A8 80061FA8 1780013C */  lui        $at, %hi(D_8016AA4C)
+    /* 427AC 80061FAC 4CAA32AC */  sw         $s2, %lo(D_8016AA4C)($at)
+    /* 427B0 80061FB0 1C00BF8F */  lw         $ra, 0x1C($sp)
+    /* 427B4 80061FB4 1800B28F */  lw         $s2, 0x18($sp)
+    /* 427B8 80061FB8 1400B18F */  lw         $s1, 0x14($sp)
+    /* 427BC 80061FBC 1000B08F */  lw         $s0, 0x10($sp)
+    /* 427C0 80061FC0 2000BD27 */  addiu      $sp, $sp, 0x20
+    /* 427C4 80061FC4 0800E003 */  jr         $ra
+    /* 427C8 80061FC8 00000000 */   nop
 endlabel StSetStream

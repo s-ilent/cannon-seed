@@ -10,5 +10,5 @@
 nonmatching StSetRing, 0x4
 
 glabel StSetRing
-    /* 217F8 80040FF8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 1D318 8003CB18 E8FFBD27 */  addiu      $sp, $sp, -0x18
 endlabel StSetRing

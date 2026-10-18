@@ -10,16 +10,16 @@
 nonmatching GsSetLsMatrix, 0x30
 
 glabel GsSetLsMatrix
-    /* 36AA4 800562A4 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 36AA8 800562A8 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 36AAC 800562AC 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 36AB0 800562B0 B528010C */  jal        func_8004A2D4
-    /* 36AB4 800562B4 21808000 */   addu      $s0, $a0, $zero
-    /* 36AB8 800562B8 D928010C */  jal        func_8004A364
-    /* 36ABC 800562BC 21200002 */   addu      $a0, $s0, $zero
-    /* 36AC0 800562C0 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 36AC4 800562C4 1000B08F */  lw         $s0, 0x10($sp)
-    /* 36AC8 800562C8 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 36ACC 800562CC 0800E003 */  jr         $ra
-    /* 36AD0 800562D0 00000000 */   nop
+    /* 2F9D4 8004F1D4 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2F9D8 8004F1D8 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 2F9DC 8004F1DC 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 2F9E0 8004F1E0 B528010C */  jal        func_8004A2D4
+    /* 2F9E4 8004F1E4 21808000 */   addu      $s0, $a0, $zero
+    /* 2F9E8 8004F1E8 D928010C */  jal        func_8004A364
+    /* 2F9EC 8004F1EC 21200002 */   addu      $a0, $s0, $zero
+    /* 2F9F0 8004F1F0 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 2F9F4 8004F1F4 1000B08F */  lw         $s0, 0x10($sp)
+    /* 2F9F8 8004F1F8 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2F9FC 8004F1FC 0800E003 */  jr         $ra
+    /* 2FA00 8004F200 00000000 */   nop
 endlabel GsSetLsMatrix

@@ -10,8 +10,8 @@
 nonmatching StartCARD, 0xC
 
 glabel StartCARD
-    /* 3069C 8004FE9C B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 306A0 8004FEA0 08004001 */  jr         $t2
-    /* 306A4 8004FEA4 4B000924 */   addiu     $t1, $zero, 0x4B
+    /* 2A2DC 80049ADC B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 2A2E0 80049AE0 08004001 */  jr         $t2
+    /* 2A2E4 80049AE4 4B000924 */   addiu     $t1, $zero, 0x4B
 endlabel StartCARD
-    /* 306A8 8004FEA8 00000000 */  nop
+    /* 2A2E8 80049AE8 00000000 */  nop

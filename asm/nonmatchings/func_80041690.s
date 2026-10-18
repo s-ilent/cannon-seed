@@ -10,5 +10,5 @@
 nonmatching _SpuDataCallback, 0x4
 
 glabel _SpuDataCallback
-    /* 21E90 80041690 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 1D880 8003D080 E8FFBD27 */  addiu      $sp, $sp, -0x18
 endlabel _SpuDataCallback

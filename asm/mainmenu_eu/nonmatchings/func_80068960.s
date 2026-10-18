@@ -10,8 +10,8 @@
 nonmatching format, 0xC
 
 glabel format
-    /* 49160 80068960 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 49164 80068964 08004001 */  jr         $t2
-    /* 49168 80068968 41000924 */   addiu     $t1, $zero, 0x41
+    /* 3FA90 8005F290 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 3FA94 8005F294 08004001 */  jr         $t2
+    /* 3FA98 8005F298 41000924 */   addiu     $t1, $zero, 0x41
 endlabel format
-    /* 4916C 8006896C 00000000 */  nop
+    /* 3FA9C 8005F29C 00000000 */  nop

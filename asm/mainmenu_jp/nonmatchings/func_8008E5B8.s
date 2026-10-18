@@ -10,38 +10,36 @@
 nonmatching SpuQuit, 0x7C
 
 glabel SpuQuit
-    /* 6EDB8 8008E5B8 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 6EDBC 8008E5BC 0D80033C */  lui        $v1, %hi(D_800C8570)
-    /* 6EDC0 8008E5C0 7085638C */  lw         $v1, %lo(D_800C8570)($v1)
-  alabel D_8008E5C4
-    /* 6EDC4 8008E5C4 01000234 */  ori        $v0, $zero, 0x1
-    /* 6EDC8 8008E5C8 16006214 */  bne        $v1, $v0, .L8008E624
-    /* 6EDCC 8008E5CC 1000BFAF */   sw        $ra, 0x10($sp)
-    /* 6EDD0 8008E5D0 0D80013C */  lui        $at, %hi(D_800C8570)
-    /* 6EDD4 8008E5D4 708520AC */  sw         $zero, %lo(D_800C8570)($at)
-    /* 6EDD8 8008E5D8 367E010C */  jal        func_8005F8D8
-    /* 6EDDC 8008E5DC 00000000 */   nop
-    /* 6EDE0 8008E5E0 21200000 */  addu       $a0, $zero, $zero
-    /* 6EDE4 8008E5E4 0D80013C */  lui        $at, %hi(D_800C85B0)
-    /* 6EDE8 8008E5E8 B08520AC */  sw         $zero, %lo(D_800C85B0)($at)
-    /* 6EDEC 8008E5EC 0D80013C */  lui        $at, %hi(D_800C85B4)
-    /* 6EDF0 8008E5F0 B48520AC */  sw         $zero, %lo(D_800C85B4)($at)
-    /* 6EDF4 8008E5F4 3CE4010C */  jal        func_800790F0
-    /* 6EDF8 8008E5F8 00000000 */   nop
-    /* 6EDFC 8008E5FC 0D80043C */  lui        $a0, %hi(D_800C8160)
-    /* 6EE00 8008E600 6081848C */  lw         $a0, %lo(D_800C8160)($a0)
-    /* 6EE04 8008E604 4100020C */  jal        func_80080104
-    /* 6EE08 8008E608 00000000 */   nop
-    /* 6EE0C 8008E60C 0D80043C */  lui        $a0, %hi(D_800C8160)
-    /* 6EE10 8008E610 6081848C */  lw         $a0, %lo(D_800C8160)($a0)
-    /* 6EE14 8008E614 4500020C */  jal        func_80080114
-    /* 6EE18 8008E618 00000000 */   nop
-    /* 6EE1C 8008E61C 827E010C */  jal        func_8005FA08
-  alabel D_8008E620
-    /* 6EE20 8008E620 00000000 */   nop
-  .L8008E624:
-    /* 6EE24 8008E624 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 6EE28 8008E628 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 6EE2C 8008E62C 0800E003 */  jr         $ra
-    /* 6EE30 8008E630 00000000 */   nop
+    /* 60888 80080088 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 6088C 8008008C 0D80033C */  lui        $v1, %hi(D_800C8570)
+    /* 60890 80080090 7085638C */  lw         $v1, %lo(D_800C8570)($v1)
+    /* 60894 80080094 01000234 */  ori        $v0, $zero, 0x1
+    /* 60898 80080098 16006214 */  bne        $v1, $v0, .L800800F4
+    /* 6089C 8008009C 1000BFAF */   sw        $ra, 0x10($sp)
+    /* 608A0 800800A0 0D80013C */  lui        $at, %hi(D_800C8570)
+    /* 608A4 800800A4 708520AC */  sw         $zero, %lo(D_800C8570)($at)
+    /* 608A8 800800A8 367E010C */  jal        func_8005F8D8
+    /* 608AC 800800AC 00000000 */   nop
+    /* 608B0 800800B0 21200000 */  addu       $a0, $zero, $zero
+    /* 608B4 800800B4 0D80013C */  lui        $at, %hi(D_800C85B0)
+    /* 608B8 800800B8 B08520AC */  sw         $zero, %lo(D_800C85B0)($at)
+    /* 608BC 800800BC 0D80013C */  lui        $at, %hi(D_800C85B4)
+    /* 608C0 800800C0 B48520AC */  sw         $zero, %lo(D_800C85B4)($at)
+    /* 608C4 800800C4 3CE4010C */  jal        _SpuDataCallback
+    /* 608C8 800800C8 00000000 */   nop
+    /* 608CC 800800CC 0D80043C */  lui        $a0, %hi(D_800C8160)
+    /* 608D0 800800D0 6081848C */  lw         $a0, %lo(D_800C8160)($a0)
+    /* 608D4 800800D4 4100020C */  jal        CloseEvent
+    /* 608D8 800800D8 00000000 */   nop
+    /* 608DC 800800DC 0D80043C */  lui        $a0, %hi(D_800C8160)
+    /* 608E0 800800E0 6081848C */  lw         $a0, %lo(D_800C8160)($a0)
+    /* 608E4 800800E4 4500020C */  jal        DisableEvent
+    /* 608E8 800800E8 00000000 */   nop
+    /* 608EC 800800EC 827E010C */  jal        func_8005FA08
+    /* 608F0 800800F0 00000000 */   nop
+  .L800800F4:
+    /* 608F4 800800F4 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 608F8 800800F8 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 608FC 800800FC 0800E003 */  jr         $ra
+    /* 60900 80080100 00000000 */   nop
 endlabel SpuQuit

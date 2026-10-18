@@ -10,8 +10,8 @@
 nonmatching OpenEvent, 0xC
 
 glabel OpenEvent
-    /* 31C54 80051454 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 31C58 80051458 08004001 */  jr         $t2
-    /* 31C5C 8005145C 08000924 */   addiu     $t1, $zero, 0x8
+    /* 2B634 8004AE34 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 2B638 8004AE38 08004001 */  jr         $t2
+    /* 2B63C 8004AE3C 08000924 */   addiu     $t1, $zero, 0x8
 endlabel OpenEvent
-    /* 31C60 80051460 00000000 */  nop
+    /* 2B640 8004AE40 00000000 */  nop

@@ -11,16 +11,16 @@
 nonmatching SetColorMatrix, 0x30
 
 glabel SetColorMatrix
-    /* 3090C 8005010C 0000888C */  lw         $t0, 0x0($a0)
-    /* 30910 80050110 0400898C */  lw         $t1, 0x4($a0)
-    /* 30914 80050114 08008A8C */  lw         $t2, 0x8($a0)
-    /* 30918 80050118 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 3091C 8005011C 10008C8C */  lw         $t4, 0x10($a0)
-    /* 30920 80050120 0080C848 */  ctc2       $t0, $16 /* handwritten instruction */
-    /* 30924 80050124 0088C948 */  ctc2       $t1, $17 /* handwritten instruction */
-    /* 30928 80050128 0090CA48 */  ctc2       $t2, $18 /* handwritten instruction */
-    /* 3092C 8005012C 0098CB48 */  ctc2       $t3, $19 /* handwritten instruction */
-    /* 30930 80050130 00A0CC48 */  ctc2       $t4, $20 /* handwritten instruction */
-    /* 30934 80050134 0800E003 */  jr         $ra
-    /* 30938 80050138 00000000 */   nop
+    /* 2A54C 80049D4C 0000888C */  lw         $t0, 0x0($a0)
+    /* 2A550 80049D50 0400898C */  lw         $t1, 0x4($a0)
+    /* 2A554 80049D54 08008A8C */  lw         $t2, 0x8($a0)
+    /* 2A558 80049D58 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 2A55C 80049D5C 10008C8C */  lw         $t4, 0x10($a0)
+    /* 2A560 80049D60 0080C848 */  ctc2       $t0, $16 /* handwritten instruction */
+    /* 2A564 80049D64 0088C948 */  ctc2       $t1, $17 /* handwritten instruction */
+    /* 2A568 80049D68 0090CA48 */  ctc2       $t2, $18 /* handwritten instruction */
+    /* 2A56C 80049D6C 0098CB48 */  ctc2       $t3, $19 /* handwritten instruction */
+    /* 2A570 80049D70 00A0CC48 */  ctc2       $t4, $20 /* handwritten instruction */
+    /* 2A574 80049D74 0800E003 */  jr         $ra
+    /* 2A578 80049D78 00000000 */   nop
 endlabel SetColorMatrix

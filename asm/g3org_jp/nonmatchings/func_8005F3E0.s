@@ -10,7 +10,7 @@
 nonmatching func_8005F3E0, 0xC
 
 glabel func_8005F3E0
-    /* 3FBE0 8005F3E0 8800BD27 */  addiu      $sp, $sp, 0x88
-    /* 3FBE4 8005F3E4 0800E003 */  jr         $ra
-    /* 3FBE8 8005F3E8 00000000 */   nop
+    /* 37810 80057010 8800BD27 */  addiu      $sp, $sp, 0x88
+    /* 37814 80057014 0800E003 */  jr         $ra
+    /* 37818 80057018 00000000 */   nop
 endlabel func_8005F3E0

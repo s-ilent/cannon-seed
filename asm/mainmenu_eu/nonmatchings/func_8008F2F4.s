@@ -10,8 +10,8 @@
 nonmatching DisableEvent, 0xC
 
 glabel DisableEvent
-    /* 6FAF4 8008F2F4 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 6FAF8 8008F2F8 08004001 */  jr         $t2
-    /* 6FAFC 8008F2FC 0D000924 */   addiu     $t1, $zero, 0xD
+    /* 61494 80080C94 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 61498 80080C98 08004001 */  jr         $t2
+    /* 6149C 80080C9C 0D000924 */   addiu     $t1, $zero, 0xD
 endlabel DisableEvent
-    /* 6FB00 8008F300 00000000 */  nop
+    /* 614A0 80080CA0 00000000 */  nop

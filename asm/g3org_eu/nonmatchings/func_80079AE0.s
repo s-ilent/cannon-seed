@@ -10,45 +10,45 @@
 nonmatching SsSetSerialAttr, 0x94
 
 glabel SsSetSerialAttr
-    /* 5A2E0 80079AE0 C0FFBD27 */  addiu      $sp, $sp, -0x40
-    /* 5A2E4 80079AE4 FF008230 */  andi       $v0, $a0, 0xFF
-    /* 5A2E8 80079AE8 0E004014 */  bnez       $v0, .L80079B24
-    /* 5A2EC 80079AEC 3800BFAF */   sw        $ra, 0x38($sp)
-    /* 5A2F0 80079AF0 FF00A330 */  andi       $v1, $a1, 0xFF
-    /* 5A2F4 80079AF4 06006014 */  bnez       $v1, .L80079B10
-    /* 5A2F8 80079AF8 01000234 */   ori       $v0, $zero, 0x1
-    /* 5A2FC 80079AFC 00020234 */  ori        $v0, $zero, 0x200
-    /* 5A300 80079B00 1000A2AF */  sw         $v0, 0x10($sp)
-    /* 5A304 80079B04 FF00C230 */  andi       $v0, $a2, 0xFF
-    /* 5A308 80079B08 2800A2AF */  sw         $v0, 0x28($sp)
-    /* 5A30C 80079B0C 01000234 */  ori        $v0, $zero, 0x1
-  .L80079B10:
-    /* 5A310 80079B10 04006214 */  bne        $v1, $v0, .L80079B24
-    /* 5A314 80079B14 00010234 */   ori       $v0, $zero, 0x100
-    /* 5A318 80079B18 1000A2AF */  sw         $v0, 0x10($sp)
-    /* 5A31C 80079B1C FF00C230 */  andi       $v0, $a2, 0xFF
-    /* 5A320 80079B20 2400A2AF */  sw         $v0, 0x24($sp)
-  .L80079B24:
-    /* 5A324 80079B24 FF008430 */  andi       $a0, $a0, 0xFF
-    /* 5A328 80079B28 01000234 */  ori        $v0, $zero, 0x1
-    /* 5A32C 80079B2C 0B008214 */  bne        $a0, $v0, .L80079B5C
-    /* 5A330 80079B30 FF00A530 */   andi      $a1, $a1, 0xFF
-    /* 5A334 80079B34 0400A014 */  bnez       $a1, .L80079B48
-    /* 5A338 80079B38 00200234 */   ori       $v0, $zero, 0x2000
-    /* 5A33C 80079B3C 1000A2AF */  sw         $v0, 0x10($sp)
-    /* 5A340 80079B40 FF00C230 */  andi       $v0, $a2, 0xFF
-    /* 5A344 80079B44 3400A2AF */  sw         $v0, 0x34($sp)
-  .L80079B48:
-    /* 5A348 80079B48 0400A414 */  bne        $a1, $a0, .L80079B5C
-    /* 5A34C 80079B4C 00100234 */   ori       $v0, $zero, 0x1000
-    /* 5A350 80079B50 1000A2AF */  sw         $v0, 0x10($sp)
-    /* 5A354 80079B54 FF00C230 */  andi       $v0, $a2, 0xFF
-    /* 5A358 80079B58 3000A2AF */  sw         $v0, 0x30($sp)
-  .L80079B5C:
-    /* 5A35C 80079B5C 74A6010C */  jal        func_800699D0
-    /* 5A360 80079B60 1000A427 */   addiu     $a0, $sp, 0x10
-    /* 5A364 80079B64 3800BF8F */  lw         $ra, 0x38($sp)
-    /* 5A368 80079B68 4000BD27 */  addiu      $sp, $sp, 0x40
-    /* 5A36C 80079B6C 0800E003 */  jr         $ra
-    /* 5A370 80079B70 00000000 */   nop
+    /* 4E870 8006E070 C0FFBD27 */  addiu      $sp, $sp, -0x40
+    /* 4E874 8006E074 FF008230 */  andi       $v0, $a0, 0xFF
+    /* 4E878 8006E078 0E004014 */  bnez       $v0, .L8006E0B4
+    /* 4E87C 8006E07C 3800BFAF */   sw        $ra, 0x38($sp)
+    /* 4E880 8006E080 FF00A330 */  andi       $v1, $a1, 0xFF
+    /* 4E884 8006E084 06006014 */  bnez       $v1, .L8006E0A0
+    /* 4E888 8006E088 01000234 */   ori       $v0, $zero, 0x1
+    /* 4E88C 8006E08C 00020234 */  ori        $v0, $zero, 0x200
+    /* 4E890 8006E090 1000A2AF */  sw         $v0, 0x10($sp)
+    /* 4E894 8006E094 FF00C230 */  andi       $v0, $a2, 0xFF
+    /* 4E898 8006E098 2800A2AF */  sw         $v0, 0x28($sp)
+    /* 4E89C 8006E09C 01000234 */  ori        $v0, $zero, 0x1
+  .L8006E0A0:
+    /* 4E8A0 8006E0A0 04006214 */  bne        $v1, $v0, .L8006E0B4
+    /* 4E8A4 8006E0A4 00010234 */   ori       $v0, $zero, 0x100
+    /* 4E8A8 8006E0A8 1000A2AF */  sw         $v0, 0x10($sp)
+    /* 4E8AC 8006E0AC FF00C230 */  andi       $v0, $a2, 0xFF
+    /* 4E8B0 8006E0B0 2400A2AF */  sw         $v0, 0x24($sp)
+  .L8006E0B4:
+    /* 4E8B4 8006E0B4 FF008430 */  andi       $a0, $a0, 0xFF
+    /* 4E8B8 8006E0B8 01000234 */  ori        $v0, $zero, 0x1
+    /* 4E8BC 8006E0BC 0B008214 */  bne        $a0, $v0, .L8006E0EC
+    /* 4E8C0 8006E0C0 FF00A530 */   andi      $a1, $a1, 0xFF
+    /* 4E8C4 8006E0C4 0400A014 */  bnez       $a1, .L8006E0D8
+    /* 4E8C8 8006E0C8 00200234 */   ori       $v0, $zero, 0x2000
+    /* 4E8CC 8006E0CC 1000A2AF */  sw         $v0, 0x10($sp)
+    /* 4E8D0 8006E0D0 FF00C230 */  andi       $v0, $a2, 0xFF
+    /* 4E8D4 8006E0D4 3400A2AF */  sw         $v0, 0x34($sp)
+  .L8006E0D8:
+    /* 4E8D8 8006E0D8 0400A414 */  bne        $a1, $a0, .L8006E0EC
+    /* 4E8DC 8006E0DC 00100234 */   ori       $v0, $zero, 0x1000
+    /* 4E8E0 8006E0E0 1000A2AF */  sw         $v0, 0x10($sp)
+    /* 4E8E4 8006E0E4 FF00C230 */  andi       $v0, $a2, 0xFF
+    /* 4E8E8 8006E0E8 3000A2AF */  sw         $v0, 0x30($sp)
+  .L8006E0EC:
+    /* 4E8EC 8006E0EC 74A6010C */  jal        SpuSetCommonAttr
+    /* 4E8F0 8006E0F0 1000A427 */   addiu     $a0, $sp, 0x10
+    /* 4E8F4 8006E0F4 3800BF8F */  lw         $ra, 0x38($sp)
+    /* 4E8F8 8006E0F8 4000BD27 */  addiu      $sp, $sp, 0x40
+    /* 4E8FC 8006E0FC 0800E003 */  jr         $ra
+    /* 4E900 8006E100 00000000 */   nop
 endlabel SsSetSerialAttr

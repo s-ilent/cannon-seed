@@ -35,6 +35,32 @@ TRUE_SHA1 = {
     "g3org_eu": "01b37b4e01afe69acd2a46e69359dadd4a20877b",
 }
 GP_FLIP = {"slps_00270": ("0x8006322C", "0x8006632C")}
+# The boots' small-data class (the flip's last stall, closed this window):
+# entries recorded from the retail gp-relative encodings with the CARVE gp
+# substituted - the woven view's lie. Their true addresses come from the
+# banked slot maps (docs/TASKS.md "the definitive slot map", content-
+# correlated), NOT from the framing math: the carve-gp window's bytes are
+# late woven data whose true home is ~0x3100 BELOW the retail window, which
+# lives in the never-woven-captured tail. Re-point is pure gp arithmetic:
+#   true = true_gp + (va - carve_gp)
+# Witness: boot_flag_0's C store is retail 0x3C($gp) -> true 0x80066368
+# (slot-map gp+0x3C = 1, the measured 0/1 word flag); boot_flag_1 = gp+0x68
+# -> 0x80066394 (slot-map 0). GP_INFO then keeps the compiled form
+# (func_80025AE0 stays 0x10, RotTransPers4 stays 0x80). sces's window has
+# no symbol entries (no C references to its statics): nothing to repoint.
+GP_REPOINT = {"slps_00270": (0x8006322C, 0x8006632C, 0xE0)}
+# The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked
+# policy: psyq name wins, the intr_* alias retires with a provenance note;
+# C sources reference none of the collided names - grep-verified). These
+# curated psyq member placements (HookEntryInt/ResetEntryInt/_96_remove,
+# recorded already-true) and the scanner's intr_* labels (mapped from the
+# carve) land on the same true bytes in mainmenu_eu. (target, alias, va):
+# the GEN-file alias line retires; the curated psyq entry labels the bytes.
+ALIAS_ADJUDICATE = {
+    "mainmenu_eu": [("intr_restart_begin", "HookEntryInt", 0x8005F2A0),
+                    ("intr_stop_commit", "ResetEntryInt", 0x8005F2F0),
+                    ("intr_start_aux6", "_96_remove", 0x8005F370)],
+}
 ENTRY_RE = re.compile(r"^(\s*[A-Za-z_]\w*\s*=\s*0x)([0-9A-Fa-f]+)(\s*;.*)$")
 
 
@@ -61,6 +87,17 @@ def yaml_rows(target):
     return rows
 
 
+def dropped_rows(target):
+    """Names of MIGRATE-DROPPED rows (pure framing, 0 true bytes). Their
+    labels refer to bytes that do not exist in the true view - symbol
+    entries bearing such names must die with the row (the snap-identity
+    rule would otherwise keep them at their carve VAs, clashing with the
+    surviving neighbours' mapped starts: data_8005A014 vs func_80062B04)."""
+    ypath = dm.OUT_DIR / "yamls" / f"splat.{target}.yaml"
+    return set(re.findall(r"MIGRATE-DROPPED[^\n]*-\s*\[0x[0-9A-Fa-f]+, \w+, (\w+)\]",
+                          ypath.read_text()))
+
+
 def check_entry(target, name, new_va, rows):
     """Every re-authored entry must sit at/inside the migrated rows.
     Row offsets are FILE offsets (header 0x800 included); new_va is a
@@ -83,7 +120,7 @@ def entry_name(line):
     return m.group(1) if m else ""
 
 
-def map_symbols_text(target, text, fw, rows, max_off):
+def map_symbols_text(target, text, fw, rows, max_off, dropped, adjudicate):
     out, n, snaps, classes = [], 0, [], {}
     enc = re.compile(r"^(func|D)_[0-9A-F]{8}$")
     mapped_vas = set()
@@ -103,6 +140,36 @@ def map_symbols_text(target, text, fw, rows, max_off):
                 out.append(f"{m.group(1)}{new_va:X}{m.group(3)}")
                 n += 1
                 continue
+            if name in dropped:
+                # the row this label named was pure framing and died in
+                # migration - the label has no true existence; retire it.
+                classes["dropped-row-label"] = \
+                    classes.get("dropped-row-label", 0) + 1
+                out.append(f"// FLIP-DROPPED-ROW (pure framing): {line.strip()}")
+                continue
+            if name in adjudicate:
+                winner = adjudicate[name][0]
+                if va == adjudicate[name][1]:
+                    classes["alias-retired"] = \
+                        classes.get("alias-retired", 0) + 1
+                    out.append(f"// FLIP-ALIAS (retired: psyq member {winner} "
+                               f"owns these bytes): {line.strip()}")
+                    continue
+            if target in GP_REPOINT:
+                cg, tg, win = GP_REPOINT[target]
+                if cg <= va < cg + win:
+                    # gp-relative small-data static: re-point through the
+                    # slot-map gp arithmetic (see GP_REPOINT note).
+                    new_va = tg + (va - cg)
+                    cls = check_entry(target, name, new_va, rows)
+                    classes["gp-repointed"] = classes.get("gp-repointed", 0) + 1
+                    if new_va in mapped_vas:
+                        raise SystemExit(f"{target}: gp-repoint clash {name} "
+                                         f"at 0x{new_va:X}")
+                    mapped_vas.add(new_va)
+                    out.append(f"{m.group(1)}{new_va:X}{m.group(3)}")
+                    n += 1
+                    continue
             if ((va - BASE) + dm.HEADER >= max_off
                     or (enc.match(name) and int(name[-8:], 16) == va)):
                 # beyond-payload symbol (BIOS region, scratchpad), or an
@@ -166,11 +233,14 @@ def main():
     for t in TARGETS:
         fw = framing(t)
         rows = yaml_rows(t)
+        dropped = dropped_rows(t)
+        ADJUDICATE = {a: (w, v) for a, w, v in ALIAS_ADJUDICATE.get(t, [])}
         max_off = (REPO / "build" / "work" / "woven" / f"{t}.bin").stat().st_size
         # per-target symbols file
         spath = f"config/symbols.{t}.txt"
         new, n, snaps, classes = map_symbols_text(t, git_read(spath), fw,
-                                                  rows, max_off)
+                                                  rows, max_off, dropped,
+                                                  ADJUDICATE)
         (outdir / f"symbols.{t}.txt").write_text(new)
         total[t] = [n, len(snaps), classes]
         # oracle staging
@@ -183,7 +253,7 @@ def main():
             f"{TRUE_SHA1[t]}  baselines/{t}.bin\n")
     # curated file: ONE pass, each entry mapped with its own scope's framing
     framings = {t: framing(t) for t in TARGETS}
-    ctx = {t: (yaml_rows(t),
+    ctx = {t: (yaml_rows(t), dropped_rows(t),
                (REPO / "build" / "work" / "woven" / f"{t}.bin").stat().st_size)
            for t in TARGETS}
     cpath = "config/symbols.curated.txt"
@@ -197,10 +267,13 @@ def main():
             continue
         m = ENTRY_RE.match(line)
         if m and scope in ctx:
-            rows, max_off = ctx[scope]
+            rows, dropped, max_off = ctx[scope]
             va0 = int(m.group(2), 16)
             name = entry_name(line)
             enc = re.compile(r"^(func|D)_[0-9A-F]{8}$")
+            if name in dropped:
+                out.append(f"// FLIP-DROPPED-ROW (pure framing): {line.strip()}")
+                continue
             if ((va0 - BASE) + dm.HEADER >= max_off
                     or (name and enc.match(name)
                         and int(name[-8:], 16) == va0)):
@@ -208,6 +281,17 @@ def main():
                 # (runtime value) - identity.
                 out.append(line)
                 continue
+            if scope in GP_REPOINT:
+                cg, tg, win = GP_REPOINT[scope]
+                if cg <= va0 < cg + win:
+                    # gp-relative small-data static (see GP_REPOINT note).
+                    new_va = tg + (va0 - cg)
+                    check_entry(scope, name, new_va, rows)
+                    print(f"  curated gp-repoint {scope}: {name} "
+                          f"0x{va0:X} -> 0x{new_va:X}")
+                    out.append(f"{m.group(1)}{new_va:X}{m.group(3)}")
+                    counts[scope] += 1
+                    continue
             new_va, sn = map_va(va0, framings[scope])
             if sn and name not in rows:
                 # woven framing position: already-true address (binary's
@@ -274,13 +358,20 @@ if "extend" in sys.argv:
 
 def fix_c_references():
     """Identity/curated names dedupe-dropped against row labels: rewrite
-    src/<target>/ C references to the winning row name. The compiled
+    C references to the winning row name - but ONLY in files the dropping
+    target builds (a yaml row named after the file stem). The same src
+    file can be built by several targets; in a non-dropping target the
+    alias survives in that target's own map, and the winner label exists
+    only in the dropping target's map - a global rewrite would break the
+    other targets' links with an undefined reference. The compiled
     encoding depends only on the address (identical), never the label."""
-    import re as _re, subprocess as _sp
+    import re as _re
     total = 0
+    srcdir = REPO / "src"
     for t in TARGETS:
         staged = (REPO / "build" / "work" / "flip" / f"symbols.{t}.txt").read_text()
         rows = yaml_rows(t)  # name -> (file off, size)
+        built = set(rows)    # a c row's name is its src/ file stem
         # winner names by true VA
         va_of_row = {BASE + (off - dm.HEADER): name for name, (off, _s) in rows.items()}
         drops = _re.findall(r"^// FLIP-DUPE \(dropped\): (\w+) = (0x[0-9A-Fa-f]+);", staged, _re.M)
@@ -291,8 +382,9 @@ def fix_c_references():
                 print(f"  {t}: {name} dropped at 0x{va:X} - no row label, "
                       f"NEEDS MANUAL REVIEW")
                 continue
-            srcdir = REPO / "src"
-            for f in srcdir.rglob("*.c"):
+            for f in srcdir.glob("*.c"):
+                if f.stem not in built:
+                    continue
                 txt = f.read_text()
                 if _re.search(rf"\b{name}\b", txt):
                     new = _re.sub(rf"\b{name}\b", winner, txt)

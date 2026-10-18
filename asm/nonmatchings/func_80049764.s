@@ -10,9 +10,9 @@
 nonmatching SsSetMono, 0x14
 
 glabel SsSetMono
-    /* 29F64 80049764 01000234 */  ori        $v0, $zero, 0x1
-    /* 29F68 80049768 1180013C */  lui        $at, %hi(D_80114FF8)
-    /* 29F6C 8004976C F84F22A4 */  sh         $v0, %lo(D_80114FF8)($at)
-    /* 29F70 80049770 0800E003 */  jr         $ra
-    /* 29F74 80049774 00000000 */   nop
+    /* 248B4 800440B4 01000234 */  ori        $v0, $zero, 0x1
+    /* 248B8 800440B8 1180013C */  lui        $at, %hi(D_80114FF8)
+    /* 248BC 800440BC F84F22A4 */  sh         $v0, %lo(D_80114FF8)($at)
+    /* 248C0 800440C0 0800E003 */  jr         $ra
+    /* 248C4 800440C4 00000000 */   nop
 endlabel SsSetMono

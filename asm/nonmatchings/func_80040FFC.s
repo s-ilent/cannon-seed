@@ -10,15 +10,15 @@
 nonmatching func_80040FFC, 0x2C
 
 glabel func_80040FFC
-    /* 217FC 80040FFC 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 21800 80041000 1280013C */  lui        $at, %hi(D_8011C318)
-    /* 21804 80041004 18C324AC */  sw         $a0, %lo(D_8011C318)($at)
-    /* 21808 80041008 1280013C */  lui        $at, %hi(D_8011C3E8)
-    /* 2180C 8004100C E8C325AC */  sw         $a1, %lo(D_8011C3E8)($at)
-    /* 21810 80041010 D2F2000C */  jal        func_8003CB48
-    /* 21814 80041014 00000000 */   nop
-    /* 21818 80041018 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 2181C 8004101C 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 21820 80041020 0800E003 */  jr         $ra
-    /* 21824 80041024 00000000 */   nop
+    /* 1D31C 8003CB1C 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 1D320 8003CB20 1280013C */  lui        $at, %hi(D_8011C318)
+    /* 1D324 8003CB24 18C324AC */  sw         $a0, %lo(D_8011C318)($at)
+    /* 1D328 8003CB28 1280013C */  lui        $at, %hi(D_8011C3E8)
+    /* 1D32C 8003CB2C E8C325AC */  sw         $a1, %lo(D_8011C3E8)($at)
+    /* 1D330 8003CB30 D2F2000C */  jal        StClearRing
+    /* 1D334 8003CB34 00000000 */   nop
+    /* 1D338 8003CB38 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 1D33C 8003CB3C 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 1D340 8003CB40 0800E003 */  jr         $ra
+    /* 1D344 8003CB44 00000000 */   nop
 endlabel func_80040FFC

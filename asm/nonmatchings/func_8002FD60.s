@@ -10,8 +10,8 @@
 nonmatching strlen, 0xC
 
 glabel strlen
-    /* 10560 8002FD60 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 10564 8002FD64 08004001 */  jr         $t2
-    /* 10568 8002FD68 1B000924 */   addiu     $t1, $zero, 0x1B
+    /* E420 8002DC20 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* E424 8002DC24 08004001 */  jr         $t2
+    /* E428 8002DC28 1B000924 */   addiu     $t1, $zero, 0x1B
 endlabel strlen
-    /* 1056C 8002FD6C 00000000 */  nop
+    /* E42C 8002DC2C 00000000 */  nop

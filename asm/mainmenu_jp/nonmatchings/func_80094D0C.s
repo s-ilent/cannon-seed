@@ -10,8 +10,8 @@
 nonmatching _card_load, 0xC
 
 glabel _card_load
-    /* 7550C 80094D0C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 75510 80094D10 08004001 */  jr         $t2
-    /* 75514 80094D14 AC000924 */   addiu     $t1, $zero, 0xAC
+    /* 662CC 80085ACC A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 662D0 80085AD0 08004001 */  jr         $t2
+    /* 662D4 80085AD4 AC000924 */   addiu     $t1, $zero, 0xAC
 endlabel _card_load
-    /* 75518 80094D18 00000000 */  nop
+    /* 662D8 80085AD8 00000000 */  nop

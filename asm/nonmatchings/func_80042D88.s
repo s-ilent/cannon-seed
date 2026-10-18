@@ -10,28 +10,28 @@
 nonmatching SsUtGetVBaddrInSB, 0x58
 
 glabel SsUtGetVBaddrInSB
-    /* 23588 80042D88 FFFF8230 */  andi       $v0, $a0, 0xFFFF
-    /* 2358C 80042D8C 1100422C */  sltiu      $v0, $v0, 0x11
-    /* 23590 80042D90 10004010 */  beqz       $v0, .L80042DD4
-    /* 23594 80042D94 00140400 */   sll       $v0, $a0, 16
-    /* 23598 80042D98 03240200 */  sra        $a0, $v0, 16
-    /* 2359C 80042D9C 1280013C */  lui        $at, %hi(D_8011A894)
-    /* 235A0 80042DA0 94A82124 */  addiu      $at, $at, %lo(D_8011A894)
-    /* 235A4 80042DA4 21082400 */  addu       $at, $at, $a0
-    /* 235A8 80042DA8 00002390 */  lbu        $v1, 0x0($at)
-    /* 235AC 80042DAC 01000234 */  ori        $v0, $zero, 0x1
-    /* 235B0 80042DB0 09006214 */  bne        $v1, $v0, .L80042DD8
-    /* 235B4 80042DB4 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 235B8 80042DB8 80100400 */  sll        $v0, $a0, 2
-    /* 235BC 80042DBC 1280013C */  lui        $at, %hi(D_8011C360)
-    /* 235C0 80042DC0 60C32124 */  addiu      $at, $at, %lo(D_8011C360)
-    /* 235C4 80042DC4 21082200 */  addu       $at, $at, $v0
-    /* 235C8 80042DC8 0000228C */  lw         $v0, 0x0($at)
-    /* 235CC 80042DCC 5AF90008 */  j          D_8003E568
-    /* 235D0 80042DD0 00000000 */   nop
-  .L80042DD4:
-    /* 235D4 80042DD4 FFFF0224 */  addiu      $v0, $zero, -0x1
-  .L80042DD8:
-    /* 235D8 80042DD8 0800E003 */  jr         $ra
-    /* 235DC 80042DDC 00000000 */   nop
+    /* 1ED18 8003E518 FFFF8230 */  andi       $v0, $a0, 0xFFFF
+    /* 1ED1C 8003E51C 1100422C */  sltiu      $v0, $v0, 0x11
+    /* 1ED20 8003E520 10004010 */  beqz       $v0, .L8003E564
+    /* 1ED24 8003E524 00140400 */   sll       $v0, $a0, 16
+    /* 1ED28 8003E528 03240200 */  sra        $a0, $v0, 16
+    /* 1ED2C 8003E52C 1280013C */  lui        $at, %hi(D_8011A894)
+    /* 1ED30 8003E530 94A82124 */  addiu      $at, $at, %lo(D_8011A894)
+    /* 1ED34 8003E534 21082400 */  addu       $at, $at, $a0
+    /* 1ED38 8003E538 00002390 */  lbu        $v1, 0x0($at)
+    /* 1ED3C 8003E53C 01000234 */  ori        $v0, $zero, 0x1
+    /* 1ED40 8003E540 09006214 */  bne        $v1, $v0, .L8003E568
+    /* 1ED44 8003E544 FFFF0224 */   addiu     $v0, $zero, -0x1
+    /* 1ED48 8003E548 80100400 */  sll        $v0, $a0, 2
+    /* 1ED4C 8003E54C 1280013C */  lui        $at, %hi(D_8011C360)
+    /* 1ED50 8003E550 60C32124 */  addiu      $at, $at, %lo(D_8011C360)
+    /* 1ED54 8003E554 21082200 */  addu       $at, $at, $v0
+    /* 1ED58 8003E558 0000228C */  lw         $v0, 0x0($at)
+    /* 1ED5C 8003E55C 5AF90008 */  j          .L8003E568
+    /* 1ED60 8003E560 00000000 */   nop
+  .L8003E564:
+    /* 1ED64 8003E564 FFFF0224 */  addiu      $v0, $zero, -0x1
+  .L8003E568:
+    /* 1ED68 8003E568 0800E003 */  jr         $ra
+    /* 1ED6C 8003E56C 00000000 */   nop
 endlabel SsUtGetVBaddrInSB

@@ -10,16 +10,16 @@
 nonmatching _card_clear, 0x30
 
 glabel _card_clear
-    /* 3064C 8004FE4C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 30650 8004FE50 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 30654 8004FE54 BF26010C */  jal        func_80049AFC
-    /* 30658 8004FE58 1800A4AF */   sw        $a0, 0x18($sp)
-    /* 3065C 8004FE5C 1800A48F */  lw         $a0, 0x18($sp)
-    /* 30660 8004FE60 3F000524 */  addiu      $a1, $zero, 0x3F
-    /* 30664 8004FE64 AF26010C */  jal        .L80049ABC
-    /* 30668 8004FE68 21300000 */   addu      $a2, $zero, $zero
-    /* 3066C 8004FE6C 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 30670 8004FE70 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 30674 8004FE74 0800E003 */  jr         $ra
-    /* 30678 8004FE78 00000000 */   nop
+    /* 2A28C 80049A8C E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2A290 80049A90 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 2A294 80049A94 BF26010C */  jal        _new_card
+    /* 2A298 80049A98 1800A4AF */   sw        $a0, 0x18($sp)
+    /* 2A29C 80049A9C 1800A48F */  lw         $a0, 0x18($sp)
+    /* 2A2A0 80049AA0 3F000524 */  addiu      $a1, $zero, 0x3F
+    /* 2A2A4 80049AA4 AF26010C */  jal        _card_write
+    /* 2A2A8 80049AA8 21300000 */   addu      $a2, $zero, $zero
+    /* 2A2AC 80049AAC 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 2A2B0 80049AB0 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2A2B4 80049AB4 0800E003 */  jr         $ra
+    /* 2A2B8 80049AB8 00000000 */   nop
 endlabel _card_clear

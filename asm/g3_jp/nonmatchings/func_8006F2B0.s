@@ -10,19 +10,19 @@
 nonmatching SpuSetTransferMode, 0x34
 
 glabel SpuSetTransferMode
-    /* 4FAB0 8006F2B0 05008010 */  beqz       $a0, .L8006F2C8
-    /* 4FAB4 8006F2B4 01000234 */   ori       $v0, $zero, 0x1
-    /* 4FAB8 8006F2B8 04008214 */  bne        $a0, $v0, .L8006F2CC
-    /* 4FABC 8006F2BC 21100000 */   addu      $v0, $zero, $zero
-    /* 4FAC0 8006F2C0 BB930108 */  j          D_80064EEC
-    /* 4FAC4 8006F2C4 01000234 */   ori       $v0, $zero, 0x1
-  .L8006F2C8:
-    /* 4FAC8 8006F2C8 21100000 */  addu       $v0, $zero, $zero
-  .L8006F2CC:
-    /* 4FACC 8006F2CC 0B80013C */  lui        $at, %hi(D_800AA8D8)
-    /* 4FAD0 8006F2D0 D8A824AC */  sw         $a0, %lo(D_800AA8D8)($at)
-    /* 4FAD4 8006F2D4 0B80013C */  lui        $at, %hi(D_800AA894)
-    /* 4FAD8 8006F2D8 94A822AC */  sw         $v0, %lo(D_800AA894)($at)
-    /* 4FADC 8006F2DC 0800E003 */  jr         $ra
-    /* 4FAE0 8006F2E0 00000000 */   nop
+    /* 456D0 80064ED0 05008010 */  beqz       $a0, .L80064EE8
+    /* 456D4 80064ED4 01000234 */   ori       $v0, $zero, 0x1
+    /* 456D8 80064ED8 04008214 */  bne        $a0, $v0, .L80064EEC
+    /* 456DC 80064EDC 21100000 */   addu      $v0, $zero, $zero
+    /* 456E0 80064EE0 BB930108 */  j          .L80064EEC
+    /* 456E4 80064EE4 01000234 */   ori       $v0, $zero, 0x1
+  .L80064EE8:
+    /* 456E8 80064EE8 21100000 */  addu       $v0, $zero, $zero
+  .L80064EEC:
+    /* 456EC 80064EEC 0B80013C */  lui        $at, %hi(D_800AA8D8)
+    /* 456F0 80064EF0 D8A824AC */  sw         $a0, %lo(D_800AA8D8)($at)
+    /* 456F4 80064EF4 0B80013C */  lui        $at, %hi(D_800AA894)
+    /* 456F8 80064EF8 94A822AC */  sw         $v0, %lo(D_800AA894)($at)
+    /* 456FC 80064EFC 0800E003 */  jr         $ra
+    /* 45700 80064F00 00000000 */   nop
 endlabel SpuSetTransferMode

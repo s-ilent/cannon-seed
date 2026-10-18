@@ -10,28 +10,28 @@
 nonmatching StClearRing, 0x60
 
 glabel StClearRing
-    /* 2161C 80040E1C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 21620 80040E20 1280053C */  lui        $a1, %hi(D_8011C160)
-    /* 21624 80040E24 60C1A58C */  lw         $a1, %lo(D_8011C160)($a1)
-    /* 21628 80040E28 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 2162C 80040E2C 1280013C */  lui        $at, %hi(D_8011B740)
-    /* 21630 80040E30 40B720AC */  sw         $zero, %lo(D_8011B740)($at)
-    /* 21634 80040E34 1280013C */  lui        $at, %hi(D_8011B738)
-    /* 21638 80040E38 38B720AC */  sw         $zero, %lo(D_8011B738)($at)
-    /* 2163C 80040E3C 1280013C */  lui        $at, %hi(D_8011B734)
-    /* 21640 80040E40 34B720AC */  sw         $zero, %lo(D_8011B734)($at)
-    /* 21644 80040E44 1180013C */  lui        $at, %hi(D_801148A0)
-    /* 21648 80040E48 A04820AC */  sw         $zero, %lo(D_801148A0)($at)
-    /* 2164C 80040E4C 2BF2000C */  jal        func_8003C8AC
-    /* 21650 80040E50 21200000 */   addu      $a0, $zero, $zero
-    /* 21654 80040E54 1180013C */  lui        $at, %hi(D_801144C8)
-    /* 21658 80040E58 C84420AC */  sw         $zero, %lo(D_801144C8)($at)
-    /* 2165C 80040E5C 0F80013C */  lui        $at, %hi(D_800F32EC)
-    /* 21660 80040E60 EC3220A4 */  sh         $zero, %lo(D_800F32EC)($at)
-    /* 21664 80040E64 0D80013C */  lui        $at, %hi(D_800D5E0C)
-    /* 21668 80040E68 0C5E20AC */  sw         $zero, %lo(D_800D5E0C)($at)
-    /* 2166C 80040E6C 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 21670 80040E70 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 21674 80040E74 0800E003 */  jr         $ra
-    /* 21678 80040E78 00000000 */   nop
+    /* 1D13C 8003C93C E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 1D140 8003C940 1280053C */  lui        $a1, %hi(D_8011C160)
+    /* 1D144 8003C944 60C1A58C */  lw         $a1, %lo(D_8011C160)($a1)
+    /* 1D148 8003C948 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 1D14C 8003C94C 1280013C */  lui        $at, %hi(D_8011B740)
+    /* 1D150 8003C950 40B720AC */  sw         $zero, %lo(D_8011B740)($at)
+    /* 1D154 8003C954 1280013C */  lui        $at, %hi(D_8011B738)
+    /* 1D158 8003C958 38B720AC */  sw         $zero, %lo(D_8011B738)($at)
+    /* 1D15C 8003C95C 1280013C */  lui        $at, %hi(D_8011B734)
+    /* 1D160 8003C960 34B720AC */  sw         $zero, %lo(D_8011B734)($at)
+    /* 1D164 8003C964 1180013C */  lui        $at, %hi(D_801148A0)
+    /* 1D168 8003C968 A04820AC */  sw         $zero, %lo(D_801148A0)($at)
+    /* 1D16C 8003C96C 2BF2000C */  jal        init_ring_status
+    /* 1D170 8003C970 21200000 */   addu      $a0, $zero, $zero
+    /* 1D174 8003C974 1180013C */  lui        $at, %hi(D_801144C8)
+    /* 1D178 8003C978 C84420AC */  sw         $zero, %lo(D_801144C8)($at)
+    /* 1D17C 8003C97C 0F80013C */  lui        $at, %hi(D_800F32EC)
+    /* 1D180 8003C980 EC3220A4 */  sh         $zero, %lo(D_800F32EC)($at)
+    /* 1D184 8003C984 0D80013C */  lui        $at, %hi(D_800D5E0C)
+    /* 1D188 8003C988 0C5E20AC */  sw         $zero, %lo(D_800D5E0C)($at)
+    /* 1D18C 8003C98C 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 1D190 8003C990 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 1D194 8003C994 0800E003 */  jr         $ra
+    /* 1D198 8003C998 00000000 */   nop
 endlabel StClearRing

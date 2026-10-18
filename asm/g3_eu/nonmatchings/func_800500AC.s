@@ -11,16 +11,16 @@
 nonmatching SetRotMatrix, 0x30
 
 glabel SetRotMatrix
-    /* 308AC 800500AC 0000888C */  lw         $t0, 0x0($a0)
-    /* 308B0 800500B0 0400898C */  lw         $t1, 0x4($a0)
-    /* 308B4 800500B4 08008A8C */  lw         $t2, 0x8($a0)
-    /* 308B8 800500B8 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 308BC 800500BC 10008C8C */  lw         $t4, 0x10($a0)
-    /* 308C0 800500C0 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
-    /* 308C4 800500C4 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
-    /* 308C8 800500C8 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
-    /* 308CC 800500CC 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
-    /* 308D0 800500D0 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
-    /* 308D4 800500D4 0800E003 */  jr         $ra
-    /* 308D8 800500D8 00000000 */   nop
+    /* 2A4EC 80049CEC 0000888C */  lw         $t0, 0x0($a0)
+    /* 2A4F0 80049CF0 0400898C */  lw         $t1, 0x4($a0)
+    /* 2A4F4 80049CF4 08008A8C */  lw         $t2, 0x8($a0)
+    /* 2A4F8 80049CF8 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 2A4FC 80049CFC 10008C8C */  lw         $t4, 0x10($a0)
+    /* 2A500 80049D00 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 2A504 80049D04 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
+    /* 2A508 80049D08 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
+    /* 2A50C 80049D0C 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
+    /* 2A510 80049D10 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
+    /* 2A514 80049D14 0800E003 */  jr         $ra
+    /* 2A518 80049D18 00000000 */   nop
 endlabel SetRotMatrix

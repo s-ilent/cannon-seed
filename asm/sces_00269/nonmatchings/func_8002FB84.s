@@ -10,8 +10,8 @@
 nonmatching strncat, 0xC
 
 glabel strncat
-    /* 10384 8002FB84 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 10388 8002FB88 08004001 */  jr         $t2
-    /* 1038C 8002FB8C 16000924 */   addiu     $t1, $zero, 0x16
+    /* E244 8002DA44 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* E248 8002DA48 08004001 */  jr         $t2
+    /* E24C 8002DA4C 16000924 */   addiu     $t1, $zero, 0x16
 endlabel strncat
-    /* 10390 8002FB90 00000000 */  nop
+    /* E250 8002DA50 00000000 */  nop

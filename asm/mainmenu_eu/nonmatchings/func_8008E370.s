@@ -10,26 +10,27 @@
 nonmatching SpuInitMalloc, 0x54
 
 glabel SpuInitMalloc
-    /* 6EB70 8008E370 21108000 */  addu       $v0, $a0, $zero
-    /* 6EB74 8008E374 0300401C */  bgtz       $v0, .L8008E384
-    /* 6EB78 8008E378 0040033C */   lui       $v1, (0x40001010 >> 16)
-    /* 6EB7C 8008E37C EFFF0108 */  j          .L8007FFBC
-    /* 6EB80 8008E380 21100000 */   addu      $v0, $zero, $zero
-  .L8008E384:
-    /* 6EB84 8008E384 0D80043C */  lui        $a0, %hi(D_800C8DC8)
-    /* 6EB88 8008E388 C88D848C */  lw         $a0, %lo(D_800C8DC8)($a0)
-    /* 6EB8C 8008E38C 10106334 */  ori        $v1, $v1, (0x40001010 & 0xFFFF)
-    /* 6EB90 8008E390 0000A3AC */  sw         $v1, 0x0($a1)
-    /* 6EB94 8008E394 0100033C */  lui        $v1, (0x10000 >> 16)
-    /* 6EB98 8008E398 0D80013C */  lui        $at, %hi(D_800C9284)
-    /* 6EB9C 8008E39C 849225AC */  sw         $a1, %lo(D_800C9284)($at)
-    /* 6EBA0 8008E3A0 0D80013C */  lui        $at, %hi(D_800C9280)
-    /* 6EBA4 8008E3A4 809220AC */  sw         $zero, %lo(D_800C9280)($at)
-    /* 6EBA8 8008E3A8 0D80013C */  lui        $at, %hi(D_800C927C)
-    /* 6EBAC 8008E3AC 7C9222AC */  sw         $v0, %lo(D_800C927C)($at)
-    /* 6EBB0 8008E3B0 04188300 */  sllv       $v1, $v1, $a0
-    /* 6EBB4 8008E3B4 F0EF6324 */  addiu      $v1, $v1, -0x1010
-    /* 6EBB8 8008E3B8 0400A3AC */  sw         $v1, 0x4($a1)
-    /* 6EBBC 8008E3BC 0800E003 */  jr         $ra
-    /* 6EBC0 8008E3C0 00000000 */   nop
+    /* 60770 8007FF70 21108000 */  addu       $v0, $a0, $zero
+    /* 60774 8007FF74 0300401C */  bgtz       $v0, .L8007FF84
+    /* 60778 8007FF78 0040033C */   lui       $v1, (0x40001010 >> 16)
+    /* 6077C 8007FF7C EFFF0108 */  j          .L8007FFBC
+    /* 60780 8007FF80 21100000 */   addu      $v0, $zero, $zero
+  .L8007FF84:
+    /* 60784 8007FF84 0D80043C */  lui        $a0, %hi(D_800C8DC8)
+    /* 60788 8007FF88 C88D848C */  lw         $a0, %lo(D_800C8DC8)($a0)
+    /* 6078C 8007FF8C 10106334 */  ori        $v1, $v1, (0x40001010 & 0xFFFF)
+    /* 60790 8007FF90 0000A3AC */  sw         $v1, 0x0($a1)
+    /* 60794 8007FF94 0100033C */  lui        $v1, (0x10000 >> 16)
+    /* 60798 8007FF98 0D80013C */  lui        $at, %hi(D_800C9284)
+    /* 6079C 8007FF9C 849225AC */  sw         $a1, %lo(D_800C9284)($at)
+    /* 607A0 8007FFA0 0D80013C */  lui        $at, %hi(D_800C9280)
+    /* 607A4 8007FFA4 809220AC */  sw         $zero, %lo(D_800C9280)($at)
+    /* 607A8 8007FFA8 0D80013C */  lui        $at, %hi(D_800C927C)
+    /* 607AC 8007FFAC 7C9222AC */  sw         $v0, %lo(D_800C927C)($at)
+    /* 607B0 8007FFB0 04188300 */  sllv       $v1, $v1, $a0
+    /* 607B4 8007FFB4 F0EF6324 */  addiu      $v1, $v1, -0x1010
+    /* 607B8 8007FFB8 0400A3AC */  sw         $v1, 0x4($a1)
+  .L8007FFBC:
+    /* 607BC 8007FFBC 0800E003 */  jr         $ra
+    /* 607C0 8007FFC0 00000000 */   nop
 endlabel SpuInitMalloc

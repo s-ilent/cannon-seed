@@ -10,14 +10,14 @@
 nonmatching def_cbready, 0x28
 
 glabel def_cbready
-    /* 65448 80084C48 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 6544C 80084C4C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 65450 80084C50 00F0043C */  lui        $a0, (0xF0000003 >> 16)
-    /* 65454 80084C54 03008434 */  ori        $a0, $a0, (0xF0000003 & 0xFFFF)
-    /* 65458 80084C58 E6DE010C */  jal        func_80077B98
-    /* 6545C 80084C5C 40000534 */   ori       $a1, $zero, 0x40
-    /* 65460 80084C60 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 65464 80084C64 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 65468 80084C68 0800E003 */  jr         $ra
-    /* 6546C 80084C6C 00000000 */   nop
+    /* 58348 80077B48 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 5834C 80077B4C 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 58350 80077B50 00F0043C */  lui        $a0, (0xF0000003 >> 16)
+    /* 58354 80077B54 03008434 */  ori        $a0, $a0, (0xF0000003 & 0xFFFF)
+    /* 58358 80077B58 E6DE010C */  jal        DeliverEvent
+    /* 5835C 80077B5C 40000534 */   ori       $a1, $zero, 0x40
+    /* 58360 80077B60 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 58364 80077B64 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 58368 80077B68 0800E003 */  jr         $ra
+    /* 5836C 80077B6C 00000000 */   nop
 endlabel def_cbready

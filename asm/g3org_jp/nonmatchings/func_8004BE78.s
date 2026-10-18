@@ -10,8 +10,8 @@
 nonmatching strncpy, 0xC
 
 glabel strncpy
-    /* 2C678 8004BE78 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2C67C 8004BE7C 08004001 */  jr         $t2
-    /* 2C680 8004BE80 1A000924 */   addiu     $t1, $zero, 0x1A
+    /* 26B08 80046308 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 26B0C 8004630C 08004001 */  jr         $t2
+    /* 26B10 80046310 1A000924 */   addiu     $t1, $zero, 0x1A
 endlabel strncpy
-    /* 2C684 8004BE84 00000000 */  nop
+    /* 26B14 80046314 00000000 */  nop

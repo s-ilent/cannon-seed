@@ -10,8 +10,8 @@
 nonmatching write, 0xC
 
 glabel write
-    /* 2F1F0 8004E9F0 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2F1F4 8004E9F4 08004001 */  jr         $t2
-    /* 2F1F8 8004E9F8 35000924 */   addiu     $t1, $zero, 0x35
+    /* 29090 80048890 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 29094 80048894 08004001 */  jr         $t2
+    /* 29098 80048898 35000924 */   addiu     $t1, $zero, 0x35
 endlabel write
-    /* 2F1FC 8004E9FC 00000000 */  nop
+    /* 2909C 8004889C 00000000 */  nop

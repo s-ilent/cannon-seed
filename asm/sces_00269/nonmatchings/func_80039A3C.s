@@ -10,17 +10,17 @@
 nonmatching print_vector, 0x34
 
 glabel print_vector
-    /* 1A23C 80039A3C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 1A240 80039A40 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 1A244 80039A44 1400858C */  lw         $a1, 0x14($a0)
-    /* 1A248 80039A48 1800868C */  lw         $a2, 0x18($a0)
-    /* 1A24C 80039A4C 1C00878C */  lw         $a3, 0x1C($a0)
-    /* 1A250 80039A50 0280043C */  lui        $a0, %hi(D_80020EA4)
-    /* 1A254 80039A54 A40E8424 */  addiu      $a0, $a0, %lo(D_80020EA4)
-    /* 1A258 80039A58 81B6000C */  jal        func_8002DA04
-    /* 1A25C 80039A5C 00000000 */   nop
-    /* 1A260 80039A60 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 1A264 80039A64 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 1A268 80039A68 0800E003 */  jr         $ra
-    /* 1A26C 80039A6C 00000000 */   nop
+    /* 16CCC 800364CC E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 16CD0 800364D0 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 16CD4 800364D4 1400858C */  lw         $a1, 0x14($a0)
+    /* 16CD8 800364D8 1800868C */  lw         $a2, 0x18($a0)
+    /* 16CDC 800364DC 1C00878C */  lw         $a3, 0x1C($a0)
+    /* 16CE0 800364E0 0280043C */  lui        $a0, %hi(D_80020EA4)
+    /* 16CE4 800364E4 A40E8424 */  addiu      $a0, $a0, %lo(D_80020EA4)
+    /* 16CE8 800364E8 81B6000C */  jal        printf
+    /* 16CEC 800364EC 00000000 */   nop
+    /* 16CF0 800364F0 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 16CF4 800364F4 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 16CF8 800364F8 0800E003 */  jr         $ra
+    /* 16CFC 800364FC 00000000 */   nop
 endlabel print_vector

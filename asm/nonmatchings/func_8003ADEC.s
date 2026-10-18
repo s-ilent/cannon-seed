@@ -10,6 +10,6 @@
 nonmatching GsDefDispBuff, 0x8
 
 glabel GsDefDispBuff
-    /* 1B5EC 8003ADEC 1280023C */  lui        $v0, %hi(D_8011C30C)
-    /* 1B5F0 8003ADF0 0CC34284 */  lh         $v0, %lo(D_8011C30C)($v0)
+    /* 17E1C 8003761C 1280023C */  lui        $v0, %hi(D_8011C30C)
+    /* 17E20 80037620 0CC34284 */  lh         $v0, %lo(D_8011C30C)($v0)
 endlabel GsDefDispBuff

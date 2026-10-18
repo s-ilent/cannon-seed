@@ -10,5 +10,5 @@
 nonmatching func_8005E1F8, 0x4
 
 glabel func_8005E1F8
-    /* 3E9F8 8005E1F8 00000000 */  nop
+    /* 36888 80056088 00000000 */  nop
 endlabel func_8005E1F8

@@ -10,37 +10,38 @@
 nonmatching _SpuIsInAllocateArea_, 0x78
 
 glabel _SpuIsInAllocateArea_
-    /* 5B7D8 8007AFD8 0080083C */  lui        $t0, (0x80000000 >> 16)
-    /* 5B7DC 8007AFDC 0040073C */  lui        $a3, (0x40000000 >> 16)
-    /* 5B7E0 8007AFE0 FF0F063C */  lui        $a2, (0xFFFFFFF >> 16)
-    /* 5B7E4 8007AFE4 FFFFC634 */  ori        $a2, $a2, (0xFFFFFFF & 0xFFFF)
-    /* 5B7E8 8007AFE8 0B80023C */  lui        $v0, %hi(D_800AA8A0)
-    /* 5B7EC 8007AFEC A0A8428C */  lw         $v0, %lo(D_800AA8A0)($v0)
-    /* 5B7F0 8007AFF0 0B80053C */  lui        $a1, %hi(D_800AB1D4)
-    /* 5B7F4 8007AFF4 D4B1A58C */  lw         $a1, %lo(D_800AB1D4)($a1)
-    /* 5B7F8 8007AFF8 04204400 */  sllv       $a0, $a0, $v0
-    /* 5B7FC 8007AFFC 0000A38C */  lw         $v1, 0x0($a1)
-    /* 5B800 8007B000 00000000 */  nop
-    /* 5B804 8007B004 24106800 */  and        $v0, $v1, $t0
-    /* 5B808 8007B008 0C004014 */  bnez       $v0, .L8007B03C
-    /* 5B80C 8007B00C 24106700 */   and       $v0, $v1, $a3
-    /* 5B810 8007B010 0C004014 */  bnez       $v0, .L8007B044
-    /* 5B814 8007B014 24186600 */   and       $v1, $v1, $a2
-    /* 5B818 8007B018 2B106400 */  sltu       $v0, $v1, $a0
-    /* 5B81C 8007B01C 0A004010 */  beqz       $v0, .L8007B048
-    /* 5B820 8007B020 01000234 */   ori       $v0, $zero, 0x1
-    /* 5B824 8007B024 0400A28C */  lw         $v0, 0x4($a1)
-    /* 5B828 8007B028 00000000 */  nop
-    /* 5B82C 8007B02C 21106200 */  addu       $v0, $v1, $v0
-    /* 5B830 8007B030 2B108200 */  sltu       $v0, $a0, $v0
-    /* 5B834 8007B034 04004014 */  bnez       $v0, .L8007B048
-    /* 5B838 8007B038 01000234 */   ori       $v0, $zero, 0x1
-  .L8007B03C:
-    /* 5B83C 8007B03C CBBC0108 */  j          .L8006F32C
-    /* 5B840 8007B040 0800A524 */   addiu     $a1, $a1, 0x8
-  .L8007B044:
-    /* 5B844 8007B044 21100000 */  addu       $v0, $zero, $zero
-  .L8007B048:
-    /* 5B848 8007B048 0800E003 */  jr         $ra
-    /* 5B84C 8007B04C 00000000 */   nop
+    /* 4FB08 8006F308 0080083C */  lui        $t0, (0x80000000 >> 16)
+    /* 4FB0C 8006F30C 0040073C */  lui        $a3, (0x40000000 >> 16)
+    /* 4FB10 8006F310 FF0F063C */  lui        $a2, (0xFFFFFFF >> 16)
+    /* 4FB14 8006F314 FFFFC634 */  ori        $a2, $a2, (0xFFFFFFF & 0xFFFF)
+    /* 4FB18 8006F318 0B80023C */  lui        $v0, %hi(D_800AA8A0)
+    /* 4FB1C 8006F31C A0A8428C */  lw         $v0, %lo(D_800AA8A0)($v0)
+    /* 4FB20 8006F320 0B80053C */  lui        $a1, %hi(D_800AB1D4)
+    /* 4FB24 8006F324 D4B1A58C */  lw         $a1, %lo(D_800AB1D4)($a1)
+    /* 4FB28 8006F328 04204400 */  sllv       $a0, $a0, $v0
+  .L8006F32C:
+    /* 4FB2C 8006F32C 0000A38C */  lw         $v1, 0x0($a1)
+    /* 4FB30 8006F330 00000000 */  nop
+    /* 4FB34 8006F334 24106800 */  and        $v0, $v1, $t0
+    /* 4FB38 8006F338 0C004014 */  bnez       $v0, .L8006F36C
+    /* 4FB3C 8006F33C 24106700 */   and       $v0, $v1, $a3
+    /* 4FB40 8006F340 0C004014 */  bnez       $v0, .L8006F374
+    /* 4FB44 8006F344 24186600 */   and       $v1, $v1, $a2
+    /* 4FB48 8006F348 2B106400 */  sltu       $v0, $v1, $a0
+    /* 4FB4C 8006F34C 0A004010 */  beqz       $v0, .L8006F378
+    /* 4FB50 8006F350 01000234 */   ori       $v0, $zero, 0x1
+    /* 4FB54 8006F354 0400A28C */  lw         $v0, 0x4($a1)
+    /* 4FB58 8006F358 00000000 */  nop
+    /* 4FB5C 8006F35C 21106200 */  addu       $v0, $v1, $v0
+    /* 4FB60 8006F360 2B108200 */  sltu       $v0, $a0, $v0
+    /* 4FB64 8006F364 04004014 */  bnez       $v0, .L8006F378
+    /* 4FB68 8006F368 01000234 */   ori       $v0, $zero, 0x1
+  .L8006F36C:
+    /* 4FB6C 8006F36C CBBC0108 */  j          .L8006F32C
+    /* 4FB70 8006F370 0800A524 */   addiu     $a1, $a1, 0x8
+  .L8006F374:
+    /* 4FB74 8006F374 21100000 */  addu       $v0, $zero, $zero
+  .L8006F378:
+    /* 4FB78 8006F378 0800E003 */  jr         $ra
+    /* 4FB7C 8006F37C 00000000 */   nop
 endlabel _SpuIsInAllocateArea_

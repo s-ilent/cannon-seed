@@ -10,8 +10,8 @@
 nonmatching write, 0xC
 
 glabel write
-    /* 12088 80031888 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 1208C 8003188C 08004001 */  jr         $t2
-    /* 12090 80031890 35000924 */   addiu     $t1, $zero, 0x35
+    /* FBB8 8002F3B8 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* FBBC 8002F3BC 08004001 */  jr         $t2
+    /* FBC0 8002F3C0 35000924 */   addiu     $t1, $zero, 0x35
 endlabel write
-    /* 12094 80031894 00000000 */  nop
+    /* FBC4 8002F3C4 00000000 */  nop

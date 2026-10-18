@@ -10,43 +10,42 @@
 nonmatching GsSetDrawBuffClip, 0x98
 
 glabel GsSetDrawBuffClip
-    /* 365F0 80055DF0 1780023C */  lui        $v0, %hi(PSDIDX)
-    /* 365F4 80055DF4 34274284 */  lh         $v0, %lo(PSDIDX)($v0)
-    /* 365F8 80055DF8 1780043C */  lui        $a0, %hi(D_8016B114)
-    /* 365FC 80055DFC 14B18494 */  lhu        $a0, %lo(D_8016B114)($a0)
-    /* 36600 80055E00 1780033C */  lui        $v1, %hi(D_8016B110)
-    /* 36604 80055E04 10B16384 */  lh         $v1, %lo(D_8016B110)($v1)
-    /* 36608 80055E08 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 3660C 80055E0C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 36610 80055E10 40100200 */  sll        $v0, $v0, 1
-    /* 36614 80055E14 1480013C */  lui        $at, %hi(D_80147E08)
-    /* 36618 80055E18 087E2124 */  addiu      $at, $at, %lo(D_80147E08)
-  alabel func_80055E1C
-    /* 3661C 80055E1C 21082200 */  addu       $at, $at, $v0
-    /* 36620 80055E20 00002584 */  lh         $a1, 0x0($at)
-    /* 36624 80055E24 1480013C */  lui        $at, %hi(D_80147E0C)
-    /* 36628 80055E28 0C7E2124 */  addiu      $at, $at, %lo(D_80147E0C)
-    /* 3662C 80055E2C 21082200 */  addu       $at, $at, $v0
-    /* 36630 80055E30 00002684 */  lh         $a2, 0x0($at)
-    /* 36634 80055E34 1780023C */  lui        $v0, %hi(D_8016B116)
-    /* 36638 80055E38 16B14294 */  lhu        $v0, %lo(D_8016B116)($v0)
-    /* 3663C 80055E3C 1780013C */  lui        $at, %hi(D_8016AC98)
-    /* 36640 80055E40 98AC24A4 */  sh         $a0, %lo(D_8016AC98)($at)
-    /* 36644 80055E44 1780043C */  lui        $a0, %hi(D_8016AC94)
-    /* 36648 80055E48 94AC8424 */  addiu      $a0, $a0, %lo(D_8016AC94)
-    /* 3664C 80055E4C 1780013C */  lui        $at, %hi(D_8016AC9A)
-    /* 36650 80055E50 9AAC22A4 */  sh         $v0, %lo(D_8016AC9A)($at)
-    /* 36654 80055E54 1780023C */  lui        $v0, %hi(D_8016B112)
-    /* 36658 80055E58 12B14284 */  lh         $v0, %lo(D_8016B112)($v0)
-    /* 3665C 80055E5C 21186500 */  addu       $v1, $v1, $a1
-    /* 36660 80055E60 000083A4 */  sh         $v1, 0x0($a0)
-    /* 36664 80055E64 21104600 */  addu       $v0, $v0, $a2
-    /* 36668 80055E68 1780013C */  lui        $at, %hi(D_8016AC96)
-    /* 3666C 80055E6C 96AC22A4 */  sh         $v0, %lo(D_8016AC96)($at)
-    /* 36670 80055E70 4F2E010C */  jal        func_8004B93C
-    /* 36674 80055E74 00000000 */   nop
-    /* 36678 80055E78 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 3667C 80055E7C 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 36680 80055E80 0800E003 */  jr         $ra
-    /* 36684 80055E84 00000000 */   nop
+    /* 2F650 8004EE50 1780023C */  lui        $v0, %hi(PSDIDX)
+    /* 2F654 8004EE54 34274284 */  lh         $v0, %lo(PSDIDX)($v0)
+    /* 2F658 8004EE58 1780043C */  lui        $a0, %hi(D_8016B114)
+    /* 2F65C 8004EE5C 14B18494 */  lhu        $a0, %lo(D_8016B114)($a0)
+    /* 2F660 8004EE60 1780033C */  lui        $v1, %hi(D_8016B110)
+    /* 2F664 8004EE64 10B16384 */  lh         $v1, %lo(D_8016B110)($v1)
+    /* 2F668 8004EE68 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2F66C 8004EE6C 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 2F670 8004EE70 40100200 */  sll        $v0, $v0, 1
+    /* 2F674 8004EE74 1480013C */  lui        $at, %hi(D_80147E08)
+    /* 2F678 8004EE78 087E2124 */  addiu      $at, $at, %lo(D_80147E08)
+    /* 2F67C 8004EE7C 21082200 */  addu       $at, $at, $v0
+    /* 2F680 8004EE80 00002584 */  lh         $a1, 0x0($at)
+    /* 2F684 8004EE84 1480013C */  lui        $at, %hi(D_80147E0C)
+    /* 2F688 8004EE88 0C7E2124 */  addiu      $at, $at, %lo(D_80147E0C)
+    /* 2F68C 8004EE8C 21082200 */  addu       $at, $at, $v0
+    /* 2F690 8004EE90 00002684 */  lh         $a2, 0x0($at)
+    /* 2F694 8004EE94 1780023C */  lui        $v0, %hi(D_8016B116)
+    /* 2F698 8004EE98 16B14294 */  lhu        $v0, %lo(D_8016B116)($v0)
+    /* 2F69C 8004EE9C 1780013C */  lui        $at, %hi(D_8016AC98)
+    /* 2F6A0 8004EEA0 98AC24A4 */  sh         $a0, %lo(D_8016AC98)($at)
+    /* 2F6A4 8004EEA4 1780043C */  lui        $a0, %hi(D_8016AC94)
+    /* 2F6A8 8004EEA8 94AC8424 */  addiu      $a0, $a0, %lo(D_8016AC94)
+    /* 2F6AC 8004EEAC 1780013C */  lui        $at, %hi(D_8016AC9A)
+    /* 2F6B0 8004EEB0 9AAC22A4 */  sh         $v0, %lo(D_8016AC9A)($at)
+    /* 2F6B4 8004EEB4 1780023C */  lui        $v0, %hi(D_8016B112)
+    /* 2F6B8 8004EEB8 12B14284 */  lh         $v0, %lo(D_8016B112)($v0)
+    /* 2F6BC 8004EEBC 21186500 */  addu       $v1, $v1, $a1
+    /* 2F6C0 8004EEC0 000083A4 */  sh         $v1, 0x0($a0)
+    /* 2F6C4 8004EEC4 21104600 */  addu       $v0, $v0, $a2
+    /* 2F6C8 8004EEC8 1780013C */  lui        $at, %hi(D_8016AC96)
+    /* 2F6CC 8004EECC 96AC22A4 */  sh         $v0, %lo(D_8016AC96)($at)
+    /* 2F6D0 8004EED0 4F2E010C */  jal        func_8004B93C
+    /* 2F6D4 8004EED4 00000000 */   nop
+    /* 2F6D8 8004EED8 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 2F6DC 8004EEDC 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2F6E0 8004EEE0 0800E003 */  jr         $ra
+    /* 2F6E4 8004EEE4 00000000 */   nop
 endlabel GsSetDrawBuffClip

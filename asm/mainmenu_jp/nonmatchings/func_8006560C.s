@@ -10,8 +10,13 @@
 nonmatching strcpy, 0xC
 
 glabel strcpy
-    /* 45E0C 8006560C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 45E10 80065610 08004001 */  jr         $t2
-    /* 45E14 80065614 19000924 */   addiu     $t1, $zero, 0x19
+    /* 3CE5C 8005C65C A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 3CE60 8005C660 08004001 */  jr         $t2
+    /* 3CE64 8005C664 19000924 */   addiu     $t1, $zero, 0x19
 endlabel strcpy
-    /* 45E18 80065618 00000000 */  nop
+
+nonmatching func_8005C668, 0x4
+
+glabel func_8005C668
+    /* 3CE68 8005C668 00000000 */  nop
+endlabel func_8005C668

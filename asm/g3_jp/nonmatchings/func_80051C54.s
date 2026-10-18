@@ -10,8 +10,8 @@
 nonmatching ChangeClearRCnt, 0xC
 
 glabel ChangeClearRCnt
-    /* 32454 80051C54 C0000A24 */  addiu      $t2, $zero, 0xC0
-    /* 32458 80051C58 08004001 */  jr         $t2
-    /* 3245C 80051C5C 0A000924 */   addiu     $t1, $zero, 0xA
+    /* 2BD04 8004B504 C0000A24 */  addiu      $t2, $zero, 0xC0
+    /* 2BD08 8004B508 08004001 */  jr         $t2
+    /* 2BD0C 8004B50C 0A000924 */   addiu     $t1, $zero, 0xA
 endlabel ChangeClearRCnt
-    /* 32460 80051C60 00000000 */  nop
+    /* 2BD10 8004B510 00000000 */  nop

@@ -10,37 +10,37 @@
 nonmatching trapIntrVSync, 0x7C
 
 glabel trapIntrVSync
-    /* 12274 80031A74 0580023C */  lui        $v0, %hi(D_8004E380)
-    /* 12278 80031A78 80E3428C */  lw         $v0, %lo(D_8004E380)($v0)
-    /* 1227C 80031A7C E0FFBD27 */  addiu      $sp, $sp, -0x20
-    /* 12280 80031A80 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 12284 80031A84 21880000 */  addu       $s1, $zero, $zero
-    /* 12288 80031A88 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 1228C 80031A8C 0580103C */  lui        $s0, %hi(D_8004E360)
-    /* 12290 80031A90 60E31026 */  addiu      $s0, $s0, %lo(D_8004E360)
-    /* 12294 80031A94 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 12298 80031A98 01004224 */  addiu      $v0, $v0, 0x1
-    /* 1229C 80031A9C 0580013C */  lui        $at, %hi(D_8004E380)
-    /* 122A0 80031AA0 80E322AC */  sw         $v0, %lo(D_8004E380)($at)
-    /* 122A4 80031AA4 0580023C */  lui        $v0, %hi(D_8004E380)
-    /* 122A8 80031AA8 80E3428C */  lw         $v0, %lo(D_8004E380)($v0)
-  .L80031AAC:
-    /* 122AC 80031AAC 00000000 */  nop
-    /* 122B0 80031AB0 0000028E */  lw         $v0, 0x0($s0)
-    /* 122B4 80031AB4 00000000 */  nop
-    /* 122B8 80031AB8 03004010 */  beqz       $v0, .L80031AC8
-    /* 122BC 80031ABC 04001026 */   addiu     $s0, $s0, 0x4
-    /* 122C0 80031AC0 09F84000 */  jalr       $v0
-    /* 122C4 80031AC4 00000000 */   nop
-  .L80031AC8:
-    /* 122C8 80031AC8 01003126 */  addiu      $s1, $s1, 0x1
-    /* 122CC 80031ACC 0800222A */  slti       $v0, $s1, 0x8
-    /* 122D0 80031AD0 F6FF4014 */  bnez       $v0, .L80031AAC
-    /* 122D4 80031AD4 00000000 */   nop
-    /* 122D8 80031AD8 1800BF8F */  lw         $ra, 0x18($sp)
-    /* 122DC 80031ADC 1400B18F */  lw         $s1, 0x14($sp)
-    /* 122E0 80031AE0 1000B08F */  lw         $s0, 0x10($sp)
-    /* 122E4 80031AE4 2000BD27 */  addiu      $sp, $sp, 0x20
-    /* 122E8 80031AE8 0800E003 */  jr         $ra
-    /* 122EC 80031AEC 00000000 */   nop
+    /* FDA4 8002F5A4 0580023C */  lui        $v0, %hi(D_8004E380)
+    /* FDA8 8002F5A8 80E3428C */  lw         $v0, %lo(D_8004E380)($v0)
+    /* FDAC 8002F5AC E0FFBD27 */  addiu      $sp, $sp, -0x20
+    /* FDB0 8002F5B0 1400B1AF */  sw         $s1, 0x14($sp)
+    /* FDB4 8002F5B4 21880000 */  addu       $s1, $zero, $zero
+    /* FDB8 8002F5B8 1000B0AF */  sw         $s0, 0x10($sp)
+    /* FDBC 8002F5BC 0580103C */  lui        $s0, %hi(D_8004E360)
+    /* FDC0 8002F5C0 60E31026 */  addiu      $s0, $s0, %lo(D_8004E360)
+    /* FDC4 8002F5C4 1800BFAF */  sw         $ra, 0x18($sp)
+    /* FDC8 8002F5C8 01004224 */  addiu      $v0, $v0, 0x1
+    /* FDCC 8002F5CC 0580013C */  lui        $at, %hi(D_8004E380)
+    /* FDD0 8002F5D0 80E322AC */  sw         $v0, %lo(D_8004E380)($at)
+    /* FDD4 8002F5D4 0580023C */  lui        $v0, %hi(D_8004E380)
+    /* FDD8 8002F5D8 80E3428C */  lw         $v0, %lo(D_8004E380)($v0)
+  .L8002F5DC:
+    /* FDDC 8002F5DC 00000000 */  nop
+    /* FDE0 8002F5E0 0000028E */  lw         $v0, 0x0($s0)
+    /* FDE4 8002F5E4 00000000 */  nop
+    /* FDE8 8002F5E8 03004010 */  beqz       $v0, .L8002F5F8
+    /* FDEC 8002F5EC 04001026 */   addiu     $s0, $s0, 0x4
+    /* FDF0 8002F5F0 09F84000 */  jalr       $v0
+    /* FDF4 8002F5F4 00000000 */   nop
+  .L8002F5F8:
+    /* FDF8 8002F5F8 01003126 */  addiu      $s1, $s1, 0x1
+    /* FDFC 8002F5FC 0800222A */  slti       $v0, $s1, 0x8
+    /* FE00 8002F600 F6FF4014 */  bnez       $v0, .L8002F5DC
+    /* FE04 8002F604 00000000 */   nop
+    /* FE08 8002F608 1800BF8F */  lw         $ra, 0x18($sp)
+    /* FE0C 8002F60C 1400B18F */  lw         $s1, 0x14($sp)
+    /* FE10 8002F610 1000B08F */  lw         $s0, 0x10($sp)
+    /* FE14 8002F614 2000BD27 */  addiu      $sp, $sp, 0x20
+    /* FE18 8002F618 0800E003 */  jr         $ra
+    /* FE1C 8002F61C 00000000 */   nop
 endlabel trapIntrVSync

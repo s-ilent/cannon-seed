@@ -10,8 +10,8 @@
 nonmatching _bu_init, 0xC
 
 glabel _bu_init
-    /* 59B1C 8007931C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 59B20 80079320 08004001 */  jr         $t2
-    /* 59B24 80079324 70000924 */   addiu     $t1, $zero, 0x70
+    /* 4E1DC 8006D9DC A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 4E1E0 8006D9E0 08004001 */  jr         $t2
+    /* 4E1E4 8006D9E4 70000924 */   addiu     $t1, $zero, 0x70
 endlabel _bu_init
-    /* 59B28 80079328 00000000 */  nop
+    /* 4E1E8 8006D9E8 00000000 */  nop

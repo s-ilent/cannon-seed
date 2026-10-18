@@ -10,8 +10,8 @@
 nonmatching lseek, 0xC
 
 glabel lseek
-    /* 2F1D0 8004E9D0 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2F1D4 8004E9D4 08004001 */  jr         $t2
-    /* 2F1D8 8004E9D8 33000924 */   addiu     $t1, $zero, 0x33
+    /* 29070 80048870 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 29074 80048874 08004001 */  jr         $t2
+    /* 29078 80048878 33000924 */   addiu     $t1, $zero, 0x33
 endlabel lseek
-    /* 2F1DC 8004E9DC 00000000 */  nop
+    /* 2907C 8004887C 00000000 */  nop

@@ -11,10 +11,10 @@
 nonmatching SetDQB, 0xC
 
 glabel SetDQB
-    /* 15F88 80035788 00E0C448 */  ctc2       $a0, $28 /* handwritten instruction */
-    /* 15F8C 8003578C 0800E003 */  jr         $ra
-    /* 15F90 80035790 00000000 */   nop
+    /* 13268 80032A68 00E0C448 */  ctc2       $a0, $28 /* handwritten instruction */
+    /* 1326C 80032A6C 0800E003 */  jr         $ra
+    /* 13270 80032A70 00000000 */   nop
 endlabel SetDQB
-    /* 15F94 80035794 00000000 */  nop
-    /* 15F98 80035798 00000000 */  nop
-    /* 15F9C 8003579C 00000000 */  nop
+    /* 13274 80032A74 00000000 */  nop
+    /* 13278 80032A78 00000000 */  nop
+    /* 1327C 80032A7C 00000000 */  nop

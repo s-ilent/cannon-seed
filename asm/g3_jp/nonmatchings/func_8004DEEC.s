@@ -10,8 +10,8 @@
 nonmatching printf, 0xC
 
 glabel printf
-    /* 2E6EC 8004DEEC A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2E6F0 8004DEF0 08004001 */  jr         $t2
-    /* 2E6F4 8004DEF4 3F000924 */   addiu     $t1, $zero, 0x3F
+    /* 287EC 80047FEC A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 287F0 80047FF0 08004001 */  jr         $t2
+    /* 287F4 80047FF4 3F000924 */   addiu     $t1, $zero, 0x3F
 endlabel printf
-    /* 2E6F8 8004DEF8 00000000 */  nop
+    /* 287F8 80047FF8 00000000 */  nop

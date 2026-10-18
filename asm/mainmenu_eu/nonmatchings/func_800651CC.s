@@ -10,8 +10,8 @@
 nonmatching bzero, 0xC
 
 glabel bzero
-    /* 459CC 800651CC A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 459D0 800651D0 08004001 */  jr         $t2
-    /* 459D4 800651D4 28000924 */   addiu     $t1, $zero, 0x28
+    /* 3CA1C 8005C21C A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 3CA20 8005C220 08004001 */  jr         $t2
+    /* 3CA24 8005C224 28000924 */   addiu     $t1, $zero, 0x28
 endlabel bzero
-    /* 459D8 800651D8 00000000 */  nop
+    /* 3CA28 8005C228 00000000 */  nop

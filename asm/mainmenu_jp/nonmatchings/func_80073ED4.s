@@ -10,11 +10,10 @@
 nonmatching func_80073ED4, 0x18
 
 glabel func_80073ED4
-    /* 546D4 80073ED4 6000B28F */  lw         $s2, 0x60($sp)
-    /* 546D8 80073ED8 5C00B18F */  lw         $s1, 0x5C($sp)
-    /* 546DC 80073EDC 5800B08F */  lw         $s0, 0x58($sp)
-    /* 546E0 80073EE0 8000BD27 */  addiu      $sp, $sp, 0x80
-  alabel func_80073EE4
-    /* 546E4 80073EE4 0800E003 */  jr         $ra
-    /* 546E8 80073EE8 00000000 */   nop
+    /* 49844 80069044 6000B28F */  lw         $s2, 0x60($sp)
+    /* 49848 80069048 5C00B18F */  lw         $s1, 0x5C($sp)
+    /* 4984C 8006904C 5800B08F */  lw         $s0, 0x58($sp)
+    /* 49850 80069050 8000BD27 */  addiu      $sp, $sp, 0x80
+    /* 49854 80069054 0800E003 */  jr         $ra
+    /* 49858 80069058 00000000 */   nop
 endlabel func_80073ED4

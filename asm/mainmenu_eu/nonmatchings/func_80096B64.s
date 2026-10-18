@@ -10,8 +10,13 @@
 nonmatching SysDeqIntRP, 0xC
 
 glabel SysDeqIntRP
-    /* 77364 80096B64 C0000A24 */  addiu      $t2, $zero, 0xC0
-    /* 77368 80096B68 08004001 */  jr         $t2
-    /* 7736C 80096B6C 03000924 */   addiu     $t1, $zero, 0x3
+    /* 67D94 80087594 C0000A24 */  addiu      $t2, $zero, 0xC0
+    /* 67D98 80087598 08004001 */  jr         $t2
+    /* 67D9C 8008759C 03000924 */   addiu     $t1, $zero, 0x3
 endlabel SysDeqIntRP
-    /* 77370 80096B70 00000000 */  nop
+
+nonmatching func_800875A0, 0x4
+
+glabel func_800875A0
+    /* 67DA0 800875A0 00000000 */  nop
+endlabel func_800875A0

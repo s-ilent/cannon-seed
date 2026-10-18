@@ -10,8 +10,8 @@
 nonmatching CloseEvent, 0xC
 
 glabel CloseEvent
-    /* 6FAE4 8008F2E4 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 6FAE8 8008F2E8 08004001 */  jr         $t2
-    /* 6FAEC 8008F2EC 09000924 */   addiu     $t1, $zero, 0x9
+    /* 61484 80080C84 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 61488 80080C88 08004001 */  jr         $t2
+    /* 6148C 80080C8C 09000924 */   addiu     $t1, $zero, 0x9
 endlabel CloseEvent
-    /* 6FAF0 8008F2F0 00000000 */  nop
+    /* 61490 80080C90 00000000 */  nop

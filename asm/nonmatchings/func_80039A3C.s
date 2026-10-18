@@ -11,13 +11,13 @@
 nonmatching Intpl, 0x24
 
 glabel Intpl
-    /* 1A23C 80039A3C 000089C8 */  lwc2       $9, 0x0($a0)
-    /* 1A240 80039A40 04008AC8 */  lwc2       $10, 0x4($a0)
-    /* 1A244 80039A44 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 1A248 80039A48 00408548 */  mtc2       $a1, $8 /* handwritten instruction */
-    /* 1A24C 80039A4C 00000000 */  nop
-    /* 1A250 80039A50 1100984A */  intpl
-    /* 1A254 80039A54 0000D6E8 */  swc2       $22, 0x0($a2)
-    /* 1A258 80039A58 0800E003 */  jr         $ra
-    /* 1A25C 80039A5C 00000000 */   nop
+    /* 16CCC 800364CC 000089C8 */  lwc2       $9, 0x0($a0)
+    /* 16CD0 800364D0 04008AC8 */  lwc2       $10, 0x4($a0)
+    /* 16CD4 800364D4 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 16CD8 800364D8 00408548 */  mtc2       $a1, $8 /* handwritten instruction */
+    /* 16CDC 800364DC 00000000 */  nop
+    /* 16CE0 800364E0 1100984A */  intpl
+    /* 16CE4 800364E4 0000D6E8 */  swc2       $22, 0x0($a2)
+    /* 16CE8 800364E8 0800E003 */  jr         $ra
+    /* 16CEC 800364EC 00000000 */   nop
 endlabel Intpl

@@ -10,8 +10,8 @@
 nonmatching OpenEvent, 0xC
 
 glabel OpenEvent
-    /* 2EAB8 8004E2B8 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2EABC 8004E2BC 08004001 */  jr         $t2
-    /* 2EAC0 8004E2C0 08000924 */   addiu     $t1, $zero, 0x8
+    /* 28A88 80048288 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 28A8C 8004828C 08004001 */  jr         $t2
+    /* 28A90 80048290 08000924 */   addiu     $t1, $zero, 0x8
 endlabel OpenEvent
-    /* 2EAC4 8004E2C4 00000000 */  nop
+    /* 28A94 80048294 00000000 */  nop

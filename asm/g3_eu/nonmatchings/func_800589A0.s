@@ -11,12 +11,12 @@
 nonmatching AverageZ3, 0x20
 
 glabel AverageZ3
-    /* 391A0 800589A0 00888448 */  mtc2       $a0, $17 /* handwritten instruction */
-    /* 391A4 800589A4 00908548 */  mtc2       $a1, $18 /* handwritten instruction */
-    /* 391A8 800589A8 00988648 */  mtc2       $a2, $19 /* handwritten instruction */
-    /* 391AC 800589AC 00000000 */  nop
-    /* 391B0 800589B0 2D00584B */  avsz3
-    /* 391B4 800589B4 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
-    /* 391B8 800589B8 0800E003 */  jr         $ra
-    /* 391BC 800589BC 00000000 */   nop
+    /* 31C10 80051410 00888448 */  mtc2       $a0, $17 /* handwritten instruction */
+    /* 31C14 80051414 00908548 */  mtc2       $a1, $18 /* handwritten instruction */
+    /* 31C18 80051418 00988648 */  mtc2       $a2, $19 /* handwritten instruction */
+    /* 31C1C 8005141C 00000000 */  nop
+    /* 31C20 80051420 2D00584B */  avsz3
+    /* 31C24 80051424 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
+    /* 31C28 80051428 0800E003 */  jr         $ra
+    /* 31C2C 8005142C 00000000 */   nop
 endlabel AverageZ3

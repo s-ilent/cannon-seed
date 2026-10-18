@@ -10,8 +10,8 @@
 nonmatching FlushCache, 0xC
 
 glabel FlushCache
-    /* 48054 80067854 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 48058 80067858 08004001 */  jr         $t2
-    /* 4805C 8006785C 44000924 */   addiu     $t1, $zero, 0x44
+    /* 3EBE4 8005E3E4 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 3EBE8 8005E3E8 08004001 */  jr         $t2
+    /* 3EBEC 8005E3EC 44000924 */   addiu     $t1, $zero, 0x44
 endlabel FlushCache
-    /* 48060 80067860 00000000 */  nop
+    /* 3EBF0 8005E3F0 00000000 */  nop

@@ -11,13 +11,13 @@
 nonmatching NormalColorDpq, 0x24
 
 glabel NormalColorDpq
-    /* 42BC8 800623C8 000080C8 */  lwc2       $0, 0x0($a0)
-    /* 42BCC 800623CC 040081C8 */  lwc2       $1, 0x4($a0)
-    /* 42BD0 800623D0 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 42BD4 800623D4 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
-    /* 42BD8 800623D8 00000000 */  nop
-    /* 42BDC 800623DC 1304E84A */  ncds
-    /* 42BE0 800623E0 0000F6E8 */  swc2       $22, 0x0($a3)
-    /* 42BE4 800623E4 0800E003 */  jr         $ra
-    /* 42BE8 800623E8 00000000 */   nop
+    /* 3A208 80059A08 000080C8 */  lwc2       $0, 0x0($a0)
+    /* 3A20C 80059A0C 040081C8 */  lwc2       $1, 0x4($a0)
+    /* 3A210 80059A10 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 3A214 80059A14 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
+    /* 3A218 80059A18 00000000 */  nop
+    /* 3A21C 80059A1C 1304E84A */  ncds
+    /* 3A220 80059A20 0000F6E8 */  swc2       $22, 0x0($a3)
+    /* 3A224 80059A24 0800E003 */  jr         $ra
+    /* 3A228 80059A28 00000000 */   nop
 endlabel NormalColorDpq

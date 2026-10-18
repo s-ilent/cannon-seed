@@ -10,8 +10,8 @@
 nonmatching exit, 0xC
 
 glabel exit
-    /* 4678C 80065F8C B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 46790 80065F90 08004001 */  jr         $t2
-    /* 46794 80065F94 38000924 */   addiu     $t1, $zero, 0x38
+    /* 3D6AC 8005CEAC B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 3D6B0 8005CEB0 08004001 */  jr         $t2
+    /* 3D6B4 8005CEB4 38000924 */   addiu     $t1, $zero, 0x38
 endlabel exit
-    /* 46798 80065F98 00000000 */  nop
+    /* 3D6B8 8005CEB8 00000000 */  nop

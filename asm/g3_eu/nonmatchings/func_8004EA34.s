@@ -10,14 +10,14 @@
 nonmatching PClseek, 0x24
 
 glabel PClseek
-    /* 2F234 8004EA34 2138C000 */  addu       $a3, $a2, $zero
-    /* 2F238 8004EA38 2130A000 */  addu       $a2, $a1, $zero
-    /* 2F23C 8004EA3C 21288000 */  addu       $a1, $a0, $zero
-    /* 2F240 8004EA40 CD410000 */  break      0, 263
-    /* 2F244 8004EA44 02004010 */  beqz       $v0, .L8004EA50
-    /* 2F248 8004EA48 21106000 */   addu      $v0, $v1, $zero
-    /* 2F24C 8004EA4C FFFF0224 */  addiu      $v0, $zero, -0x1
-  .L8004EA50:
-    /* 2F250 8004EA50 0800E003 */  jr         $ra
-    /* 2F254 8004EA54 00000000 */   nop
+    /* 290D4 800488D4 2138C000 */  addu       $a3, $a2, $zero
+    /* 290D8 800488D8 2130A000 */  addu       $a2, $a1, $zero
+    /* 290DC 800488DC 21288000 */  addu       $a1, $a0, $zero
+    /* 290E0 800488E0 CD410000 */  break      0, 263
+    /* 290E4 800488E4 02004010 */  beqz       $v0, .L800488F0
+    /* 290E8 800488E8 21106000 */   addu      $v0, $v1, $zero
+    /* 290EC 800488EC FFFF0224 */  addiu      $v0, $zero, -0x1
+  .L800488F0:
+    /* 290F0 800488F0 0800E003 */  jr         $ra
+    /* 290F4 800488F4 00000000 */   nop
 endlabel PClseek

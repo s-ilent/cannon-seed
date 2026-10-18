@@ -10,23 +10,23 @@
 nonmatching gte_init, 0x4C
 
 glabel gte_init
-    /* 44C1C 8006441C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 44C20 80064420 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 44C24 80064424 C66D010C */  jal        func_8005B718
-    /* 44C28 80064428 00000000 */   nop
-    /* 44C2C 8006442C 21200000 */  addu       $a0, $zero, $zero
-    /* 44C30 80064430 21280000 */  addu       $a1, $zero, $zero
-    /* 44C34 80064434 ED2D010C */  jal        func_8004B7B4
-    /* 44C38 80064438 21300000 */   addu      $a2, $zero, $zero
-    /* 44C3C 8006443C 21200000 */  addu       $a0, $zero, $zero
-    /* 44C40 80064440 122E010C */  jal        func_8004B848
-    /* 44C44 80064444 21280000 */   addu      $a1, $zero, $zero
-    /* 44C48 80064448 1880013C */  lui        $at, %hi(D_80178988)
-    /* 44C4C 8006444C 888920A4 */  sh         $zero, %lo(D_80178988)($at)
-    /* 44C50 80064450 1880013C */  lui        $at, %hi(D_80178984)
-    /* 44C54 80064454 848920A4 */  sh         $zero, %lo(D_80178984)($at)
-    /* 44C58 80064458 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 44C5C 8006445C 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 44C60 80064460 0800E003 */  jr         $ra
-    /* 44C64 80064464 00000000 */   nop
+    /* 3BECC 8005B6CC E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 3BED0 8005B6D0 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 3BED4 8005B6D4 C66D010C */  jal        func_8005B718
+    /* 3BED8 8005B6D8 00000000 */   nop
+    /* 3BEDC 8005B6DC 21200000 */  addu       $a0, $zero, $zero
+    /* 3BEE0 8005B6E0 21280000 */  addu       $a1, $zero, $zero
+    /* 3BEE4 8005B6E4 ED2D010C */  jal        func_8004B7B4
+    /* 3BEE8 8005B6E8 21300000 */   addu      $a2, $zero, $zero
+    /* 3BEEC 8005B6EC 21200000 */  addu       $a0, $zero, $zero
+    /* 3BEF0 8005B6F0 122E010C */  jal        func_8004B848
+    /* 3BEF4 8005B6F4 21280000 */   addu      $a1, $zero, $zero
+    /* 3BEF8 8005B6F8 1880013C */  lui        $at, %hi(D_80178988)
+    /* 3BEFC 8005B6FC 888920A4 */  sh         $zero, %lo(D_80178988)($at)
+    /* 3BF00 8005B700 1880013C */  lui        $at, %hi(D_80178984)
+    /* 3BF04 8005B704 848920A4 */  sh         $zero, %lo(D_80178984)($at)
+    /* 3BF08 8005B708 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 3BF0C 8005B70C 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 3BF10 8005B710 0800E003 */  jr         $ra
+    /* 3BF14 8005B714 00000000 */   nop
 endlabel gte_init

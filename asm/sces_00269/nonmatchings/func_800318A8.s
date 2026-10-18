@@ -10,8 +10,8 @@
 nonmatching EnableEvent, 0xC
 
 glabel EnableEvent
-    /* 120A8 800318A8 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 120AC 800318AC 08004001 */  jr         $t2
-    /* 120B0 800318B0 0C000924 */   addiu     $t1, $zero, 0xC
+    /* FBD8 8002F3D8 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* FBDC 8002F3DC 08004001 */  jr         $t2
+    /* FBE0 8002F3E0 0C000924 */   addiu     $t1, $zero, 0xC
 endlabel EnableEvent
-    /* 120B4 800318B4 00000000 */  nop
+    /* FBE4 8002F3E4 00000000 */  nop

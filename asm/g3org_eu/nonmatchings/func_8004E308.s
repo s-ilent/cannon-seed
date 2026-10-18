@@ -10,8 +10,8 @@
 nonmatching open, 0xC
 
 glabel open
-    /* 2EB08 8004E308 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2EB0C 8004E30C 08004001 */  jr         $t2
-    /* 2EB10 8004E310 32000924 */   addiu     $t1, $zero, 0x32
+    /* 28AD8 800482D8 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 28ADC 800482DC 08004001 */  jr         $t2
+    /* 28AE0 800482E0 32000924 */   addiu     $t1, $zero, 0x32
 endlabel open
-    /* 2EB14 8004E314 00000000 */  nop
+    /* 28AE4 800482E4 00000000 */  nop

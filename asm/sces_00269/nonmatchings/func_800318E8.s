@@ -10,8 +10,8 @@
 nonmatching _96_init, 0xC
 
 glabel _96_init
-    /* 120E8 800318E8 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 120EC 800318EC 08004001 */  jr         $t2
-    /* 120F0 800318F0 71000924 */   addiu     $t1, $zero, 0x71
+    /* FC18 8002F418 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* FC1C 8002F41C 08004001 */  jr         $t2
+    /* FC20 8002F420 71000924 */   addiu     $t1, $zero, 0x71
 endlabel _96_init
-    /* 120F4 800318F4 00000000 */  nop
+    /* FC24 8002F424 00000000 */  nop

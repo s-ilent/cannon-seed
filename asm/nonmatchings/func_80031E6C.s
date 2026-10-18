@@ -10,8 +10,8 @@
 nonmatching PAD_dr, 0xC
 
 glabel PAD_dr
-    /* 1266C 80031E6C B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 12670 80031E70 08004001 */  jr         $t2
-    /* 12674 80031E74 16000924 */   addiu     $t1, $zero, 0x16
+    /* 1006C 8002F86C B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 10070 8002F870 08004001 */  jr         $t2
+    /* 10074 8002F874 16000924 */   addiu     $t1, $zero, 0x16
 endlabel PAD_dr
-    /* 12678 80031E78 00000000 */  nop
+    /* 10078 8002F878 00000000 */  nop

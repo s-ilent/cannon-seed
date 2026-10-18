@@ -10,8 +10,8 @@
 nonmatching close, 0xC
 
 glabel close
-    /* 12078 80031878 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 1207C 8003187C 08004001 */  jr         $t2
-    /* 12080 80031880 36000924 */   addiu     $t1, $zero, 0x36
+    /* FBA8 8002F3A8 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* FBAC 8002F3AC 08004001 */  jr         $t2
+    /* FBB0 8002F3B0 36000924 */   addiu     $t1, $zero, 0x36
 endlabel close
-    /* 12084 80031884 00000000 */  nop
+    /* FBB4 8002F3B4 00000000 */  nop

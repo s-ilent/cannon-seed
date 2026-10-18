@@ -10,19 +10,19 @@
 nonmatching SpuSetTransferStartAddr, 0x3C
 
 glabel SpuSetTransferStartAddr
-    /* 68BE0 800883E0 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 68BE4 800883E4 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 68BE8 800883E8 21808000 */  addu       $s0, $a0, $zero
-    /* 68BEC 800883EC FFFF0424 */  addiu      $a0, $zero, -0x1
-    /* 68BF0 800883F0 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 68BF4 800883F4 B8EA010C */  jal        func_8007AAE0
-    /* 68BF8 800883F8 21280002 */   addu      $a1, $s0, $zero
-    /* 68BFC 800883FC 0D80013C */  lui        $at, %hi(D_800C8DA0)
-    /* 68C00 80088400 A08D22A4 */  sh         $v0, %lo(D_800C8DA0)($at)
-    /* 68C04 80088404 21100002 */  addu       $v0, $s0, $zero
-    /* 68C08 80088408 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 68C0C 8008840C 1000B08F */  lw         $s0, 0x10($sp)
-    /* 68C10 80088410 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 68C14 80088414 0800E003 */  jr         $ra
-    /* 68C18 80088418 00000000 */   nop
+    /* 5B3C0 8007ABC0 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 5B3C4 8007ABC4 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 5B3C8 8007ABC8 21808000 */  addu       $s0, $a0, $zero
+    /* 5B3CC 8007ABCC FFFF0424 */  addiu      $a0, $zero, -0x1
+    /* 5B3D0 8007ABD0 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 5B3D4 8007ABD4 B8EA010C */  jal        func_8007AAE0
+    /* 5B3D8 8007ABD8 21280002 */   addu      $a1, $s0, $zero
+    /* 5B3DC 8007ABDC 0D80013C */  lui        $at, %hi(D_800C8DA0)
+    /* 5B3E0 8007ABE0 A08D22A4 */  sh         $v0, %lo(D_800C8DA0)($at)
+    /* 5B3E4 8007ABE4 21100002 */  addu       $v0, $s0, $zero
+    /* 5B3E8 8007ABE8 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 5B3EC 8007ABEC 1000B08F */  lw         $s0, 0x10($sp)
+    /* 5B3F0 8007ABF0 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 5B3F4 8007ABF4 0800E003 */  jr         $ra
+    /* 5B3F8 8007ABF8 00000000 */   nop
 endlabel SpuSetTransferStartAddr

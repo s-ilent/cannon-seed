@@ -11,14 +11,14 @@
 nonmatching ColorDpq, 0x28
 
 glabel ColorDpq
-    /* 42C98 80062498 000089C8 */  lwc2       $9, 0x0($a0)
-    /* 42C9C 8006249C 04008AC8 */  lwc2       $10, 0x4($a0)
-    /* 42CA0 800624A0 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 42CA4 800624A4 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 42CA8 800624A8 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
-    /* 42CAC 800624AC 00000000 */  nop
-    /* 42CB0 800624B0 1404284B */  cdp
-    /* 42CB4 800624B4 0000F6E8 */  swc2       $22, 0x0($a3)
-    /* 42CB8 800624B8 0800E003 */  jr         $ra
-    /* 42CBC 800624BC 00000000 */   nop
+    /* 3A2D8 80059AD8 000089C8 */  lwc2       $9, 0x0($a0)
+    /* 3A2DC 80059ADC 04008AC8 */  lwc2       $10, 0x4($a0)
+    /* 3A2E0 80059AE0 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 3A2E4 80059AE4 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 3A2E8 80059AE8 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
+    /* 3A2EC 80059AEC 00000000 */  nop
+    /* 3A2F0 80059AF0 1404284B */  cdp
+    /* 3A2F4 80059AF4 0000F6E8 */  swc2       $22, 0x0($a3)
+    /* 3A2F8 80059AF8 0800E003 */  jr         $ra
+    /* 3A2FC 80059AFC 00000000 */   nop
 endlabel ColorDpq

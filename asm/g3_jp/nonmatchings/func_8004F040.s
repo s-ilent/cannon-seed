@@ -10,8 +10,8 @@
 nonmatching PCclose, 0x10
 
 glabel PCclose
-    /* 2F840 8004F040 21288000 */  addu       $a1, $a0, $zero
-    /* 2F844 8004F044 0D410000 */  break      0, 260
-    /* 2F848 8004F048 0800E003 */  jr         $ra
-    /* 2F84C 8004F04C 00000000 */   nop
+    /* 296E0 80048EE0 21288000 */  addu       $a1, $a0, $zero
+    /* 296E4 80048EE4 0D410000 */  break      0, 260
+    /* 296E8 80048EE8 0800E003 */  jr         $ra
+    /* 296EC 80048EEC 00000000 */   nop
 endlabel PCclose

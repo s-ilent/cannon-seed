@@ -10,8 +10,8 @@
 nonmatching _96_remove, 0xC
 
 glabel _96_remove
-    /* 31CB4 800514B4 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 31CB8 800514B8 08004001 */  jr         $t2
-    /* 31CBC 800514BC 72000924 */   addiu     $t1, $zero, 0x72
+    /* 2B694 8004AE94 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 2B698 8004AE98 08004001 */  jr         $t2
+    /* 2B69C 8004AE9C 72000924 */   addiu     $t1, $zero, 0x72
 endlabel _96_remove
-    /* 31CC0 800514C0 00000000 */  nop
+    /* 2B6A0 8004AEA0 00000000 */  nop

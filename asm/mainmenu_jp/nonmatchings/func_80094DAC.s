@@ -10,8 +10,8 @@
 nonmatching _new_card, 0xC
 
 glabel _new_card
-    /* 755AC 80094DAC B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 755B0 80094DB0 08004001 */  jr         $t2
-    /* 755B4 80094DB4 50000924 */   addiu     $t1, $zero, 0x50
+    /* 6636C 80085B6C B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 66370 80085B70 08004001 */  jr         $t2
+    /* 66374 80085B74 50000924 */   addiu     $t1, $zero, 0x50
 endlabel _new_card
-    /* 755B8 80094DB8 00000000 */  nop
+    /* 66378 80085B78 00000000 */  nop

@@ -11,14 +11,14 @@
 nonmatching DpqColorLight, 0x28
 
 glabel DpqColorLight
-    /* 398BC 800590BC 000089C8 */  lwc2       $9, 0x0($a0)
-    /* 398C0 800590C0 04008AC8 */  lwc2       $10, 0x4($a0)
-    /* 398C4 800590C4 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 398C8 800590C8 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 398CC 800590CC 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
-    /* 398D0 800590D0 00000000 */  nop
-    /* 398D4 800590D4 2900684A */  dpcl
-    /* 398D8 800590D8 0000F6E8 */  swc2       $22, 0x0($a3)
-    /* 398DC 800590DC 0800E003 */  jr         $ra
-    /* 398E0 800590E0 00000000 */   nop
+    /* 321FC 800519FC 000089C8 */  lwc2       $9, 0x0($a0)
+    /* 32200 80051A00 04008AC8 */  lwc2       $10, 0x4($a0)
+    /* 32204 80051A04 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 32208 80051A08 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 3220C 80051A0C 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
+    /* 32210 80051A10 00000000 */  nop
+    /* 32214 80051A14 2900684A */  dpcl
+    /* 32218 80051A18 0000F6E8 */  swc2       $22, 0x0($a3)
+    /* 3221C 80051A1C 0800E003 */  jr         $ra
+    /* 32220 80051A20 00000000 */   nop
 endlabel DpqColorLight

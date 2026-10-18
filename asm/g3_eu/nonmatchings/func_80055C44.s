@@ -10,37 +10,37 @@
 nonmatching GsMulCoord2, 0x84
 
 glabel GsMulCoord2
-    /* 36444 80055C44 D0FFBD27 */  addiu      $sp, $sp, -0x30
-    /* 36448 80055C48 2000B0AF */  sw         $s0, 0x20($sp)
-    /* 3644C 80055C4C 21808000 */  addu       $s0, $a0, $zero
-    /* 36450 80055C50 2400B1AF */  sw         $s1, 0x24($sp)
-    /* 36454 80055C54 2188A000 */  addu       $s1, $a1, $zero
-    /* 36458 80055C58 14002526 */  addiu      $a1, $s1, 0x14
-    /* 3645C 80055C5C 2800BFAF */  sw         $ra, 0x28($sp)
-    /* 36460 80055C60 0225010C */  jal        func_80049408
-    /* 36464 80055C64 1000A627 */   addiu     $a2, $sp, 0x10
-    /* 36468 80055C68 21200002 */  addu       $a0, $s0, $zero
-    /* 3646C 80055C6C 7B26010C */  jal        func_800499EC
-    /* 36470 80055C70 21282002 */   addu      $a1, $s1, $zero
-    /* 36474 80055C74 1000A28F */  lw         $v0, 0x10($sp)
-    /* 36478 80055C78 1400038E */  lw         $v1, 0x14($s0)
-    /* 3647C 80055C7C 00000000 */  nop
-    /* 36480 80055C80 21104300 */  addu       $v0, $v0, $v1
-    /* 36484 80055C84 140022AE */  sw         $v0, 0x14($s1)
-    /* 36488 80055C88 1400A28F */  lw         $v0, 0x14($sp)
-    /* 3648C 80055C8C 1800038E */  lw         $v1, 0x18($s0)
-    /* 36490 80055C90 00000000 */  nop
-    /* 36494 80055C94 21104300 */  addu       $v0, $v0, $v1
-    /* 36498 80055C98 180022AE */  sw         $v0, 0x18($s1)
-    /* 3649C 80055C9C 1800A28F */  lw         $v0, 0x18($sp)
-    /* 364A0 80055CA0 1C00038E */  lw         $v1, 0x1C($s0)
-    /* 364A4 80055CA4 00000000 */  nop
-    /* 364A8 80055CA8 21104300 */  addu       $v0, $v0, $v1
-    /* 364AC 80055CAC 1C0022AE */  sw         $v0, 0x1C($s1)
-    /* 364B0 80055CB0 2800BF8F */  lw         $ra, 0x28($sp)
-    /* 364B4 80055CB4 2400B18F */  lw         $s1, 0x24($sp)
-    /* 364B8 80055CB8 2000B08F */  lw         $s0, 0x20($sp)
-    /* 364BC 80055CBC 3000BD27 */  addiu      $sp, $sp, 0x30
-    /* 364C0 80055CC0 0800E003 */  jr         $ra
-    /* 364C4 80055CC4 00000000 */   nop
+    /* 2F4A4 8004ECA4 D0FFBD27 */  addiu      $sp, $sp, -0x30
+    /* 2F4A8 8004ECA8 2000B0AF */  sw         $s0, 0x20($sp)
+    /* 2F4AC 8004ECAC 21808000 */  addu       $s0, $a0, $zero
+    /* 2F4B0 8004ECB0 2400B1AF */  sw         $s1, 0x24($sp)
+    /* 2F4B4 8004ECB4 2188A000 */  addu       $s1, $a1, $zero
+    /* 2F4B8 8004ECB8 14002526 */  addiu      $a1, $s1, 0x14
+    /* 2F4BC 8004ECBC 2800BFAF */  sw         $ra, 0x28($sp)
+    /* 2F4C0 8004ECC0 0225010C */  jal        func_80049408
+    /* 2F4C4 8004ECC4 1000A627 */   addiu     $a2, $sp, 0x10
+    /* 2F4C8 8004ECC8 21200002 */  addu       $a0, $s0, $zero
+    /* 2F4CC 8004ECCC 7B26010C */  jal        MulMatrix2
+    /* 2F4D0 8004ECD0 21282002 */   addu      $a1, $s1, $zero
+    /* 2F4D4 8004ECD4 1000A28F */  lw         $v0, 0x10($sp)
+    /* 2F4D8 8004ECD8 1400038E */  lw         $v1, 0x14($s0)
+    /* 2F4DC 8004ECDC 00000000 */  nop
+    /* 2F4E0 8004ECE0 21104300 */  addu       $v0, $v0, $v1
+    /* 2F4E4 8004ECE4 140022AE */  sw         $v0, 0x14($s1)
+    /* 2F4E8 8004ECE8 1400A28F */  lw         $v0, 0x14($sp)
+    /* 2F4EC 8004ECEC 1800038E */  lw         $v1, 0x18($s0)
+    /* 2F4F0 8004ECF0 00000000 */  nop
+    /* 2F4F4 8004ECF4 21104300 */  addu       $v0, $v0, $v1
+    /* 2F4F8 8004ECF8 180022AE */  sw         $v0, 0x18($s1)
+    /* 2F4FC 8004ECFC 1800A28F */  lw         $v0, 0x18($sp)
+    /* 2F500 8004ED00 1C00038E */  lw         $v1, 0x1C($s0)
+    /* 2F504 8004ED04 00000000 */  nop
+    /* 2F508 8004ED08 21104300 */  addu       $v0, $v0, $v1
+    /* 2F50C 8004ED0C 1C0022AE */  sw         $v0, 0x1C($s1)
+    /* 2F510 8004ED10 2800BF8F */  lw         $ra, 0x28($sp)
+    /* 2F514 8004ED14 2400B18F */  lw         $s1, 0x24($sp)
+    /* 2F518 8004ED18 2000B08F */  lw         $s0, 0x20($sp)
+    /* 2F51C 8004ED1C 3000BD27 */  addiu      $sp, $sp, 0x30
+    /* 2F520 8004ED20 0800E003 */  jr         $ra
+    /* 2F524 8004ED24 00000000 */   nop
 endlabel GsMulCoord2

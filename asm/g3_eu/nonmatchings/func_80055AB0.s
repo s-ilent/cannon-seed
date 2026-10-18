@@ -10,16 +10,16 @@
 nonmatching GsSetLsMatrix, 0x30
 
 glabel GsSetLsMatrix
-    /* 362B0 80055AB0 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 362B4 80055AB4 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 362B8 80055AB8 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 362BC 80055ABC 3B27010C */  jal        func_80049CEC
-    /* 362C0 80055AC0 21808000 */   addu      $s0, $a0, $zero
-    /* 362C4 80055AC4 5F27010C */  jal        func_80049D7C
-    /* 362C8 80055AC8 21200002 */   addu      $a0, $s0, $zero
-    /* 362CC 80055ACC 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 362D0 80055AD0 1000B08F */  lw         $s0, 0x10($sp)
-    /* 362D4 80055AD4 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 362D8 80055AD8 0800E003 */  jr         $ra
-    /* 362DC 80055ADC 00000000 */   nop
+    /* 2F310 8004EB10 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2F314 8004EB14 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 2F318 8004EB18 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 2F31C 8004EB1C 3B27010C */  jal        SetRotMatrix
+    /* 2F320 8004EB20 21808000 */   addu      $s0, $a0, $zero
+    /* 2F324 8004EB24 5F27010C */  jal        SetTransMatrix
+    /* 2F328 8004EB28 21200002 */   addu      $a0, $s0, $zero
+    /* 2F32C 8004EB2C 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 2F330 8004EB30 1000B08F */  lw         $s0, 0x10($sp)
+    /* 2F334 8004EB34 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2F338 8004EB38 0800E003 */  jr         $ra
+    /* 2F33C 8004EB3C 00000000 */   nop
 endlabel GsSetLsMatrix

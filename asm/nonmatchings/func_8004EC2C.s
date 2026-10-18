@@ -10,8 +10,8 @@
 nonmatching WaitEvent, 0xC
 
 glabel WaitEvent
-    /* 2F42C 8004EC2C B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2F430 8004EC30 08004001 */  jr         $t2
-    /* 2F434 8004EC34 0A000924 */   addiu     $t1, $zero, 0xA
+    /* 292CC 80048ACC B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 292D0 80048AD0 08004001 */  jr         $t2
+    /* 292D4 80048AD4 0A000924 */   addiu     $t1, $zero, 0xA
 endlabel WaitEvent
-    /* 2F438 8004EC38 00000000 */  nop
+    /* 292D8 80048AD8 00000000 */  nop

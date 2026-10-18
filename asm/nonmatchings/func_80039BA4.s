@@ -11,11 +11,11 @@
 nonmatching Lzc, 0x18
 
 glabel Lzc
-    /* 1A3A4 80039BA4 00F08448 */  mtc2       $a0, $30 /* handwritten instruction */
-    /* 1A3A8 80039BA8 00000000 */  nop
-    /* 1A3AC 80039BAC 00000000 */  nop
-    /* 1A3B0 80039BB0 00F80248 */  mfc2       $v0, $31 /* handwritten instruction */
-    /* 1A3B4 80039BB4 0800E003 */  jr         $ra
-    /* 1A3B8 80039BB8 00000000 */   nop
+    /* 16E34 80036634 00F08448 */  mtc2       $a0, $30 /* handwritten instruction */
+    /* 16E38 80036638 00000000 */  nop
+    /* 16E3C 8003663C 00000000 */  nop
+    /* 16E40 80036640 00F80248 */  mfc2       $v0, $31 /* handwritten instruction */
+    /* 16E44 80036644 0800E003 */  jr         $ra
+    /* 16E48 80036648 00000000 */   nop
 endlabel Lzc
-    /* 1A3BC 80039BBC 00000000 */  nop
+    /* 16E4C 8003664C 00000000 */  nop

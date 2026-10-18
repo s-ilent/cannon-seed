@@ -10,10 +10,10 @@
 nonmatching GsSetOrign, 0x18
 
 glabel GsSetOrign
-    /* 84B4 80027CB4 0680013C */  lui        $at, %hi(D_80066424)
-    /* 84B8 80027CB8 246424A4 */  sh         $a0, %lo(D_80066424)($at)
-    /* 84BC 80027CBC 0680013C */  lui        $at, %hi(D_8006642C)
-    /* 84C0 80027CC0 2C6425A4 */  sh         $a1, %lo(D_8006642C)($at)
-    /* 84C4 80027CC4 0800E003 */  jr         $ra
-    /* 84C8 80027CC8 00000000 */   nop
+    /* 7414 80026C14 0680013C */  lui        $at, %hi(D_80066424)
+    /* 7418 80026C18 246424A4 */  sh         $a0, %lo(D_80066424)($at)
+    /* 741C 80026C1C 0680013C */  lui        $at, %hi(D_8006642C)
+    /* 7420 80026C20 2C6425A4 */  sh         $a1, %lo(D_8006642C)($at)
+    /* 7424 80026C24 0800E003 */  jr         $ra
+    /* 7428 80026C28 00000000 */   nop
 endlabel GsSetOrign

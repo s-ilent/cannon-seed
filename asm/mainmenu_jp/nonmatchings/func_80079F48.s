@@ -11,13 +11,13 @@
 nonmatching NormalColorDpq, 0x24
 
 glabel NormalColorDpq
-    /* 5A748 80079F48 000080C8 */  lwc2       $0, 0x0($a0)
-    /* 5A74C 80079F4C 040081C8 */  lwc2       $1, 0x4($a0)
-    /* 5A750 80079F50 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 5A754 80079F54 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
-    /* 5A758 80079F58 00000000 */  nop
-    /* 5A75C 80079F5C 1304E84A */  ncds
-    /* 5A760 80079F60 0000F6E8 */  swc2       $22, 0x0($a3)
-    /* 5A764 80079F64 0800E003 */  jr         $ra
-    /* 5A768 80079F68 00000000 */   nop
+    /* 4ECD8 8006E4D8 000080C8 */  lwc2       $0, 0x0($a0)
+    /* 4ECDC 8006E4DC 040081C8 */  lwc2       $1, 0x4($a0)
+    /* 4ECE0 8006E4E0 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 4ECE4 8006E4E4 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
+    /* 4ECE8 8006E4E8 00000000 */  nop
+    /* 4ECEC 8006E4EC 1304E84A */  ncds
+    /* 4ECF0 8006E4F0 0000F6E8 */  swc2       $22, 0x0($a3)
+    /* 4ECF4 8006E4F4 0800E003 */  jr         $ra
+    /* 4ECF8 8006E4F8 00000000 */   nop
 endlabel NormalColorDpq

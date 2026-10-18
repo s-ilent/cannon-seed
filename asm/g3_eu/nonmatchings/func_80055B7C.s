@@ -10,17 +10,17 @@
 nonmatching GsSetLightMatrix2, 0x34
 
 glabel GsSetLightMatrix2
-    /* 3637C 80055B7C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 36380 80055B80 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 36384 80055B84 21288000 */  addu       $a1, $a0, $zero
-    /* 36388 80055B88 1780043C */  lui        $a0, %hi(D_8016AC68)
-    /* 3638C 80055B8C 68AC8424 */  addiu      $a0, $a0, %lo(D_8016AC68)
-    /* 36390 80055B90 7B26010C */  jal        func_800499EC
-    /* 36394 80055B94 00000000 */   nop
-    /* 36398 80055B98 4727010C */  jal        func_80049D1C
-    /* 3639C 80055B9C 21204000 */   addu      $a0, $v0, $zero
-    /* 363A0 80055BA0 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 363A4 80055BA4 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 363A8 80055BA8 0800E003 */  jr         $ra
-    /* 363AC 80055BAC 00000000 */   nop
+    /* 2F3DC 8004EBDC E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2F3E0 8004EBE0 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 2F3E4 8004EBE4 21288000 */  addu       $a1, $a0, $zero
+    /* 2F3E8 8004EBE8 1780043C */  lui        $a0, %hi(D_8016AC68)
+    /* 2F3EC 8004EBEC 68AC8424 */  addiu      $a0, $a0, %lo(D_8016AC68)
+    /* 2F3F0 8004EBF0 7B26010C */  jal        MulMatrix2
+    /* 2F3F4 8004EBF4 00000000 */   nop
+    /* 2F3F8 8004EBF8 4727010C */  jal        SetLightMatrix
+    /* 2F3FC 8004EBFC 21204000 */   addu      $a0, $v0, $zero
+    /* 2F400 8004EC00 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 2F404 8004EC04 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2F408 8004EC08 0800E003 */  jr         $ra
+    /* 2F40C 8004EC0C 00000000 */   nop
 endlabel GsSetLightMatrix2

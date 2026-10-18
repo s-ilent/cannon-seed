@@ -11,14 +11,14 @@
 nonmatching Square12, 0x28
 
 glabel Square12
-    /* 39150 80058950 000089C8 */  lwc2       $9, 0x0($a0)
-    /* 39154 80058954 04008AC8 */  lwc2       $10, 0x4($a0)
-    /* 39158 80058958 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 3915C 8005895C 00000000 */  nop
-    /* 39160 80058960 2804A84A */  sqr        1
-    /* 39164 80058964 0000B9E8 */  swc2       $25, 0x0($a1)
-    /* 39168 80058968 0400BAE8 */  swc2       $26, 0x4($a1) /* handwritten instruction */
-    /* 3916C 8005896C 0800BBE8 */  swc2       $27, 0x8($a1) /* handwritten instruction */
-    /* 39170 80058970 0800E003 */  jr         $ra
-    /* 39174 80058974 2110A000 */   addu      $v0, $a1, $zero
+    /* 31BC0 800513C0 000089C8 */  lwc2       $9, 0x0($a0)
+    /* 31BC4 800513C4 04008AC8 */  lwc2       $10, 0x4($a0)
+    /* 31BC8 800513C8 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 31BCC 800513CC 00000000 */  nop
+    /* 31BD0 800513D0 2804A84A */  sqr        1
+    /* 31BD4 800513D4 0000B9E8 */  swc2       $25, 0x0($a1)
+    /* 31BD8 800513D8 0400BAE8 */  swc2       $26, 0x4($a1) /* handwritten instruction */
+    /* 31BDC 800513DC 0800BBE8 */  swc2       $27, 0x8($a1) /* handwritten instruction */
+    /* 31BE0 800513E0 0800E003 */  jr         $ra
+    /* 31BE4 800513E4 2110A000 */   addu      $v0, $a1, $zero
 endlabel Square12

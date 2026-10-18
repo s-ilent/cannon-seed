@@ -11,26 +11,26 @@
 nonmatching OuterProduct12, 0x58
 
 glabel OuterProduct12
-    /* 399D8 800591D8 00004D48 */  cfc2       $t5, $0 /* handwritten instruction */
-    /* 399DC 800591DC 00104E48 */  cfc2       $t6, $2 /* handwritten instruction */
-    /* 399E0 800591E0 00204F48 */  cfc2       $t7, $4 /* handwritten instruction */
-    /* 399E4 800591E4 0000888C */  lw         $t0, 0x0($a0)
-    /* 399E8 800591E8 0400898C */  lw         $t1, 0x4($a0)
-    /* 399EC 800591EC 08008A8C */  lw         $t2, 0x8($a0)
-    /* 399F0 800591F0 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
-    /* 399F4 800591F4 0010C948 */  ctc2       $t1, $2 /* handwritten instruction */
-    /* 399F8 800591F8 0020CA48 */  ctc2       $t2, $4 /* handwritten instruction */
-    /* 399FC 800591FC 0800ABC8 */  lwc2       $11, 0x8($a1)
-    /* 39A00 80059200 0000A9C8 */  lwc2       $9, 0x0($a1)
-    /* 39A04 80059204 0400AAC8 */  lwc2       $10, 0x4($a1)
-    /* 39A08 80059208 00000000 */  nop
-    /* 39A0C 8005920C 0C00784B */  op         1
-    /* 39A10 80059210 0000D9E8 */  swc2       $25, 0x0($a2)
-    /* 39A14 80059214 0400DAE8 */  swc2       $26, 0x4($a2) /* handwritten instruction */
-    /* 39A18 80059218 0800DBE8 */  swc2       $27, 0x8($a2) /* handwritten instruction */
-    /* 39A1C 8005921C 0000CD48 */  ctc2       $t5, $0 /* handwritten instruction */
-    /* 39A20 80059220 0010CE48 */  ctc2       $t6, $2 /* handwritten instruction */
-    /* 39A24 80059224 0020CF48 */  ctc2       $t7, $4 /* handwritten instruction */
-    /* 39A28 80059228 0800E003 */  jr         $ra
-    /* 39A2C 8005922C 00000000 */   nop
+    /* 32318 80051B18 00004D48 */  cfc2       $t5, $0 /* handwritten instruction */
+    /* 3231C 80051B1C 00104E48 */  cfc2       $t6, $2 /* handwritten instruction */
+    /* 32320 80051B20 00204F48 */  cfc2       $t7, $4 /* handwritten instruction */
+    /* 32324 80051B24 0000888C */  lw         $t0, 0x0($a0)
+    /* 32328 80051B28 0400898C */  lw         $t1, 0x4($a0)
+    /* 3232C 80051B2C 08008A8C */  lw         $t2, 0x8($a0)
+    /* 32330 80051B30 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 32334 80051B34 0010C948 */  ctc2       $t1, $2 /* handwritten instruction */
+    /* 32338 80051B38 0020CA48 */  ctc2       $t2, $4 /* handwritten instruction */
+    /* 3233C 80051B3C 0800ABC8 */  lwc2       $11, 0x8($a1)
+    /* 32340 80051B40 0000A9C8 */  lwc2       $9, 0x0($a1)
+    /* 32344 80051B44 0400AAC8 */  lwc2       $10, 0x4($a1)
+    /* 32348 80051B48 00000000 */  nop
+    /* 3234C 80051B4C 0C00784B */  op         1
+    /* 32350 80051B50 0000D9E8 */  swc2       $25, 0x0($a2)
+    /* 32354 80051B54 0400DAE8 */  swc2       $26, 0x4($a2) /* handwritten instruction */
+    /* 32358 80051B58 0800DBE8 */  swc2       $27, 0x8($a2) /* handwritten instruction */
+    /* 3235C 80051B5C 0000CD48 */  ctc2       $t5, $0 /* handwritten instruction */
+    /* 32360 80051B60 0010CE48 */  ctc2       $t6, $2 /* handwritten instruction */
+    /* 32364 80051B64 0020CF48 */  ctc2       $t7, $4 /* handwritten instruction */
+    /* 32368 80051B68 0800E003 */  jr         $ra
+    /* 3236C 80051B6C 00000000 */   nop
 endlabel OuterProduct12

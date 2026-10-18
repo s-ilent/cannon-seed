@@ -10,8 +10,8 @@
 nonmatching SsSetStereo, 0x10
 
 glabel SsSetStereo
-    /* 29F78 80049778 1180013C */  lui        $at, %hi(D_80114FF8)
-    /* 29F7C 8004977C F84F20A4 */  sh         $zero, %lo(D_80114FF8)($at)
-    /* 29F80 80049780 0800E003 */  jr         $ra
-    /* 29F84 80049784 00000000 */   nop
+    /* 248C8 800440C8 1180013C */  lui        $at, %hi(D_80114FF8)
+    /* 248CC 800440CC F84F20A4 */  sh         $zero, %lo(D_80114FF8)($at)
+    /* 248D0 800440D0 0800E003 */  jr         $ra
+    /* 248D4 800440D4 00000000 */   nop
 endlabel SsSetStereo

@@ -10,24 +10,24 @@
 nonmatching startIntrDMA, 0x50
 
 glabel startIntrDMA
-    /* 2E2D0 8004DAD0 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 2E2D4 8004DAD4 0A80043C */  lui        $a0, %hi(D_800A49B4)
-    /* 2E2D8 8004DAD8 B4498424 */  addiu      $a0, $a0, %lo(D_800A49B4)
-    /* 2E2DC 8004DADC 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 2E2E0 8004DAE0 931F010C */  jal        func_80047E4C
-    /* 2E2E4 8004DAE4 08000534 */   ori       $a1, $zero, 0x8
-    /* 2E2E8 8004DAE8 03000434 */  ori        $a0, $zero, 0x3
-    /* 2E2EC 8004DAEC 0A80023C */  lui        $v0, %hi(D_800A49B0)
-    /* 2E2F0 8004DAF0 B049428C */  lw         $v0, %lo(D_800A49B0)($v0)
-    /* 2E2F4 8004DAF4 0480053C */  lui        $a1, %hi(D_80047C20)
-    /* 2E2F8 8004DAF8 207CA524 */  addiu      $a1, $a1, %lo(D_80047C20)
-    /* 2E2FC 8004DAFC 000040AC */  sw         $zero, 0x0($v0)
-    /* 2E300 8004DB00 371D010C */  jal        func_800474DC
-    /* 2E304 8004DB04 00000000 */   nop
-    /* 2E308 8004DB08 0480023C */  lui        $v0, %hi(D_80047DA4)
-    /* 2E30C 8004DB0C A47D4224 */  addiu      $v0, $v0, %lo(D_80047DA4)
-    /* 2E310 8004DB10 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 2E314 8004DB14 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 2E318 8004DB18 0800E003 */  jr         $ra
-    /* 2E31C 8004DB1C 00000000 */   nop
+    /* 283D0 80047BD0 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 283D4 80047BD4 0A80043C */  lui        $a0, %hi(D_800A49B4)
+    /* 283D8 80047BD8 B4498424 */  addiu      $a0, $a0, %lo(D_800A49B4)
+    /* 283DC 80047BDC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 283E0 80047BE0 931F010C */  jal        memclr
+    /* 283E4 80047BE4 08000534 */   ori       $a1, $zero, 0x8
+    /* 283E8 80047BE8 03000434 */  ori        $a0, $zero, 0x3
+    /* 283EC 80047BEC 0A80023C */  lui        $v0, %hi(D_800A49B0)
+    /* 283F0 80047BF0 B049428C */  lw         $v0, %lo(D_800A49B0)($v0)
+    /* 283F4 80047BF4 0480053C */  lui        $a1, %hi(trapIntrDMA)
+    /* 283F8 80047BF8 207CA524 */  addiu      $a1, $a1, %lo(trapIntrDMA)
+    /* 283FC 80047BFC 000040AC */  sw         $zero, 0x0($v0)
+    /* 28400 80047C00 371D010C */  jal        func_800474DC
+    /* 28404 80047C04 00000000 */   nop
+    /* 28408 80047C08 0480023C */  lui        $v0, %hi(setIntrDMA)
+    /* 2840C 80047C0C A47D4224 */  addiu      $v0, $v0, %lo(setIntrDMA)
+    /* 28410 80047C10 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 28414 80047C14 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 28418 80047C18 0800E003 */  jr         $ra
+    /* 2841C 80047C1C 00000000 */   nop
 endlabel startIntrDMA

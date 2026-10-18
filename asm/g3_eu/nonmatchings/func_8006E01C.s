@@ -10,22 +10,22 @@
 nonmatching init_ring_status, 0x40
 
 glabel init_ring_status
-    /* 4E81C 8006E01C F8FFBD27 */  addiu      $sp, $sp, -0x8
-    /* 4E820 8006E020 0B00A010 */  beqz       $a1, .L8006E050
-    /* 4E824 8006E024 21300000 */   addu      $a2, $zero, $zero
-  .L8006E028:
-    /* 4E828 8006E028 2110C400 */  addu       $v0, $a2, $a0
-    /* 4E82C 8006E02C 0100C624 */  addiu      $a2, $a2, 0x1
-    /* 4E830 8006E030 1780033C */  lui        $v1, %hi(D_80172748)
-    /* 4E834 8006E034 4827638C */  lw         $v1, %lo(D_80172748)($v1)
-    /* 4E838 8006E038 40110200 */  sll        $v0, $v0, 5
-    /* 4E83C 8006E03C 21104300 */  addu       $v0, $v0, $v1
-    /* 4E840 8006E040 000040AC */  sw         $zero, 0x0($v0)
-    /* 4E844 8006E044 2B10C500 */  sltu       $v0, $a2, $a1
-    /* 4E848 8006E048 F7FF4014 */  bnez       $v0, .L8006E028
-    /* 4E84C 8006E04C 00000000 */   nop
-  .L8006E050:
-    /* 4E850 8006E050 0800BD27 */  addiu      $sp, $sp, 0x8
-    /* 4E854 8006E054 0800E003 */  jr         $ra
-    /* 4E858 8006E058 00000000 */   nop
+    /* 4469C 80063E9C F8FFBD27 */  addiu      $sp, $sp, -0x8
+    /* 446A0 80063EA0 0B00A010 */  beqz       $a1, .L80063ED0
+    /* 446A4 80063EA4 21300000 */   addu      $a2, $zero, $zero
+  .L80063EA8:
+    /* 446A8 80063EA8 2110C400 */  addu       $v0, $a2, $a0
+    /* 446AC 80063EAC 0100C624 */  addiu      $a2, $a2, 0x1
+    /* 446B0 80063EB0 1780033C */  lui        $v1, %hi(D_80172748)
+    /* 446B4 80063EB4 4827638C */  lw         $v1, %lo(D_80172748)($v1)
+    /* 446B8 80063EB8 40110200 */  sll        $v0, $v0, 5
+    /* 446BC 80063EBC 21104300 */  addu       $v0, $v0, $v1
+    /* 446C0 80063EC0 000040AC */  sw         $zero, 0x0($v0)
+    /* 446C4 80063EC4 2B10C500 */  sltu       $v0, $a2, $a1
+    /* 446C8 80063EC8 F7FF4014 */  bnez       $v0, .L80063EA8
+    /* 446CC 80063ECC 00000000 */   nop
+  .L80063ED0:
+    /* 446D0 80063ED0 0800BD27 */  addiu      $sp, $sp, 0x8
+    /* 446D4 80063ED4 0800E003 */  jr         $ra
+    /* 446D8 80063ED8 00000000 */   nop
 endlabel init_ring_status

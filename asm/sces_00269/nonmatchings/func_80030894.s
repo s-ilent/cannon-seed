@@ -10,8 +10,8 @@
 nonmatching strncmp, 0xC
 
 glabel strncmp
-    /* 11094 80030894 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 11098 80030898 08004001 */  jr         $t2
-    /* 1109C 8003089C 18000924 */   addiu     $t1, $zero, 0x18
+    /* EE24 8002E624 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* EE28 8002E628 08004001 */  jr         $t2
+    /* EE2C 8002E62C 18000924 */   addiu     $t1, $zero, 0x18
 endlabel strncmp
-    /* 110A0 800308A0 00000000 */  nop
+    /* EE30 8002E630 00000000 */  nop

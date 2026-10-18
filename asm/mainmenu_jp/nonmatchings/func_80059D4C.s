@@ -10,6 +10,6 @@
 nonmatching func_80059D4C, 0x8
 
 glabel func_80059D4C
-    /* 3A54C 80059D4C 0800E003 */  jr         $ra
-    /* 3A550 80059D50 00000000 */   nop
+    /* 32D5C 8005255C 0800E003 */  jr         $ra
+    /* 32D60 80052560 00000000 */   nop
 endlabel func_80059D4C

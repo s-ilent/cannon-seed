@@ -11,19 +11,19 @@
 nonmatching func_80077330, 0x3C
 
 glabel func_80077330
-    /* 57B30 80077330 21608501 */  addu       $t4, $t4, $a1
-    /* 57B34 80077334 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
-    /* 57B38 80077338 00000000 */  nop
-    /* 57B3C 8007733C 1F004004 */  bltz       $v0, D_800773BC
-    /* 57B40 80077340 00000000 */   nop
-    /* 57B44 80077344 0600404B */  nclip
-    /* 57B48 80077348 00C00248 */  mfc2       $v0, $24 /* handwritten instruction */
-    /* 57B4C 8007734C 00000000 */  nop
-    /* 57B50 80077350 1A004018 */  blez       $v0, D_800773BC
-    /* 57B54 80077354 00000000 */   nop
-    /* 57B58 80077358 2D00584B */  avsz3
-    /* 57B5C 8007735C 00380E48 */  mfc2       $t6, $7 /* handwritten instruction */
-    /* 57B60 80077360 0C00F4E8 */  swc2       $20, 0xC($a3)
-    /* 57B64 80077364 1400F5E8 */  swc2       $21, 0x14($a3)
-    /* 57B68 80077368 1C00F6E8 */  swc2       $22, 0x1C($a3)
+    /* 4C6B0 8006BEB0 21608501 */  addu       $t4, $t4, $a1
+    /* 4C6B4 8006BEB4 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
+    /* 4C6B8 8006BEB8 00000000 */  nop
+    /* 4C6BC 8006BEBC 1F004004 */  bltz       $v0, D_8006BF3C
+    /* 4C6C0 8006BEC0 00000000 */   nop
+    /* 4C6C4 8006BEC4 0600404B */  nclip
+    /* 4C6C8 8006BEC8 00C00248 */  mfc2       $v0, $24 /* handwritten instruction */
+    /* 4C6CC 8006BECC 00000000 */  nop
+    /* 4C6D0 8006BED0 1A004018 */  blez       $v0, D_8006BF3C
+    /* 4C6D4 8006BED4 00000000 */   nop
+    /* 4C6D8 8006BED8 2D00584B */  avsz3
+    /* 4C6DC 8006BEDC 00380E48 */  mfc2       $t6, $7 /* handwritten instruction */
+    /* 4C6E0 8006BEE0 0C00F4E8 */  swc2       $20, 0xC($a3)
+    /* 4C6E4 8006BEE4 1400F5E8 */  swc2       $21, 0x14($a3)
+    /* 4C6E8 8006BEE8 1C00F6E8 */  swc2       $22, 0x1C($a3)
 endlabel func_80077330

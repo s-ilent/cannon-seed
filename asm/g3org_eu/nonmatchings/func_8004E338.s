@@ -10,8 +10,8 @@
 nonmatching ReturnFromException, 0xC
 
 glabel ReturnFromException
-    /* 2EB38 8004E338 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2EB3C 8004E33C 08004001 */  jr         $t2
-    /* 2EB40 8004E340 17000924 */   addiu     $t1, $zero, 0x17
+    /* 28B08 80048308 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 28B0C 8004830C 08004001 */  jr         $t2
+    /* 28B10 80048310 17000924 */   addiu     $t1, $zero, 0x17
 endlabel ReturnFromException
-    /* 2EB44 8004E344 00000000 */  nop
+    /* 28B14 80048314 00000000 */  nop

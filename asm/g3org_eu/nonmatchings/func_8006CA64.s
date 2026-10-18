@@ -10,41 +10,41 @@
 nonmatching SpuWritePartly, 0x8C
 
 glabel SpuWritePartly
-    /* 4D264 8006CA64 E0FFBD27 */  addiu      $sp, $sp, -0x20
-    /* 4D268 8006CA68 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 4D26C 8006CA6C 2188A000 */  addu       $s1, $a1, $zero
-    /* 4D270 8006CA70 0700023C */  lui        $v0, (0x7F000 >> 16)
-    /* 4D274 8006CA74 00F04234 */  ori        $v0, $v0, (0x7F000 & 0xFFFF)
-    /* 4D278 8006CA78 2B105100 */  sltu       $v0, $v0, $s1
-    /* 4D27C 8006CA7C 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 4D280 8006CA80 03004010 */  beqz       $v0, .L8006CA90
-    /* 4D284 8006CA84 1000B0AF */   sw        $s0, 0x10($sp)
-    /* 4D288 8006CA88 0700113C */  lui        $s1, (0x7F000 >> 16)
-    /* 4D28C 8006CA8C 00F03136 */  ori        $s1, $s1, (0x7F000 & 0xFFFF)
-  .L8006CA90:
-    /* 4D290 8006CA90 0B80103C */  lui        $s0, %hi(D_800B7DC0)
-    /* 4D294 8006CA94 C07D1096 */  lhu        $s0, %lo(D_800B7DC0)($s0)
-    /* 4D298 8006CA98 0B80023C */  lui        $v0, %hi(D_800B7DE8)
-    /* 4D29C 8006CA9C E87D428C */  lw         $v0, %lo(D_800B7DE8)($v0)
-    /* 4D2A0 8006CAA0 21282002 */  addu       $a1, $s1, $zero
-    /* 4D2A4 8006CAA4 7189010C */  jal        func_800625C4
-    /* 4D2A8 8006CAA8 04805000 */   sllv      $s0, $s0, $v0
-    /* 4D2AC 8006CAAC FFFF0424 */  addiu      $a0, $zero, -0x1
-    /* 4D2B0 8006CAB0 BF89010C */  jal        func_800626FC
-    /* 4D2B4 8006CAB4 21281102 */   addu      $a1, $s0, $s1
-    /* 4D2B8 8006CAB8 0B80033C */  lui        $v1, %hi(D_800B7DF8)
-    /* 4D2BC 8006CABC F87D638C */  lw         $v1, %lo(D_800B7DF8)($v1)
-    /* 4D2C0 8006CAC0 0B80013C */  lui        $at, %hi(D_800B7DC0)
-    /* 4D2C4 8006CAC4 C07D22A4 */  sh         $v0, %lo(D_800B7DC0)($at)
-    /* 4D2C8 8006CAC8 03006014 */  bnez       $v1, .L8006CAD8
-    /* 4D2CC 8006CACC 21102002 */   addu      $v0, $s1, $zero
-    /* 4D2D0 8006CAD0 0B80013C */  lui        $at, %hi(_spu_inTransfer)
-    /* 4D2D4 8006CAD4 F47D20AC */  sw         $zero, %lo(_spu_inTransfer)($at)
-  .L8006CAD8:
-    /* 4D2D8 8006CAD8 1800BF8F */  lw         $ra, 0x18($sp)
-    /* 4D2DC 8006CADC 1400B18F */  lw         $s1, 0x14($sp)
-    /* 4D2E0 8006CAE0 1000B08F */  lw         $s0, 0x10($sp)
-    /* 4D2E4 8006CAE4 2000BD27 */  addiu      $sp, $sp, 0x20
-    /* 4D2E8 8006CAE8 0800E003 */  jr         $ra
-    /* 4D2EC 8006CAEC 00000000 */   nop
+    /* 43344 80062B44 E0FFBD27 */  addiu      $sp, $sp, -0x20
+    /* 43348 80062B48 1400B1AF */  sw         $s1, 0x14($sp)
+    /* 4334C 80062B4C 2188A000 */  addu       $s1, $a1, $zero
+    /* 43350 80062B50 0700023C */  lui        $v0, (0x7F000 >> 16)
+    /* 43354 80062B54 00F04234 */  ori        $v0, $v0, (0x7F000 & 0xFFFF)
+    /* 43358 80062B58 2B105100 */  sltu       $v0, $v0, $s1
+    /* 4335C 80062B5C 1800BFAF */  sw         $ra, 0x18($sp)
+    /* 43360 80062B60 03004010 */  beqz       $v0, .L80062B70
+    /* 43364 80062B64 1000B0AF */   sw        $s0, 0x10($sp)
+    /* 43368 80062B68 0700113C */  lui        $s1, (0x7F000 >> 16)
+    /* 4336C 80062B6C 00F03136 */  ori        $s1, $s1, (0x7F000 & 0xFFFF)
+  .L80062B70:
+    /* 43370 80062B70 0B80103C */  lui        $s0, %hi(D_800B7DC0)
+    /* 43374 80062B74 C07D1096 */  lhu        $s0, %lo(D_800B7DC0)($s0)
+    /* 43378 80062B78 0B80023C */  lui        $v0, %hi(D_800B7DE8)
+    /* 4337C 80062B7C E87D428C */  lw         $v0, %lo(D_800B7DE8)($v0)
+    /* 43380 80062B80 21282002 */  addu       $a1, $s1, $zero
+    /* 43384 80062B84 7189010C */  jal        func_800625C4
+    /* 43388 80062B88 04805000 */   sllv      $s0, $s0, $v0
+    /* 4338C 80062B8C FFFF0424 */  addiu      $a0, $zero, -0x1
+    /* 43390 80062B90 BF89010C */  jal        func_800626FC
+    /* 43394 80062B94 21281102 */   addu      $a1, $s0, $s1
+    /* 43398 80062B98 0B80033C */  lui        $v1, %hi(D_800B7DF8)
+    /* 4339C 80062B9C F87D638C */  lw         $v1, %lo(D_800B7DF8)($v1)
+    /* 433A0 80062BA0 0B80013C */  lui        $at, %hi(D_800B7DC0)
+    /* 433A4 80062BA4 C07D22A4 */  sh         $v0, %lo(D_800B7DC0)($at)
+    /* 433A8 80062BA8 03006014 */  bnez       $v1, .L80062BB8
+    /* 433AC 80062BAC 21102002 */   addu      $v0, $s1, $zero
+    /* 433B0 80062BB0 0B80013C */  lui        $at, %hi(D_800B7DF4)
+    /* 433B4 80062BB4 F47D20AC */  sw         $zero, %lo(D_800B7DF4)($at)
+  .L80062BB8:
+    /* 433B8 80062BB8 1800BF8F */  lw         $ra, 0x18($sp)
+    /* 433BC 80062BBC 1400B18F */  lw         $s1, 0x14($sp)
+    /* 433C0 80062BC0 1000B08F */  lw         $s0, 0x10($sp)
+    /* 433C4 80062BC4 2000BD27 */  addiu      $sp, $sp, 0x20
+    /* 433C8 80062BC8 0800E003 */  jr         $ra
+    /* 433CC 80062BCC 00000000 */   nop
 endlabel SpuWritePartly

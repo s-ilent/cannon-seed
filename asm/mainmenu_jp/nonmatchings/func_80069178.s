@@ -10,8 +10,8 @@
 nonmatching PAD_init, 0xC
 
 glabel PAD_init
-    /* 49978 80069178 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 4997C 8006917C 08004001 */  jr         $t2
-    /* 49980 80069180 15000924 */   addiu     $t1, $zero, 0x15
+    /* 40178 8005F978 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 4017C 8005F97C 08004001 */  jr         $t2
+    /* 40180 8005F980 15000924 */   addiu     $t1, $zero, 0x15
 endlabel PAD_init
-    /* 49984 80069184 00000000 */  nop
+    /* 40184 8005F984 00000000 */  nop

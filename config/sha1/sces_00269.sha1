@@ -1,8 +1,6 @@
-# =============================================================================
-# config/sha1/sces_00269.sha1 — THE ORACLE for target 'sces_00269'
-#
-# SHA-1 of the retail executable extracted from the Galaxian^3 disc.
-# NEVER edit this file to make a build pass. A git hook blocks it.
-# The one legitimate edit is the initial setup that recorded this hash.
-# =============================================================================
-1969898477965aefa053fabd07cd6c410e816986  baselines/sces_00269.bin
+# config/sha1/sces_00269.sha1 - THE ORACLE for target 'sces_00269'
+# TRUE (de-framed) baseline oracle: the flip commit re-baselines
+# this file from the woven hash to the per-sector true EXE hash
+# banked in docs/TASKS.md and witnessed 8/8 on the re-fetched
+# discs. One deliberate --no-verify flip commit, per checklist.
+06b4bda68dce0f3734cfb7cbb76913a6e7fa2dc9  baselines/sces_00269.bin

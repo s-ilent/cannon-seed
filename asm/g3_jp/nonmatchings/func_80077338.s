@@ -10,15 +10,15 @@
 nonmatching SsVabTransCompleted, 0x2C
 
 glabel SsVabTransCompleted
-    /* 57B38 80077338 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 57B3C 8007733C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 57B40 80077340 00240400 */  sll        $a0, $a0, 16
-    /* 57B44 80077344 B9AF010C */  jal        func_8006BEE4
-    /* 57B48 80077348 03240400 */   sra       $a0, $a0, 16
-    /* 57B4C 8007734C 00140200 */  sll        $v0, $v0, 16
-    /* 57B50 80077350 03140200 */  sra        $v0, $v0, 16
-    /* 57B54 80077354 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 57B58 80077358 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 57B5C 8007735C 0800E003 */  jr         $ra
-    /* 57B60 80077360 00000000 */   nop
+    /* 4C6B8 8006BEB8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 4C6BC 8006BEBC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 4C6C0 8006BEC0 00240400 */  sll        $a0, $a0, 16
+    /* 4C6C4 8006BEC4 B9AF010C */  jal        SpuIsTransferCompleted
+    /* 4C6C8 8006BEC8 03240400 */   sra       $a0, $a0, 16
+    /* 4C6CC 8006BECC 00140200 */  sll        $v0, $v0, 16
+    /* 4C6D0 8006BED0 03140200 */  sra        $v0, $v0, 16
+    /* 4C6D4 8006BED4 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 4C6D8 8006BED8 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 4C6DC 8006BEDC 0800E003 */  jr         $ra
+    /* 4C6E0 8006BEE0 00000000 */   nop
 endlabel SsVabTransCompleted

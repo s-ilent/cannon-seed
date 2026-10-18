@@ -11,13 +11,13 @@
 nonmatching AverageZ4, 0x24
 
 glabel AverageZ4
-    /* 399B4 800591B4 00808448 */  mtc2       $a0, $16 /* handwritten instruction */
-    /* 399B8 800591B8 00888548 */  mtc2       $a1, $17 /* handwritten instruction */
-    /* 399BC 800591BC 00908648 */  mtc2       $a2, $18 /* handwritten instruction */
-    /* 399C0 800591C0 00988748 */  mtc2       $a3, $19 /* handwritten instruction */
-    /* 399C4 800591C4 00000000 */  nop
-    /* 399C8 800591C8 2E00684B */  avsz4
-    /* 399CC 800591CC 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
-    /* 399D0 800591D0 0800E003 */  jr         $ra
-    /* 399D4 800591D4 00000000 */   nop
+    /* 322F4 80051AF4 00808448 */  mtc2       $a0, $16 /* handwritten instruction */
+    /* 322F8 80051AF8 00888548 */  mtc2       $a1, $17 /* handwritten instruction */
+    /* 322FC 80051AFC 00908648 */  mtc2       $a2, $18 /* handwritten instruction */
+    /* 32300 80051B00 00988748 */  mtc2       $a3, $19 /* handwritten instruction */
+    /* 32304 80051B04 00000000 */  nop
+    /* 32308 80051B08 2E00684B */  avsz4
+    /* 3230C 80051B0C 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
+    /* 32310 80051B10 0800E003 */  jr         $ra
+    /* 32314 80051B14 00000000 */   nop
 endlabel AverageZ4

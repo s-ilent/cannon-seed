@@ -11,24 +11,24 @@
 nonmatching ApplyMatrix, 0x50
 
 glabel ApplyMatrix
-    /* 306B8 8004FEB8 0000888C */  lw         $t0, 0x0($a0)
-    /* 306BC 8004FEBC 0400898C */  lw         $t1, 0x4($a0)
-    /* 306C0 8004FEC0 08008A8C */  lw         $t2, 0x8($a0)
-    /* 306C4 8004FEC4 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 306C8 8004FEC8 10008C8C */  lw         $t4, 0x10($a0)
-    /* 306CC 8004FECC 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
-    /* 306D0 8004FED0 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
-    /* 306D4 8004FED4 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
-    /* 306D8 8004FED8 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
-    /* 306DC 8004FEDC 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
-    /* 306E0 8004FEE0 0000A0C8 */  lwc2       $0, 0x0($a1)
-    /* 306E4 8004FEE4 0400A1C8 */  lwc2       $1, 0x4($a1)
-    /* 306E8 8004FEE8 00000000 */  nop
-    /* 306EC 8004FEEC 1260484A */  mvmva      1, 0, 0, 3, 0
-    /* 306F0 8004FEF0 0000D9E8 */  swc2       $25, 0x0($a2)
-    /* 306F4 8004FEF4 0400DAE8 */  swc2       $26, 0x4($a2) /* handwritten instruction */
-    /* 306F8 8004FEF8 0800DBE8 */  swc2       $27, 0x8($a2) /* handwritten instruction */
-    /* 306FC 8004FEFC 2110C000 */  addu       $v0, $a2, $zero
-    /* 30700 8004FF00 0800E003 */  jr         $ra
-    /* 30704 8004FF04 00000000 */   nop
+    /* 2A2F8 80049AF8 0000888C */  lw         $t0, 0x0($a0)
+    /* 2A2FC 80049AFC 0400898C */  lw         $t1, 0x4($a0)
+    /* 2A300 80049B00 08008A8C */  lw         $t2, 0x8($a0)
+    /* 2A304 80049B04 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 2A308 80049B08 10008C8C */  lw         $t4, 0x10($a0)
+    /* 2A30C 80049B0C 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 2A310 80049B10 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
+    /* 2A314 80049B14 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
+    /* 2A318 80049B18 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
+    /* 2A31C 80049B1C 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
+    /* 2A320 80049B20 0000A0C8 */  lwc2       $0, 0x0($a1)
+    /* 2A324 80049B24 0400A1C8 */  lwc2       $1, 0x4($a1)
+    /* 2A328 80049B28 00000000 */  nop
+    /* 2A32C 80049B2C 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 2A330 80049B30 0000D9E8 */  swc2       $25, 0x0($a2)
+    /* 2A334 80049B34 0400DAE8 */  swc2       $26, 0x4($a2) /* handwritten instruction */
+    /* 2A338 80049B38 0800DBE8 */  swc2       $27, 0x8($a2) /* handwritten instruction */
+    /* 2A33C 80049B3C 2110C000 */  addu       $v0, $a2, $zero
+    /* 2A340 80049B40 0800E003 */  jr         $ra
+    /* 2A344 80049B44 00000000 */   nop
 endlabel ApplyMatrix

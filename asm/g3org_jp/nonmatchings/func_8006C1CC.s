@@ -10,16 +10,17 @@
 nonmatching _spu_setInTransfer, 0x2C
 
 glabel _spu_setInTransfer
-    /* 4C9CC 8006C1CC 01000234 */  ori        $v0, $zero, 0x1
-    /* 4C9D0 8006C1D0 05008214 */  bne        $a0, $v0, .L8006C1E8
-    /* 4C9D4 8006C1D4 00000000 */   nop
-    /* 4C9D8 8006C1D8 0B80013C */  lui        $at, %hi(_spu_inTransfer)
-    /* 4C9DC 8006C1DC F47520AC */  sw         $zero, %lo(_spu_inTransfer)($at)
-    /* 4C9E0 8006C1E0 00890108 */  j          .L80062400
-    /* 4C9E4 8006C1E4 00000000 */   nop
-  .L8006C1E8:
-    /* 4C9E8 8006C1E8 0B80013C */  lui        $at, %hi(_spu_inTransfer)
-    /* 4C9EC 8006C1EC F47522AC */  sw         $v0, %lo(_spu_inTransfer)($at)
-    /* 4C9F0 8006C1F0 0800E003 */  jr         $ra
-    /* 4C9F4 8006C1F4 00000000 */   nop
+    /* 42BDC 800623DC 01000234 */  ori        $v0, $zero, 0x1
+    /* 42BE0 800623E0 05008214 */  bne        $a0, $v0, .L800623F8
+    /* 42BE4 800623E4 00000000 */   nop
+    /* 42BE8 800623E8 0B80013C */  lui        $at, %hi(D_800B75F4)
+    /* 42BEC 800623EC F47520AC */  sw         $zero, %lo(D_800B75F4)($at)
+    /* 42BF0 800623F0 00890108 */  j          .L80062400
+    /* 42BF4 800623F4 00000000 */   nop
+  .L800623F8:
+    /* 42BF8 800623F8 0B80013C */  lui        $at, %hi(D_800B75F4)
+    /* 42BFC 800623FC F47522AC */  sw         $v0, %lo(D_800B75F4)($at)
+  .L80062400:
+    /* 42C00 80062400 0800E003 */  jr         $ra
+    /* 42C04 80062404 00000000 */   nop
 endlabel _spu_setInTransfer

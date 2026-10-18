@@ -10,17 +10,18 @@
 nonmatching MDEC_vlc_brk, 0x30
 
 glabel MDEC_vlc_brk
-    /* 49298 80068A98 0A80033C */  lui        $v1, %hi(D_80098C04)
-    /* 4929C 80068A9C 048C638C */  lw         $v1, %lo(D_80098C04)($v1)
-    /* 492A0 80068AA0 03008010 */  beqz       $a0, .L80068AB0
-    /* 492A4 80068AA4 00000000 */   nop
-    /* 492A8 80068AA8 FA7C0108 */  j          .L8005F3E8
-    /* 492AC 80068AAC 40100400 */   sll       $v0, $a0, 1
-  .L80068AB0:
-    /* 492B0 80068AB0 FF00023C */  lui        $v0, (0xFFFFFF >> 16)
-    /* 492B4 80068AB4 FFFF4234 */  ori        $v0, $v0, (0xFFFFFF & 0xFFFF)
-    /* 492B8 80068AB8 0A80013C */  lui        $at, %hi(D_80098C04)
-    /* 492BC 80068ABC 048C22AC */  sw         $v0, %lo(D_80098C04)($at)
-    /* 492C0 80068AC0 0800E003 */  jr         $ra
-    /* 492C4 80068AC4 21106000 */   addu      $v0, $v1, $zero
+    /* 3FBC8 8005F3C8 0A80033C */  lui        $v1, %hi(D_80098C04)
+    /* 3FBCC 8005F3CC 048C638C */  lw         $v1, %lo(D_80098C04)($v1)
+    /* 3FBD0 8005F3D0 03008010 */  beqz       $a0, .L8005F3E0
+    /* 3FBD4 8005F3D4 00000000 */   nop
+    /* 3FBD8 8005F3D8 FA7C0108 */  j          .L8005F3E8
+    /* 3FBDC 8005F3DC 40100400 */   sll       $v0, $a0, 1
+  .L8005F3E0:
+    /* 3FBE0 8005F3E0 FF00023C */  lui        $v0, (0xFFFFFF >> 16)
+    /* 3FBE4 8005F3E4 FFFF4234 */  ori        $v0, $v0, (0xFFFFFF & 0xFFFF)
+  .L8005F3E8:
+    /* 3FBE8 8005F3E8 0A80013C */  lui        $at, %hi(D_80098C04)
+    /* 3FBEC 8005F3EC 048C22AC */  sw         $v0, %lo(D_80098C04)($at)
+    /* 3FBF0 8005F3F0 0800E003 */  jr         $ra
+    /* 3FBF4 8005F3F4 21106000 */   addu      $v0, $v1, $zero
 endlabel MDEC_vlc_brk

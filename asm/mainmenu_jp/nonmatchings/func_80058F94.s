@@ -10,6 +10,6 @@
 nonmatching func_80058F94, 0x8
 
 glabel func_80058F94
-    /* 39794 80058F94 0800E003 */  jr         $ra
-    /* 39798 80058F98 2C0080A4 */   sh        $zero, 0x2C($a0)
+    /* 320D4 800518D4 0800E003 */  jr         $ra
+    /* 320D8 800518D8 2C0080A4 */   sh        $zero, 0x2C($a0)
 endlabel func_80058F94

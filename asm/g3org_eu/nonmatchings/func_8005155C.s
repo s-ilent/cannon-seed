@@ -10,8 +10,8 @@
 nonmatching memcpy, 0xC
 
 glabel memcpy
-    /* 31D5C 8005155C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 31D60 80051560 08004001 */  jr         $t2
-    /* 31D64 80051564 2A000924 */   addiu     $t1, $zero, 0x2A
+    /* 2B73C 8004AF3C A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 2B740 8004AF40 08004001 */  jr         $t2
+    /* 2B744 8004AF44 2A000924 */   addiu     $t1, $zero, 0x2A
 endlabel memcpy
-    /* 31D68 80051568 00000000 */  nop
+    /* 2B748 8004AF48 00000000 */  nop

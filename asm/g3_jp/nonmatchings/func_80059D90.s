@@ -10,42 +10,42 @@
 nonmatching _make_packet, 0x94
 
 glabel _make_packet
-    /* 3A590 80059D90 D8FFBD27 */  addiu      $sp, $sp, -0x28
-    /* 3A594 80059D94 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 3A598 80059D98 21808000 */  addu       $s0, $a0, $zero
-    /* 3A59C 80059D9C 1800B2AF */  sw         $s2, 0x18($sp)
-    /* 3A5A0 80059DA0 2190A000 */  addu       $s2, $a1, $zero
-    /* 3A5A4 80059DA4 1C00B3AF */  sw         $s3, 0x1C($sp)
-    /* 3A5A8 80059DA8 2000BFAF */  sw         $ra, 0x20($sp)
-    /* 3A5AC 80059DAC 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 3A5B0 80059DB0 0800428E */  lw         $v0, 0x8($s2)
-    /* 3A5B4 80059DB4 FFFFC630 */  andi       $a2, $a2, 0xFFFF
-    /* 3A5B8 80059DB8 2388C200 */  subu       $s1, $a2, $v0
-    /* 3A5BC 80059DBC 05002106 */  bgez       $s1, .L80059DD4
-    /* 3A5C0 80059DC0 2198E000 */   addu      $s3, $a3, $zero
-    /* 3A5C4 80059DC4 0280043C */  lui        $a0, %hi(D_80021AE4)
-    /* 3A5C8 80059DC8 E41A8424 */  addiu      $a0, $a0, %lo(D_80021AE4)
-    /* 3A5CC 80059DCC FB1F010C */  jal        func_80047FEC
-    /* 3A5D0 80059DD0 00000000 */   nop
-  .L80059DD4:
-    /* 3A5D4 80059DD4 0400428E */  lw         $v0, 0x4($s2)
-    /* 3A5D8 80059DD8 80181100 */  sll        $v1, $s1, 2
-    /* 3A5DC 80059DDC 21186200 */  addu       $v1, $v1, $v0
-    /* 3A5E0 80059DE0 FF006232 */  andi       $v0, $s3, 0xFF
-    /* 3A5E4 80059DE4 80100200 */  sll        $v0, $v0, 2
-    /* 3A5E8 80059DE8 04004224 */  addiu      $v0, $v0, 0x4
-    /* 3A5EC 80059DEC 0000648C */  lw         $a0, 0x0($v1)
-    /* 3A5F0 80059DF0 21100202 */  addu       $v0, $s0, $v0
-    /* 3A5F4 80059DF4 000004AE */  sw         $a0, 0x0($s0)
-    /* 3A5F8 80059DF8 030013A2 */  sb         $s3, 0x3($s0)
-    /* 3A5FC 80059DFC 000070AC */  sw         $s0, 0x0($v1)
-    /* 3A600 80059E00 030060A0 */  sb         $zero, 0x3($v1)
-    /* 3A604 80059E04 2000BF8F */  lw         $ra, 0x20($sp)
-    /* 3A608 80059E08 1C00B38F */  lw         $s3, 0x1C($sp)
-    /* 3A60C 80059E0C 1800B28F */  lw         $s2, 0x18($sp)
-    /* 3A610 80059E10 1400B18F */  lw         $s1, 0x14($sp)
-    /* 3A614 80059E14 1000B08F */  lw         $s0, 0x10($sp)
-    /* 3A618 80059E18 2800BD27 */  addiu      $sp, $sp, 0x28
-    /* 3A61C 80059E1C 0800E003 */  jr         $ra
-    /* 3A620 80059E20 00000000 */   nop
+    /* 32DA0 800525A0 D8FFBD27 */  addiu      $sp, $sp, -0x28
+    /* 32DA4 800525A4 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 32DA8 800525A8 21808000 */  addu       $s0, $a0, $zero
+    /* 32DAC 800525AC 1800B2AF */  sw         $s2, 0x18($sp)
+    /* 32DB0 800525B0 2190A000 */  addu       $s2, $a1, $zero
+    /* 32DB4 800525B4 1C00B3AF */  sw         $s3, 0x1C($sp)
+    /* 32DB8 800525B8 2000BFAF */  sw         $ra, 0x20($sp)
+    /* 32DBC 800525BC 1400B1AF */  sw         $s1, 0x14($sp)
+    /* 32DC0 800525C0 0800428E */  lw         $v0, 0x8($s2)
+    /* 32DC4 800525C4 FFFFC630 */  andi       $a2, $a2, 0xFFFF
+    /* 32DC8 800525C8 2388C200 */  subu       $s1, $a2, $v0
+    /* 32DCC 800525CC 05002106 */  bgez       $s1, .L800525E4
+    /* 32DD0 800525D0 2198E000 */   addu      $s3, $a3, $zero
+    /* 32DD4 800525D4 0280043C */  lui        $a0, %hi(D_80021AE4)
+    /* 32DD8 800525D8 E41A8424 */  addiu      $a0, $a0, %lo(D_80021AE4)
+    /* 32DDC 800525DC FB1F010C */  jal        printf
+    /* 32DE0 800525E0 00000000 */   nop
+  .L800525E4:
+    /* 32DE4 800525E4 0400428E */  lw         $v0, 0x4($s2)
+    /* 32DE8 800525E8 80181100 */  sll        $v1, $s1, 2
+    /* 32DEC 800525EC 21186200 */  addu       $v1, $v1, $v0
+    /* 32DF0 800525F0 FF006232 */  andi       $v0, $s3, 0xFF
+    /* 32DF4 800525F4 80100200 */  sll        $v0, $v0, 2
+    /* 32DF8 800525F8 04004224 */  addiu      $v0, $v0, 0x4
+    /* 32DFC 800525FC 0000648C */  lw         $a0, 0x0($v1)
+    /* 32E00 80052600 21100202 */  addu       $v0, $s0, $v0
+    /* 32E04 80052604 000004AE */  sw         $a0, 0x0($s0)
+    /* 32E08 80052608 030013A2 */  sb         $s3, 0x3($s0)
+    /* 32E0C 8005260C 000070AC */  sw         $s0, 0x0($v1)
+    /* 32E10 80052610 030060A0 */  sb         $zero, 0x3($v1)
+    /* 32E14 80052614 2000BF8F */  lw         $ra, 0x20($sp)
+    /* 32E18 80052618 1C00B38F */  lw         $s3, 0x1C($sp)
+    /* 32E1C 8005261C 1800B28F */  lw         $s2, 0x18($sp)
+    /* 32E20 80052620 1400B18F */  lw         $s1, 0x14($sp)
+    /* 32E24 80052624 1000B08F */  lw         $s0, 0x10($sp)
+    /* 32E28 80052628 2800BD27 */  addiu      $sp, $sp, 0x28
+    /* 32E2C 8005262C 0800E003 */  jr         $ra
+    /* 32E30 80052630 00000000 */   nop
 endlabel _make_packet

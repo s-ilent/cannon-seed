@@ -10,8 +10,8 @@
 nonmatching memchr, 0xC
 
 glabel memchr
-    /* 466CC 80065ECC A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 466D0 80065ED0 08004001 */  jr         $t2
-    /* 466D4 80065ED4 2E000924 */   addiu     $t1, $zero, 0x2E
+    /* 3D5EC 8005CDEC A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 3D5F0 8005CDF0 08004001 */  jr         $t2
+    /* 3D5F4 8005CDF4 2E000924 */   addiu     $t1, $zero, 0x2E
 endlabel memchr
-    /* 466D8 80065ED8 00000000 */  nop
+    /* 3D5F8 8005CDF8 00000000 */  nop

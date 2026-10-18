@@ -10,13 +10,13 @@
 nonmatching TransMatrix, 0x24
 
 glabel TransMatrix
-    /* 30764 8004FF64 0000A88C */  lw         $t0, 0x0($a1)
-    /* 30768 8004FF68 0400A98C */  lw         $t1, 0x4($a1)
-    /* 3076C 8004FF6C 0800AA8C */  lw         $t2, 0x8($a1)
-    /* 30770 8004FF70 140088AC */  sw         $t0, 0x14($a0)
-    /* 30774 8004FF74 180089AC */  sw         $t1, 0x18($a0)
-    /* 30778 8004FF78 1C008AAC */  sw         $t2, 0x1C($a0)
-    /* 3077C 8004FF7C 21108000 */  addu       $v0, $a0, $zero
-    /* 30780 8004FF80 0800E003 */  jr         $ra
-    /* 30784 8004FF84 00000000 */   nop
+    /* 2A3A4 80049BA4 0000A88C */  lw         $t0, 0x0($a1)
+    /* 2A3A8 80049BA8 0400A98C */  lw         $t1, 0x4($a1)
+    /* 2A3AC 80049BAC 0800AA8C */  lw         $t2, 0x8($a1)
+    /* 2A3B0 80049BB0 140088AC */  sw         $t0, 0x14($a0)
+    /* 2A3B4 80049BB4 180089AC */  sw         $t1, 0x18($a0)
+    /* 2A3B8 80049BB8 1C008AAC */  sw         $t2, 0x1C($a0)
+    /* 2A3BC 80049BBC 21108000 */  addu       $v0, $a0, $zero
+    /* 2A3C0 80049BC0 0800E003 */  jr         $ra
+    /* 2A3C4 80049BC4 00000000 */   nop
 endlabel TransMatrix

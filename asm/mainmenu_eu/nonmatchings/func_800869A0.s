@@ -10,28 +10,28 @@
 nonmatching StClearRing, 0x60
 
 glabel StClearRing
-    /* 671A0 800869A0 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 671A4 800869A4 1980053C */  lui        $a1, %hi(D_8019582C)
-    /* 671A8 800869A8 2C58A58C */  lw         $a1, %lo(D_8019582C)($a1)
-    /* 671AC 800869AC 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 671B0 800869B0 1980013C */  lui        $at, %hi(D_80194DFC)
-    /* 671B4 800869B4 FC4D20AC */  sw         $zero, %lo(D_80194DFC)($at)
-    /* 671B8 800869B8 1980013C */  lui        $at, %hi(D_80194DF4)
-    /* 671BC 800869BC F44D20AC */  sw         $zero, %lo(D_80194DF4)($at)
-    /* 671C0 800869C0 1980013C */  lui        $at, %hi(D_80194DF0)
-    /* 671C4 800869C4 F04D20AC */  sw         $zero, %lo(D_80194DF0)($at)
-    /* 671C8 800869C8 1980013C */  lui        $at, %hi(D_8018DF2C)
-    /* 671CC 800869CC 2CDF20AC */  sw         $zero, %lo(D_8018DF2C)($at)
-    /* 671D0 800869D0 20E5010C */  jal        func_80079480
-    /* 671D4 800869D4 21200000 */   addu      $a0, $zero, $zero
-    /* 671D8 800869D8 1980013C */  lui        $at, %hi(D_8018DA9C)
-    /* 671DC 800869DC 9CDA20AC */  sw         $zero, %lo(D_8018DA9C)($at)
-    /* 671E0 800869E0 1780013C */  lui        $at, %hi(D_801681C0)
-    /* 671E4 800869E4 C08120A4 */  sh         $zero, %lo(D_801681C0)($at)
-    /* 671E8 800869E8 1580013C */  lui        $at, %hi(D_8014ACC0)
-    /* 671EC 800869EC C0AC20AC */  sw         $zero, %lo(D_8014ACC0)($at)
-    /* 671F0 800869F0 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 671F4 800869F4 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 671F8 800869F8 0800E003 */  jr         $ra
-    /* 671FC 800869FC 00000000 */   nop
+    /* 59D10 80079510 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 59D14 80079514 1980053C */  lui        $a1, %hi(D_8019582C)
+    /* 59D18 80079518 2C58A58C */  lw         $a1, %lo(D_8019582C)($a1)
+    /* 59D1C 8007951C 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 59D20 80079520 1980013C */  lui        $at, %hi(D_80194DFC)
+    /* 59D24 80079524 FC4D20AC */  sw         $zero, %lo(D_80194DFC)($at)
+    /* 59D28 80079528 1980013C */  lui        $at, %hi(D_80194DF4)
+    /* 59D2C 8007952C F44D20AC */  sw         $zero, %lo(D_80194DF4)($at)
+    /* 59D30 80079530 1980013C */  lui        $at, %hi(D_80194DF0)
+    /* 59D34 80079534 F04D20AC */  sw         $zero, %lo(D_80194DF0)($at)
+    /* 59D38 80079538 1980013C */  lui        $at, %hi(D_8018DF2C)
+    /* 59D3C 8007953C 2CDF20AC */  sw         $zero, %lo(D_8018DF2C)($at)
+    /* 59D40 80079540 20E5010C */  jal        init_ring_status
+    /* 59D44 80079544 21200000 */   addu      $a0, $zero, $zero
+    /* 59D48 80079548 1980013C */  lui        $at, %hi(D_8018DA9C)
+    /* 59D4C 8007954C 9CDA20AC */  sw         $zero, %lo(D_8018DA9C)($at)
+    /* 59D50 80079550 1780013C */  lui        $at, %hi(D_801681C0)
+    /* 59D54 80079554 C08120A4 */  sh         $zero, %lo(D_801681C0)($at)
+    /* 59D58 80079558 1580013C */  lui        $at, %hi(D_8014ACC0)
+    /* 59D5C 8007955C C0AC20AC */  sw         $zero, %lo(D_8014ACC0)($at)
+    /* 59D60 80079560 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 59D64 80079564 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 59D68 80079568 0800E003 */  jr         $ra
+    /* 59D6C 8007956C 00000000 */   nop
 endlabel StClearRing

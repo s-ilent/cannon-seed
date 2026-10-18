@@ -10,8 +10,8 @@
 nonmatching TestEvent, 0xC
 
 glabel TestEvent
-    /* 31C74 80051474 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 31C78 80051478 08004001 */  jr         $t2
-    /* 31C7C 8005147C 0B000924 */   addiu     $t1, $zero, 0xB
+    /* 2B654 8004AE54 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 2B658 8004AE58 08004001 */  jr         $t2
+    /* 2B65C 8004AE5C 0B000924 */   addiu     $t1, $zero, 0xB
 endlabel TestEvent
-    /* 31C80 80051480 00000000 */  nop
+    /* 2B660 8004AE60 00000000 */  nop

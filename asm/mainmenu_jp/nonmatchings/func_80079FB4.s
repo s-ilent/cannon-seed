@@ -10,13 +10,12 @@
 nonmatching NormalColorCol, 0x20
 
 glabel NormalColorCol
-    /* 5A7B4 80079FB4 000080C8 */  lwc2       $0, 0x0($a0)
-    /* 5A7B8 80079FB8 040081C8 */  lwc2       $1, 0x4($a0)
-    /* 5A7BC 80079FBC 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 5A7C0 80079FC0 00000000 */  nop
-  alabel func_80079FC4
-    /* 5A7C4 80079FC4 1B04084B */  nccs
-    /* 5A7C8 80079FC8 0000D6E8 */  swc2       $22, 0x0($a2)
-    /* 5A7CC 80079FCC 0800E003 */  jr         $ra
-    /* 5A7D0 80079FD0 00000000 */   nop
+    /* 4ED44 8006E544 000080C8 */  lwc2       $0, 0x0($a0)
+    /* 4ED48 8006E548 040081C8 */  lwc2       $1, 0x4($a0)
+    /* 4ED4C 8006E54C 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 4ED50 8006E550 00000000 */  nop
+    /* 4ED54 8006E554 1B04084B */  nccs
+    /* 4ED58 8006E558 0000D6E8 */  swc2       $22, 0x0($a2)
+    /* 4ED5C 8006E55C 0800E003 */  jr         $ra
+    /* 4ED60 8006E560 00000000 */   nop
 endlabel NormalColorCol

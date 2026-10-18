@@ -11,7 +11,7 @@
 nonmatching func_80051B18, 0xC
 
 glabel func_80051B18
-    /* 32318 80051B18 0C000000 */  syscall    0 /* handwritten instruction */
-    /* 3231C 80051B1C 0800E003 */  jr         $ra
-    /* 32320 80051B20 00000000 */   nop
+    /* 2BBC8 8004B3C8 0C000000 */  syscall    0 /* handwritten instruction */
+    /* 2BBCC 8004B3CC 0800E003 */  jr         $ra
+    /* 2BBD0 8004B3D0 00000000 */   nop
 endlabel func_80051B18

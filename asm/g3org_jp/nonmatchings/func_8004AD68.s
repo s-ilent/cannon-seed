@@ -10,8 +10,8 @@
 nonmatching malloc, 0xC
 
 glabel malloc
-    /* 2B568 8004AD68 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2B56C 8004AD6C 08004001 */  jr         $t2
-    /* 2B570 8004AD70 33000924 */   addiu     $t1, $zero, 0x33
+    /* 25C58 80045458 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 25C5C 8004545C 08004001 */  jr         $t2
+    /* 25C60 80045460 33000924 */   addiu     $t1, $zero, 0x33
 endlabel malloc
-    /* 2B574 8004AD74 00000000 */  nop
+    /* 25C64 80045464 00000000 */  nop

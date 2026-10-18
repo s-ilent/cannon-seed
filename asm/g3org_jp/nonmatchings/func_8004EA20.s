@@ -10,8 +10,13 @@
 nonmatching delete, 0xC
 
 glabel delete
-    /* 2F220 8004EA20 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2F224 8004EA24 08004001 */  jr         $t2
-    /* 2F228 8004EA28 45000924 */   addiu     $t1, $zero, 0x45
+    /* 290C0 800488C0 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 290C4 800488C4 08004001 */  jr         $t2
+    /* 290C8 800488C8 45000924 */   addiu     $t1, $zero, 0x45
 endlabel delete
-    /* 2F22C 8004EA2C 00000000 */  nop
+
+nonmatching func_800488CC, 0x4
+
+glabel func_800488CC
+    /* 290CC 800488CC 00000000 */  nop
+endlabel func_800488CC

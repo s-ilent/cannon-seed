@@ -10,8 +10,8 @@
 nonmatching malloc, 0xC
 
 glabel malloc
-    /* 45DAC 800655AC A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 45DB0 800655B0 08004001 */  jr         $t2
-    /* 45DB4 800655B4 33000924 */   addiu     $t1, $zero, 0x33
+    /* 3CDFC 8005C5FC A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 3CE00 8005C600 08004001 */  jr         $t2
+    /* 3CE04 8005C604 33000924 */   addiu     $t1, $zero, 0x33
 endlabel malloc
-    /* 45DB8 800655B8 00000000 */  nop
+    /* 3CE08 8005C608 00000000 */  nop

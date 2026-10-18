@@ -10,44 +10,43 @@
 nonmatching CdInit, 0x90
 
 glabel CdInit
-    /* 4C248 8006BA48 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 4C24C 8006BA4C 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 4C250 8006BA50 04001034 */  ori        $s0, $zero, 0x4
-    /* 4C254 8006BA54 1400BFAF */  sw         $ra, 0x14($sp)
-  .L8006BA58:
-    /* 4C258 8006BA58 7B7D010C */  jal        func_8005F5EC
-  .L8006BA5C:
-    /* 4C25C 8006BA5C 01000434 */   ori       $a0, $zero, 0x1
-    /* 4C260 8006BA60 01000334 */  ori        $v1, $zero, 0x1
-    /* 4C264 8006BA64 0F004314 */  bne        $v0, $v1, .L8006BAA4
-    /* 4C268 8006BA68 FFFF1026 */   addiu     $s0, $s0, -0x1
-    /* 4C26C 8006BA6C 0680043C */  lui        $a0, %hi(D_80061E18)
-    /* 4C270 8006BA70 181E8424 */  addiu      $a0, $a0, %lo(D_80061E18)
-    /* 4C274 8006BA74 D07D010C */  jal        func_8005F740
-    /* 4C278 8006BA78 00000000 */   nop
-    /* 4C27C 8006BA7C 0680043C */  lui        $a0, %hi(D_80061E40)
-    /* 4C280 8006BA80 401E8424 */  addiu      $a0, $a0, %lo(D_80061E40)
-    /* 4C284 8006BA84 D67D010C */  jal        func_8005F758
-    /* 4C288 8006BA88 00000000 */   nop
-  .L8006BA8C:
-    /* 4C28C 8006BA8C 0680043C */  lui        $a0, %hi(D_80061E68)
-    /* 4C290 8006BA90 681E8424 */  addiu      $a0, $a0, %lo(D_80061E68)
-    /* 4C294 8006BA94 DC7D010C */  jal        func_8005F770
-    /* 4C298 8006BA98 00000000 */   nop
-    /* 4C29C 8006BA9C 81870108 */  j          .L80061E04
-    /* 4C2A0 8006BAA0 01000234 */   ori       $v0, $zero, 0x1
-  .L8006BAA4:
-    /* 4C2A4 8006BAA4 FFFF0224 */  addiu      $v0, $zero, -0x1
-    /* 4C2A8 8006BAA8 EBFF0216 */  bne        $s0, $v0, .L8006BA58
-    /* 4C2AC 8006BAAC 00000000 */   nop
-    /* 4C2B0 8006BAB0 0280043C */  lui        $a0, %hi(D_80021F64)
-    /* 4C2B4 8006BAB4 641F8424 */  addiu      $a0, $a0, %lo(D_80021F64)
-    /* 4C2B8 8006BAB8 FB1F010C */  jal        func_80047FEC
-    /* 4C2BC 8006BABC 00000000 */   nop
-    /* 4C2C0 8006BAC0 21100000 */  addu       $v0, $zero, $zero
-    /* 4C2C4 8006BAC4 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 4C2C8 8006BAC8 1000B08F */  lw         $s0, 0x10($sp)
-    /* 4C2CC 8006BACC 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 4C2D0 8006BAD0 0800E003 */  jr         $ra
-    /* 4C2D4 8006BAD4 00000000 */   nop
+    /* 42588 80061D88 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 4258C 80061D8C 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 42590 80061D90 04001034 */  ori        $s0, $zero, 0x4
+    /* 42594 80061D94 1400BFAF */  sw         $ra, 0x14($sp)
+  .L80061D98:
+    /* 42598 80061D98 7B7D010C */  jal        func_8005F5EC
+    /* 4259C 80061D9C 01000434 */   ori       $a0, $zero, 0x1
+    /* 425A0 80061DA0 01000334 */  ori        $v1, $zero, 0x1
+    /* 425A4 80061DA4 0F004314 */  bne        $v0, $v1, .L80061DE4
+    /* 425A8 80061DA8 FFFF1026 */   addiu     $s0, $s0, -0x1
+    /* 425AC 80061DAC 0680043C */  lui        $a0, %hi(def_cbsync)
+    /* 425B0 80061DB0 181E8424 */  addiu      $a0, $a0, %lo(def_cbsync)
+    /* 425B4 80061DB4 D07D010C */  jal        func_8005F740
+    /* 425B8 80061DB8 00000000 */   nop
+    /* 425BC 80061DBC 0680043C */  lui        $a0, %hi(def_cbready)
+    /* 425C0 80061DC0 401E8424 */  addiu      $a0, $a0, %lo(def_cbready)
+    /* 425C4 80061DC4 D67D010C */  jal        func_8005F758
+    /* 425C8 80061DC8 00000000 */   nop
+    /* 425CC 80061DCC 0680043C */  lui        $a0, %hi(def_cbread)
+    /* 425D0 80061DD0 681E8424 */  addiu      $a0, $a0, %lo(def_cbread)
+    /* 425D4 80061DD4 DC7D010C */  jal        func_8005F770
+    /* 425D8 80061DD8 00000000 */   nop
+    /* 425DC 80061DDC 81870108 */  j          .L80061E04
+    /* 425E0 80061DE0 01000234 */   ori       $v0, $zero, 0x1
+  .L80061DE4:
+    /* 425E4 80061DE4 FFFF0224 */  addiu      $v0, $zero, -0x1
+    /* 425E8 80061DE8 EBFF0216 */  bne        $s0, $v0, .L80061D98
+    /* 425EC 80061DEC 00000000 */   nop
+    /* 425F0 80061DF0 0280043C */  lui        $a0, %hi(D_80021F64)
+    /* 425F4 80061DF4 641F8424 */  addiu      $a0, $a0, %lo(D_80021F64)
+    /* 425F8 80061DF8 FB1F010C */  jal        printf
+    /* 425FC 80061DFC 00000000 */   nop
+    /* 42600 80061E00 21100000 */  addu       $v0, $zero, $zero
+  .L80061E04:
+    /* 42604 80061E04 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 42608 80061E08 1000B08F */  lw         $s0, 0x10($sp)
+    /* 4260C 80061E0C 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 42610 80061E10 0800E003 */  jr         $ra
+    /* 42614 80061E14 00000000 */   nop
 endlabel CdInit

@@ -10,16 +10,16 @@
 nonmatching _card_clear, 0x30
 
 glabel _card_clear
-    /* 59ABC 800792BC E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 59AC0 800792C0 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 59AC4 800792C4 7BB6010C */  jal        func_8006D9EC
-    /* 59AC8 800792C8 1800A4AF */   sw        $a0, 0x18($sp)
-    /* 59ACC 800792CC 1800A48F */  lw         $a0, 0x18($sp)
-    /* 59AD0 800792D0 3F000524 */  addiu      $a1, $zero, 0x3F
-    /* 59AD4 800792D4 6BB6010C */  jal        func_8006D9AC
-    /* 59AD8 800792D8 21300000 */   addu      $a2, $zero, $zero
-    /* 59ADC 800792DC 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 59AE0 800792E0 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 59AE4 800792E4 0800E003 */  jr         $ra
-    /* 59AE8 800792E8 00000000 */   nop
+    /* 4E17C 8006D97C E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 4E180 8006D980 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 4E184 8006D984 7BB6010C */  jal        _new_card
+    /* 4E188 8006D988 1800A4AF */   sw        $a0, 0x18($sp)
+    /* 4E18C 8006D98C 1800A48F */  lw         $a0, 0x18($sp)
+    /* 4E190 8006D990 3F000524 */  addiu      $a1, $zero, 0x3F
+    /* 4E194 8006D994 6BB6010C */  jal        _card_write
+    /* 4E198 8006D998 21300000 */   addu      $a2, $zero, $zero
+    /* 4E19C 8006D99C 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 4E1A0 8006D9A0 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 4E1A4 8006D9A4 0800E003 */  jr         $ra
+    /* 4E1A8 8006D9A8 00000000 */   nop
 endlabel _card_clear

@@ -10,13 +10,13 @@
 nonmatching ColorCol, 0x24
 
 glabel ColorCol
-    /* 5A840 8007A040 000089C8 */  lwc2       $9, 0x0($a0)
-    /* 5A844 8007A044 04008AC8 */  lwc2       $10, 0x4($a0)
-    /* 5A848 8007A048 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 5A84C 8007A04C 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 5A850 8007A050 00000000 */  nop
-    /* 5A854 8007A054 1C04384B */  cc
-    /* 5A858 8007A058 0000D6E8 */  swc2       $22, 0x0($a2)
-    /* 5A85C 8007A05C 0800E003 */  jr         $ra
-    /* 5A860 8007A060 00000000 */   nop
+    /* 4EDD0 8006E5D0 000089C8 */  lwc2       $9, 0x0($a0)
+    /* 4EDD4 8006E5D4 04008AC8 */  lwc2       $10, 0x4($a0)
+    /* 4EDD8 8006E5D8 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 4EDDC 8006E5DC 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 4EDE0 8006E5E0 00000000 */  nop
+    /* 4EDE4 8006E5E4 1C04384B */  cc
+    /* 4EDE8 8006E5E8 0000D6E8 */  swc2       $22, 0x0($a2)
+    /* 4EDEC 8006E5EC 0800E003 */  jr         $ra
+    /* 4EDF0 8006E5F0 00000000 */   nop
 endlabel ColorCol

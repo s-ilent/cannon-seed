@@ -10,9 +10,10 @@
 nonmatching SpuVmDamperOn, 0x14
 
 glabel SpuVmDamperOn
-    /* 9CC0 800294C0 02000234 */  ori        $v0, $zero, 0x2
-    /* 9CC4 800294C4 0B80013C */  lui        $at, %hi(D_800ABB4C)
-    /* 9CC8 800294C8 4CBB22A4 */  sh         $v0, %lo(D_800ABB4C)($at)
-    /* 9CCC 800294CC 0800E003 */  jr         $ra
-    /* 9CD0 800294D0 00000000 */   nop
+    /* 8890 80028090 02000234 */  ori        $v0, $zero, 0x2
+  .L80028094:
+    /* 8894 80028094 0B80013C */  lui        $at, %hi(D_800ABB4C)
+    /* 8898 80028098 4CBB22A4 */  sh         $v0, %lo(D_800ABB4C)($at)
+    /* 889C 8002809C 0800E003 */  jr         $ra
+    /* 88A0 800280A0 00000000 */   nop
 endlabel SpuVmDamperOn

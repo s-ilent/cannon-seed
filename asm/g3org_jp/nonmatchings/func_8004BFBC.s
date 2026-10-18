@@ -10,11 +10,11 @@
 nonmatching _SN_write, 0x18
 
 glabel _SN_write
-    /* 2C7BC 8004BFBC 8D410000 */  break      0, 262
-    /* 2C7C0 8004BFC0 02004010 */  beqz       $v0, .L8004BFCC
-    /* 2C7C4 8004BFC4 21106000 */   addu      $v0, $v1, $zero
-    /* 2C7C8 8004BFC8 FFFF0224 */  addiu      $v0, $zero, -0x1
-  .L8004BFCC:
-    /* 2C7CC 8004BFCC 0800E003 */  jr         $ra
-    /* 2C7D0 8004BFD0 00000000 */   nop
+    /* 26C4C 8004644C 8D410000 */  break      0, 262
+    /* 26C50 80046450 02004010 */  beqz       $v0, .L8004645C
+    /* 26C54 80046454 21106000 */   addu      $v0, $v1, $zero
+    /* 26C58 80046458 FFFF0224 */  addiu      $v0, $zero, -0x1
+  .L8004645C:
+    /* 26C5C 8004645C 0800E003 */  jr         $ra
+    /* 26C60 80046460 00000000 */   nop
 endlabel _SN_write

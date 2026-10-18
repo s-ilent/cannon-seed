@@ -10,18 +10,17 @@
 nonmatching SsVabOpenHeadSticky, 0x34
 
 glabel SsVabOpenHeadSticky
-    /* 29FBC 800497BC E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 29FC0 800497C0 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 29FC4 800497C4 2138C000 */  addu       $a3, $a2, $zero
-    /* 29FC8 800497C8 002C0500 */  sll        $a1, $a1, 16
-    /* 29FCC 800497CC 032C0500 */  sra        $a1, $a1, 16
-    /* 29FD0 800497D0 5D10010C */  jal        func_80044174
-    /* 29FD4 800497D4 01000634 */   ori       $a2, $zero, 0x1
-    /* 29FD8 800497D8 00140200 */  sll        $v0, $v0, 16
-    /* 29FDC 800497DC 03140200 */  sra        $v0, $v0, 16
-    /* 29FE0 800497E0 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 29FE4 800497E4 1800BD27 */  addiu      $sp, $sp, 0x18
-  alabel func_800497E8
-    /* 29FE8 800497E8 0800E003 */  jr         $ra
-    /* 29FEC 800497EC 00000000 */   nop
+    /* 2490C 8004410C E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 24910 80044110 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 24914 80044114 2138C000 */  addu       $a3, $a2, $zero
+    /* 24918 80044118 002C0500 */  sll        $a1, $a1, 16
+    /* 2491C 8004411C 032C0500 */  sra        $a1, $a1, 16
+    /* 24920 80044120 5D10010C */  jal        SsVabOpenHeadWithMode
+    /* 24924 80044124 01000634 */   ori       $a2, $zero, 0x1
+    /* 24928 80044128 00140200 */  sll        $v0, $v0, 16
+    /* 2492C 8004412C 03140200 */  sra        $v0, $v0, 16
+    /* 24930 80044130 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 24934 80044134 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 24938 80044138 0800E003 */  jr         $ra
+    /* 2493C 8004413C 00000000 */   nop
 endlabel SsVabOpenHeadSticky

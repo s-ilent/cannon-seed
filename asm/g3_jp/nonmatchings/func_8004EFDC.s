@@ -10,8 +10,8 @@
 nonmatching free, 0xC
 
 glabel free
-    /* 2F7DC 8004EFDC A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2F7E0 8004EFE0 08004001 */  jr         $t2
-    /* 2F7E4 8004EFE4 34000924 */   addiu     $t1, $zero, 0x34
+    /* 2967C 80048E7C A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 29680 80048E80 08004001 */  jr         $t2
+    /* 29684 80048E84 34000924 */   addiu     $t1, $zero, 0x34
 endlabel free
-    /* 2F7E8 8004EFE8 00000000 */  nop
+    /* 29688 80048E88 00000000 */  nop

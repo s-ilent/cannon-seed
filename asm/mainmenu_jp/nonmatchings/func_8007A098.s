@@ -11,8 +11,8 @@
 nonmatching AverageSZ3, 0x10
 
 glabel AverageSZ3
-    /* 5A898 8007A098 2D00584B */  avsz3
-    /* 5A89C 8007A09C 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
-    /* 5A8A0 8007A0A0 0800E003 */  jr         $ra
-    /* 5A8A4 8007A0A4 00000000 */   nop
+    /* 4EE28 8006E628 2D00584B */  avsz3
+    /* 4EE2C 8006E62C 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
+    /* 4EE30 8006E630 0800E003 */  jr         $ra
+    /* 4EE34 8006E634 00000000 */   nop
 endlabel AverageSZ3

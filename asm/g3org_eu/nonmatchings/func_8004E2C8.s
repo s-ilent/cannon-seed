@@ -10,8 +10,8 @@
 nonmatching read, 0xC
 
 glabel read
-    /* 2EAC8 8004E2C8 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2EACC 8004E2CC 08004001 */  jr         $t2
-    /* 2EAD0 8004E2D0 34000924 */   addiu     $t1, $zero, 0x34
+    /* 28A98 80048298 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 28A9C 8004829C 08004001 */  jr         $t2
+    /* 28AA0 800482A0 34000924 */   addiu     $t1, $zero, 0x34
 endlabel read
-    /* 2EAD4 8004E2D4 00000000 */  nop
+    /* 28AA4 800482A4 00000000 */  nop

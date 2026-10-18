@@ -11,7 +11,7 @@
 nonmatching SetDQA, 0xC
 
 glabel SetDQA
-    /* 15F7C 8003577C 00D8C448 */  ctc2       $a0, $27 /* handwritten instruction */
-    /* 15F80 80035780 0800E003 */  jr         $ra
-    /* 15F84 80035784 00000000 */   nop
+    /* 1325C 80032A5C 00D8C448 */  ctc2       $a0, $27 /* handwritten instruction */
+    /* 13260 80032A60 0800E003 */  jr         $ra
+    /* 13264 80032A64 00000000 */   nop
 endlabel SetDQA

@@ -11,34 +11,34 @@
 nonmatching func_8007BBC0, 0x78
 
 glabel func_8007BBC0
-    /* 5C3C0 8007BBC0 0000EFA4 */  sh         $t7, 0x0($a3)
-    /* 5C3C4 8007BBC4 1800F8A4 */  sh         $t8, 0x18($a3)
-    /* 5C3C8 8007BBC8 3000F9A4 */  sh         $t9, 0x30($a3)
-    /* 5C3CC 8007BBCC 02000C85 */  lh         $t4, 0x2($t0)
-    /* 5C3D0 8007BBD0 02002D85 */  lh         $t5, 0x2($t1)
-    /* 5C3D4 8007BBD4 02004E85 */  lh         $t6, 0x2($t2)
-    /* 5C3D8 8007BBD8 20788D01 */  add        $t7, $t4, $t5 /* handwritten instruction */
-    /* 5C3DC 8007BBDC 20C0AE01 */  add        $t8, $t5, $t6 /* handwritten instruction */
-    /* 5C3E0 8007BBE0 20C8CC01 */  add        $t9, $t6, $t4 /* handwritten instruction */
-    /* 5C3E4 8007BBE4 43780F00 */  sra        $t7, $t7, 1
-    /* 5C3E8 8007BBE8 43C01800 */  sra        $t8, $t8, 1
-    /* 5C3EC 8007BBEC 43C81900 */  sra        $t9, $t9, 1
-    /* 5C3F0 8007BBF0 0200EFA4 */  sh         $t7, 0x2($a3)
-    /* 5C3F4 8007BBF4 1A00F8A4 */  sh         $t8, 0x1A($a3)
-    /* 5C3F8 8007BBF8 3200F9A4 */  sh         $t9, 0x32($a3)
-    /* 5C3FC 8007BBFC 04000C85 */  lh         $t4, 0x4($t0)
-    /* 5C400 8007BC00 04002D85 */  lh         $t5, 0x4($t1)
-    /* 5C404 8007BC04 04004E85 */  lh         $t6, 0x4($t2)
-    /* 5C408 8007BC08 20788D01 */  add        $t7, $t4, $t5 /* handwritten instruction */
-    /* 5C40C 8007BC0C 20C0AE01 */  add        $t8, $t5, $t6 /* handwritten instruction */
-    /* 5C410 8007BC10 20C8CC01 */  add        $t9, $t6, $t4 /* handwritten instruction */
-    /* 5C414 8007BC14 43780F00 */  sra        $t7, $t7, 1
-    /* 5C418 8007BC18 43C01800 */  sra        $t8, $t8, 1
-    /* 5C41C 8007BC1C 43C81900 */  sra        $t9, $t9, 1
-    /* 5C420 8007BC20 0400EFA4 */  sh         $t7, 0x4($a3)
-    /* 5C424 8007BC24 1C00F8A4 */  sh         $t8, 0x1C($a3)
-    /* 5C428 8007BC28 3400F9A4 */  sh         $t9, 0x34($a3)
-    /* 5C42C 8007BC2C 0000E0C8 */  lwc2       $0, 0x0($a3)
-    /* 5C430 8007BC30 0400E1C8 */  lwc2       $1, 0x4($a3)
-    /* 5C434 8007BC34 1800E2C8 */  lwc2       $2, 0x18($a3)
+    /* 505C0 8006FDC0 0000EFA4 */  sh         $t7, 0x0($a3)
+    /* 505C4 8006FDC4 1800F8A4 */  sh         $t8, 0x18($a3)
+    /* 505C8 8006FDC8 3000F9A4 */  sh         $t9, 0x30($a3)
+    /* 505CC 8006FDCC 02000C85 */  lh         $t4, 0x2($t0)
+    /* 505D0 8006FDD0 02002D85 */  lh         $t5, 0x2($t1)
+    /* 505D4 8006FDD4 02004E85 */  lh         $t6, 0x2($t2)
+    /* 505D8 8006FDD8 20788D01 */  add        $t7, $t4, $t5 /* handwritten instruction */
+    /* 505DC 8006FDDC 20C0AE01 */  add        $t8, $t5, $t6 /* handwritten instruction */
+    /* 505E0 8006FDE0 20C8CC01 */  add        $t9, $t6, $t4 /* handwritten instruction */
+    /* 505E4 8006FDE4 43780F00 */  sra        $t7, $t7, 1
+    /* 505E8 8006FDE8 43C01800 */  sra        $t8, $t8, 1
+    /* 505EC 8006FDEC 43C81900 */  sra        $t9, $t9, 1
+    /* 505F0 8006FDF0 0200EFA4 */  sh         $t7, 0x2($a3)
+    /* 505F4 8006FDF4 1A00F8A4 */  sh         $t8, 0x1A($a3)
+    /* 505F8 8006FDF8 3200F9A4 */  sh         $t9, 0x32($a3)
+    /* 505FC 8006FDFC 04000C85 */  lh         $t4, 0x4($t0)
+    /* 50600 8006FE00 04002D85 */  lh         $t5, 0x4($t1)
+    /* 50604 8006FE04 04004E85 */  lh         $t6, 0x4($t2)
+    /* 50608 8006FE08 20788D01 */  add        $t7, $t4, $t5 /* handwritten instruction */
+    /* 5060C 8006FE0C 20C0AE01 */  add        $t8, $t5, $t6 /* handwritten instruction */
+    /* 50610 8006FE10 20C8CC01 */  add        $t9, $t6, $t4 /* handwritten instruction */
+    /* 50614 8006FE14 43780F00 */  sra        $t7, $t7, 1
+    /* 50618 8006FE18 43C01800 */  sra        $t8, $t8, 1
+    /* 5061C 8006FE1C 43C81900 */  sra        $t9, $t9, 1
+    /* 50620 8006FE20 0400EFA4 */  sh         $t7, 0x4($a3)
+    /* 50624 8006FE24 1C00F8A4 */  sh         $t8, 0x1C($a3)
+    /* 50628 8006FE28 3400F9A4 */  sh         $t9, 0x34($a3)
+    /* 5062C 8006FE2C 0000E0C8 */  lwc2       $0, 0x0($a3)
+    /* 50630 8006FE30 0400E1C8 */  lwc2       $1, 0x4($a3)
+    /* 50634 8006FE34 1800E2C8 */  lwc2       $2, 0x18($a3)
 endlabel func_8007BBC0

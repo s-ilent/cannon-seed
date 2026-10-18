@@ -10,7 +10,7 @@
 nonmatching func_8004B6F0, 0xC
 
 glabel func_8004B6F0
-    /* 2BEF0 8004B6F0 FFFF8FA0 */  sb         $t7, -0x1($a0)
-    /* 2BEF4 8004B6F4 0800E003 */  jr         $ra
-    /* 2BEF8 8004B6F8 21108000 */   addu      $v0, $a0, $zero
+    /* 264B0 80045CB0 FFFF8FA0 */  sb         $t7, -0x1($a0)
+    /* 264B4 80045CB4 0800E003 */  jr         $ra
+    /* 264B8 80045CB8 21108000 */   addu      $v0, $a0, $zero
 endlabel func_8004B6F0

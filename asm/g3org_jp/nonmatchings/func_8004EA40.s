@@ -10,8 +10,8 @@
 nonmatching HookEntryInt, 0xC
 
 glabel HookEntryInt
-    /* 2F240 8004EA40 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2F244 8004EA44 08004001 */  jr         $t2
-    /* 2F248 8004EA48 19000924 */   addiu     $t1, $zero, 0x19
+    /* 290E0 800488E0 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 290E4 800488E4 08004001 */  jr         $t2
+    /* 290E8 800488E8 19000924 */   addiu     $t1, $zero, 0x19
 endlabel HookEntryInt
-    /* 2F24C 8004EA4C 00000000 */  nop
+    /* 290EC 800488EC 00000000 */  nop

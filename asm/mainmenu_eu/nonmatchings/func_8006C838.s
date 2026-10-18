@@ -10,34 +10,34 @@
 nonmatching GsInitGraph, 0x78
 
 glabel GsInitGraph
-    /* 4D038 8006C838 D8FFBD27 */  addiu      $sp, $sp, -0x28
-    /* 4D03C 8006C83C 1C00B1AF */  sw         $s1, 0x1C($sp)
-    /* 4D040 8006C840 FFFF9130 */  andi       $s1, $a0, 0xFFFF
-    /* 4D044 8006C844 21202002 */  addu       $a0, $s1, $zero
-    /* 4D048 8006C848 1800B0AF */  sw         $s0, 0x18($sp)
-    /* 4D04C 8006C84C FFFFB030 */  andi       $s0, $a1, 0xFFFF
-    /* 4D050 8006C850 21280002 */  addu       $a1, $s0, $zero
-    /* 4D054 8006C854 FFFFC630 */  andi       $a2, $a2, 0xFFFF
-    /* 4D058 8006C858 3800A297 */  lhu        $v0, 0x38($sp)
-    /* 4D05C 8006C85C FFFFE730 */  andi       $a3, $a3, 0xFFFF
-    /* 4D060 8006C860 2000BFAF */  sw         $ra, 0x20($sp)
-    /* 4D064 8006C864 648A010C */  jal        func_80062990
-    /* 4D068 8006C868 1000A2AF */   sw        $v0, 0x10($sp)
-    /* 4D06C 8006C86C 1CCC010C */  jal        func_80073070
-    /* 4D070 8006C870 00000000 */   nop
-    /* 4D074 8006C874 21202002 */  addu       $a0, $s1, $zero
-    /* 4D078 8006C878 1980013C */  lui        $at, %hi(PSDIDX)
-    /* 4D07C 8006C87C 485720A4 */  sh         $zero, %lo(PSDIDX)($at)
-    /* 4D080 8006C880 D88A010C */  jal        func_80062B60
-    /* 4D084 8006C884 21280002 */   addu      $a1, $s0, $zero
-    /* 4D088 8006C888 CB8C010C */  jal        func_8006332C
-    /* 4D08C 8006C88C 00000000 */   nop
-    /* 4D090 8006C890 B8CC010C */  jal        func_800732E0
-    /* 4D094 8006C894 00000000 */   nop
-    /* 4D098 8006C898 2000BF8F */  lw         $ra, 0x20($sp)
-    /* 4D09C 8006C89C 1C00B18F */  lw         $s1, 0x1C($sp)
-    /* 4D0A0 8006C8A0 1800B08F */  lw         $s0, 0x18($sp)
-    /* 4D0A4 8006C8A4 2800BD27 */  addiu      $sp, $sp, 0x28
-    /* 4D0A8 8006C8A8 0800E003 */  jr         $ra
-    /* 4D0AC 8006C8AC 00000000 */   nop
+    /* 43118 80062918 D8FFBD27 */  addiu      $sp, $sp, -0x28
+    /* 4311C 8006291C 1C00B1AF */  sw         $s1, 0x1C($sp)
+    /* 43120 80062920 FFFF9130 */  andi       $s1, $a0, 0xFFFF
+    /* 43124 80062924 21202002 */  addu       $a0, $s1, $zero
+    /* 43128 80062928 1800B0AF */  sw         $s0, 0x18($sp)
+    /* 4312C 8006292C FFFFB030 */  andi       $s0, $a1, 0xFFFF
+    /* 43130 80062930 21280002 */  addu       $a1, $s0, $zero
+    /* 43134 80062934 FFFFC630 */  andi       $a2, $a2, 0xFFFF
+    /* 43138 80062938 3800A297 */  lhu        $v0, 0x38($sp)
+    /* 4313C 8006293C FFFFE730 */  andi       $a3, $a3, 0xFFFF
+    /* 43140 80062940 2000BFAF */  sw         $ra, 0x20($sp)
+    /* 43144 80062944 648A010C */  jal        gpu_init
+    /* 43148 80062948 1000A2AF */   sw        $v0, 0x10($sp)
+    /* 4314C 8006294C 1CCC010C */  jal        gte_init
+    /* 43150 80062950 00000000 */   nop
+    /* 43154 80062954 21202002 */  addu       $a0, $s1, $zero
+    /* 43158 80062958 1980013C */  lui        $at, %hi(PSDIDX)
+    /* 4315C 8006295C 485720A4 */  sh         $zero, %lo(PSDIDX)($at)
+    /* 43160 80062960 D88A010C */  jal        valiable_init
+    /* 43164 80062964 21280002 */   addu      $a1, $s0, $zero
+    /* 43168 80062968 CB8C010C */  jal        GsSetDrawBuffClip
+    /* 4316C 8006296C 00000000 */   nop
+    /* 43170 80062970 B8CC010C */  jal        GsSetDrawBuffOffset
+    /* 43174 80062974 00000000 */   nop
+    /* 43178 80062978 2000BF8F */  lw         $ra, 0x20($sp)
+    /* 4317C 8006297C 1C00B18F */  lw         $s1, 0x1C($sp)
+    /* 43180 80062980 1800B08F */  lw         $s0, 0x18($sp)
+    /* 43184 80062984 2800BD27 */  addiu      $sp, $sp, 0x28
+    /* 43188 80062988 0800E003 */  jr         $ra
+    /* 4318C 8006298C 00000000 */   nop
 endlabel GsInitGraph

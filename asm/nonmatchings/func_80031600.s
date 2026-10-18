@@ -10,39 +10,40 @@
 nonmatching restartIntr, 0x88
 
 glabel restartIntr
-    /* 11E00 80031600 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 11E04 80031604 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 11E08 80031608 0580103C */  lui        $s0, %hi(intr_active_flag)
-    /* 11E0C 8003160C 9CD21026 */  addiu      $s0, $s0, %lo(intr_active_flag)
-    /* 11E10 80031610 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 11E14 80031614 00000296 */  lhu        $v0, 0x0($s0)
-    /* 11E18 80031618 00000000 */  nop
-    /* 11E1C 8003161C 14004014 */  bnez       $v0, .L80031670
-    /* 11E20 80031620 00000000 */   nop
-    /* 11E24 80031624 3FBE000C */  jal        func_8002F8FC
-    /* 11E28 80031628 38000426 */   addiu     $a0, $s0, 0x38
-    /* 11E2C 8003162C 0580043C */  lui        $a0, %hi(intr_mask_ptr)
-    /* 11E30 80031630 2CE3848C */  lw         $a0, %lo(intr_mask_ptr)($a0)
-    /* 11E34 80031634 0580033C */  lui        $v1, %hi(intr_saved_mask)
-    /* 11E38 80031638 CED26394 */  lhu        $v1, %lo(intr_saved_mask)($v1)
-    /* 11E3C 8003163C 01000234 */  ori        $v0, $zero, 0x1
-    /* 11E40 80031640 000002A6 */  sh         $v0, 0x0($s0)
-    /* 11E44 80031644 000083A4 */  sh         $v1, 0x0($a0)
-    /* 11E48 80031648 0580033C */  lui        $v1, %hi(intr_dicr_ptr)
-    /* 11E4C 8003164C 30E3638C */  lw         $v1, %lo(intr_dicr_ptr)($v1)
-    /* 11E50 80031650 0580023C */  lui        $v0, %hi(intr_saved_dicr)
-    /* 11E54 80031654 D0D2428C */  lw         $v0, %lo(intr_saved_dicr)($v0)
-    /* 11E58 80031658 00000000 */  nop
-    /* 11E5C 8003165C 000062AC */  sw         $v0, 0x0($v1)
-    /* 11E60 80031660 6BBE000C */  jal        func_8002F9AC
-    /* 11E64 80031664 00000000 */   nop
-    /* 11E68 80031668 69BC0008 */  j          intr_restart_tail
-    /* 11E6C 8003166C 21100002 */   addu      $v0, $s0, $zero
-  .L80031670:
-    /* 11E70 80031670 21100000 */  addu       $v0, $zero, $zero
-    /* 11E74 80031674 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 11E78 80031678 1000B08F */  lw         $s0, 0x10($sp)
-    /* 11E7C 8003167C 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 11E80 80031680 0800E003 */  jr         $ra
-    /* 11E84 80031684 00000000 */   nop
+    /* F930 8002F130 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* F934 8002F134 1000B0AF */  sw         $s0, 0x10($sp)
+    /* F938 8002F138 0580103C */  lui        $s0, %hi(D_8004D29C)
+    /* F93C 8002F13C 9CD21026 */  addiu      $s0, $s0, %lo(D_8004D29C)
+    /* F940 8002F140 1400BFAF */  sw         $ra, 0x14($sp)
+    /* F944 8002F144 00000296 */  lhu        $v0, 0x0($s0)
+    /* F948 8002F148 00000000 */  nop
+    /* F94C 8002F14C 14004014 */  bnez       $v0, .L8002F1A0
+    /* F950 8002F150 00000000 */   nop
+    /* F954 8002F154 3FBE000C */  jal        HookEntryInt
+    /* F958 8002F158 38000426 */   addiu     $a0, $s0, 0x38
+    /* F95C 8002F15C 0580043C */  lui        $a0, %hi(D_8004E32C)
+    /* F960 8002F160 2CE3848C */  lw         $a0, %lo(D_8004E32C)($a0)
+    /* F964 8002F164 0580033C */  lui        $v1, %hi(D_8004D2CE)
+    /* F968 8002F168 CED26394 */  lhu        $v1, %lo(D_8004D2CE)($v1)
+    /* F96C 8002F16C 01000234 */  ori        $v0, $zero, 0x1
+    /* F970 8002F170 000002A6 */  sh         $v0, 0x0($s0)
+    /* F974 8002F174 000083A4 */  sh         $v1, 0x0($a0)
+    /* F978 8002F178 0580033C */  lui        $v1, %hi(D_8004E330)
+    /* F97C 8002F17C 30E3638C */  lw         $v1, %lo(D_8004E330)($v1)
+    /* F980 8002F180 0580023C */  lui        $v0, %hi(D_8004D2D0)
+    /* F984 8002F184 D0D2428C */  lw         $v0, %lo(D_8004D2D0)($v0)
+    /* F988 8002F188 00000000 */  nop
+    /* F98C 8002F18C 000062AC */  sw         $v0, 0x0($v1)
+    /* F990 8002F190 6BBE000C */  jal        func_8002F9AC
+    /* F994 8002F194 00000000 */   nop
+    /* F998 8002F198 69BC0008 */  j          .L8002F1A4
+    /* F99C 8002F19C 21100002 */   addu      $v0, $s0, $zero
+  .L8002F1A0:
+    /* F9A0 8002F1A0 21100000 */  addu       $v0, $zero, $zero
+  .L8002F1A4:
+    /* F9A4 8002F1A4 1400BF8F */  lw         $ra, 0x14($sp)
+    /* F9A8 8002F1A8 1000B08F */  lw         $s0, 0x10($sp)
+    /* F9AC 8002F1AC 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* F9B0 8002F1B0 0800E003 */  jr         $ra
+    /* F9B4 8002F1B4 00000000 */   nop
 endlabel restartIntr

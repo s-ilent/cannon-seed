@@ -10,17 +10,17 @@
 nonmatching VSyncCallback, 0x34
 
 glabel VSyncCallback
-    /* 30DD8 800505D8 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 30DDC 800505DC 0980023C */  lui        $v0, %hi(intr_start_tab)
-    /* 30DE0 800505E0 907C428C */  lw         $v0, %lo(intr_start_tab)($v0)
-    /* 30DE4 800505E4 21288000 */  addu       $a1, $a0, $zero
-    /* 30DE8 800505E8 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 30DEC 800505EC 1400428C */  lw         $v0, 0x14($v0)
-    /* 30DF0 800505F0 00000000 */  nop
-    /* 30DF4 800505F4 09F84000 */  jalr       $v0
-    /* 30DF8 800505F8 21200000 */   addu      $a0, $zero, $zero
-    /* 30DFC 800505FC 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 30E00 80050600 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 30E04 80050604 0800E003 */  jr         $ra
-    /* 30E08 80050608 00000000 */   nop
+    /* 2A8E8 8004A0E8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2A8EC 8004A0EC 0980023C */  lui        $v0, %hi(D_80097C90)
+    /* 2A8F0 8004A0F0 907C428C */  lw         $v0, %lo(D_80097C90)($v0)
+    /* 2A8F4 8004A0F4 21288000 */  addu       $a1, $a0, $zero
+    /* 2A8F8 8004A0F8 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 2A8FC 8004A0FC 1400428C */  lw         $v0, 0x14($v0)
+    /* 2A900 8004A100 00000000 */  nop
+    /* 2A904 8004A104 09F84000 */  jalr       $v0
+    /* 2A908 8004A108 21200000 */   addu      $a0, $zero, $zero
+    /* 2A90C 8004A10C 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 2A910 8004A110 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2A914 8004A114 0800E003 */  jr         $ra
+    /* 2A918 8004A118 00000000 */   nop
 endlabel VSyncCallback

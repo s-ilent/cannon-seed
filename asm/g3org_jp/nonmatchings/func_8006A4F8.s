@@ -10,56 +10,56 @@
 nonmatching StGetNext, 0xC4
 
 glabel StGetNext
-    /* 4ACF8 8006A4F8 21388000 */  addu       $a3, $a0, $zero
-    /* 4ACFC 8006A4FC 1880023C */  lui        $v0, %hi(D_8017F9AC)
-    /* 4AD00 8006A500 ACF9428C */  lw         $v0, %lo(D_8017F9AC)($v0)
-    /* 4AD04 8006A504 1880033C */  lui        $v1, %hi(D_8017FADC)
-    /* 4AD08 8006A508 DCFA638C */  lw         $v1, %lo(D_8017FADC)($v1)
-    /* 4AD0C 8006A50C 40110200 */  sll        $v0, $v0, 5
-    /* 4AD10 8006A510 21304300 */  addu       $a2, $v0, $v1
-    /* 4AD14 8006A514 0000C294 */  lhu        $v0, 0x0($a2)
-    /* 4AD18 8006A518 01000334 */  ori        $v1, $zero, 0x1
-    /* 4AD1C 8006A51C FFFF4230 */  andi       $v0, $v0, 0xFFFF
-    /* 4AD20 8006A520 0E004314 */  bne        $v0, $v1, .L8006A55C
-    /* 4AD24 8006A524 2140A000 */   addu      $t0, $a1, $zero
-    /* 4AD28 8006A528 1880023C */  lui        $v0, %hi(D_8017FACC)
-    /* 4AD2C 8006A52C CCFA428C */  lw         $v0, %lo(D_8017FACC)($v0)
-    /* 4AD30 8006A530 1880013C */  lui        $at, %hi(D_8017F9AC)
-    /* 4AD34 8006A534 ACF920AC */  sw         $zero, %lo(D_8017F9AC)($at)
-    /* 4AD38 8006A538 02004010 */  beqz       $v0, .L8006A544
-    /* 4AD3C 8006A53C 00000000 */   nop
-    /* 4AD40 8006A540 0000C0A4 */  sh         $zero, 0x0($a2)
-  .L8006A544:
-    /* 4AD44 8006A544 1880023C */  lui        $v0, %hi(D_8017F9AC)
-    /* 4AD48 8006A548 ACF9428C */  lw         $v0, %lo(D_8017F9AC)($v0)
-    /* 4AD4C 8006A54C 1880033C */  lui        $v1, %hi(D_8017FADC)
-    /* 4AD50 8006A550 DCFA638C */  lw         $v1, %lo(D_8017FADC)($v1)
-    /* 4AD54 8006A554 40110200 */  sll        $v0, $v0, 5
-    /* 4AD58 8006A558 21304300 */  addu       $a2, $v0, $v1
-  .L8006A55C:
-    /* 4AD5C 8006A55C 0000C294 */  lhu        $v0, 0x0($a2)
-    /* 4AD60 8006A560 02000334 */  ori        $v1, $zero, 0x2
-    /* 4AD64 8006A564 FFFF4230 */  andi       $v0, $v0, 0xFFFF
-    /* 4AD68 8006A568 12004314 */  bne        $v0, $v1, .L8006A5B4
-    /* 4AD6C 8006A56C 01000234 */   ori       $v0, $zero, 0x1
-    /* 4AD70 8006A570 04000234 */  ori        $v0, $zero, 0x4
-    /* 4AD74 8006A574 0000C2A4 */  sh         $v0, 0x0($a2)
-    /* 4AD78 8006A578 21100000 */  addu       $v0, $zero, $zero
-    /* 4AD7C 8006A57C 1880043C */  lui        $a0, %hi(D_8017FBAC)
-    /* 4AD80 8006A580 ACFB848C */  lw         $a0, %lo(D_8017FBAC)($a0)
-    /* 4AD84 8006A584 1880033C */  lui        $v1, %hi(D_8017FADC)
-    /* 4AD88 8006A588 DCFA638C */  lw         $v1, %lo(D_8017FADC)($v1)
-    /* 4AD8C 8006A58C 1880053C */  lui        $a1, %hi(D_8017F9AC)
-    /* 4AD90 8006A590 ACF9A58C */  lw         $a1, %lo(D_8017F9AC)($a1)
-    /* 4AD94 8006A594 40210400 */  sll        $a0, $a0, 5
-    /* 4AD98 8006A598 21208300 */  addu       $a0, $a0, $v1
-    /* 4AD9C 8006A59C 80190500 */  sll        $v1, $a1, 6
-    /* 4ADA0 8006A5A0 23186500 */  subu       $v1, $v1, $a1
-    /* 4ADA4 8006A5A4 40190300 */  sll        $v1, $v1, 5
-    /* 4ADA8 8006A5A8 21208300 */  addu       $a0, $a0, $v1
-    /* 4ADAC 8006A5AC 0000E4AC */  sw         $a0, 0x0($a3)
-    /* 4ADB0 8006A5B0 000006AD */  sw         $a2, 0x0($t0)
-  .L8006A5B4:
-    /* 4ADB4 8006A5B4 0800E003 */  jr         $ra
-    /* 4ADB8 8006A5B8 00000000 */   nop
+    /* 41298 80060A98 21388000 */  addu       $a3, $a0, $zero
+    /* 4129C 80060A9C 1880023C */  lui        $v0, %hi(D_8017F9AC)
+    /* 412A0 80060AA0 ACF9428C */  lw         $v0, %lo(D_8017F9AC)($v0)
+    /* 412A4 80060AA4 1880033C */  lui        $v1, %hi(D_8017FADC)
+    /* 412A8 80060AA8 DCFA638C */  lw         $v1, %lo(D_8017FADC)($v1)
+    /* 412AC 80060AAC 40110200 */  sll        $v0, $v0, 5
+    /* 412B0 80060AB0 21304300 */  addu       $a2, $v0, $v1
+    /* 412B4 80060AB4 0000C294 */  lhu        $v0, 0x0($a2)
+    /* 412B8 80060AB8 01000334 */  ori        $v1, $zero, 0x1
+    /* 412BC 80060ABC FFFF4230 */  andi       $v0, $v0, 0xFFFF
+    /* 412C0 80060AC0 0E004314 */  bne        $v0, $v1, .L80060AFC
+    /* 412C4 80060AC4 2140A000 */   addu      $t0, $a1, $zero
+    /* 412C8 80060AC8 1880023C */  lui        $v0, %hi(D_8017FACC)
+    /* 412CC 80060ACC CCFA428C */  lw         $v0, %lo(D_8017FACC)($v0)
+    /* 412D0 80060AD0 1880013C */  lui        $at, %hi(D_8017F9AC)
+    /* 412D4 80060AD4 ACF920AC */  sw         $zero, %lo(D_8017F9AC)($at)
+    /* 412D8 80060AD8 02004010 */  beqz       $v0, .L80060AE4
+    /* 412DC 80060ADC 00000000 */   nop
+    /* 412E0 80060AE0 0000C0A4 */  sh         $zero, 0x0($a2)
+  .L80060AE4:
+    /* 412E4 80060AE4 1880023C */  lui        $v0, %hi(D_8017F9AC)
+    /* 412E8 80060AE8 ACF9428C */  lw         $v0, %lo(D_8017F9AC)($v0)
+    /* 412EC 80060AEC 1880033C */  lui        $v1, %hi(D_8017FADC)
+    /* 412F0 80060AF0 DCFA638C */  lw         $v1, %lo(D_8017FADC)($v1)
+    /* 412F4 80060AF4 40110200 */  sll        $v0, $v0, 5
+    /* 412F8 80060AF8 21304300 */  addu       $a2, $v0, $v1
+  .L80060AFC:
+    /* 412FC 80060AFC 0000C294 */  lhu        $v0, 0x0($a2)
+    /* 41300 80060B00 02000334 */  ori        $v1, $zero, 0x2
+    /* 41304 80060B04 FFFF4230 */  andi       $v0, $v0, 0xFFFF
+    /* 41308 80060B08 12004314 */  bne        $v0, $v1, .L80060B54
+    /* 4130C 80060B0C 01000234 */   ori       $v0, $zero, 0x1
+    /* 41310 80060B10 04000234 */  ori        $v0, $zero, 0x4
+    /* 41314 80060B14 0000C2A4 */  sh         $v0, 0x0($a2)
+    /* 41318 80060B18 21100000 */  addu       $v0, $zero, $zero
+    /* 4131C 80060B1C 1880043C */  lui        $a0, %hi(D_8017FBAC)
+    /* 41320 80060B20 ACFB848C */  lw         $a0, %lo(D_8017FBAC)($a0)
+    /* 41324 80060B24 1880033C */  lui        $v1, %hi(D_8017FADC)
+    /* 41328 80060B28 DCFA638C */  lw         $v1, %lo(D_8017FADC)($v1)
+    /* 4132C 80060B2C 1880053C */  lui        $a1, %hi(D_8017F9AC)
+    /* 41330 80060B30 ACF9A58C */  lw         $a1, %lo(D_8017F9AC)($a1)
+    /* 41334 80060B34 40210400 */  sll        $a0, $a0, 5
+    /* 41338 80060B38 21208300 */  addu       $a0, $a0, $v1
+    /* 4133C 80060B3C 80190500 */  sll        $v1, $a1, 6
+    /* 41340 80060B40 23186500 */  subu       $v1, $v1, $a1
+    /* 41344 80060B44 40190300 */  sll        $v1, $v1, 5
+    /* 41348 80060B48 21208300 */  addu       $a0, $a0, $v1
+    /* 4134C 80060B4C 0000E4AC */  sw         $a0, 0x0($a3)
+    /* 41350 80060B50 000006AD */  sw         $a2, 0x0($t0)
+  .L80060B54:
+    /* 41354 80060B54 0800E003 */  jr         $ra
+    /* 41358 80060B58 00000000 */   nop
 endlabel StGetNext

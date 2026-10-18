@@ -10,12 +10,12 @@
 nonmatching StSetMask, 0x20
 
 glabel StSetMask
-    /* 217D8 80040FD8 1280013C */  lui        $at, %hi(D_8011C310)
-    /* 217DC 80040FDC 10C324AC */  sw         $a0, %lo(D_8011C310)($at)
-    /* 217E0 80040FE0 1180013C */  lui        $at, %hi(D_80114FF4)
-    /* 217E4 80040FE4 F44F25AC */  sw         $a1, %lo(D_80114FF4)($at)
-    /* 217E8 80040FE8 1280013C */  lui        $at, %hi(D_8011C308)
-    /* 217EC 80040FEC 08C326AC */  sw         $a2, %lo(D_8011C308)($at)
-    /* 217F0 80040FF0 0800E003 */  jr         $ra
-    /* 217F4 80040FF4 00000000 */   nop
+    /* 1D2F8 8003CAF8 1280013C */  lui        $at, %hi(D_8011C310)
+    /* 1D2FC 8003CAFC 10C324AC */  sw         $a0, %lo(D_8011C310)($at)
+    /* 1D300 8003CB00 1180013C */  lui        $at, %hi(D_80114FF4)
+    /* 1D304 8003CB04 F44F25AC */  sw         $a1, %lo(D_80114FF4)($at)
+    /* 1D308 8003CB08 1280013C */  lui        $at, %hi(D_8011C308)
+    /* 1D30C 8003CB0C 08C326AC */  sw         $a2, %lo(D_8011C308)($at)
+    /* 1D310 8003CB10 0800E003 */  jr         $ra
+    /* 1D314 8003CB14 00000000 */   nop
 endlabel StSetMask

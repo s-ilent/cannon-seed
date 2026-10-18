@@ -11,26 +11,25 @@
 nonmatching func_8005DEE4, 0x54
 
 glabel func_8005DEE4
-    /* 3E6E4 8005DEE4 426B0D00 */  srl        $t5, $t5, 13
-    /* 3E6E8 8005DEE8 2168A601 */  addu       $t5, $t5, $a2
-    /* 3E6EC 8005DEEC 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
-    /* 3E6F0 8005DEF0 00000000 */  nop
-    /* 3E6F4 8005DEF4 45004004 */  bltz       $v0, D_8005E00C
-  alabel func_8005DEF8
-    /* 3E6F8 8005DEF8 00000000 */   nop
-    /* 3E6FC 8005DEFC 0600404B */  nclip
-    /* 3E700 8005DF00 000060C8 */  lwc2       $0, 0x0($v1)
-    /* 3E704 8005DF04 040061C8 */  lwc2       $1, 0x4($v1)
-    /* 3E708 8005DF08 00C00348 */  mfc2       $v1, $24 /* handwritten instruction */
-    /* 3E70C 8005DF0C 00000000 */  nop
-    /* 3E710 8005DF10 3E006018 */  blez       $v1, D_8005E00C
-    /* 3E714 8005DF14 00000000 */   nop
-    /* 3E718 8005DF18 0800ECE8 */  swc2       $12, 0x8($a3)
-    /* 3E71C 8005DF1C 1400EDE8 */  swc2       $13, 0x14($a3)
-    /* 3E720 8005DF20 2000EEE8 */  swc2       $14, 0x20($a3)
-    /* 3E724 8005DF24 00000000 */  nop
-    /* 3E728 8005DF28 0100184A */  rtps
-    /* 3E72C 8005DF2C 000062C9 */  lwc2       $2, 0x0($t3)
-    /* 3E730 8005DF30 040063C9 */  lwc2       $3, 0x4($t3)
-    /* 3E734 8005DF34 000084C9 */  lwc2       $4, 0x0($t4)
+    /* 366A4 80055EA4 426B0D00 */  srl        $t5, $t5, 13
+    /* 366A8 80055EA8 2168A601 */  addu       $t5, $t5, $a2
+    /* 366AC 80055EAC 00F84248 */  cfc2       $v0, $31 /* handwritten instruction */
+    /* 366B0 80055EB0 00000000 */  nop
+    /* 366B4 80055EB4 45004004 */  bltz       $v0, D_80055FCC
+    /* 366B8 80055EB8 00000000 */   nop
+    /* 366BC 80055EBC 0600404B */  nclip
+    /* 366C0 80055EC0 000060C8 */  lwc2       $0, 0x0($v1)
+    /* 366C4 80055EC4 040061C8 */  lwc2       $1, 0x4($v1)
+    /* 366C8 80055EC8 00C00348 */  mfc2       $v1, $24 /* handwritten instruction */
+    /* 366CC 80055ECC 00000000 */  nop
+    /* 366D0 80055ED0 3E006018 */  blez       $v1, D_80055FCC
+    /* 366D4 80055ED4 00000000 */   nop
+    /* 366D8 80055ED8 0800ECE8 */  swc2       $12, 0x8($a3)
+    /* 366DC 80055EDC 1400EDE8 */  swc2       $13, 0x14($a3)
+    /* 366E0 80055EE0 2000EEE8 */  swc2       $14, 0x20($a3)
+    /* 366E4 80055EE4 00000000 */  nop
+    /* 366E8 80055EE8 0100184A */  rtps
+    /* 366EC 80055EEC 000062C9 */  lwc2       $2, 0x0($t3)
+    /* 366F0 80055EF0 040063C9 */  lwc2       $3, 0x4($t3)
+    /* 366F4 80055EF4 000084C9 */  lwc2       $4, 0x0($t4)
 endlabel func_8005DEE4

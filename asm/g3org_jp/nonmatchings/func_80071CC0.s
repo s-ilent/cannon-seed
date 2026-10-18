@@ -10,13 +10,13 @@
 nonmatching SpuSetNoiseVoice, 0x24
 
 glabel SpuSetNoiseVoice
-    /* 524C0 80071CC0 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 524C4 80071CC4 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 524C8 80071CC8 CA000634 */  ori        $a2, $zero, 0xCA
-    /* 524CC 80071CCC DA9C010C */  jal        func_80067368
-    /* 524D0 80071CD0 CB000734 */   ori       $a3, $zero, 0xCB
-    /* 524D4 80071CD4 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 524D8 80071CD8 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 524DC 80071CDC 0800E003 */  jr         $ra
-    /* 524E0 80071CE0 00000000 */   nop
+    /* 47AF0 800672F0 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 47AF4 800672F4 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 47AF8 800672F8 CA000634 */  ori        $a2, $zero, 0xCA
+    /* 47AFC 800672FC DA9C010C */  jal        _SpuSetAnyVoice
+    /* 47B00 80067300 CB000734 */   ori       $a3, $zero, 0xCB
+    /* 47B04 80067304 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 47B08 80067308 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 47B0C 8006730C 0800E003 */  jr         $ra
+    /* 47B10 80067310 00000000 */   nop
 endlabel SpuSetNoiseVoice

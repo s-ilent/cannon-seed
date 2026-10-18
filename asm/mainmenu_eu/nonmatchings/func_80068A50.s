@@ -10,8 +10,8 @@
 nonmatching firstfile, 0xC
 
 glabel firstfile
-    /* 49250 80068A50 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 49254 80068A54 08004001 */  jr         $t2
-    /* 49258 80068A58 42000924 */   addiu     $t1, $zero, 0x42
+    /* 3FB80 8005F380 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 3FB84 8005F384 08004001 */  jr         $t2
+    /* 3FB88 8005F388 42000924 */   addiu     $t1, $zero, 0x42
 endlabel firstfile
-    /* 4925C 80068A5C 00000000 */  nop
+    /* 3FB8C 8005F38C 00000000 */  nop

@@ -10,8 +10,8 @@
 nonmatching strcmp, 0xC
 
 glabel strcmp
-    /* 2E83C 8004E03C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2E840 8004E040 08004001 */  jr         $t2
-    /* 2E844 8004E044 17000924 */   addiu     $t1, $zero, 0x17
+    /* 2880C 8004800C A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 28810 80048010 08004001 */  jr         $t2
+    /* 28814 80048014 17000924 */   addiu     $t1, $zero, 0x17
 endlabel strcmp
-    /* 2E848 8004E048 00000000 */  nop
+    /* 28818 80048018 00000000 */  nop

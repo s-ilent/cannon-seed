@@ -10,45 +10,45 @@
 nonmatching memmove, 0x88
 
 glabel memmove
-    /* 11590 80030D90 F8FFBD27 */  addiu      $sp, $sp, -0x8
-    /* 11594 80030D94 21388000 */  addu       $a3, $a0, $zero
-    /* 11598 80030D98 2140A000 */  addu       $t0, $a1, $zero
-    /* 1159C 80030D9C 2B08E800 */  sltu       $at, $a3, $t0
-    /* 115A0 80030DA0 0800A4AF */  sw         $a0, 0x8($sp)
-    /* 115A4 80030DA4 0C00A5AF */  sw         $a1, 0xC($sp)
-    /* 115A8 80030DA8 1000A6AF */  sw         $a2, 0x10($sp)
-    /* 115AC 80030DAC 0D002014 */  bnez       $at, .L80030DE4
-    /* 115B0 80030DB0 2148C000 */   addu      $t1, $a2, $zero
-    /* 115B4 80030DB4 21502001 */  addu       $t2, $t1, $zero
-    /* 115B8 80030DB8 14004019 */  blez       $t2, .L80030E0C
-    /* 115BC 80030DBC FFFF2925 */   addiu     $t1, $t1, -0x1
-  .L80030DC0:
-    /* 115C0 80030DC0 21700901 */  addu       $t6, $t0, $t1
-    /* 115C4 80030DC4 0000CF91 */  lbu        $t7, 0x0($t6)
-    /* 115C8 80030DC8 21C0E900 */  addu       $t8, $a3, $t1
-    /* 115CC 80030DCC 21502001 */  addu       $t2, $t1, $zero
-    /* 115D0 80030DD0 FFFF2925 */  addiu      $t1, $t1, -0x1
-    /* 115D4 80030DD4 FAFF401D */  bgtz       $t2, .L80030DC0
-    /* 115D8 80030DD8 00000FA3 */   sb        $t7, 0x0($t8)
-    /* 115DC 80030DDC 0C000010 */  b          .L80030E10
-    /* 115E0 80030DE0 2110E000 */   addu      $v0, $a3, $zero
-  .L80030DE4:
-    /* 115E4 80030DE4 21502001 */  addu       $t2, $t1, $zero
-    /* 115E8 80030DE8 08004019 */  blez       $t2, .L80030E0C
-    /* 115EC 80030DEC FFFF2925 */   addiu     $t1, $t1, -0x1
-  .L80030DF0:
-    /* 115F0 80030DF0 00001991 */  lbu        $t9, 0x0($t0)
-    /* 115F4 80030DF4 21502001 */  addu       $t2, $t1, $zero
-    /* 115F8 80030DF8 FFFF2925 */  addiu      $t1, $t1, -0x1
-    /* 115FC 80030DFC 01000825 */  addiu      $t0, $t0, 0x1
-    /* 11600 80030E00 0100E724 */  addiu      $a3, $a3, 0x1
-    /* 11604 80030E04 FAFF401D */  bgtz       $t2, .L80030DF0
-    /* 11608 80030E08 FFFFF9A0 */   sb        $t9, -0x1($a3)
-  .L80030E0C:
-    /* 1160C 80030E0C 2110E000 */  addu       $v0, $a3, $zero
-  .L80030E10:
-    /* 11610 80030E10 0800E003 */  jr         $ra
-    /* 11614 80030E14 0800BD27 */   addiu     $sp, $sp, 0x8
+    /* F1F0 8002E9F0 F8FFBD27 */  addiu      $sp, $sp, -0x8
+    /* F1F4 8002E9F4 21388000 */  addu       $a3, $a0, $zero
+    /* F1F8 8002E9F8 2140A000 */  addu       $t0, $a1, $zero
+    /* F1FC 8002E9FC 2B08E800 */  sltu       $at, $a3, $t0
+    /* F200 8002EA00 0800A4AF */  sw         $a0, 0x8($sp)
+    /* F204 8002EA04 0C00A5AF */  sw         $a1, 0xC($sp)
+    /* F208 8002EA08 1000A6AF */  sw         $a2, 0x10($sp)
+    /* F20C 8002EA0C 0D002014 */  bnez       $at, .L8002EA44
+    /* F210 8002EA10 2148C000 */   addu      $t1, $a2, $zero
+    /* F214 8002EA14 21502001 */  addu       $t2, $t1, $zero
+    /* F218 8002EA18 14004019 */  blez       $t2, .L8002EA6C
+    /* F21C 8002EA1C FFFF2925 */   addiu     $t1, $t1, -0x1
+  .L8002EA20:
+    /* F220 8002EA20 21700901 */  addu       $t6, $t0, $t1
+    /* F224 8002EA24 0000CF91 */  lbu        $t7, 0x0($t6)
+    /* F228 8002EA28 21C0E900 */  addu       $t8, $a3, $t1
+    /* F22C 8002EA2C 21502001 */  addu       $t2, $t1, $zero
+    /* F230 8002EA30 FFFF2925 */  addiu      $t1, $t1, -0x1
+    /* F234 8002EA34 FAFF401D */  bgtz       $t2, .L8002EA20
+    /* F238 8002EA38 00000FA3 */   sb        $t7, 0x0($t8)
+    /* F23C 8002EA3C 0C000010 */  b          .L8002EA70
+    /* F240 8002EA40 2110E000 */   addu      $v0, $a3, $zero
+  .L8002EA44:
+    /* F244 8002EA44 21502001 */  addu       $t2, $t1, $zero
+    /* F248 8002EA48 08004019 */  blez       $t2, .L8002EA6C
+    /* F24C 8002EA4C FFFF2925 */   addiu     $t1, $t1, -0x1
+  .L8002EA50:
+    /* F250 8002EA50 00001991 */  lbu        $t9, 0x0($t0)
+    /* F254 8002EA54 21502001 */  addu       $t2, $t1, $zero
+    /* F258 8002EA58 FFFF2925 */  addiu      $t1, $t1, -0x1
+    /* F25C 8002EA5C 01000825 */  addiu      $t0, $t0, 0x1
+    /* F260 8002EA60 0100E724 */  addiu      $a3, $a3, 0x1
+    /* F264 8002EA64 FAFF401D */  bgtz       $t2, .L8002EA50
+    /* F268 8002EA68 FFFFF9A0 */   sb        $t9, -0x1($a3)
+  .L8002EA6C:
+    /* F26C 8002EA6C 2110E000 */  addu       $v0, $a3, $zero
+  .L8002EA70:
+    /* F270 8002EA70 0800E003 */  jr         $ra
+    /* F274 8002EA74 0800BD27 */   addiu     $sp, $sp, 0x8
 endlabel memmove
-    /* 11618 80030E18 00000000 */  nop
-    /* 1161C 80030E1C 00000000 */  nop
+    /* F278 8002EA78 00000000 */  nop
+    /* F27C 8002EA7C 00000000 */  nop

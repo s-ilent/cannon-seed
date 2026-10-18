@@ -10,8 +10,8 @@
 nonmatching _96_init, 0xC
 
 glabel _96_init
-    /* 2EA58 8004E258 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2EA5C 8004E25C 08004001 */  jr         $t2
-    /* 2EA60 8004E260 71000924 */   addiu     $t1, $zero, 0x71
+    /* 28A28 80048228 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 28A2C 8004822C 08004001 */  jr         $t2
+    /* 28A30 80048230 71000924 */   addiu     $t1, $zero, 0x71
 endlabel _96_init
-    /* 2EA64 8004E264 00000000 */  nop
+    /* 28A34 80048234 00000000 */  nop

@@ -10,8 +10,8 @@
 nonmatching func_8007E4A0, 0x10
 
 glabel func_8007E4A0
-    /* 5ECA0 8007E4A0 21704000 */  addu       $t6, $v0, $zero
-    /* 5ECA4 8007E4A4 000080C9 */  lwc2       $0, 0x0($t4)
-    /* 5ECA8 8007E4A8 040081C9 */  lwc2       $1, 0x4($t4)
-    /* 5ECAC 8007E4AC 0000A2C9 */  lwc2       $2, 0x0($t5)
+    /* 528B0 800720B0 21704000 */  addu       $t6, $v0, $zero
+    /* 528B4 800720B4 000080C9 */  lwc2       $0, 0x0($t4)
+    /* 528B8 800720B8 040081C9 */  lwc2       $1, 0x4($t4)
+    /* 528BC 800720BC 0000A2C9 */  lwc2       $2, 0x0($t5)
 endlabel func_8007E4A0

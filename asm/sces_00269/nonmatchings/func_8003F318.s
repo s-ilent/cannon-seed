@@ -10,14 +10,14 @@
 nonmatching def_cbsync, 0x28
 
 glabel def_cbsync
-    /* 1FB18 8003F318 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 1FB1C 8003F31C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 1FB20 8003F320 00F0043C */  lui        $a0, (0xF0000003 >> 16)
-    /* 1FB24 8003F324 03008434 */  ori        $a0, $a0, (0xF0000003 & 0xFFFF)
-    /* 1FB28 8003F328 90EC000C */  jal        func_8003B240
-    /* 1FB2C 8003F32C 20000534 */   ori       $a1, $zero, 0x20
-    /* 1FB30 8003F330 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 1FB34 8003F334 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 1FB38 8003F338 0800E003 */  jr         $ra
-    /* 1FB3C 8003F33C 00000000 */   nop
+    /* 1B9C8 8003B1C8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 1B9CC 8003B1CC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 1B9D0 8003B1D0 00F0043C */  lui        $a0, (0xF0000003 >> 16)
+    /* 1B9D4 8003B1D4 03008434 */  ori        $a0, $a0, (0xF0000003 & 0xFFFF)
+    /* 1B9D8 8003B1D8 90EC000C */  jal        DeliverEvent
+    /* 1B9DC 8003B1DC 20000534 */   ori       $a1, $zero, 0x20
+    /* 1B9E0 8003B1E0 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 1B9E4 8003B1E4 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 1B9E8 8003B1E8 0800E003 */  jr         $ra
+    /* 1B9EC 8003B1EC 00000000 */   nop
 endlabel def_cbsync

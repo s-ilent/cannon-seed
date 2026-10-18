@@ -10,26 +10,26 @@
 nonmatching GsClearOt, 0x58
 
 glabel GsClearOt
-    /* 48064 80067864 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 48068 80067868 FFFF8430 */  andi       $a0, $a0, 0xFFFF
-    /* 4806C 8006786C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 48070 80067870 0000C38C */  lw         $v1, 0x0($a2)
-    /* 48074 80067874 FFFFA530 */  andi       $a1, $a1, 0xFFFF
-    /* 48078 80067878 0800C4AC */  sw         $a0, 0x8($a2)
-    /* 4807C 8006787C 0400C48C */  lw         $a0, 0x4($a2)
-    /* 48080 80067880 04000234 */  ori        $v0, $zero, 0x4
-    /* 48084 80067884 0C00C5AC */  sw         $a1, 0xC($a2)
-    /* 48088 80067888 0000C58C */  lw         $a1, 0x0($a2)
-    /* 4808C 8006788C 04106200 */  sllv       $v0, $v0, $v1
-    /* 48090 80067890 21104400 */  addu       $v0, $v0, $a0
-    /* 48094 80067894 FCFF4224 */  addiu      $v0, $v0, -0x4
-    /* 48098 80067898 1000C2AC */  sw         $v0, 0x10($a2)
-    /* 4809C 8006789C 01000234 */  ori        $v0, $zero, 0x1
-    /* 480A0 800678A0 0400C48C */  lw         $a0, 0x4($a2)
-    /* 480A4 800678A4 F42D010C */  jal        func_8004B7D0
-    /* 480A8 800678A8 0428A200 */   sllv      $a1, $v0, $a1
-    /* 480AC 800678AC 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 480B0 800678B0 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 480B4 800678B4 0800E003 */  jr         $ra
-    /* 480B8 800678B8 00000000 */   nop
+    /* 3EBF4 8005E3F4 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 3EBF8 8005E3F8 FFFF8430 */  andi       $a0, $a0, 0xFFFF
+    /* 3EBFC 8005E3FC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 3EC00 8005E400 0000C38C */  lw         $v1, 0x0($a2)
+    /* 3EC04 8005E404 FFFFA530 */  andi       $a1, $a1, 0xFFFF
+    /* 3EC08 8005E408 0800C4AC */  sw         $a0, 0x8($a2)
+    /* 3EC0C 8005E40C 0400C48C */  lw         $a0, 0x4($a2)
+    /* 3EC10 8005E410 04000234 */  ori        $v0, $zero, 0x4
+    /* 3EC14 8005E414 0C00C5AC */  sw         $a1, 0xC($a2)
+    /* 3EC18 8005E418 0000C58C */  lw         $a1, 0x0($a2)
+    /* 3EC1C 8005E41C 04106200 */  sllv       $v0, $v0, $v1
+    /* 3EC20 8005E420 21104400 */  addu       $v0, $v0, $a0
+    /* 3EC24 8005E424 FCFF4224 */  addiu      $v0, $v0, -0x4
+    /* 3EC28 8005E428 1000C2AC */  sw         $v0, 0x10($a2)
+    /* 3EC2C 8005E42C 01000234 */  ori        $v0, $zero, 0x1
+    /* 3EC30 8005E430 0400C48C */  lw         $a0, 0x4($a2)
+    /* 3EC34 8005E434 F42D010C */  jal        func_8004B7D0
+    /* 3EC38 8005E438 0428A200 */   sllv      $a1, $v0, $a1
+    /* 3EC3C 8005E43C 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 3EC40 8005E440 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 3EC44 8005E444 0800E003 */  jr         $ra
+    /* 3EC48 8005E448 00000000 */   nop
 endlabel GsClearOt

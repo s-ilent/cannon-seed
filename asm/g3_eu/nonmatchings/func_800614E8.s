@@ -10,10 +10,10 @@
 nonmatching func_800614E8, 0x18
 
 glabel func_800614E8
-    /* 41CE8 800614E8 FFFF1827 */  addiu      $t8, $t8, -0x1
-    /* 41CEC 800614EC 87FF0017 */  bnez       $t8, D_8006130C
-    /* 41CF0 800614F0 00000000 */   nop
-    /* 41CF4 800614F4 2110E000 */  addu       $v0, $a3, $zero
-    /* 41CF8 800614F8 0800E003 */  jr         $ra
-    /* 41CFC 800614FC 00000000 */   nop
+    /* 39588 80058D88 FFFF1827 */  addiu      $t8, $t8, -0x1
+    /* 3958C 80058D8C 87FF0017 */  bnez       $t8, D_80058BAC
+    /* 39590 80058D90 00000000 */   nop
+    /* 39594 80058D94 2110E000 */  addu       $v0, $a3, $zero
+    /* 39598 80058D98 0800E003 */  jr         $ra
+    /* 3959C 80058D9C 00000000 */   nop
 endlabel func_800614E8

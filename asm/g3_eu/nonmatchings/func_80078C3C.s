@@ -10,15 +10,15 @@
 nonmatching Snd_play, 0x2C
 
 glabel Snd_play
-    /* 5943C 80078C3C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 59440 80078C40 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 59444 80078C44 00240400 */  sll        $a0, $a0, 16
-    /* 59448 80078C48 002C0500 */  sll        $a1, $a1, 16
-    /* 5944C 80078C4C 03240400 */  sra        $a0, $a0, 16
-    /* 59450 80078C50 16B5010C */  jal        func_8006D458
-    /* 59454 80078C54 032C0500 */   sra       $a1, $a1, 16
-    /* 59458 80078C58 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 5945C 80078C5C 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 59460 80078C60 0800E003 */  jr         $ra
-    /* 59464 80078C64 00000000 */   nop
+    /* 4DC2C 8006D42C E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 4DC30 8006D430 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 4DC34 8006D434 00240400 */  sll        $a0, $a0, 16
+    /* 4DC38 8006D438 002C0500 */  sll        $a1, $a1, 16
+    /* 4DC3C 8006D43C 03240400 */  sra        $a0, $a0, 16
+    /* 4DC40 8006D440 16B5010C */  jal        func_8006D458
+    /* 4DC44 8006D444 032C0500 */   sra       $a1, $a1, 16
+    /* 4DC48 8006D448 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 4DC4C 8006D44C 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 4DC50 8006D450 0800E003 */  jr         $ra
+    /* 4DC54 8006D454 00000000 */   nop
 endlabel Snd_play

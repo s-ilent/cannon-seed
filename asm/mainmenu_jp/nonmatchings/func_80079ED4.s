@@ -11,11 +11,11 @@
 nonmatching DpqColor, 0x1C
 
 glabel DpqColor
-    /* 5A6D4 80079ED4 000086C8 */  lwc2       $6, 0x0($a0)
-    /* 5A6D8 80079ED8 00408548 */  mtc2       $a1, $8 /* handwritten instruction */
-    /* 5A6DC 80079EDC 00000000 */  nop
-    /* 5A6E0 80079EE0 1000784A */  dpcs
-    /* 5A6E4 80079EE4 0000D6E8 */  swc2       $22, 0x0($a2)
-    /* 5A6E8 80079EE8 0800E003 */  jr         $ra
-    /* 5A6EC 80079EEC 00000000 */   nop
+    /* 4EC64 8006E464 000086C8 */  lwc2       $6, 0x0($a0)
+    /* 4EC68 8006E468 00408548 */  mtc2       $a1, $8 /* handwritten instruction */
+    /* 4EC6C 8006E46C 00000000 */  nop
+    /* 4EC70 8006E470 1000784A */  dpcs
+    /* 4EC74 8006E474 0000D6E8 */  swc2       $22, 0x0($a2)
+    /* 4EC78 8006E478 0800E003 */  jr         $ra
+    /* 4EC7C 8006E47C 00000000 */   nop
 endlabel DpqColor

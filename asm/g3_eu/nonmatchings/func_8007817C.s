@@ -10,52 +10,52 @@
 nonmatching SpuIsTransferCompleted, 0xA8
 
 glabel SpuIsTransferCompleted
-    /* 5897C 8007817C 0B80023C */  lui        $v0, %hi(D_800AB114)
-    /* 58980 80078180 14B1428C */  lw         $v0, %lo(D_800AB114)($v0)
-    /* 58984 80078184 E0FFBD27 */  addiu      $sp, $sp, -0x20
-    /* 58988 80078188 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 5898C 8007818C 21888000 */  addu       $s1, $a0, $zero
-    /* 58990 80078190 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 58994 80078194 01001034 */  ori        $s0, $zero, 0x1
-    /* 58998 80078198 06005010 */  beq        $v0, $s0, .L800781B4
-    /* 5899C 8007819C 1800BFAF */   sw        $ra, 0x18($sp)
-    /* 589A0 800781A0 0B80023C */  lui        $v0, %hi(_spu_inTransfer)
-    /* 589A4 800781A4 E8B0428C */  lw         $v0, %lo(_spu_inTransfer)($v0)
-    /* 589A8 800781A8 00000000 */  nop
-    /* 589AC 800781AC 03005014 */  bne        $v0, $s0, .L800781BC
-    /* 589B0 800781B0 00000000 */   nop
-  .L800781B4:
-    /* 589B4 800781B4 CBB20108 */  j          D_8006CB2C
-    /* 589B8 800781B8 01000234 */   ori       $v0, $zero, 0x1
-  .L800781BC:
-    /* 589BC 800781BC 0B80043C */  lui        $a0, %hi(D_800AB16C)
-    /* 589C0 800781C0 6CB1848C */  lw         $a0, %lo(D_800AB16C)($a0)
-    /* 589C4 800781C4 952B010C */  jal        func_8004AE54
-    /* 589C8 800781C8 00000000 */   nop
-    /* 589CC 800781CC 0B003016 */  bne        $s1, $s0, .L800781FC
-    /* 589D0 800781D0 00000000 */   nop
-    /* 589D4 800781D4 0B004014 */  bnez       $v0, .L80078204
-    /* 589D8 800781D8 01000234 */   ori       $v0, $zero, 0x1
-  .L800781DC:
-    /* 589DC 800781DC 0B80043C */  lui        $a0, %hi(D_800AB16C)
-    /* 589E0 800781E0 6CB1848C */  lw         $a0, %lo(D_800AB16C)($a0)
-    /* 589E4 800781E4 952B010C */  jal        func_8004AE54
-    /* 589E8 800781E8 00000000 */   nop
-    /* 589EC 800781EC FBFF4010 */  beqz       $v0, .L800781DC
-    /* 589F0 800781F0 01000234 */   ori       $v0, $zero, 0x1
-    /* 589F4 800781F4 C9B20108 */  j          D_8006CB24
-    /* 589F8 800781F8 00000000 */   nop
-  .L800781FC:
-    /* 589FC 800781FC 03005014 */  bne        $v0, $s0, .L8007820C
-    /* 58A00 80078200 00000000 */   nop
-  .L80078204:
-    /* 58A04 80078204 0B80013C */  lui        $at, %hi(_spu_inTransfer)
-    /* 58A08 80078208 E8B022AC */  sw         $v0, %lo(_spu_inTransfer)($at)
-  .L8007820C:
-    /* 58A0C 8007820C 1800BF8F */  lw         $ra, 0x18($sp)
-    /* 58A10 80078210 1400B18F */  lw         $s1, 0x14($sp)
-    /* 58A14 80078214 1000B08F */  lw         $s0, 0x10($sp)
-    /* 58A18 80078218 2000BD27 */  addiu      $sp, $sp, 0x20
-    /* 58A1C 8007821C 0800E003 */  jr         $ra
-    /* 58A20 80078220 00000000 */   nop
+    /* 4D29C 8006CA9C 0B80023C */  lui        $v0, %hi(D_800AB114)
+    /* 4D2A0 8006CAA0 14B1428C */  lw         $v0, %lo(D_800AB114)($v0)
+    /* 4D2A4 8006CAA4 E0FFBD27 */  addiu      $sp, $sp, -0x20
+    /* 4D2A8 8006CAA8 1400B1AF */  sw         $s1, 0x14($sp)
+    /* 4D2AC 8006CAAC 21888000 */  addu       $s1, $a0, $zero
+    /* 4D2B0 8006CAB0 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 4D2B4 8006CAB4 01001034 */  ori        $s0, $zero, 0x1
+    /* 4D2B8 8006CAB8 06005010 */  beq        $v0, $s0, .L8006CAD4
+    /* 4D2BC 8006CABC 1800BFAF */   sw        $ra, 0x18($sp)
+    /* 4D2C0 8006CAC0 0B80023C */  lui        $v0, %hi(D_800AB0E8)
+    /* 4D2C4 8006CAC4 E8B0428C */  lw         $v0, %lo(D_800AB0E8)($v0)
+    /* 4D2C8 8006CAC8 00000000 */  nop
+    /* 4D2CC 8006CACC 03005014 */  bne        $v0, $s0, .L8006CADC
+    /* 4D2D0 8006CAD0 00000000 */   nop
+  .L8006CAD4:
+    /* 4D2D4 8006CAD4 CBB20108 */  j          .L8006CB2C
+    /* 4D2D8 8006CAD8 01000234 */   ori       $v0, $zero, 0x1
+  .L8006CADC:
+    /* 4D2DC 8006CADC 0B80043C */  lui        $a0, %hi(D_800AB16C)
+    /* 4D2E0 8006CAE0 6CB1848C */  lw         $a0, %lo(D_800AB16C)($a0)
+    /* 4D2E4 8006CAE4 952B010C */  jal        TestEvent
+    /* 4D2E8 8006CAE8 00000000 */   nop
+    /* 4D2EC 8006CAEC 0B003016 */  bne        $s1, $s0, .L8006CB1C
+    /* 4D2F0 8006CAF0 00000000 */   nop
+    /* 4D2F4 8006CAF4 0B004014 */  bnez       $v0, .L8006CB24
+    /* 4D2F8 8006CAF8 01000234 */   ori       $v0, $zero, 0x1
+  .L8006CAFC:
+    /* 4D2FC 8006CAFC 0B80043C */  lui        $a0, %hi(D_800AB16C)
+    /* 4D300 8006CB00 6CB1848C */  lw         $a0, %lo(D_800AB16C)($a0)
+    /* 4D304 8006CB04 952B010C */  jal        TestEvent
+    /* 4D308 8006CB08 00000000 */   nop
+    /* 4D30C 8006CB0C FBFF4010 */  beqz       $v0, .L8006CAFC
+    /* 4D310 8006CB10 01000234 */   ori       $v0, $zero, 0x1
+    /* 4D314 8006CB14 C9B20108 */  j          .L8006CB24
+    /* 4D318 8006CB18 00000000 */   nop
+  .L8006CB1C:
+    /* 4D31C 8006CB1C 03005014 */  bne        $v0, $s0, .L8006CB2C
+    /* 4D320 8006CB20 00000000 */   nop
+  .L8006CB24:
+    /* 4D324 8006CB24 0B80013C */  lui        $at, %hi(D_800AB0E8)
+    /* 4D328 8006CB28 E8B022AC */  sw         $v0, %lo(D_800AB0E8)($at)
+  .L8006CB2C:
+    /* 4D32C 8006CB2C 1800BF8F */  lw         $ra, 0x18($sp)
+    /* 4D330 8006CB30 1400B18F */  lw         $s1, 0x14($sp)
+    /* 4D334 8006CB34 1000B08F */  lw         $s0, 0x10($sp)
+    /* 4D338 8006CB38 2000BD27 */  addiu      $sp, $sp, 0x20
+    /* 4D33C 8006CB3C 0800E003 */  jr         $ra
+    /* 4D340 8006CB40 00000000 */   nop
 endlabel SpuIsTransferCompleted

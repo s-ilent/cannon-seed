@@ -10,13 +10,13 @@
 nonmatching CdGetToc, 0x24
 
 glabel CdGetToc
-    /* 656A8 80084EA8 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 656AC 80084EAC 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 656B0 80084EB0 21288000 */  addu       $a1, $a0, $zero
-    /* 656B4 80084EB4 73DF010C */  jal        func_80077DCC
-    /* 656B8 80084EB8 01000434 */   ori       $a0, $zero, 0x1
-    /* 656BC 80084EBC 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 656C0 80084EC0 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 656C4 80084EC4 0800E003 */  jr         $ra
-    /* 656C8 80084EC8 00000000 */   nop
+    /* 585A8 80077DA8 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 585AC 80077DAC 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 585B0 80077DB0 21288000 */  addu       $a1, $a0, $zero
+    /* 585B4 80077DB4 73DF010C */  jal        CdGetToc2
+    /* 585B8 80077DB8 01000434 */   ori       $a0, $zero, 0x1
+    /* 585BC 80077DBC 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 585C0 80077DC0 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 585C4 80077DC4 0800E003 */  jr         $ra
+    /* 585C8 80077DC8 00000000 */   nop
 endlabel CdGetToc

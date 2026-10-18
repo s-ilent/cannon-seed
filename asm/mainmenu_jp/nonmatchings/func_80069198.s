@@ -10,8 +10,8 @@
 nonmatching ChangeClearPAD, 0xC
 
 glabel ChangeClearPAD
-    /* 49998 80069198 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 4999C 8006919C 08004001 */  jr         $t2
-    /* 499A0 800691A0 5B000924 */   addiu     $t1, $zero, 0x5B
+    /* 40198 8005F998 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 4019C 8005F99C 08004001 */  jr         $t2
+    /* 401A0 8005F9A0 5B000924 */   addiu     $t1, $zero, 0x5B
 endlabel ChangeClearPAD
-    /* 499A4 800691A4 00000000 */  nop
+    /* 401A4 8005F9A4 00000000 */  nop

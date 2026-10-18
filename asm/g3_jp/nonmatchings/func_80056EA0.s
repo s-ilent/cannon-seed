@@ -10,14 +10,14 @@
 nonmatching GsSetAmbient, 0x28
 
 glabel GsSetAmbient
-    /* 376A0 80056EA0 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 376A4 80056EA4 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 376A8 80056EA8 03210400 */  sra        $a0, $a0, 4
-    /* 376AC 80056EAC 03290500 */  sra        $a1, $a1, 4
-    /* 376B0 80056EB0 813A010C */  jal        func_8004EA04
-    /* 376B4 80056EB4 03310600 */   sra       $a2, $a2, 4
-    /* 376B8 80056EB8 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 376BC 80056EBC 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 376C0 80056EC0 0800E003 */  jr         $ra
-    /* 376C4 80056EC4 00000000 */   nop
+    /* 304A0 8004FCA0 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 304A4 8004FCA4 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 304A8 8004FCA8 03210400 */  sra        $a0, $a0, 4
+    /* 304AC 8004FCAC 03290500 */  sra        $a1, $a1, 4
+    /* 304B0 8004FCB0 813A010C */  jal        SetBackColor
+    /* 304B4 8004FCB4 03310600 */   sra       $a2, $a2, 4
+    /* 304B8 8004FCB8 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 304BC 8004FCBC 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 304C0 8004FCC0 0800E003 */  jr         $ra
+    /* 304C4 8004FCC4 00000000 */   nop
 endlabel GsSetAmbient

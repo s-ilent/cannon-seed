@@ -10,11 +10,11 @@
 nonmatching func_8007D5C0
 
 glabel func_8007D5C0
-    /* 5DDC0 8007D5C0 00000000 */ .word 0x00000000
-    /* 5DDC4 8007D5C4 00000000 */ .word 0x00000000
-    /* 5DDC8 8007D5C8 09010000 */ .word 0x00000109 /* invalid instruction */
-    /* 5DDCC 8007D5CC 0C000000 */ .word 0x0000000C
-    /* 5DDD0 8007D5D0 00000000 */ .word 0x00000000
-    /* 5DDD4 8007D5D4 01000000 */ .word 0x00000001 /* invalid instruction */
-    /* 5DDD8 8007D5D8 00000000 */ .word 0x00000000
+    /* 51C30 80071430 00000000 */ .word 0x00000000
+    /* 51C34 80071434 00000000 */ .word 0x00000000
+    /* 51C38 80071438 09010000 */ .word 0x00000109 /* invalid instruction */
+    /* 51C3C 8007143C 0C000000 */ .word 0x0000000C
+    /* 51C40 80071440 00000000 */ .word 0x00000000
+    /* 51C44 80071444 01000000 */ .word 0x00000001 /* invalid instruction */
+    /* 51C48 80071448 00000000 */ .word 0x00000000
 enddlabel func_8007D5C0

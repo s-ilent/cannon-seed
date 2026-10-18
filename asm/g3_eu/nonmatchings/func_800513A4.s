@@ -10,8 +10,8 @@
 nonmatching SetMem, 0xC
 
 glabel SetMem
-    /* 31BA4 800513A4 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 31BA8 800513A8 08004001 */  jr         $t2
-    /* 31BAC 800513AC 9F000924 */   addiu     $t1, $zero, 0x9F
+    /* 2B584 8004AD84 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 2B588 8004AD88 08004001 */  jr         $t2
+    /* 2B58C 8004AD8C 9F000924 */   addiu     $t1, $zero, 0x9F
 endlabel SetMem
-    /* 31BB0 800513B0 00000000 */  nop
+    /* 2B590 8004AD90 00000000 */  nop

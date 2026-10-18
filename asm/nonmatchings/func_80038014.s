@@ -11,16 +11,16 @@
 nonmatching SetLightMatrix, 0x30
 
 glabel SetLightMatrix
-    /* 18814 80038014 0000888C */  lw         $t0, 0x0($a0)
-    /* 18818 80038018 0400898C */  lw         $t1, 0x4($a0)
-    /* 1881C 8003801C 08008A8C */  lw         $t2, 0x8($a0)
-    /* 18820 80038020 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 18824 80038024 10008C8C */  lw         $t4, 0x10($a0)
-    /* 18828 80038028 0040C848 */  ctc2       $t0, $8 /* handwritten instruction */
-    /* 1882C 8003802C 0048C948 */  ctc2       $t1, $9 /* handwritten instruction */
-    /* 18830 80038030 0050CA48 */  ctc2       $t2, $10 /* handwritten instruction */
-    /* 18834 80038034 0058CB48 */  ctc2       $t3, $11 /* handwritten instruction */
-    /* 18838 80038038 0060CC48 */  ctc2       $t4, $12 /* handwritten instruction */
-    /* 1883C 8003803C 0800E003 */  jr         $ra
-    /* 18840 80038040 00000000 */   nop
+    /* 15634 80034E34 0000888C */  lw         $t0, 0x0($a0)
+    /* 15638 80034E38 0400898C */  lw         $t1, 0x4($a0)
+    /* 1563C 80034E3C 08008A8C */  lw         $t2, 0x8($a0)
+    /* 15640 80034E40 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 15644 80034E44 10008C8C */  lw         $t4, 0x10($a0)
+    /* 15648 80034E48 0040C848 */  ctc2       $t0, $8 /* handwritten instruction */
+    /* 1564C 80034E4C 0048C948 */  ctc2       $t1, $9 /* handwritten instruction */
+    /* 15650 80034E50 0050CA48 */  ctc2       $t2, $10 /* handwritten instruction */
+    /* 15654 80034E54 0058CB48 */  ctc2       $t3, $11 /* handwritten instruction */
+    /* 15658 80034E58 0060CC48 */  ctc2       $t4, $12 /* handwritten instruction */
+    /* 1565C 80034E5C 0800E003 */  jr         $ra
+    /* 15660 80034E60 00000000 */   nop
 endlabel SetLightMatrix

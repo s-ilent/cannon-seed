@@ -10,23 +10,23 @@
 nonmatching gte_init, 0x4C
 
 glabel gte_init
-    /* 5F764 8007EF64 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 5F768 8007EF68 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 5F76C 8007EF6C A4CA010C */  jal        func_80072A90
-    /* 5F770 8007EF70 00000000 */   nop
-    /* 5F774 8007EF74 21200000 */  addu       $a0, $zero, $zero
-    /* 5F778 8007EF78 21280000 */  addu       $a1, $zero, $zero
-    /* 5F77C 8007EF7C CE8B010C */  jal        func_80062F38
-    /* 5F780 8007EF80 21300000 */   addu      $a2, $zero, $zero
-    /* 5F784 8007EF84 21200000 */  addu       $a0, $zero, $zero
-    /* 5F788 8007EF88 F38B010C */  jal        func_80062FCC
-    /* 5F78C 8007EF8C 21280000 */   addu      $a1, $zero, $zero
-    /* 5F790 8007EF90 1980013C */  lui        $at, %hi(D_8018DB18)
-    /* 5F794 8007EF94 18DB20A4 */  sh         $zero, %lo(D_8018DB18)($at)
-    /* 5F798 8007EF98 1980013C */  lui        $at, %hi(D_8018DB14)
-    /* 5F79C 8007EF9C 14DB20A4 */  sh         $zero, %lo(D_8018DB14)($at)
-    /* 5F7A0 8007EFA0 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 5F7A4 8007EFA4 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 5F7A8 8007EFA8 0800E003 */  jr         $ra
-    /* 5F7AC 8007EFAC 00000000 */   nop
+    /* 53244 80072A44 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 53248 80072A48 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 5324C 80072A4C A4CA010C */  jal        func_80072A90
+    /* 53250 80072A50 00000000 */   nop
+    /* 53254 80072A54 21200000 */  addu       $a0, $zero, $zero
+    /* 53258 80072A58 21280000 */  addu       $a1, $zero, $zero
+    /* 5325C 80072A5C CE8B010C */  jal        func_80062F38
+    /* 53260 80072A60 21300000 */   addu      $a2, $zero, $zero
+    /* 53264 80072A64 21200000 */  addu       $a0, $zero, $zero
+    /* 53268 80072A68 F38B010C */  jal        func_80062FCC
+    /* 5326C 80072A6C 21280000 */   addu      $a1, $zero, $zero
+    /* 53270 80072A70 1980013C */  lui        $at, %hi(D_8018DB18)
+    /* 53274 80072A74 18DB20A4 */  sh         $zero, %lo(D_8018DB18)($at)
+    /* 53278 80072A78 1980013C */  lui        $at, %hi(D_8018DB14)
+    /* 5327C 80072A7C 14DB20A4 */  sh         $zero, %lo(D_8018DB14)($at)
+    /* 53280 80072A80 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 53284 80072A84 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 53288 80072A88 0800E003 */  jr         $ra
+    /* 5328C 80072A8C 00000000 */   nop
 endlabel gte_init

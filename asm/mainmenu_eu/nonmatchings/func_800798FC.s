@@ -11,12 +11,12 @@
 nonmatching func_800798FC, 0x20
 
 glabel func_800798FC
-    /* 5A0FC 800798FC 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 5A100 80079900 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 5A104 80079904 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
-    /* 5A108 80079908 00000000 */  nop
-    /* 5A10C 8007990C 1404284B */  cdp
-    /* 5A110 80079910 0000F6E8 */  swc2       $22, 0x0($a3)
-    /* 5A114 80079914 0800E003 */  jr         $ra
-    /* 5A118 80079918 00000000 */   nop
+    /* 4E7BC 8006DFBC 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 4E7C0 8006DFC0 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 4E7C4 8006DFC4 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
+    /* 4E7C8 8006DFC8 00000000 */  nop
+    /* 4E7CC 8006DFCC 1404284B */  cdp
+    /* 4E7D0 8006DFD0 0000F6E8 */  swc2       $22, 0x0($a3)
+    /* 4E7D4 8006DFD4 0800E003 */  jr         $ra
+    /* 4E7D8 8006DFD8 00000000 */   nop
 endlabel func_800798FC

@@ -8373,4 +8373,64 @@ Next queue:
    .o_00005710 lma 0x5710 adjusted to 0x5714" (a gen_ld LMA conflict after the
    framing rows dropped). Check gen_ld overlaps before/with the extract x8
    step.
+## 2026-10-18 (window cron-20261018-2104): the flip's remaining layers CLOSE - gp re-point from the slot maps, dropped-row label retirement, the alias adjudication lands as build enforcement; all 8 targets extract clean on the flipped config and the oracle re-baseline commit lands (verify 8/8 true = next window's first gate)
 
+Resumed per the 1949 queue with HEAD == origin/main == f5097cd8 (no rollback
+this window; discs, true baselines, woven backups all survived).
+
+THE SMALL-DATA CLASS, CLOSED (the 1949 stall): the class enumerated to
+exactly FOUR entries, all slps - boot_flag_0 (carve gp+0x3C) and boot_flag_1
+(gp+0x68), each in the per-target symbols file and the curated file. The
+TASKS.md 1949 witness address "0x8005A778" was the STAGED (wrongly framed-
+mapped) value, not a curated one; the curated entry is 0x80063268 = carve_gp
++ 0x3C. Fix (tools/flip_reauthor.py GP_REPOINT): re-point is pure gp
+arithmetic true = true_gp + (va - carve_gp) - boot_flag_0 -> 0x80066368
+(slot-map gp+0x3C = 1, the measured 0/1 word flag), boot_flag_1 ->
+0x80066394 (slot-map 0); both contained-validated against the migrated
+rows. GP_INFO then keeps the compiled form (0x3C($gp) displacement
+unchanged; func_80025AE0 stays 0x10, RotTransPers4 stays 0x80). sces's
+window has no symbol entries (no C references to its statics): nothing to
+repoint there.
+
+TWO MORE DEFECTS FOUND AND FIXED while extract-proving the staging:
+- DROPPED-ROW LABELS: data_8005A014 (mainmenu_jp) names a row that was
+  MIGRATE-DROPPED (pure framing, 0 true bytes) - the label died with the
+  row, but the snap-identity rule kept it at its carve VA, clashing with
+  the surviving asm row func_80062B04's mapped start (0x8005A014). Fix:
+  entries whose name matches a MIGRATE-DROPPED row retire with a
+  FLIP-DROPPED-ROW comment (2 mainmenu_jp, 1 mainmenu_eu, 1 g3org_eu).
+- THE ALIAS ADJUDICATION IS BUILD-ENFORCING, not just polish: mainmenu_eu's
+  curated psyq placements (HookEntryInt/ResetEntryInt/_96_remove, recorded
+  already-true) and the scanner's intr_* labels (mapped from the carve)
+  land on the same true bytes - splat REJECTS the duplicates. The banked
+  rehearsal policy (psyq name wins, alias retires with a provenance note)
+  now runs as flip_reauthor ALIAS_ADJUDICATE: 3 gen-file aliases retired
+  (grep-verified: no C references any of the collided names).
+- C-REFERENCE REWRITE SCOPING FIXED (a latent 1949 breakage): the fixc
+  pass rewrote src/*.c GLOBALLY, but the same src file can be built by
+  several targets and the winner label exists only in the dropping
+  target's map - the 1949 run's global rewrite would have fed
+  data_80031E7C (an slps-only row label) to stopIntr.c (sces-built),
+  func_80068084.c (mainmenu_eu) and func_800511E8.c (g3_jp) = undefined
+  references. fixc now rewrites ONLY files the dropping target builds (a
+  yaml row named after the file stem): exactly one rewrite,
+  func_80031550.c (slps-built) intr_stop_begin -> data_80031E7C.
+
+GATES: make extract on the flipped config runs CLEAN x8 (splat split, 0
+duplicates). The oracle re-baseline commit lands now per the checklist
+(one deliberate --no-verify commit: config/sha1/* -> the banked true-EXE
+SHA-1s, baselines/ swapped to the witnessed true files in the sandbox,
+staged configs + yamls installed). make verify 8/8 true + the judge sweep
+(identity-kept entries, FLIP-DUPE/FLIP-ALIAS/FLIP-DROPPED-ROW reviews) are
+next window's first gates - the extract-clean x8 state is committed
+unverified, per the recorded flip sequence.
+
+Next queue:
+1. make verify 8/8 true (the flip's decisive gate); on any mismatch:
+   audit_sizes for the compiled-size shifts, then judge sweep.
+2. Judge sweep: review the identity-true classes and the
+   FLIP-DUPE/FLIP-ALIAS/FLIP-DROPPED-ROW retirements per target.
+3. mainmenu_jp data_800596C4 (FLIP-DUPE, no row label, no C refs) -
+   confirm inert or re-label.
+4. Post-flip: ratchets re-baseline decision belongs to the lane owner;
+   the GSD round-5 adopt/reject still stands.

@@ -11,50 +11,50 @@
 nonmatching RotAverageNclip4, 0xB0
 
 glabel RotAverageNclip4
-    /* 55B38 80075338 000080C8 */  lwc2       $0, 0x0($a0)
-    /* 55B3C 8007533C 040081C8 */  lwc2       $1, 0x4($a0)
-    /* 55B40 80075340 0000A2C8 */  lwc2       $2, 0x0($a1)
-    /* 55B44 80075344 0400A3C8 */  lwc2       $3, 0x4($a1)
-    /* 55B48 80075348 0000C4C8 */  lwc2       $4, 0x0($a2)
-    /* 55B4C 8007534C 0400C5C8 */  lwc2       $5, 0x4($a2)
-    /* 55B50 80075350 00000000 */  nop
-    /* 55B54 80075354 3000284A */  rtpt
-    /* 55B58 80075358 2800A88F */  lw         $t0, 0x28($sp)
-    /* 55B5C 8007535C 00F84348 */  cfc2       $v1, $31 /* handwritten instruction */
-    /* 55B60 80075360 00000000 */  nop
-    /* 55B64 80075364 000003AD */  sw         $v1, 0x0($t0)
-    /* 55B68 80075368 0600404B */  nclip
-    /* 55B6C 8007536C 1000A88F */  lw         $t0, 0x10($sp)
-    /* 55B70 80075370 1400A98F */  lw         $t1, 0x14($sp)
-    /* 55B74 80075374 1800AA8F */  lw         $t2, 0x18($sp)
-    /* 55B78 80075378 00C00248 */  mfc2       $v0, $24 /* handwritten instruction */
-    /* 55B7C 8007537C 00000000 */  nop
-    /* 55B80 80075380 0300401C */  bgtz       $v0, .L80075390
-    /* 55B84 80075384 00000000 */   nop
-    /* 55B88 80075388 15000010 */  b          .L800753E0
-    /* 55B8C 8007538C 00000000 */   nop
-  .L80075390:
-    /* 55B90 80075390 00000CE9 */  swc2       $12, 0x0($t0)
-    /* 55B94 80075394 00002DE9 */  swc2       $13, 0x0($t1)
-    /* 55B98 80075398 00004EE9 */  swc2       $14, 0x0($t2)
-    /* 55B9C 8007539C 0000E0C8 */  lwc2       $0, 0x0($a3)
-    /* 55BA0 800753A0 0400E1C8 */  lwc2       $1, 0x4($a3)
-    /* 55BA4 800753A4 00000000 */  nop
-    /* 55BA8 800753A8 0100184A */  rtps
-    /* 55BAC 800753AC 1C00A88F */  lw         $t0, 0x1C($sp)
-    /* 55BB0 800753B0 2000A98F */  lw         $t1, 0x20($sp)
-    /* 55BB4 800753B4 2800AA8F */  lw         $t2, 0x28($sp)
-    /* 55BB8 800753B8 00000EE9 */  swc2       $14, 0x0($t0)
-    /* 55BBC 800753BC 00F84B48 */  cfc2       $t3, $31 /* handwritten instruction */
-    /* 55BC0 800753C0 000028E9 */  swc2       $8, 0x0($t1)
-    /* 55BC4 800753C4 25586301 */  or         $t3, $t3, $v1
-    /* 55BC8 800753C8 00004BAD */  sw         $t3, 0x0($t2)
-    /* 55BCC 800753CC 2E00684B */  avsz4
-    /* 55BD0 800753D0 2400A98F */  lw         $t1, 0x24($sp)
-    /* 55BD4 800753D4 00380848 */  mfc2       $t0, $7 /* handwritten instruction */
-    /* 55BD8 800753D8 00000000 */  nop
-    /* 55BDC 800753DC 000028AD */  sw         $t0, 0x0($t1)
-  .L800753E0:
-    /* 55BE0 800753E0 0800E003 */  jr         $ra
-    /* 55BE4 800753E4 00000000 */   nop
+    /* 4AA48 8006A248 000080C8 */  lwc2       $0, 0x0($a0)
+    /* 4AA4C 8006A24C 040081C8 */  lwc2       $1, 0x4($a0)
+    /* 4AA50 8006A250 0000A2C8 */  lwc2       $2, 0x0($a1)
+    /* 4AA54 8006A254 0400A3C8 */  lwc2       $3, 0x4($a1)
+    /* 4AA58 8006A258 0000C4C8 */  lwc2       $4, 0x0($a2)
+    /* 4AA5C 8006A25C 0400C5C8 */  lwc2       $5, 0x4($a2)
+    /* 4AA60 8006A260 00000000 */  nop
+    /* 4AA64 8006A264 3000284A */  rtpt
+    /* 4AA68 8006A268 2800A88F */  lw         $t0, 0x28($sp)
+    /* 4AA6C 8006A26C 00F84348 */  cfc2       $v1, $31 /* handwritten instruction */
+    /* 4AA70 8006A270 00000000 */  nop
+    /* 4AA74 8006A274 000003AD */  sw         $v1, 0x0($t0)
+    /* 4AA78 8006A278 0600404B */  nclip
+    /* 4AA7C 8006A27C 1000A88F */  lw         $t0, 0x10($sp)
+    /* 4AA80 8006A280 1400A98F */  lw         $t1, 0x14($sp)
+    /* 4AA84 8006A284 1800AA8F */  lw         $t2, 0x18($sp)
+    /* 4AA88 8006A288 00C00248 */  mfc2       $v0, $24 /* handwritten instruction */
+    /* 4AA8C 8006A28C 00000000 */  nop
+    /* 4AA90 8006A290 0300401C */  bgtz       $v0, .L8006A2A0
+    /* 4AA94 8006A294 00000000 */   nop
+    /* 4AA98 8006A298 15000010 */  b          .L8006A2F0
+    /* 4AA9C 8006A29C 00000000 */   nop
+  .L8006A2A0:
+    /* 4AAA0 8006A2A0 00000CE9 */  swc2       $12, 0x0($t0)
+    /* 4AAA4 8006A2A4 00002DE9 */  swc2       $13, 0x0($t1)
+    /* 4AAA8 8006A2A8 00004EE9 */  swc2       $14, 0x0($t2)
+    /* 4AAAC 8006A2AC 0000E0C8 */  lwc2       $0, 0x0($a3)
+    /* 4AAB0 8006A2B0 0400E1C8 */  lwc2       $1, 0x4($a3)
+    /* 4AAB4 8006A2B4 00000000 */  nop
+    /* 4AAB8 8006A2B8 0100184A */  rtps
+    /* 4AABC 8006A2BC 1C00A88F */  lw         $t0, 0x1C($sp)
+    /* 4AAC0 8006A2C0 2000A98F */  lw         $t1, 0x20($sp)
+    /* 4AAC4 8006A2C4 2800AA8F */  lw         $t2, 0x28($sp)
+    /* 4AAC8 8006A2C8 00000EE9 */  swc2       $14, 0x0($t0)
+    /* 4AACC 8006A2CC 00F84B48 */  cfc2       $t3, $31 /* handwritten instruction */
+    /* 4AAD0 8006A2D0 000028E9 */  swc2       $8, 0x0($t1)
+    /* 4AAD4 8006A2D4 25586301 */  or         $t3, $t3, $v1
+    /* 4AAD8 8006A2D8 00004BAD */  sw         $t3, 0x0($t2)
+    /* 4AADC 8006A2DC 2E00684B */  avsz4
+    /* 4AAE0 8006A2E0 2400A98F */  lw         $t1, 0x24($sp)
+    /* 4AAE4 8006A2E4 00380848 */  mfc2       $t0, $7 /* handwritten instruction */
+    /* 4AAE8 8006A2E8 00000000 */  nop
+    /* 4AAEC 8006A2EC 000028AD */  sw         $t0, 0x0($t1)
+  .L8006A2F0:
+    /* 4AAF0 8006A2F0 0800E003 */  jr         $ra
+    /* 4AAF4 8006A2F4 00000000 */   nop
 endlabel RotAverageNclip4

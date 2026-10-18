@@ -10,8 +10,8 @@
 nonmatching setjmp, 0xC
 
 glabel setjmp
-    /* 3145C 80050C5C A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 31460 80050C60 08004001 */  jr         $t2
-    /* 31464 80050C64 13000924 */   addiu     $t1, $zero, 0x13
+    /* 2AF6C 8004A76C A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 2AF70 8004A770 08004001 */  jr         $t2
+    /* 2AF74 8004A774 13000924 */   addiu     $t1, $zero, 0x13
 endlabel setjmp
-    /* 31468 80050C68 00000000 */  nop
+    /* 2AF78 8004A778 00000000 */  nop

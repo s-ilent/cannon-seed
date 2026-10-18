@@ -10,8 +10,8 @@
 nonmatching delete, 0xC
 
 glabel delete
-    /* 31BC4 800513C4 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 31BC8 800513C8 08004001 */  jr         $t2
-    /* 31BCC 800513CC 45000924 */   addiu     $t1, $zero, 0x45
+    /* 2B5A4 8004ADA4 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 2B5A8 8004ADA8 08004001 */  jr         $t2
+    /* 2B5AC 8004ADAC 45000924 */   addiu     $t1, $zero, 0x45
 endlabel delete
-    /* 31BD0 800513D0 00000000 */  nop
+    /* 2B5B0 8004ADB0 00000000 */  nop

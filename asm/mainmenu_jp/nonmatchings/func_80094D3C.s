@@ -10,16 +10,16 @@
 nonmatching _card_clear, 0x30
 
 glabel _card_clear
-    /* 7553C 80094D3C E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 75540 80094D40 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 75544 80094D44 DB16020C */  jal        func_80085B6C
-    /* 75548 80094D48 1800A4AF */   sw        $a0, 0x18($sp)
-    /* 7554C 80094D4C 1800A48F */  lw         $a0, 0x18($sp)
-    /* 75550 80094D50 3F000524 */  addiu      $a1, $zero, 0x3F
-    /* 75554 80094D54 CB16020C */  jal        func_80085B2C
-    /* 75558 80094D58 21300000 */   addu      $a2, $zero, $zero
-    /* 7555C 80094D5C 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 75560 80094D60 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 75564 80094D64 0800E003 */  jr         $ra
-    /* 75568 80094D68 00000000 */   nop
+    /* 662FC 80085AFC E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 66300 80085B00 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 66304 80085B04 DB16020C */  jal        _new_card
+    /* 66308 80085B08 1800A4AF */   sw        $a0, 0x18($sp)
+    /* 6630C 80085B0C 1800A48F */  lw         $a0, 0x18($sp)
+    /* 66310 80085B10 3F000524 */  addiu      $a1, $zero, 0x3F
+    /* 66314 80085B14 CB16020C */  jal        _card_write
+    /* 66318 80085B18 21300000 */   addu      $a2, $zero, $zero
+    /* 6631C 80085B1C 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 66320 80085B20 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 66324 80085B24 0800E003 */  jr         $ra
+    /* 66328 80085B28 00000000 */   nop
 endlabel _card_clear

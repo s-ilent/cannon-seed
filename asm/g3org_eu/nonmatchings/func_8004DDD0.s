@@ -10,37 +10,37 @@
 nonmatching trapIntrVSync, 0x7C
 
 glabel trapIntrVSync
-    /* 2E5D0 8004DDD0 0A80023C */  lui        $v0, %hi(D_800A49F8)
-    /* 2E5D4 8004DDD4 F849428C */  lw         $v0, %lo(D_800A49F8)($v0)
-    /* 2E5D8 8004DDD8 E0FFBD27 */  addiu      $sp, $sp, -0x20
-    /* 2E5DC 8004DDDC 1400B1AF */  sw         $s1, 0x14($sp)
-    /* 2E5E0 8004DDE0 21880000 */  addu       $s1, $zero, $zero
-    /* 2E5E4 8004DDE4 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 2E5E8 8004DDE8 0A80103C */  lui        $s0, %hi(intr_vb_cb_slots)
-    /* 2E5EC 8004DDEC D8491026 */  addiu      $s0, $s0, %lo(intr_vb_cb_slots)
-    /* 2E5F0 8004DDF0 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 2E5F4 8004DDF4 01004224 */  addiu      $v0, $v0, 0x1
-    /* 2E5F8 8004DDF8 0A80013C */  lui        $at, %hi(D_800A49F8)
-    /* 2E5FC 8004DDFC F84922AC */  sw         $v0, %lo(D_800A49F8)($at)
-    /* 2E600 8004DE00 0A80023C */  lui        $v0, %hi(D_800A49F8)
-    /* 2E604 8004DE04 F849428C */  lw         $v0, %lo(D_800A49F8)($v0)
-  .L8004DE08:
-    /* 2E608 8004DE08 00000000 */  nop
-    /* 2E60C 8004DE0C 0000028E */  lw         $v0, 0x0($s0)
-    /* 2E610 8004DE10 00000000 */  nop
-    /* 2E614 8004DE14 03004010 */  beqz       $v0, .L8004DE24
-    /* 2E618 8004DE18 04001026 */   addiu     $s0, $s0, 0x4
-    /* 2E61C 8004DE1C 09F84000 */  jalr       $v0
-    /* 2E620 8004DE20 00000000 */   nop
-  .L8004DE24:
-    /* 2E624 8004DE24 01003126 */  addiu      $s1, $s1, 0x1
-    /* 2E628 8004DE28 0800222A */  slti       $v0, $s1, 0x8
-    /* 2E62C 8004DE2C F6FF4014 */  bnez       $v0, .L8004DE08
-    /* 2E630 8004DE30 00000000 */   nop
-    /* 2E634 8004DE34 1800BF8F */  lw         $ra, 0x18($sp)
-    /* 2E638 8004DE38 1400B18F */  lw         $s1, 0x14($sp)
-    /* 2E63C 8004DE3C 1000B08F */  lw         $s0, 0x10($sp)
-    /* 2E640 8004DE40 2000BD27 */  addiu      $sp, $sp, 0x20
-    /* 2E644 8004DE44 0800E003 */  jr         $ra
-    /* 2E648 8004DE48 00000000 */   nop
+    /* 286D0 80047ED0 0A80023C */  lui        $v0, %hi(D_800A49F8)
+    /* 286D4 80047ED4 F849428C */  lw         $v0, %lo(D_800A49F8)($v0)
+    /* 286D8 80047ED8 E0FFBD27 */  addiu      $sp, $sp, -0x20
+    /* 286DC 80047EDC 1400B1AF */  sw         $s1, 0x14($sp)
+    /* 286E0 80047EE0 21880000 */  addu       $s1, $zero, $zero
+    /* 286E4 80047EE4 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 286E8 80047EE8 0A80103C */  lui        $s0, %hi(D_800A49D8)
+    /* 286EC 80047EEC D8491026 */  addiu      $s0, $s0, %lo(D_800A49D8)
+    /* 286F0 80047EF0 1800BFAF */  sw         $ra, 0x18($sp)
+    /* 286F4 80047EF4 01004224 */  addiu      $v0, $v0, 0x1
+    /* 286F8 80047EF8 0A80013C */  lui        $at, %hi(D_800A49F8)
+    /* 286FC 80047EFC F84922AC */  sw         $v0, %lo(D_800A49F8)($at)
+    /* 28700 80047F00 0A80023C */  lui        $v0, %hi(D_800A49F8)
+    /* 28704 80047F04 F849428C */  lw         $v0, %lo(D_800A49F8)($v0)
+  .L80047F08:
+    /* 28708 80047F08 00000000 */  nop
+    /* 2870C 80047F0C 0000028E */  lw         $v0, 0x0($s0)
+    /* 28710 80047F10 00000000 */  nop
+    /* 28714 80047F14 03004010 */  beqz       $v0, .L80047F24
+    /* 28718 80047F18 04001026 */   addiu     $s0, $s0, 0x4
+    /* 2871C 80047F1C 09F84000 */  jalr       $v0
+    /* 28720 80047F20 00000000 */   nop
+  .L80047F24:
+    /* 28724 80047F24 01003126 */  addiu      $s1, $s1, 0x1
+    /* 28728 80047F28 0800222A */  slti       $v0, $s1, 0x8
+    /* 2872C 80047F2C F6FF4014 */  bnez       $v0, .L80047F08
+    /* 28730 80047F30 00000000 */   nop
+    /* 28734 80047F34 1800BF8F */  lw         $ra, 0x18($sp)
+    /* 28738 80047F38 1400B18F */  lw         $s1, 0x14($sp)
+    /* 2873C 80047F3C 1000B08F */  lw         $s0, 0x10($sp)
+    /* 28740 80047F40 2000BD27 */  addiu      $sp, $sp, 0x20
+    /* 28744 80047F44 0800E003 */  jr         $ra
+    /* 28748 80047F48 00000000 */   nop
 endlabel trapIntrVSync

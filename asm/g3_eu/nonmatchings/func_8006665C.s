@@ -11,71 +11,70 @@
 nonmatching RotAverageNclipColorDpq3_1, 0x100
 
 glabel RotAverageNclipColorDpq3_1
-    /* 46E5C 8006665C 000080C8 */  lwc2       $0, 0x0($a0)
-    /* 46E60 80066660 040081C8 */  lwc2       $1, 0x4($a0)
-    /* 46E64 80066664 00000000 */  nop
-    /* 46E68 80066668 0100184A */  rtps
-    /* 46E6C 8006666C 00400F48 */  mfc2       $t7, $8 /* handwritten instruction */
-    /* 46E70 80066670 0000A0C8 */  lwc2       $0, 0x0($a1)
-    /* 46E74 80066674 0400A1C8 */  lwc2       $1, 0x4($a1)
-    /* 46E78 80066678 00000000 */  nop
-    /* 46E7C 8006667C 0100184A */  rtps
-    /* 46E80 80066680 00401848 */  mfc2       $t8, $8 /* handwritten instruction */
-    /* 46E84 80066684 0000C0C8 */  lwc2       $0, 0x0($a2)
-    /* 46E88 80066688 0400C1C8 */  lwc2       $1, 0x4($a2)
-    /* 46E8C 8006668C 00000000 */  nop
-    /* 46E90 80066690 0100184A */  rtps
-    /* 46E94 80066694 3800A28F */  lw         $v0, 0x38($sp)
-    /* 46E98 80066698 00401948 */  mfc2       $t9, $8 /* handwritten instruction */
-    /* 46E9C 8006669C 00F84348 */  cfc2       $v1, $31 /* handwritten instruction */
-    /* 46EA0 800666A0 00000000 */  nop
-    /* 46EA4 800666A4 000043AC */  sw         $v1, 0x0($v0)
-    /* 46EA8 800666A8 0600404B */  nclip
-    /* 46EAC 800666AC 1000AB8F */  lw         $t3, 0x10($sp)
-    /* 46EB0 800666B0 1400AC8F */  lw         $t4, 0x14($sp)
-    /* 46EB4 800666B4 1800AD8F */  lw         $t5, 0x18($sp)
-    /* 46EB8 800666B8 00C00248 */  mfc2       $v0, $24 /* handwritten instruction */
-    /* 46EBC 800666BC 00000000 */  nop
-    /* 46EC0 800666C0 0300401C */  bgtz       $v0, .L800666D0
-    /* 46EC4 800666C4 00000000 */   nop
-    /* 46EC8 800666C8 22000010 */  b          .L80066754
-    /* 46ECC 800666CC 00000000 */   nop
-  .L800666D0:
-    /* 46ED0 800666D0 0000E0C8 */  lwc2       $0, 0x0($a3)
-    /* 46ED4 800666D4 0400E1C8 */  lwc2       $1, 0x4($a3)
-    /* 46ED8 800666D8 0000A6C9 */  lwc2       $6, 0x0($t5)
-    /* 46EDC 800666DC 00408F48 */  mtc2       $t7, $8 /* handwritten instruction */
-    /* 46EE0 800666E0 00000000 */  nop
-    /* 46EE4 800666E4 1304E84A */  ncds
-    /* 46EE8 800666E8 1C00A88F */  lw         $t0, 0x1C($sp)
-    /* 46EEC 800666EC 2800A98F */  lw         $t1, 0x28($sp)
-    /* 46EF0 800666F0 00000CE9 */  swc2       $12, 0x0($t0)
-  .L800666F4:
-    /* 46EF4 800666F4 000036E9 */  swc2       $22, 0x0($t1)
-    /* 46EF8 800666F8 000060C9 */  lwc2       $0, 0x0($t3)
-    /* 46EFC 800666FC 040061C9 */  lwc2       $1, 0x4($t3)
-    /* 46F00 80066700 00409848 */  mtc2       $t8, $8 /* handwritten instruction */
-    /* 46F04 80066704 00000000 */  nop
-    /* 46F08 80066708 1304E84A */  ncds
-    /* 46F0C 8006670C 2000A88F */  lw         $t0, 0x20($sp)
-    /* 46F10 80066710 2C00A98F */  lw         $t1, 0x2C($sp)
-    /* 46F14 80066714 00000DE9 */  swc2       $13, 0x0($t0)
-    /* 46F18 80066718 000036E9 */  swc2       $22, 0x0($t1)
-    /* 46F1C 8006671C 000080C9 */  lwc2       $0, 0x0($t4)
-    /* 46F20 80066720 040081C9 */  lwc2       $1, 0x4($t4)
-    /* 46F24 80066724 00409948 */  mtc2       $t9, $8 /* handwritten instruction */
-    /* 46F28 80066728 00000000 */  nop
-    /* 46F2C 8006672C 1304E84A */  ncds
-    /* 46F30 80066730 2400A88F */  lw         $t0, 0x24($sp)
-    /* 46F34 80066734 3000A98F */  lw         $t1, 0x30($sp)
-    /* 46F38 80066738 00000EE9 */  swc2       $14, 0x0($t0)
-    /* 46F3C 8006673C 000036E9 */  swc2       $22, 0x0($t1)
-    /* 46F40 80066740 2D00584B */  avsz3
-    /* 46F44 80066744 3400A98F */  lw         $t1, 0x34($sp)
-    /* 46F48 80066748 00380848 */  mfc2       $t0, $7 /* handwritten instruction */
-    /* 46F4C 8006674C 00000000 */  nop
-    /* 46F50 80066750 000028AD */  sw         $t0, 0x0($t1)
-  .L80066754:
-    /* 46F54 80066754 0800E003 */  jr         $ra
-    /* 46F58 80066758 00000000 */   nop
+    /* 3DC4C 8005D44C 000080C8 */  lwc2       $0, 0x0($a0)
+    /* 3DC50 8005D450 040081C8 */  lwc2       $1, 0x4($a0)
+    /* 3DC54 8005D454 00000000 */  nop
+    /* 3DC58 8005D458 0100184A */  rtps
+    /* 3DC5C 8005D45C 00400F48 */  mfc2       $t7, $8 /* handwritten instruction */
+    /* 3DC60 8005D460 0000A0C8 */  lwc2       $0, 0x0($a1)
+    /* 3DC64 8005D464 0400A1C8 */  lwc2       $1, 0x4($a1)
+    /* 3DC68 8005D468 00000000 */  nop
+    /* 3DC6C 8005D46C 0100184A */  rtps
+    /* 3DC70 8005D470 00401848 */  mfc2       $t8, $8 /* handwritten instruction */
+    /* 3DC74 8005D474 0000C0C8 */  lwc2       $0, 0x0($a2)
+    /* 3DC78 8005D478 0400C1C8 */  lwc2       $1, 0x4($a2)
+    /* 3DC7C 8005D47C 00000000 */  nop
+    /* 3DC80 8005D480 0100184A */  rtps
+    /* 3DC84 8005D484 3800A28F */  lw         $v0, 0x38($sp)
+    /* 3DC88 8005D488 00401948 */  mfc2       $t9, $8 /* handwritten instruction */
+    /* 3DC8C 8005D48C 00F84348 */  cfc2       $v1, $31 /* handwritten instruction */
+    /* 3DC90 8005D490 00000000 */  nop
+    /* 3DC94 8005D494 000043AC */  sw         $v1, 0x0($v0)
+    /* 3DC98 8005D498 0600404B */  nclip
+    /* 3DC9C 8005D49C 1000AB8F */  lw         $t3, 0x10($sp)
+    /* 3DCA0 8005D4A0 1400AC8F */  lw         $t4, 0x14($sp)
+    /* 3DCA4 8005D4A4 1800AD8F */  lw         $t5, 0x18($sp)
+    /* 3DCA8 8005D4A8 00C00248 */  mfc2       $v0, $24 /* handwritten instruction */
+    /* 3DCAC 8005D4AC 00000000 */  nop
+    /* 3DCB0 8005D4B0 0300401C */  bgtz       $v0, .L8005D4C0
+    /* 3DCB4 8005D4B4 00000000 */   nop
+    /* 3DCB8 8005D4B8 22000010 */  b          .L8005D544
+    /* 3DCBC 8005D4BC 00000000 */   nop
+  .L8005D4C0:
+    /* 3DCC0 8005D4C0 0000E0C8 */  lwc2       $0, 0x0($a3)
+    /* 3DCC4 8005D4C4 0400E1C8 */  lwc2       $1, 0x4($a3)
+    /* 3DCC8 8005D4C8 0000A6C9 */  lwc2       $6, 0x0($t5)
+    /* 3DCCC 8005D4CC 00408F48 */  mtc2       $t7, $8 /* handwritten instruction */
+    /* 3DCD0 8005D4D0 00000000 */  nop
+    /* 3DCD4 8005D4D4 1304E84A */  ncds
+    /* 3DCD8 8005D4D8 1C00A88F */  lw         $t0, 0x1C($sp)
+    /* 3DCDC 8005D4DC 2800A98F */  lw         $t1, 0x28($sp)
+    /* 3DCE0 8005D4E0 00000CE9 */  swc2       $12, 0x0($t0)
+    /* 3DCE4 8005D4E4 000036E9 */  swc2       $22, 0x0($t1)
+    /* 3DCE8 8005D4E8 000060C9 */  lwc2       $0, 0x0($t3)
+    /* 3DCEC 8005D4EC 040061C9 */  lwc2       $1, 0x4($t3)
+    /* 3DCF0 8005D4F0 00409848 */  mtc2       $t8, $8 /* handwritten instruction */
+    /* 3DCF4 8005D4F4 00000000 */  nop
+    /* 3DCF8 8005D4F8 1304E84A */  ncds
+    /* 3DCFC 8005D4FC 2000A88F */  lw         $t0, 0x20($sp)
+    /* 3DD00 8005D500 2C00A98F */  lw         $t1, 0x2C($sp)
+    /* 3DD04 8005D504 00000DE9 */  swc2       $13, 0x0($t0)
+    /* 3DD08 8005D508 000036E9 */  swc2       $22, 0x0($t1)
+    /* 3DD0C 8005D50C 000080C9 */  lwc2       $0, 0x0($t4)
+    /* 3DD10 8005D510 040081C9 */  lwc2       $1, 0x4($t4)
+    /* 3DD14 8005D514 00409948 */  mtc2       $t9, $8 /* handwritten instruction */
+    /* 3DD18 8005D518 00000000 */  nop
+    /* 3DD1C 8005D51C 1304E84A */  ncds
+    /* 3DD20 8005D520 2400A88F */  lw         $t0, 0x24($sp)
+    /* 3DD24 8005D524 3000A98F */  lw         $t1, 0x30($sp)
+    /* 3DD28 8005D528 00000EE9 */  swc2       $14, 0x0($t0)
+    /* 3DD2C 8005D52C 000036E9 */  swc2       $22, 0x0($t1)
+    /* 3DD30 8005D530 2D00584B */  avsz3
+    /* 3DD34 8005D534 3400A98F */  lw         $t1, 0x34($sp)
+    /* 3DD38 8005D538 00380848 */  mfc2       $t0, $7 /* handwritten instruction */
+    /* 3DD3C 8005D53C 00000000 */  nop
+    /* 3DD40 8005D540 000028AD */  sw         $t0, 0x0($t1)
+  .L8005D544:
+    /* 3DD44 8005D544 0800E003 */  jr         $ra
+    /* 3DD48 8005D548 00000000 */   nop
 endlabel RotAverageNclipColorDpq3_1

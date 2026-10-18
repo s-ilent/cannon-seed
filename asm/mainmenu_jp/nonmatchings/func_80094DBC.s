@@ -10,8 +10,13 @@
 nonmatching _card_read, 0xC
 
 glabel _card_read
-    /* 755BC 80094DBC B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 755C0 80094DC0 08004001 */  jr         $t2
-    /* 755C4 80094DC4 4F000924 */   addiu     $t1, $zero, 0x4F
+    /* 6637C 80085B7C B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 66380 80085B80 08004001 */  jr         $t2
+    /* 66384 80085B84 4F000924 */   addiu     $t1, $zero, 0x4F
 endlabel _card_read
-    /* 755C8 80094DC8 00000000 */  nop
+
+nonmatching func_80085B88, 0x4
+
+glabel func_80085B88
+    /* 66388 80085B88 00000000 */  nop
+endlabel func_80085B88

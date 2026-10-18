@@ -10,8 +10,8 @@
 nonmatching _card_read, 0xC
 
 glabel _card_read
-    /* 5CC90 8007C490 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 5CC94 8007C494 08004001 */  jr         $t2
-    /* 5CC98 8007C498 4F000924 */   addiu     $t1, $zero, 0x4F
+    /* 50D60 80070560 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 50D64 80070564 08004001 */  jr         $t2
+    /* 50D68 80070568 4F000924 */   addiu     $t1, $zero, 0x4F
 endlabel _card_read
-    /* 5CC9C 8007C49C 00000000 */  nop
+    /* 50D6C 8007056C 00000000 */  nop

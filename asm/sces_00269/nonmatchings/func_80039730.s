@@ -10,16 +10,16 @@
 nonmatching GsSetLsMatrix, 0x30
 
 glabel GsSetLsMatrix
-    /* 19F30 80039730 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 19F34 80039734 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 19F38 80039738 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 19F3C 8003973C 33D2000C */  jal        func_800348CC
-    /* 19F40 80039740 21808000 */   addu      $s0, $a0, $zero
-    /* 19F44 80039744 57D2000C */  jal        func_8003495C
-    /* 19F48 80039748 21200002 */   addu      $a0, $s0, $zero
-    /* 19F4C 8003974C 1400BF8F */  lw         $ra, 0x14($sp)
-    /* 19F50 80039750 1000B08F */  lw         $s0, 0x10($sp)
-    /* 19F54 80039754 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 19F58 80039758 0800E003 */  jr         $ra
-    /* 19F5C 8003975C 00000000 */   nop
+    /* 169C0 800361C0 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 169C4 800361C4 1000B0AF */  sw         $s0, 0x10($sp)
+    /* 169C8 800361C8 1400BFAF */  sw         $ra, 0x14($sp)
+    /* 169CC 800361CC 33D2000C */  jal        func_800348CC
+    /* 169D0 800361D0 21808000 */   addu      $s0, $a0, $zero
+    /* 169D4 800361D4 57D2000C */  jal        func_8003495C
+    /* 169D8 800361D8 21200002 */   addu      $a0, $s0, $zero
+    /* 169DC 800361DC 1400BF8F */  lw         $ra, 0x14($sp)
+    /* 169E0 800361E0 1000B08F */  lw         $s0, 0x10($sp)
+    /* 169E4 800361E4 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 169E8 800361E8 0800E003 */  jr         $ra
+    /* 169EC 800361EC 00000000 */   nop
 endlabel GsSetLsMatrix

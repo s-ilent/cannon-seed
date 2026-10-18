@@ -10,8 +10,8 @@
 nonmatching puts, 0xC
 
 glabel puts
-    /* 31B54 80051354 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 31B58 80051358 08004001 */  jr         $t2
-    /* 31B5C 8005135C 3F000924 */   addiu     $t1, $zero, 0x3F
+    /* 2B534 8004AD34 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 2B538 8004AD38 08004001 */  jr         $t2
+    /* 2B53C 8004AD3C 3F000924 */   addiu     $t1, $zero, 0x3F
 endlabel puts
-    /* 31B60 80051360 00000000 */  nop
+    /* 2B540 8004AD40 00000000 */  nop

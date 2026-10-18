@@ -10,8 +10,13 @@
 nonmatching TestEvent, 0xC
 
 glabel TestEvent
-    /* 12168 80031968 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 1216C 8003196C 08004001 */  jr         $t2
-    /* 12170 80031970 0B000924 */   addiu     $t1, $zero, 0xB
+    /* FC98 8002F498 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* FC9C 8002F49C 08004001 */  jr         $t2
+    /* FCA0 8002F4A0 0B000924 */   addiu     $t1, $zero, 0xB
 endlabel TestEvent
-    /* 12174 80031974 00000000 */  nop
+
+nonmatching func_8002F4A4, 0x4
+
+glabel func_8002F4A4
+    /* FCA4 8002F4A4 00000000 */  nop
+endlabel func_8002F4A4

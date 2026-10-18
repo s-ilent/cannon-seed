@@ -10,8 +10,8 @@
 nonmatching LoadExec, 0xC
 
 glabel LoadExec
-    /* 49190 80068990 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 49194 80068994 08004001 */  jr         $t2
-    /* 49198 80068998 51000924 */   addiu     $t1, $zero, 0x51
+    /* 3FAC0 8005F2C0 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 3FAC4 8005F2C4 08004001 */  jr         $t2
+    /* 3FAC8 8005F2C8 51000924 */   addiu     $t1, $zero, 0x51
 endlabel LoadExec
-    /* 4919C 8006899C 00000000 */  nop
+    /* 3FACC 8005F2CC 00000000 */  nop

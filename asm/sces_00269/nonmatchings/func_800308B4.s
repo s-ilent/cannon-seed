@@ -10,8 +10,8 @@
 nonmatching free, 0xC
 
 glabel free
-    /* 110B4 800308B4 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 110B8 800308B8 08004001 */  jr         $t2
-    /* 110BC 800308BC 34000924 */   addiu     $t1, $zero, 0x34
+    /* EE44 8002E644 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* EE48 8002E648 08004001 */  jr         $t2
+    /* EE4C 8002E64C 34000924 */   addiu     $t1, $zero, 0x34
 endlabel free
-    /* 110C0 800308C0 00000000 */  nop
+    /* EE50 8002E650 00000000 */  nop

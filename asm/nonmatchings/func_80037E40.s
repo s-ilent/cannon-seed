@@ -11,29 +11,27 @@
 nonmatching ApplyMatrixSV, 0x5C
 
 glabel ApplyMatrixSV
-    /* 18640 80037E40 0000888C */  lw         $t0, 0x0($a0)
-    /* 18644 80037E44 0400898C */  lw         $t1, 0x4($a0)
-    /* 18648 80037E48 08008A8C */  lw         $t2, 0x8($a0)
-    /* 1864C 80037E4C 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 18650 80037E50 10008C8C */  lw         $t4, 0x10($a0)
-    /* 18654 80037E54 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
-    /* 18658 80037E58 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
-    /* 1865C 80037E5C 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
-    /* 18660 80037E60 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
-    /* 18664 80037E64 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
-    /* 18668 80037E68 0000A0C8 */  lwc2       $0, 0x0($a1)
-    /* 1866C 80037E6C 0400A1C8 */  lwc2       $1, 0x4($a1)
-    /* 18670 80037E70 00000000 */  nop
-  .L80037E74:
-    /* 18674 80037E74 1260484A */  mvmva      1, 0, 0, 3, 0
-    /* 18678 80037E78 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
-    /* 1867C 80037E7C 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
-    /* 18680 80037E80 00580A48 */  mfc2       $t2, $11 /* handwritten instruction */
-    /* 18684 80037E84 0000C8A4 */  sh         $t0, 0x0($a2)
-    /* 18688 80037E88 0200C9A4 */  sh         $t1, 0x2($a2)
-  .L80037E8C:
-    /* 1868C 80037E8C 0400CAA4 */  sh         $t2, 0x4($a2)
-    /* 18690 80037E90 2110C000 */  addu       $v0, $a2, $zero
-    /* 18694 80037E94 0800E003 */  jr         $ra
-    /* 18698 80037E98 00000000 */   nop
+    /* 15460 80034C60 0000888C */  lw         $t0, 0x0($a0)
+    /* 15464 80034C64 0400898C */  lw         $t1, 0x4($a0)
+    /* 15468 80034C68 08008A8C */  lw         $t2, 0x8($a0)
+    /* 1546C 80034C6C 0C008B8C */  lw         $t3, 0xC($a0)
+    /* 15470 80034C70 10008C8C */  lw         $t4, 0x10($a0)
+    /* 15474 80034C74 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
+    /* 15478 80034C78 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
+    /* 1547C 80034C7C 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
+    /* 15480 80034C80 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
+    /* 15484 80034C84 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
+    /* 15488 80034C88 0000A0C8 */  lwc2       $0, 0x0($a1)
+    /* 1548C 80034C8C 0400A1C8 */  lwc2       $1, 0x4($a1)
+    /* 15490 80034C90 00000000 */  nop
+    /* 15494 80034C94 1260484A */  mvmva      1, 0, 0, 3, 0
+    /* 15498 80034C98 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
+    /* 1549C 80034C9C 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
+    /* 154A0 80034CA0 00580A48 */  mfc2       $t2, $11 /* handwritten instruction */
+    /* 154A4 80034CA4 0000C8A4 */  sh         $t0, 0x0($a2)
+    /* 154A8 80034CA8 0200C9A4 */  sh         $t1, 0x2($a2)
+    /* 154AC 80034CAC 0400CAA4 */  sh         $t2, 0x4($a2)
+    /* 154B0 80034CB0 2110C000 */  addu       $v0, $a2, $zero
+    /* 154B4 80034CB4 0800E003 */  jr         $ra
+    /* 154B8 80034CB8 00000000 */   nop
 endlabel ApplyMatrixSV

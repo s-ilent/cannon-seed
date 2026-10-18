@@ -11,14 +11,14 @@
 nonmatching ColorDpq, 0x28
 
 glabel ColorDpq
-    /* 5A818 8007A018 000089C8 */  lwc2       $9, 0x0($a0)
-    /* 5A81C 8007A01C 04008AC8 */  lwc2       $10, 0x4($a0)
-    /* 5A820 8007A020 08008BC8 */  lwc2       $11, 0x8($a0)
-    /* 5A824 8007A024 0000A6C8 */  lwc2       $6, 0x0($a1)
-    /* 5A828 8007A028 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
-    /* 5A82C 8007A02C 00000000 */  nop
-    /* 5A830 8007A030 1404284B */  cdp
-    /* 5A834 8007A034 0000F6E8 */  swc2       $22, 0x0($a3)
-    /* 5A838 8007A038 0800E003 */  jr         $ra
-    /* 5A83C 8007A03C 00000000 */   nop
+    /* 4EDA8 8006E5A8 000089C8 */  lwc2       $9, 0x0($a0)
+    /* 4EDAC 8006E5AC 04008AC8 */  lwc2       $10, 0x4($a0)
+    /* 4EDB0 8006E5B0 08008BC8 */  lwc2       $11, 0x8($a0)
+    /* 4EDB4 8006E5B4 0000A6C8 */  lwc2       $6, 0x0($a1)
+    /* 4EDB8 8006E5B8 00408648 */  mtc2       $a2, $8 /* handwritten instruction */
+    /* 4EDBC 8006E5BC 00000000 */  nop
+    /* 4EDC0 8006E5C0 1404284B */  cdp
+    /* 4EDC4 8006E5C4 0000F6E8 */  swc2       $22, 0x0($a3)
+    /* 4EDC8 8006E5C8 0800E003 */  jr         $ra
+    /* 4EDCC 8006E5CC 00000000 */   nop
 endlabel ColorDpq

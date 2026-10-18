@@ -10,13 +10,13 @@
 nonmatching _SpuDataCallback, 0x24
 
 glabel _SpuDataCallback
-    /* 66D80 80086580 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 66D84 80086584 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 66D88 80086588 21288000 */  addu       $a1, $a0, $zero
-    /* 66D8C 8008658C E37A010C */  jal        func_8005EB8C
-    /* 66D90 80086590 04000434 */   ori       $a0, $zero, 0x4
-    /* 66D94 80086594 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 66D98 80086598 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 66D9C 8008659C 0800E003 */  jr         $ra
-    /* 66DA0 800865A0 00000000 */   nop
+    /* 598F0 800790F0 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 598F4 800790F4 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 598F8 800790F8 21288000 */  addu       $a1, $a0, $zero
+    /* 598FC 800790FC E37A010C */  jal        func_8005EB8C
+    /* 59900 80079100 04000434 */   ori       $a0, $zero, 0x4
+    /* 59904 80079104 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 59908 80079108 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 5990C 8007910C 0800E003 */  jr         $ra
+    /* 59910 80079110 00000000 */   nop
 endlabel _SpuDataCallback

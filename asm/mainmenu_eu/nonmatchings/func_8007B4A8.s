@@ -10,32 +10,14 @@
 nonmatching func_8007B4A8, 0x28
 
 glabel func_8007B4A8
-    /* 5BCA8 8007B4A8 2A080D03 */  slt        $at, $t8, $t5
-    /* 5BCAC 8007B4AC 08002010 */  beqz       $at, func_8007B4D0
-    /* 5BCB0 8007B4B0 2A080E03 */   slt       $at, $t8, $t6
-    /* 5BCB4 8007B4B4 06002010 */  beqz       $at, func_8007B4D0
-    /* 5BCB8 8007B4B8 2A080F03 */   slt       $at, $t8, $t7
-    /* 5BCBC 8007B4BC 04002010 */  beqz       $at, func_8007B4D0
-    /* 5BCC0 8007B4C0 00000000 */   nop
-    /* 5BCC4 8007B4C4 21108000 */  addu       $v0, $a0, $zero
-    /* 5BCC8 8007B4C8 0800E003 */  jr         $ra
-    /* 5BCCC 8007B4CC 00000000 */   nop
+    /* 4FFD8 8006F7D8 2A080D03 */  slt        $at, $t8, $t5
+    /* 4FFDC 8006F7DC 08002010 */  beqz       $at, D_8006F800
+    /* 4FFE0 8006F7E0 2A080E03 */   slt       $at, $t8, $t6
+    /* 4FFE4 8006F7E4 06002010 */  beqz       $at, D_8006F800
+    /* 4FFE8 8006F7E8 2A080F03 */   slt       $at, $t8, $t7
+    /* 4FFEC 8006F7EC 04002010 */  beqz       $at, D_8006F800
+    /* 4FFF0 8006F7F0 00000000 */   nop
+    /* 4FFF4 8006F7F4 21108000 */  addu       $v0, $a0, $zero
+    /* 4FFF8 8006F7F8 0800E003 */  jr         $ra
+    /* 4FFFC 8006F7FC 00000000 */   nop
 endlabel func_8007B4A8
-
-nonmatching func_8007B4D0
-
-glabel func_8007B4D0
-    /* 5BCD0 8007B4D0 BE403A48 */ .word 0x483A40BE /* invalid instruction */
-    /* 5BCD4 8007B4D4 9B2B7443 */ .word 0x43742B9B /* invalid instruction */
-    /* 5BCD8 8007B4D8 C172D82A */ .word 0x2AD872C1
-    /* 5BCDC 8007B4DC EC04ACF9 */ .word 0xF9AC04EC
-    /* 5BCE0 8007B4E0 42E5D742 */ .word 0x42D7E542 /* invalid instruction */
-    /* 5BCE4 8007B4E4 06B9C054 */ .word 0x54C0B906
-    /* 5BCE8 8007B4E8 1A71F145 */ .word 0x45F1711A /* invalid instruction */
-    /* 5BCEC 8007B4EC 1DC7135A */ .word 0x5A13C71D /* invalid instruction */
-    /* 5BCF0 8007B4F0 D5CD2805 */ .word 0x0528CDD5
-    /* 5BCF4 8007B4F4 4C7BA9F4 */ .word 0xF4A97B4C
-    /* 5BCF8 8007B4F8 7307AECE */ .word 0xCEAE0773
-    /* 5BCFC 8007B4FC 1C7AECC8 */ .word 0xC8EC7A1C
-    /* 5BD00 8007B500 263B4263 */ .word 0x63423B26
-enddlabel func_8007B4D0

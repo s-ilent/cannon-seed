@@ -10,26 +10,26 @@
 nonmatching startIntrVSync, 0x58
 
 glabel startIntrVSync
-    /* 31844 80051044 E8FFBD27 */  addiu      $sp, $sp, -0x18
-    /* 31848 80051048 0980043C */  lui        $a0, %hi(intr_vb_cb_slots)
-    /* 3184C 8005104C CC7C8424 */  addiu      $a0, $a0, %lo(intr_vb_cb_slots)
-    /* 31850 80051050 0980033C */  lui        $v1, %hi(D_80097CF0)
-    /* 31854 80051054 F07C638C */  lw         $v1, %lo(D_80097CF0)($v1)
-    /* 31858 80051058 07010234 */  ori        $v0, $zero, 0x107
-    /* 3185C 8005105C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 31860 80051060 000062AC */  sw         $v0, 0x0($v1)
-    /* 31864 80051064 0980013C */  lui        $at, %hi(D_80097CEC)
-    /* 31868 80051068 EC7C20AC */  sw         $zero, %lo(D_80097CEC)($at)
-    /* 3186C 8005106C C92A010C */  jal        func_8004AB24
-    /* 31870 80051070 08000534 */   ori       $a1, $zero, 0x8
-    /* 31874 80051074 0580053C */  lui        $a1, %hi(D_8004AA7C)
-    /* 31878 80051078 7CAAA524 */  addiu      $a1, $a1, %lo(D_8004AA7C)
-    /* 3187C 8005107C 2228010C */  jal        func_8004A088
-    /* 31880 80051080 21200000 */   addu      $a0, $zero, $zero
-    /* 31884 80051084 0580023C */  lui        $v0, %hi(D_8004AAF8)
-    /* 31888 80051088 F8AA4224 */  addiu      $v0, $v0, %lo(D_8004AAF8)
-    /* 3188C 8005108C 1000BF8F */  lw         $ra, 0x10($sp)
-    /* 31890 80051090 1800BD27 */  addiu      $sp, $sp, 0x18
-    /* 31894 80051094 0800E003 */  jr         $ra
-    /* 31898 80051098 00000000 */   nop
+    /* 2B224 8004AA24 E8FFBD27 */  addiu      $sp, $sp, -0x18
+    /* 2B228 8004AA28 0980043C */  lui        $a0, %hi(D_80097CCC)
+    /* 2B22C 8004AA2C CC7C8424 */  addiu      $a0, $a0, %lo(D_80097CCC)
+    /* 2B230 8004AA30 0980033C */  lui        $v1, %hi(D_80097CF0)
+    /* 2B234 8004AA34 F07C638C */  lw         $v1, %lo(D_80097CF0)($v1)
+    /* 2B238 8004AA38 07010234 */  ori        $v0, $zero, 0x107
+    /* 2B23C 8004AA3C 1000BFAF */  sw         $ra, 0x10($sp)
+    /* 2B240 8004AA40 000062AC */  sw         $v0, 0x0($v1)
+    /* 2B244 8004AA44 0980013C */  lui        $at, %hi(D_80097CEC)
+    /* 2B248 8004AA48 EC7C20AC */  sw         $zero, %lo(D_80097CEC)($at)
+    /* 2B24C 8004AA4C C92A010C */  jal        func_8004AB24
+    /* 2B250 8004AA50 08000534 */   ori       $a1, $zero, 0x8
+    /* 2B254 8004AA54 0580053C */  lui        $a1, %hi(trapIntrVSync)
+    /* 2B258 8004AA58 7CAAA524 */  addiu      $a1, $a1, %lo(trapIntrVSync)
+    /* 2B25C 8004AA5C 2228010C */  jal        InterruptCallback
+    /* 2B260 8004AA60 21200000 */   addu      $a0, $zero, $zero
+    /* 2B264 8004AA64 0580023C */  lui        $v0, %hi(setIntrVSync)
+    /* 2B268 8004AA68 F8AA4224 */  addiu      $v0, $v0, %lo(setIntrVSync)
+    /* 2B26C 8004AA6C 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 2B270 8004AA70 1800BD27 */  addiu      $sp, $sp, 0x18
+    /* 2B274 8004AA74 0800E003 */  jr         $ra
+    /* 2B278 8004AA78 00000000 */   nop
 endlabel startIntrVSync

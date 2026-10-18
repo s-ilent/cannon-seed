@@ -10,13 +10,13 @@
 nonmatching PCopen, 0x20
 
 glabel PCopen
-    /* 2BF48 8004B748 2130A000 */  addu       $a2, $a1, $zero
-    /* 2BF4C 8004B74C 21288000 */  addu       $a1, $a0, $zero
-    /* 2BF50 8004B750 CD400000 */  break      0, 259
-    /* 2BF54 8004B754 02004010 */  beqz       $v0, .L8004B760
-    /* 2BF58 8004B758 21106000 */   addu      $v0, $v1, $zero
-    /* 2BF5C 8004B75C FFFF0224 */  addiu      $v0, $zero, -0x1
-  .L8004B760:
-    /* 2BF60 8004B760 0800E003 */  jr         $ra
-    /* 2BF64 8004B764 00000000 */   nop
+    /* 26508 80045D08 2130A000 */  addu       $a2, $a1, $zero
+    /* 2650C 80045D0C 21288000 */  addu       $a1, $a0, $zero
+    /* 26510 80045D10 CD400000 */  break      0, 259
+    /* 26514 80045D14 02004010 */  beqz       $v0, .L80045D20
+    /* 26518 80045D18 21106000 */   addu      $v0, $v1, $zero
+    /* 2651C 80045D1C FFFF0224 */  addiu      $v0, $zero, -0x1
+  .L80045D20:
+    /* 26520 80045D20 0800E003 */  jr         $ra
+    /* 26524 80045D24 00000000 */   nop
 endlabel PCopen

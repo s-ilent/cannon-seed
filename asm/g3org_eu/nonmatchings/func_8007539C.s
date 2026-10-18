@@ -10,29 +10,29 @@
 nonmatching Snd_nextpause, 0x64
 
 glabel Snd_nextpause
-    /* 55B9C 8007539C 00240400 */  sll        $a0, $a0, 16
-    /* 55BA0 800753A0 1880023C */  lui        $v0, %hi(D_8017FB1C)
-    /* 55BA4 800753A4 1CFB4224 */  addiu      $v0, $v0, %lo(D_8017FB1C)
-    /* 55BA8 800753A8 83230400 */  sra        $a0, $a0, 14
-    /* 55BAC 800753AC 21208200 */  addu       $a0, $a0, $v0
-    /* 55BB0 800753B0 002C0500 */  sll        $a1, $a1, 16
-    /* 55BB4 800753B4 032C0500 */  sra        $a1, $a1, 16
-    /* 55BB8 800753B8 40100500 */  sll        $v0, $a1, 1
-    /* 55BBC 800753BC 21104500 */  addu       $v0, $v0, $a1
-    /* 55BC0 800753C0 80100200 */  sll        $v0, $v0, 2
-    /* 55BC4 800753C4 23104500 */  subu       $v0, $v0, $a1
-    /* 55BC8 800753C8 80100200 */  sll        $v0, $v0, 2
-    /* 55BCC 800753CC 23104500 */  subu       $v0, $v0, $a1
-    /* 55BD0 800753D0 0000838C */  lw         $v1, 0x0($a0)
-    /* 55BD4 800753D4 80100200 */  sll        $v0, $v0, 2
-    /* 55BD8 800753D8 21184300 */  addu       $v1, $v0, $v1
-    /* 55BDC 800753DC 2B0060A0 */  sb         $zero, 0x2B($v1)
-    /* 55BE0 800753E0 0000838C */  lw         $v1, 0x0($a0)
-    /* 55BE4 800753E4 00000000 */  nop
-    /* 55BE8 800753E8 21104300 */  addu       $v0, $v0, $v1
-    /* 55BEC 800753EC 9000438C */  lw         $v1, 0x90($v0)
-    /* 55BF0 800753F0 FFFE0424 */  addiu      $a0, $zero, -0x101
-    /* 55BF4 800753F4 24186400 */  and        $v1, $v1, $a0
-    /* 55BF8 800753F8 0800E003 */  jr         $ra
-    /* 55BFC 800753FC 900043AC */   sw        $v1, 0x90($v0)
+    /* 4AAAC 8006A2AC 00240400 */  sll        $a0, $a0, 16
+    /* 4AAB0 8006A2B0 1880023C */  lui        $v0, %hi(D_8017FB1C)
+    /* 4AAB4 8006A2B4 1CFB4224 */  addiu      $v0, $v0, %lo(D_8017FB1C)
+    /* 4AAB8 8006A2B8 83230400 */  sra        $a0, $a0, 14
+    /* 4AABC 8006A2BC 21208200 */  addu       $a0, $a0, $v0
+    /* 4AAC0 8006A2C0 002C0500 */  sll        $a1, $a1, 16
+    /* 4AAC4 8006A2C4 032C0500 */  sra        $a1, $a1, 16
+    /* 4AAC8 8006A2C8 40100500 */  sll        $v0, $a1, 1
+    /* 4AACC 8006A2CC 21104500 */  addu       $v0, $v0, $a1
+    /* 4AAD0 8006A2D0 80100200 */  sll        $v0, $v0, 2
+    /* 4AAD4 8006A2D4 23104500 */  subu       $v0, $v0, $a1
+    /* 4AAD8 8006A2D8 80100200 */  sll        $v0, $v0, 2
+    /* 4AADC 8006A2DC 23104500 */  subu       $v0, $v0, $a1
+    /* 4AAE0 8006A2E0 0000838C */  lw         $v1, 0x0($a0)
+    /* 4AAE4 8006A2E4 80100200 */  sll        $v0, $v0, 2
+    /* 4AAE8 8006A2E8 21184300 */  addu       $v1, $v0, $v1
+    /* 4AAEC 8006A2EC 2B0060A0 */  sb         $zero, 0x2B($v1)
+    /* 4AAF0 8006A2F0 0000838C */  lw         $v1, 0x0($a0)
+    /* 4AAF4 8006A2F4 00000000 */  nop
+    /* 4AAF8 8006A2F8 21104300 */  addu       $v0, $v0, $v1
+    /* 4AAFC 8006A2FC 9000438C */  lw         $v1, 0x90($v0)
+    /* 4AB00 8006A300 FFFE0424 */  addiu      $a0, $zero, -0x101
+    /* 4AB04 8006A304 24186400 */  and        $v1, $v1, $a0
+    /* 4AB08 8006A308 0800E003 */  jr         $ra
+    /* 4AB0C 8006A30C 900043AC */   sw        $v1, 0x90($v0)
 endlabel Snd_nextpause

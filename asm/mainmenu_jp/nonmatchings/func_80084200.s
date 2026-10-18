@@ -10,8 +10,8 @@
 nonmatching DeliverEvent, 0xC
 
 glabel DeliverEvent
-    /* 64A00 80084200 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 64A04 80084204 08004001 */  jr         $t2
-    /* 64A08 80084208 07000924 */   addiu     $t1, $zero, 0x7
+    /* 57A30 80077230 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 57A34 80077234 08004001 */  jr         $t2
+    /* 57A38 80077238 07000924 */   addiu     $t1, $zero, 0x7
 endlabel DeliverEvent
-    /* 64A0C 8008420C 00000000 */  nop
+    /* 57A3C 8007723C 00000000 */  nop

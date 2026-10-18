@@ -11,81 +11,78 @@
 nonmatching func_8007EFDC, 0x54
 
 glabel func_8007EFDC
-    /* 5F7DC 8007EFDC 00000000 */  nop
-    /* 5F7E0 8007EFE0 55010824 */  addiu      $t0, $zero, 0x155
-    /* 5F7E4 8007EFE4 00E8C848 */  ctc2       $t0, $29 /* handwritten instruction */
-    /* 5F7E8 8007EFE8 00000000 */  nop
-    /* 5F7EC 8007EFEC 00010824 */  addiu      $t0, $zero, 0x100
-    /* 5F7F0 8007EFF0 00F0C848 */  ctc2       $t0, $30 /* handwritten instruction */
-    /* 5F7F4 8007EFF4 00000000 */  nop
-    /* 5F7F8 8007EFF8 E8030824 */  addiu      $t0, $zero, 0x3E8
-    /* 5F7FC 8007EFFC 00D0C848 */  ctc2       $t0, $26 /* handwritten instruction */
-    /* 5F800 8007F000 00000000 */  nop
-    /* 5F804 8007F004 9EEF0824 */  addiu      $t0, $zero, -0x1062
-    /* 5F808 8007F008 00D8C848 */  ctc2       $t0, $27 /* handwritten instruction */
-    /* 5F80C 8007F00C 00000000 */  nop
-    /* 5F810 8007F010 4001083C */  lui        $t0, (0x1400000 >> 16)
-    /* 5F814 8007F014 00E0C848 */  ctc2       $t0, $28 /* handwritten instruction */
-    /* 5F818 8007F018 00000000 */  nop
-    /* 5F81C 8007F01C 00C0C048 */  ctc2       $zero, $24 /* handwritten instruction */
-    /* 5F820 8007F020 00C8C048 */  ctc2       $zero, $25 /* handwritten instruction */
-    /* 5F824 8007F024 00000000 */  nop
-    /* 5F828 8007F028 0800E003 */  jr         $ra
-    /* 5F82C 8007F02C 00000000 */   nop
+    /* 532BC 80072ABC 00000000 */  nop
+    /* 532C0 80072AC0 55010824 */  addiu      $t0, $zero, 0x155
+    /* 532C4 80072AC4 00E8C848 */  ctc2       $t0, $29 /* handwritten instruction */
+    /* 532C8 80072AC8 00000000 */  nop
+    /* 532CC 80072ACC 00010824 */  addiu      $t0, $zero, 0x100
+    /* 532D0 80072AD0 00F0C848 */  ctc2       $t0, $30 /* handwritten instruction */
+    /* 532D4 80072AD4 00000000 */  nop
+    /* 532D8 80072AD8 E8030824 */  addiu      $t0, $zero, 0x3E8
+    /* 532DC 80072ADC 00D0C848 */  ctc2       $t0, $26 /* handwritten instruction */
+    /* 532E0 80072AE0 00000000 */  nop
+    /* 532E4 80072AE4 9EEF0824 */  addiu      $t0, $zero, -0x1062
+    /* 532E8 80072AE8 00D8C848 */  ctc2       $t0, $27 /* handwritten instruction */
+    /* 532EC 80072AEC 00000000 */  nop
+    /* 532F0 80072AF0 4001083C */  lui        $t0, (0x1400000 >> 16)
+    /* 532F4 80072AF4 00E0C848 */  ctc2       $t0, $28 /* handwritten instruction */
+    /* 532F8 80072AF8 00000000 */  nop
+    /* 532FC 80072AFC 00C0C048 */  ctc2       $zero, $24 /* handwritten instruction */
+    /* 53300 80072B00 00C8C048 */  ctc2       $zero, $25 /* handwritten instruction */
+    /* 53304 80072B04 00000000 */  nop
+    /* 53308 80072B08 0800E003 */  jr         $ra
+    /* 5330C 80072B0C 00000000 */   nop
 endlabel func_8007EFDC
 
-nonmatching func_8007F030, 0x30
+nonmatching func_80072B10, 0x68
 
-glabel func_8007F030
-    /* 5F830 8007F030 0D80013C */  lui        $at, %hi(D_800C9D48)
-    /* 5F834 8007F034 489D3FAC */  sw         $ra, %lo(D_800C9D48)($at)
-    /* 5F838 8007F038 367E010C */  jal        func_8005F8D8
-    /* 5F83C 8007F03C 00000000 */   nop
-    /* 5F840 8007F040 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 5F844 8007F044 09F84001 */  jalr       $t2
-    /* 5F848 8007F048 56000924 */   addiu     $t1, $zero, 0x56
-    /* 5F84C 8007F04C 07800A3C */  lui        $t2, %hi(D_80072B78)
-    /* 5F850 8007F050 0780093C */  lui        $t1, %hi(func_80072BB0)
-    /* 5F854 8007F054 1800428C */  lw         $v0, 0x18($v0)
-    /* 5F858 8007F058 782B4A25 */  addiu      $t2, $t2, %lo(D_80072B78)
-    /* 5F85C 8007F05C B02B2925 */  addiu      $t1, $t1, %lo(func_80072BB0)
-endlabel func_8007F030
-
-nonmatching func_8007F060, 0x38
-
-glabel func_8007F060
-    /* 5F860 8007F060 0000438D */  lw         $v1, 0x0($t2)
-    /* 5F864 8007F064 04004A25 */  addiu      $t2, $t2, 0x4
-    /* 5F868 8007F068 04004224 */  addiu      $v0, $v0, 0x4
-    /* 5F86C 8007F06C FCFF4915 */  bne        $t2, $t1, func_8007F060
-    /* 5F870 8007F070 FCFF43AC */   sw        $v1, -0x4($v0)
-    /* 5F874 8007F074 ECCA010C */  jal        func_80072BB0
-    /* 5F878 8007F078 00000000 */   nop
-    /* 5F87C 8007F07C 827E010C */  jal        func_8005FA08
-    /* 5F880 8007F080 00000000 */   nop
-    /* 5F884 8007F084 0D801F3C */  lui        $ra, %hi(D_800C9D48)
-    /* 5F888 8007F088 489DFF8F */  lw         $ra, %lo(D_800C9D48)($ra)
-    /* 5F88C 8007F08C 00000000 */  nop
-    /* 5F890 8007F090 0800E003 */  jr         $ra
-    /* 5F894 8007F094 00000000 */   nop
-endlabel func_8007F060
+glabel func_80072B10
+    /* 53310 80072B10 0D80013C */  lui        $at, %hi(D_800C9D48)
+    /* 53314 80072B14 489D3FAC */  sw         $ra, %lo(D_800C9D48)($at)
+    /* 53318 80072B18 367E010C */  jal        func_8005F8D8
+    /* 5331C 80072B1C 00000000 */   nop
+    /* 53320 80072B20 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 53324 80072B24 09F84001 */  jalr       $t2
+    /* 53328 80072B28 56000924 */   addiu     $t1, $zero, 0x56
+    /* 5332C 80072B2C 07800A3C */  lui        $t2, %hi(D_80072B78)
+    /* 53330 80072B30 0780093C */  lui        $t1, %hi(FlushCache)
+    /* 53334 80072B34 1800428C */  lw         $v0, 0x18($v0)
+    /* 53338 80072B38 782B4A25 */  addiu      $t2, $t2, %lo(D_80072B78)
+    /* 5333C 80072B3C B02B2925 */  addiu      $t1, $t1, %lo(FlushCache)
+  .L80072B40:
+    /* 53340 80072B40 0000438D */  lw         $v1, 0x0($t2)
+    /* 53344 80072B44 04004A25 */  addiu      $t2, $t2, 0x4
+    /* 53348 80072B48 04004224 */  addiu      $v0, $v0, 0x4
+    /* 5334C 80072B4C FCFF4915 */  bne        $t2, $t1, .L80072B40
+    /* 53350 80072B50 FCFF43AC */   sw        $v1, -0x4($v0)
+    /* 53354 80072B54 ECCA010C */  jal        FlushCache
+    /* 53358 80072B58 00000000 */   nop
+    /* 5335C 80072B5C 827E010C */  jal        func_8005FA08
+    /* 53360 80072B60 00000000 */   nop
+    /* 53364 80072B64 0D801F3C */  lui        $ra, %hi(D_800C9D48)
+    /* 53368 80072B68 489DFF8F */  lw         $ra, %lo(D_800C9D48)($ra)
+    /* 5336C 80072B6C 00000000 */  nop
+    /* 53370 80072B70 0800E003 */  jr         $ra
+    /* 53374 80072B74 00000000 */   nop
+endlabel func_80072B10
+  alabel D_80072B78
+    /* 53378 80072B78 00000000 */  nop
+    /* 5337C 80072B7C 00000000 */  nop
 
 /* Handwritten function */
-nonmatching func_8007F098, 0x34
+nonmatching func_80072B80, 0x2C
 
-glabel func_8007F098
-    /* 5F898 8007F098 00000000 */  nop
-    /* 5F89C 8007F09C 00000000 */  nop
-    /* 5F8A0 8007F0A0 00011A24 */  addiu      $k0, $zero, 0x100 /* handwritten instruction */
-    /* 5F8A4 8007F0A4 08005A8F */  lw         $k0, 0x8($k0) /* handwritten instruction */
-    /* 5F8A8 8007F0A8 00000000 */  nop
-    /* 5F8AC 8007F0AC 00005A8F */  lw         $k0, 0x0($k0) /* handwritten instruction */
-    /* 5F8B0 8007F0B0 00000000 */  nop
-    /* 5F8B4 8007F0B4 08005A23 */  addi       $k0, $k0, 0x8 /* handwritten instruction */
-    /* 5F8B8 8007F0B8 040041AF */  sw         $at, 0x4($k0) /* handwritten instruction */
-    /* 5F8BC 8007F0BC 080042AF */  sw         $v0, 0x8($k0) /* handwritten instruction */
-    /* 5F8C0 8007F0C0 0C0043AF */  sw         $v1, 0xC($k0) /* handwritten instruction */
-    /* 5F8C4 8007F0C4 7C005FAF */  sw         $ra, 0x7C($k0) /* handwritten instruction */
-    /* 5F8C8 8007F0C8 00680240 */  mfc0       $v0, $13 /* handwritten instruction */
-endlabel func_8007F098
-    /* 5F8CC 8007F0CC 00000000 */  nop
+glabel func_80072B80
+    /* 53380 80072B80 00011A24 */  addiu      $k0, $zero, 0x100 /* handwritten instruction */
+    /* 53384 80072B84 08005A8F */  lw         $k0, 0x8($k0) /* handwritten instruction */
+    /* 53388 80072B88 00000000 */  nop
+    /* 5338C 80072B8C 00005A8F */  lw         $k0, 0x0($k0) /* handwritten instruction */
+    /* 53390 80072B90 00000000 */  nop
+    /* 53394 80072B94 08005A23 */  addi       $k0, $k0, 0x8 /* handwritten instruction */
+    /* 53398 80072B98 040041AF */  sw         $at, 0x4($k0) /* handwritten instruction */
+    /* 5339C 80072B9C 080042AF */  sw         $v0, 0x8($k0) /* handwritten instruction */
+    /* 533A0 80072BA0 0C0043AF */  sw         $v1, 0xC($k0) /* handwritten instruction */
+    /* 533A4 80072BA4 7C005FAF */  sw         $ra, 0x7C($k0) /* handwritten instruction */
+    /* 533A8 80072BA8 00680240 */  mfc0       $v0, $13 /* handwritten instruction */
+endlabel func_80072B80
+    /* 533AC 80072BAC 00000000 */  nop

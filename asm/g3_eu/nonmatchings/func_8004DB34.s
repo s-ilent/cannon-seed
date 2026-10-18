@@ -10,8 +10,8 @@
 nonmatching memset, 0xC
 
 glabel memset
-    /* 2E334 8004DB34 A0000A24 */  addiu      $t2, $zero, 0xA0
-    /* 2E338 8004DB38 08004001 */  jr         $t2
-    /* 2E33C 8004DB3C 2B000924 */   addiu     $t1, $zero, 0x2B
+    /* 28434 80047C34 A0000A24 */  addiu      $t2, $zero, 0xA0
+    /* 28438 80047C38 08004001 */  jr         $t2
+    /* 2843C 80047C3C 2B000924 */   addiu     $t1, $zero, 0x2B
 endlabel memset
-    /* 2E340 8004DB40 00000000 */  nop
+    /* 28440 80047C40 00000000 */  nop

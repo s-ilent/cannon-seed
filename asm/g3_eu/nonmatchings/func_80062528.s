@@ -11,8 +11,8 @@
 nonmatching AverageSZ4, 0x10
 
 glabel AverageSZ4
-    /* 42D28 80062528 2E00684B */  avsz4
-    /* 42D2C 8006252C 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
-    /* 42D30 80062530 0800E003 */  jr         $ra
-    /* 42D34 80062534 00000000 */   nop
+    /* 3A368 80059B68 2E00684B */  avsz4
+    /* 3A36C 80059B6C 00380248 */  mfc2       $v0, $7 /* handwritten instruction */
+    /* 3A370 80059B70 0800E003 */  jr         $ra
+    /* 3A374 80059B74 00000000 */   nop
 endlabel AverageSZ4

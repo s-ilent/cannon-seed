@@ -10,8 +10,8 @@
 nonmatching close, 0xC
 
 glabel close
-    /* 2E9E8 8004E1E8 B0000A24 */  addiu      $t2, $zero, 0xB0
-    /* 2E9EC 8004E1EC 08004001 */  jr         $t2
-    /* 2E9F0 8004E1F0 36000924 */   addiu     $t1, $zero, 0x36
+    /* 289B8 800481B8 B0000A24 */  addiu      $t2, $zero, 0xB0
+    /* 289BC 800481BC 08004001 */  jr         $t2
+    /* 289C0 800481C0 36000924 */   addiu     $t1, $zero, 0x36
 endlabel close
-    /* 2E9F4 8004E1F4 00000000 */  nop
+    /* 289C4 800481C4 00000000 */  nop
