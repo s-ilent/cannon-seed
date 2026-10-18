@@ -8360,3 +8360,17 @@ Next queue:
    rollback, CDN links expire ~2026-10-19 09:54 UTC).
 3. set/get_player_info case-map re-derivation (queue item of -1719).
 4. GsMapModelingData stays the matching lane's.
+
+   1a. Independent-rehearsal addendum (the review lane, same day): reached the
+   symbol layer from the XRef direction - tools/xref_census.py landed (lui+lo,
+   data-word, gp_rel channels); its gp channel reproduces the banked .sdata
+   window (slps first datum 0x80066330 = true gp + 4), an independent
+   cross-check of the slot-map fix. One finding the staging has not met yet:
+   AFTER extract x8, the second-pass link fails with R_MIPS_PC16 truncation on
+   promoted cross-file .L labels - witnessed bne at true 0x80027188 targeting
+   .L80027248 defined 0xC0 away in SpuVmDamperOn's row, which cannot truncate,
+   so the resolved symbol is not the positional one; ld also warns "section
+   .o_00005710 lma 0x5710 adjusted to 0x5714" (a gen_ld LMA conflict after the
+   framing rows dropped). Check gen_ld overlaps before/with the extract x8
+   step.
+
