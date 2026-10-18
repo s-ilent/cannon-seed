@@ -8239,7 +8239,17 @@ Next queue:
    against both.
 3. The boots' .sdata window witness (gp = 0x8006632C slps / 0x80065FC4
    sces; name global = the first datum) and the SE.VH/SE.VB diff; the
-   runtime-provisioned region needs the de-frame transition or a runtime
-   trace - coordination-gated like the BIG item.
-4. GsMapModelingData stays the matching lane's; BIG de-frame
-   coordination-gated.
+   runtime-provisioned region needs the de-frame transition (see item 5) or a
+   runtime trace.
+4. GsMapModelingData stays the matching lane's.
+5. BIG DE-FRAME: AUTHORIZED by the owner 2026-10-18; prep COMPLETE
+   (tools/deframe_migrate.py, validated on all 8: migrated yamls all
+   splat-split clean, byte spot checks and doc-banked anchors reproduce; no
+   compiled-C row contains framing on any target, so matched content is
+   migration-safe). FLIP IS BLOCKED ON ONE INPUT: the disc CHDs - local
+   baselines are short by their tails, so deframe.py --payload cannot reach
+   the banked true-EXE SHA-1s. Flip checklist when discs land: full true
+   baselines + witness check 8/8 -> deframe_migrate.py -> re-derive
+   woven-space symbol names, re-author curated entries, gp_value flip (slps
+   0x8006322C -> 0x8006632C) -> make extract -> deliberate oracle re-baseline
+   (one --no-verify commit) -> make verify 8/8 true -> judge sweep.
