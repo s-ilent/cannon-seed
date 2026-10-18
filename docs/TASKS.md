@@ -8434,3 +8434,97 @@ Next queue:
    confirm inert or re-label.
 4. Post-flip: ratchets re-baseline decision belongs to the lane owner;
    the GSD round-5 adopt/reject still stands.
+
+## 2026-10-19 (window cron-20261018-2219): the true baselines are re-witnessed 8/8 after the rollback and the flip's decisive gate opens with a NAMED link-layer class - the woven-name/true-position collision (slps_00270: 8 exact instances, the audit tool banked)
+
+Resumed per the 2104 queue's first gate. HEAD was de0b0d68 (reset forward
+past an eighth rollback that ate the worklog's post-cron-20261014-2112
+sections - restored from thread records + TASKS.md, see the worklog
+restore note; baselines/ survived with the WOVEN files, disk/*.chd eaten,
+.secrets survived).
+
+BASELINE RE-WITNESS (prerequisite for the gate): both CHDs re-fetched from
+the still-valid CDN links (EU 382613010 / JP 382607234 B, both sha256
+equal to the recorded values), raw images extracted (JP 629,169,408 B /
+EU 629,169,408-span writes), and all 8 EXEs re-extracted --per-sector into
+baselines/. All 8 sha1s equal the flip's committed true-baseline oracles
+byte-for-byte (slps fa9474b4..., sces 06b4bda6..., mainmenu_jp d637286a...,
+mainmenu_eu f9f29eeb..., g3_jp 994a680c..., g3_eu 39030a75...,
+g3org_jp 2b2a4225..., g3org_eu 01b37b4e...). The disc witness reproduces
+exactly from a cold sandbox; the true baselines are regenerable on demand.
+(One exec-bit flip on tools/*.sh was repaired en route - rehydrate's
+re-mark list missed cc.sh.)
+
+THE DECISIVE GATE'S FIRST RUN: make verify TARGET=slps_00270 gets through
+sha (true baseline accepted), extract (splat split clean), the C compile
+(func_80025AE0.c), and assembles 304 objects 0-failed, then FAILS at
+link: `multiple definition of 'func_800445BC'` - build/asm/nonmatchings/
+func_800445BC.s.o(.r_000201BC, VMA 0x8003F9BC per gen.ld) first-defined,
+build/asm/nonmatchings/data/data_80049C6C.data.s.o(.r_00024DBC, VMA
+0x800445BC) duplicate.
+
+THE CLASS, NAMED (mechanism evidence-banked): the flip moved every row to
+its TRUE file offset while the row names keep their woven-era spelling
+(the yaml header says both explicitly). splat exports each asm row's name
+as a glabel at the row's true VMA; spimdisasm additionally emits a dlabel
+for every context symbol inside a row's span, and the context symbols
+include auto-created entries from the retail bytes' own jal/j/branch
+encodings (TRUE runtime addresses) plus the identity-true symbols-file
+entries passed through verbatim. In the woven view row name == row
+position, so the row label and the context symbol at the same address
+merged into one definition. In the true view, a row whose woven-era name
+encodes an address that now falls inside a DIFFERENT row's span gets its
+name emitted TWICE at two VMAs: the row's glabel and the owning row's
+dlabel -> ld multiple definition. The instance: the func row named
+func_800445BC sits at true VMA 0x8003F9BC (0x201BC, drift 0x4C00 = exactly
+64 sectors x 304), and its name-encoded 0x800445BC is the start of data
+row data_80049C6C (0x24DBC) - whose dlabel list is otherwise exactly the
+seven identity-true "(branch target)" entries in [0x800445BC,0x80044884)
+(func_800445D0/650/668/738/7B0/800/804) plus the colliding auto-symbol.
+The data row's own name appears NOWHERE in its own .s (data rows export
+only the dlabels placed inside them).
+
+CENSUS (scripts/audit_flip_clashes.py, post-extract, persisted
+repo-external): slps_00270 has EXACTLY 8 clashes - func_800445BC (the one
+ld hit) + 7 latent (func_80025F20 -> inside data_80026524,
+func_80027858/func_800281DC -> inside data_80028428, func_8002BC38 ->
+inside data_8002D3F4, func_800310F8 -> inside data_80032F4C,
+func_800328B0 -> inside data_80035278, func_80040C40 -> inside
+data_8004557C). The link will trip them one at a time. A static yaml-side
+census (scripts/census_flip_dupe.py) over-counts (301) because it counts
+every drifted row whose encoded address lands in the tiling neighbour -
+only names that are BOTH exported by their row AND placed by a context
+symbol inside another row clash; the post-extract audit is the precise
+instrument.
+
+SECOND OBSERVATION (non-fatal, distinct class): extract on the other
+targets logs "Unable to determine a segment for the following
+user-declared symbols" - e.g. mainmenu_jp's _svm_stereo_mono (0x8018DA40)
+and PSDIDX (0x80194E34), beyond-payload psyq statics whose entries are
+BYTE-IDENTICAL pre- and post-flip (added at fbc0f261, the LIBSND pair
+window) and that the woven pipeline placed without complaint. splat's
+segment_manager wants `absolute:True` (or a segment) for symbols outside
+every segment's vram range; extract exits 0 regardless. Needs the
+woven-era placement mechanism identified before deciding whether the fix
+is an annotation or a flip_reauthor passthrough class.
+
+FIX DIRECTION (lane owner's call): the yaml header pre-announces the
+phase that resolves this class - "The transition must re-derive the
+woven-space names (re-scan on the true baseline)". The 8 slps instances
+enumerate exactly the rows whose names the re-scan re-derives first. An
+interim unblock could rename the 8 rows to their true VAs (e.g.
+func_800445BC -> func_8003F9BC), but that ripples into the symbols file,
+C file names and build refs, so it is the flip lane's adjudication, not a
+drive-by.
+
+Next queue:
+1. Per-target clash audits for the remaining 7 targets (extract each,
+   then the audit script) - the full re-scan work order.
+2. The re-scan/re-derivation of the woven-space names on the true
+   baselines (the yaml header's own next phase), starting from the 8
+   slps instances.
+3. The psyq beyond-payload statics question (_svm_stereo_mono/PSDIDX):
+   how did the woven pipeline place them; absolute:True vs a passthrough
+   class.
+4. make verify 8/8 true remains the gate once the name layer settles;
+   audit_sizes + the judge sweep stand behind it.
