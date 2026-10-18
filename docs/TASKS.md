@@ -6877,3 +6877,85 @@ Next queue:
    and re-emit the curated/sdk notes that cited the conflict.
 4. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/trapIntr);
    BIG de-frame coordination-gated; runtime gate-family blocked.
+
+## 2026-10-18 (window cron-20261018-0204): pad-install's helper is identified -
+## 0x8002ead0 is a 0x30-byte indirect dispatcher over psyq libetc's intr.c
+## control struct (cell 0x8004e324 -> table 0x8004e304, headed by the RCS string
+## "$Id: intr.c,v 1.71 1995/08/29 11:01:44 suzu Exp $"), member [0xc] = the
+## interrupt-manager reset/init entry; sces carries the same family one libetc
+## revision later (v1.73) at its own addresses with exactly one fewer caller -
+## the pad-install site - and the pad cluster closes
+
+Method: both boots re-extracted per-sector TRUE from the sha256-exact CHDs
+(disc_work/; head-sector decode - the boots sit at LBA 24, so 500 sectors cover
+them; scripts repo-external: head_sectors.py, pad_helper_hunt.py,
+pad_table_hunt2.py, pad_worker_hunt.py, pad_close_verify.py). Boots' EXE
+headers: t_addr 0x80020000, t_size 0x46800, entry 0x8002db14, both regions.
+
+- THE CALLEE: 0x8002ead0 is NOT a worker - it is a 0x30-byte dispatcher:
+  {lui $v0,0x8005; lw $v0,-0x1cdc($v0); sp frame; lw $v0,0xc($v0); jalr $v0;
+  epilogue} over the static cell 0x8004e324. The cell is initialized IN THE
+  FILE to 0x8004e304 - a member table whose [0x0] is the string pointer
+  "$Id: intr.c,v 1.71 1995/08/29 11:01:44 suzu Exp $" - psyq libetc's intr.c
+  control struct. (Earlier "cell is zero / no accessors" readings were an
+  arithmetic slip: lui 0x8005 + lw -0x1cdc resolves to 0x8004e324, not 0x8004d324.)
+- THE STRUCT (slps): [0x0] intr.c RCS id string ptr; [0x4] 0 (runtime-filled);
+  [0x8] 0x8002ef2c; [0xc] 0x8002ec68; [0x10] 0x8002f080; [0x14] 0
+  (runtime-filled); [0x18] 0x8002f130; [0x1c] 0x8004d29c; then the cell
+  0x8004e324 and the HW cells {0x1f801070 I_STAT, 0x1f801074 I_MASK,
+  0x1f8010f0 DICR, 0, 0x1f8010f4}. Trampoline family over the same cell:
+  members 0x4/0x8/0xc/0x10/0x14 (two shapes)/0x18 at 0x8002eb30 / 0x8002eb00 /
+  0x8002ead0 / 0x8002ebc4 / 0x8002eb64+0x8002eb94 / 0x8002ebf4.
+- MEMBER [0xc] = 0x8002ec68 IS THE FUNCTION (interrupt-manager reset/init):
+  gated by lhu 0x8004d29c (already-initialized flag); zeroes 0x41a words
+  (0x1068 bytes = the whole callback pool 0x8004d29c..0x8004e304) via the
+  local u32-memclr 0x8002f1b8; acks (u16)I_STAT = (u16)I_MASK; writes
+  0x33333333 to DICR; probes BIOS A0#0x13 (no args; non-zero return gates the
+  default-handler install); on that path 0x8002ed44 registers the default
+  handler whose strings are "unexpected interrupt(%04x)" (0x80020b2c) and
+  "intr timeout(%04x:%04x)" (0x80020b48) - the intr.c identity is
+  string-backed, not inferred; wires the node list (0x8004d2d4 ->
+  0x8004e2b4), sets the flag, then RUNTIME-FILLS the two empty members:
+  table[0x14] = 0x8002f1f4(), table[0x4] = 0x8002f9dc() (A0#0x72 thunk) -
+  which is why the file image carries zeros there - and ends with the
+  B0#0x19 HookEntryInt thunk 0x8002f8fc on its own node. Returns 0x8004d29c.
+- CALLERS: 8 in slps (0x8002223c, 0x8002f4bc, 0x8002fa58, 0x80037bd0,
+  0x8003a5b4, 0x8003a634, 0x8003cf40, 0x80043570); pad-install 0x8002f4bc is
+  one of them and preserves a0 into the call. Pad-install's sequence now
+  decodes completely: store arg to 0x80115300 -> seed hook cell 0x800d282c
+  to -1 -> RESET THE INTERRUPT MANAGER ([0xc]) -> PAD_init(0x20000001,
+  &0x800d282c) -> ChangeClearPAD(0) - the standard psyq pad dance with the
+  intr reset before the hook install.
+- THE SCES ANALOG EXISTS: the family sits one object-shift lower (sces [0xc]
+  dispatcher 0x8002e69c, worker 0x8002e834, cell 0x8004dfac -> table
+  0x8004df8c) and its table[0x0] string is "$Id: intr.c,v 1.73 1995/11/10
+  05:29:40 suzu Exp $" - a NEWER libetc revision than slps's v1.71.
+  Normalized instruction streams of the two workers match 50/50 modulo
+  shifted immediates; the two [0xc] dispatchers are shape-identical. sces
+  callers of its [0xc]: 7 (0x80022334, 0x8002f554, 0x80037698, 0x8003a22c,
+  0x8003a2d8, 0x8003cd34, 0x80043584) - exactly slps's 8 minus the
+  pad-install call, in 1:1 order. The census's one-stub diff (PAD_init
+  slps-only) therefore remains the ONLY pad-relevant diff between the boots;
+  the intr machinery itself is common.
+- BIOS ordinals left unnamed (no psyq-name evidence; semantics banked):
+  A0#0x13 (intr-init probe, no args, non-zero => install default handlers),
+  A0#0x71 (kernel-group slot), A0#0x72 (source of table[0x4]). psyq's
+  LIBAPI.LIB objects do not carry the boot-side 16-byte thunk pattern, so a
+  stub-grep cannot name them.
+- THE PAD CLUSTER IS CLOSED: pad-install (0x8002f49c), hook-reader
+  (0x8002f4fc), hook cell (0x800d282c), PAD_init thunk (0x8002f91c), the
+  gate-checked PAD_dr poll, the ChangeClearPAD VSync/int machinery, and now
+  the helper - every member of the slps-only pad path has an identity, and
+  every one of them is absent or dead in sces, matching the sces boot's
+  no-pad-init answer.
+
+Next queue:
+1. (carried) The 0x80010000 config-area ownership question.
+2. sdk lane: A0#0x3F = printf is now SDK-attested - close the strcpy pin
+   re-review and re-emit the curated/sdk notes that cited the conflict.
+3. Lanes stay theirs (matching clusters, GSD round-5, setIntr/startIntr/
+   trapIntr); BIG de-frame coordination-gated; runtime gate-family blocked.
+4. Footnote: the intr family's remaining members ([0x8] 0x8002ef2c indexed
+   setter, [0x10] 0x8002f080 and [0x18] 0x8002f130 flag-gated pair, and the
+   runtime-installed [0x4]/[0x14] handlers) are one decode away each if a
+   future window wants the rest of the family named.
