@@ -7674,3 +7674,110 @@ Next queue:
    same true-view treatment applies when its turn comes.
 4. GsMapModelingData stays the matching lane's; disc re-provision follow-ups
    wait on the fresh CDN links (requested in #dragoon).
+
+## 2026-10-18 (window cron-20261018-1204): slps_00270's live re-scan converges
+## the symbols contract but structurally refuses the pre-builder cluster walk -
+## no anchor lands on cluster code, the cluster is pocket-split in carve space,
+## the sces walk is banked as collidental, and the func_80025AB0 ghost closes as
+## load-bearing with its true identity mapped
+
+Queue item 2 (the 1049 window's next queue): run slps_00270's live scan/extract
+and expect the walk to reproduce the sces finding at -0x28. Sandbox rollback
+pre-window: repo back to 7623cd2, worklog tail lost past cron-20261014-2112
+(TASKS.md remains the authoritative history), disk/ + disc_work eaten again.
+Recovered 7623cd2 -> 19112515 (fetch + reset; origin had not moved beyond the
+1049 window's own push). Disc status: both CHDs missing AND the 2026-10-17 CDN
+links expired (~09:54 UTC) - the standing rule's both-conditions-met case, now
+the second window running - a fresh-link re-request went to Silent in #dragoon
+at window start (the 1049 request unanswered as of window end). Baselines
+survived; the window runs repo-side only, and every map number below is
+deframe-mapped from the committed baselines, not from disc extracts.
+
+THE PREDICTION FAILS, AND THE MECHANISM IS STRUCTURAL (three measurements, all
+on the baseline):
+
+1. NO ANCHOR LANDS ON THE CLUSTER. A whole-payload jal census finds 18 jal
+   words encoding carve targets inside the free region
+   [0x8002376C..0x80024430) - 15 are TRUE-address encodings of family members
+   (builder 0x80023AB0 x1, setter 0x80023D98 x3, getter 0x8002414C x5, writer
+   0x800242E0 x4, reader 0x80024424 x2 - the 0819 mapped table exactly), three
+   are encodings with sources in data rows or the free region itself (targets
+   0x80023938/0x80023988/0x80023A18). The getter-true encodings are what
+   seeded sces's walk - but the deframe map sends carve 0x8002414C to
+   FRAMING/HEADER in slps (in sces the same-numbered carve position held the
+   pocket head immediately before its cluster): the slps walk seeds inside a
+   framing pocket, eats two bad words, dies. The writer/reader-true encodings
+   decode inside or at the edge of the builder pin (0x800242E0 -> carve file
+   0x4AE0 = pin interior, seed refused; 0x80024424 -> file 0x4C24 = a 0xC
+   sliver the pin barrier closes). Zero seeds remain on cluster code.
+2. THE CLUSTER IS POCKET-SPLIT IN CARVE SPACE. Deframe map: runtime
+   0x800237D8 (true cluster head) -> carve 0x80024028; runtime 0x80023800 ->
+   carve 0x80024180. A 0x130 framing pocket (EDC/ECC tail, ff patterns, the
+   MODE2 subheader words 00 00 08 00 x2 at file 0x4978/0x497C) sits between
+   the cluster's first 0x28 true bytes and its remaining 0x2B0 - carve
+   [0x80024028..0x80024050) + pocket + carve [0x80024180..0x80024430).
+   sces's cluster is pocket-free interior with the pocket at its head; slps's
+   is split - the exact condition 0819 banked as de-frame territory when it
+   left the setter dispatcher as data. The sces walk row's shape (0xC pocket
+   head, then contiguous code to the pin) has no slps counterpart.
+3. ANY WALK CROSSING THE REGION DIES ON KILLER WORDS. The widest walk (a v3
+   prologue-rescue run seeded at carve 0x80023904) swept
+   [0x80023904..0x80024430) (0xB2C) and closed exactly at the builder pin -
+   the pin-boundary closure mechanism works - but v3d rejected the range:
+   jal -> 0x87F15AAC at carve 0x800240BC (file 0x48BC) and j -> 0x81B9A72C at
+   carve 0x800240D4 (file 0x48D4). Both killers sit in the drifted head span
+   that sces covers with other rows (func_8002392C / data_80023840) - slps's
+   free region is 0xCC4 against sces's 0xF4, and the killers live in the
+   extra span.
+
+CONCLUSION: the region-pair asymmetry is structural, not an omission. sces's
+walk was collidental - its getter-true anchor numerically landed on real code.
+slps has no such collision and cannot have one: its cluster pieces are
+pocket-split, anchor-blind, and killer-guarded. slps's pre-builder cluster
+joins the setter dispatcher in the de-frame-territory set; the carve
+prerequisite for the family's C candidates remains the four pinned islands +
+shrunk getter row (2be1f211), which is complete on both boots. The 1049 queue
+prediction is answered in the negative with the mechanism named.
+
+THE CONVERGENCE THAT DID LAND (writer contract, sces precedent): the live
+re-scan normalized the yaml extent comments to the writer's lowercase form and
+applied 0211cde's annotation contract to slps's symbols file - 26 "(pinned
+member row)" suffixes stripped to plain type:func (the 17 GTE SetXxx names,
+GPU_cw, ReturnFromException and 7 more), 20 walk-era "(branch target)" ghosts
+released (19 inside the old inflated getter row's span - func_80024C24 and the
+func_80024D64..func_80025290 series, bytes the 2be1f211 pins re-owned; plus
+func_8003FC84 elsewhere; sces released 13 of the same class), and the getter
+row's func_80024BFC symbol removed (sces's getter func_80024C24 carries none
+either; pinned rows label from their row names).
+
+THE func_80025AB0 GHOST CLOSES AS LOAD-BEARING (0819's cleanup item, resolved
+by measurement): the regeneration does NOT drop func_80025AB0, and it must not
+- the symbol names a real branch target inside func_80025480's covered row
+(bne a0,v0 at carve 0x80025A84 / file 0x6284 -> carve 0x80025AB0 / file
+0x62B0, defined there as a 0x18 nonmatching island with the bne resolving to
+it). 0819's "names pocket-B framing bytes" diagnosis conflated carve
+0x80025AB0 with pocket-B's file offset 0x5AB0; the deframe map gives the
+island's true identity (runtime 0x80024ED0, the bne at 0x80024EA4 - a
+consistent true-view branch pair in the region beyond the B-tail member). The
+carve name is a drift name carrying a load-bearing reference; the
+row-collision lesson (no data row at file 0x5AB0) was the real fix and is
+already applied. The 0819 flag text is superseded by this measurement.
+
+Gates: make verify slps_00270 GREEN (290,816 bytes exact, pc0 0x8002DB14)
+after the symbols convergence; back-to-back scan idempotent (identical
+diffstat both runs); only slps_00270 config touched - the other seven targets'
+inputs are byte-unchanged and the last full 8/8 proof stands; matched 174;
+ratchets untouched (365/0).
+
+Next queue:
+1. The setter dispatcher true-view decode (1049 queue item 3): its jump table
+   at carve 0x80020444 with entries = true setter-island addresses
+   0x80023E00..0x8002427C is decode-ready with the 1049 script treatment; the
+   de-framed payloads regenerate from the baselines via tools/deframe.py
+   --payload (repo-external, no discs needed).
+2. The de-frame transition's driver set gains a fourth entry: the region-pair
+   asymmetry itself (sces collidental vs slps structurally blind) is direct
+   evidence that only the true view converges both boots.
+3. GsMapModelingData stays the matching lane's; disc re-provision follow-ups
+   wait on the fresh CDN links (re-requested in #dragoon); BIG de-frame
+   coordination-gated.
