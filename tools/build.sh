@@ -60,6 +60,18 @@ ASFLAGS="$ASFLAGS -I $ASM_DIR"
 mkdir -p build
 # regenerate the round-trip linker script from the committed yaml
 "$PY" tools/gen_ld.py "$TARGET" || fail "gen_ld failed"
+# name -> rom map from the yaml: the .s FILENAMES carry historical (woven
+# carve) VAs, but the rows' rom offsets are the current yaml's truth. The
+# per-file section rename must match gen_ld.py's AT addresses exactly.
+"$PY" - "$TARGET" > "build/${TARGET}.asm_roms" <<'PYROMS' || fail "asm_roms failed"
+import sys, yaml
+cfg = yaml.safe_load(open(f"config/splat.{sys.argv[1]}.yaml"))
+for seg in cfg["segments"]:
+    if isinstance(seg, dict) and seg.get("type") == "code":
+        for e in seg.get("subsegments", []):
+            if isinstance(e, list) and len(e) >= 3 and e[1] != "c":
+                print(f"{e[2]} {e[0]:X}")
+PYROMS
 # stage the preprocessed assembly under build/, mirroring asm/nonmatchings
 find build/asm -name "*.s" -delete 2>/dev/null
 find build/asm -name "*.o" -delete 2>/dev/null
@@ -89,7 +101,12 @@ while IFS= read -r src; do
         */data_*) rom_hex=$(basename "$staged" | sed -E 's/^data_([0-9A-Fa-f]{8}).*/\1/') ;;
         *)        rom_hex=$(basename "$staged" | sed -E 's/^func_([0-9A-Fa-f]{8}).*/\1/') ;;
     esac
-    rom=$(( 0x800 + (0x${rom_hex} - 0x80020000) ))
+    # look the row's rom up BY NAME in the yaml map (filename addresses are
+    # historical); fall back to the filename decode only if unlisted.
+    row_name=$(basename "$staged" | sed -E 's/(\.data)?\.s$//')
+    rom_map=$(awk -v n="$row_name" '$1 == n { print "0x" $2; exit }' "build/${TARGET}.asm_roms")
+    rom=$(( 0x800 + (0x${rom_hex} - 0x80020000) ))   # filename fallback (decimal)
+    [ -n "$rom_map" ] && rom=$(( rom_map ))
     python3 - "$staged" "$rom" <<'PYSEC'
 import re, sys
 path, rom = sys.argv[1], int(sys.argv[2])

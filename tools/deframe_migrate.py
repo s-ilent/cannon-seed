@@ -220,9 +220,14 @@ def cross_check(target: str, fw: Framing, dmod, rows) -> str:
             kb = payload[k * DATA:(k + 1) * DATA]
             if not kb:
                 break
-            if framed[ko:ko + len(kb)] != kb:
+            # the true file may extend past the woven baseline's truncation
+            # point: compare only the overlap (every CAPTURED data byte).
+            seg = framed[ko:ko + len(kb)]
+            if not seg:
+                break
+            if seg != kb[:len(seg)]:
                 raise SystemExit(f"{target}: mapping mismatch at sector {k}")
-            n_bytes += len(kb)
+            n_bytes += len(seg)
         return f"mapping OK ({n_map} row starts vs deframe.py; {n_bytes} bytes re-verified)"
     return f"mapping OK ({n_map} row starts vs deframe.py; --payload output absent)"
 
