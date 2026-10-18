@@ -7928,3 +7928,132 @@ Next queue:
    (boots' .sdata windows dump, SE.VH/SE.VB diff, missing-tail witness
    dumps) are unblocked by this window's CHD restoration; BIG de-frame
    coordination-gated.
+
+## 2026-10-18 (window cron-20261018-1604): the get_game_info read-side decode
+## closes at setter fidelity and the builder decodes as a silent dual-record
+## defaults stager - the 18-case pair law holds with zero real diffs (+0x28
+## code / +0xC data / -0x20C reporter), the two-join shape resolves to a
+## shared sign-extend trampoline plus a materialization stub, getter case 12
+## is a dual-record SUPER_BLASTER consensus read, and the builder fills BOTH
+## 0x538 records, the four 0x2C player rows and the C block from four
+## byte-identical dash-placeholder tables
+
+Queue items 1 and 2 (the 1334 window's next queue): the get_game_info island
+decode and the builder true-view decode. Seventh sandbox rollback pre-window:
+repo back to 7623cd2, worklog tail lost past cron-20261014-2112 again
+(TASKS.md stays the authoritative history), disk/ + /home/z/scripts +
+/home/z/disc_work eaten - but baselines/ SURVIVED this time. Recovered
+7623cd2 -> b4574f8d (fetch + reset; origin had carried the whole gameinfo
+lane forward through the 0704..1334 windows: the carve pair 2be1f211/5d3de8e4,
+the region-pair docs 5a4cc6d6/85abac11, the rec1 true-view decode 19112515,
+the re-scan convergence 3185c691/1bed5005, and the setter dispatch close
+b4574f8d). No disc fetch needed: the de-framed true views of both boots were
+regenerated from the surviving baselines via tools/deframe.py --payload
+(repo-external, no disc reads). Decode scripts repo-external
+(scripts/getter_decode.py, builder_decode.py, builder_followup.py; raw dumps
+in /home/z/disc_work/getter_raw.txt, builder_raw.txt).
+
+THE GETTER IS THE SETTER'S MIRROR, VALIDATION-FREE (slps 0x8002414C, sces
+0x80024174 = +0x28): prologue (sp-0x18, ra 0x14, s0 0x10), a1 = 0x80010000
+permanent, lh selector, v1 = record A 0x800100B8 / B 0x800105F0 by the same
+mission routing; guard identical (sll/sra sign-extend a0, ori v0,0x11, sltu,
+bnez -> default); dispatch sll a0,2 / at = 0x8002038C + a0 (sces 0x80020398)
+/ lw / jr v0. All 18 islands are validation-free loads - the getter has ZERO
+per-case asserts; its only reporter call is the default (fmt 0x8002035C /
+sces 0x80020368 = the +0xC law, file "gameinfo.c" 0x80020080/0x8002008C,
+line 0x194 = 404; setter default line 320, callee 0x8002DC10/0x8002DA04 =
+the -0x20C reporter-cluster law). The 1334 question "where are the getter's
+case strings" resolves: they do not exist.
+
+THE TWO JOINS RESOLVED: 0x800242CC is not an epilogue - it is a one-insn
+materialization stub `move $v0,$s0`, falling into 0x800242D0, the real
+epilogue (lw ra 0x14 / lw s0 0x10 / jr ra / addiu sp,0x18). The setter's
+single join corresponds to the epilogue; the getter's extra join is the
+stub. Split condition = the case's return shape. Two shapes:
+- s0-form: `lh $s0,X($v1)` + `j 0x800242D0` + delay `move $v0,$s0` - the
+  sign-extending lh loads: case 0 (lh ($a1) - reads the selector halfword
+  itself), 2 (LEVEL ($v1)), 5 (+0xE), 6 (+0x10), 7 (+0x12), 16 (+0x534).
+- v0-form: `lhu $v0,X($base)` + `j 0x8002423C` + delay `sll $v0,0x10` -
+  case 1 (TV_MODE 2($a1)), 3 (2($v1)), and the C-block cases 8/9/10/11/13/
+  14/15/17 (0xB28..0xB36 ($a1)). They funnel into a SHARED SIGN-EXTEND
+  TRAMPOLINE at 0x8002423C (`j 0x800242CC; sra $s0,$v0,0x10`) which lives
+  INSIDE case 3's island as compiler fall-through sharing: case 3 is the
+  only record-side lhu case, and its tail doubles as the lhu cases' exit.
+Every case reads exactly what the setter's same-numbered case writes (the
+setter case map mirrors 1:1 onto load offsets). Case 4 (PARTNER NAME)
+returns the POINTER: `j 0x800242CC; addiu $s0,$v1,4` - no load, the
+caller-side counterpart of the setter's validated copy.
+CASE 12 (SUPER_BLASTER, 0x8002427C, its own island) is a DUAL-RECORD
+CONSENSUS read: v0 = sra16(lhu 0x5EE($a1)) = recA+0x536; if != -1 ->
+s0 = 0 -> join A. Else v0 = sra16(lhu 0xB26($a1)) = recB+0x536; s0 =
+negu(sltiu(nor(v0),1)) = (recB+0x536 == -1). So get_game_info(12) returns 1
+iff BOTH mission records' SUPER_BLASTER are -1, else 0 (setter domain
+{-1,0}): the super blaster is armed only by mission-record consensus.
+MIRROR PROOF (insn-by-insn, 101 insns each): 26 non-identical, all
+address-bearing - 20 branch/jump targets +0x28, table base and fmt/file
+strings +0xC, reporter callee -0x20C; zero register/shape/offset diffs,
+18/18 islands identical including case 12's consensus logic.
+
+THE BUILDER (0x80023AB0 slps, 0x80023AD8 sces = +0x28, 186 insns, leaf -
+no frame, no callee-saves, jr ra direct): it has NO assert strings and NO
+switch table - the "its own assert strings should name it" expectation is
+refuted; the boot defaults stager is silent and table-free, pure stores,
+loops and immediates. Its single caller (whole-payload j/jal census): slps
+0x80021828, sces 0x80021844 - one boot-time init call each. Sequence:
+1. Header defaults: sh 0 -> 0x80010000 (mission), 0x80010002 (TV_MODE),
+   0x80010004; sh -1 -> 0x80010006.
+2. FOUR 0x2C player rows at 0x80010008 stride 0x2C (the set/get_player_info
+   record family): per row +0x00..+0x12 = {0,0,1,0,2,3,5,0,1,0,0x7F,0x2D,0},
+   +0x14..+0x28 = {-100,-100,100,100,-100,-100,100,100} (paired axis
+   ranges), +0x2A = 0. The rows run 0x80010008..0x800100B8, ending exactly
+   at record A.
+3. C block: 1 -> 0xB28 (PAUSE_DISP), -1 -> 0xB2A, 0 -> 0xB2C..0xB36.
+4. Outer loop over TWO 0x538 records (t3 = 0..1, t2/t1 += 0x538) - the
+   builder fills BOTH record A and record B with identical defaults,
+   correcting the 1334 "record B left to the runtime API" reading: per
+   record, sh 2 -> +0x00 (LEVEL), sh -1 -> +0x02, the 5-byte default
+   PARTNER NAME copy (lw word + lb byte -> +0x04/+0x08, see below), sh -1
+   -> +0x0E (PLAY_RECORDING), 0 -> +0x10/+0x12, then FOUR copy loops of
+   10 x 0x20 bytes from 0x8004B97C/0x8004BABC/0x8004BBFC/0x8004BD3C (sces
+   -0x35C: 0x8004B620/0x8004B760/0x8004B8A0/0x8004B9E0) -> rec+0x14/+0x154/+0x294/+0x3D4, then
+   tail stores 0 -> +0x514 (sb), +0x51C (sw), +0x524/+0x526/+0x534 (sh),
+   +0x536 (sh - SUPER_BLASTER = 0).
+   The four tables are CONTIGUOUS (each +0x140) and BYTE-IDENTICAL between
+   the boots; every one of the 10 entries per table is the same 32 bytes
+   (0x2D2D 0x2D2D, sixteen zero bytes, 0x0002, 0, 0x2D20 0x2D2D 0x2D2D
+   0x0020 = "----" dash placeholders plus a 0x2 field): ten uniform
+   placeholder rows per table, four tables per record.
+5. THE DEFAULT NAME SOURCE IS A GP-RELATIVE GLOBAL: slps `lw 4($gp)` +
+   `lb 8($gp)`, sces `lw 8($gp)` + `lb 0xC($gp)`; crt0 sets gp = 0x8006632C
+   (slps, at 0x8002DB94) / 0x80065FC4 (sces, at 0x8002D988), so the global
+   sits at slps 0x80066330..34 / sces 0x80065FCC..D0 - both INSIDE the
+   beyond-file runtime tail (payload ends 0x8005D5F0, t_size runs to
+   0x80066800): the boots' .sdata/.sbss provisioning zone. The default
+   partner name is therefore whatever the tail provisioning leaves there -
+   the .sdata window dump item gains a concrete datum to witness.
+STRUCTURAL NOTE (de-frame driver set): the getter shares the setter's jtbl
+shape (table entries encode TRUE addresses) and stays a switch-class unit
+with the rec1 pair - blocker unchanged. The builder is the opposite pole:
+no table, no encoded addresses beyond lui/addiu data absolutes that re-link
+naturally - its C draft (loops + store lists + the four table addresses) is
+the first gameinfo.c member that is true-view-matchable without the jtbl
+blocker, once the de-frame transition supplies the true view.
+
+Gates: make verify slps_00270 GREEN post-recovery (the window touches only
+docs; decode scripts and true views are repo-external scratch; the other
+seven targets' inputs are byte-unchanged and the last full 8/8 proof
+stands); matched 174; ratchets untouched (365/0). Tree clean, pushed.
+
+Next queue:
+1. C drafts for set/get_game_info (probes/gcc263/): the guard idiom,
+   report-and-continue tail, and now the getter's trampoline sharing are
+   fully witnessed; the builder joins as the table-free member.
+2. gameinfo.c member map completion: re-derive set/get_player_info's case
+   map against the builder's four 0x2C player rows (the row defaults
+   enumerate the record layout the rec1 pair writes).
+3. The boots' .sdata window dump now has a named datum: the default
+   partner-name global (slps 0x80066330, sces 0x80065FCC, 5 bytes via
+   gp+4/gp+8).
+4. GsMapModelingData stays the matching lane's; BIG de-frame
+   coordination-gated.
+
