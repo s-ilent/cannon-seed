@@ -137,29 +137,29 @@ GsClearOt = 0x80072BC0; // LIBGS SCLIB member; tools/sdk_members.py, unique plac
 //   alongside &state_block_2; no other reference anywhere in the image.
 // EU twins sit at JP +0x814 (state words) / +0x838 (records); identical
 // names under both target scopes tie the relocation twins together.
-state_block_0 = 0x8007B8A8; // state map: reset-walker entry (func_80026414 a0, mode 0/-1)
-state_block_1 = 0x8007B8E8; // state map: reset-walker entry (mode 0/-1)
-state_block_2 = 0x8007B980; // state map: reset-walker entry (modes 0/-1, 2/-1); func_80026668/267C8 arg
-state_rearm_0 = 0x8007B9C0; // state map: re-armed to -1 by the state-clear driver (block_2+0x40)
-state_rearm_1 = 0x8007B9C4; // state map: re-armed to -1 (block_2+0x44)
-state_rearm_2 = 0x8007B9C8; // state map: re-armed to -1 (block_2+0x48)
-state_rearm_3 = 0x8007B9CC; // state map: re-armed to -1 (block_2+0x4C)
-state_block_3 = 0x8007BC78; // state map: reset-walker entry (mode 0/0)
-state_block_4 = 0x8007BCB8; // state map: reset-walker entry (mode 0/0)
-state_block_5 = 0x8007BCF8; // state map: reset-walker entry (mode 0/0)
-state_block_6 = 0x8007BD38; // state map: reset-walker entry (mode 0/0)
-state_block_7 = 0x8007BD78; // state map: reset-walker entry (mode 0/0)
-state_block_8 = 0x8007BDB8; // state map: reset-walker entry (mode 0/0)
-state_cursor = 0x8007BF40; // state map: -1 or &state_block_9, func_80035A78(0xC)-gated
-state_block_9 = 0x8007BF58; // state map: the block the cursor selects
-state_block_10 = 0x8007BFC8; // state map: reset-walker entry (mode 0/0)
-state_record_0 = 0x800B3BBC; // state map: id record pair, func_800267C8 arg 2
-state_record_1 = 0x800B3BC4; // state map: id record pair, func_800267C8 arg 3
+state_block_0 = 0x80089328; // state map: reset-walker entry (func_80026414 a0, mode 0/-1)
+state_block_1 = 0x80089368; // state map: reset-walker entry (mode 0/-1)
+state_block_2 = 0x80089400; // state map: reset-walker entry (modes 0/-1, 2/-1); func_80026668/267C8 arg
+state_rearm_0 = 0x80089440; // state map: re-armed to -1 by the state-clear driver (block_2+0x40)
+state_rearm_1 = 0x80089444; // state map: re-armed to -1 (block_2+0x44)
+state_rearm_2 = 0x80089448; // state map: re-armed to -1 (block_2+0x48)
+state_rearm_3 = 0x8008944C; // state map: re-armed to -1 (block_2+0x4C)
+state_block_3 = 0x800896F8; // state map: reset-walker entry (mode 0/0)
+state_block_4 = 0x80089738; // state map: reset-walker entry (mode 0/0)
+state_block_5 = 0x80089778; // state map: reset-walker entry (mode 0/0)
+state_block_6 = 0x800897B8; // state map: reset-walker entry (mode 0/0)
+state_block_7 = 0x800897F8; // state map: reset-walker entry (mode 0/0)
+state_block_8 = 0x80089838; // state map: reset-walker entry (mode 0/0)
+state_cursor = 0x800899C0; // state map: -1 or &state_block_9, func_80035A78(0xC)-gated
+state_block_9 = 0x800899D8; // state map: the block the cursor selects
+state_block_10 = 0x80089A48; // state map: reset-walker entry (mode 0/0)
+state_record_0 = 0x800C9B3C; // state map: id record pair, func_800267C8 arg 2
+state_record_1 = 0x800C9B44; // state map: id record pair, func_800267C8 arg 3
 //
 // The menu-state flag the wrapper family arms (src/func_80037A44.c):
 // stored 0 or 1 immediately before invoking the menu primitive
 // func_80025DAC(); no other static reference in the image.
-menu_state_flag = 0x800B2E18; // wrapper-family flag: armed 0/1 before func_80025DAC()
+menu_state_flag = 0x800C8B38; // wrapper-family flag: armed 0/1 before func_80025DAC()
 //
 // The static state table the runtime computed jump hands control through
 // (9 pointer words into the walker family's mid-function pieces; zero
@@ -650,14 +650,14 @@ _spu_inTransfer = 0x800C8DD4; // LIBSPU S_INI member bss static; gp:absolute (re
 // through setIntrVSync, so slot contents are game/linker history.
 // Vcount and the +0x24 slot are NOT curated: the matched unit does not
 // reference them and the neighbouring asm rows keep their D_ rendering.
-intr_vb_cb_slots = 0x800A1864;
+intr_vb_cb_slots = 0x800B4D24;
 // video_mode: role-descriptive name for the VMODE member's backing static
 // (0x800B4EC4, initial word 0 = MODE_NTSC). SetVideoMode reads it into $v0
 // then stores $a0 into it; GetVideoMode returns it — the pair proves the
 // semantics. Psy-Q 3.3 LIBETC.LIB VMODE.OBJ exports no symbol for it
 // (archive string table carries only GetVideoMode/SetVideoMode + the
 // E:\PSX\SRC\ETC\VMODE.C path), so no original name is recoverable.
-video_mode = 0x800A1A04; // LIBETC VMODE member backing static; evidence above, no Psy-Q symbol name exists
+video_mode = 0x800B4EC4; // LIBETC VMODE member backing static; evidence above, no Psy-Q symbol name exists
 CheckCallback = 0x8005EC80; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x8005EC90; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x8005ECA8; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
@@ -693,13 +693,13 @@ SetIntrMask = 0x8005ECA8; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_m
 // Member offsets differ per build (this build: stopIntr at member
 // +0x6e0, sces lacks the trio but carries stopIntr) - the bytes, not
 // the offsets, identify the member.
-intr_active_flag = 0x800A0A00; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x800A0A32; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x800A0A34; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_imask_ptr = 0x800A182C; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
-intr_dicr_ptr = 0x800A1834; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x80057508; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x800575E8; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_active_flag = 0x800B3C60; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800B3C92; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x800B3C94; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x800B4CEC; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x800B4CF4; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8005F8D8; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8005F9B8; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x8005F0DC; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 // startIntr statics: LIBETC INTR member start-path (member .text+0x198,
 // extent 0xdc, ending at trapIntr; sig-db labels loc_210/loc_260 are its
@@ -809,8 +809,8 @@ restartIntr = 0x8005F18C; // LIBETC INTR member (extent 0x88; 34-slot masked-wor
 // placement pass misread them as 0x8005D29E/0x8005E32C).
 // LIBETC.H 3.3: int CheckCallback(void); Get/SetIntrMask postdate
 // the 3.3 header (sig-db labels + the bodies give the signatures).
-intr_trap_flag = 0x800A0A02; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
-intr_mask_ptr = 0x800A1830; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
+intr_trap_flag = 0x800B3C62; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x800B4CF0; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 // PSDIDX: the GS_002.OBJ member's own bss static for the active draw
 // buffer index (Psy-Q 3.3 sig-db: labels GsGetActiveBuff @0 /
 // GsSetDrawBuffOffset @0x10, sig bytes match retail lui+lh+jr+nop).
@@ -846,7 +846,7 @@ SsSetStereo = 0x80080138; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // extern. The flag sits beyond the payload segment (EXE bss; no dlabel
 // renders), resolved extern by the C. Full evidence under target:
 // mainmenu_jp.
-_spu_inTransfer = 0x800B288C; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - the flag is 8 bytes per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+_spu_inTransfer = 0x800C85AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - the flag is 8 bytes per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
 // target: sces_00269
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----

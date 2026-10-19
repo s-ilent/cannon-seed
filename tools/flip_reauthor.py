@@ -91,11 +91,73 @@ RETAIL_BOUND = {
         "intr_stop_begin": 0x8002F87C,
         "intr_stop_commit": 0x8002F95C,
         "intr_active_flag": 0x8004D29C,
+        "intr_trap_flag": 0x8004D29E,
         "intr_saved_mask": 0x8004D2CE,
         "intr_saved_dicr": 0x8004D2D0,
         "intr_imask_ptr": 0x8004E328,
         "intr_mask_ptr": 0x8004E32C,
         "intr_dicr_ptr": 0x8004E330,
+    },
+    # mainmenu_jp (cron-20261019-0549, two oracle-enumerated waves, 31
+    # names) + g3_jp (cron-20261019-0704, ONE wave via the per-run pair
+    # enumerator, 12 names) - banked by the mechanical three-way git
+    # derivation (cron-20261019-0819): an entry is retail-bound iff the
+    # landed HEAD value == the pre-flip de0b0d68^ value while the de0b0d68
+    # staging differs. Cross-validated: sces reproduces its banked 7/7,
+    # g3_jp reproduces its 12 landed RETAIL-BOUND annotations 12/12, and
+    # the derivation caught this table's own banking gap (intr_trap_flag
+    # above: 11 names restored per the 0319 record, 10 were banked).
+    # All mainmenu_jp/g3_jp entries are row-hosted in the flipped yamls
+    # (ten g3_jp data members inside the giant data row data_8007D920;
+    # the mainmenu_jp state_* cluster likewise) - verbatim pass-through
+    # suffices, no absolute:true (that remains the slps-only variant,
+    # see the map_symbols_text retail-bound branch's gap hosting rule).
+    "mainmenu_jp": {
+        "intr_stop_begin": 0x8005F8D8,
+        "intr_stop_commit": 0x8005F9B8,
+        "intr_active_flag": 0x800B3C60,
+        "intr_trap_flag": 0x800B3C62,
+        "intr_saved_mask": 0x800B3C92,
+        "intr_saved_dicr": 0x800B3C94,
+        "intr_imask_ptr": 0x800B4CEC,
+        "intr_mask_ptr": 0x800B4CF0,
+        "intr_dicr_ptr": 0x800B4CF4,
+        "intr_vb_cb_slots": 0x800B4D24,
+        "video_mode": 0x800B4EC4,
+        "menu_state_flag": 0x800C8B38,
+        "_spu_inTransfer": 0x800C85AC,
+        "state_block_0": 0x80089328,
+        "state_block_1": 0x80089368,
+        "state_block_2": 0x80089400,
+        "state_rearm_0": 0x80089440,
+        "state_rearm_1": 0x80089444,
+        "state_rearm_2": 0x80089448,
+        "state_rearm_3": 0x8008944C,
+        "state_block_3": 0x800896F8,
+        "state_block_4": 0x80089738,
+        "state_block_5": 0x80089778,
+        "state_block_6": 0x800897B8,
+        "state_block_7": 0x800897F8,
+        "state_block_8": 0x80089838,
+        "state_block_9": 0x800899D8,
+        "state_cursor": 0x800899C0,
+        "state_block_10": 0x80089A48,
+        "state_record_0": 0x800C9B3C,
+        "state_record_1": 0x800C9B44,
+    },
+    "g3_jp": {
+        "intr_stop_begin": 0x8004B3C4,
+        "intr_stop_commit": 0x8004B4A4,
+        "intr_active_flag": 0x800963EC,
+        "intr_trap_flag": 0x800963EE,
+        "intr_saved_mask": 0x8009641E,
+        "intr_saved_dicr": 0x80096420,
+        "intr_imask_ptr": 0x80097478,
+        "intr_mask_ptr": 0x8009747C,
+        "intr_dicr_ptr": 0x80097480,
+        "intr_vb_cb_slots": 0x800974B0,
+        "video_mode": 0x80097650,
+        "_spu_inTransfer": 0x800AA8AC,
     },
 }
 # The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked
@@ -169,6 +231,32 @@ def entry_name(line):
     return m.group(1) if m else ""
 
 
+def row_hosting(va, rows):
+    """row-start | contained | gap for a carve/runtime VA against the
+    migrated yaml rows (row offsets are FILE offsets, 0x800 header in).
+    Accepts a name->(off, size) dict or any (off, size) iterable."""
+    p = (va - BASE) + dm.HEADER
+    spans = rows.values() if isinstance(rows, dict) else rows
+    for off, size in spans:
+        if p == off:
+            return "row-start"
+        if off <= p < off + size:
+            return "contained"
+    return "gap"
+
+
+def add_absolute_attr(line):
+    """Append the absolute:true attribute after the leading type: token -
+    the landed slps spelling (`// type:s32 absolute:true ...`). A
+    gap-hosted definition is emitted by splat as an ld absolute (there is
+    no row section to host it), which is exactly what the retail encodings
+    need: the address is fixed by the code, not by placement."""
+    m = re.match(r"(\s*\w+ = 0x[0-9A-Fa-f]+; // type:\w+)(.*)$", line)
+    if m:
+        return f"{m.group(1)} absolute:true{m.group(2)}"
+    return line.replace("; // ", "; // absolute:true ", 1)
+
+
 def map_symbols_text(target, text, fw, rows, max_off, dropped, adjudicate):
     out, n, snaps, classes = [], 0, [], {}
     enc = re.compile(r"^(func|D)_[0-9A-F]{8}$")
@@ -223,12 +311,20 @@ def map_symbols_text(target, text, fw, rows, max_off, dropped, adjudicate):
                 # retail-bound curated entry: the retail bytes encode this
                 # exact address (see the RETAIL_BOUND note) - pass through
                 # verbatim; the framing re-point would break the encoding.
+                # Gap-hosted entries additionally need absolute:true (the
+                # splat symbol would otherwise land in no section and the
+                # ld absolute is what the retail encodings bind to); the
+                # row-hosted majority passes through untouched.
                 if va in mapped_vas:
                     classes["retail-bound-dupe-dropped"] = \
                         classes.get("retail-bound-dupe-dropped", 0) + 1
                     out.append(f"// FLIP-DUPE (dropped): {line.strip()}")
                     continue
                 mapped_vas.add(va)
+                if row_hosting(va, rows) == "gap" and "absolute:true" not in line:
+                    line = add_absolute_attr(line)
+                    classes["retail-bound-gap"] = \
+                        classes.get("retail-bound-gap", 0) + 1
                 out.append(line)
                 classes["retail-bound"] = classes.get("retail-bound", 0) + 1
                 n += 1
@@ -337,6 +433,17 @@ def main():
             if name in dropped:
                 out.append(f"// FLIP-DROPPED-ROW (pure framing): {line.strip()}")
                 continue
+            if name and va0 == RETAIL_BOUND.get(scope, {}).get(name):
+                # retail-bound curated entry (see the RETAIL_BOUND note):
+                # the pre-flip curated value IS the retail truth - pass
+                # through verbatim. Without this branch the framing map
+                # staged the class away (the mainmenu_jp curated scope's
+                # +0x83D0 / +0x13260 deltas were exactly this bug; the
+                # tree's curated section was restored by hand in the
+                # banking commit, cron-20261019-0819).
+                out.append(line)
+                counts[scope] += 1
+                continue
             if ((va0 - BASE) + dm.HEADER >= max_off
                     or (name and enc.match(name)
                         and int(name[-8:], 16) == va0)):
@@ -394,7 +501,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if not any(a in sys.argv for a in ("extend", "fixc", "check")):
+        main()
 
 # --- post-step (idempotent): extend each migrated last row to the true
 # file end. The migrate tool stops the last row at the woven capture point
@@ -458,3 +566,75 @@ def fix_c_references():
 
 if "fixc" in sys.argv:
     fix_c_references()
+
+
+def tree_yaml_row_spans(target):
+    """(off, size) pairs from the TREE yaml (config/splat.<t>.yaml, the
+    committed flip-era rows) - the offline stand-in for yaml_rows(), which
+    needs the build tree's migrated yamls."""
+    ypath = REPO / "config" / f"splat.{target}.yaml"
+    spans = []
+    for m in re.finditer(r"^\s*-\s*\[(0x[0-9A-Fa-f]+),\s*\w+,\s*\w+\]"
+                         r"\s*#\s*(0x[0-9A-Fa-f]+)", ypath.read_text(), re.M):
+        spans.append((int(m.group(1), 16), int(m.group(2), 16)))
+    return spans
+
+
+def check_banked():
+    """Offline regression guard (no woven inputs needed): every banked
+    RETAIL_BOUND entry must match the landed config/symbols.<t>.txt
+    name->address exactly, and every landed RETAIL-BOUND annotation must
+    be banked. The absolute:true attribute is reported per hosting class
+    as the per-target record (slps's contained-in-giant-row members carry
+    it - a 0319-era choice for then-gap positions; the jp targets'
+    row-hosted members don't) with ONE hard rule: a row-start definition
+    never carries absolute:true (the row's own section label owns the
+    address). Exit 1 on any problem."""
+    problems = 0
+    for t, table in sorted(RETAIL_BOUND.items()):
+        spath = REPO / "config" / f"symbols.{t}.txt"
+        text = spath.read_text()
+        landed = {}
+        for line in text.splitlines():
+            m = ENTRY_RE.match(line)
+            if m:
+                landed[entry_name(line)] = int(m.group(2), 16)
+        annotated = set(re.findall(r"^(\w+) = 0x[0-9A-Fa-f]+;.*RETAIL-BOUND",
+                                   text, re.M))
+        spans = tree_yaml_row_spans(t)
+        stats = {}
+        for name, va in sorted(table.items()):
+            if name not in landed:
+                print(f"  {t}: {name} banked but ABSENT from the landed file")
+                problems += 1
+            elif landed[name] != va:
+                print(f"  {t}: {name} banked 0x{va:X} != landed "
+                      f"0x{landed[name]:X}")
+                problems += 1
+            host = row_hosting(va, spans)
+            line = next((ln for ln in text.splitlines()
+                         if ln.startswith(f"{name} = 0x{va:X}")), "")
+            # attribute-position only: the annotation prose may mention
+            # absolute:true without carrying it (the g3_jp spelling)
+            has_abs = bool(re.search(r"; // type:\w+ absolute:true\b", line))
+            stats[(host, has_abs)] = stats.get((host, has_abs), 0) + 1
+            if host == "row-start" and has_abs:
+                print(f"  {t}: {name} is a row-start definition but carries "
+                      f"absolute:true - invariant broken")
+                problems += 1
+        for name in sorted(annotated - set(table)):
+            print(f"  {t}: {name} carries a landed RETAIL-BOUND annotation "
+                  f"but is NOT banked")
+            problems += 1
+        summary = ", ".join(f"{host}/abs={int(abs_)}: {cnt}"
+                            for (host, abs_), cnt in sorted(stats.items()))
+        print(f"{t}: {len(table)} banked entries checked "
+              f"({len(annotated)} landed annotations) - {summary}")
+    if problems:
+        raise SystemExit(f"check: {problems} problem(s)")
+    print("check: all banked RETAIL_BOUND tables agree with the landed "
+          "files; the row-start/absolute:true invariant holds")
+
+
+if "check" in sys.argv:
+    check_banked()
