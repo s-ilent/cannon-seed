@@ -9142,3 +9142,47 @@ Next queue:
 3. g3org_jp and g3org_eu units follow (the same shape; their censuses
    re-derive on the true basis).
 4. make verify 8/8 true remains the gate.
+
+## 2026-10-19 (window cron-20261019-1319): both g3org units' census
+adjudications land at the yaml layer (commits 8147010a + 14a69b66, censuses
+20 -> 0 and 23 -> 0 on the extract basis), and the window-opening
+flip_reauthor check gate is GREEN (85 banked RETAIL_BOUND entries across the
+five landed units agree with the landed files in both directions; the
+row-start/absolute:true invariant holds). The disc-blocked context is
+confirmed in this sandbox too: baselines/ is the all-woven set
+(slps f2a13b52, sces 19698984, mainmenu_jp ec26c696, mainmenu_eu cbad60dc,
+g3_jp 6ab446ff, g3_eu 80acb6d1, g3org_jp 5923d4eb, g3org_eu c83138e2 - none
+of the true gates), disk/*.chd + /home/z/disc_work are eaten, the CDN links
+expired 09:54 UTC; the fresh-links request stands from the 1051 record.
+
+THE TWO ADJUDICATIONS (same shape, both fully with-row - no no-row island
+sub-case in either g3org unit, unlike g3_eu's five-entry cluster):
+g3org_jp's re-derived census is 20 names = 7 dlabel-class + 13 cross-file
+glabel dupes; g3org_eu's is 23 names = 11 dlabel-class + 12 cross-file
+glabel dupes. Every census name owns its yaml row, so both classes resolve
+with the one fix: all rows renamed <name>.rowdef with their GEN lines
+retired as FLIP-ROWDEF comments (the established spelling verbatim),
+clean_stale_asm removed the 20 + 23 stale old-name files, and the
+re-extract + re-audit round-trips at 0. The g3org_jp dupe class carries the
+same cascade shape mainmenu_jp witnessed: func_80035E74 is nested inside
+func_80038C34.s while func_800332C8 is nested inside func_80035E74.s.
+
+THE TOOL: adjudicate_rowdefs banked (dc32844b) - the with-row spellings as
+code with per-name guards (exactly one yaml row and one symbols line must
+match, else the name is skipped untouched). Validated 20/20 + 23/23 this
+window; it serves the true-basis re-derivations when the discs return (the
+1051 caveat still applies to all three unlinked units: this basis is woven
+bytes split at true offsets, the name-layer adjudication is yaml/GEN-keyed
+and byte-independent, but the standing lane rule holds - re-derive each
+true-basis wiped census before the link and adjudicate any delta with the
+same spellings).
+
+Next queue:
+1. Silent refreshes the CDN links -> re-fetch both CHDs (sha256 gate),
+   per-sector re-extract, witness 8/8 true baselines.
+2. g3_eu unit completion (the 1051 record's pre-derived retail-bound table
+   stands), then g3org_jp and g3org_eu units: true-basis census
+   re-derivation first (adjudicate_rowdefs + the no-row spelling variant by
+   hand for any island entries), first flipped-era link, retail-bound wave,
+   curated scope retail-bound restoration, RETAIL_BOUND banking + check.
+3. make verify 8/8 true remains the gate.
