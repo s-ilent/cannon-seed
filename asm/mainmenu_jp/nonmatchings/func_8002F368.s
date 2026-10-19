@@ -38,8 +38,8 @@ glabel func_8002D358
     /* DBBC 8002D3BC 21280000 */  addu       $a1, $zero, $zero
     /* DBC0 8002D3C0 0599000C */  jal        func_80026414
     /* DBC4 8002D3C4 FFFF0624 */   addiu     $a2, $zero, -0x1
-    /* DBC8 8002D3C8 0980043C */  lui        $a0, %hi(D_80089400)
-    /* DBCC 8002D3CC 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* DBC8 8002D3C8 0980043C */  lui        $a0, %hi(state_block_2)
+    /* DBCC 8002D3CC 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* DBD0 8002D3D0 21280000 */  addu       $a1, $zero, $zero
     /* DBD4 8002D3D4 0599000C */  jal        func_80026414
     /* DBD8 8002D3D8 FFFF0624 */   addiu     $a2, $zero, -0x1

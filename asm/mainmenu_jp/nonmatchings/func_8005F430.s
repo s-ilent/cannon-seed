@@ -346,7 +346,7 @@ glabel func_80057448
     /* 37C4C 8005744C 00000000 */   nop
 endlabel func_80057448
 
-nonmatching func_80057450, 0xB8
+nonmatching func_80057450, 0x108
 
 glabel func_80057450
     /* 37C50 80057450 E8FFBD27 */  addiu      $sp, $sp, -0x18
@@ -396,36 +396,28 @@ glabel func_80057450
     /* 37CFC 800574FC 00000000 */   nop
     /* 37D00 80057500 565D010C */  jal        func_80057558
     /* 37D04 80057504 00000000 */   nop
+    /* 37D08 80057508 525D0108 */  j          .L80057548
+    /* 37D0C 8005750C 00000000 */   nop
+    /* 37D10 80057510 A05D010C */  jal        func_80057680
+    /* 37D14 80057514 00000000 */   nop
+    /* 37D18 80057518 525D0108 */  j          .L80057548
+    /* 37D1C 8005751C 00000000 */   nop
+    /* 37D20 80057520 B95D010C */  jal        func_800576E4
+    /* 37D24 80057524 00000000 */   nop
+    /* 37D28 80057528 525D0108 */  j          .L80057548
+    /* 37D2C 8005752C 00000000 */   nop
+    /* 37D30 80057530 DC5D010C */  jal        func_80057770
+    /* 37D34 80057534 00000000 */   nop
+    /* 37D38 80057538 525D0108 */  j          .L80057548
+    /* 37D3C 8005753C 00000000 */   nop
+    /* 37D40 80057540 1F5E010C */  jal        func_8005FD7C
+    /* 37D44 80057544 00000000 */   nop
+  .L80057548:
+    /* 37D48 80057548 1000BF8F */  lw         $ra, 0x10($sp)
+    /* 37D4C 8005754C 00000000 */  nop
+    /* 37D50 80057550 0800E003 */  jr         $ra
+    /* 37D54 80057554 1800BD27 */   addiu     $sp, $sp, 0x18
 endlabel func_80057450
-
-nonmatching intr_stop_begin
-
-dlabel intr_stop_begin
-    /* 37D08 80057508 525D0108 */ .word 0x08015D52
-    /* 37D0C 8005750C 00000000 */ .word 0x00000000
-    /* 37D10 80057510 A05D010C */ .word 0x0C015DA0
-    /* 37D14 80057514 00000000 */ .word 0x00000000
-    /* 37D18 80057518 525D0108 */ .word 0x08015D52
-    /* 37D1C 8005751C 00000000 */ .word 0x00000000
-    /* 37D20 80057520 B95D010C */ .word 0x0C015DB9
-    /* 37D24 80057524 00000000 */ .word 0x00000000
-    /* 37D28 80057528 525D0108 */ .word 0x08015D52
-    /* 37D2C 8005752C 00000000 */ .word 0x00000000
-    /* 37D30 80057530 DC5D010C */ .word 0x0C015DDC
-    /* 37D34 80057534 00000000 */ .word 0x00000000
-    /* 37D38 80057538 525D0108 */ .word 0x08015D52
-    /* 37D3C 8005753C 00000000 */ .word 0x00000000
-    /* 37D40 80057540 1F5E010C */ .word 0x0C015E1F
-    /* 37D44 80057544 00000000 */ .word 0x00000000
-
-nonmatching .L80057548
-
-alabel .L80057548
-    /* 37D48 80057548 1000BF8F */ .word 0x8FBF0010
-    /* 37D4C 8005754C 00000000 */ .word 0x00000000
-    /* 37D50 80057550 0800E003 */ .word 0x03E00008
-    /* 37D54 80057554 1800BD27 */ .word 0x27BD0018
-enddlabel intr_stop_begin
 
 nonmatching func_80057558, 0x30
 
@@ -471,11 +463,6 @@ dlabel intr_restart_begin
     /* 37DDC 800575DC 2CA123A4 */ .word 0xA423A12C
     /* 37DE0 800575E0 0D80013C */ .word 0x3C01800D
     /* 37DE4 800575E4 749F30A4 */ .word 0xA4309F74
-enddlabel intr_restart_begin
-
-nonmatching intr_stop_commit
-
-dlabel intr_stop_commit
     /* 37DE8 800575E8 0D80013C */ .word 0x3C01800D
     /* 37DEC 800575EC 94A020A4 */ .word 0xA420A094
     /* 37DF0 800575F0 0D80013C */ .word 0x3C01800D
@@ -496,7 +483,7 @@ dlabel intr_stop_commit
     /* 37E2C 8005762C 0000C494 */ .word 0x94C40000
     /* 37E30 80057630 1580053C */ .word 0x3C058015
     /* 37E34 80057634 ACA5A594 */ .word 0x94A5A5AC
-enddlabel intr_stop_commit
+enddlabel intr_restart_begin
 
 nonmatching intr_restart_commit
 

@@ -399,8 +399,8 @@ glabel func_800865F8
     /* 59F18 80079718 0D80043C */  lui        $a0, %hi(D_800C857C)
     /* 59F1C 8007971C 7C85848C */  lw         $a0, %lo(D_800C857C)($a0)
     /* 59F20 80079720 01000334 */  ori        $v1, $zero, 0x1
-    /* 59F24 80079724 0D80013C */  lui        $at, %hi(D_800C85AC)
-    /* 59F28 80079728 AC8523AC */  sw         $v1, %lo(D_800C85AC)($at)
+    /* 59F24 80079724 0D80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 59F28 80079728 AC8523AC */  sw         $v1, %lo(_spu_inTransfer)($at)
     /* 59F2C 8007972C 00C00334 */  ori        $v1, $zero, 0xC000
     /* 59F30 80079730 AA0183A4 */  sh         $v1, 0x1AA($a0)
     /* 59F34 80079734 0D80013C */  lui        $at, %hi(D_800C85B0)

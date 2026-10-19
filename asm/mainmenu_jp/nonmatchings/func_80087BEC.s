@@ -38,8 +38,8 @@ glabel SpuWritePartly
     /* 5AD5C 8007A55C 788522A4 */  sh         $v0, %lo(D_800C8578)($at)
     /* 5AD60 8007A560 03006014 */  bnez       $v1, .L8007A570
     /* 5AD64 8007A564 21102002 */   addu      $v0, $s1, $zero
-    /* 5AD68 8007A568 0D80013C */  lui        $at, %hi(D_800C85AC)
-    /* 5AD6C 8007A56C AC8520AC */  sw         $zero, %lo(D_800C85AC)($at)
+    /* 5AD68 8007A568 0D80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 5AD6C 8007A56C AC8520AC */  sw         $zero, %lo(_spu_inTransfer)($at)
   .L8007A570:
     /* 5AD70 8007A570 1800BF8F */  lw         $ra, 0x18($sp)
     /* 5AD74 8007A574 1400B18F */  lw         $s1, 0x14($sp)

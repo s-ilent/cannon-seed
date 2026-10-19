@@ -12,24 +12,24 @@ nonmatching startIntr, 0xDC
 glabel startIntr
     /* 3F4C4 8005ECC4 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 3F4C8 8005ECC8 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 3F4CC 8005ECCC 0B80103C */  lui        $s0, %hi(D_800B3C60)
-    /* 3F4D0 8005ECD0 603C1026 */  addiu      $s0, $s0, %lo(D_800B3C60)
+    /* 3F4CC 8005ECCC 0B80103C */  lui        $s0, %hi(intr_active_flag)
+    /* 3F4D0 8005ECD0 603C1026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* 3F4D4 8005ECD4 1400BFAF */  sw         $ra, 0x14($sp)
     /* 3F4D8 8005ECD8 00000296 */  lhu        $v0, 0x0($s0)
     /* 3F4DC 8005ECDC 00000000 */  nop
     /* 3F4E0 8005ECE0 2A004014 */  bnez       $v0, .L8005ED8C
     /* 3F4E4 8005ECE4 21100000 */   addu      $v0, $zero, $zero
-    /* 3F4E8 8005ECE8 0B80033C */  lui        $v1, %hi(D_800B4CEC)
-    /* 3F4EC 8005ECEC EC4C638C */  lw         $v1, %lo(D_800B4CEC)($v1)
-    /* 3F4F0 8005ECF0 0B80023C */  lui        $v0, %hi(D_800B4CF0)
-    /* 3F4F4 8005ECF4 F04C428C */  lw         $v0, %lo(D_800B4CF0)($v0)
+    /* 3F4E8 8005ECE8 0B80033C */  lui        $v1, %hi(intr_imask_ptr)
+    /* 3F4EC 8005ECEC EC4C638C */  lw         $v1, %lo(intr_imask_ptr)($v1)
+    /* 3F4F0 8005ECF0 0B80023C */  lui        $v0, %hi(intr_mask_ptr)
+    /* 3F4F4 8005ECF4 F04C428C */  lw         $v0, %lo(intr_mask_ptr)($v0)
     /* 3F4F8 8005ECF8 3333053C */  lui        $a1, (0x33333333 >> 16)
     /* 3F4FC 8005ECFC 000040A4 */  sh         $zero, 0x0($v0)
     /* 3F500 8005ED00 00004294 */  lhu        $v0, 0x0($v0)
     /* 3F504 8005ED04 3333A534 */  ori        $a1, $a1, (0x33333333 & 0xFFFF)
     /* 3F508 8005ED08 000062A4 */  sh         $v0, 0x0($v1)
-    /* 3F50C 8005ED0C 0B80023C */  lui        $v0, %hi(D_800B4CF4)
-    /* 3F510 8005ED10 F44C428C */  lw         $v0, %lo(D_800B4CF4)($v0)
+    /* 3F50C 8005ED0C 0B80023C */  lui        $v0, %hi(intr_dicr_ptr)
+    /* 3F510 8005ED10 F44C428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* 3F514 8005ED14 21200002 */  addu       $a0, $s0, $zero
     /* 3F518 8005ED18 000045AC */  sw         $a1, 0x0($v0)
     /* 3F51C 8005ED1C 857C010C */  jal        func_8005F214

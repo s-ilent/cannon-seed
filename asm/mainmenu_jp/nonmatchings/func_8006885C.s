@@ -12,8 +12,8 @@ nonmatching restartIntr, 0x3C
 glabel restartIntr
     /* 3F98C 8005F18C E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 3F990 8005F190 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 3F994 8005F194 0B80103C */  lui        $s0, %hi(D_800B3C60)
-    /* 3F998 8005F198 603C1026 */  addiu      $s0, $s0, %lo(D_800B3C60)
+    /* 3F994 8005F194 0B80103C */  lui        $s0, %hi(intr_active_flag)
+    /* 3F998 8005F198 603C1026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* 3F99C 8005F19C 1400BFAF */  sw         $ra, 0x14($sp)
     /* 3F9A0 8005F1A0 00000296 */  lhu        $v0, 0x0($s0)
     /* 3F9A4 8005F1A4 00000000 */  nop
@@ -21,10 +21,10 @@ glabel restartIntr
     /* 3F9AC 8005F1AC 00000000 */   nop
     /* 3F9B0 8005F1B0 567E010C */  jal        HookEntryInt
     /* 3F9B4 8005F1B4 38000426 */   addiu     $a0, $s0, 0x38
-    /* 3F9B8 8005F1B8 0B80043C */  lui        $a0, %hi(D_800B4CF0)
-    /* 3F9BC 8005F1BC F04C848C */  lw         $a0, %lo(D_800B4CF0)($a0)
-    /* 3F9C0 8005F1C0 0B80033C */  lui        $v1, %hi(D_800B3C92)
-    /* 3F9C4 8005F1C4 923C6394 */  lhu        $v1, %lo(D_800B3C92)($v1)
+    /* 3F9B8 8005F1B8 0B80043C */  lui        $a0, %hi(intr_mask_ptr)
+    /* 3F9BC 8005F1BC F04C848C */  lw         $a0, %lo(intr_mask_ptr)($a0)
+    /* 3F9C0 8005F1C0 0B80033C */  lui        $v1, %hi(intr_saved_mask)
+    /* 3F9C4 8005F1C4 923C6394 */  lhu        $v1, %lo(intr_saved_mask)($v1)
 endlabel restartIntr
 
 nonmatching func_8005F1C8, 0x4C
@@ -33,10 +33,10 @@ glabel func_8005F1C8
     /* 3F9C8 8005F1C8 01000234 */  ori        $v0, $zero, 0x1
     /* 3F9CC 8005F1CC 000002A6 */  sh         $v0, 0x0($s0)
     /* 3F9D0 8005F1D0 000083A4 */  sh         $v1, 0x0($a0)
-    /* 3F9D4 8005F1D4 0B80033C */  lui        $v1, %hi(D_800B4CF4)
-    /* 3F9D8 8005F1D8 F44C638C */  lw         $v1, %lo(D_800B4CF4)($v1)
-    /* 3F9DC 8005F1DC 0B80023C */  lui        $v0, %hi(D_800B3C94)
-    /* 3F9E0 8005F1E0 943C428C */  lw         $v0, %lo(D_800B3C94)($v0)
+    /* 3F9D4 8005F1D4 0B80033C */  lui        $v1, %hi(intr_dicr_ptr)
+    /* 3F9D8 8005F1D8 F44C638C */  lw         $v1, %lo(intr_dicr_ptr)($v1)
+    /* 3F9DC 8005F1DC 0B80023C */  lui        $v0, %hi(intr_saved_dicr)
+    /* 3F9E0 8005F1E0 943C428C */  lw         $v0, %lo(intr_saved_dicr)($v0)
     /* 3F9E4 8005F1E4 00000000 */  nop
     /* 3F9E8 8005F1E8 000062AC */  sw         $v0, 0x0($v1)
     /* 3F9EC 8005F1EC 827E010C */  jal        func_8005FA08

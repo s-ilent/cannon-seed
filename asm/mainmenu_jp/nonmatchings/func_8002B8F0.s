@@ -486,8 +486,8 @@ glabel func_8002A688
     /* AEC0 8002A6C0 149BC624 */  addiu      $a2, $a2, %lo(D_800C9B14)
     /* AEC4 8002A6C4 F299000C */  jal        func_800267C8
     /* AEC8 8002A6C8 00000000 */   nop
-    /* AECC 8002A6CC 0980043C */  lui        $a0, %hi(D_80089400)
-    /* AED0 8002A6D0 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* AECC 8002A6CC 0980043C */  lui        $a0, %hi(state_block_2)
+    /* AED0 8002A6D0 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* AED4 8002A6D4 0D80053C */  lui        $a1, %hi(D_800C9B1C)
     /* AED8 8002A6D8 1C9BA524 */  addiu      $a1, $a1, %lo(D_800C9B1C)
     /* AEDC 8002A6DC 0D80063C */  lui        $a2, %hi(D_800C9B24)
@@ -512,8 +512,8 @@ glabel func_8002A688
     /* AF24 8002A724 FFFF1424 */   addiu     $s4, $zero, -0x1
     /* AF28 8002A728 2810858F */  lw         $a1, 0x1028($gp)
     /* AF2C 8002A72C 3010868F */  lw         $a2, 0x1030($gp)
-    /* AF30 8002A730 0980043C */  lui        $a0, %hi(D_80089400)
-    /* AF34 8002A734 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* AF30 8002A730 0980043C */  lui        $a0, %hi(state_block_2)
+    /* AF34 8002A734 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* AF38 8002A738 E199000C */  jal        func_80026784
     /* AF3C 8002A73C 00000000 */   nop
     /* AF40 8002A740 3810858F */  lw         $a1, 0x1038($gp)
@@ -524,8 +524,8 @@ glabel func_8002A688
     /* AF54 8002A754 00000000 */   nop
     /* AF58 8002A758 0980103C */  lui        $s0, %hi(D_800893E8)
     /* AF5C 8002A75C E8931026 */  addiu      $s0, $s0, %lo(D_800893E8)
-    /* AF60 8002A760 0980113C */  lui        $s1, %hi(D_80089400)
-    /* AF64 8002A764 00943126 */  addiu      $s1, $s1, %lo(D_80089400)
+    /* AF60 8002A760 0980113C */  lui        $s1, %hi(state_block_2)
+    /* AF64 8002A764 00943126 */  addiu      $s1, $s1, %lo(state_block_2)
     /* AF68 8002A768 000011AE */  sw         $s1, 0x0($s0)
     /* AF6C 8002A76C 0980013C */  lui        $at, %hi(D_800893EC)
     /* AF70 8002A770 EC9334AC */  sw         $s4, %lo(D_800893EC)($at)
@@ -535,26 +535,26 @@ glabel func_8002A688
     /* AF80 8002A780 F49332AC */  sw         $s2, %lo(D_800893F4)($at)
     /* AF84 8002A784 0980133C */  lui        $s3, %hi(D_80089458)
     /* AF88 8002A788 58947326 */  addiu      $s3, $s3, %lo(D_80089458)
-    /* AF8C 8002A78C 0980013C */  lui        $at, %hi(D_80089440)
-    /* AF90 8002A790 409433AC */  sw         $s3, %lo(D_80089440)($at)
+    /* AF8C 8002A78C 0980013C */  lui        $at, %hi(state_rearm_0)
+    /* AF90 8002A790 409433AC */  sw         $s3, %lo(state_rearm_0)($at)
     /* AF94 8002A794 C0FF1026 */  addiu      $s0, $s0, -0x40
-    /* AF98 8002A798 0980013C */  lui        $at, %hi(D_80089444)
-    /* AF9C 8002A79C 449430AC */  sw         $s0, %lo(D_80089444)($at)
-    /* AFA0 8002A7A0 0980013C */  lui        $at, %hi(D_8008944C)
-    /* AFA4 8002A7A4 4C9432AC */  sw         $s2, %lo(D_8008944C)($at)
+    /* AF98 8002A798 0980013C */  lui        $at, %hi(state_rearm_1)
+    /* AF9C 8002A79C 449430AC */  sw         $s0, %lo(state_rearm_1)($at)
+    /* AFA0 8002A7A0 0980013C */  lui        $at, %hi(state_rearm_3)
+    /* AFA4 8002A7A4 4C9432AC */  sw         $s2, %lo(state_rearm_3)($at)
     /* AFA8 8002A7A8 0980013C */  lui        $at, %hi(D_80089498)
     /* AFAC 8002A7AC 989434AC */  sw         $s4, %lo(D_80089498)($at)
     /* AFB0 8002A7B0 0980013C */  lui        $at, %hi(D_8008949C)
     /* AFB4 8002A7B4 9C9431AC */  sw         $s1, %lo(D_8008949C)($at)
     /* AFB8 8002A7B8 0980013C */  lui        $at, %hi(D_800894A4)
     /* AFBC 8002A7BC A49432AC */  sw         $s2, %lo(D_800894A4)($at)
-    /* AFC0 8002A7C0 0980043C */  lui        $a0, %hi(D_80089328)
-    /* AFC4 8002A7C4 28938424 */  addiu      $a0, $a0, %lo(D_80089328)
+    /* AFC0 8002A7C0 0980043C */  lui        $a0, %hi(state_block_0)
+    /* AFC4 8002A7C4 28938424 */  addiu      $a0, $a0, %lo(state_block_0)
     /* AFC8 8002A7C8 21280000 */  addu       $a1, $zero, $zero
     /* AFCC 8002A7CC 0599000C */  jal        func_80026414
     /* AFD0 8002A7D0 FFFF0624 */   addiu     $a2, $zero, -0x1
-    /* AFD4 8002A7D4 0980043C */  lui        $a0, %hi(D_80089368)
-    /* AFD8 8002A7D8 68938424 */  addiu      $a0, $a0, %lo(D_80089368)
+    /* AFD4 8002A7D4 0980043C */  lui        $a0, %hi(state_block_1)
+    /* AFD8 8002A7D8 68938424 */  addiu      $a0, $a0, %lo(state_block_1)
     /* AFDC 8002A7DC 21280000 */  addu       $a1, $zero, $zero
     /* AFE0 8002A7E0 0599000C */  jal        func_80026414
     /* AFE4 8002A7E4 FFFF0624 */   addiu     $a2, $zero, -0x1

@@ -17,15 +17,15 @@ glabel func_8002E000
     /* E810 8002E010 0599000C */  jal        func_80026414
     /* E814 8002E014 FFFF0624 */   addiu     $a2, $zero, -0x1
   .L8002E018:
-    /* E818 8002E018 0980043C */  lui        $a0, %hi(D_80089A48)
-    /* E81C 8002E01C 489A8424 */  addiu      $a0, $a0, %lo(D_80089A48)
+    /* E818 8002E018 0980043C */  lui        $a0, %hi(state_block_10)
+    /* E81C 8002E01C 489A8424 */  addiu      $a0, $a0, %lo(state_block_10)
     /* E820 8002E020 4999000C */  jal        func_80026524
     /* E824 8002E024 21280000 */   addu      $a1, $zero, $zero
     /* E828 8002E028 06005114 */  bne        $v0, $s1, func_8002E044
     /* E82C 8002E02C 02000534 */   ori       $a1, $zero, 0x2
     /* E830 8002E030 01001034 */  ori        $s0, $zero, 0x1
-    /* E834 8002E034 0980043C */  lui        $a0, %hi(D_80089400)
-    /* E838 8002E038 00948424 */  addiu      $a0, $a0, %lo(D_80089400)
+    /* E834 8002E034 0980043C */  lui        $a0, %hi(state_block_2)
+    /* E838 8002E038 00948424 */  addiu      $a0, $a0, %lo(state_block_2)
     /* E83C 8002E03C 0599000C */  jal        func_80026414
     /* E840 8002E040 FFFF0624 */   addiu     $a2, $zero, -0x1
 endlabel func_8002E000

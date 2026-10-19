@@ -5,7 +5,7 @@
  * Each arms the menu-state flag (first two functions) and/or
  * drives the sequence helper func_800356C4(N, M), then calls the
  * unprototyped menu primitive func_80025DAC(). Functions 17-35 here
- * (func_80037D0C..func_800380D0) were once described as JP-only
+ * (func_80034B2C..func_800380D0) were once described as JP-only
  * variants; EU carries the same 19 - they hid in mainmenu_eu's
  * data_80037CAC until the cron-20261011-1156 carve and are now matched
  * as src/func_80037CAC.c.
@@ -143,7 +143,7 @@ void func_80037CD4(void)
     func_80025DAC();
 }
 
-void func_80037D0C(void)
+void func_80034B2C(void)
 {
     func_800356C4(7, 0);
     func_800356C4(7, 1);
