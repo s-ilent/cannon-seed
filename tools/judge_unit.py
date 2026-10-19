@@ -21,6 +21,7 @@ Exit codes: 0 = every judged unit EXACT, 1 = at least one unit not EXACT,
 Per-unit verdicts: EXACT / DIFF <n>/<total> words / SIZE <built> vs <row> /
 NO-SOURCE / COMPILE-FAIL / STAGE-FAIL / AS-FAIL / LINK-FAIL / UNRESOLVED.
 """
+import hashlib
 import os
 import re
 import subprocess
@@ -177,11 +178,49 @@ def judge(target, name, rom, extent, gp_flags, asflags):
     return verdict, detail
 
 
+def baseline_gate(target):
+    """Refuse to judge unless the local baseline IS the committed oracle.
+
+    The judge's expected bytes are a slice of baselines/<target>.bin at the
+    row's yaml offset. Post-flip (de0b0d68) the committed config/sha1/<t>.sha1
+    values are the TRUE baselines' hashes, while a sandbox holding the
+    all-woven set (or any other re-extraction) slices garbage here: witnessed
+    2026-10-19 as judge 0/33 EXACT on sces_00269, a target whose whole image
+    had verified EXACT. A different hash is a different build - never compare
+    against it. Mirrors verify.sh's gate 2.
+    """
+    path = os.path.join(REPO, f"baselines/{target}.bin")
+    if not os.path.exists(path):
+        print(f"judge: no baseline at baselines/{target}.bin", file=sys.stderr)
+        return False
+    sha_file = os.path.join(REPO, f"config/sha1/{target}.sha1")
+    expected = None
+    for ln in open(sha_file):
+        ln = ln.strip()
+        if ln and not ln.startswith("#"):
+            expected = ln.split()[0].lower()
+            break
+    actual = hashlib.sha1(open(path, "rb").read()).hexdigest()
+    if expected != actual:
+        print(f"judge: baselines/{target}.bin does not match the committed "
+              f"oracle config/sha1/{target}.sha1", file=sys.stderr)
+        print(f"  expected sha1: {expected}", file=sys.stderr)
+        print(f"  actual   sha1: {actual}", file=sys.stderr)
+        print("A different hash is a different build - the retail slice this "
+              "judge compares against is not in the building (woven set in "
+              "the disc-blocked sandbox; the true baselines return with the "
+              "discs). Never edit the sha1 file to pass.", file=sys.stderr)
+        return False
+    return True
+
+
 def main(argv):
     if len(argv) < 2:
         print(__doc__)
         return 2
     target = argv[1]
+    if not baseline_gate(target):
+        return 2
     rows = c_rows(target)
     names = argv[2:]
     if names:
