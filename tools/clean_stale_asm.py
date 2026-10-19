@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-ENTRY = re.compile(r"-\s*\[(0x[0-9A-Fa-f]+),\s*(\w+),\s*(\w+)\]")
+ENTRY = re.compile(r"-\s*\[(0x[0-9A-Fa-f]+),\s*(\w+),\s*([\w.]+)\]")
 SUFFIXES = (".data.s", ".s")
 
 
@@ -45,6 +45,11 @@ def yaml_ref_dirs() -> dict:
         d = m.group(1).rstrip("/")
         names = dirs.setdefault(d, set())
         for ln in text.splitlines():
+            # comment lines never reference: the MIGRATE-DROPPED rows are
+            # commented out of the yamls and their stale files are exactly
+            # what this tool exists to remove (cron-20261019-0319 fix).
+            if ln.lstrip().startswith("#"):
+                continue
             em = ENTRY.search(ln)
             if em:
                 names.add(em.group(3))
@@ -98,6 +103,8 @@ def main() -> int:
         d = m.group(1).rstrip("/")
         names = dirs.setdefault(d, set())
         for ln in text.splitlines():
+            if ln.lstrip().startswith("#"):
+                continue
             em = ENTRY.search(ln)
             if em:
                 names.add(em.group(3))
