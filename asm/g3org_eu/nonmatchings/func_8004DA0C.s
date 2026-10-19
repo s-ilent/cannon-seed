@@ -21,17 +21,17 @@ glabel restartIntr
     /* 2832C 80047B2C 00000000 */   nop
     /* 28330 80047B30 8620010C */  jal        HookEntryInt
     /* 28334 80047B34 38000426 */   addiu     $a0, $s0, 0x38
-    /* 28338 80047B38 0A80043C */  lui        $a0, %hi(D_800A49A4)
-    /* 2833C 80047B3C A449848C */  lw         $a0, %lo(D_800A49A4)($a0)
-    /* 28340 80047B40 0A80033C */  lui        $v1, %hi(D_800A3946)
-    /* 28344 80047B44 46396394 */  lhu        $v1, %lo(D_800A3946)($v1)
+    /* 28338 80047B38 0A80043C */  lui        $a0, %hi(intr_mask_ptr)
+    /* 2833C 80047B3C A449848C */  lw         $a0, %lo(intr_mask_ptr)($a0)
+    /* 28340 80047B40 0A80033C */  lui        $v1, %hi(intr_saved_mask)
+    /* 28344 80047B44 46396394 */  lhu        $v1, %lo(intr_saved_mask)($v1)
     /* 28348 80047B48 01000234 */  ori        $v0, $zero, 0x1
     /* 2834C 80047B4C 000002A6 */  sh         $v0, 0x0($s0)
     /* 28350 80047B50 000083A4 */  sh         $v1, 0x0($a0)
-    /* 28354 80047B54 0A80033C */  lui        $v1, %hi(D_800A49A8)
-    /* 28358 80047B58 A849638C */  lw         $v1, %lo(D_800A49A8)($v1)
-    /* 2835C 80047B5C 0A80023C */  lui        $v0, %hi(D_800A3948)
-    /* 28360 80047B60 4839428C */  lw         $v0, %lo(D_800A3948)($v0)
+    /* 28354 80047B54 0A80033C */  lui        $v1, %hi(intr_dicr_ptr)
+    /* 28358 80047B58 A849638C */  lw         $v1, %lo(intr_dicr_ptr)($v1)
+    /* 2835C 80047B5C 0A80023C */  lui        $v0, %hi(intr_saved_dicr)
+    /* 28360 80047B60 4839428C */  lw         $v0, %lo(intr_saved_dicr)($v0)
     /* 28364 80047B64 00000000 */  nop
     /* 28368 80047B68 000062AC */  sw         $v0, 0x0($v1)
     /* 2836C 80047B6C AE20010C */  jal        func_800482B8

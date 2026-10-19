@@ -169,6 +169,10 @@ RETAIL_BOUND = {
     # from its woven name func_80062280 (the false-positive split
     # detection inside data_8006AAF4 keeps the encoded name - the slps
     # 0319 law; the census reads only asm/*.s so the LINK witnessed it).
+    # 7429c736 carried the file rename WITHOUT the function rename; the
+    # fresh-sandbox build exposed the missing half as a multiple-
+    # definition of func_80062280 against the data row - the content
+    # half completed 2026-10-20 per the b51807e6 jp law.
     "g3_eu": {
         "intr_stop_begin": 0x8004AD44,
         "intr_stop_commit": 0x8004AE14,
@@ -243,6 +247,40 @@ RETAIL_BOUND = {
         "intr_saved_dicr": 0x800A3168,
         "video_mode": 0x800A4398,
         "_spu_inTransfer": 0x800B75F4,
+    },
+    # g3org_eu (cron-20261020-<utc>, ONE wave - the 1334 pre-derived set,
+    # 9 names, all retail-confirmed by the first flipped-era link's oracle
+    # enumeration: 34 diff bytes / 4 clusters, every cluster a staged->retail
+    # address pair - two jal pairs (stop_begin 0x80042E78->0x80048198,
+    # stop_commit 0x80042F48->0x80048268) and lui hi halves 0x8009->0x800A
+    # (the statics) plus 0x800A->0x800B (_spu_inTransfer)). intr_stop_begin
+    # lands at the data_8004E1C8 row start (0x28998) and intr_stop_commit at
+    # the func_8004E298 sdk veneer row start (0x28A68) - the 1051 shape
+    # verbatim. The EU ResetEntryInt variant (the 1334 notes): stop_commit
+    # 0x80048268 == staged ResetEntryInt == the func_8004E298 veneer row
+    # start, but the veneer row's woven name is func_8004E298, not
+    # ResetEntryInt's pre address 0x80048298 - allow_duplicated:True both
+    # lines, the inherent alias legitimized. The four family names MOVED in
+    # eu (unlike jp's identity mapping): intr_imask_ptr/mask_ptr/dicr_ptr/
+    # vb_cb_slots carried. video_mode/intr_active_flag/intr_trap_flag map
+    # identity through staging - no action, not carried. The true-basis
+    # census re-derivation lands 17 names (11 dlabel-class + 6 cross-file
+    # glabel dupes, all with-row, adjudicate_rowdefs 17/17); the twin C row
+    # closes by the carve-name rename func_80025E04 -> func_800258F4 with
+    # the shared src ALREADY renamed (the jp window) - the EU link evidence
+    # is the missing-file refusal, no nested glabel detection on the eu
+    # basis. Symbols parse law witnessed: no colons in annotation prose
+    # (a "notes:" token parses as an attribute and kills the extract).
+    "g3org_eu": {
+        "intr_stop_begin": 0x80048198,
+        "intr_stop_commit": 0x80048268,
+        "intr_saved_mask": 0x800A3946,
+        "intr_saved_dicr": 0x800A3948,
+        "intr_imask_ptr": 0x800A49A0,
+        "intr_mask_ptr": 0x800A49A4,
+        "intr_dicr_ptr": 0x800A49A8,
+        "intr_vb_cb_slots": 0x800A49D8,
+        "_spu_inTransfer": 0x800B7DF4,
     },
 }
 # The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked

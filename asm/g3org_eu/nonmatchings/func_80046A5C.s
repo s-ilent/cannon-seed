@@ -80,7 +80,7 @@ glabel func_80046A5C
     /* 222A4 80041AA4 00000000 */   nop
     /* 222A8 80041AA8 DFED000C */  jal        func_8003B77C
     /* 222AC 80041AAC 00000000 */   nop
-    /* 222B0 80041AB0 1AEE000C */  jal        func_8003FAE8
+    /* 222B0 80041AB0 1AEE000C */  jal        func_8003B868
     /* 222B4 80041AB4 00000000 */   nop
     /* 222B8 80041AB8 D306010C */  jal        func_80041B4C
     /* 222BC 80041ABC 00000000 */   nop

@@ -9576,3 +9576,96 @@ Next queue:
    (the screen now works on true bytes end to end, judge 52/52 class).
 3. Discs live until ~2026-10-20 09:54 UTC; the re-fetch recipe is in the
    cron prompt (foreground download, sha256 gate, per-sector extract).
+
+## 2026-10-20 (window cron-20261019-2242): g3org_eu is the EIGHTH FLIPPED-ERA GREEN and verify is 8/8 - the whole image byte-exact on the true retail baselines; the seventh rollback's recovery (the honest witness parse caught the woven set again), the 17-name true-basis census, the 1334 pre-derived set in one oracle-clean wave (34 diff bytes / 4 clusters), and the fresh-sandbox build exposing 7429c736's missing rename half
+
+- Seventh worklog rollback pre-window (repo to 7623cd2e while origin had
+  advanced THROUGH this lane's own two windows to 8114c1d6 - g3_eu sixth
+  GREEN 7429c736 + e22b990a, g3org_jp seventh GREEN b51807e6 + 8114c1d6;
+  worklog.md back to an Oct-10-era 0/47): the one-command SOP restored
+  digest coverage (47/47, exit 0) under cron-20261019-2242-restore.
+  baselines/ survived but as the Oct-10 all-woven set AGAIN (witness 0/8
+  by the honest awk parse - the b51807e6 lesson holds); CHDs re-fetched
+  IN FOREGROUND (sha256-gated both), raw bins sector-exact (JP 267504 /
+  EU 267752, ~2m40s each in parallel), 8 EXEs --per-sector -> baselines/,
+  WITNESS 8/8. exec bits flipped once mid-window (tools/cc.sh Permission
+  denied) - the find/xargs chmod restored them.
+- Judge sweep x8 on real bytes: mainmenu_jp 30/30, mainmenu_eu 30/30,
+  g3org_jp 52/52, slps 37/38, sces 32/33, g3_jp 39/40, g3_eu 46/47,
+  g3org_eu 28/34 (the one unlinked unit, per the committed records).
+- G3ORG_EU UNIT COMPLETION: the true-basis census re-derivation lands
+  17 names (11 dlabel-class + 6 cross-file glabel dupes - the woven-basis
+  23 was already adjudicated by 14a69b66; the true basis adds its delta),
+  all with-row, adjudicate_rowdefs 17/17 -> census 0, clean_stale_asm
+  nothing stale. The first flipped-era link's C-row evidence is the
+  MISSING-FILE refusal (src/func_80025E04.c is gone - the shared src was
+  already renamed by the jp window; the eu basis has NO nested glabel at
+  0x80025E04, only a local branch label - the detection evidence shape is
+  per-target); the twin row took its carve name func_800258F4 (name==VMA,
+  yaml offset 0x58F4). The retail-bound wave landed the 1334 pre-derived
+  g3org_eu set in ONE oracle-clean wave: 9 names (the four family names
+  intr_imask_ptr/mask_ptr/dicr_ptr/vb_cb_slots MOVE in eu, unlike jp's
+  identity mapping), 34 diff bytes / 4 clusters all staged->retail
+  address pairs - two jal pairs (stop_begin 0x80042E78->0x80048198,
+  stop_commit 0x80042F48->0x80048268) and lui hi halves 0x8009->0x800A
+  (the statics) plus 0x800A->0x800B (_spu_inTransfer). The EU
+  ResetEntryInt variant landed verbatim from the 1334 notes: stop_commit
+  0x80048268 == staged ResetEntryInt == the func_8004E298 sdk veneer row
+  start, allow_duplicated:True both lines. video_mode/intr_active_flag/
+  intr_trap_flag map identity through staging - no action, not carried.
+  - THE SYMBOLS PARSE LAW (new, witnessed): splat 0.50 parses every
+    "word:" in a symbols annotation as an attribute - a comment containing
+    "the 1334 notes:" killed the extract with "Missing attribute value in
+    'notes:'". Annotation prose carries NO colons (jp's landed comments
+    comply; the eu stop_commit comment reworded to dashes).
+- RESULT: make verify TARGET=g3org_eu GREEN - "OK: build matches retail
+  baselines/g3org_eu.bin", sha1 01b37b4e == the committed oracle, 0
+  differing bytes; judge g3org_eu 34/34 EXACT (up from 28/34); ratchets
+  374/0 == baseline; census 0; clean_stale_asm nothing stale; RETAIL_BOUND
+  g3org_eu banked (9 entries) and flip_reauthor check reproduces the
+  landed annotations across the EIGHT tables (114 banked entries; the
+  row-start/absolute:true invariant holds).
+- THE FRESH-SANDBOX BUILD EXPOSED 7429c736's MISSING RENAME HALF: g3_eu's
+  link failed with multiple definition of func_80062280 - the data row
+  data_8006AAF4's false-positive-split dlabel (the slps law keeps the
+  encoded name) vs the C object: the carve-name rename committed the FILE
+  move (src/func_80062280.c -> func_800598C0.c, 0 lines) but not the
+  FUNCTION rename inside it. The 2012 window's GREEN was therefore
+  predicated on a stale build/ object that fresh-sandbox state cannot
+  reproduce; the content half is now completed per the b51807e6 jp law
+  (void func_800598C0(void), the provenance comment in the file). The
+  ratchets prose law applies in src comments too - placeholder-shaped
+  func_XXXXXXXX tokens in a comment count (the +3 fail); the comment
+  reworded to address form.
+- THE ROWDEF COMMIT GAP (rollback-proofing): g3_eu's 31 .rowdef.s files
+  were never committed (7429c736 carried only the yaml renames and the
+  old-name deletions) and the rollback ate all 31 - the build refused
+  with "cannot find build/asm/g3_eu/.../func_80025DA0.rowdef.s.o"; the
+  deterministic re-extract regenerated them byte-identical. The jp
+  majority practice now applied: g3_eu's 31 and g3org_eu's 40 .rowdef.s
+  files committed (slps's 9 were already in under the legacy
+  asm/nonmatchings layout; sces/mainmenu/g3_jp/g3org_jp complete).
+- FULL SWEEP: verify 8/8 GREEN (slps_00270, sces_00269, mainmenu_jp,
+  mainmenu_eu, g3_jp, g3_eu, g3org_jp, g3org_eu - the whole image
+  byte-exact on the true retail baselines); judge g3_eu 46/47, g3org_eu
+  34/34; matched 174; ratchets 374/0.
+- Tree: config/splat.g3org_eu.yaml + config/symbols.g3org_eu.txt (the 17
+  FLIP-ROWDEF retirements + the C-row carve rename + the 9 RETAIL-BOUND
+  restorations + the ResetEntryInt allow_duplicated) + the g3org_eu
+  extract fixed point (17 old-name deletions, the true-basis re-decodes,
+  the retail re-encodings) + 71 .rowdef.s files committed across g3_eu
+  (31) and g3org_eu (40) + src/func_800598C0.c (the content-half rename)
+  + the RETAIL_BOUND g3org_eu table in tools/flip_reauthor.py.
+
+Next queue:
+1. The matching lane resumes on the fully-green image: coddog reports ->
+   clusters -> judge loop (the screen reads true bytes end to end; the
+   1-row open-candidate tails on slps/sces/g3_jp/g3_eu and g3org_eu's
+   judge-34/34 state are the known starting material).
+2. Discs expire ~2026-10-20 09:54 UTC; the re-fetch recipe is in the cron
+   prompt (foreground download, sha256 gate, per-sector extract). Only
+   ask Silent for fresh links if the discs are actually missing AND
+   needed - do not nag otherwise.
+3. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.

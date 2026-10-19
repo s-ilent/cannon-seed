@@ -19,8 +19,8 @@ glabel startIntr
     /* 27E5C 8004765C 00000000 */  nop
     /* 27E60 80047660 2A004014 */  bnez       $v0, .L8004770C
     /* 27E64 80047664 21100000 */   addu      $v0, $zero, $zero
-    /* 27E68 80047668 0A80033C */  lui        $v1, %hi(D_800A49A0)
-    /* 27E6C 8004766C A049638C */  lw         $v1, %lo(D_800A49A0)($v1)
+    /* 27E68 80047668 0A80033C */  lui        $v1, %hi(intr_imask_ptr)
+    /* 27E6C 8004766C A049638C */  lw         $v1, %lo(intr_imask_ptr)($v1)
     /* 27E70 80047670 0A80023C */  lui        $v0, (0x800A0000 >> 16)
 endlabel startIntr
 
@@ -33,8 +33,8 @@ glabel func_80047674
     /* 27E80 80047680 00004294 */  lhu        $v0, 0x0($v0)
     /* 27E84 80047684 3333A534 */  ori        $a1, $a1, (0x33333333 & 0xFFFF)
     /* 27E88 80047688 000062A4 */  sh         $v0, 0x0($v1)
-    /* 27E8C 8004768C 0A80023C */  lui        $v0, %hi(D_800A49A8)
-    /* 27E90 80047690 A849428C */  lw         $v0, %lo(D_800A49A8)($v0)
+    /* 27E8C 8004768C 0A80023C */  lui        $v0, %hi(intr_dicr_ptr)
+    /* 27E90 80047690 A849428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* 27E94 80047694 21200002 */  addu       $a0, $s0, $zero
     /* 27E98 80047698 000045AC */  sw         $a1, 0x0($v0)
     /* 27E9C 8004769C E51E010C */  jal        func_80047B94

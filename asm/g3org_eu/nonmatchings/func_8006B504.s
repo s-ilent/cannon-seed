@@ -269,8 +269,8 @@ glabel func_8006B504
     /* 423FC 80061BFC 0B80043C */  lui        $a0, %hi(D_800B7DC4)
     /* 42400 80061C00 C47D848C */  lw         $a0, %lo(D_800B7DC4)($a0)
     /* 42404 80061C04 01000334 */  ori        $v1, $zero, 0x1
-    /* 42408 80061C08 0B80013C */  lui        $at, %hi(D_800B7DF4)
-    /* 4240C 80061C0C F47D23AC */  sw         $v1, %lo(D_800B7DF4)($at)
+    /* 42408 80061C08 0B80013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 4240C 80061C0C F47D23AC */  sw         $v1, %lo(_spu_inTransfer)($at)
     /* 42410 80061C10 00C00334 */  ori        $v1, $zero, 0xC000
     /* 42414 80061C14 AA0183A4 */  sh         $v1, 0x1AA($a0)
     /* 42418 80061C18 0B80013C */  lui        $at, %hi(D_800B7DF8)

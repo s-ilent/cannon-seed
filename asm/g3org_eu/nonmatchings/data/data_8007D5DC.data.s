@@ -46399,25 +46399,14 @@ nonmatching D_80092820
 
 dlabel D_80092820
     /* 73020 80092820 13000000 */ .word 0x00000013
-    /* 73024 80092824 */ .short 0x0F00
-enddlabel D_80092820
-
-nonmatching intr_saved_mask
-
-dlabel intr_saved_mask
-    /* 73026 80092826 */ .short 0x0000
-enddlabel intr_saved_mask
-
-nonmatching intr_saved_dicr
-
-dlabel intr_saved_dicr
+    /* 73024 80092824 000F0000 */ .word 0x00000F00
     /* 73028 80092828 50FBFFFF */ .word 0xFFFFFB50
     /* 7302C 8009282C 90E70000 */ .word 0x0000E790
     /* 73030 80092830 00000000 */ .word 0x00000000
     /* 73034 80092834 78940880 */ .word D_80089478
     /* 73038 80092838 088A0B80 */ .word D_800B8A08
     /* 7303C 8009283C 748B0B80 */ .word D_800B8B74
-enddlabel intr_saved_dicr
+enddlabel D_80092820
 
 nonmatching D_80092840
 
@@ -47464,23 +47453,8 @@ nonmatching intr_start_tab
 
 dlabel intr_start_tab
     /* 73F4C 8009374C 00CE0880 */ .word D_8008CE00
-enddlabel intr_start_tab
-
-nonmatching intr_imask_ptr
-
-dlabel intr_imask_ptr
     /* 73F50 80093750 48080000 */ .word 0x00000848
-enddlabel intr_imask_ptr
-
-nonmatching intr_mask_ptr
-
-dlabel intr_mask_ptr
     /* 73F54 80093754 20CE0880 */ .word D_8008CE20
-enddlabel intr_mask_ptr
-
-nonmatching intr_dicr_ptr
-
-dlabel intr_dicr_ptr
     /* 73F58 80093758 48080000 */ .word 0x00000848
     /* 73F5C 8009375C 40CE0880 */ .word D_8008CE40
     /* 73F60 80093760 48080000 */ .word 0x00000848
@@ -47493,11 +47467,6 @@ dlabel intr_dicr_ptr
     /* 73F7C 8009377C C0CE0880 */ .word D_8008CEC0
     /* 73F80 80093780 52080000 */ .word 0x00000852
     /* 73F84 80093784 E0CE0880 */ .word D_8008CEE0
-enddlabel intr_dicr_ptr
-
-nonmatching intr_vb_cb_slots
-
-dlabel intr_vb_cb_slots
     /* 73F88 80093788 52080000 */ .word 0x00000852
     /* 73F8C 8009378C 00CF0880 */ .word D_8008CF00
     /* 73F90 80093790 52080000 */ .word 0x00000852
@@ -48156,7 +48125,7 @@ dlabel intr_vb_cb_slots
     /* 749C4 800941C4 E0F70880 */ .word D_8008F7E0
     /* 749C8 800941C8 FFFF0000 */ .word 0x0000FFFF
     /* 749CC 800941CC 00000000 */ .word 0x00000000
-enddlabel intr_vb_cb_slots
+enddlabel intr_start_tab
 
 nonmatching D_800941D0
 
@@ -71262,18 +71231,18 @@ dlabel intr_trap_flag
     /* 84144 800A3944 */ .short 0x0000
 enddlabel intr_trap_flag
 
-nonmatching D_800A3946
+nonmatching intr_saved_mask
 
-dlabel D_800A3946
+dlabel intr_saved_mask
     /* 84146 800A3946 */ .short 0x0000
-enddlabel D_800A3946
+enddlabel intr_saved_mask
 
-nonmatching D_800A3948
+nonmatching intr_saved_dicr
 
-dlabel D_800A3948
+dlabel intr_saved_dicr
     /* 84148 800A3948 00000000 */ .word 0x00000000
     /* 8414C 800A394C 00000000 */ .word 0x00000000
-enddlabel D_800A3948
+enddlabel intr_saved_dicr
 
 nonmatching D_800A3950
 
@@ -71915,11 +71884,6 @@ dlabel D_800A3950
     /* 84B38 800A4338 00000000 */ .word 0x00000000
     /* 84B3C 800A433C 00000000 */ .word 0x00000000
     /* 84B40 800A4340 00000000 */ .word 0x00000000
-enddlabel D_800A3950
-
-nonmatching _spu_inTransfer
-
-dlabel _spu_inTransfer
     /* 84B44 800A4344 00000000 */ .word 0x00000000
     /* 84B48 800A4348 00000000 */ .word 0x00000000
     /* 84B4C 800A434C 00000000 */ .word 0x00000000
@@ -72318,7 +72282,7 @@ dlabel _spu_inTransfer
     /* 85170 800A4970 00000000 */ .word 0x00000000
     /* 85174 800A4974 00000000 */ .word 0x00000000
     /* 85178 800A4978 00000000 */ .word 0x00000000
-enddlabel _spu_inTransfer
+enddlabel D_800A3950
 
 nonmatching D_800A497C
 
@@ -72339,24 +72303,24 @@ dlabel D_800A499C
     /* 8519C 800A499C 7C490A80 */ .word D_800A497C
 enddlabel D_800A499C
 
-nonmatching D_800A49A0
+nonmatching intr_imask_ptr
 
-dlabel D_800A49A0
+dlabel intr_imask_ptr
     /* 851A0 800A49A0 7010801F */ .word 0x1F801070
-enddlabel D_800A49A0
+enddlabel intr_imask_ptr
 
-nonmatching D_800A49A4
+nonmatching intr_mask_ptr
 
-dlabel D_800A49A4
+dlabel intr_mask_ptr
     /* 851A4 800A49A4 7410801F */ .word 0x1F801074
-enddlabel D_800A49A4
+enddlabel intr_mask_ptr
 
-nonmatching D_800A49A8
+nonmatching intr_dicr_ptr
 
-dlabel D_800A49A8
+dlabel intr_dicr_ptr
     /* 851A8 800A49A8 F010801F */ .word 0x1F8010F0
     /* 851AC 800A49AC 00000000 */ .word 0x00000000
-enddlabel D_800A49A8
+enddlabel intr_dicr_ptr
 
 nonmatching D_800A49B0
 
@@ -72383,9 +72347,9 @@ dlabel D_800A49D4
     /* 851D4 800A49D4 8010801F */ .word 0x1F801080
 enddlabel D_800A49D4
 
-nonmatching D_800A49D8
+nonmatching intr_vb_cb_slots
 
-dlabel D_800A49D8
+dlabel intr_vb_cb_slots
     /* 851D8 800A49D8 00000000 */ .word 0x00000000
     /* 851DC 800A49DC 00000000 */ .word 0x00000000
     /* 851E0 800A49E0 00000000 */ .word 0x00000000
@@ -72394,7 +72358,7 @@ dlabel D_800A49D8
     /* 851EC 800A49EC 00000000 */ .word 0x00000000
     /* 851F0 800A49F0 00000000 */ .word 0x00000000
     /* 851F4 800A49F4 00000000 */ .word 0x00000000
-enddlabel D_800A49D8
+enddlabel intr_vb_cb_slots
 
 nonmatching D_800A49F8
 
@@ -72430,7 +72394,7 @@ dlabel D_800A4A10
     /* 85240 800A4A40 B0A30480 */ .word 0x8004A3B0
     /* 85244 800A4A44 0CAA0480 */ .word 0x8004AA0C
     /* 85248 800A4A48 C09A0480 */ .word 0x80049AC0
-    /* 8524C 800A4A4C 48AB0480 */ .word func_80051168
+    /* 8524C 800A4A4C 48AB0480 */ .word func_8004AB48
     /* 85250 800A4A50 104A0A80 */ .word D_800A4A10
     /* 85254 800A4A54 A8500480 */ .word printf
     /* 85258 800A4A58 00000000 */ .word 0x00000000
@@ -73307,7 +73271,7 @@ dlabel D_800A4B74
     /* 85EF0 800A56F0 FC040580 */ .word GsTMDdivTF3L
     /* 85EF4 800A56F4 F8610580 */ .word GsTMDdivTF3LFG
     /* 85EF8 800A56F8 7C3C0580 */ .word GsTMDdivTF3NL
-    /* 85EFC 800A56FC 48460580 */ .word func_8005C2F8
+    /* 85EFC 800A56FC 48460580 */ .word func_80054648
     /* 85F00 800A5700 FC0F0580 */ .word D_80050FFC
     /* 85F04 800A5704 CC4E0580 */ .word 0x80054ECC
     /* 85F08 800A5708 80500580 */ .word 0x80055080
@@ -109952,11 +109916,11 @@ dlabel D_800B7DF0
     /* 985F0 800B7DF0 07000000 */ .word 0x00000007
 enddlabel D_800B7DF0
 
-nonmatching D_800B7DF4
+nonmatching _spu_inTransfer
 
-dlabel D_800B7DF4
+dlabel _spu_inTransfer
     /* 985F4 800B7DF4 01000000 */ .word 0x00000001
-enddlabel D_800B7DF4
+enddlabel _spu_inTransfer
 
 nonmatching D_800B7DF8
 

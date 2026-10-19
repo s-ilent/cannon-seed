@@ -748,11 +748,6 @@ dlabel func_80042E4C
     /* 2366C 80042E6C DD0B0108 */ .word 0x08010BDD
     /* 23670 80042E70 00000000 */ .word 0x00000000
     /* 23674 80042E74 110C010C */ .word 0x0C010C11
-enddlabel func_80042E4C
-
-nonmatching intr_stop_begin
-
-dlabel intr_stop_begin
     /* 23678 80042E78 21280002 */ .word 0x02002821
     /* 2367C 80042E7C 00004394 */ .word 0x94430000
     /* 23680 80042E80 0C80043C */ .word 0x3C04800C
@@ -779,7 +774,7 @@ dlabel intr_stop_begin
     /* 236D4 80042ED4 02000234 */ .word 0x34020002
     /* 236D8 80042ED8 03000234 */ .word 0x34020003
     /* 236DC 80042EDC 8C0982A7 */ .word 0xA782098C
-enddlabel intr_stop_begin
+enddlabel func_80042E4C
 
 nonmatching func_80042EE0
 
@@ -815,11 +810,6 @@ dlabel intr_restart_begin
     /* 2373C 80042F3C 00000000 */ .word 0x00000000
     /* 23740 80042F40 FFFF4224 */ .word 0x2442FFFF
     /* 23744 80042F44 920982A7 */ .word 0xA7820992
-enddlabel intr_restart_begin
-
-nonmatching intr_stop_commit
-
-dlabel intr_stop_commit
     /* 23748 80042F48 00140200 */ .word 0x00021400
     /* 2374C 80042F4C 09004014 */ .word 0x14400009
     /* 23750 80042F50 3C000234 */ .word 0x3402003C
@@ -835,7 +825,7 @@ dlabel intr_stop_commit
     /* 23778 80042F78 2C00B38F */ .word 0x8FB3002C
     /* 2377C 80042F7C 2800B28F */ .word 0x8FB20028
     /* 23780 80042F80 2400B18F */ .word 0x8FB10024
-enddlabel intr_stop_commit
+enddlabel intr_restart_begin
 
 nonmatching func_80042F84
 
