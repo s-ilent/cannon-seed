@@ -15,9 +15,12 @@ in its subject. Digest text is the header's own summary, trimmed.
 
 Usage:
     python3 tools/worklog_digest.py [worklog_path] [--all]
-    worklog_path defaults to /home/z/my-project/worklog.md (missing file = nothing present)
+    worklog_path defaults to /home/z/my-project/worklog.md (missing file = nothing covered)
     --all lists every window regardless of worklog coverage.
-Exit status: 0 when nothing is missing, 1 when the digest lists missing windows.
+Coverage levels: a full "Task ID: cron-..." section, or a digest bullet
+"- cron-... (hash): ..." from a prior RESTORE NOTE - only windows with
+neither trace are listed as missing. Exit status: 0 when nothing is
+missing, 1 when the digest lists missing windows.
 """
 import re
 import subprocess
@@ -99,18 +102,24 @@ def main():
     show_all = "--all" in sys.argv
     worklog = Path(args[0]) if args else DEFAULT_WORKLOG
 
-    present = set()
+    sections = set()
+    digest = set()
     if worklog.exists():
-        present = set(re.findall(r"^Task ID: (cron-\d{8}-\d{4})", worklog.read_text(errors="replace"), re.M))
+        text = worklog.read_text(errors="replace")
+        sections = set(re.findall(r"^Task ID: (cron-\d{8}-\d{4})", text, re.M))
+        # RESTORE NOTE digest bullets: "- cron-YYYYMMDD-HHMM (hash[, hash]): ..."
+        digest = set(re.findall(r"^- (cron-\d{8}-\d{4}) \((?:[0-9a-f]{8}(?:, [0-9a-f]{8})*(?:, \.\.\.)?|\?\?)\): ", text, re.M))
 
     entries = git_log()
     subjects = anchor_map(entries)
     windows = header_windows()
 
-    missing = [(wid, text) for wid, text in windows if show_all or wid not in present]
+    covered = sections | digest
+    missing = [(wid, t) for wid, t in windows if show_all or wid not in covered]
     print(f"worklog_digest: {len(windows)} window(s) in docs/TASKS.md, "
-          f"{sum(1 for w, _ in windows if w in present)} present in {worklog}, "
-          f"{len(missing)} missing")
+          f"{sum(1 for w, _ in windows if w in sections)} full section(s), "
+          f"{sum(1 for w, _ in windows if w in digest - sections)} digest-level, "
+          f"{len(missing)} missing  [{worklog}]")
     for wid, text in missing:
         anchors = subjects.get(wid)
         if anchors:
