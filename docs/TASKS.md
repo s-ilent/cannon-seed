@@ -9291,3 +9291,43 @@ Next queue:
    retail-bound waves from the 1334 tables, curated scope restoration,
    RETAIL_BOUND banking + check.
 2. make verify 8/8 true remains the gate.
+
+## 2026-10-19 (window cron-20261019-1704): the worklog rollback digest is
+mechanized - tools/worklog_digest.py regenerates the RESTORE NOTE digest
+from the repo record in one command; the full offline gate sweep confirms
+the adjudication layer intact through two rollbacks.
+- Second rollback in a row: HEAD back to 7623cd2e, worklog back to its
+  cron-20261014-2112 tail (the 1549 restore eaten with it). Recovered to
+  origin/main e0c76acd; tree clean; disk/ still empty (disc-blocked, the
+  fresh-link request stands, not re-pinged).
+- flip_reauthor check at window open: GREEN - 85 banked RETAIL_BOUND
+  entries across the five landed tables agree both ways.
+- Full census sweep, all 8 targets, audit_flip_clashes at the committed
+  tree: landed five 0/0/0/0/0; unflipped three 10/10/11 - investigated,
+  NOT a regression: those names' resolving .rowdef.s files are the
+  untracked regenerable extract outputs (the landing discipline carries
+  the yaml renames but not the regenerated asm). make extract x3 over
+  g3_eu/g3org_jp/g3org_eu then re-audit: 0/0/0 on the extract basis,
+  clean_stale_asm "nothing stale" x3 - the 1051/1319 adjudications stand
+  at HEAD. Churn reverted, 63 untracked .rowdef.s removed, tree clean.
+- tools/worklog_digest.py: window IDs from the docs/TASKS.md "## date
+  (window cron-...)" headers in file order (liberal parser: the
+  "late (window ...)" and ", same session" variants, wrapped "## "
+  continuation lines joined), anchor commits from git-log subjects with
+  a -S pickaxe fallback over docs/TASKS.md, digest lines for every
+  window whose Task ID is absent from the local worklog, exit 1 signals
+  missing. Self-test: 42 windows found, 42 missing against the rolled-
+  back worklog; the rebuilt worklog re-run reports 0 missing.
+- The worklog is rebuilt: RESTORE NOTE + the tool's digest + the
+  reconstructed 1549 section + this window's section. Future rollbacks
+  cost one tool run.
+
+Next queue:
+1. Discs return (the request stands) -> true baselines 8/8 -> g3_eu unit
+   completion (pre-derived table in the 1051 record), then the g3org pair
+   units: true-basis census re-derivation, first flipped-era link, the
+   retail-bound waves from the 1334 tables, curated scope restoration,
+   RETAIL_BOUND banking + check.
+2. make verify 8/8 true remains the gate.
+3. On any future worklog rollback: rehydrate, reset --hard origin/main,
+   then `python3 tools/worklog_digest.py` and paste under a RESTORE NOTE.
