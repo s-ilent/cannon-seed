@@ -19,7 +19,7 @@
  */
 extern unsigned int boot_flag_0;
 
-void func_80025AE0(void)
+void func_80024F00(void)
 {
     __asm__ volatile("nop");
     boot_flag_0 = 0;

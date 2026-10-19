@@ -90,7 +90,7 @@ First verified C match: `src/func_80036CFC.c` (stub with body `jr $ra; nop`), pa
 
 Certain retail routines are hand-written assembly rather than compiler output:
 
-* Leading-nop store routines (`func_80025AE0`, `func_8002A0DC`: `nop; sw/sh $zero,off($gp); jr $ra; nop`)
+* Leading-nop store routines (`func_80024F00` (formerly woven-named func_80025AE0), `func_8002A0DC`: `nop; sw/sh $zero,off($gp); jr $ra; nop`)
 * Adjacent `ori`-store pairs with delay-slot overlaps into the subsequent function
 * GTE `ctc2` stub (`func_80037AC8`)
 

@@ -1534,18 +1534,7 @@ dlabel func_80045CF0
     /* 27CC0 800474C0 00000000 */ .word 0x00000000
     /* 27CC4 800474C4 70008210 */ .word 0x10820070
     /* 27CC8 800474C8 02000234 */ .word 0x34020002
-enddlabel func_80045CF0
-
-nonmatching intr_active_flag
-
-dlabel intr_active_flag
-    /* 27CCC 800474CC */ .short 0x006E
-enddlabel intr_active_flag
-
-nonmatching intr_trap_flag
-
-dlabel intr_trap_flag
-    /* 27CCE 800474CE */ .short 0x1082
+    /* 27CCC 800474CC 6E008210 */ .word 0x1082006E
     /* 27CD0 800474D0 03000234 */ .word 0x34020003
     /* 27CD4 800474D4 6C008210 */ .word 0x1082006C
     /* 27CD8 800474D8 04000234 */ .word 0x34020004
@@ -1555,30 +1544,9 @@ dlabel intr_trap_flag
     /* 27CE8 800474E8 00000000 */ .word 0x00000000
     /* 27CEC 800474EC A21D0108 */ .word 0x08011DA2
     /* 27CF0 800474F0 00000000 */ .word 0x00000000
-enddlabel intr_trap_flag
-
-nonmatching D_800474F4
-
-dlabel D_800474F4
     /* 27CF4 800474F4 401D0108 */ .word 0x08011D40
     /* 27CF8 800474F8 4200B1A3 */ .word 0xA3B10042
-enddlabel D_800474F4
-
-nonmatching D_800474FC
-
-dlabel D_800474FC
-    /* 27CFC 800474FC */ .short 0x0043
-enddlabel D_800474FC
-
-nonmatching intr_saved_mask
-
-dlabel intr_saved_mask
-    /* 27CFE 800474FE */ .short 0xA3B1
-enddlabel intr_saved_mask
-
-nonmatching intr_saved_dicr
-
-dlabel intr_saved_dicr
+    /* 27CFC 800474FC 4300B1A3 */ .word 0xA3B10043
     /* 27D00 80047500 00241200 */ .word 0x00122400
     /* 27D04 80047504 03240400 */ .word 0x00042403
     /* 27D08 80047508 002C1400 */ .word 0x00142C00
@@ -1589,11 +1557,6 @@ dlabel intr_saved_dicr
     /* 27D1C 8004751C 3C00A727 */ .word 0x27A7003C
     /* 27D20 80047520 A21D0108 */ .word 0x08011DA2
     /* 27D24 80047524 00000000 */ .word 0x00000000
-enddlabel intr_saved_dicr
-
-nonmatching D_80047528
-
-dlabel D_80047528
     /* 27D28 80047528 4C00A497 */ .word 0x97A4004C
     /* 27D2C 8004752C 4E00A597 */ .word 0x97A5004E
     /* 27D30 80047530 DC1E010C */ .word 0x0C011EDC
@@ -1611,76 +1574,31 @@ dlabel D_80047528
     /* 27D60 80047560 00000000 */ .word 0x00000000
     /* 27D64 80047564 08004000 */ .word 0x00400008
     /* 27D68 80047568 00000000 */ .word 0x00000000
-enddlabel D_80047528
-
-nonmatching D_8004756C
-
-dlabel D_8004756C
     /* 27D6C 8004756C 6600A0A7 */ .word 0xA7A00066
     /* 27D70 80047570 841D0108 */ .word 0x08011D84
     /* 27D74 80047574 5C00B1A7 */ .word 0xA7B1005C
-enddlabel D_8004756C
-
-nonmatching D_80047578
-
-dlabel D_80047578
     /* 27D78 80047578 01000234 */ .word 0x34020001
     /* 27D7C 8004757C 6600A2A7 */ .word 0xA7A20066
     /* 27D80 80047580 841D0108 */ .word 0x08011D84
     /* 27D84 80047584 5C00B1A7 */ .word 0xA7B1005C
-enddlabel D_80047578
-
-nonmatching D_80047588
-
-dlabel D_80047588
     /* 27D88 80047588 841D0108 */ .word 0x08011D84
     /* 27D8C 8004758C 5E00B1A7 */ .word 0xA7B1005E
-enddlabel D_80047588
-
-nonmatching D_80047590
-
-dlabel D_80047590
     /* 27D90 80047590 841D0108 */ .word 0x08011D84
     /* 27D94 80047594 6000B1A7 */ .word 0xA7B10060
-enddlabel D_80047590
-
-nonmatching D_80047598
-
-dlabel D_80047598
     /* 27D98 80047598 6800A0A7 */ .word 0xA7A00068
     /* 27D9C 8004759C 841D0108 */ .word 0x08011D84
     /* 27DA0 800475A0 6200B1A7 */ .word 0xA7B10062
-enddlabel D_80047598
-
-nonmatching D_800475A4
-
-dlabel D_800475A4
     /* 27DA4 800475A4 01000234 */ .word 0x34020001
     /* 27DA8 800475A8 6800A2A7 */ .word 0xA7A20068
     /* 27DAC 800475AC 841D0108 */ .word 0x08011D84
     /* 27DB0 800475B0 6200B1A7 */ .word 0xA7B10062
-enddlabel D_800475A4
-
-nonmatching D_800475B4
-
-dlabel D_800475B4
     /* 27DB4 800475B4 6A00A0A7 */ .word 0xA7A0006A
     /* 27DB8 800475B8 841D0108 */ .word 0x08011D84
     /* 27DBC 800475BC 6400B1A7 */ .word 0xA7B10064
-enddlabel D_800475B4
-
-nonmatching D_800475C0
-
-dlabel D_800475C0
     /* 27DC0 800475C0 01000234 */ .word 0x34020001
     /* 27DC4 800475C4 6A00A2A7 */ .word 0xA7A2006A
     /* 27DC8 800475C8 841D0108 */ .word 0x08011D84
     /* 27DCC 800475CC 6400B1A7 */ .word 0xA7B10064
-enddlabel D_800475C0
-
-nonmatching D_800475D0
-
-dlabel D_800475D0
     /* 27DD0 800475D0 FF002232 */ .word 0x322200FF
     /* 27DD4 800475D4 05004010 */ .word 0x10400005
     /* 27DD8 800475D8 4000422C */ .word 0x2C420040
@@ -1694,18 +1612,8 @@ dlabel D_800475D0
     /* 27DF8 800475F8 01000234 */ .word 0x34020001
     /* 27DFC 800475FC 841D0108 */ .word 0x08011D84
     /* 27E00 80047600 6C00A2A7 */ .word 0xA7A2006C
-enddlabel D_800475D0
-
-nonmatching D_80047604
-
-dlabel D_80047604
     /* 27E04 80047604 841D0108 */ .word 0x08011D84
     /* 27E08 80047608 4500B1A3 */ .word 0xA3B10045
-enddlabel D_80047604
-
-nonmatching D_8004760C
-
-dlabel D_8004760C
     /* 27E0C 8004760C 4600B1A3 */ .word 0xA3B10046
     /* 27E10 80047610 5C00A427 */ .word 0x27A4005C
     /* 27E14 80047614 4C00A527 */ .word 0x27A5004C
@@ -1722,46 +1630,21 @@ dlabel D_8004760C
     /* 27E40 80047640 21380002 */ .word 0x02003821
     /* 27E44 80047644 A21D0108 */ .word 0x08011DA2
     /* 27E48 80047648 00000000 */ .word 0x00000000
-enddlabel D_8004760C
-
-nonmatching D_8004764C
-
-dlabel D_8004764C
     /* 27E4C 8004764C 261F010C */ .word 0x0C011F26
     /* 27E50 80047650 21202002 */ .word 0x02202021
     /* 27E54 80047654 A21D0108 */ .word 0x08011DA2
     /* 27E58 80047658 00000000 */ .word 0x00000000
-enddlabel D_8004764C
-
-nonmatching D_8004765C
-
-dlabel D_8004765C
     /* 27E5C 8004765C 21202002 */ .word 0x02202021
     /* 27E60 80047660 531F010C */ .word 0x0C011F53
     /* 27E64 80047664 21288000 */ .word 0x00802821
     /* 27E68 80047668 A21D0108 */ .word 0x08011DA2
     /* 27E6C 8004766C 00000000 */ .word 0x00000000
-enddlabel D_8004765C
-
-nonmatching D_80047670
-
-dlabel D_80047670
     /* 27E70 80047670 791F010C */ .word 0x0C011F79
     /* 27E74 80047674 21202002 */ .word 0x02202021
     /* 27E78 80047678 A21D0108 */ .word 0x08011DA2
     /* 27E7C 8004767C 00000000 */ .word 0x00000000
-enddlabel D_80047670
-
-nonmatching D_80047680
-
-dlabel D_80047680
     /* 27E80 80047680 891F010C */ .word 0x0C011F89
     /* 27E84 80047684 21202002 */ .word 0x02202021
-enddlabel D_80047680
-
-nonmatching D_80047688
-
-dlabel D_80047688
     /* 27E88 80047688 2800BF8F */ .word 0x8FBF0028
     /* 27E8C 8004768C 2400B58F */ .word 0x8FB50024
     /* 27E90 80047690 2000B48F */ .word 0x8FB40020
@@ -2076,4 +1959,4 @@ dlabel D_80047688
     /* 28364 80047B64 8000A3AC */ .word 0xACA30080
     /* 28368 80047B68 0800E003 */ .word 0x03E00008
     /* 2836C 80047B6C 00000000 */ .word 0x00000000
-enddlabel D_80047688
+enddlabel func_80045CF0

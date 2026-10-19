@@ -84,7 +84,10 @@ RotMatrixC = 0x800350E8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools
 //
 // Boot small-data flags (docs/TOOLCHAIN.md leading-nop store stub family).
 // - boot_flag_0 (word): the only runtime writes measured are 0/1 - cleared
-//   by the stub func_80025AE0 (jal'd once per iteration by the 10x walk
+//   by the boot_flag_0 stub (src/func_80024F00, formerly woven-named
+//   func_80025AE0; the retail jal encodes the stub at 0x80025AE0 which the
+//   carve-view split double-detects inside data_80026524 - adjudicated
+//   2026-10-19), jal'd once per iteration by the 10x walk
 //   loop at func_800262E4), set to 1 by the twin stub func_80025AF0 (no
 //   static caller in the current scan); no static reader anywhere.
 // - boot_flag_1 (halfword, element 0 of the halfword array the scanner

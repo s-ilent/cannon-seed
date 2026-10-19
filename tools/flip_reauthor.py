@@ -46,7 +46,7 @@ GP_FLIP = {"slps_00270": ("0x8006322C", "0x8006632C")}
 # Witness: boot_flag_0's C store is retail 0x3C($gp) -> true 0x80066368
 # (slot-map gp+0x3C = 1, the measured 0/1 word flag); boot_flag_1 = gp+0x68
 # -> 0x80066394 (slot-map 0). GP_INFO then keeps the compiled form
-# (func_80025AE0 stays 0x10, RotTransPers4 stays 0x80). sces's window has
+# (the boot_flag_0 stub row stays 0x10, RotTransPers4 stays 0x80). sces's window has
 # no symbol entries (no C references to its statics): nothing to repoint.
 GP_REPOINT = {"slps_00270": (0x8006322C, 0x8006632C, 0xE0)}
 # The curated-table retail-bound class (docs/TASKS.md 2026-10-19, the
@@ -76,6 +76,26 @@ RETAIL_BOUND = {
         "intr_active_flag": 0x8004CF24,
         "intr_saved_mask": 0x8004CF56,
         "intr_saved_dicr": 0x8004CF58,
+    },
+    # slps_00270 wave 1 (cron-20261019-0319, the oracle-enumerated set: 36
+    # diff bytes -> 10 names, all pre-flip entries). Unlike sces, most slps
+    # positions sit in MIGRATE-DROPPED gaps, so the landed entries carry
+    # absolute:true (the _spu_inTransfer precedent); intr_stop_begin and
+    # intr_stop_commit land at row starts (data_80031E7C / func_80031F5C).
+    # NOTE for the staging pass-through: verbatim passthrough of the pre-flip
+    # lines is NOT sufficient here - the landed lines need the absolute:true
+    # attribute appended for the gap-hosted names.
+    "slps_00270": {
+        "video_mode": 0x8004E500,
+        "_spu_inTransfer": 0x80065DE4,
+        "intr_stop_begin": 0x8002F87C,
+        "intr_stop_commit": 0x8002F95C,
+        "intr_active_flag": 0x8004D29C,
+        "intr_saved_mask": 0x8004D2CE,
+        "intr_saved_dicr": 0x8004D2D0,
+        "intr_imask_ptr": 0x8004E328,
+        "intr_mask_ptr": 0x8004E32C,
+        "intr_dicr_ptr": 0x8004E330,
     },
 }
 # The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked

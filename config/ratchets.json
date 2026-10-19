@@ -45,7 +45,7 @@
     "menu_state_flag (0x800C8B38 JP / 0x800C936C EU - armed 0/1 by the wrapper",
     "families before the menu primitive; committed prose vocabulary), boot_flag_0",
     "(0x80063268 slps word - writes measured 0/1 via the leading-nop stub family:",
-    "cleared per walk iteration by func_80025AE0, set by twin stub func_80025AF0,",
+    "cleared per walk iteration by the boot_flag_0 stub (src/func_80024F00, the carve-row formerly woven-named func_80025AE0), set by twin stub func_80025AF0,",
     "no static reader) and boot_flag_1 (0x80063294 slps halfword - cleared by stub",
     "func_8002A0DC + at func_8002706C, ==1 gate in func_80027100 re-enters the",
     "walk at func_80026288; set-site outside the current scan). Evidence per name",

@@ -4,7 +4,7 @@
  * LIBETC INTR member .text+0x5b0 (extent 0xb0; sdk_members.py unique
  * placement, sig-db sig agrees). Shuts the interrupt subsystem down:
  * gate on the active flag at the INTR state base, run the shutdown
- * cluster (data_80031E7C/intr_stop_commit - real code the scanner
+ * cluster (intr_stop_begin/intr_stop_commit - real code the scanner
  * mis-typed as data inside data_8004A828), save the mask halfword and
  * the DMA DICR word, zero the I_MASK port (re-reading it through the
  * intr_imask_ptr slot), clear the per-channel+master DICR enables
@@ -55,7 +55,7 @@ extern long intr_saved_dicr;
 extern void *volatile intr_mask_ptr;
 extern void *volatile intr_imask_ptr;
 extern void *volatile intr_dicr_ptr;
-extern void data_80031E7C(void);
+extern void intr_stop_begin(void);
 extern void intr_stop_commit(void);
 
 long stopIntr(void)
@@ -67,7 +67,7 @@ long stopIntr(void)
 
     if (*p == 0)
         return 0;
-    data_80031E7C();
+    intr_stop_begin();
     mp = intr_mask_ptr;
     dp = intr_dicr_ptr;
     intr_saved_mask = *(unsigned short *)mp;

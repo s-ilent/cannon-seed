@@ -852,7 +852,7 @@ def preserved_types(yaml_path: Path):
     against a subsegment of exactly that size, so the defensive split in
     main() must carve the c-range out at that size, not to the end of the
     merged range (the range may contain v3-rescued code the C file must
-    not swallow — witnessed with the 0x10-byte func_80025AE0 stub).
+    not swallow — witnessed with the 0x10-byte boot_flag_0 stub (src/func_80024F00, formerly woven-named func_80025AE0)).
     """
     kept = {}
     pinned = set()
@@ -992,7 +992,7 @@ def main(argv):
     # Pin-span hygiene (cron-20261012-1026): the passes inside scan() (the
     # v3c merge, the v5 body-extension and its adjacency re-merge) can
     # bridge a range ACROSS a no-walk span - witnessed: slps_00270
-    # func_80025AE0's 4-byte head extended leftward over its own pin and
+    # the boot_flag_0 stub's (src/func_80024F00) 4-byte head extended leftward over its own pin and
     # merged with the predecessor, swallowing the matched C row. No range
     # may contain a byte-verified row's bytes: subtract every pin span
     # from every range here, before the defensive split and the gap
