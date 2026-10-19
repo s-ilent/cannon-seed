@@ -8829,3 +8829,95 @@ Next queue:
 2. The flip_reauthor staging pass-through needs the absolute:true attribute logic for gap-hosted names before the next staging re-run reproduces the slps landed state (noted in the RETAIL_BOUND comment).
 3. make verify 8/8 true remains the gate; screens' 1 DATA observation each on sces/slps is matcher context.
 4. clean_stale_asm's union rule now handles .rowdef and MIGRATE-DROPPED - re-run it after any yaml adjudication wave.
+
+## 2026-10-19 (window cron-20261019-0549): mainmenu_jp is the THIRD FLIPPED-ERA GREEN (verify d637286a, 0 differing bytes) - the six-target queue starts with the 26-name census adjudication, the alabel census blind spot closes, and the retail-bound class lands in two oracle-enumerated waves (31 names)
+
+Resumed per the 0319 queue (cheapest census next). A TWELFTH rollback: repo
+at 7623cd2, disc/ + disc_work/ + baselines/ (reverted to the Oct 10 woven
+set) all eaten, worklog tail back to cron-20261014-2112, venv rebuilt by
+rehydrate. Reset forward to 19e301d7 (6f7f4f13 ancestor-verified). Both
+CHDs re-fetched from the still-valid CDN links (sha256-gated, fifth
+consecutive cold-sandbox witness), raw images + all 8 true baselines
+restored through the recreated repo-external scripts/restore_discs.py
+(sha1-gated against TRUE_SHA1; the gate caught the woven baselines in
+place) - the script now tolerates a partial raw from an interrupted run
+(exact-size check, unlink+re-extract). All 8 sha1-witnessed.
+
+POST-CLEANUP CENSUS (wiped basis, per target, the 0319 queue item):
+mainmenu_jp 12 dlabel + 14 glabel-dupe = 26 name-level; g3_jp 15 + 12 =
+27. mainmenu_jp is the cheapest - this window's target. (The pre-cleanup
+figures 17/18 do not carry: the 341-file cleanup and the intervening yaml
+waves moved the ground; re-deriving per target before each adjudication
+is the protocol.)
+
+CENSUS BLIND SPOT #2 (new, link-witnessed): after the 26-name rowdef
+adjudication the link still tripped on func_800253F8 - a nested
+`alabel func_800253F8` emission inside func_80025D9C.s (spimdisasm found
+the function at the encoded position inside that row's true span and
+emitted it with macro.inc's alabel = .global + .type + .aent, a real
+global definition) vs the row file's own glabel. The census regex only
+knew glabel/dlabel. audit_flip_clashes.py now collects alabel as
+glabel-class; the func_800253F8 row joined the adjudication (27 rowdefs
+total). The C-side blindness (func_80037D0C, the 0319 note) stays
+link-only.
+
+THE C-ROW MEMBER VARIANT (no sces/slps precedent): the link's second
+blocker was func_80037D0C - the C object src/func_80037A44.o defines it
+at .r_00015064+0x2c8 = true VMA 0x80034B2C, while the nested nonmatching
+emission inside func_8003B1A8.s sits at the ENCODED position 0x80037D0C
+(the row's true span hosts it; the beq/j pair that names it is in the
+same row). THE LAW DECIDES: the definition at the encoded position owns
+the name so the relocations re-encode the retail value; the C definition
+yields - renamed to its true-position name func_80034B2C (name==VMA
+self-consistency, the slps carve-name precedent generalized to a member
+inside a matched C row). Definition + one prose reference renamed; no
+externs elsewhere; the symbols entry intr_stop-style "(branch target)"
+stays retail-bound at 0x80037D0C.
+
+THE ADJUDICATION (27 names, the sces spelling verbatim): yaml rows
+renamed <name>.rowdef (splat derives glabel/nonmatching/endlabel/filename
+- durable across re-extracts), row-start symbol entries retired as
+FLIP-ROWDEF comments carrying their then-current values. Census 26+1 ->
+0. First link: SUCCESS (698,368 B, pc0 0x8005C530).
+
+RETAIL-BOUND WAVES (the oracle enumerates; every value pre-flip-confirmed
+in de0b0d68^ - the sces faithfulness proof repeats): wave 1 = 23 names /
+115 bytes / 27 runs: the state_* family (block_0..10, cursor, rearm_0,
+records - twelve names at delta 0xDA80), the intr cluster (active_flag/
+trap_flag/saved_mask 0x13260; mask_ptr/dicr_ptr/vb_cb_slots/video_mode
+0x134C0), menu_state_flag + _spu_inTransfer (0x15D20), intr_stop_begin/
+commit (0x83D0 - both land at row starts, data_800690D8 hosting
+intr_stop_begin exactly). Wave 2 = 8 names / 24 bytes (the wave-1 runs
+carried multiple pairs - enumerate EVERY pair per run, not one per run):
+state_record_0/1, rearm_1/2/3, block_0, intr_imask_ptr, intr_saved_dicr.
+All row-hosted in the flipped yaml (the giant tail row data_8009624C
+hosts most; NO absolute:true needed - that remains the slps-only
+variant). THE INHERENT ALIAS AGAIN: retail intr_stop_commit 0x8005F9B8
+coincides with the pinned psyq ResetEntryInt - allow_duplicated:True on
+both lines (the sces/slps spelling). RESULT: make verify TARGET=
+mainmenu_jp GREEN, sha1 d637286a == the committed oracle, 0 differing
+bytes. Gates: ratchets 374/0 == baseline; census mainmenu_jp 0;
+code_data_screen 386 asm/c subsegs, 3 DATA observations (zero-heavy
+spans, the matcher-context species); clean_stale_asm "nothing stale"
+(the fixed point holds post-adjudication).
+
+LESSON: per-run pair enumeration (wave 2 exists because wave 1 read one
+pair per run); the oracle per wave is still the enumerator, but read the
+runs exhaustively - a 22B run is two pairs, a 42B run three.
+
+Next queue:
+1. Flip lane: four targets left (g3_jp 27 name-level, mainmenu_eu,
+   g3_eu, g3org_jp, g3org_eu - re-derive each wiped census before
+   starting; the numbers move with every landed wave). Expect: rowdef
+   adjudications (audit now covers alabel), C-object-side blockers at
+   the link (link-only witness), then retail-bound waves with the
+   wave-2 lesson applied.
+2. flip_reauthor: bank the RETAIL_BOUND mainmenu_jp table (31 names,
+   all row-hosted - verbatim pass-through suffices for this target) and
+   the absolute:true attribute logic for gap-hosted names (the 0319
+   staging note, still open).
+3. The alabel blind spot is closed in the census; the C-side class
+   remains link-only - consider an undef_syms-side census if the lane
+   wants it instrumented.
+4. make verify 8/8 true remains the gate; screens' 3 DATA observations
+   on mainmenu_jp are matcher context, not flip blockers.
