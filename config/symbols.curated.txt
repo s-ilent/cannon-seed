@@ -416,22 +416,22 @@ _spu_inTransfer = 0x80099058; // LIBSPU S_INI member bss static; gp:absolute (re
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
-intr_vb_cb_slots = 0x80087DB0; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
+intr_vb_cb_slots = 0x800974B0; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
-video_mode = 0x80087F50; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+video_mode = 0x80097650; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 CheckCallback = 0x8004A76C; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x8004A77C; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x8004A794; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
-intr_active_flag = 0x80086F4C; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x80086F7E; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x80086F80; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_imask_ptr = 0x80087D78; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
-intr_dicr_ptr = 0x80087D80; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x80045984; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x80045A64; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_active_flag = 0x800963EC; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x8009641E; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x80096420; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_imask_ptr = 0x80097478; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
+intr_dicr_ptr = 0x80097480; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8004B3C4; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8004B4A4; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x8004ABC8; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntr = 0x8004A7B0; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
 intr_start_aux1 = 0x800453F0; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
@@ -445,8 +445,8 @@ intr_restart_begin = 0x80045A04; // INTR restart cluster entry 1, jal from resta
 intr_restart_commit = 0x80045AB4; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x800453DC; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
 restartIntr = 0x8004AC78; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
-intr_trap_flag = 0x80086F4E; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
-intr_mask_ptr = 0x80087D7C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
+intr_trap_flag = 0x800963EE; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x8009747C; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -464,7 +464,7 @@ SsSetStereo = 0x8006AB1C; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x8009894C; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+_spu_inTransfer = 0x800AA8AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
 // target: g3org_eu
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
