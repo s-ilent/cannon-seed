@@ -8921,3 +8921,85 @@ Next queue:
    wants it instrumented.
 4. make verify 8/8 true remains the gate; screens' 3 DATA observations
    on mainmenu_jp are matcher context, not flip blockers.
+
+2026-10-19 (window cron-20261019-0704): g3_jp is the FOURTH FLIPPED-ERA
+GREEN. Rehydrate OK; origin had moved to c587fe1e (the 0549 window's
+mainmenu_jp unit landed after the context break) - reset forward, tree
+clean. Mid-session the sandbox re-provisioned AGAIN under the window
+(baselines/ reverted to the all-woven snapshot between the 07:05 witness
+and the 07:11 write; disk/*.chd and /home/z/disc_work eaten; the CDN
+links still valid at 07:08 so both CHDs re-fetched, sha256 exact). All
+eight TRUE baselines re-extracted per-sector into per-disc dirs and
+sha1-witnessed 8/8 against the flipped oracles (the MAINMENU.EXE
+same-name collision contained by the jp_out/eu_out split; the seven
+EXEs + g3_jp all exact). g3_jp census re-derived on the wiped basis:
+15 dlabel + 12 glabel-dupe = 27 name-level, EXACTLY the 0319
+post-cleanup numbers (no wave moved this target's namespace in
+between).
+
+THE ADJUDICATION (27 names, the established spelling): yaml rows
+renamed <name>.rowdef, row-start symbol entries retired as FLIP-ROWDEF
+comments carrying their then-current values. Census 27 -> 0. First
+link: SUCCESS (575,488 B, pc0 0x80047EF0) - NO C-side blocker this
+time (the mainmenu_jp func_80037D0C class did not appear; the link-only
+class stays un-instrumented).
+
+THE RETAIL-BOUND CLASS IN ONE WAVE (12 names / 39 diff bytes / 24
+runs): the oracle enumerator read exhaustively per run (the wave-2
+lesson instrumented: tools/oracle_runs.py decodes EVERY overlapping
+word of EVERY run; committed this window), so g3_jp closed in ONE wave
+where mainmenu_jp needed two. THE DECODE LESSON: %hi/%lo pairs carry
+the sign-extension - built lui 0x800A + lw 0x894C is 0x8009894C, NOT
+0x800A894C; the raw-word table is the evidence, the reader applies the
+carry. THE STAGING DERIVATION, understood this window: de0b0d68
+flip-mapped the curated entries to approximate true-layout positions
+(intr_stop_begin 0x8004B3C4 -> 0x80045984 staging, _spu_inTransfer
+0x800AA8AC -> 0x8009894C, the whole intr cluster likewise); the staged
+values are what the pre-wave build encoded (every "built" word in the
+oracle table == the staging entry), and the staged _spu_inTransfer even
+rendered a dlabel inside the giant data row that the C getter bound
+to. THE WAVE restores the PRE-FLIP entries - witnessed verbatim from
+git de0b0d68^, 12/12 identical to the independent oracle decode (the
+faithfulness proof repeats): intr_stop_begin 0x8004B3C4 and
+intr_stop_commit 0x8004B4A4 (jal targets, landing at the data_80051B14
+and func_80051BF4 row starts), intr_active_flag 0x800963EC,
+intr_trap_flag 0x800963EE, intr_saved_mask 0x8009641E,
+intr_saved_dicr 0x80096420, intr_imask_ptr 0x80097478,
+intr_mask_ptr 0x8009747C, intr_dicr_ptr 0x80097480,
+intr_vb_cb_slots 0x800974B0, video_mode 0x80097650, _spu_inTransfer
+0x800AA8AC - ten data members row-hosted in the giant data row
+data_8007D920, NO absolute:true needed (that remains the slps-only
+variant). THE INHERENT ALIAS AGAIN: retail intr_stop_commit
+0x8004B4A4 coincides with the pinned psyq ResetEntryInt -
+allow_duplicated:True on both lines (the established spelling). Both
+symbol files restored (per-target RETAIL-BOUND annotations per the
+slps spelling; curated g3_jp sections verbatim). Unreferenced family
+members (intr_start_aux*, intr_restart_*) stay staging - the oracle is
+the enumerator; they are a later wave's work if a reference ever
+appears.
+
+RESULT: make verify TARGET=g3_jp GREEN, sha1 994a680c == the committed
+oracle, 0 differing bytes. Gates: ratchets 374/0 == baseline; census
+g3_jp 0; code_data_screen 314 asm/c subsegs, 5 DATA observations
+(zero-heavy spans, the matcher-context species); clean_stale_asm
+"nothing stale" (the fixed point holds post-adjudication); regression
+slps_00270 + sces_00269 + mainmenu_jp re-verified GREEN after the
+baseline re-provision (the mid-session revert was the only failure;
+the g3_jp-scoped curated edits touch nothing of theirs).
+
+Next queue:
+1. Flip lane: four targets left (mainmenu_eu, g3_eu, g3org_jp,
+   g3org_eu - re-derive each wiped census before starting; the numbers
+   move with every landed wave). Expect: rowdef adjudications, first
+   link (C-side class possible), retail-bound waves with the
+   enumerator (the %hi/%lo carry lesson applies).
+2. flip_reauthor: bank the RETAIL_BOUND mainmenu_jp + g3_jp tables
+   (31 + 12 names, all row-hosted - verbatim pass-through suffices for
+   both targets) and the absolute:true attribute logic for gap-hosted
+   names (the 0319 staging note, still open). The staging-derivation
+   discovery above gives the tool its semantic: pre-flip curated
+   entries are the retail truth; the de0b0d68 flip-map was staging.
+3. The C-side class remains link-only - consider an undef_syms-side
+   census if the lane wants it instrumented.
+4. make verify 8/8 true remains the gate; screens' 5 DATA observations
+   on g3_jp are matcher context, not flip blockers.
