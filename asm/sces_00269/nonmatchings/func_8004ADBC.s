@@ -29,8 +29,8 @@ endlabel func_800454B0
 nonmatching func_800454D0, 0x80
 
 glabel func_800454D0
-    /* 25CD0 800454D0 0680023C */  lui        $v0, %hi(D_80065A68)
-    /* 25CD4 800454D4 685A428C */  lw         $v0, %lo(D_80065A68)($v0)
+    /* 25CD0 800454D0 0680023C */  lui        $v0, %hi(_spu_inTransfer)
+    /* 25CD4 800454D4 685A428C */  lw         $v0, %lo(_spu_inTransfer)($v0)
     /* 25CD8 800454D8 00000000 */  nop
     /* 25CDC 800454DC 03005014 */  bne        $v0, $s0, .L800454EC
     /* 25CE0 800454E0 00000000 */   nop
@@ -59,8 +59,8 @@ glabel func_800454D0
     /* 25D2C 8004552C 03005014 */  bne        $v0, $s0, .L8004553C
     /* 25D30 80045530 00000000 */   nop
   .L80045534:
-    /* 25D34 80045534 0680013C */  lui        $at, %hi(D_80065A68)
-    /* 25D38 80045538 685A22AC */  sw         $v0, %lo(D_80065A68)($at)
+    /* 25D34 80045534 0680013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 25D38 80045538 685A22AC */  sw         $v0, %lo(_spu_inTransfer)($at)
   .L8004553C:
     /* 25D3C 8004553C 1800BF8F */  lw         $ra, 0x18($sp)
     /* 25D40 80045540 1400B18F */  lw         $s1, 0x14($sp)

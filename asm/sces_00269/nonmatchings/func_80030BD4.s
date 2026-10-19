@@ -12,8 +12,8 @@ nonmatching startIntr, 0x14
 glabel startIntr
     /* F034 8002E834 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* F038 8002E838 1000B0AF */  sw         $s0, 0x10($sp)
-    /* F03C 8002E83C 0580103C */  lui        $s0, %hi(D_8004CF24)
-    /* F040 8002E840 24CF1026 */  addiu      $s0, $s0, %lo(D_8004CF24)
+    /* F03C 8002E83C 0580103C */  lui        $s0, %hi(intr_active_flag)
+    /* F040 8002E840 24CF1026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* F044 8002E844 1400BFAF */  sw         $ra, 0x14($sp)
 endlabel startIntr
 

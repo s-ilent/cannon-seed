@@ -75,7 +75,7 @@ segments:
       - [0x3800, data, data_80023840]   # 0xdc
       - [0x38DC, asm, func_8002392C]   # 0x724
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x4880, data, data_80024080]   # 0xf4
-      - [0x4000, asm, func_80024174]   # 0x2d8
+      - [0x4000, asm, func_80024174.rowdef]   # 0x2d8
       - [0x42D8, asm, func_80024458]   # 0x2e8 pinned
       - [0x45C0, data, data_80024740]   # 0x3b4
       - [0x4974, asm, func_80024C24]   # 0x194 pinned
@@ -97,11 +97,11 @@ segments:
       - [0x9800, data, data_8002A570]   # 0x18
       - [0x9818, asm, func_8002A6A8]   # 0x31c
       - [0x9B34, data, data_8002A9C4]   # 0xcec
-      - [0xA820, asm, func_8002B910]   # 0x14c
+      - [0xA820, asm, func_8002B910.rowdef]   # 0x14c
       - [0xA96C, data, data_8002BA5C]   # 0x4
-      - [0xA970, asm, func_8002BA60]   # 0x690
+      - [0xA970, asm, func_8002BA60.rowdef]   # 0x690
       - [0xB000, data, data_8002C17C]   # 0x84
-      - [0xB084, asm, func_8002C2A4]   # 0x200
+      - [0xB084, asm, func_8002C2A4.rowdef]   # 0x200
       - [0xB284, data, data_8002C4A4]   # 0x57c
       - [0xB800, asm, func_8002CB40]   # 0x800
       - [0xC000, data, data_8002D380]   # 0x50
@@ -190,7 +190,7 @@ segments:
       - [0xFD08, data, data_800319D8]   # 0x364
       - [0x1006C, asm, func_80031E6C]   # 0xf94
       - [0x11000, data, data_80032F54]   # 0x1000
-      - [0x12000, asm, func_8003429C]   # 0x800
+      - [0x12000, asm, func_8003429C.rowdef]   # 0x800
       - [0x12800, data, data_80034AD4]   # 0x12c
       - [0x1292C, asm, func_80034D1C]   # 0x10 sdk
       - [0x1293C, asm, func_80034D2C]   # 0x10 sdk
@@ -216,13 +216,13 @@ segments:
       - [0x13268, asm, func_80035788]   # 0x18 sdk
       - [0x13280, asm, func_800357A0]   # 0xf4 sdk
       - [0x13374, data, data_80035894]   # 0x474
-      - [0x137E8, asm, func_80035D08]   # 0x18
+      - [0x137E8, asm, func_80035D08.rowdef]   # 0x18
       - [0x13800, data, data_80035D2C]   # 0x1a0
       - [0x139A0, asm, func_80035FF0]   # 0x98 sdk
       - [0x13A38, asm, func_80036088]   # 0xe4 sdk
       - [0x13B1C, asm, func_8003616C]   # 0x78 sdk
       - [0x13B94, data, data_800361E4]   # 0x4b0
-      - [0x14044, asm, func_800367C4]   # 0xec
+      - [0x14044, asm, func_800367C4.rowdef]   # 0xec
       - [0x14130, asm, func_800368B0]   # 0x50 sdk
       - [0x14180, data, data_80036900]   # 0x454
       - [0x145D4, asm, func_80036D54]   # 0x22c
@@ -240,7 +240,7 @@ segments:
       - [0x15BE0, data, data_800386F0]   # 0x444
       - [0x16024, asm, func_80038C64]   # 0xe4
       - [0x16108, data, data_80038D48]   # 0x4
-      - [0x1610C, asm, func_80038D4C]   # 0x5f8
+      - [0x1610C, asm, func_80038D4C.rowdef]   # 0x5f8
       - [0x16704, data, data_80039344]   # 0x170
       - [0x16874, asm, func_800395E4]   # 0xa0
       - [0x16914, data, data_80039684]   # 0x4 pinned

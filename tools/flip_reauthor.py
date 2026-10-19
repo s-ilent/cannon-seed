@@ -49,6 +49,35 @@ GP_FLIP = {"slps_00270": ("0x8006322C", "0x8006632C")}
 # (func_80025AE0 stays 0x10, RotTransPers4 stays 0x80). sces's window has
 # no symbol entries (no C references to its statics): nothing to repoint.
 GP_REPOINT = {"slps_00270": (0x8006322C, 0x8006632C, 0xE0)}
+# The curated-table retail-bound class (docs/TASKS.md 2026-10-19, the
+# sces_00269 pilot, first flipped-era GREEN): entries RETAIL CODE
+# REFERENCES (C %hi/%lo pairs, stopIntr's no-arg jals) must keep the
+# retail-encoded address. Retail runtime encodings are layout-invariant -
+# the flip re-places rows in the FILE, it does not change what the retail
+# code encodes - so reference resolution binds to the retail encodings,
+# NOT to row-position arithmetic; the framing re-point of this class broke
+# 33 retail bytes across two waves (4 + 3 names) before the restoration.
+# Values = the pre-flip entries (the woven pipeline resolved at retail
+# encodings all along). intr_stop_commit additionally needs
+# allow_duplicated:True on both sides in the symbols file: it shares
+# 0x8002F458 with the re-pointed psyq pin ResetEntryInt - the row-name
+# class and the retail-encoded class legitimately coincide post-flip
+# (pre-flip they sat at different addresses: 0x80031928 vs 0x8002F458).
+# The woven row names whose yaml rows migrated away from their name
+# addresses (the glabel-dupe census class) are adjudicated at the yaml
+# layer instead: the row becomes <name>.rowdef and the name belongs to
+# the definition at the retail-encoded position (sces_00269 pilot, 8 rows).
+RETAIL_BOUND = {
+    "sces_00269": {
+        "video_mode": 0x8004CF20,
+        "_spu_inTransfer": 0x80065A68,
+        "intr_stop_begin": 0x8002F388,
+        "intr_stop_commit": 0x8002F458,
+        "intr_active_flag": 0x8004CF24,
+        "intr_saved_mask": 0x8004CF56,
+        "intr_saved_dicr": 0x8004CF58,
+    },
+}
 # The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked
 # policy: psyq name wins, the intr_* alias retires with a provenance note;
 # C sources reference none of the collided names - grep-verified). These
@@ -170,6 +199,20 @@ def map_symbols_text(target, text, fw, rows, max_off, dropped, adjudicate):
                     out.append(f"{m.group(1)}{new_va:X}{m.group(3)}")
                     n += 1
                     continue
+            if va == RETAIL_BOUND.get(target, {}).get(name):
+                # retail-bound curated entry: the retail bytes encode this
+                # exact address (see the RETAIL_BOUND note) - pass through
+                # verbatim; the framing re-point would break the encoding.
+                if va in mapped_vas:
+                    classes["retail-bound-dupe-dropped"] = \
+                        classes.get("retail-bound-dupe-dropped", 0) + 1
+                    out.append(f"// FLIP-DUPE (dropped): {line.strip()}")
+                    continue
+                mapped_vas.add(va)
+                out.append(line)
+                classes["retail-bound"] = classes.get("retail-bound", 0) + 1
+                n += 1
+                continue
             if ((va - BASE) + dm.HEADER >= max_off
                     or (enc.match(name) and int(name[-8:], 16) == va)):
                 # beyond-payload symbol (BIOS region, scratchpad), or an

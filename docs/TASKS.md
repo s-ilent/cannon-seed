@@ -8720,3 +8720,94 @@ Next queue:
    2x the name census; the audit tool's output already covers the
    names.
 4. psyq statics: no action needed (mechanism documented above).
+
+## 2026-10-19 (window cron-20261019-0204): sces_00269 is the FIRST FLIPPED-ERA GREEN - the curated-table class restored to retail encodings in two waves (4+3 names, 33 bytes), the 8 woven row names adjudicated at the yaml layer as <name>.rowdef, and the alias pair at 0x8002F458 legitimized with allow_duplicated
+
+Resumed per the 0049 queue. HEAD was 7623cd2 (an ELEVENTH rollback; worklog
+tail reverted to cron-20261014-2112 - the 2334/0049 sections are eaten
+locally and recoverable from git: 6f7f4f13 and 4252a9e8 carry their
+TASKS.md sections; this file is authoritative). Reset forward to 4252a9e8.
+Both CHDs re-fetched (sha256 equal, fourth consecutive cold-sandbox
+witness), all 8 true baselines re-extracted --per-sector and sha1-witnessed
+by a repo-external script (scripts/restore_discs.py, gated against the
+TRUE_SHA1 table in tools/flip_reauthor.py - the gate caught the rollback's
+woven-era baselines sitting in place: all 8 sha1s wrong before restore).
+cc.sh exec bit re-repaired (rehydrate's re-mark list still misses it).
+
+CURATED-TABLE CLASS, WAVE 1 (the 0049 pilot four): moved video_mode,
+_spu_inTransfer, intr_stop_begin, intr_stop_commit back to their
+retail-encoded addresses in config/symbols.sces_00269.txt (0x8004CF20 /
+0x80065A68 / 0x8002F388 / 0x8002F458). All four have row coverage in the
+flipped yaml (the first two land inside data_80051000; intr_stop_begin is
+the start of data_80031858; intr_stop_commit the start of the func_80031928
+row). Pre-flip file (de0b0d68^) confirms the restoration is faithful: the
+woven pipeline carried exactly these values - it resolved names at retail
+encodings all along.
+
+NAME-COLLISION ADJUDICATION (0049 queue item 2, landed as row-rename): the
+8 sces census names' yaml rows renamed <name> -> <name>.rowdef
+(func_80024174/2B910/2BA60/2C2A4/3429C/35D08/367C4/38D4C) and their
+row-start symbol entries retired with FLIP-ROWDEF provenance comments.
+Mechanism witnessed concretely: the row func_80024174 migrated to true
+0x80023800 while the row func_80024C24 migrated ONTO 0x80024174 - the
+nested nonmatching emission (auto-named from the retail-encoded reference)
+lands inside another row's true span, so the woven row name and the encoded
+definition split apart; the definition at the encoded position owns the
+name, the row keeps its bytes under .rowdef. Durable across re-extracts
+(unlike the 0049 sandbox-only .s edit): splat derives glabel/nonmatching/
+endlabel/filename from the yaml row name. Old row files deleted; fresh
+extract regenerates everything else identically.
+
+ALIAS AT 0x8002F458: the retail-bound intr_stop_commit coincides with the
+re-pointed psyq pin ResetEntryInt (the pin followed its row to the new
+start). Pre-flip they sat at different addresses (0x80031928 vs
+0x8002F458) - the coincidence is INHERENT to the flip. Adjudication:
+allow_duplicated:True on BOTH symbols-file lines (splat's sanctioned
+mechanism; bare `allow_duplicated` tokens are ignored - attributes must be
+key:value). The C source spells intr_stop_commit (src/func_8004E094.c,
+src/stopIntr.c); the psyq member provenance keeps ResetEntryInt. Note:
+splat asserts exactly one ';' per symbols line and parses comment
+attributes as key:value - provenance prose must avoid both.
+
+CURATED-TABLE CLASS, WAVE 2 (found by the oracle, not by theory): after
+wave 1 the verify diff dropped 24 -> 9 bytes = three more %hi/%lo sites in
+stopIntr's vicinity: intr_active_flag, intr_saved_mask, intr_saved_dicr
+encode 0x8004CF24 / 0x8004CF56 / 0x8004CF58 retail (the LIBETC statics
+cluster is contiguous: video_mode 0x8004CF20, active_flag +4, saved_mask
++0x36, saved_dicr +0x38). The 0049 gas table had attributed these sites to
+video_mode's divergences; their own GEN entries were framing-mapped
+wrong-class too. Moved all three (pre-flip file confirms 0x8004CF24 was
+the woven value). The intr_*_ptr trio (mask/imask/dicr) stays at its
+mapped values - no C-site divergence, i.e. already identity-true. LESSON:
+the oracle, run per-wave, is the enumerator for this class - the same
+audit now applies to every C-referenced curated name in the other 7
+targets, and the wave-2 pattern says expect MORE names than any one
+window's table lists.
+
+RESULT: make verify TARGET=sces_00269 GREEN - "OK: build matches retail
+baselines/sces_00269.bin", sha1 06b4bda6 == the committed oracle, 0
+differing bytes. First flipped-era byte-exact image. Gates this window:
+ratchets 374/0 == baseline; audit_flip_clashes sces_00269 = 1 name-level
+note (func_8002F90C, glabel in a nested emission + dlabel in a data row -
+0049's link witness already showed it does NOT trip ld; the census
+over-approximates ld by design); code_data_screen sces_00269 = 230 asm/c
+subsegs, 1 DATA observation (0x80032A68, SetDQB's row, untouched by this
+window's diff - pre-existing flipped-era state for the matchers). Banked
+in tools/flip_reauthor.py: RETAIL_BOUND pilot table + the pass-through
+branch in map_symbols_text (staging re-runs now reproduce the class rule).
+
+Next queue:
+1. Flip lane: retail-bound wave audit for the other 7 targets - per
+   target: restore C-referenced curated names to retail encodings
+   (oracle-enumerated per wave), adjudicate that target's census names at
+   the yaml layer, then verify. Cheapest next: whichever target's census
+   is smallest (check audit output per target).
+2. The 8-row yaml adjudication direction (row-rename) is now
+   LINK-PROVEN AND TREE-LANDED for sces; the lane may still prefer the
+   build-enforcement variant for the remaining targets - decide before
+   mass-applying.
+3. audit tool note: the func_8002F90C-class name-level over-approximation
+   (audit flags, ld does not trip) could gain a --ld-mode that models the
+   two-pass link; only if the lane wants it.
+4. make verify 8/8 true remains the gate; screens' 1 DATA observation on
+   sces is matcher context, not a flip blocker.

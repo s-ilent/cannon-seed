@@ -13,13 +13,13 @@ glabel _spu_setInTransfer
     /* 1E828 8003E028 01000234 */  ori        $v0, $zero, 0x1
     /* 1E82C 8003E02C 05008214 */  bne        $a0, $v0, .L8003E044
     /* 1E830 8003E030 00000000 */   nop
-    /* 1E834 8003E034 0680013C */  lui        $at, %hi(D_80065A68)
-    /* 1E838 8003E038 685A20AC */  sw         $zero, %lo(D_80065A68)($at)
+    /* 1E834 8003E034 0680013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 1E838 8003E038 685A20AC */  sw         $zero, %lo(_spu_inTransfer)($at)
     /* 1E83C 8003E03C 13F80008 */  j          .L8003E04C
     /* 1E840 8003E040 00000000 */   nop
   .L8003E044:
-    /* 1E844 8003E044 0680013C */  lui        $at, %hi(D_80065A68)
-    /* 1E848 8003E048 685A22AC */  sw         $v0, %lo(D_80065A68)($at)
+    /* 1E844 8003E044 0680013C */  lui        $at, %hi(_spu_inTransfer)
+    /* 1E848 8003E048 685A22AC */  sw         $v0, %lo(_spu_inTransfer)($at)
   .L8003E04C:
     /* 1E84C 8003E04C 0800E003 */  jr         $ra
     /* 1E850 8003E050 00000000 */   nop

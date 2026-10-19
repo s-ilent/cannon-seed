@@ -17,8 +17,8 @@ endlabel restartIntr
 nonmatching func_8002ED04, 0x4C
 
 glabel func_8002ED04
-    /* F504 8002ED04 0580103C */  lui        $s0, %hi(D_8004CF24)
-    /* F508 8002ED08 24CF1026 */  addiu      $s0, $s0, %lo(D_8004CF24)
+    /* F504 8002ED04 0580103C */  lui        $s0, %hi(intr_active_flag)
+    /* F508 8002ED08 24CF1026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* F50C 8002ED0C 1400BFAF */  sw         $ra, 0x14($sp)
     /* F510 8002ED10 00000296 */  lhu        $v0, 0x0($s0)
     /* F514 8002ED14 00000000 */  nop
@@ -28,8 +28,8 @@ glabel func_8002ED04
     /* F524 8002ED24 38000426 */   addiu     $a0, $s0, 0x38
     /* F528 8002ED28 0580043C */  lui        $a0, %hi(intr_mask_ptr)
     /* F52C 8002ED2C B4DF848C */  lw         $a0, %lo(intr_mask_ptr)($a0)
-    /* F530 8002ED30 0580033C */  lui        $v1, %hi(D_8004CF56)
-    /* F534 8002ED34 56CF6394 */  lhu        $v1, %lo(D_8004CF56)($v1)
+    /* F530 8002ED30 0580033C */  lui        $v1, %hi(intr_saved_mask)
+    /* F534 8002ED34 56CF6394 */  lhu        $v1, %lo(intr_saved_mask)($v1)
     /* F538 8002ED38 01000234 */  ori        $v0, $zero, 0x1
     /* F53C 8002ED3C 000002A6 */  sh         $v0, 0x0($s0)
     /* F540 8002ED40 000083A4 */  sh         $v1, 0x0($a0)
