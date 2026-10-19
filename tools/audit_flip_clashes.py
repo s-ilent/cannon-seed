@@ -36,6 +36,12 @@ import sys
 from pathlib import Path
 
 GLABEL = re.compile(r"^\s*glabel\s+(\S+)")
+# alabel (macro.inc) = .global + .type + label + .aent: a real global
+# definition emitted for functions spimdisasm finds inside another row's
+# true span (the func_800253F8 class the first census missed - the link
+# witnessed it as a multiple definition the glabel/dlabel regex never saw).
+# glabel-class for census purposes.
+ALABEL = re.compile(r"^\s*alabel\s+(\S+)")
 DLABEL = re.compile(r"^\s*dlabel\s+(\S+)")
 
 
@@ -64,6 +70,10 @@ def collect(roots):
         with p.open(errors="replace") as fh:
             for line in fh:
                 m = GLABEL.match(line)
+                if m:
+                    glabels.setdefault(m.group(1), set()).add(rel)
+                    continue
+                m = ALABEL.match(line)
                 if m:
                     glabels.setdefault(m.group(1), set()).add(rel)
                     continue
