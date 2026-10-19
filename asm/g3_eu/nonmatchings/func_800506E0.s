@@ -12,24 +12,24 @@ nonmatching startIntr, 0x7C
 glabel startIntr
     /* 2A9F0 8004A1F0 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 2A9F4 8004A1F4 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 2A9F8 8004A1F8 0980103C */  lui        $s0, %hi(D_80096C08)
-    /* 2A9FC 8004A1FC 086C1026 */  addiu      $s0, $s0, %lo(D_80096C08)
+    /* 2A9F8 8004A1F8 0980103C */  lui        $s0, %hi(intr_active_flag)
+    /* 2A9FC 8004A1FC 086C1026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* 2AA00 8004A200 1400BFAF */  sw         $ra, 0x14($sp)
     /* 2AA04 8004A204 00000296 */  lhu        $v0, 0x0($s0)
     /* 2AA08 8004A208 00000000 */  nop
     /* 2AA0C 8004A20C 2A004014 */  bnez       $v0, .L8004A2B8
     /* 2AA10 8004A210 21100000 */   addu      $v0, $zero, $zero
-    /* 2AA14 8004A214 0980033C */  lui        $v1, %hi(D_80097C94)
-    /* 2AA18 8004A218 947C638C */  lw         $v1, %lo(D_80097C94)($v1)
-    /* 2AA1C 8004A21C 0980023C */  lui        $v0, %hi(D_80097C98)
-    /* 2AA20 8004A220 987C428C */  lw         $v0, %lo(D_80097C98)($v0)
+    /* 2AA14 8004A214 0980033C */  lui        $v1, %hi(intr_imask_ptr)
+    /* 2AA18 8004A218 947C638C */  lw         $v1, %lo(intr_imask_ptr)($v1)
+    /* 2AA1C 8004A21C 0980023C */  lui        $v0, %hi(intr_mask_ptr)
+    /* 2AA20 8004A220 987C428C */  lw         $v0, %lo(intr_mask_ptr)($v0)
     /* 2AA24 8004A224 3333053C */  lui        $a1, (0x33333333 >> 16)
     /* 2AA28 8004A228 000040A4 */  sh         $zero, 0x0($v0)
     /* 2AA2C 8004A22C 00004294 */  lhu        $v0, 0x0($v0)
     /* 2AA30 8004A230 3333A534 */  ori        $a1, $a1, (0x33333333 & 0xFFFF)
     /* 2AA34 8004A234 000062A4 */  sh         $v0, 0x0($v1)
-    /* 2AA38 8004A238 0980023C */  lui        $v0, %hi(D_80097C9C)
-    /* 2AA3C 8004A23C 9C7C428C */  lw         $v0, %lo(D_80097C9C)($v0)
+    /* 2AA38 8004A238 0980023C */  lui        $v0, %hi(intr_dicr_ptr)
+    /* 2AA3C 8004A23C 9C7C428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* 2AA40 8004A240 21200002 */  addu       $a0, $s0, $zero
     /* 2AA44 8004A244 000045AC */  sw         $a1, 0x0($v0)
     /* 2AA48 8004A248 D029010C */  jal        memclr

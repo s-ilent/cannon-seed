@@ -12,8 +12,8 @@ nonmatching restartIntr, 0x60
 glabel restartIntr
     /* 2AEB8 8004A6B8 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 2AEBC 8004A6BC 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 2AEC0 8004A6C0 0980103C */  lui        $s0, %hi(D_80096C08)
-    /* 2AEC4 8004A6C4 086C1026 */  addiu      $s0, $s0, %lo(D_80096C08)
+    /* 2AEC0 8004A6C0 0980103C */  lui        $s0, %hi(intr_active_flag)
+    /* 2AEC4 8004A6C4 086C1026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* 2AEC8 8004A6C8 1400BFAF */  sw         $ra, 0x14($sp)
     /* 2AECC 8004A6CC 00000296 */  lhu        $v0, 0x0($s0)
     /* 2AED0 8004A6D0 00000000 */  nop
@@ -21,17 +21,17 @@ glabel restartIntr
     /* 2AED8 8004A6D8 00000000 */   nop
     /* 2AEDC 8004A6DC 712B010C */  jal        HookEntryInt
     /* 2AEE0 8004A6E0 38000426 */   addiu     $a0, $s0, 0x38
-    /* 2AEE4 8004A6E4 0980043C */  lui        $a0, %hi(D_80097C98)
-    /* 2AEE8 8004A6E8 987C848C */  lw         $a0, %lo(D_80097C98)($a0)
-    /* 2AEEC 8004A6EC 0980033C */  lui        $v1, %hi(D_80096C3A)
-    /* 2AEF0 8004A6F0 3A6C6394 */  lhu        $v1, %lo(D_80096C3A)($v1)
+    /* 2AEE4 8004A6E4 0980043C */  lui        $a0, %hi(intr_mask_ptr)
+    /* 2AEE8 8004A6E8 987C848C */  lw         $a0, %lo(intr_mask_ptr)($a0)
+    /* 2AEEC 8004A6EC 0980033C */  lui        $v1, %hi(intr_saved_mask)
+    /* 2AEF0 8004A6F0 3A6C6394 */  lhu        $v1, %lo(intr_saved_mask)($v1)
     /* 2AEF4 8004A6F4 01000234 */  ori        $v0, $zero, 0x1
     /* 2AEF8 8004A6F8 000002A6 */  sh         $v0, 0x0($s0)
     /* 2AEFC 8004A6FC 000083A4 */  sh         $v1, 0x0($a0)
-    /* 2AF00 8004A700 0980033C */  lui        $v1, %hi(D_80097C9C)
-    /* 2AF04 8004A704 9C7C638C */  lw         $v1, %lo(D_80097C9C)($v1)
-    /* 2AF08 8004A708 0980023C */  lui        $v0, %hi(D_80096C3C)
-    /* 2AF0C 8004A70C 3C6C428C */  lw         $v0, %lo(D_80096C3C)($v0)
+    /* 2AF00 8004A700 0980033C */  lui        $v1, %hi(intr_dicr_ptr)
+    /* 2AF04 8004A704 9C7C638C */  lw         $v1, %lo(intr_dicr_ptr)($v1)
+    /* 2AF08 8004A708 0980023C */  lui        $v0, %hi(intr_saved_dicr)
+    /* 2AF0C 8004A70C 3C6C428C */  lw         $v0, %lo(intr_saved_dicr)($v0)
     /* 2AF10 8004A710 00000000 */  nop
     /* 2AF14 8004A714 000062AC */  sw         $v0, 0x0($v1)
 endlabel restartIntr

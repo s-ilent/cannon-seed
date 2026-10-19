@@ -27961,24 +27961,8 @@ dlabel D_8008744C
     /* 67E28 80087628 CC130880 */ .word D_800813CC
     /* 67E2C 8008762C 04030000 */ .word 0x00000304
     /* 67E30 80087630 EC130880 */ .word D_800813EC
-enddlabel D_8008744C
-
-nonmatching video_mode
-
-dlabel video_mode
     /* 67E34 80087634 04030000 */ .word 0x00000304
-enddlabel video_mode
-
-nonmatching intr_active_flag
-
-dlabel intr_active_flag
-    /* 67E38 80087638 */ .short 0x140C
-enddlabel intr_active_flag
-
-nonmatching intr_trap_flag
-
-dlabel intr_trap_flag
-    /* 67E3A 8008763A */ .short 0x8008
+    /* 67E38 80087638 0C140880 */ .word D_8008140C
     /* 67E3C 8008763C 04030300 */ .word 0x00030304
     /* 67E40 80087640 2C140880 */ .word D_8008142C
     /* 67E44 80087644 11030000 */ .word 0x00000311
@@ -27990,18 +27974,7 @@ dlabel intr_trap_flag
     /* 67E5C 8008765C 12030000 */ .word 0x00000312
     /* 67E60 80087660 AC140880 */ .word D_800814AC
     /* 67E64 80087664 15030000 */ .word 0x00000315
-    /* 67E68 80087668 */ .short 0x14EC
-enddlabel intr_trap_flag
-
-nonmatching intr_saved_mask
-
-dlabel intr_saved_mask
-    /* 67E6A 8008766A */ .short 0x8008
-enddlabel intr_saved_mask
-
-nonmatching intr_saved_dicr
-
-dlabel intr_saved_dicr
+    /* 67E68 80087668 EC140880 */ .word D_800814EC
     /* 67E6C 8008766C 15030000 */ .word 0x00000315
     /* 67E70 80087670 2C150880 */ .word D_8008152C
     /* 67E74 80087674 30030000 */ .word 0x00000330
@@ -28680,7 +28653,7 @@ dlabel intr_saved_dicr
     /* 688F8 800880F8 CC390880 */ .word D_800839CC
     /* 688FC 800880FC FFFF0000 */ .word 0x0000FFFF
     /* 68900 80088100 00000000 */ .word 0x00000000
-enddlabel intr_saved_dicr
+enddlabel D_8008744C
 
 nonmatching D_80088104
 
@@ -28906,23 +28879,8 @@ nonmatching intr_start_tab
 
 dlabel intr_start_tab
     /* 68C60 80088460 4C470880 */ .word D_8008474C
-enddlabel intr_start_tab
-
-nonmatching intr_imask_ptr
-
-dlabel intr_imask_ptr
     /* 68C64 80088464 40020000 */ .word 0x00000240
-enddlabel intr_imask_ptr
-
-nonmatching intr_mask_ptr
-
-dlabel intr_mask_ptr
     /* 68C68 80088468 6C470880 */ .word D_8008476C
-enddlabel intr_mask_ptr
-
-nonmatching intr_dicr_ptr
-
-dlabel intr_dicr_ptr
     /* 68C6C 8008846C 40020000 */ .word 0x00000240
     /* 68C70 80088470 8C470880 */ .word D_8008478C
     /* 68C74 80088474 40020000 */ .word 0x00000240
@@ -28935,11 +28893,6 @@ dlabel intr_dicr_ptr
     /* 68C90 80088490 8C4B0880 */ .word D_80084B8C
     /* 68C94 80088494 C0020300 */ .word 0x000302C0
     /* 68C98 80088498 AC4B0880 */ .word D_80084BAC
-enddlabel intr_dicr_ptr
-
-nonmatching intr_vb_cb_slots
-
-dlabel intr_vb_cb_slots
     /* 68C9C 8008849C C0020000 */ .word 0x000002C0
     /* 68CA0 800884A0 CC4B0880 */ .word D_80084BCC
     /* 68CA4 800884A4 C0020000 */ .word 0x000002C0
@@ -29458,7 +29411,7 @@ dlabel intr_vb_cb_slots
     /* 694A8 80088CA8 8C6F0880 */ .word D_80086F8C
     /* 694AC 80088CAC FFFF0000 */ .word 0x0000FFFF
     /* 694B0 80088CB0 00000000 */ .word 0x00000000
-enddlabel intr_vb_cb_slots
+enddlabel intr_start_tab
 
 nonmatching D_80088CB4
 
@@ -50813,27 +50766,22 @@ dlabel D_80092C04
     /* 77400 80096C00 00000010 */ .word 0x10000000
 enddlabel D_80092C04
 
-nonmatching D_80096C04
+nonmatching video_mode
 
-dlabel D_80096C04
+dlabel video_mode
     /* 77404 80096C04 00000000 */ .word 0x00000000
-enddlabel D_80096C04
+enddlabel video_mode
 
-nonmatching D_80096C08
+nonmatching intr_active_flag
 
-dlabel D_80096C08
+dlabel intr_active_flag
     /* 77408 80096C08 */ .short 0x0000
-enddlabel D_80096C08
+enddlabel intr_active_flag
 
-nonmatching D_80096C0A
+nonmatching intr_trap_flag
 
-dlabel D_80096C0A
+dlabel intr_trap_flag
     /* 7740A 80096C0A */ .short 0x0000
-enddlabel D_80096C0A
-
-nonmatching D_80096C0C
-
-dlabel D_80096C0C
     /* 7740C 80096C0C 00000000 */ .word 0x00000000
     /* 77410 80096C10 00000000 */ .word 0x00000000
     /* 77414 80096C14 00000000 */ .word 0x00000000
@@ -50845,7 +50793,7 @@ dlabel D_80096C0C
     /* 7742C 80096C2C 00000000 */ .word 0x00000000
     /* 77430 80096C30 00000000 */ .word 0x00000000
     /* 77434 80096C34 00000000 */ .word 0x00000000
-enddlabel D_80096C0C
+enddlabel intr_trap_flag
 
 nonmatching D_80096C38
 
@@ -50853,15 +50801,15 @@ dlabel D_80096C38
     /* 77438 80096C38 */ .short 0x0000
 enddlabel D_80096C38
 
-nonmatching D_80096C3A
+nonmatching intr_saved_mask
 
-dlabel D_80096C3A
+dlabel intr_saved_mask
     /* 7743A 80096C3A */ .short 0x0000
-enddlabel D_80096C3A
+enddlabel intr_saved_mask
 
-nonmatching D_80096C3C
+nonmatching intr_saved_dicr
 
-dlabel D_80096C3C
+dlabel intr_saved_dicr
     /* 7743C 80096C3C 00000000 */ .word 0x00000000
     /* 77440 80096C40 00000000 */ .word 0x00000000
     /* 77444 80096C44 00000000 */ .word 0x00000000
@@ -51899,7 +51847,7 @@ dlabel D_80096C3C
     /* 78464 80097C64 00000000 */ .word 0x00000000
     /* 78468 80097C68 00000000 */ .word 0x00000000
     /* 7846C 80097C6C 00000000 */ .word 0x00000000
-enddlabel D_80096C3C
+enddlabel intr_saved_dicr
 
 nonmatching D_80097C70
 
@@ -51911,7 +51859,7 @@ dlabel D_80097C70
     /* 78480 80097C80 08A60480 */ .word stopIntr
     /* 78484 80097C84 00000000 */ .word 0x00000000
     /* 78488 80097C88 B8A60480 */ .word restartIntr
-    /* 7848C 80097C8C 086C0980 */ .word D_80096C08
+    /* 7848C 80097C8C 086C0980 */ .word intr_active_flag
 enddlabel D_80097C70
 
 nonmatching D_80097C90
@@ -51920,23 +51868,23 @@ dlabel D_80097C90
     /* 78490 80097C90 707C0980 */ .word D_80097C70
 enddlabel D_80097C90
 
-nonmatching D_80097C94
+nonmatching intr_imask_ptr
 
-dlabel D_80097C94
+dlabel intr_imask_ptr
     /* 78494 80097C94 7010801F */ .word 0x1F801070
-enddlabel D_80097C94
+enddlabel intr_imask_ptr
 
-nonmatching D_80097C98
+nonmatching intr_mask_ptr
 
-dlabel D_80097C98
+dlabel intr_mask_ptr
     /* 78498 80097C98 7410801F */ .word 0x1F801074
-enddlabel D_80097C98
+enddlabel intr_mask_ptr
 
-nonmatching D_80097C9C
+nonmatching intr_dicr_ptr
 
-dlabel D_80097C9C
+dlabel intr_dicr_ptr
     /* 7849C 80097C9C F010801F */ .word 0x1F8010F0
-enddlabel D_80097C9C
+enddlabel intr_dicr_ptr
 
 nonmatching D_80097CA0
 
@@ -51954,9 +51902,9 @@ dlabel D_80097CA0
     /* 784C8 80097CC8 8010801F */ .word 0x1F801080
 enddlabel D_80097CA0
 
-nonmatching D_80097CCC
+nonmatching intr_vb_cb_slots
 
-dlabel D_80097CCC
+dlabel intr_vb_cb_slots
     /* 784CC 80097CCC 00000000 */ .word 0x00000000
     /* 784D0 80097CD0 00000000 */ .word 0x00000000
     /* 784D4 80097CD4 00000000 */ .word 0x00000000
@@ -51965,7 +51913,7 @@ dlabel D_80097CCC
     /* 784E0 80097CE0 00000000 */ .word 0x00000000
     /* 784E4 80097CE4 00000000 */ .word 0x00000000
     /* 784E8 80097CE8 00000000 */ .word 0x00000000
-enddlabel D_80097CCC
+enddlabel intr_vb_cb_slots
 
 nonmatching D_80097CEC
 
@@ -54272,11 +54220,6 @@ dlabel D_80098C18
     /* 7984C 8009904C 03000000 */ .word 0x00000003
     /* 79850 80099050 00000000 */ .word 0x00000000
     /* 79854 80099054 03000000 */ .word 0x00000003
-enddlabel D_80098C18
-
-nonmatching _spu_inTransfer
-
-dlabel _spu_inTransfer
     /* 79858 80099058 00000000 */ .word 0x00000000
     /* 7985C 8009905C 03000000 */ .word 0x00000003
     /* 79860 80099060 00000000 */ .word 0x00000000
@@ -55030,7 +54973,7 @@ dlabel _spu_inTransfer
     /* 7A410 80099C10 00000000 */ .word 0x00000000
     /* 7A414 80099C14 00000000 */ .word 0x00000000
     /* 7A418 80099C18 00000000 */ .word 0x00000000
-enddlabel _spu_inTransfer
+enddlabel D_80098C18
 
 nonmatching D_80099C1C
 
@@ -90582,11 +90525,11 @@ dlabel D_800AB0E4
     /* 8B8E4 800AB0E4 07000000 */ .word 0x00000007
 enddlabel D_800AB0E4
 
-nonmatching D_800AB0E8
+nonmatching _spu_inTransfer
 
-dlabel D_800AB0E8
+dlabel _spu_inTransfer
     /* 8B8E8 800AB0E8 01000000 */ .word 0x00000001
-enddlabel D_800AB0E8
+enddlabel _spu_inTransfer
 
 nonmatching D_800AB0EC
 
