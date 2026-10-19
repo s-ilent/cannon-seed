@@ -9186,3 +9186,67 @@ Next queue:
    hand for any island entries), first flipped-era link, retail-bound wave,
    curated scope retail-bound restoration, RETAIL_BOUND banking + check.
 3. make verify 8/8 true remains the gate.
+
+## 2026-10-19 (window cron-20261019-1334): the g3org pair's retail-bound
+tables pre-derived (the 1051 g3_eu precedent - the flip windows land them):
+mechanical diff of each scope's de0b0d68^ (pre-flip) vs de0b0d68 (staged)
+curated entries, names cross-checked against the union of the five landed
+RETAIL_BOUND tables; restore values = each target's own pre-flip entries.
+Sandbox state unchanged: no discs, baselines all-woven, HEAD this window's
+own push.
+
+G3ORG_JP RESTORATION SET (8; value-only from the pre-flip file, subject to
+the oracle enumeration and the three-way landed confirmation as always):
+intr_stop_begin 0x80048860 (staged 0x80043410), intr_stop_commit 0x80048940
+(staged 0x800434F0), intr_active_flag 0x800A3134 (staged 0x80092144),
+intr_trap_flag 0x800A3136 (staged 0x80092146), intr_saved_mask 0x800A3166
+(staged 0x80092176), intr_saved_dicr 0x800A3168 (staged 0x80092178),
+video_mode 0x800A4398 (staged 0x80093148), _spu_inTransfer 0x800B75F4
+(staged 0x800A3C74). Family names unchanged by staging (map identity there,
+no action): intr_imask_ptr, intr_mask_ptr, intr_dicr_ptr, intr_vb_cb_slots.
+
+G3ORG_EU RESTORATION SET (9): intr_stop_begin 0x80048198 (staged
+0x80042E78), intr_stop_commit 0x80048268 (staged 0x80042F48),
+intr_saved_mask 0x800A3946 (staged 0x80092826), intr_saved_dicr 0x800A3948
+(staged 0x80092828), intr_imask_ptr 0x800A49A0 (staged 0x80093750),
+intr_mask_ptr 0x800A49A4 (staged 0x80093754), intr_dicr_ptr 0x800A49A8
+(staged 0x80093758), intr_vb_cb_slots 0x800A49D8 (staged 0x80093788),
+_spu_inTransfer 0x800B7DF4 (staged 0x800A4344). Unchanged (no action):
+intr_active_flag, intr_trap_flag, video_mode.
+
+STRUCTURE (flip_reauthor's own row-span helpers, offline): both stop pairs
+land at ROW STARTS exactly as every landed unit - jp at the data_8004E9C0 /
+func_8004EAA0 row starts (0x29060 / 0x29140), eu at the data_8004E1C8 /
+func_8004E298 row starts (0x28998 / 0x28A68) - each pair a data row plus a
+0x10 sdk veneer row, the 1051 shape verbatim. All statics are contained
+(row-gap positions; row-hosted vs absolute:true hosting is decided by the
+extract at the flip, per-target variant as banked). Stop/commit spacing: eu
+0xD0 repeats the landed law; jp 0xE0 is a per-target variant (both ends
+independently row-start-confirmed).
+
+THE RESETENTRYINT COINCIDENCE (the sces allow_duplicated law): jp matches
+sces verbatim - the stop_commit retail value 0x80048940 IS the true VMA of
+the sdk veneer row whose woven name func_8004EAA0 is ResetEntryInt's own
+pre-flip address (staged ResetEntryInt = 0x80048940): post-flip the row-name
+class and the retail-encoded class coincide, allow_duplicated:True both
+sides at the flip. Eu shows the same value coincidence (stop_commit
+0x80048268 == staged ResetEntryInt == the func_8004E298 veneer row start)
+but its veneer row's woven name is func_8004E298, not ResetEntryInt's pre
+address 0x80048298 - same allow_duplicated need, variant spelling;
+adjudicate with the extract at the flip.
+
+STAYING STAGED (moved but in NO landed retail table - function entries
+track the layout): intr_start_aux1-6, intr_restart_begin/commit, and jp's
+intr_restart_tail; plus eu's intr_start_tab (a psyq word pointer whose
+landed siblings never needed restoration - per-target variant, the flip
+window's oracle enumeration decides). The mainmenu state cluster
+(menu_state_flag, state_*) is mainmenu-only and correctly absent from both
+g3org scopes.
+
+Next queue:
+1. Discs return (the request stands) -> true baselines 8/8 -> g3_eu unit
+   completion (pre-derived table in the 1051 record), then the g3org pair
+   units: true-basis census re-derivation, first flipped-era link, the
+   retail-bound waves from the tables above, curated scope restoration,
+   RETAIL_BOUND banking + check.
+2. make verify 8/8 true remains the gate.
