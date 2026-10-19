@@ -9331,3 +9331,52 @@ Next queue:
 2. make verify 8/8 true remains the gate.
 3. On any future worklog rollback: rehydrate, reset --hard origin/main,
    then `python3 tools/worklog_digest.py` and paste under a RESTORE NOTE.
+
+## 2026-10-19 (window cron-20261019-1819): the judge screen joins verify
+behind the true-baseline gate - the matching lane's offline program is
+disc-gated end to end, and the third worklog rollback costs one command.
+- Third consecutive rollback: HEAD to 7623cd2e, worklog to the
+  cron-20261014-2112 tail (both prior restores eaten). Recovered to
+  origin/main 4eb782ed; tree clean; disk/ still empty (disc-blocked, the
+  fresh-link request stands, not re-pinged). The worklog restore is now
+  ONE command (tools/worklog_digest.py, banked last window): 43 windows
+  regenerated + the 1549/1704 sections reconstructed condensed from the
+  repo record under RESTORE NOTE cron-20261019-1819-restore.
+- flip_reauthor check at window open: GREEN (85 banked RETAIL_BOUND
+  entries across the five landed tables, both ways).
+- THE MATCHING-LANE ATTEMPT AND ITS FINDING: the 37d92312 recipe (coddog
+  clusters -> C against judge_unit -> judge sweep -> verify -> EU rolls)
+  was queued for the unattended agent; its judge step turns out to be
+  true-baseline-gated post-flip. Witnessed: `judge_unit.py sces_00269`
+  returned 0/33 EXACT on a target whose whole image had verified EXACT
+  against the true baseline - the judge's expected bytes are a slice of
+  baselines/<t>.bin at the yaml row offset, and the flip re-based the
+  yaml offsets onto the TRUE image while the disc-blocked sandbox holds
+  the all-woven set, so the slice reads garbage. Diagnosis then fix:
+  tools/judge_unit gains baseline_gate (3e9c1038) mirroring verify.sh's
+  gate 2 - refuse with exit 2 unless the local baseline's sha1 equals
+  config/sha1/<t>.sha1; the committed sha1s are the true baselines
+  post-flip, so the gate self-heals the moment the discs return.
+- Consequence for the lane: NO oracle-grade candidate screen exists in a
+  woven-baseline sandbox (the extract's own bytes cannot serve - for c
+  rows the current C IS the source being screened, a self-comparison).
+  Banking candidates without a screen contradicts the recipe's own law
+  (the judge is a screen, verify is the gate), so nothing is banked this
+  window. The coddog cluster REPORTS remain regenerable offline (region-
+  pair similarity on the woven pair baselines is how 3c02c43 baselined
+  them) and stay the disc-return window's starting material.
+- Disc-return opening sequence gains a step: true baselines land ->
+  sha1 witness (verify's own gate) -> judge sweep x8 (~2 s/unit, per-unit
+  sanity before any whole-image spend) -> verify 8/8 -> then the queued
+  flip units + the matching lane resumes its grind.
+
+Next queue:
+1. Discs return (the request stands) -> true baselines 8/8 -> judge sweep
+   x8 -> verify 8/8 -> g3_eu unit completion (pre-derived table in the
+   1051 record) -> the g3org pair units (true-basis census re-derivation,
+   first flipped-era link, retail-bound waves from the 1334 tables,
+   curated restoration, RETAIL_BOUND banking + check) -> matching lane
+   resumes (coddog reports -> clusters -> judge loop).
+2. make verify 8/8 true remains the gate.
+3. On any future worklog rollback: rehydrate, reset --hard origin/main,
+   `python3 tools/worklog_digest.py`, paste under a RESTORE NOTE.
