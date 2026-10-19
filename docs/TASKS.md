@@ -8623,3 +8623,100 @@ Next queue:
    vs a passthrough class.
 4. make verify 8/8 true remains the gate once the name layer settles;
    audit_sizes + the judge sweep stand behind it.
+
+## 2026-10-19 (window cron-20261019-0049): the sces_00269 link is witnessed end to end - the census's 8 names trip ld in ONE run, retiring the row-side definitions links the image, and the 24-byte residual names the curated-table class as the same family's third path (retail encodings bind, row positions don't)
+
+Resumed per the 2334 queue. HEAD was 7623cd2 (a TENTH rollback; discs and
+true baselines eaten again). Reset forward to 6f7f4f13 - no remote motion
+since 2334. Both CHDs re-fetched from the still-valid CDN links (sha256
+equal, third consecutive cold-sandbox witness), sces_00269 re-extracted
+--per-sector, sha1 06b4bda6 = the committed oracle. (Rollback also ate
+cc.sh's exec bit - repaired with the usual chmod pass; rehydrate's
+re-mark list still misses it.)
+
+PSYQ BEYOND-PAYLOAD STATICS: CLOSED BY READING THE TREE (2334 queue item
+3, zero code change). The placement mechanism is build.sh's TWO-PASS
+link: pass 1 collects undefined references, tools/undef_syms.py resolves
+them (address-encoded names at their name address; names without an
+address - explicitly "Psy-Q bss statics beyond the payload segment, like
+LIBGS's PSDIDX" per its docstring - from the committed per-target
+symbols file), pass 2 links with the generated definitions. The splat
+"Unable to determine a segment" warning is cosmetic for these entries
+and era-independent (same yaml segments, same entries pre/post flip);
+no absolute:True needed, no passthrough class needed. Document, don't
+touch.
+
+THE LINK WITNESS (2334 queue item 2, sces_00269 - the 8-blocker target):
+- make build trips SIXTEEN multiple-definition lines = EXACTLY the
+  census's 8 names x {plain, .NON_MATCHING}: the 6 glabel-dupes
+  (func_80024174/2B910/2BA60/2C2A4/3429C/35D08) + the 2 dlabel clashes
+  (func_800367C4/38D4C). The glabel-dupe class is now LINK-WITNESSED,
+  no longer inferred. The .NON_MATCHING twins come from the nonmatching
+  macro (include/macro.inc): every "nonmatching name,size" marker emits
+  a GLOBAL <name>.NON_MATCHING symbol - the census's 181 name-level
+  instances surface as ~362 ld error lines.
+- CORRECTION to the 2219 assumption: ld does NOT stop at the first
+  duplicate - it reports ALL of them in one run (all 16 lines in one
+  build/ld.err). Per-target blocker census = the audit tool's output,
+  one link run witnesses all of it.
+- SANDBOX-ONLY NEUTRALIZATION: in each of the 8 names' OWN row files,
+  retire the row-side spellings (glabel/endlabel/nonmatching renamed to
+  <name>.rowdef; the definitions at the name-encoded positions stay).
+  Rationale: every reference spelled <name> in the flipped output
+  encodes the name-encoded address (spimdisasm resolves an encoded
+  target to a symbol only at that symbol's address), so the surviving
+  definition must be the one at the name-encoded position; the row's
+  own glabel is definitionally unreferenced. RESULT: THE LINK
+  SUCCEEDS - the first flipped-era link (build/sces_00269.bin,
+  290,816 B, pc0 0x8002D908).
+- RESIDUAL: 24 bytes in 8 runs, ALL inside 4 matched-C rows
+  (func_800308E4, func_800308FC, stopIntr, func_800428C4) - ZERO
+  divergence on the asm side: the row-side retirement is byte-clean
+  where it applies. The image is 24 bytes from closing.
+
+THE RESIDUAL'S ROOT, PINNED PER NAME (gas %hi/%lo semantics on the
+retail bytes; the matched-lui/differing-%lo pattern confirms both sides
+round to the same %hi):
+  name             retail encodes   PRE-flip entry   flip-rewritten (CUR)
+  video_mode       0x8004CF20       0x8004CF20       0x80047150
+  _spu_inTransfer  0x80065A68       0x80065A68       0x8005C988
+  intr_stop_begin  0x8002F388       0x8002F388       0x8002D378
+  intr_stop_commit 0x8002F458       0x8002F458       0x8002D448
+All four dlabels render inside data rows at the rewritten addresses
+(video_mode at 0x80047150 in data_8004B8A8, _spu_inTransfer at
+0x8005C988 in data_80051000); all four C references resolve there; the
+retail bytes encode the PRE-flip addresses. Same woven-name/true-
+position family, THIRD materialization path: the curated symbols-table
+entries (the first two paths were the row-name dlabels/glabels and the
+nested-func glabels).
+
+THE PRINCIPLE (the window's payoff): retail runtime encodings are
+layout-invariant. The true file's instruction words equal the woven
+file's - the flip re-places rows in the FILE, it does not change what
+the retail code encodes - so every address retail code encodes IS a
+woven-era address, and the flip must NOT re-point any symbol retail
+code references. Reference resolution binds to the RETAIL ENCODINGS
+(the same oracle discipline as everything else); row/file positions
+bind only the byte layout. The curated-table migration re-pointed
+retail-encoded symbols (4/4 checked names wrong) - wrong class rule.
+The re-scan must re-derive curated entries from the retail encodings,
+not from row-position arithmetic. (sces's four names are the pilot
+set; the same audit applies to every C-referenced curated name in all
+8 targets.)
+
+Sandbox restored (asm/ checkout; build/ artifacts git-ignored). Docs
+only; nothing generated is committed.
+
+Next queue:
+1. The flip lane: re-derive the curated-table class from retail
+   encodings - the four sces names are the pilot set; sces is then
+   24 bytes from the first flipped GREEN (verify TARGET=sces_00269).
+2. The name-collision adjudication: the retirement direction (keep the
+   name-encoded position, retire the row-side glabel) is link-proven
+   and byte-clean where witnessed; the lane decides glabel-retire vs
+   row-rename per the re-scan.
+3. Extend the census instrument if useful: the nonmatching macro's
+   global <name>.NON_MATCHING emission means the ld error surface is
+   2x the name census; the audit tool's output already covers the
+   names.
+4. psyq statics: no action needed (mechanism documented above).
