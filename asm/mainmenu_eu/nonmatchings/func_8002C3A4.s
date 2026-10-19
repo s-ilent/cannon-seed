@@ -23,15 +23,15 @@ glabel func_8002A984
     /* B1AC 8002A9AC 0C000434 */   ori       $a0, $zero, 0xC
     /* B1B0 8002A9B0 07005414 */  bne        $v0, $s4, .L8002A9D0
     /* B1B4 8002A9B4 00000000 */   nop
-    /* B1B8 8002A9B8 0980023C */  lui        $v0, %hi(D_8008A1EC)
-    /* B1BC 8002A9BC ECA14224 */  addiu      $v0, $v0, %lo(D_8008A1EC)
-    /* B1C0 8002A9C0 0980013C */  lui        $at, %hi(D_8008A1D4)
-    /* B1C4 8002A9C4 D4A122AC */  sw         $v0, %lo(D_8008A1D4)($at)
+    /* B1B8 8002A9B8 0980023C */  lui        $v0, %hi(state_block_9)
+    /* B1BC 8002A9BC ECA14224 */  addiu      $v0, $v0, %lo(state_block_9)
+    /* B1C0 8002A9C0 0980013C */  lui        $at, %hi(state_cursor)
+    /* B1C4 8002A9C4 D4A122AC */  sw         $v0, %lo(state_cursor)($at)
     /* B1C8 8002A9C8 76AA0008 */  j          .L8002A9D8
     /* B1CC 8002A9CC 00000000 */   nop
   .L8002A9D0:
-    /* B1D0 8002A9D0 0980013C */  lui        $at, %hi(D_8008A1D4)
-    /* B1D4 8002A9D4 D4A134AC */  sw         $s4, %lo(D_8008A1D4)($at)
+    /* B1D0 8002A9D0 0980013C */  lui        $at, %hi(state_cursor)
+    /* B1D4 8002A9D4 D4A134AC */  sw         $s4, %lo(state_cursor)($at)
   .L8002A9D8:
     /* B1D8 8002A9D8 2400BF8F */  lw         $ra, 0x24($sp)
     /* B1DC 8002A9DC 2000B48F */  lw         $s4, 0x20($sp)

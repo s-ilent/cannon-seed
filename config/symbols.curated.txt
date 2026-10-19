@@ -324,28 +324,28 @@ data_8005A014 = 0x8005A014; // MODE2 sector framing, was func_ (census above): A
 // cron-20261012-1411 recon). Same roles, same names.
 state_block_0 = 0x80089B3C; // state map: reset-walker entry (func_80026364 a0, mode 0/-1)
 state_block_1 = 0x80089B7C; // state map: reset-walker entry (mode 0/-1)
-state_block_2 = 0x8007C064; // state map: reset-walker entry (modes 0/-1, 2/-1); func_80026668/26718 arg
-state_rearm_0 = 0x8007C0A4; // state map: re-armed to -1 by the state-clear driver (block_2+0x40)
-state_rearm_1 = 0x8007C0A8; // state map: re-armed to -1 (block_2+0x44)
-state_rearm_2 = 0x8007C0AC; // state map: re-armed to -1 (block_2+0x48)
-state_rearm_3 = 0x8007C0B0; // state map: re-armed to -1 (block_2+0x4C)
-state_block_3 = 0x8007C35C; // state map: reset-walker entry (mode 0/0)
-state_block_4 = 0x8007C39C; // state map: reset-walker entry (mode 0/0)
-state_block_5 = 0x8007C3DC; // state map: reset-walker entry (mode 0/0)
-state_block_6 = 0x8007C41C; // state map: reset-walker entry (mode 0/0)
-state_block_7 = 0x8007C45C; // state map: reset-walker entry (mode 0/0)
-state_block_8 = 0x8007C49C; // state map: reset-walker entry (mode 0/0)
-state_cursor = 0x8007C624; // state map: -1 or &state_block_9, func_80035A18(0xC)-gated
-state_block_9 = 0x8007C63C; // state map: the block the cursor selects
-state_block_10 = 0x8007C6AC; // state map: reset-walker entry (mode 0/0)
-state_record_0 = 0x800B42C4; // state map: id record pair, func_80026718 arg 2
-state_record_1 = 0x800B42CC; // state map: id record pair, func_80026718 arg 3
+state_block_2 = 0x80089C14; // state map: reset-walker entry (modes 0/-1, 2/-1); func_80026668/26718 arg
+state_rearm_0 = 0x80089C54; // state map: re-armed to -1 by the state-clear driver (block_2+0x40)
+state_rearm_1 = 0x80089C58; // state map: re-armed to -1 (block_2+0x44)
+state_rearm_2 = 0x80089C5C; // state map: re-armed to -1 (block_2+0x48)
+state_rearm_3 = 0x80089C60; // state map: re-armed to -1 (block_2+0x4C)
+state_block_3 = 0x80089F0C; // state map: reset-walker entry (mode 0/0)
+state_block_4 = 0x80089F4C; // state map: reset-walker entry (mode 0/0)
+state_block_5 = 0x80089F8C; // state map: reset-walker entry (mode 0/0)
+state_block_6 = 0x80089FCC; // state map: reset-walker entry (mode 0/0)
+state_block_7 = 0x8008A00C; // state map: reset-walker entry (mode 0/0)
+state_block_8 = 0x8008A04C; // state map: reset-walker entry (mode 0/0)
+state_cursor = 0x8008A1D4; // state map: -1 or &state_block_9, func_80035A18(0xC)-gated
+state_block_9 = 0x8008A1EC; // state map: the block the cursor selects
+state_block_10 = 0x8008A25C; // state map: reset-walker entry (mode 0/0)
+state_record_0 = 0x800CA374; // state map: id record pair, func_80026718 arg 2
+state_record_1 = 0x800CA37C; // state map: id record pair, func_80026718 arg 3
 //
 // EU twin of the mainmenu_jp menu-state flag (src/func_800379E4.c; +0x834
 // from the JP address - not a state-map offset): armed 0/1 by the EU
 // wrapper family before invoking the menu primitive func_80025CFC(); no
 // other static reference in the image.
-menu_state_flag = 0x800B351C; // wrapper-family flag: armed 0/1 before func_80025CFC()
+menu_state_flag = 0x800C936C; // wrapper-family flag: armed 0/1 before func_80025CFC()
 //
 // EU twin of the mainmenu_jp state table above: same nine addresses, EU
 // walker targets = JP - 0xB0 (the 1411 callee map, re-measured by
@@ -584,16 +584,16 @@ _spu_inTransfer = 0x800A3C74; // LIBSPU S_INI member bss static; gp:absolute (re
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
-video_mode = 0x800A10E0; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+video_mode = 0x800B4470; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
 CheckCallback = 0x8005E688; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x8005E698; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x8005E6B0; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
-intr_active_flag = 0x800A10E4; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x800A1116; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x800A1118; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_active_flag = 0x800B4474; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800B44A6; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_saved_dicr = 0x800B44A8; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
 intr_imask_ptr = 0x800B5500; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
 intr_dicr_ptr = 0x800B5508; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x80056F80; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8005F220; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
 intr_stop_commit = 0x8005F2F0; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
 stopIntr = 0x8005EAE4; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntr = 0x8005E6CC; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
@@ -608,7 +608,7 @@ intr_restart_begin = 0x8005F2A0; // INTR restart cluster entry 1, jal from resta
 intr_restart_commit = 0x8005F340; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x80056968; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
 restartIntr = 0x8005EB94; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
-intr_trap_flag = 0x800A10E6; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_trap_flag = 0x800B4476; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
 intr_mask_ptr = 0x800B5504; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 startIntrVSync = 0x8005EF00; // LIBETC INTR_VB member .text+0x0 (extent 0x58); sdk_members.py unique placement + sig-db agrees
 trapIntrVSync = 0x8005EF58; // LIBETC INTR_VB member .text+0x58 (extent 0x7c); sdk_members.py unique placement + sig-db agrees

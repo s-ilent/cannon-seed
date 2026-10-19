@@ -159,6 +159,42 @@ RETAIL_BOUND = {
         "video_mode": 0x80097650,
         "_spu_inTransfer": 0x800AA8AC,
     },
+    # mainmenu_eu (cron-20261019-0934, ONE wave via the per-run pair
+    # enumerator + the jal fix: opcode 0x03, not 0x0C - 24 names, 83 diff
+    # bytes / 22 runs, all pre-flip confirmed verbatim in de0b0d68^).
+    # intr_stop_commit was link-forced: the first flipped-era link died
+    # "unresolved intr_stop_commit" - the retail value equals the FLIP-ALIAS
+    # comment's own 0x8005F2F0, so the alias is the inherent ResetEntryInt
+    # class, restored live with allow_duplicated:True on both lines (the
+    # sces/slps/mainmenu_jp/g3_jp spelling) and dropped from the
+    # ALIAS_ADJUDICATE retirement policy below. All entries row-hosted -
+    # verbatim pass-through, no absolute:true (the slps-only variant).
+    "mainmenu_eu": {
+        "intr_stop_begin": 0x8005F220,
+        "intr_stop_commit": 0x8005F2F0,
+        "intr_active_flag": 0x800B4474,
+        "intr_trap_flag": 0x800B4476,
+        "intr_saved_mask": 0x800B44A6,
+        "intr_saved_dicr": 0x800B44A8,
+        "video_mode": 0x800B4470,
+        "menu_state_flag": 0x800C936C,
+        "state_block_2": 0x80089C14,
+        "state_block_3": 0x80089F0C,
+        "state_block_4": 0x80089F4C,
+        "state_block_5": 0x80089F8C,
+        "state_block_6": 0x80089FCC,
+        "state_block_7": 0x8008A00C,
+        "state_block_8": 0x8008A04C,
+        "state_block_9": 0x8008A1EC,
+        "state_cursor": 0x8008A1D4,
+        "state_block_10": 0x8008A25C,
+        "state_rearm_0": 0x80089C54,
+        "state_rearm_1": 0x80089C58,
+        "state_rearm_2": 0x80089C5C,
+        "state_rearm_3": 0x80089C60,
+        "state_record_0": 0x800CA374,
+        "state_record_1": 0x800CA37C,
+    },
 }
 # The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked
 # policy: psyq name wins, the intr_* alias retires with a provenance note;
@@ -169,8 +205,12 @@ RETAIL_BOUND = {
 # the GEN-file alias line retires; the curated psyq entry labels the bytes.
 ALIAS_ADJUDICATE = {
     "mainmenu_eu": [("intr_restart_begin", "HookEntryInt", 0x8005F2A0),
-                    ("intr_stop_commit", "ResetEntryInt", 0x8005F2F0),
                     ("intr_start_aux6", "_96_remove", 0x8005F370)],
+    # NOTE: intr_stop_commit/ResetEntryInt 0x8005F2F0 was REMOVED from this
+    # retirement policy by cron-20261019-0934: the flipped-era link refused
+    # to resolve without it, and the retail value IS 0x8005F2F0 (pre-flip
+    # verbatim) - the inherent alias, landed live with allow_duplicated:True
+    # on both lines per the established spelling.
 }
 ENTRY_RE = re.compile(r"^(\s*[A-Za-z_]\w*\s*=\s*0x)([0-9A-Fa-f]+)(\s*;.*)$")
 

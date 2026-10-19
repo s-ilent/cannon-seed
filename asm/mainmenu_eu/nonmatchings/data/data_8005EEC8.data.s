@@ -226,11 +226,6 @@ dlabel intr_start_aux4
     /* 37774 80056F74 00000000 */ .word 0x00000000
     /* 37778 80056F78 47E1000C */ .word 0x0C00E147
     /* 3777C 80056F7C 00000000 */ .word 0x00000000
-enddlabel intr_start_aux4
-
-nonmatching intr_stop_begin
-
-dlabel intr_stop_begin
     /* 37780 80056F80 49E1000C */ .word 0x0C00E149
     /* 37784 80056F84 00000000 */ .word 0x00000000
     /* 37788 80056F88 5FDD000C */ .word 0x0C00DD5F
@@ -263,4 +258,4 @@ dlabel intr_stop_begin
     /* 377F4 80056FF4 0800E003 */ .word 0x03E00008
     /* 377F8 80056FF8 00000000 */ .word 0x00000000
     /* 377FC 80056FFC E8FFBD27 */ .word 0x27BDFFE8
-enddlabel intr_stop_begin
+enddlabel intr_start_aux4
