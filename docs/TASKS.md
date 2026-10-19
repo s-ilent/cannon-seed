@@ -9501,3 +9501,78 @@ Next queue:
    (the screen now works on true bytes end to end).
 3. Discs live until ~2026-10-20 09:54 UTC; the re-fetch recipe is in the
    cron prompt (foreground download, sha256 gate, per-sector extract).
+
+## 2026-10-19 (window cron-20261019-2127): g3org_jp is the SEVENTH FLIPPED-ERA GREEN - the sixth rollback's woven-baseline trap caught by the honest witness check, the 13-name true-basis census, the link-only C-row class closed by the carve-name rename, and the 1334 pre-derived set landing in ONE oracle-clean wave
+
+- Sixth worklog rollback pre-window (repo to 7623cd2e, worklog digest-missing,
+  disk/ eaten AND baselines/ silently swapped for the Oct-10 all-woven
+  snapshot): the first witness eyeball passed against the rolled-back
+  oracle files and LIED - the honest parse (awk past the comment header)
+  against the POST-RESET tree showed all 8 MISMATCH. CHDs re-downloaded IN
+  FOREGROUND (sha256-gated both), raw images sector-exact (JP 267504 / EU
+  267752), 8 EXEs --per-sector -> baselines/, WITNESS 8/8 against the true
+  oracles. Full recovery ~21:31 -> 21:41 UTC. LESSON: witness checks must
+  parse the oracle file, never eyeball raw output - and a rollback can
+  swap baselines/ content, not just delete it.
+- TRUE-BASIS CENSUS: 13 names on the true basis (10 dlabel-class + 3
+  cross-file glabel dupes: func_800398A0, func_80043194, func_8005CA88 -
+  the nested true-position rows own the plain names, the woven rows renamed
+  .rowdef with the FLIP-ROWDEF retirements, the established spelling;
+  the pre-flip 20-name adjudication 8147010a covered the woven basis and
+  re-derived 0 there, the true basis adds the expected delta); census
+  13 -> 0, clean_stale_asm nothing stale after the re-extract.
+- THE LINK-ONLY C-ROW CLASS (the census's documented blind spot, the g3_eu
+  func_80062280 law verbatim): multiple definition of func_80025E04 - the
+  matched 8-byte empty C row (src/func_80025E04.c) vs the nested
+  true-position detection inside func_80026704.s at VMA 0x80025E04 exactly
+  (name==VMA). THE LAW APPLIED: the detection keeps the name; the C row
+  renames to its carve name func_800258F4 (yaml offset 0x58F4, name==VMA
+  self-consistency). No symbols entry, no C references; the ratchets prose
+  mention swept (the g3_eu case had none to sweep). yaml + src only - the
+  regen-commit hook path (config+symbols in the same commit) allowed it
+  WITHOUT --no-verify. The g3org_eu twin row (0x58F4, same shared src
+  file) lands with its own unit - its evidence comes at its own link.
+- THE RETAIL-BOUND WAVE, ONE WAVE (the 1334 pre-derived g3org_jp set,
+  8 names, restored verbatim): intr_stop_begin 0x80048860 and
+  intr_stop_commit 0x80048940 (the data_8004E9C0 / func_8004EAA0 row
+  starts - the 1051 shape verbatim; the stop_commit position coincides
+  with the pinned psyq ResetEntryInt 0x80048940, allow_duplicated:True
+  both lines), intr_active_flag 0x800A3134, intr_trap_flag 0x800A3136,
+  intr_saved_mask 0x800A3166, intr_saved_dicr 0x800A3168,
+  video_mode 0x800A4398, _spu_inTransfer 0x800B75F4 (the flag cluster +
+  video_mode row-hosted inside the giant data row data_8007D5D0 - the
+  g3_jp data_8007D920 analog; _spu_inTransfer in the spu row). The four
+  family names map identity through staging - no action, not carried.
+  The first flipped-era link enumerated the whole story in 28 diff
+  bytes / 7 clusters - every cluster a staged->retail address pair from
+  the pre-derived table. NO second pass needed.
+- RESULT: make verify TARGET=g3org_jp GREEN - "OK: build matches retail
+  baselines/g3org_jp.bin", sha1 2b2a4225 == the committed oracle, 0
+  differing bytes. judge g3org_jp 52/52 EXACT (true bytes end to end);
+  ratchets 374/0 == baseline; census 0; clean_stale_asm nothing stale;
+  flip_reauthor check GREEN after banking (seven tables); slps_00270
+  regression re-verified GREEN.
+- BANKED: RETAIL_BOUND g3org_jp table in tools/flip_reauthor.py (8
+  entries, row-hosted, verbatim pass-through; the banking comment carries
+  the C-row rename provenance and the family-name identity note).
+- Tree: config/splat.g3org_jp.yaml + config/symbols.g3org_jp.txt (13
+  FLIP-ROWDEF retirements + the 8 RETAIL-BOUND restorations + the
+  ResetEntryInt allow_duplicated) + src/func_800258F4.c rename + the
+  g3org_jp extract fixed point (13 deletions, the true-basis re-decodes,
+  the retail dlabel edits) + the 33 g3org_jp .rowdef.s files COMMITTED
+  (the g3_jp/mainmenu_eu majority practice; the extract-regenerable
+  concern is moot post-GREEN); ratchets untouched (374/0); matched 174.
+
+Next queue:
+1. g3org_eu unit completion (the 9-name pre-derived set in the 1334
+   record): true-basis census re-derivation, first flipped-era link (the
+   twin C row func_80025E04 rename closes with its own evidence - the
+   shared src file func_800258F4.c is ALREADY renamed, the EU yaml row
+   needs its carve name from the EU link), the retail-bound wave (9
+   names; eu's stop pair at the data_8004E1C8 / func_8004E298 row starts;
+   the ResetEntryInt variant spelling per the 1334 notes), RETAIL_BOUND
+   banking + check -> verify 8/8.
+2. The matching lane resumes: coddog reports -> clusters -> judge loop
+   (the screen now works on true bytes end to end, judge 52/52 class).
+3. Discs live until ~2026-10-20 09:54 UTC; the re-fetch recipe is in the
+   cron prompt (foreground download, sha256 gate, per-sector extract).
