@@ -219,6 +219,31 @@ RETAIL_BOUND = {
         "state_record_0": 0x800CA374,
         "state_record_1": 0x800CA37C,
     },
+    # g3org_jp (cron-20261019-2127, ONE wave - the 1334 pre-derived set,
+    # 8 names, all retail-confirmed by the first flipped-era link's oracle
+    # enumeration: 28 diff bytes / 7 clusters, every cluster a staged->retail
+    # address pair from the pre-derived table). intr_stop_begin lands at the
+    # data_8004E9C0 row start (0x29060) and intr_stop_commit at the
+    # func_8004EAA0 sdk veneer row start (0x29140) - the 1051 shape verbatim;
+    # the stop_commit position coincides with the pinned psyq ResetEntryInt
+    # (staged = the same 0x80048940), allow_duplicated:True both lines (the
+    # sces/slps/mainmenu_jp/g3_jp spelling). The flag cluster + video_mode +
+    # _spu_inTransfer row-hosted (the giant data row data_8007D5D0 and the
+    # spu row) - verbatim pass-through, no absolute:true. The four family
+    # names (intr_imask_ptr/mask_ptr/dicr_ptr/vb_cb_slots) map identity
+    # through staging - no action, not carried here. Same class as the
+    # census-adjudicated link-only C-row rename func_80025E04 ->
+    # func_800258F4 (the nested true-position row owns the plain name).
+    "g3org_jp": {
+        "intr_stop_begin": 0x80048860,
+        "intr_stop_commit": 0x80048940,
+        "intr_active_flag": 0x800A3134,
+        "intr_trap_flag": 0x800A3136,
+        "intr_saved_mask": 0x800A3166,
+        "intr_saved_dicr": 0x800A3168,
+        "video_mode": 0x800A4398,
+        "_spu_inTransfer": 0x800B75F4,
+    },
 }
 # The rehearsal's alias-adjudication layer (docs/TASKS.md 2026-10-18, banked
 # policy: psyq name wins, the intr_* alias retires with a provenance note;

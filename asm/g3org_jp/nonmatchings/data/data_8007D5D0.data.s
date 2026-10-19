@@ -45650,16 +45650,10 @@ dlabel D_80092124
     /* 72940 80092140 6C830B80 */ .word D_800B836C
 enddlabel D_80092124
 
-nonmatching intr_active_flag
+nonmatching D_80092144
 
-dlabel intr_active_flag
-    /* 72944 80092144 */ .short 0x0017
-enddlabel intr_active_flag
-
-nonmatching intr_trap_flag
-
-dlabel intr_trap_flag
-    /* 72946 80092146 */ .short 0x0000
+dlabel D_80092144
+    /* 72944 80092144 17000000 */ .word 0x00000017
     /* 72948 80092148 C8FBFFFF */ .word 0xFFFFFBC8
     /* 7294C 8009214C 64E7FFFF */ .word 0xFFFFE764
     /* 72950 80092150 C4EF0000 */ .word 0x0000EFC4
@@ -45667,7 +45661,7 @@ dlabel intr_trap_flag
     /* 72958 80092158 DC8E0880 */ .word D_80088EDC
     /* 7295C 8009215C 00820B80 */ .word D_800B8200
     /* 72960 80092160 DC820B80 */ .word D_800B82DC
-enddlabel intr_trap_flag
+enddlabel D_80092144
 
 nonmatching D_80092164
 
@@ -45676,22 +45670,11 @@ dlabel D_80092164
     /* 72968 80092168 90240000 */ .word 0x00002490
     /* 7296C 8009216C 18E8FFFF */ .word 0xFFFFE818
     /* 72970 80092170 38E50000 */ .word 0x0000E538
-    /* 72974 80092174 */ .short 0x0000
-enddlabel D_80092164
-
-nonmatching intr_saved_mask
-
-dlabel intr_saved_mask
-    /* 72976 80092176 */ .short 0x0000
-enddlabel intr_saved_mask
-
-nonmatching intr_saved_dicr
-
-dlabel intr_saved_dicr
+    /* 72974 80092174 00000000 */ .word 0x00000000
     /* 72978 80092178 248F0880 */ .word D_80088F24
     /* 7297C 8009217C 00820B80 */ .word D_800B8200
     /* 72980 80092180 AC830B80 */ .word D_800B83AC
-enddlabel intr_saved_dicr
+enddlabel D_80092164
 
 nonmatching D_80092184
 
@@ -46733,11 +46716,6 @@ dlabel D_80092224
     /* 7393C 8009313C 0E0A0000 */ .word 0x00000A0E
     /* 73940 80093140 64CD0880 */ .word D_8008CD64
     /* 73944 80093144 0E0A0000 */ .word 0x00000A0E
-enddlabel D_80092224
-
-nonmatching video_mode
-
-dlabel video_mode
     /* 73948 80093148 84CD0880 */ .word D_8008CD84
     /* 7394C 8009314C 100A0300 */ .word 0x00030A10
     /* 73950 80093150 A4CD0880 */ .word D_8008CDA4
@@ -47293,7 +47271,7 @@ dlabel video_mode
     /* 741E8 800939E8 04F00880 */ .word D_8008F004
     /* 741EC 800939EC FFFF0000 */ .word 0x0000FFFF
     /* 741F0 800939F0 00000000 */ .word 0x00000000
-enddlabel video_mode
+enddlabel D_80092224
 
 nonmatching D_800939F4
 
@@ -48087,7 +48065,7 @@ dlabel D_800939F4
     /* 74E3C 8009463C 440C0300 */ .word 0x00030C44
     /* 74E40 80094640 24210980 */ .word D_80092124
     /* 74E44 80094644 6C0C0300 */ .word 0x00030C6C
-    /* 74E48 80094648 44210980 */ .word intr_active_flag
+    /* 74E48 80094648 44210980 */ .word D_80092144
     /* 74E4C 8009464C 6C0C0000 */ .word 0x00000C6C
     /* 74E50 80094650 64210980 */ .word D_80092164
     /* 74E54 80094654 760C0000 */ .word 0x00000C76
@@ -70177,53 +70155,42 @@ dlabel D_8009F134
     /* 83930 800A3130 00000010 */ .word 0x10000000
 enddlabel D_8009F134
 
-nonmatching D_800A3134
+nonmatching intr_active_flag
 
-dlabel D_800A3134
+dlabel intr_active_flag
     /* 83934 800A3134 */ .short 0x0000
-enddlabel D_800A3134
+enddlabel intr_active_flag
 
-nonmatching D_800A3136
+nonmatching intr_trap_flag
 
-dlabel D_800A3136
+dlabel intr_trap_flag
     /* 83936 800A3136 */ .short 0x0000
-    /* 83938 800A3138 */ .short 0x0000
-    /* 8393A 800A313A */ .short 0x0000
-    /* 8393C 800A313C */ .short 0x0000
-    /* 8393E 800A313E */ .short 0x0000
-    /* 83940 800A3140 */ .short 0x0000
-    /* 83942 800A3142 */ .short 0x0000
-    /* 83944 800A3144 */ .short 0x0000
-    /* 83946 800A3146 */ .short 0x0000
-    /* 83948 800A3148 */ .short 0x0000
-    /* 8394A 800A314A */ .short 0x0000
-    /* 8394C 800A314C */ .short 0x0000
-    /* 8394E 800A314E */ .short 0x0000
-    /* 83950 800A3150 */ .short 0x0000
-    /* 83952 800A3152 */ .short 0x0000
-    /* 83954 800A3154 */ .short 0x0000
-    /* 83956 800A3156 */ .short 0x0000
-    /* 83958 800A3158 */ .short 0x0000
-    /* 8395A 800A315A */ .short 0x0000
-    /* 8395C 800A315C */ .short 0x0000
-    /* 8395E 800A315E */ .short 0x0000
-    /* 83960 800A3160 */ .short 0x0000
-    /* 83962 800A3162 */ .short 0x0000
+    /* 83938 800A3138 00000000 */ .word 0x00000000
+    /* 8393C 800A313C 00000000 */ .word 0x00000000
+    /* 83940 800A3140 00000000 */ .word 0x00000000
+    /* 83944 800A3144 00000000 */ .word 0x00000000
+    /* 83948 800A3148 00000000 */ .word 0x00000000
+    /* 8394C 800A314C 00000000 */ .word 0x00000000
+    /* 83950 800A3150 00000000 */ .word 0x00000000
+    /* 83954 800A3154 00000000 */ .word 0x00000000
+    /* 83958 800A3158 00000000 */ .word 0x00000000
+    /* 8395C 800A315C 00000000 */ .word 0x00000000
+    /* 83960 800A3160 00000000 */ .word 0x00000000
     /* 83964 800A3164 */ .short 0x0000
-enddlabel D_800A3136
+enddlabel intr_trap_flag
 
-nonmatching D_800A3166
+nonmatching intr_saved_mask
 
-dlabel D_800A3166
+dlabel intr_saved_mask
     /* 83966 800A3166 */ .short 0x0000
-enddlabel D_800A3166
+enddlabel intr_saved_mask
 
-nonmatching D_800A3168
+nonmatching intr_saved_dicr
 
-dlabel D_800A3168
+dlabel intr_saved_dicr
     /* 83968 800A3168 00000000 */ .word 0x00000000
     /* 8396C 800A316C 00000000 */ .word 0x00000000
-enddlabel D_800A3168
+enddlabel intr_saved_dicr
 
 nonmatching D_800A3170
 
@@ -70933,11 +70900,6 @@ dlabel D_800A3170
     /* 84468 800A3C68 00000000 */ .word 0x00000000
     /* 8446C 800A3C6C 00000000 */ .word 0x00000000
     /* 84470 800A3C70 00000000 */ .word 0x00000000
-enddlabel D_800A3170
-
-nonmatching _spu_inTransfer
-
-dlabel _spu_inTransfer
     /* 84474 800A3C74 00000000 */ .word 0x00000000
     /* 84478 800A3C78 00000000 */ .word 0x00000000
     /* 8447C 800A3C7C 00000000 */ .word 0x00000000
@@ -71268,7 +71230,7 @@ dlabel _spu_inTransfer
     /* 84990 800A4190 00000000 */ .word 0x00000000
     /* 84994 800A4194 00000000 */ .word 0x00000000
     /* 84998 800A4198 00000000 */ .word 0x00000000
-enddlabel _spu_inTransfer
+enddlabel D_800A3170
 
 nonmatching D_800A419C
 
@@ -71280,7 +71242,7 @@ dlabel D_800A419C
     /* 849AC 800A41AC 64800480 */ .word stopIntr
     /* 849B0 800A41B0 00000000 */ .word 0x00000000
     /* 849B4 800A41B4 14810480 */ .word restartIntr
-    /* 849B8 800A41B8 34310A80 */ .word D_800A3134
+    /* 849B8 800A41B8 34310A80 */ .word intr_active_flag
 enddlabel D_800A419C
 
 nonmatching intr_start_tab
@@ -71593,9 +71555,9 @@ dlabel D_800A4394
     /* 84B94 800A4394 00000000 */ .word 0x00000000
 enddlabel D_800A4394
 
-nonmatching D_800A4398
+nonmatching video_mode
 
-dlabel D_800A4398
+dlabel video_mode
     /* 84B98 800A4398 00000000 */ .word 0x00000000
     /* 84B9C 800A439C 00101F10 */ .word 0x101F1000
     /* 84BA0 800A43A0 3F105E10 */ .word 0x105E103F
@@ -72326,7 +72288,7 @@ dlabel D_800A4398
     /* 856F4 800A4EF4 44A10580 */ .word 0x8005A144
     /* 856F8 800A4EF8 7C3D0580 */ .word D_80053D7C
     /* 856FC 800A4EFC A8060580 */ .word D_800506A8
-enddlabel D_800A4398
+enddlabel video_mode
 
 nonmatching D_800A4F00
 
@@ -109960,11 +109922,11 @@ dlabel D_800B75F0
     /* 97DF0 800B75F0 07000000 */ .word 0x00000007
 enddlabel D_800B75F0
 
-nonmatching D_800B75F4
+nonmatching _spu_inTransfer
 
-dlabel D_800B75F4
+dlabel _spu_inTransfer
     /* 97DF4 800B75F4 01000000 */ .word 0x00000001
-enddlabel D_800B75F4
+enddlabel _spu_inTransfer
 
 nonmatching D_800B75F8
 

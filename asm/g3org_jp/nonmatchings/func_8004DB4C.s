@@ -12,8 +12,8 @@ nonmatching startIntr, 0xDC
 glabel startIntr
     /* 2844C 80047C4C E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 28450 80047C50 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 28454 80047C54 0A80103C */  lui        $s0, %hi(D_800A3134)
-    /* 28458 80047C58 34311026 */  addiu      $s0, $s0, %lo(D_800A3134)
+    /* 28454 80047C54 0A80103C */  lui        $s0, %hi(intr_active_flag)
+    /* 28458 80047C58 34311026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* 2845C 80047C5C 1400BFAF */  sw         $ra, 0x14($sp)
     /* 28460 80047C60 00000296 */  lhu        $v0, 0x0($s0)
     /* 28464 80047C64 00000000 */  nop

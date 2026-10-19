@@ -387,7 +387,7 @@ glabel func_80043370
     /* 23BEC 800433EC 00000000 */   nop
 endlabel func_80043370
 
-nonmatching func_800433F0, 0x20
+nonmatching func_800433F0, 0x24
 
 glabel func_800433F0
     /* 23BF0 800433F0 00000586 */  lh         $a1, 0x0($s0)
@@ -398,13 +398,8 @@ glabel func_800433F0
     /* 23C04 80043404 A0908494 */  lhu        $a0, %lo(D_800B90A0)($a0)
     /* 23C08 80043408 04000586 */  lh         $a1, 0x4($s0)
     /* 23C0C 8004340C 910D010C */  jal        func_80043644
+    /* 23C10 80043410 00000000 */   nop
 endlabel func_800433F0
-
-nonmatching intr_stop_begin
-
-dlabel intr_stop_begin
-    /* 23C10 80043410 00000000 */ .word 0x00000000
-enddlabel intr_stop_begin
 
 nonmatching func_80043414, 0x10
 
@@ -491,43 +486,32 @@ glabel func_800434BC
     /* 23CE8 800434E8 020086A4 */   sh        $a2, 0x2($a0)
 endlabel func_800434BC
 
-nonmatching func_800434EC, 0x4
+nonmatching func_800434EC, 0x50
 
 glabel func_800434EC
     /* 23CEC 800434EC 00140400 */  sll        $v0, $a0, 16
+    /* 23CF0 800434F0 83130200 */  sra        $v0, $v0, 14
+    /* 23CF4 800434F4 0A004224 */  addiu      $v0, $v0, 0xA
+    /* 23CF8 800434F8 2118A200 */  addu       $v1, $a1, $v0
+    /* 23CFC 800434FC 00006684 */  lh         $a2, 0x0($v1)
+    /* 23D00 80043500 FFFF0224 */  addiu      $v0, $zero, -0x1
+    /* 23D04 80043504 0700C214 */  bne        $a2, $v0, .L80043524
+    /* 23D08 80043508 00140400 */   sll       $v0, $a0, 16
+    /* 23D0C 8004350C 02006284 */  lh         $v0, 0x2($v1)
+    /* 23D10 80043510 00000000 */  nop
+    /* 23D14 80043514 03004614 */  bne        $v0, $a2, .L80043524
+    /* 23D18 80043518 00140400 */   sll       $v0, $a0, 16
+    /* 23D1C 8004351C 5A0D0108 */  j          func_80043568
+    /* 23D20 80043520 21100000 */   addu      $v0, $zero, $zero
+  .L80043524:
+    /* 23D24 80043524 03140200 */  sra        $v0, $v0, 16
+    /* 23D28 80043528 02004104 */  bgez       $v0, .L80043534
+    /* 23D2C 8004352C 21204000 */   addu      $a0, $v0, $zero
+    /* 23D30 80043530 07004224 */  addiu      $v0, $v0, 0x7
+  .L80043534:
+    /* 23D34 80043534 21188000 */  addu       $v1, $a0, $zero
+    /* 23D38 80043538 02006104 */  bgez       $v1, .L80043544
 endlabel func_800434EC
-
-nonmatching intr_stop_commit
-
-dlabel intr_stop_commit
-    /* 23CF0 800434F0 83130200 */ .word 0x00021383
-    /* 23CF4 800434F4 0A004224 */ .word 0x2442000A
-    /* 23CF8 800434F8 2118A200 */ .word 0x00A21821
-    /* 23CFC 800434FC 00006684 */ .word 0x84660000
-    /* 23D00 80043500 FFFF0224 */ .word 0x2402FFFF
-    /* 23D04 80043504 0700C214 */ .word 0x14C20007
-    /* 23D08 80043508 00140400 */ .word 0x00041400
-    /* 23D0C 8004350C 02006284 */ .word 0x84620002
-    /* 23D10 80043510 00000000 */ .word 0x00000000
-    /* 23D14 80043514 03004614 */ .word 0x14460003
-    /* 23D18 80043518 00140400 */ .word 0x00041400
-    /* 23D1C 8004351C 5A0D0108 */ .word 0x08010D5A
-    /* 23D20 80043520 21100000 */ .word 0x00001021
-
-nonmatching .L80043524
-
-alabel .L80043524
-    /* 23D24 80043524 03140200 */ .word 0x00021403
-    /* 23D28 80043528 02004104 */ .word 0x04410002
-    /* 23D2C 8004352C 21204000 */ .word 0x00402021
-    /* 23D30 80043530 07004224 */ .word 0x24420007
-
-nonmatching .L80043534
-
-alabel .L80043534
-    /* 23D34 80043534 21188000 */ .word 0x00801821
-    /* 23D38 80043538 02006104 */ .word 0x04610002
-enddlabel intr_stop_commit
 
 nonmatching func_8004353C, 0x4
 

@@ -289,7 +289,7 @@ glabel func_8003FADC
     /* 2033C 8003FB3C 208F22A4 */  sh         $v0, %lo(D_800B8F20)($at)
     /* 20340 8003FB40 0C80013C */  lui        $at, %hi(D_800B8FD0)
     /* 20344 8003FB44 D08F20A4 */  sh         $zero, %lo(D_800B8FD0)($at)
-    /* 20348 8003FB48 BE09010C */  jal        func_800478E8
+    /* 20348 8003FB48 BE09010C */  jal        func_800426F8
     /* 2034C 8003FB4C 06000434 */   ori       $a0, $zero, 0x6
     /* 20350 8003FB50 C207010C */  jal        func_80041F08
     /* 20354 8003FB54 00000000 */   nop
@@ -351,7 +351,7 @@ glabel func_8003FB90
     /* 20418 8003FC18 35000234 */  ori        $v0, $zero, 0x35
     /* 2041C 8003FC1C 0C80013C */  lui        $at, %hi(D_800B8EE0)
     /* 20420 8003FC20 E08E22A4 */  sh         $v0, %lo(D_800B8EE0)($at)
-    /* 20424 8003FC24 BE09010C */  jal        func_800478E8
+    /* 20424 8003FC24 BE09010C */  jal        func_800426F8
     /* 20428 8003FC28 35000434 */   ori       $a0, $zero, 0x35
     /* 2042C 8003FC2C 0C80023C */  lui        $v0, %hi(D_800B9370)
     /* 20430 8003FC30 70934294 */  lhu        $v0, %lo(D_800B9370)($v0)

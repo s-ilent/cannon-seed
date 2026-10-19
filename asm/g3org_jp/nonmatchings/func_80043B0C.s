@@ -88,7 +88,7 @@ glabel func_8003F0EC
     /* 1F940 8003F140 01006324 */  addiu      $v1, $v1, 0x1
     /* 1F944 8003F144 0C80013C */  lui        $at, %hi(D_800B90D0)
     /* 1F948 8003F148 D09023A4 */  sh         $v1, %lo(D_800B90D0)($at)
-    /* 1F94C 8003F14C BE09010C */  jal        func_800478E8
+    /* 1F94C 8003F14C BE09010C */  jal        func_800426F8
     /* 1F950 8003F150 38000434 */   ori       $a0, $zero, 0x38
     /* 1F954 8003F154 0C80013C */  lui        $at, %hi(D_800B9370)
     /* 1F958 8003F158 709330A4 */  sh         $s0, %lo(D_800B9370)($at)
@@ -125,7 +125,7 @@ glabel func_8003F1A4
     /* 1F9AC 8003F1AC 27000234 */  ori        $v0, $zero, 0x27
     /* 1F9B0 8003F1B0 0C80013C */  lui        $at, %hi(D_800B8EE0)
     /* 1F9B4 8003F1B4 E08E22A4 */  sh         $v0, %lo(D_800B8EE0)($at)
-    /* 1F9B8 8003F1B8 BE09010C */  jal        func_800478E8
+    /* 1F9B8 8003F1B8 BE09010C */  jal        func_800426F8
     /* 1F9BC 8003F1BC 27000434 */   ori       $a0, $zero, 0x27
     /* 1F9C0 8003F1C0 0C80023C */  lui        $v0, %hi(D_800B9370)
     /* 1F9C4 8003F1C4 70934294 */  lhu        $v0, %lo(D_800B9370)($v0)
@@ -186,7 +186,7 @@ nonmatching func_8003F240, 0x3C
 glabel func_8003F240
     /* 1FA40 8003F240 0C80013C */  lui        $at, %hi(D_800B8EE0)
     /* 1FA44 8003F244 E08E22A4 */  sh         $v0, %lo(D_800B8EE0)($at)
-    /* 1FA48 8003F248 BE09010C */  jal        func_800478E8
+    /* 1FA48 8003F248 BE09010C */  jal        func_800426F8
     /* 1FA4C 8003F24C 34000434 */   ori       $a0, $zero, 0x34
     /* 1FA50 8003F250 0C80023C */  lui        $v0, %hi(D_800B9370)
     /* 1FA54 8003F254 70934294 */  lhu        $v0, %lo(D_800B9370)($v0)
@@ -502,7 +502,7 @@ glabel func_8003F554
     /* 1FDBC 8003F5BC 01006324 */  addiu      $v1, $v1, 0x1
     /* 1FDC0 8003F5C0 0C80013C */  lui        $at, %hi(D_800B8E80)
     /* 1FDC4 8003F5C4 808E23A4 */  sh         $v1, %lo(D_800B8E80)($at)
-    /* 1FDC8 8003F5C8 BE09010C */  jal        func_800478E8
+    /* 1FDC8 8003F5C8 BE09010C */  jal        func_800426F8
     /* 1FDCC 8003F5CC 38000434 */   ori       $a0, $zero, 0x38
     /* 1FDD0 8003F5D0 01000234 */  ori        $v0, $zero, 0x1
     /* 1FDD4 8003F5D4 0C80013C */  lui        $at, %hi(D_800B9370)
