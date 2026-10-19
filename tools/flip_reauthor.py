@@ -159,6 +159,30 @@ RETAIL_BOUND = {
         "video_mode": 0x80097650,
         "_spu_inTransfer": 0x800AA8AC,
     },
+    # g3_eu (cron-20261019-2012, SIXTH flipped-era GREEN, ONE wave - the
+    # 1051 pre-derived g3_jp twin set restored verbatim; all 12 row-hosted:
+    # the stop pair at the data_80051364 / func_80051434 row starts, the
+    # flag cluster + _spu_inTransfer inside the giant data row
+    # data_8007E6D0; the inherent ResetEntryInt alias legitimized on both
+    # lines). The unit also landed the link-only C-row class for this
+    # target: the matched 8-byte empty row at carve 0x800598C0 renamed
+    # from its woven name func_80062280 (the false-positive split
+    # detection inside data_8006AAF4 keeps the encoded name - the slps
+    # 0319 law; the census reads only asm/*.s so the LINK witnessed it).
+    "g3_eu": {
+        "intr_stop_begin": 0x8004AD44,
+        "intr_stop_commit": 0x8004AE14,
+        "intr_active_flag": 0x80096C08,
+        "intr_trap_flag": 0x80096C0A,
+        "intr_saved_mask": 0x80096C3A,
+        "intr_saved_dicr": 0x80096C3C,
+        "intr_imask_ptr": 0x80097C94,
+        "intr_mask_ptr": 0x80097C98,
+        "intr_dicr_ptr": 0x80097C9C,
+        "intr_vb_cb_slots": 0x80097CCC,
+        "video_mode": 0x80096C04,
+        "_spu_inTransfer": 0x800AB0E8,
+    },
     # mainmenu_eu (cron-20261019-0934, ONE wave via the per-run pair
     # enumerator + the jal fix: opcode 0x03, not 0x0C - 24 names, 83 diff
     # bytes / 22 runs, all pre-flip confirmed verbatim in de0b0d68^).

@@ -9434,3 +9434,70 @@ Next queue:
 4. Discs live until ~2026-10-20 09:54 UTC: if a later window finds
    disk/*.chd eaten, re-download from the cron-prompt links IN FOREGROUND
    (backgrounded curls die with the tool call), re-gate sha256, re-extract.
+
+## 2026-10-19 (window cron-20261019-2012): g3_eu is the SIXTH FLIPPED-ERA GREEN - the fifth rollback's seven-minute recovery, the 11-name true-basis census adjudication, the 1051 twin set landing in ONE oracle-clean wave, and the link-only C-row class closed by the carve-name rename
+
+- Fifth worklog rollback pre-window (repo to 7623cd2e, worklog 0/45, disk/
+  and baselines/ woven again): recovered to origin/main 09e9a282; RESTORE
+  NOTE + 45-window digest appended. CHDs re-downloaded IN FOREGROUND from
+  the still-valid links (sha256-gated both), raw images sector-exact
+  (JP 267504 / EU 267752), 8 EXEs --per-sector -> baselines/, WITNESS 8/8.
+  Full recovery 20:12 -> 20:19 UTC - the SOP is now routine.
+- TRUE-BASIS CENSUS (the 1051 caveat honored): 11 names on the wiped
+  basis (5 dlabel-class + 6 cross-file glabel dupes) vs the woven-basis
+  0 - the expected delta. All 11 adjudicated with tools/adjudicate_rowdefs
+  (11 yaml rows renamed .rowdef, 11 symbols lines retired, the established
+  spelling); clean_stale_asm removed the 11 old-name files; census 11 -> 0.
+- FIRST LINK attempt died on the LINK-ONLY C-ROW CLASS (the census's
+  documented blind spot): multiple definition of func_80062280 - the
+  matched 8-byte empty C row (src/func_80062280.c) vs the false-positive
+  split detection inside data_8006AAF4 at VMA 0x80062280 exactly (the
+  encoded position). THE SLPS LAW APPLIED: the false detection keeps the
+  name; the C row renames to its carve name func_800598C0 (rom 0x3A0C0 +
+  the 0x8001F800 segment delta, name==VMA self-consistency). No symbols
+  entry, no C references, no ratchets comment - the rename is yaml + src
+  only. (The slps case's ratchets/curated/TOOLCHAIN prose sweep had
+  nothing to sweep here.)
+- THE RETAIL-BOUND WAVE, ONE WAVE (the 1051 pre-derived g3_jp twin set,
+  12 names, restored verbatim): intr_stop_begin 0x8004AD44 and
+  intr_stop_commit 0x8004AE14 (dlabels at the data_80051364 /
+  func_80051434 row starts), intr_active_flag 0x80096C08,
+  intr_trap_flag 0x80096C0A, intr_saved_mask 0x80096C3A,
+  intr_saved_dicr 0x80096C3C, intr_imask_ptr 0x80097C94,
+  intr_mask_ptr 0x80097C98, intr_dicr_ptr 0x80097C9C,
+  intr_vb_cb_slots 0x80097CCC, video_mode 0x80096C04,
+  _spu_inTransfer 0x800AB0E8 (the flag cluster + _spu_inTransfer
+  row-hosted inside the giant data row data_8007E6D0 - g3_eu's analog of
+  g3_jp's data_8007D920). NO absolute:true (the slps-only variant
+  confirmed absent here). THE INHERENT ALIAS: retail intr_stop_commit
+  0x8004AE14 coincides with the pinned psyq ResetEntryInt -
+  allow_duplicated:True on both lines (the established spelling).
+  The wave needed NO second pass: the oracle enumerated ZERO remaining
+  diffs - the 1051 pre-derivation was exact.
+- RESULT: make verify TARGET=g3_eu GREEN - "OK: build matches retail
+  baselines/g3_eu.bin", sha1 39030a75 == the committed oracle, 0
+  differing bytes. FIRST flipped-era link AND byte-exact image in the
+  same window. Gates: ratchets 374/0 == baseline; census g3_eu 0 over
+  469 files; clean_stale_asm "nothing stale"; judge g3_eu 46/47 EXACT
+  (up from the disc-blocked 38/47 - the screen reads true bytes, the
+  1 residue is its known open-candidate tail); flip_reauthor check GREEN
+  after banking; slps_00270 regression re-verified GREEN (the g3_eu-scoped
+  edits touch nothing of the others).
+- BANKED: RETAIL_BOUND g3_eu table in tools/flip_reauthor.py (12 entries,
+  all row-hosted, verbatim pass-through - the g3_jp class; the banking
+  comment carries the C-row rename provenance).
+- Tree: config/splat.g3_eu.yaml + config/symbols.g3_eu.txt + the
+  func_800598C0.c rename + the g3_eu extract fixed point (11 deletions,
+  the retail dlabel edits, the true-basis re-decode of the touched rows);
+  the 31 untracked .rowdef.s stay untracked (the 1051 precedent -
+  extract-regenerable); ratchets untouched (374/0); matched 174.
+
+Next queue:
+1. The g3org pair units (the 1334 tables): true-basis census re-derivation
+   per unit, first flipped-era links, retail-bound waves from the
+   pre-derived sets, the two stop pairs' no-row island variants manual,
+   curated restoration, RETAIL_BOUND banking + check -> verify 8/8.
+2. The matching lane resumes: coddog reports -> clusters -> judge loop
+   (the screen now works on true bytes end to end).
+3. Discs live until ~2026-10-20 09:54 UTC; the re-fetch recipe is in the
+   cron prompt (foreground download, sha256 gate, per-sector extract).
