@@ -9073,3 +9073,72 @@ Next queue:
 3. flip_reauthor `check` as a flip-lane window-opening gate (offline,
    seconds, no woven inputs needed).
 4. make verify 8/8 true remains the gate.
+
+## 2026-10-19 (window cron-20261019-1051): g3_eu's census adjudication lands
+at the yaml layer (commit a5db3893, census 25 -> 0 on the extract basis) and
+the window goes disc-blocked at the link: the re-provision that ate the last
+window's context ALSO reverted baselines/ to the all-woven set and ate
+disk/*.chd + /home/z/disc_work, the CDN links expired 09:54 UTC, so the first
+flipped-era link is impossible until Silent refreshes them (the request goes
+out with this window's report; the sha256 gates are in the standing prompt).
+
+THE ADJUDICATION (25 names: 17 dlabel-class + 8 cross-file glabel dupes,
+both classes one fix): census re-derived on the extract basis (the only
+basis available - see the caveat below). 20 with-row census rows renamed
+<name>.rowdef with their GEN lines retired as FLIP-ROWDEF comments (the
+established sces-through-mainmenu_eu spelling verbatim). 20 stale old-name
+.s files removed by clean_stale_asm's union rule (the extract fixed point
+moves with the adjudicated yaml). The WOVEN-BYTE extract artifacts (the
+450 regenerated .s files + the 20 new .rowdef.s) were reverted before the
+commit - the landed diff is exactly yaml + symbols + the 20 deletions.
+
+THE NO-ROW SUB-CASE (new; no precedent in the five landed units): the five
+census names func_8004D774/4D78C/4D7C0/4D7D8/4D7F4 have NO yaml row - they
+are a code island inside data_80052068's true span, identity "(branch
+target)" GEN entries at the encoded positions, and func_8004D704's bnez
+context makes spimdisasm nest nonmatching blocks (glabels) inside
+func_8004D704.s WHILE the entries dlabel the same addresses inside
+data_80052068.data.s - both sides at the encoded position. The entries are
+the redundant side (the auto-context definition is entry-independent and
+byte-correct); retired with the no-row spelling variant: "// FLIP-ROWDEF
+(no yaml row owns this woven name; the identity branch-target entry is
+retired and the encoded-position auto-context definition owns the plain
+name): <name> = <value>; // type:func (branch target)".
+
+CAVEAT (recorded for the next window): the extract this census was derived
+from split the WOVEN bytes at TRUE offsets (the re-provision left no true
+baseline), and the census's auto-context side is byte-dependent - the
+name-layer adjudication itself is yaml/GEN-keyed and byte-independent, but
+the standing lane rule holds: re-derive the true-basis wiped census before
+the link (expect a small delta vs the 25; adjudicate any new names with the
+same spellings).
+
+THE RETAIL-BOUND WAVE, PRE-DERIVED (the g3_jp twin set, 12 names; restore
+value-only from the pre-flip de0b0d68^ file, subject to the oracle
+enumeration as always - the staged column is what the pre-wave build would
+encode): intr_stop_begin 0x8004AD44 (staged 0x80045434), intr_stop_commit
+0x8004AE14 (staged 0x80045504), intr_active_flag 0x80096C08 (staged
+0x80087638), intr_trap_flag 0x80096C0A (staged 0x8008763A), intr_saved_mask
+0x80096C3A (staged 0x8008766A), intr_saved_dicr 0x80096C3C (staged
+0x8008766C), intr_imask_ptr 0x80097C94 (staged 0x80088464), intr_mask_ptr
+0x80097C98 (staged 0x80088468), intr_dicr_ptr 0x80097C9C (staged
+0x8008846C), intr_vb_cb_slots 0x80097CCC (staged 0x8008849C), video_mode
+0x80096C04 (staged 0x80087634), _spu_inTransfer 0x800AB0E8 (staged
+0x80099058). The stop pair lands at the data_80051364 / func_80051434 row
+starts exactly as g3_jp's landed at data_80051B14 / func_80051BF4 (the
+0xD0 stop/commit spacing repeats); the flag cluster's offsets are row-gap
+positions at row-start granularity - hosting (row-hosted vs absolute:true)
+is decided by the extract, per-target variant as banked.
+
+Next queue:
+1. Silent refreshes the CDN links (they expired 09:54 UTC; the discs AND
+   baselines are gone) -> re-fetch both CHDs (sha256 gate), per-sector
+   re-extract, witness 8/8 true baselines.
+2. g3_eu unit completion: true-basis census re-derivation (adjudicate any
+   delta), first flipped-era link, the retail-bound wave from the
+   pre-derived table above (oracle_runs enumerates; the %hi/%lo carry
+   lesson applies), curated g3_eu scope retail-bound restoration,
+   RETAIL_BOUND banking + check.
+3. g3org_jp and g3org_eu units follow (the same shape; their censuses
+   re-derive on the true basis).
+4. make verify 8/8 true remains the gate.
