@@ -9003,3 +9003,73 @@ Next queue:
    census if the lane wants it instrumented.
 4. make verify 8/8 true remains the gate; screens' 5 DATA observations
    on g3_jp are matcher context, not flip blockers.
+
+2026-10-19 (window cron-20261019-0819): the RETAIL_BOUND record completes -
+mainmenu_jp (31) + g3_jp (12) banked, the curated mainmenu_jp staging
+repaired, and the 0319 banking gap caught. Rehydrate OK; the sandbox had
+re-provisioned AGAIN before the window (worklog tail back to
+cron-20261014-2112, disk/*.chd + /home/z/disc_work eaten, baselines/ back
+to the all-woven snapshot) and re-provisioned AGAIN mid-window (~08:20, a
+mode flip that ate cc.sh's exec bit AFTER rehydrate had run - make verify
+died "Permission denied"; chmod tools/*.sh fixed it and rehydrate already
+covers tools/*.sh, so the lesson is: mid-window re-provisions re-flip
+modes, re-run rehydrate on any Permission denied). Both CHDs re-fetched
+(sha256 exact), raw images re-extracted (267,504 + 267,752 sectors), all
+eight TRUE baselines re-extracted per-sector into jp_out/eu_out and
+sha1-witnessed 8/8 against the flipped oracles.
+
+THE DERIVATION (repo-external scripts): an entry is retail-bound iff the
+landed HEAD value == the pre-flip de0b0d68^ value while the de0b0d68
+staging differs. Mechanically exact, cross-validated three ways: sces
+reproduces its banked table 7/7, g3_jp reproduces its 12 landed
+RETAIL-BOUND annotations 12/12, mainmenu_jp yields exactly the 0549
+record's 31 names - and it caught a real gap: the banked slps table held
+10 of the 11 restored names (intr_trap_flag 0x8004D29E missing). Now
+banked 11/11.
+
+THE CURATED REPAIR: the de0b0d68 curated pass lacked the RETAIL_BOUND
+branch, so it framing-mapped the whole mainmenu_jp scope - the stop
+cluster +0x83D0, the intr cluster +0x13260, the state cluster +0xDA80
+(the exact deltas the 0549 record carries). The 0549 window restored the
+build's symbols.mainmenu_jp.txt but the scanner-input curated file kept
+the staged values (build-inert: gen_ld/split consume only
+symbols.<t>.txt - but wrong hints for the next scan of mainmenu_jp in
+the true-space world). All 31 entries restored value-only to the
+pre-flip retail values (= the banked table, = the landed symbols file);
+the already-true identities (PSDIDX, _svm_stereo_mono,
+func_80059F90/9C) needed no edit. Scope census of the rest:
+mainmenu_eu 223/237, g3_eu 275/277, g3org_jp 247/254, g3org_eu 225/230
+curated entries staged-away vs pre-flip - MOSTLY correct (general hints
+map to true positions), except each scope's retail-bound class, whose
+restoration belongs to that target's flip window.
+
+THE TOOL: flip_reauthor gains the mainmenu_jp + g3_jp tables, the
+gap-hosted absolute:true attribute rule in the symbols pass (the
+row-hosted majority passes verbatim), the RETAIL_BOUND pass-through in
+the curated pass (the bug class is structurally closed), and an offline
+`check` mode: banked tables vs landed files in both directions plus the
+row-start/absolute:true invariant (a row-start definition never carries
+absolute:true). The attribute is the recorded per-target variant: slps's
+9 contained members carry it (a 0319-era choice for then-gap positions,
+today inside the consolidated giant row data_8005135C), the jp targets'
+row-hosted members don't.
+
+GATES: make verify GREEN x4 on the re-provisioned baselines (slps
+fa9474b4, mainmenu_jp d637286a, g3_jp 994a680c, sces 06b4bda6 - all four
+landed flipped-era targets); git status = exactly the two intended files
+(the tool + the curated file); ratchets/matched/progress untouched.
+
+Next queue:
+1. Flip lane: four targets left (mainmenu_eu, g3_eu, g3org_jp, g3org_eu
+   - re-derive each wiped census before starting; the numbers move with
+   every landed wave). Expect: rowdef adjudications (audit covers
+   alabel), first link (C-side class possible), retail-bound waves with
+   the enumerator (the %hi/%lo carry lesson applies).
+2. Each remaining target's flip window must ALSO restore its curated
+   scope's retail-bound class (the mainmenu_jp precedent: derive the
+   set from landed==pre-flip-while-staged-differs, restore value-only).
+   flip_reauthor's curated pass-through now handles it for any future
+   re-run, and `check` extends to each target as its table lands.
+3. flip_reauthor `check` as a flip-lane window-opening gate (offline,
+   seconds, no woven inputs needed).
+4. make verify 8/8 true remains the gate.
