@@ -9250,3 +9250,44 @@ Next queue:
    retail-bound waves from the tables above, curated scope restoration,
    RETAIL_BOUND banking + check.
 2. make verify 8/8 true remains the gate.
+
+## 2026-10-19 (window cron-20261019-1549): the shared worklog lost five
+days of sections to a sandbox rollback and is restored as a digest - the
+repo record proves nothing was lost; the window-open gate is GREEN and the
+oracle's true-baseline gate is confirmed as the woven sandbox's expected
+verify signature.
+- Recovery first: the sandbox had rolled back to 7623cd2e while origin had
+  moved to a693fe7c (one new commit on top of this lane's 729a2848: the
+  1334 window's pre-derived g3org retail-bound tables). Reset forward;
+  tree clean. Rehydrate rebuilt the venv offline in 1s.
+- THE WORKLOG ROLLBACK: /home/z/my-project/worklog.md had reverted to its
+  cron-20261014-2112 tail - ~44 cron-window sections (2026-10-15 00:57 UTC
+  through 2026-10-19 13:34 UTC) gone from the local file. Full fidelity
+  was never at risk (every window committed its log to this file and its
+  commits to git history), so the restore is a one-line-per-window digest
+  with commit anchors, appended under a RESTORE NOTE with Task ID
+  cron-20261019-1549-restore, followed by this window's own section. The
+  worklog is continuous again at digest level; docs/TASKS.md + git log
+  remain the authoritative record.
+- flip_reauthor check at window open: GREEN - all 85 banked RETAIL_BOUND
+  entries across the five landed tables agree with the landed files both
+  ways; the row-start/absolute:true invariant holds.
+- Verify in the woven sandbox is oracle-gated: config/sha1/g3_eu.sha1
+  holds the TRUE baseline sha1 (39030a75) and the sandbox's woven
+  baselines/g3_eu.bin is 80acb6d1, so verify refuses at the baseline gate
+  before building - for every target, flipped or not. This is the
+  expected post-flip disc-blocked signature (the oracle re-baseline
+  de0b0d68 committed the true sha1s on purpose), not a regression; no
+  build-side maintenance check is possible until the discs return.
+- Sandbox state unchanged: no discs (disk/ empty), baselines all-woven
+  (sha1 table in the 1319 record), the CDN links expired 09:54 UTC and
+  the fresh-link request stands with Silent - not re-pinged per the
+  no-repeat rule.
+
+Next queue:
+1. Discs return (the request stands) -> true baselines 8/8 -> g3_eu unit
+   completion (pre-derived table in the 1051 record), then the g3org pair
+   units: true-basis census re-derivation, first flipped-era link, the
+   retail-bound waves from the 1334 tables, curated scope restoration,
+   RETAIL_BOUND banking + check.
+2. make verify 8/8 true remains the gate.
