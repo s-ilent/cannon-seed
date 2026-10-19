@@ -9380,3 +9380,57 @@ Next queue:
 2. make verify 8/8 true remains the gate.
 3. On any future worklog rollback: rehydrate, reset --hard origin/main,
    `python3 tools/worklog_digest.py`, paste under a RESTORE NOTE.
+
+## 2026-10-19 (window cron-20261019-1851): the discs return on Silent's fresh links and the disc-return opening sequence runs end to end - true baselines witness 8/8, the judge sweep x8 reads real bytes for the first time post-flip, and verify re-proves the five flipped-era GREEN against the true retail images
+
+- Fourth worklog rollback pre-window (repo to 7623cd2e, worklog to a
+  pre-flip snapshot, digest 0 full / 0 digest / 44 missing): recovered to
+  origin/main f2206590; RESTORE NOTE + 44-window digest appended per the
+  one-command SOP.
+- CRON TASK REFRESHED per Silent's request (the old links had expired
+  2026-10-19 09:54 UTC and the request stood): cron job 466555 replaced by
+  468315 carrying the fresh links (expire ~2026-10-20 09:54 UTC), the
+  foreground-download lesson (a nohup'd curl dies with its tool call ->
+  curl error 23; foreground fetch = ~5 s/file at ~90 MB/s), and the
+  post-flip facts + disc-return queue.
+- CHDs re-fetched and sha256-GATED (EU 382613010 B / 98ccd877..., JP
+  382607234 B / a6025267...); chd_extract x2 sector-exact vs the banked
+  record (JP 267504 / EU 267752 sectors); the 8 EXEs re-extracted
+  --per-sector (true content) -> baselines/<t>.bin, the woven set backed
+  up at build/work/woven/.
+- WITNESS 8/8: every per-sector extraction's SHA-1 equals its committed
+  true-EXE oracle (config/sha1/<t>.sha1) - the extraction pipeline is
+  byte-perfect end to end (CHD -> main-channel bin -> ISO9660 -> EXE).
+- Sandbox mode-flip bites mid-session: exec bits stripped from tools/*.sh
+  between rehydrate (18:53) and the first judge sweep (~19:20) ->
+  PermissionError on tools/cc.sh; a find|xargs chmod restores. rehydrate.sh
+  already chmods (line 40) - the flip is environmental; re-chmod on any
+  PermissionError is the practical response.
+- JUDGE SWEEP x8 (first real-bytes screen post-flip, ~2 s/unit):
+  slps_00270 37/38, sces_00269 32/33, mainmenu_jp 30/30, mainmenu_eu
+  30/30, g3_jp 39/40 - the five GREEN targets read true bytes; the
+  unlinked three show their open-candidate tails (g3_eu 38/47, g3org_jp
+  47/52, g3org_eu 29/34). No gate refusals: the oracle-gated judge
+  (3e9c1038) self-healed exactly as designed.
+- VERIFY x8 against the true baselines: the five flipped-era GREEN
+  re-proven BYTE-EXACT (slps_00270, sces_00269, mainmenu_jp, mainmenu_eu,
+  g3_jp - all exit 0, "OK: build matches retail"); the unlinked three
+  fail at build exactly as parked (exit 2, no oracle edit) - g3_eu,
+  g3org_jp, g3org_eu remain the queue.
+- flip_reauthor check at window end: GREEN (85 banked RETAIL_BOUND
+  entries across the five landed tables, both ways).
+- Tree: docs only; disk/, baselines/, build/ stay git-ignored; ratchets
+  untouched (365/0); matched 174.
+
+Next queue:
+1. g3_eu unit completion (the 1051 tables): true-basis census re-push ->
+   first flipped-era link -> retail-bound wave -> curated restoration ->
+   RETAIL_BOUND banking + flip_reauthor check -> verify GREEN (6/8).
+2. The g3org pair units (the 1334 tables): same class; the two stop
+   pairs' no-row island variants manual; then verify 8/8.
+3. The matching lane resumes: coddog reports -> clusters -> judge loop
+   (the screen now works on true bytes; the 1-2 residue on GREEN targets
+   is its known open-candidate tail).
+4. Discs live until ~2026-10-20 09:54 UTC: if a later window finds
+   disk/*.chd eaten, re-download from the cron-prompt links IN FOREGROUND
+   (backgrounded curls die with the tool call), re-gate sha256, re-extract.
