@@ -9930,3 +9930,79 @@ Next queue:
 3. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-202610200457): the NormalColorDpq3/NormalColorCol3 pair lands 6 of 6 as C sources across g3org_jp/g3org_eu/mainmenu_jp - the eleventh rollback's recovery reruns the disc-return opening sequence end to end (RESTORE NOTE for the worklog), the pick list's next real cluster grows to three targets on a cross-target byte-twin probe, and the ratchet's no-placeholder-tokens-in-src-prose rule banks
+
+Opening sequence (all green): rehydrate OK; the eleventh rollback had taken
+the repo to 7623cd2 (recovered to origin/main 74ff96b3 via reset --hard) and
+the shared worklog to a pre-cron snapshot - worklog_digest exit 1 with all
+49 windows missing, so the RESTORE NOTE SOP ran for the first time in its
+full-file form (the durable per-window records live here in TASKS.md; the
+digest index is appended to the worklog under cron-20261020-0457-restore).
+disk/ + build/work/ wiped; baselines/ the stale set again - but the first
+witness probe printed 8/8 MISMATCH from a broken probe (it cat'ed the whole
+annotated .sha1 file instead of the hash field; the files are sha1sum format
+with comment lines), the corrected grep-v-hash probe reads 8/8 OK after the
+refetch: both CHDs re-fetched foreground and sha256-gated, both raw bins
+re-extracted (267504 / 267752 sectors), the 8 true EXEs re-extracted
+per-sector (this time into per-region dirs - the shared-name MAINMENU.EXE/
+G3.EXE/G3ORG.EXE files overwrote each other in the first single-dir pass),
+staged, witness 8/8.
+
+* THE LANDING (3 of 3 targets, 6 rows): the pick list regenerated on the
+  post-landing tree (74ff96b3) - the g3 pair's exact-unmatched clusters are
+  ALL psyq/BIOS stub classes plus the parked Square12/Square0 delay-slot
+  pair, so the lane moved to the g3org pair per the queue; its top real
+  compiler-output cluster is NormalColorDpq3 (0x48) + NormalColorCol3
+  (0x44) at 0x80057484/0x800574EC, region-pair 100.00% byte twins nested
+  in the libgte single-light run between landed NormalColorDpq and
+  NormalColorCol. The cross-target twin probe (banked last window) then
+  found mainmenu_jp's own rows at 0x80079F6C/0x80079FD4 are 100.00% byte
+  twins of the same two functions, so the landing grew to 3 targets /
+  6 rows in one wave; mainmenu_eu's copies sit in a not-yet-walked zone
+  of the eu basis (the eu mainmenu layout after the landed RotAverage
+  trio is data rows and unsplit islands) and stay asm until that layout
+  work - the asymmetric jp-only landing has precedent (NormalColorDpq.c
+  landed g3org_jp first).
+* The decode itself is the two banked shapes composed: the four-arg
+  NormalColorDpq template (vertices/colour/IR0/one command/store) plus
+  the DpqColor3 stacked-window shape (caller's 0x10($sp) args read
+  inside the one-block volatile). Dpq3's depth-cue parameter goes
+  straight from the stack into IR0 ($8) with one lwc2 - no cpu register
+  round-trip; Col3 has no depth parameter, its pre-command slot is a
+  plain nop. ncdt 0x4AF80416 vs ncct 0x4B18043F is the pair's only
+  command difference (the Dpq/Col split). One new sub-class detail:
+  the RGB loads come AFTER the colour load and the command's outputs
+  (RGB0/1/2, $20/$21/$22) store through stacked pointers loaded after
+  the command - the DpqColor3 scheduling law again.
+* GATES: judge 2/2 EXACT in each of the three targets (0x48/0x44 rows,
+  no pad, no SIZE class needed); verify g3org_jp + g3org_eu +
+  mainmenu_jp GREEN, then the full sweep re-proven 8/8 on the true
+  retail baselines; ratchets 374/0 = baseline AFTER a catch worth
+  banking - the new sources' prose named the mainmenu rows with their
+  func_ placeholder tokens and the first ratchet run failed 378 > 374
+  (4 comment tokens); the rule: src/ prose cites TRUE VAs, never
+  placeholder names - the ratchet counts them as debt; xref census run
+  all three targets; clean_stale_asm nothing stale; progress 388
+  matched of 10630 census units (the pair-landing heuristic held flat
+  per the banked law - judge verdicts are the per-region record).
+* The libgte GTE-entry class now stands at: g3_jp/g3_eu carry the math
+  cluster (8), the RotAverage trio (3) and the lighting pair (2);
+  mainmenu_jp/mainmenu_eu carry the RotAverage trio (3);
+  g3org_jp/g3org_eu + mainmenu_jp now carry the NormalColor triple-
+  output pair (2 each).
+
+Next queue:
+1. Matching lane continues down the pick lists: mainmenu_jp's remaining
+   sdk run (the single-light neighbours of the landed pair:
+   0x4EC40..0x4EDD0 minus the landed two) is a dense twin-probe
+   opportunity - most should be 100.00% twins of landed g3org/g3
+   sources; the g3org twins of the landed RotAverage clusters still
+   carry different layouts (g3org_jp's row at 0x80063FD4 is 0x8c) and
+   need their own decode when the lane reaches them.
+2. Disc links expire ~09:54 UTC (this window's re-fetch at ~04:59 UTC
+   was the last proven use); only ask Silent for fresh links if the
+   discs are actually missing AND needed - do not nag.
+3. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
