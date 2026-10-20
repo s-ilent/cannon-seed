@@ -501,9 +501,9 @@ segments:
       - [0x4A6F8, data, data_80074EB8]   # 0x1f0
       - [0x4A8E8, asm, func_800751D8.rowdef]   # 0x8c
       - [0x4A974, data, data_80075264]   # 0x44
-      - [0x4A9B8, asm, func_800752A8]   # 0x90 sdk
-      - [0x4AA48, asm, func_80075338]   # 0xb0 sdk
-      - [0x4AAF8, asm, func_800753E8]   # 0x60 sdk
+      - [0x4A9B8, c, RotAverageNclip3]   # 0x90 sdk
+      - [0x4AA48, c, RotAverageNclip4]   # 0xb0 sdk
+      - [0x4AAF8, c, RotAverage3]   # 0x60 sdk
       - [0x4AB58, data, data_80075448]   # 0x38
       - [0x4AB90, asm, func_80075480]   # 0x200
       - [0x4AD90, asm, func_80075680]   # 0x270 sdk
