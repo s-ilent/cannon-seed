@@ -398,9 +398,9 @@ segments:
       - [0x35B20, asm, func_8005D230]   # 0x178 sdk
       - [0x35C98, asm, func_8005D3A8]   # 0x184 sdk
       - [0x35E1C, data, data_8005D52C]   # 0x6c0
-      - [0x364DC, asm, func_8005DD1C]   # 0x90 sdk
-      - [0x3656C, asm, func_8005DDAC]   # 0xb0 sdk
-      - [0x3661C, asm, func_8005DE5C]   # 0x60 sdk
+      - [0x364DC, c, RotAverageNclip3]   # 0x90 sdk
+      - [0x3656C, c, RotAverageNclip4]   # 0xb0 sdk
+      - [0x3661C, c, RotAverage3]   # 0x60 sdk
       - [0x3667C, data, data_8005DEBC]   # 0x184
       - [0x36800, asm, func_8005E16C]   # 0xb4
       - [0x368B4, asm, func_8005E224]   # 0x270 sdk

@@ -391,9 +391,9 @@ segments:
       - [0x363CC, data, data_8005DC0C]   # 0x8
       - [0x363D4, asm, func_8005DC14]   # 0x404
       - [0x367D8, data, data_8005E018]   # 0x2c0
-      - [0x36A98, asm, func_8005E408]   # 0x90 sdk
-      - [0x36B28, asm, func_8005E498]   # 0xb0 sdk
-      - [0x36BD8, asm, func_8005E548]   # 0x60 sdk
+      - [0x36A98, c, RotAverageNclip3]   # 0x90 sdk
+      - [0x36B28, c, RotAverageNclip4]   # 0xb0 sdk
+      - [0x36BD8, c, RotAverage3]   # 0x60 sdk
       - [0x36C38, data, data_8005E5A8]   # 0x68
       - [0x36CA0, asm, func_8005E610.rowdef]   # 0x360
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x3F1BC, data, data_8005E9BC]   # 0xe0
