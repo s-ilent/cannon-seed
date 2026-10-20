@@ -9669,3 +9669,63 @@ Next queue:
 3. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-20261019-2357): the matching lane resumes on the fully-green image - the pair-report pick list regenerated, the four 1-row judge tails re-read as the RotTransPers4 pad law, and the libgte math cluster lands 8 of 10 as C sources across g3_jp/g3_eu (Square12/Square0 parked in the _SsUtBuildADSR class with the delay-slot probe record)
+
+Opening sequence (all green): rehydrate OK, HEAD == origin/main 62ac8722,
+worklog digest 48/48, discs + 8 true baselines survived. The judge sweep x8
+re-read the tails: mainmenu pair 31/31, g3org pair 53/53 and 35/35, and the
+four "1-row open tails" on slps/sces/g3_jp/g3_eu are ALL the same row -
+RotTransPers4 SIZE built 120 vs row 128 - which is the banked PAD LAW (the
+0x78 function plus 8 zero pad bytes inside the 0x80 row; the inter-row gap
+is ld zero fill and make verify is GREEN). Every c-row unit in the whole
+image judges EXACT; the pair_report pick list is the lane's real worklist.
+The A0/B0 BIOS-dispatch thunks dominate the top clusters (curated-pinned,
+not compiler output, unmatched by design); the densest REAL cluster is the
+libgte math family in g3_jp/g3_eu (10 funcs, 800519FC..80051BE0, 0x1e4
+bytes, region-pair 100.00% byte twins): DpqColorLight, DpqColor3, Intpl,
+Square12, Square0, AverageZ3, AverageZ4, OuterProduct12, OuterProduct0,
+Lzc - the stubs already glabel the real names, no C callers, no rowdefs.
+
+* THE LANDING (8 of 10): one C source per function serves both regions -
+  16 rows flipped, 16 stale .s deleted. DpqColorLight/DpqColor3/Intpl are
+  the dpcl/dpct/intpl command wrappers (dpct re-reads a2 into $6 AND the
+  RGB2 load shares the pointer; the stacked-output loads are pinned by the
+  one-block shape); AverageZ3/Z4 and Lzc return via the $2 register-var
+  law (mfc2 into $v0 inside the block; Lzc is mtc2 LZCS $30 / mfc2 LZCR
+  $31 with two latency nops, function 0x18 in a 0x1c row = the pad law);
+  OuterProduct12/0 decode as cfc2 $13/$14/$15 save of control 0/2/4, ctc2
+  install of a0's three packed rows through cpu $8/$9/$10, the vector
+  loads in retail's REVERSED lwc2 order (offset 8 first), the op command
+  (0x4B78000C sf-set / 0x4B70000C sf-clear), MAC1-3 stores, and the
+  restore - all inside one volatile block with cpu clobbers 8/9/10/13/
+  14/15. judge EXACT first shot on 7 of 8 (Lzc's SIZE is the pad law).
+* THE PARK (Square12/Square0, the _SsUtBuildADSR class): retail ends
+  [jr $ra; addu $v0,$a1,$zero] with the return-value copy IN the delay
+  slot. gcc 2.6.3 emits the $2 copy BEFORE the j $31 with a nop-filled
+  slot for EVERY probed shape: pure C `return a1` (even with no asm
+  block), register-var return forms, and the noreturn+block-epilogue
+  attempt (the attribute parses in prototype position; gcc still emits
+  the stock epilogue - 2.6.3 does not suppress it). THE REFINED LAW: this
+  gcc fills the return delay slot only with insns that READ $2 (the
+  RotTransPers4 sra class - the value op on the return register itself
+  goes into the slot verbatim); a copy from another register never does.
+  Both units stay asm; the probe record is banked for the lane.
+* Gates: judge g3_jp 47 and g3_eu 54 EXACT (+7 each); make verify g3_jp
+  and g3_eu GREEN on the true retail baselines (whole image byte-exact);
+  ratchets 374/0 = baseline; xref census run; clean_stale_asm nothing
+  stale; progress 388 matched of 10651 census units (g3_jp 3.78%, g3_eu
+  5.13%).
+
+Next queue:
+1. Matching lane continues down the pair-report pick lists: the g3
+   RotAverageNclip3/4 + RotAverage3 cluster (0x198 bytes) and the
+   mainmenu RotAverageNclip4/RotAverage3 pair are the next real
+   compiler-output picks; the A0/B0 thunk blocks stay curated-pinned.
+2. Discs expire ~2026-10-20 09:54 UTC; the re-fetch recipe is in the cron
+   prompt (foreground download, sha256 gate, per-sector extract). Only
+   ask Silent for fresh links if the discs are actually missing AND
+   needed - do not nag otherwise.
+3. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
