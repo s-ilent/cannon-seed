@@ -277,7 +277,7 @@ segments:
       - [0x17B44, asm, func_8003AB14]   # 0x80
       - [0x17BC4, data, data_8003AB94]   # 0x38
       - [0x17BFC, asm, func_8003ABCC]   # 0x10 sdk
-      - [0x17C0C, asm, func_8003ABDC]   # 0x58 sdk
+      - [0x17C0C, c, GsClearOt]   # 0x58 sdk
       - [0x17C64, c, func_8003AC34]   # 0x10 sdk
       - [0x17C74, asm, func_8003AC44]   # 0x11c sdk
       - [0x17D90, asm, func_8003AD60]   # 0xf4 sdk

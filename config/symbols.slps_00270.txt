@@ -20,6 +20,7 @@ func_80030E78 = 0x8002EAD8; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_800310F8.rowdef and the retail-encoded definition owns the plain name): func_800310F8 = 0x8002ED58; // type:func
 func_80031DE8 = 0x8002F800; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_800328B0.rowdef and the retail-encoded definition owns the plain name): func_800328B0 = 0x80030180; // type:func
+GsClearOt_clear = 0x80030318; // type:func (shared alias: GsClearOt callee)
 func_80034BBC = 0x80032000; // type:func
 func_80035758 = 0x80032A38; // type:func
 func_80037AC8 = 0x800348E8; // type:func

@@ -69,6 +69,7 @@ func_800517C4 = 0x8004B074; // type:func
 func_80051B18 = 0x8004B3C8; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_80051D14.rowdef and the retail-encoded definition owns the plain name): func_80051D14 = 0x8004B5C4; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8005A13C.rowdef and the retail-encoded definition owns the plain name): func_8005A13C = 0x8005281C; // type:func
+GsClearOt_clear = 0x8004BE60; // type:func (shared alias: GsClearOt callee)
 func_8005B1F0 = 0x800537A0; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8005B42C.rowdef and the retail-encoded definition owns the plain name): func_8005B42C = 0x800538AC; // type:func
 func_8005BCAC = 0x80054000; // type:func
