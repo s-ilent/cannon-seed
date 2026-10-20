@@ -9729,3 +9729,63 @@ Next queue:
 3. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-202610200118): the RotAverage cluster lands 3 of 3 as C sources across g3_jp/g3_eu - the eighth rollback's recovery (the honest witness parse caught the all-woven baseline set again), the disc-return opening sequence rerun end to end, and maspsx's branch-hazard nop law banked (the two-branch nclip shapes carry their bgtz/b as exact retail .words)
+
+Opening sequence (eighth rollback): rehydrate OK, HEAD was 7623cd2e
+(two docs commits behind origin), reset --hard to origin/main
+5841165b. disk/*.chd eaten again, baselines/*.bin survived as the
+WOVEN set (the honest witness parse: all 8 mismatched the committed
+oracles). CHDs re-fetched foreground in 7.6 s, both sha256 gates
+PASS; chd_extract x2 (267504 / 267752 sectors); 8 EXEs re-extracted
+per-sector; WITNESS 8/8. make verify 8/8 GREEN after the usual
+exec-bit recharge (cc.sh Permission denied ~13 min after rehydrate).
+Worklog: the shared worklog had rolled back to the Oct-15 snapshot -
+ALL 49 windows missing; digest restored 49/49 under
+cron-202610200116-restore.
+
+* THE LANDING (3 of 3): the pair-report pick list's next real
+  compiler-output cluster (g3_jp 8005E408..8005E5A0 rows, region-pair
+  100.00% byte twins; the build-ELF names RotAverageNclip3/4 +
+  RotAverage3 already glabel'd by the stubs, no C callers, no
+  rowdefs) - one C source per function serves both regions, 6 rows
+  flipped, 6 stale .s deleted. RotAverageNclip3 (0x88): rtpt on the
+  three vertices, FLAG ($31) through the 0x20($sp) pointer, nclip,
+  MAC0 ($24) into $2 as the return, the positive branch stores
+  SXY0/1/2 ($12/$13/$14) + IR0 ($8), avsz3's OTZ ($7) through the
+  0x1c($sp) pointer. RotAverageNclip4 (0xb0, no pad): the same shape
+  plus the fourth vertex through rtps reusing the fifo, the
+  cumulative flag (rtps FLAG or'd into the rtpt FLAG, retail's law),
+  avsz4. RotAverage3 (0x58): rtpt + the stores + avsz3 with the OTZ
+  mfc2'd straight into $2 (the Lzc class).
+* NEW LAW - maspsx's branch-hazard nop: maspsx appends a nop after
+  EVERY branch mnemonic under .set reorder ("nop # DEBUG:
+  branch/jump" in __init__.py), which retail does not carry - the
+  first build's bgtz grew offset 4 vs retail 3. Fix: bank the two
+  branches as exact retail .words (bgtz 0x1C400003, b 0x1000000B /
+  0x10000015) - the GTE-command .word class extended to control
+  flow. The block's explicit delay-slot nops are preserved verbatim.
+* Gates: RotAverageNclip4 judges EXACT both regions (0xb0 row, no
+  pad); RotAverageNclip3 (0x88 in 0x90) and RotAverage3 (0x58 in
+  0x60) join the banked pad-law SIZE class beside Lzc/RotTransPers4
+  (the 8 zero pad words are ld zero fill; the whole-image SHA-1 is
+  the oracle). make verify g3_jp + g3_eu GREEN on the true retail
+  baselines; the full sweep re-proven 8/8. Ratchets 374/0 = baseline
+  (the ratchet counts placeholder tokens in src/include - the new
+  files carry none, the count is untouched by design). xref census
+  run both targets; clean_stale_asm nothing stale; progress 394
+  matched (g3_jp 50, g3_eu 60; +6 rows across the pair).
+* Next queue:
+  1. Matching lane continues down the pair-report pick lists: the
+     next exact-unmatched clusters are the A0/B0 thunk blocks
+     (curated-pinned, not compiler output - stay pinned) and the
+     RotAverageNclipColorCol3/Dpq3 pair (0xc8 each, g3
+     8005B284/8005B354 region twins) as the next real picks; the
+     mainmenu RotAverageNclip4/RotAverage3 pair (0x8006A1B8..) is
+     the same trio one lane over.
+  2. Discs expire ~2026-10-20 09:54 UTC; the re-fetch recipe is in
+     the cron prompt (foreground download, sha256 gate, per-sector
+     extract). This window re-proved it end to end in ~6 minutes.
+  3. The BIG de-frame item stays coordination-gated; the parallel
+     lanes (GSD round-5, setIntr base->a1, startIntr reopen,
+     trapIntr fingerprint) stay theirs.
