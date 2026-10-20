@@ -10330,3 +10330,62 @@ Next queue:
 4. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-20261020-2231): the twentieth rollback's recovery reruns the disc-return opening sequence a tenth time, the near-twin census re-banks in-repo, and TransposeMatrix decodes to a shape-exact 20/20 schedule with one open register-choice question
+* The twentieth rollback hit this window's sandbox: HEAD reverted to
+  7623cd2 (172 behind origin), the worklog lost every section after
+  cron-20261014-2112 (53-window RESTORE NOTE appended per SOP, digest
+  tool itself survived only in the fresh tree), disk/ empty, and all
+  eight baselines were the woven pre-flip set again (witness 8/8
+  MISMATCH). Standard recovery: reset to 66a5284f, both CHDs
+  sha256-gated and re-extracted, 8 EXEs --per-sector, baselines
+  witness 8/8 STRICT, exec-bit fix on tools/cc.sh (the one file
+  rehydrate.sh's list missed), verify sweep re-proven 8/8 GREEN before
+  any tool output was trusted.
+* tools/near_twin_census.py re-banks IN-REPO (the repo-external census
+  scratch was eaten twice; the lm_probe_diff precedent applies): pools
+  the 7917 unmatched non-veneer non-fragment rows, groups
+  byte-identical waves across targets (157 found), and lists same-name
+  near groups with their differing word slots. Top census findings:
+  the named waves _SsUtBuildADSR x6 (0x8c), TransposeMatrix x6 (0x50),
+  SetColorMatrix x5 (0x30), GsMapModelingData x5 (0x78, probes parked),
+  RotAverageNclipColorDpq3_1 x4 (0x100), the GTE micro family
+  (SetDQA/SetDQB/Square0/Square12/ApplyMatrix*), and the x24 0x14 +
+  x12 0x2c anonymous waves. The GsTMDfast/div families stay the GSD
+  lane owner's.
+* TransposeMatrix (byte-identical x6: 0x14668 slps_00270, 0x448F4
+  mainmenu_eu, 0x30ADC g3_jp, 0x30418 g3_eu, 0x2D86C g3org_eu, plus
+  the sces_00269 copy inside the merged 0x480 unit func_800370E4 at
+  0x14834 - a dozen internal glabels, re-boundary before its row can
+  flip) decodes to a 3x3 short-matrix transpose with a0 = src, a1 =
+  dst, v0 = dst returned. Probes established two new banked laws:
+  INT-typed temps force the retail lh (all short-typed forms - short
+  locals, struct fields, casts - narrow to lhu), and the 1:1
+  interleaved three-int rotation reproduces the retail schedule
+  EXACTLY (all 20 positions opcode+offset aligned; the straight
+  row-major form serializes into 28 words with six load-delay nops,
+  the per-row batch form gives the wrong 3+3 rhythm).
+* Open question (landing blocker): register choice. Retail rotates
+  t1/t2/t3, keeps a1 as the store base throughout (v0 is only the
+  return copy), and never touches v1/a1/a2; stock cc1 2.6.3 hands the
+  temps v1/a1/a2 and coalesces the store base with the return pseudo.
+  One coherent allocator-behavior question - the same family as the
+  GsTMDdivTG4LFG "Sony sched patch or a flag" open item in 978f4082.
+  judge masks only relocation fields, so the rows stay unlanded until
+  the pin closes.
+
+Next queue:
+1. Close the TransposeMatrix register-choice pin (the probe carries
+   the full shape story): either find the source form that keeps the
+   store base on a1 with t-family temps under stock cc1, or widen the
+   978f4082 Sony-cc1 question to cover allocator preference - then
+   the five-row wave lands first-shot and the sces re-boundary of
+   func_800370E4 follows as its own item.
+2. The census's named waves are the matching lane's feed:
+   _SsUtBuildADSR x6 (libspu, byte-identical, no relocation slots in
+   the wave members per the near-group zero-diff listing) is the
+   next-cleanest target after TransposeMatrix; SetColorMatrix x5 and
+   the GTE micro family batch behind it.
+3. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
