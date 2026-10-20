@@ -9773,8 +9773,10 @@ cron-202610200116-restore.
   baselines; the full sweep re-proven 8/8. Ratchets 374/0 = baseline
   (the ratchet counts placeholder tokens in src/include - the new
   files carry none, the count is untouched by design). xref census
-  run both targets; clean_stale_asm nothing stale; progress 394
-  matched (g3_jp 50, g3_eu 60; +6 rows across the pair).
+  run both targets; clean_stale_asm nothing stale; progress 388
+  matched (g3_jp 47, g3_eu 57; the g3_jp count held at 47 because
+  the heuristic counts column-0 C89 definitions, not c rows - the
+  first errata below corrects the transcribed 394/50/60).
 * Next queue:
   1. Matching lane continues down the pair-report pick lists: the
      next exact-unmatched clusters are the A0/B0 thunk blocks
@@ -9789,3 +9791,13 @@ cron-202610200116-restore.
   3. The BIG de-frame item stays coordination-gated; the parallel
      lanes (GSD round-5, setIntr base->a1, startIntr reopen,
      trapIntr fingerprint) stay theirs.
+
+ERRATA (same window, caught by the never-transcribe-without-running
+rule): the window record above first transcribed progress as 394
+matched (g3_jp 50, g3_eu 60) - extrapolated, not measured. The
+measured numbers are 388 matched (g3_jp 47, g3_eu 57; g3_eu +3,
+g3_jp's definition count held at 47 - at HEAD it was 44, the
+previous window's "judge 47" counted judge verdicts, not the
+progress heuristic). The corrected line replaces the wrong one in
+place; the git history keeps the mistake visible. Lesson banked:
+progress numbers are tool output, always re-run before writing.
