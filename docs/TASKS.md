@@ -9801,3 +9801,73 @@ previous window's "judge 47" counted judge verdicts, not the
 progress heuristic). The corrected line replaces the wrong one in
 place; the git history keeps the mistake visible. Lesson banked:
 progress numbers are tool output, always re-run before writing.
+
+## 2026-10-20 (window cron-202610200227): the RotAverageNclipColorCol3/Dpq3 pair lands 2 of 2 as C sources across g3_jp/g3_eu - the ninth rollback's recovery reruns the disc-return opening sequence end to end, the pair-report pick list's next real compiler-output cluster closes, and the shared-delay-slot branch shape banks
+
+Opening sequence (all green): rehydrate OK; the ninth rollback had taken the
+repo to 7623cd2 (recovered to origin/main ba323e6a via reset --hard); the
+shared worklog snapped back to its Oct-14 snapshot (49 windows missing) and
+the digest RESTORE NOTE landed under cron-202610200227-restore; disk/ and
+build/work/ were wiped and baselines/ held the stale woven set (8/8 DIFF) -
+the disc-return opening sequence reran end to end: both CHDs re-fetched
+foreground and sha256-gated (98ccd877 / a6025267), both raw bins re-extracted
+(267504 / 267752 sectors), the 8 true EXEs re-extracted per-sector, witness
+8/8, the judge sweep x8 read real bytes (the known pad-law SIZE tails),
+verify re-proven 8/8 before any work. The exec-bit flip bit again at the
+first judge call (cc.sh PermissionError) and was re-chmodded - the standing
+lesson.
+
+* THE LANDING (2 of 2): the pair-report pick list's next real
+  compiler-output cluster (g3 true 8005B284/8005B354, rows
+  func_80063FD4/func_800640A4 in g3_jp and func_800638E8/func_800639B8
+  in g3_eu, each 0xd0 sdk; region-pair 100.00% byte twins, 52 words
+  each) - one C source per function serves both regions, 4 rows
+  flipped, 4 stale .s deleted. Shape: the rtpt/FLAG/nclip/mfc2-MAC0
+  head is the RotAverage trio's; the positive branch loads the three
+  normals (a3 + stack 0x10/0x14) plus a single color word (0x18) into
+  the V registers and RGB ($6), the lighting command - ncct
+  0x4B18043F in Col3, ncdt 0x4AF80416 in Dpq3, the pair's only
+  difference - lights RGB0/1/2 ($20/$21/$22), then the projected
+  SXY0/1/2 ($12/$13/$14, still holding rtpt's fifo) store through
+  0x1C/0x20/0x24 and the lit RGB0/1/2 through 0x28/0x2C/0x30; avsz3
+  writes OTZ ($7) through the 0x34 otz pointer, FLAG through 0x38.
+  15-arg frameless stack window.
+* NEW SLOT SHAPE banked: retail's skip-b delay slot IS the tail's
+  first lwc2 (label 1 is the slot - one load serves both the
+  fall-through and skip paths), so the bgtz offset is 2 (target
+  bgtz+12: nop + b only - one less than RotAverageNclip3, whose b
+  carries its own nop slot) and the skip-b offset is 0x1B (26 tail
+  instructions after the shared slot). The first build carried the
+  Nclip3 bgtz word 0x1C400003 and judged DIFF 1/50 words at exactly
+  the bgtz; the retail word 0x1C400002 measured off the stub fixed
+  both functions to zero diffs - the slot-shape law: read the branch
+  words off THIS function's retail stream, never carry a sister's.
+* Gates: both rows join the banked pad-law SIZE class (0xc8 function
+  in 0xd0 row, zero diffs; the 8 pad words are ld zero fill, make
+  verify is the oracle); judge g3_jp 47/53 and g3_eu 54/60 (the +2
+  rows per region are the pair's SIZE verdicts); make verify g3_jp +
+  g3_eu GREEN on the true retail baselines and the full sweep
+  re-proven 8/8; ratchets 374/0 = baseline; xref census run both
+  targets; clean_stale_asm nothing stale; measured progress 388
+  matched of 10641 census units (g3_jp 47, g3_eu 57 - the definition
+  heuristic held flat through the pair landing; judge verdicts are
+  the +2 SIZE-clean rows per region).
+* Scheduling note: a bare `make scan` regenerated a fresh segmentation
+  that does NOT match the curated tree (merged rows, renamed data rows,
+  lost MIGRATE-DROPPED markers) and was reverted - the census gate is
+  tools/xref_census.py, not make scan; the scan-v2 bootstrap reruns
+  only on layout discovery.
+
+Next queue:
+1. Matching lane continues down the pair-report pick lists: the
+   mainmenu RotAverageNclip4/RotAverage3 pair (0x8006A1B8.., the same
+   trio one lane over) is the next real pick; the A0/B0 thunk blocks
+   stay curated-pinned; the g3org twins of the landed clusters carry
+   different layouts (g3org_jp's func_80063FD4 row is 0x8c) and need
+   their own decode when the lane reaches them.
+2. Disc links expire ~2026-10-20 09:54 UTC; the re-fetch recipe is
+   proven again this window (~6 minutes end to end). Only ask Silent
+   for fresh links if the discs are actually missing AND needed.
+3. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
