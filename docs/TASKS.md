@@ -10279,3 +10279,54 @@ Next queue:
 4. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-20261020-1112): the GsSetLightMode entry-copy item closes OFFLINE at 35/35 - the two-argument printf is the answer, the probe diff harness re-banks in-repo, and the six-row wave is first-shot ready for the next oracle window
+* The fifteenth rollback hit this window's sandbox: HEAD reverted to
+  7623cd2 (one behind the 0957 window's 60e24a3a), baselines/*.bin are
+  the Oct 10 woven-era files again (all eight sha1 MISMATCH the true
+  config/sha1 oracles), disk/ is empty and the CHD links expired (curl
+  404 past ~09:54 UTC). Oracle blocked; the window is tree-only, and
+  /home/z/my-project/worklog.md lost all 52 window sections (full-file
+  RESTORE NOTE appended per SOP).
+* The probe diff harness re-banks IN-REPO (the 0957 scratch was
+  repo-external and the rollback ate it): tools/lm_words.py (six-way
+  retail word proof - reproduces exactly the ten differing slots) and
+  tools/lm_probe_diff.py (cc.sh compile -> objdump words -> masked
+  slot compare; masks only relocation-carrying fields, trims gas's
+  16-byte .text section padding, honest register/branch/immediate
+  compare everywhere else).
+* THE 35TH SLOT CLOSES OFFLINE: retail's entry addu $a1,$a0,$zero is
+  the SECOND printf argument. Retail's error leg is jal printf with no
+  $a1 setup at the call site and a nop delay slot - the string takes
+  $a0, so the mode value must already BE in $a1: the source is
+  printf(str, mode). With one argument gcc homes mode in $a0 and every
+  test reads $a0 (the 0957 draft's 34/35); with the two-argument call,
+  mode's live range conflicts with $a0 (printf's first-argument setup
+  clobbers it), local-alloc homes mode in $a1 for the WHOLE range -
+  the entry copy - and the call site needs only the string into $a0.
+  tools/lm_probe_diff.py reports 35/35 on the updated
+  probes/gcc263/GsSetLightMode.c first shot; the masked slots are
+  exactly the ten address-bearing words the six-way proof lists. Judge
+  iteration at landing is now a formality (and judge is oracle-gated
+  anyway).
+* Landing recipe coordinates pre-verified: all six yaml rows present
+  (g3_jp func_80067128, g3_eu func_800678BC, g3org_jp 0x3BA84
+  func_80063FD4 # 0x8c sdk, g3org_eu func_80064720, mainmenu_jp
+  func_8007F138, mainmenu_eu func_8007F894), six stale .s in place for
+  deletion, per-target statics/strings in the draft prose. The wave
+  needs only: discs -> baselines witness 8/8 -> curated entries -> 6
+  flips + 6 deletions -> judge x6 -> verify -> ratchets -> census.
+
+Next queue:
+1. When fresh CHD links land (Silent pinged in the Discord report -
+   the links expired with the fourteenth rollback): disc-return
+   opening sequence, then the GsSetLightMode 6-row wave per the
+   recipe; first-shot EXACT expected, judge confirms.
+2. mainmenu_jp's next runs unchanged: 0x10 pairs at 0x4EE28/0x4EE38
+   and the 0x304 row at 0x4E894 (func_80079B04) - twin probe before
+   decode (needs baselines).
+3. pair_report needs baselines back; the density-first lists are
+   current from the 0957 window's inventory_report x8.
+4. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
