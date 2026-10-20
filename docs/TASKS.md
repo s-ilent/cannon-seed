@@ -9871,3 +9871,62 @@ Next queue:
 3. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-202610200312): the mainmenu RotAverage trio lands 3 of 3 as C sources (6 rows) - the tenth rollback's recovery reruns the disc-return opening sequence end to end, the queued pair grows to the full trio on a 100.00% byte-twin probe against the landed g3 versions, and jp's Nclip3 surfaces from a misclassified data row
+
+Opening sequence (all green): rehydrate OK; the tenth rollback had taken the
+repo to 7623cd2 (recovered to origin/main e039a6ad via reset --hard); the
+shared worklog survived this time (digest exit 0); disk/ + build/work/ wiped
+and baselines/ the stale woven set (8/8 DIFF) again - both CHDs re-fetched
+foreground and sha256-gated, both raw bins re-extracted (267504 / 267752
+sectors), the 8 true EXEs re-extracted per-sector, witness 8/8, judge sweep
+x8 on real bytes, verify 8/8 before work. The disc-return recipe now runs in
+~4 minutes end to end.
+
+* THE LANDING (3 of 3, 6 rows): the queue's "mainmenu
+  RotAverageNclip4/RotAverage3 pair" grew to the full trio when the
+  byte probe proved all three mainmenu functions 100.00% twins of the
+  LANDED g3 versions (Nclip4 176 B, RotAverage3 96 B row, Nclip3 144 B
+  row - jp and eu both, and jp vs eu too), so the existing
+  src/RotAverageNclip3.c / RotAverageNclip4.c / RotAverage3.c serve
+  unchanged and no new decode was needed. eu's three rows renamed in
+  place (func_800752A8/80075338/800753E8 -> RotAverageNclip3/4/
+  RotAverage3 at 0x4A9B8/0x4AA48/0x4AAF8); jp's Nclip4/RotAverage3
+  renamed (func_80075A5C/80075B0C at 0x4B03C/0x4B0EC) and jp's Nclip3
+  surfaced from the DATA row data_8007589C (0x4AFAC, 0x90) sitting at
+  its exact expected VA 0x8006A7AC = Nclip4 - 0x90 - the scan had
+  classified the function bytes as data; the carve flips it to the c
+  row. 6 stale files deleted (5 stub .s + 1 data .s).
+* METHOD note banked: the pair-report/twin probe extends across
+  targets - before decoding any sdk-class function, compare its retail
+  bytes against the already-landed copies in other targets (the
+  address calibration must read EACH target's own pinned symbol file;
+  the first probe pass read g3_eu at g3_jp's VAs and produced phantom
+  DIFFs). Twin = the landed source lands as-is, judge first shot.
+* Gates: RotAverageNclip4 judges EXACT both regions (0xb0, no pad);
+  RotAverageNclip3 (0x88 in 0x90) and RotAverage3 (0x58 in 0x60) join
+  the banked pad-law SIZE class with zero diffs (the pad words are ld
+  zero fill, make verify is the oracle); judge mainmenu_jp 31/33 and
+  mainmenu_eu 31/33 (+1 EXACT each, +3 rows each); verify mainmenu_jp
+  + mainmenu_eu GREEN on the true retail baselines and the full sweep
+  re-proven 8/8; ratchets 374/0 = baseline; xref census run both
+  targets; clean_stale_asm nothing stale; measured progress 388
+  matched of 10636 census units (mainmenu totals shrank 1844+1736 ->
+  1841+1734 as the trio's rows absorbed; the definition heuristic held
+  at 64/63 - the whole-image SHA-1 is the real oracle).
+* The libgte GTE-entry class now stands at: g3_jp/g3_eu carry the
+  math cluster (8), the RotAverage trio (3) and the lighting pair
+  (2); mainmenu_jp/mainmenu_eu now carry the RotAverage trio (3).
+
+Next queue:
+1. Matching lane continues down the pair-report pick lists: regenerate
+   the pick list on the post-landing tree and take the next real
+   compiler-output cluster; the g3org twins of the landed clusters
+   carry different layouts (g3org_jp's func_80063FD4 row is 0x8c) and
+   need their own decode when the lane reaches them.
+2. Disc links expired ~09:54 UTC (this window's re-fetch at 03:44 UTC
+   was the last proven use); only ask Silent for fresh links if the
+   discs are actually missing AND needed - do not nag.
+3. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
