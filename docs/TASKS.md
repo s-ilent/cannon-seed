@@ -10075,3 +10075,68 @@ veneer (A0/B0/C0 dispatch, 0xc or one pad word), fragment (starts at an
 epilogue, restores a saved reg before any store, or has no jr $ra),
 sdk (name defined by config/sdk_anchors.txt or config/sdk_members.txt,
 or VA inside an anchor span), else compiler.
+
+## 2026-10-20 (window cron-20261020-0612): the mainmenu single-light run lands 7 of 8 as C sources in one twin wave - the twelfth rollback's recovery reruns the disc-return opening sequence a fourth time (~6 minutes), the pick list's sdk run proves 7/8 byte-twins of the landed g3org copies, and the eighth row surfaces as the NormalColor3 decode with its exact twins pre-banked in three other targets
+
+Opening sequence (all green): rehydrate OK; the twelfth rollback took the
+repo to 7623cd2 (157 behind origin/main; recovered to afce6360 via reset
+--hard) AND the shared worklog to a pre-cron snapshot (the full-file wipe
+again - digest exit 1, 49 windows missing; full-file RESTORE NOTE appended
+per the banked SOP, durable records live here in TASKS.md). disk/ +
+build/work/ wiped; baselines/ the stale woven set - both CHDs re-fetched
+foreground and sha256-gated, both raw bins re-extracted (267504 / 267752
+sectors), the 8 true EXEs re-extracted per-sector into per-region dirs,
+staged, witness 8/8 (the witness probe greps the hash field - the .sha1
+files are sha1sum format with comment lines; the naive cat-the-file probe
+fails all 8).
+
+* THE LANDING (7 of 8, one wave): the queue's "mainmenu_jp remaining sdk
+  run 0x4EC40..0x4EDD0 minus the landed two" - the yaml rows are true
+  file offsets while the row NAMES are woven-space, so the run's true VAs
+  are 0x8006E440..0x8006E5D0 (true VA = file offset + 0x8001F800 for
+  mainmenu_jp, confirmed two ways by the landed pair's symbols rows).
+  The twin probe (persisted as scripts/twin_probe_0612.py) reads each
+  candidate's bytes from baselines/mainmenu_jp.bin at the row offset and
+  diffs against every landed c row in all eight targets (each target's
+  own yaml + own baseline = the banked calibration law): 7 of 8 are
+  100.00% byte twins of g3org copies - LocalLight (0x24), DpqColor
+  (0x1c), NormalColor (0x1c), NormalColorDpq (0x24), NormalColorCol
+  (0x20), ColorDpq (0x28), ColorCol (0x24) - so the existing src/*.c
+  serve unchanged and no new decode was needed. The yaml flips 7 rows
+  asm->c in place; 7 stale .s deleted; the eighth row stays asm.
+* THE EIGHTH ROW IS THE NEXT DECODE: func_80079F0C (0x3c) has no landed
+  twin, and the symbols file already pins its curated name - NormalColor3
+  = 0x8006E49C (the three-vertex single-light normal-colour, the gap row
+  in every target's single-light run). The follow-up probe finds its
+  exact twins at g3org_jp func_8005F7F4 (0x37C24), g3org_eu func_8005F0C0
+  (0x37620) and g3_eu func_8006238C (0x3A1CC) - one decode lands 4 rows
+  across 4 targets when the lane reaches it (g3_jp's run has no 0x3c asm
+  twin; its counterpart sits in the not-yet-walked zone or another class).
+* Gates: judge 7/7 EXACT first shot (the twin law's cleanest proof yet -
+  zero decode iterations), verify mainmenu_jp GREEN on the true retail
+  baseline and the full sweep re-proven 8/8; ratchets 374/0 = baseline;
+  xref census mainmenu_jp (2077 lui-refs, 2569 word-refs); clean_stale_asm
+  nothing stale; progress 395 matched of 10629 census units (+7 exactly =
+  the landed rows; the filesystem heuristic remains the secondary record).
+* The libgte GTE-entry class now stands at: g3_jp/g3_eu carry the math
+  cluster (8), the RotAverage trio (3) and the lighting pair (2);
+  mainmenu_jp/mainmenu_eu carry the RotAverage trio (3);
+  g3org_jp/g3org_eu + mainmenu_jp carry the NormalColor triple-output
+  pair (2 each); mainmenu_jp now additionally carries the seven-function
+  single-light run (this wave).
+
+Next queue:
+1. NormalColor3: one 0x3c decode, 4 rows across mainmenu_jp +
+   g3org_jp + g3org_eu + g3_eu (twins pre-banked above). The shape is
+   the NormalColor template extended to three vertices (the NormalColor3
+   family law: vertices from the stacked window, one nct? command word -
+   read the retail .word from the carve before writing the asm block).
+2. mainmenu_jp's next runs after the single-light run: the 0x10 pairs
+   at 0x4EE28/0x4EE38 and the 0x304 row at 0x4E894 (func_80079B04) - the
+   twin probe extends before any decode.
+3. Disc links expire ~09:54 UTC (this window's re-fetch at ~06:16 UTC
+   was the last proven use); only ask Silent for fresh links if the
+   discs are actually missing AND needed - do not nag.
+4. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
