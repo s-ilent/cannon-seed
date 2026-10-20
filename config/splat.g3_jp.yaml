@@ -342,16 +342,16 @@ segments:
       - [0x30E7C, asm, func_800579AC]   # 0x180 sdk
       - [0x30FFC, data, data_80057B2C]   # 0x11d8
       - [0x321D4, c, LightColor]   # 0x28 sdk
-      - [0x321FC, asm, func_800590BC]   # 0x28 sdk
-      - [0x32224, asm, func_800590E4]   # 0x3c sdk
-      - [0x32260, asm, func_80059120]   # 0x24 sdk
+      - [0x321FC, c, DpqColorLight]   # 0x28 sdk
+      - [0x32224, c, DpqColor3]   # 0x3c sdk
+      - [0x32260, c, Intpl]   # 0x24 sdk
       - [0x32284, asm, func_80059144]   # 0x28 sdk
       - [0x322AC, asm, func_8005916C]   # 0x28 sdk
-      - [0x322D4, asm, func_80059194]   # 0x20 sdk
-      - [0x322F4, asm, func_800591B4]   # 0x24 sdk
-      - [0x32318, asm, func_800591D8]   # 0x58 sdk
-      - [0x32370, asm, func_80059230]   # 0x58 sdk
-      - [0x323C8, asm, func_80059288]   # 0x1c sdk
+      - [0x322D4, c, AverageZ3]   # 0x20 sdk
+      - [0x322F4, c, AverageZ4]   # 0x24 sdk
+      - [0x32318, c, OuterProduct12]   # 0x58 sdk
+      - [0x32370, c, OuterProduct0]   # 0x58 sdk
+      - [0x323C8, c, Lzc]   # 0x1c sdk
       - [0x323E4, asm, func_800592A4]   # 0x130 sdk
       - [0x32514, data, data_800593D4]   # 0x4fc
       - [0x32A10, c, RotTransPers4]   # 0x80 sdk
