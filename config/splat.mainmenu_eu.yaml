@@ -598,7 +598,7 @@ segments:
       - [0x538BC, data, data_8007F70C]   # 0x120
       - [0x539DC, asm, func_8007F82C]   # 0x10 sdk
       - [0x539EC, asm, func_8007F83C]   # 0x58 sdk
-      - [0x53A44, asm, func_8007F894]   # 0x8c sdk
+      - [0x53A44, c, GsSetLightMode]   # 0x8c sdk
       - [0x53AD0, c, func_8007F920]   # 0x10
       - [0x53AE0, asm, func_8007F930]   # 0x11c sdk
       - [0x53BFC, data, data_8007FA4C]   # 0x404
