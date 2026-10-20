@@ -1,18 +1,36 @@
-/* GsTMDdivTG4LFG offline probe (window cron-20261020-1458).
+/* GsTMDdivTG4LFG offline probe (window cron-20261020-1458; re-probed
+ * cron-20261020-1613 after the align-1 struct-copy fix).
  *
- * STATUS: 184 of 193 words shape-exact; the open item is the ENTRY
- * MOVE TIMING for a2 (nt): retail moves BOTH a1->s6 AND a2->s7 in the
- * first four slots (before the s5 reload and the 0x3C808080
- * materialize); the probe moves a1->s6 at entry (3/3 slots exact, frame
- * 0xA0 exact) but defers a2 into s7 until after the entry branch, which
- * shifts the whole allocation cascade (~9 slots). The batch entry move
- * suggests the original body references a2 before the first call in a
- * way the probe draft does not reproduce yet - next lever candidates:
- * K&R parameter declarations (the banked GsSetLightMode entry-copy
- * lever), an earlier normal-table reference in the p40/p48 setup
- * statement order, or a packet-struct-typed pk argument changing the
- * address-escape set. Word census: retail 193 (0x304 = 193 words
- * including the two-lwl/lwr vertex copies), probe 184.
+ * STATUS: 200 of 193 words - the loop body now matches retail shape
+ * slot-for-slot modulo the entry cascade, and the entry block is the
+ * ONE remaining root cause. Three laws banked this window:
+ *
+ * 1. ALIGN-1 STRUCT COPY LAW: the four vertex copies are struct
+ *    assignments of an alignment-1 type (char b[8] reproduces it; a
+ *    4-short struct also emits the same shape). gcc then emits the
+ *    retail lwl/lwr + swl/swr quad per copy. A 2xunsigned-long struct
+ *    (align 4) or a (long long *) cast gets decomposed to plain
+ *    lw/sw pairs - the cast does NOT lower the alignment trust.
+ * 2. DECL-ORDER SPILL-SLOT LAW: retail spills p48 to 0x60($sp) and
+ *    p40 to 0x68($sp) - p48 first - so the original declared p48
+ *    BEFORE p40 (gcc 2.6.3 assigns local spill slots in declaration
+ *    order; statement order does not move the slots).
+ * 3. SINGLE-EARLY-HOME LAW: our cc1 emits exactly ONE of the two
+ *    parameter homes (a1->s6, a2->s7) in the entry block top; the
+ *    other defers to the loop-head branch delay slot. Which one is
+ *    early follows the first source reference: no alias -> a1's home
+ *    early (slot 2 = retail-exact 00a0b021) and a2's late; a2 aliased
+ *    via a first-statement local copy (char *nt = nt_;) -> a2's home
+ *    early (slot 2 = retail-exact 00c0b821, retail's slot-4 word) and
+ *    a1's late. K&R declarations change nothing here. Retail has BOTH
+ *    homes in the first four slots (save a1-home, save a2-home) BEFORE
+ *    the s5 reload and the 0x3C808080 materialize - reproducing that
+ *    batch is the remaining open item; everything downstream (the
+ *    s5-vs-s1 packet-base register pick, the extra s0-init spill at
+ *    0x70, the 7-word body surplus) follows from it. Next levers: an
+ *    entry-block reference to BOTH params that costs zero retail
+ *    instructions (CSE-eliminated shape), or finding the source
+ *    construct that pins both assign_parms homes unshovable.
  *
  * Retail shape: mainmenu_jp file 0x4E894 (true 0x8006E094), extent 0x304,
  * five-word-relocation layer (4 jal + 1 hi/lo pair) across mainmenu_jp /
@@ -30,7 +48,7 @@
  * Landed callees called by name: RotTransPers, NormalColorDpq.
  */
 
-typedef struct { unsigned long a, b; } GsTMDdivTG4LFG_v8;
+typedef struct { char b[8]; } GsTMDdivTG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
 extern void NormalColorDpq(long *a0, long *a1, long c, long *a3);
@@ -41,10 +59,17 @@ extern void GsTMDdivTG4LFG_sz(long *, long *, long *, long *);
 extern long GsTMDdivTG4LFG_pk(long, char *, long, long *);
 extern unsigned char GsTMDdivTG4LFG_ft[];
 
-long GsTMDdivTG4LFG(unsigned char *tmd, char *vt, char *nt, long *pkin,
-                    unsigned long cnt, unsigned long shift, long *otp,
-                    char *pk)
+long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
+    unsigned char *tmd;
+    char *vt;
+    char *nt_;
+    long *pkin;
+    unsigned long cnt;
+    unsigned long shift;
+    long *otp;
+    char *pk;
 {
+    char *nt = nt_;
     long ret = (long)pkin;
     long *v1o = (long *)(pk + 0x18);
     long *v2o = (long *)(pk + 0x30);
@@ -54,8 +79,8 @@ long GsTMDdivTG4LFG(unsigned char *tmd, char *vt, char *nt, long *pkin,
     long buf40[2];
     long buf48;
     long p4C;
-    long *p40;
     long *p48;
+    long *p40;
     unsigned char *s0;
     unsigned long fp;
     unsigned long otz;
@@ -73,13 +98,13 @@ long GsTMDdivTG4LFG(unsigned char *tmd, char *vt, char *nt, long *pkin,
         s0 = tmd + 0x10;
         fp = 0;
         do {
-            *(GsTMDdivTG4LFG_v8 *)v1o =
+            *(GsTMDdivTG4LFG_v8 *)(pk + 0x18) =
                 *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 6) * 8);
-            *(GsTMDdivTG4LFG_v8 *)v2o =
+            *(GsTMDdivTG4LFG_v8 *)(pk + 0x30) =
                 *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0xA) * 8);
-            *(GsTMDdivTG4LFG_v8 *)v3o =
+            *(GsTMDdivTG4LFG_v8 *)(pk + 0x48) =
                 *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0xE) * 8);
-            *(GsTMDdivTG4LFG_v8 *)v4o =
+            *(GsTMDdivTG4LFG_v8 *)(pk + 0x60) =
                 *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0x12) * 8);
 
             if (GsTMDdivTG4LFG_dv(v1o, v2o, v3o,
