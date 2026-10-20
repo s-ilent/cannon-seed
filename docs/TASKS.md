@@ -10206,3 +10206,76 @@ Next queue:
 4. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-20261020-0957): the GsSetLightMode six-target wave is discovered and decoded to 34 of 35 slots offline - the fourteenth rollback eats the disc links with them (curl 404, oracle blocked), the worklog loses all 51 Oct 15..20 windows (full-file RESTORE NOTE again), and the offline pivot runs inventory_report x8 on the surviving build ELFs
+
+Opening sequence (partial green): rehydrate OK; the fourteenth rollback
+repeated the signature - repo at 7623cd2 (162 behind; reset --hard to
+67215355 = the 0727 push), worklog rolled back to the Oct 14 era (digest
+exit 1: 51 missing, 0 full sections; the canonical records survive in
+this file - full-file RESTORE NOTE appended per SOP), disk/ wiped AND
+baselines/ the stale Oct 10 woven set (witness 8/8 MISMATCH), AND the
+2026-10-19 CHD links are past expiry (curl 404 both, the first window to
+arrive after the deadline). Oracle work (judge/verify) BLOCKED until
+fresh links; fresh links requested once in #dragoon (discs actually
+missing AND needed). build/ survived for once - all 8 per-target ELFs
+intact.
+
+* OFFLINE PIVOT: with judge oracle-gated away, the window ran the
+  density-first pick from tree data only. inventory_report x8 on the
+  surviving ELFs: TOTAL unmatched 8546 (compiler 6378, fragment 2003,
+  sdk 162, veneer 3); largest compiler surfaces mainmenu_eu 1095,
+  mainmenu_jp 999, g3org_jp 999. (pair_report still needs baselines -
+  blocked.)
+* THE PICK: the 0727 queue's g3org RotAverage-twins pointer led to
+  config/splat.g3org_jp.yaml 0x3BA84 func_80063FD4 (0x8c, sdk) - which
+  decodes as GsSetLightMode, and the curated file shows the member is
+  pinned in SIX targets (g3_jp 0x8005DDE8, g3_eu 0x8005E44C, g3org_jp
+  0x8005B284, g3org_eu 0x8005B8A0, mainmenu_jp 0x80072C18, mainmenu_eu
+  0x80073244), none landed anywhere.
+* SIX-WAY WORD PROOF (scripts/lm_words.py, repo-external): the 35
+  instruction slots are shape-identical across all six copies; only 10
+  words differ and every one is address-bearing (4 internal j targets,
+  4 mode-static %hi/%lo pairs, 2 printf-string %hi/%lo, 1 jal printf).
+  ONE source serves all six targets - a 6-row wave, bigger than
+  NormalColor3's 4. Per-target symbol coordinates banked in the probe
+  draft's prose.
+* OFFLINE DECODE (probes/gcc263/GsSetLightMode.c, compiled through
+  tools/cc.sh and compared with scripts/lm_probe_diff.py): a plain
+  switch does NOT reproduce retail (gcc 2.6.3 range-merges contiguous
+  cases into bltz/slti-4 tests); the retail tree is the equality-chain
+  dispatch over 0/1/2/3 - beq mode,1; slti v0,mode,2 range gate; beqz
+  mode; j error; range leg re-tests 2 and 3 with the 3-test riding the
+  ==2 branch's delay slot; out-of-line zero/store/error bodies in that
+  order; shared epilogue. The goto-leg chain in retail leg order hits
+  34 of 35 slots exactly (masked compare on the address-bearing fields)
+  including the delay-slot fills and the SDK/ASPSX epilogue convention
+  via the cc-post: keep-epilogue marker (the banked split law - frame
+  release BEFORE the jump, nop in the branch delay).
+* OPEN ITEM (one instruction): retail opens with addu $a1,$a0,$zero and
+  all five tests plus the store leg read $a1. No probed source form
+  produces the copy (K&R parameter definition and long m = mode locals
+  coalesce away; the plain switch restructures the tree). At landing:
+  judge iteration from this draft; single known-fields instruction.
+* LANDING RECIPE (next oracle window): curated entries for the 6
+  mode statics (D_80171D7C/D_80171E9C/D_8017FA30/D_8017FB14/
+  D_80194D6C/D_80194E80) and 6 strings (D_80021C34/D_80021C14/
+  D_8002256C/D_80022568/D_80023190/D_800231DC) under shared alias
+  names, src/GsSetLightMode.c from the probe draft, 6 yaml flips asm->c
+  with 6 stale .s deletions (asm/g3_jp func_80067128, g3_eu
+  func_800678BC, g3org_jp func_80063FD4, g3org_eu func_80064720,
+  mainmenu_jp func_8007F138, mainmenu_eu func_8007F894), judge x6,
+  verify, ratchets, census. printf is already curated (6 LIBC
+  placements).
+
+Next queue:
+1. When fresh CHD links land: disc-return opening sequence, then the
+   GsSetLightMode 6-row wave landing per the recipe above (judge
+   iteration closes the entry-copy item).
+2. mainmenu_jp's next runs unchanged: 0x10 pairs at 0x4EE28/0x4EE38 and
+   the 0x304 row at 0x4E894 (func_80079B04) - twin probe before decode.
+3. The density-first lists are regenerated tree-only this window
+   (inventory_report numbers above); pair_report needs baselines back.
+4. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
