@@ -1,36 +1,54 @@
 /* GsTMDdivTG4LFG offline probe (window cron-20261020-1458; re-probed
- * cron-20261020-1613 after the align-1 struct-copy fix).
+ * cron-20261020-1613 after the align-1 struct-copy fix; entry-cascade
+ * variant sweep cron-202610201758).
  *
- * STATUS: 200 of 193 words - the loop body now matches retail shape
- * slot-for-slot modulo the entry cascade, and the entry block is the
- * ONE remaining root cause. Three laws banked this window:
+ * STATUS: 200 of 193 words - the loop body matches retail shape
+ * modulo the entry cascade, and the entry block is the ONE remaining
+ * root cause. The window cron-202610201758 sweep ran FOUR more entry
+ * variants against the same retail reference (all 200/193, all with
+ * exactly ONE param home at entry and the OTHER deferred to the
+ * cnt!=0 block head scheduled into the beqz delay slot):
  *
- * 1. ALIGN-1 STRUCT COPY LAW: the four vertex copies are struct
- *    assignments of an alignment-1 type (char b[8] reproduces it; a
- *    4-short struct also emits the same shape). gcc then emits the
- *    retail lwl/lwr + swl/swr quad per copy. A 2xunsigned-long struct
- *    (align 4) or a (long long *) cast gets decomposed to plain
- *    lw/sw pairs - the cast does NOT lower the alignment trust.
- * 2. DECL-ORDER SPILL-SLOT LAW: retail spills p48 to 0x60($sp) and
- *    p40 to 0x68($sp) - p48 first - so the original declared p48
- *    BEFORE p40 (gcc 2.6.3 assigns local spill slots in declaration
- *    order; statement order does not move the slots).
- * 3. SINGLE-EARLY-HOME LAW: our cc1 emits exactly ONE of the two
- *    parameter homes (a1->s6, a2->s7) in the entry block top; the
- *    other defers to the loop-head branch delay slot. Which one is
- *    early follows the first source reference: no alias -> a1's home
- *    early (slot 2 = retail-exact 00a0b021) and a2's late; a2 aliased
- *    via a first-statement local copy (char *nt = nt_;) -> a2's home
- *    early (slot 2 = retail-exact 00c0b821, retail's slot-4 word) and
- *    a1's late. K&R declarations change nothing here. Retail has BOTH
- *    homes in the first four slots (save a1-home, save a2-home) BEFORE
- *    the s5 reload and the 0x3C808080 materialize - reproducing that
- *    batch is the remaining open item; everything downstream (the
- *    s5-vs-s1 packet-base register pick, the extra s0-init spill at
- *    0x70, the 7-word body surplus) follows from it. Next levers: an
- *    entry-block reference to BOTH params that costs zero retail
- *    instructions (CSE-eliminated shape), or finding the source
- *    construct that pins both assign_parms homes unshovable.
+ *   A. both aliases (char *vt = vt_; char *nt = nt_;)  -> a1->s7 @6,
+ *      a2->s6 delay
+ *   B. decl-swap (nt first, vt second)                 -> a2->s7 @6,
+ *      a1->s6 delay  (REG MAP MATCHES RETAIL: vt s6 / nt s7)
+ *   C. zero aliases (parms used directly)              -> a1->s6 @2
+ *      retail-exact 00a0b021, a2->s7 delay  (KEPT SHAPE - most likely
+ *      true source)
+ *   D. explicit-register hammer (register char *vt2 asm("$22") = vt;
+ *      ...) -> IDENTICAL bytes to C: cc1/reload SINKS even an
+ *      asm-bound initializer past the branch; the asm hammer cannot
+ *      pin an entry home.
+ *
+ * Laws banked this window:
+ * 4. REVERSE-DECL CALLEE-SAVED MAP (locals): among the pointer
+ *    locals, the FIRST-declared alias gets the HIGHEST callee-saved
+ *    (s7) plus the entry home; the second gets s6 and defers. The
+ *    v*o group allocates descending with declaration order in BOTH
+ *    compilers (v1o highest); pk (stack parm) takes the LOWEST
+ *    callee-saved in ours (s1) but retail's s5 - the packet-base
+ *    pick (s5 vs s1) follows from the home batching, not the source.
+ * 5. THE DEFERRAL IS BACKEND PLACEMENT, NOT SCHEDULING: the deferred
+ *    copy is the first instruction of the cnt!=0 block (the beqz
+ *    delay slot fill), placed by local-alloc/reload - the scheduler
+ *    only filled the slot. Five source shapes cannot move it. The
+ *    working theory is reload's lazy parm-register equivalence: a2
+ *    lives in the incoming register until its first clobber (the dv
+ *    call's arg setup writes a0=v1o/a1=v2o/a2=v3o, killing BOTH a1
+ *    and a2 equivalences at the same point), and the asymmetry (a1
+ *    homed, a2 deferred) follows the pseudo processing order in
+ *    local-alloc/global-alloc. ftp.gnu.org is unreachable from the
+ *    sandbox, so gcc-2.6.3 stock source (local-alloc.c block_alloc /
+ *    global.c / reload1.c equiv handling) must come from a mirror or
+ *    the next-window empirical route: perturb WHERE a2 dies first
+ *    (e.g. a C read of a2-derived data placed before the branch) and
+ *    watch whether its home moves to entry.
+ *
+ * Three earlier laws stand: ALIGN-1 STRUCT COPY (char b[8] vertex
+ * copies), DECL-ORDER SPILL SLOTS (p48 0x60 before p40 0x68),
+ * SINGLE-EARLY-HOME (now refined: which pseudo is early follows the
+ * declaration/processing order, and exactly ONE gets it per compile).
  *
  * Retail shape: mainmenu_jp file 0x4E894 (true 0x8006E094), extent 0x304,
  * five-word-relocation layer (4 jal + 1 hi/lo pair) across mainmenu_jp /
@@ -69,7 +87,6 @@ long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
     long *otp;
     char *pk;
 {
-    char *nt = nt_;
     long ret = (long)pkin;
     long *v1o = (long *)(pk + 0x18);
     long *v2o = (long *)(pk + 0x30);
@@ -108,9 +125,9 @@ long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
                 *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0x12) * 8);
 
             if (GsTMDdivTG4LFG_dv(v1o, v2o, v3o,
-                                  nt + *(unsigned short *)(s0 + 4) * 8,
-                                  nt + *(unsigned short *)(s0 + 8) * 8,
-                                  nt + *(unsigned short *)(s0 + 0xC) * 8,
+                                  nt_ + *(unsigned short *)(s0 + 4) * 8,
+                                  nt_ + *(unsigned short *)(s0 + 8) * 8,
+                                  nt_ + *(unsigned short *)(s0 + 0xC) * 8,
                                   p40, v1o + 4, v2o + 4, v3o + 4,
                                   (long *)((char *)v1o + 0xC),
                                   (long *)((char *)v2o + 0xC),
@@ -121,7 +138,7 @@ long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
                                   (long *)((char *)v2o + 0x14),
                                   (long *)((char *)v3o + 0x14),
                                   (long *)((char *)v4o + 0x14));
-                NormalColorDpq((long *)(nt + *(unsigned short *)(s0 + 0x10) * 8),
+                NormalColorDpq((long *)(nt_ + *(unsigned short *)(s0 + 0x10) * 8),
                                p40, p4C, (long *)((char *)v4o + 0xC));
                 otz = *(unsigned short *)&buf40[1];
                 dv = (otz - otp[2]) >> shift;
