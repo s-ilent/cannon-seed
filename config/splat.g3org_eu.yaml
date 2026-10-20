@@ -456,9 +456,9 @@ segments:
       - [0x37604, c, NormalColor]   # 0x1c sdk
       - [0x37620, asm, func_8005F0C0]   # 0x3c sdk
       - [0x3765C, c, NormalColorDpq]   # 0x24 sdk
-      - [0x37680, asm, func_8005F120]   # 0x48 sdk
+      - [0x37680, c, NormalColorDpq3]   # 0x48 sdk
       - [0x376C8, c, NormalColorCol]   # 0x20 sdk
-      - [0x376E8, asm, func_8005F188]   # 0x44 sdk
+      - [0x376E8, c, NormalColorCol3]   # 0x44 sdk
       - [0x3772C, c, ColorDpq]   # 0x28 sdk
       - [0x37754, c, ColorCol]   # 0x24 sdk
       - [0x37778, c, NormalClip]   # 0x24 sdk
