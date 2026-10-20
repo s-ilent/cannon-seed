@@ -219,7 +219,7 @@ segments:
       - [0x137E8, asm, func_80035D08.rowdef]   # 0x18
       - [0x13800, data, data_80035D2C]   # 0x1a0
       - [0x139A0, asm, func_80035FF0]   # 0x98 sdk
-      - [0x13A38, asm, func_80036088]   # 0xe4 sdk
+      - [0x13A38, c, GsGetTimInfo]   # 0xe4 sdk
       - [0x13B1C, asm, func_8003616C]   # 0x78 sdk
       - [0x13B94, data, data_800361E4]   # 0x4b0
       - [0x14044, asm, func_800367C4.rowdef]   # 0xec

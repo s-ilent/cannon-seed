@@ -355,7 +355,7 @@ segments:
       - [0x2C6BC, data, data_8005273C]   # 0x3e8
       - [0x2CAA4, asm, func_80052C54]   # 0x98 sdk
       - [0x2CB3C, asm, func_80052CEC]   # 0x78 sdk
-      - [0x2CBB4, asm, func_80052D64]   # 0xe4 sdk
+      - [0x2CBB4, c, GsGetTimInfo]   # 0xe4 sdk
       - [0x2CC98, asm, func_80052E48]   # 0x2d4 sdk
       - [0x2CF6C, data, data_8005311C]   # 0x14
       - [0x2CF80, asm, func_80053130]   # 0x80
