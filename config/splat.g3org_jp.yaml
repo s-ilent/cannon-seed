@@ -490,7 +490,7 @@ segments:
       - [0x37BC8, c, LocalLight]   # 0x24 sdk
       - [0x37BEC, c, DpqColor]   # 0x1c sdk
       - [0x37C08, c, NormalColor]   # 0x1c sdk
-      - [0x37C24, asm, func_8005F7F4]   # 0x3c sdk
+      - [0x37C24, c, NormalColor3]   # 0x3c sdk
       - [0x37C60, c, NormalColorDpq]   # 0x24 sdk
       - [0x37C84, c, NormalColorDpq3]   # 0x48 sdk
       - [0x37CCC, c, NormalColorCol]   # 0x20 sdk
