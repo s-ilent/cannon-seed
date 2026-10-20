@@ -23,7 +23,8 @@ import re
 import struct
 import sys
 
-REPO = "/home/z/my-project/cannon-seed"
+REPO = os.environ.get("CANNON_SEED_REPO") or os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))
 BASE_VA = 0x80020000
 HDR = 0x800
 
@@ -107,6 +108,107 @@ def is_matched(target, name, va=None):
     return va in _C_ROWS[target]
 
 
+_ANCHORS = None
+_LIBNAMES = None
+
+
+def sdk_spans(target):
+    """Anchored SDK-member spans for the target, from config/sdk_anchors.txt.
+
+    Rows are grouped under `// target: <t>` headers; a cluster function is
+    library-class when its VA starts an anchor or falls inside one.
+    """
+    global _ANCHORS
+    if _ANCHORS is None:
+        _ANCHORS = {}
+        cur = None
+        path = os.path.join(REPO, "config/sdk_anchors.txt")
+        for line in open(path):
+            m = re.match(r"// target: (\S+)", line)
+            if m:
+                cur = _ANCHORS.setdefault(m.group(1), [])
+                continue
+            f = line.split()
+            if cur is not None and len(f) == 6 and f[0].startswith("0x"):
+                cur.append((int(f[0], 16), int(f[1], 16)))
+    return sorted(_ANCHORS.get(target, []))
+
+
+def sdk_names():
+    """Every SDK symbol name the reports define, across all targets.
+
+    The build ELF already carries these names; the same member recurs at
+    different addresses per target (and several times per image), so the
+    name is the stable library-class signal, not the span.
+    """
+    global _LIBNAMES
+    if _LIBNAMES is None:
+        _LIBNAMES = set()
+        for line in open(os.path.join(REPO, "config/sdk_anchors.txt")):
+            f = line.split()
+            if len(f) == 6 and f[0].startswith("0x"):
+                _LIBNAMES.add(f[2])
+        for line in open(os.path.join(REPO, "config/sdk_members.txt")):
+            f = line.split()
+            if len(f) >= 7 and f[0] == "//" and f[1].startswith("0x"):
+                _LIBNAMES.add(f[6])
+    return _LIBNAMES
+
+
+def is_veneer(target, va, size):
+    """The 3-word dispatch stub: addiu t2,vec; jr t2; addiu t1,idx.
+
+    Vectors 0xA0/0xB0/0xC0 are the libc/kernel/B-call tables. The row may
+    pad one zero word past the stub (the banked pad law).
+    """
+    if size not in (0xC, 0x10):
+        return False
+    b = baseline_bytes(target, va, size)
+    if b is None:
+        return False
+    w = struct.unpack_from("<%dI" % (size // 4), b, 0)
+    return (w[0] in (0x240A00A0, 0x240A00B0, 0x240A00C0)
+            and w[1] == 0x01400008
+            and (w[2] & 0xFFFF0000) == 0x24090000
+            and all(x == 0 for x in w[3:]))
+
+
+def is_fragment(target, va, size):
+    """A symbol that starts at a function tail or inside a body.
+
+    The scan's split detection emits these where a symbol boundary landed
+    inside one function; they are not matchable units of their own. A real
+    function of this size always ends in jr $ra (or a tail j), so a small
+    symbol with no terminator is a body slice.
+    """
+    if size > 0x10:
+        return False
+    b = baseline_bytes(target, va, size)
+    if b is None:
+        return False
+    w = struct.unpack_from("<%dI" % (size // 4), b, 0)
+    if (w[0] & 0xFFFF0000) == 0x8FBF0000 or w[0] == 0x03E00008:
+        return True                                  # starts at the epilogue
+    op, base = (w[0] >> 26) & 0x3F, (w[0] >> 21) & 0x1F
+    rt = (w[0] >> 16) & 0x1F
+    if op == 0x23 and base == 29 and (16 <= rt <= 23 or rt == 31):
+        return True                  # restores a saved reg before any store
+    return 0x03E00008 not in w                       # no return at all
+
+
+def fn_class(target, va, size, name=""):
+    if is_veneer(target, va, size):
+        return "veneer"
+    if is_fragment(target, va, size):
+        return "fragment"
+    if name in sdk_names():
+        return "sdk"
+    for ava, asz in sdk_spans(target):
+        if ava <= va < ava + asz:
+            return "sdk"
+    return "compiler"
+
+
 def sim(a, b):
     if a is None or b is None:
         return None
@@ -148,13 +250,27 @@ def main():
             rows.append((name, va, size, va2, size2, s,
                          is_matched(a, name, va), is_matched(b, name, va2)))
         counts = {}
+        ucounts = {}
         for r in rows:
             counts[bucket(r[5])] = counts.get(bucket(r[5]), 0) + 1
+            if r[6] is False and r[7] is False:
+                ucounts[bucket(r[5])] = ucounts.get(bucket(r[5]), 0) + 1
         print(f"\n== {label}: {len(rows)} pairs ==  "
               f"100.00%:{counts.get('100.00',0)}  95-99.99%:"
               f"{counts.get('95-99.99',0)}  80-94.99%:"
               f"{counts.get('80-94.99',0)}  <80%:{counts.get('<80',0)}"
               f"  bytefail:{counts.get('bytefail',0)}")
+        print(f"   unmatched:  100.00%:{ucounts.get('100.00',0)}  "
+              f"95-99.99%:{ucounts.get('95-99.99',0)}  "
+              f"80-94.99%:{ucounts.get('80-94.99',0)}  "
+              f"<80%:{ucounts.get('<80',0)}")
+        # every unmatched pair with its ratio, for the near-twin pools
+        with open(os.path.join(REPO, f"build/pairs_{a}_unmatched.txt"),
+                  "w") as f:
+            for r in sorted(rows, key=lambda r: -(r[5] or 0)):
+                if r[6] is False and r[7] is False:
+                    f.write(f"{bucket(r[5])} {r[5]:.4f} {r[0]} "
+                            f"{r[1]:08X} {r[2]} {r[3]:08X} {r[4]}\n")
         all_rows[label] = rows
 
     # exact unmatched pairs -> contiguous clusters per JP side
@@ -174,24 +290,49 @@ def main():
                 clusters.append(cur)
                 cur = [r]
         clusters.append(cur)
-        clusters.sort(key=len, reverse=True)
+        # density order: compiler-output functions first (the progress unit),
+        # tactical library classes last - veneers are pinned, not matchable.
+        tgt = label.split("-")[0]
+        clusters = [[list(r) + [fn_class(tgt, r[1], r[2], r[0])] for r in c]
+                    for c in clusters]
+        clusters.sort(key=lambda c: (-sum(r[8] == "compiler" for r in c),
+                                     -len(c)))
         jp = label.split("-")[0]
+        nc = sum(1 for c in clusters for r in c if r[8] == "compiler")
+        nlib = sum(1 for c in clusters for r in c if r[8] != "compiler")
         print(f"\n-- {label}: {len(exact)} exact unmatched, "
-              f"{len(clusters)} clusters; top runs --")
-        for c in clusters[:8]:
+              f"{len(clusters)} clusters; {nc} compiler / {nlib} library "
+              f"subject; density order --")
+        shown_lib = 0
+        for c in clusters:
+            ncomp = sum(1 for r in c if r[8] == "compiler")
+            if ncomp == 0:
+                shown_lib += 1
+                if shown_lib == 1:
+                    print("    -- library-class clusters (tail work) --")
+                print(f"   {len(c):3d} funcs  {c[0][1]:08X}.."
+                      f"{c[-1][1]+c[-1][2]:08X}  [{c[0][8]}]")
+                continue
             lo, hi = c[0][1], c[-1][1] + c[-1][2]
-            print(f"   {len(c):3d} funcs  {lo:08X}..{hi:08X} "
-                  f"({hi-lo:#x} bytes)")
+            print(f"   {len(c):3d} funcs ({ncomp} compiler)  "
+                  f"{lo:08X}..{hi:08X} ({hi-lo:#x} bytes)")
             for r in c[:6]:
-                print(f"        {r[0]}  {r[1]:08X} sz={r[2]:#x}")
+                print(f"        {r[0]}  {r[1]:08X} sz={r[2]:#x} [{r[8]}]")
             if len(c) > 6:
                 print(f"        ... +{len(c)-6} more")
+        if not shown_lib:
+            pass
         # stash the pick list for the biggest target
         if want or True:
             with open(os.path.join(REPO, f"build/pairs_{jp}_exact.txt"),
                       "w") as f:
                 for r in exact:
                     f.write(f"{r[0]} {r[1]:08X} {r[2]} {r[3]:08X} {r[4]}\n")
+            with open(os.path.join(REPO, f"build/pairs_{jp}_density.txt"),
+                      "w") as f:
+                for c in clusters:
+                    for r in c:
+                        f.write(f"{r[8]} {r[0]} {r[1]:08X} {r[2]}\n")
 
 
 if __name__ == "__main__":

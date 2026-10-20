@@ -219,6 +219,21 @@ If a build fails without compiler errors, locate the change with `cmp -l`. Conve
 
 The full-image checksum (`make verify`) is the only gate that confirms success. Diff tools ([asm-differ], `decomp.me`) help iteration. The linked SHA-1 is the final check.
 
+## 7. Throughput policy: pick order and batch landings
+
+The per-window landing rate, not the total, decides when this project finishes. Two rules keep the rate high.
+
+**Pick order follows the class, not the list position.** `tools/pair_report.py` labels every exact-twin function by class and ranks clusters by how many compiler-output functions they contain. `tools/inventory_report.py` does the same for each target's full unmatched set:
+
+* `compiler` - gcc 2.6.3 output. The progress unit. Takes priority.
+* `sdk` - a named Psy-Q library member (`config/sdk_anchors.txt`, `config/sdk_members.txt`). Decode at the tail of a window, one shape per window.
+* `veneer` - the 3-word `addiu $t2,vec; jr $t2; addiu $t1,idx` dispatch, vectors 0xA0/0xB0/0xC0 (a row may pad one zero word). Pinned. Never a pick.
+* `fragment` - a symbol that starts mid-function (split-detection artifact). Not a matching unit; it belongs to a segmentation audit, not the queue.
+
+**Bucket order is not class order.** Similarity does not imply provenance: at 2026-10-20 the `95-99.99%` cross-region pool is 55 of 64 SDK members (`Gs*`/`Ss*` library variants), while the `80-94.99%` pool is roughly half compiler output. Read the class first, then the bucket.
+
+**Land a batch per commit, not a window per function.** N rows of the same shape cost one decode, one `make verify` sweep and one record - the marginal row is near-free. A window that lands fewer than about ten rows should say why (new shape, probe, recovery). Consume one first-in-class probe per window at most: if a new shape needs more than one probe without a match, park it and return to the dense queue.
+
 [m2c]: https://github.com/matt-kempster/m2c
 [asm-differ]: https://github.com/simonlindholm/asm-differ
 [decomp-permuter]: https://github.com/simonlindholm/decomp-permuter

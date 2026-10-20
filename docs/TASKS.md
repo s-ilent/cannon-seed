@@ -10006,3 +10006,72 @@ Next queue:
 3. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+## 2026-10-20 (coordination, review lane): the region-pair pick lane is CLOSED - the twin surface is cross-target, density is measured by class, and windows land batches
+
+State measured this session (before the 0312/0457 window landings): the
+eight true baselines re-extracted from the local CHDs and witnessed 8/8;
+verify GREEN on g3_jp, g3_eu (the then-touched targets) and both mainmenu
+targets. Progress 388, ratchets 374/0.
+
+THE FOUR REGION-PAIR LISTS ARE EXHAUSTED. `tools/pair_report.py` now
+classifies every function (veneer / fragment / sdk / compiler) and ranks
+clusters by compiler-class count. At that HEAD the 121 exact-twin
+unmatched functions of the four canonical region pairs contain ZERO
+compiler-class entries: 103 veneer, 12 sdk, 6 fragments (mainmenu
+func_8002DF14, 8002E1D8, 8002E250, 8002E800, 8002F000 and slps SetDQB -
+all split-detection slices, not matching units). NOTE the scope: the
+0312/0457 windows then found two more clusters by probing a landed source
+against a DIFFERENT executable's image (g3 -> mainmenu RotAverage trio,
+g3org -> mainmenu NormalColor pair). Those are cross-target twins, which
+the four region-pair lists never show. The twin surface is not empty; it
+is no longer region-keyed.
+
+THE QUEUE, measured with tools/inventory_report.py at HEAD (unmatched
+function symbols per target: compiler / fragment / sdk / veneer):
+slps 380/103/10/11, sces 451/133/16/17, mainmenu_jp 633/206/136/56,
+mainmenu_eu 705/267/115/53, g3_jp 376/173/129/51, g3_eu 318/122/140/56,
+g3org_jp 1062/323/26/16, g3org_eu 898/280/22/2. TOTAL 4823 compiler
+(the real matching surface, region-duplicated), 1607 fragment, 594 sdk,
+262 veneer. Per-target pick lists land in build/inventory_<t>.txt.
+
+1. Cross-target twin probe runs FIRST every window and takes priority when
+   it fires (tools/twin_probe.py, name-independent byte hashes across all
+   eight images). Measured this session the vein is nearly drained: with
+   a 0x18 size floor, six unmatched copies of the sdk memclr (0x2c) and
+   nothing compiler-class. The 0312/0457 windows had already consumed the
+   substantive set (RotAverage trio, NormalColor pair, 9 rows). Keep the
+   probe as a cheap standing check, not as the planned workload.
+2. Then the compiler-class rows from build/inventory_<t>.txt, batched by
+   shape. g3org_jp (1062) and g3org_eu (898) are the largest untouched
+   inventories; slps/sces are the smallest. This is new C work, not twins.
+3. Cross-region near-twins are NOT automatically compiler work: the
+   95-99.99% pool is 55 of 64 SDK members (Gs*/Ss* library variants);
+   the 80-94.99% pool is the first mixed one (67 sdk / 63 compiler).
+   Read build/pairs_<t>_unmatched.txt class-first, bucket second.
+4. The 1607 fragment-class rows are split-detection artifacts - symbols
+   whose extent starts mid-function. That is a segmentation-audit item
+   for the coordination lane (audit_sizes / code_data_screen / the
+   scan's split detection), not a matching queue. Re-carve before
+   matching them.
+5. Library tail only: sdk-class rows one shape per window; veneers are
+   pinned and never picks.
+
+BATCH RULE (docs/MATCHING.md section 7): one commit per same-shape batch,
+one verify sweep per touched target; a window landing fewer than ~10 rows
+says why. At the last three windows' ~2-5 functions per 1.5 h the
+remaining ~10k units do not finish; the queue-handoff day proved +200/day
+on dense compiler work.
+
+TOOLING: pair_report.py no longer hardcodes the sandbox root (derives the
+repo from the script path, CANNON_SEED_REPO override), so it runs on the
+PC checkout; it emits build/pairs_<jp>_density.txt in class order and
+build/pairs_<t>_unmatched.txt (every unmatched pair with its ratio).
+New tools/inventory_report.py gives the per-target class table above and
+build/inventory_<t>.txt. New tools/twin_probe.py hashes every function's
+retail bytes across all eight images and lists unmatched copies of
+matched functions (MIN_SIZE 0x18, compiler-class sources; name-blind).
+Class rules live in pair_report.fn_class:
+veneer (A0/B0/C0 dispatch, 0xc or one pad word), fragment (starts at an
+epilogue, restores a saved reg before any store, or has no jr $ra),
+sdk (name defined by config/sdk_anchors.txt or config/sdk_members.txt,
+or VA inside an anchor span), else compiler.
