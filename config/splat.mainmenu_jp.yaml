@@ -549,8 +549,8 @@ segments:
       - [0x4EDD0, c, ColorCol]   # 0x24 sdk
       - [0x4EDF4, c, NormalClip]   # 0x24 sdk
       - [0x4EE18, c, NormalClipS]   # 0x10 sdk
-      - [0x4EE28, asm, func_8007A098]   # 0x10 sdk
-      - [0x4EE38, asm, func_8007A0A8]   # 0x10 sdk
+      - [0x4EE28, c, AverageSZ3]      # 0x10 sdk
+      - [0x4EE38, c, AverageSZ4]      # 0x10 sdk
       - [0x4EE48, data, data_8007A0B8]   # 0x1b4
       - [0x4EFFC, data, data_8007A26C]   # 0x4 pinned
       - [0x4F000, data, data_8007A298]   # 0xe4
