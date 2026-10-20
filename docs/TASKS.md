@@ -10140,3 +10140,69 @@ Next queue:
 4. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+
+## 2026-10-20 (window cron-20261020-0727): NormalColor3 lands 4 of 4 as one C source across mainmenu_jp/g3org_jp/g3org_eu/g3_eu - the thirteenth rollback's recovery reruns the disc-return opening sequence a fifth time, the queued 0x3c gap row decodes through the banked triple-output shapes on the first shot, and the swc2 base-register fields get machine-verified before the prose
+
+Opening sequence (all green): rehydrate OK; the thirteenth rollback repeated
+the twelfth's signature exactly - repo at 7623cd2 (160 behind; reset --hard
+to 0f20501c), worklog full-wiped (digest exit 1; full-file RESTORE NOTE
+appended), disk/ + build/work/ wiped, baselines/ the stale woven set. Both
+CHDs re-fetched foreground and sha256-gated, both raw bins re-extracted
+(267752 / 267504 sectors), the 8 true EXEs re-extracted per-sector into
+per-region dirs, staged, witness 8/8. The disc-return recipe is fully
+mechanical now (~8 minutes including both raw-bin extractions).
+
+* THE DECODE (one source, 4 rows): the queue's NormalColor3 item from the
+  0612 window. The 0x3c row at mainmenu_jp true 0x8006E49C (file
+  0x4EC9C) disassembles to 15 words: six lwc2 into the V registers
+  ($0-$5) from the three vertex pointers (a0/a1/a2), a plain nop, the
+  nct command .word 0x4AD80420 (the family's third command word beside
+  ncdt 0x4AF80416 and ncct 0x4B18043F), two stacked-pointer loads
+  ($8 <- 0x10($sp), $9 <- 0x14($sp)) after the command, three swc2
+  (RGB0 -> 0($a3), RGB1 -> 0($8), RGB2 -> 0($9)), jr $ra + nop. No
+  per-call colour and no depth cue: the pre-command slot is a plain nop
+  where Col3 loads RGB ($6) and Dpq3 loads IR0 ($8) - NCT takes the
+  colour from the light matrix's background colour. The capstone sweep
+  stops at the cop2 words, so the swc2/lw base-register fields were
+  machine-verified with a raw-word field dump BEFORE writing the prose
+  (a hand-decode had swapped the $8/$9 pairing - arithmetic wins).
+* THE LANDING: all four copies are 100.00% byte twins of each other
+  (re-proven at landing time from the fresh baselines) and every
+  symbol was already pinned in its own symbols file since the walk
+  (mainmenu_jp 0x8006E49C, g3org_jp 0x80057424, g3org_eu 0x80056E20,
+  g3_eu 0x800599CC; true VA = file offset + 0x8001F800 verified per
+  target from landed-row pairs), so one C source serves all four
+  targets and the landing is the 0612 twin-wave shape at decode cost:
+  4 yaml rows asm->c, 4 stale .s deleted, one src/NormalColor3.c.
+  g3_jp and mainmenu_eu have no 0x3c twin row (mainmenu_eu's run sits
+  in the not-yet-walked eu zone; g3_jp's counterpart is elsewhere).
+* Gates: judge 1/1 EXACT in each of the four targets first shot (zero
+  decode iterations - the family templates carried everything);
+  verify mainmenu_jp + g3org_jp + g3org_eu + g3_eu GREEN, then the
+  full sweep re-proven 8/8 on the true retail baselines; ratchets
+  374/0 = baseline; xref census all four targets; clean_stale_asm
+  nothing stale; progress 395 matched of 10625 census units (census
+  total -4 as the rows absorbed; the filesystem heuristic remains
+  secondary to the whole-image SHA-1).
+* The libgte GTE-entry class now stands at: g3_jp/g3_eu carry the math
+  cluster (8), the RotAverage trio (3) and the lighting pair (2), g3_eu
+  now NormalColor3 (1); mainmenu_jp/mainmenu_eu carry the RotAverage
+  trio (3); mainmenu_jp carries the seven-function single-light run;
+  g3org_jp/g3org_eu + mainmenu_jp carry the NormalColor triple-output
+  pair (2 each), all four of g3org_jp/g3org_eu/g3_eu/mainmenu_jp now
+  NormalColor3 (1 each).
+
+Next queue:
+1. Per the density-first policy (0b326ad7): run inventory_report +
+   the pair_report density lists on this tree and take the top
+   compiler-class cluster; the g3org twins of the landed RotAverage
+   clusters still need their own decode (g3org_jp's row at 0x80063FD4
+   is 0x8c).
+2. mainmenu_jp's next runs: the 0x10 pairs at 0x4EE28/0x4EE38 and the
+   0x304 row at 0x4E894 (func_80079B04) - twin probe before decode.
+3. Disc links expire ~09:54 UTC (this window's re-fetch at ~07:31 UTC
+   was the last proven use); only ask Silent for fresh links if the
+   discs are actually missing AND needed - do not nag.
+4. The BIG de-frame item stays coordination-gated; the parallel lanes
+   (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
+   fingerprint) stay theirs.
