@@ -1,6 +1,51 @@
 /* GsTMDdivTG4LFG offline probe (window cron-20261020-1458; re-probed
  * cron-20261020-1613 after the align-1 struct-copy fix; entry-cascade
- * variant sweep cron-202610201758).
+ * variant sweep cron-202610201758; ROOT CAUSE FOUND cron-202610201843).
+ *
+ * ROOT CAUSE (window cron-202610201843, RTL-dump proof - this CORRECTS
+ * law 5 below, whose "local-alloc/reload, not scheduling" claim was
+ * WRONG): cc1 -da per-pass dumps show reload's output (.greg dump,
+ * "Register dispositions" section) has BOTH parm homes as entry insns
+ * in retail order - insn 4 a0->a0 (tmd stays, deleted), insn 6 s6<-a1,
+ * insn 8 s7<-a2 - i.e. assign_parms emits both copies at entry and
+ * reload keeps both there. The deferral is created by SCHED2 (the
+ * post-reload scheduler) plus DBR (delay-slot fill):
+ *  - gcc 2.6.3 sched.c traverses each block BACKWARD (pick order =
+ *    reverse final order; proven by matching the -da .sched2 trace to
+ *    the reversed final chain: picks 59, 8, 377, 374, 56, 53, 50, 47,
+ *    39, 36, 33, 30, 27, 44, 24, 436..422, 420, 418, 370, 18, 434,
+ *    369, 6, 424, 416).
+ *  - both homes are IN-BLOCK SINKS (nothing in the entry block reads
+ *    s6/s7 or a1/a2; their only anti-dep is save->home, which is a
+ *    predecessor edge), so both are ready at T-2, right after the
+ *    branch (T-1, priority 0x7fffff51; all other priorities collapsed
+ *    to 1 - the latency-1 "no need to move" law in sched.c priority()).
+ *  - at T-2 the scheduler swapped to 8 ("now 8 6") and placed it
+ *    directly before the beqz; dbr then filled the LOAD-DELAY SLOT
+ *    between the cnt reload (lw t0) and beqz t0 with it - a USEFUL
+ *    fill. Retail has a LITERAL NOP there (0x8006E108, between lw t0
+ *    and beqz): retail's fill pass found no useful candidate, i.e.
+ *    retail's sched2 did NOT slide the a2-home to the branch. The
+ *    fp-init (addu fp,zero,zero) fills retail's beqz slot NATURALLY
+ *    (first insn of the cnt!=0 block, physically the delay slot).
+ *  - the ONE open question: why stock sched.c's backward walk slides
+ *    the sink-home while retail's compile did not (same DAG shape, so
+ *    the difference is the Sony sched patch or a flag). The PSX cc1
+ *    ships binaries-only (decompals/old-gcc r0.12); its sched.c diff
+ *    is unread, and STOCK sched.c at /tmp/gcc263 (see mirror note)
+ *    reproduces OUR behavior, so the patch must be read or inferred.
+ *
+ * MIRROR NOTE (replaces the "needs a mirror next window" item): stock
+ * gcc-2.6.3 source is ONLY at
+ *   https://gcc.gnu.org/pub/gcc/old-releases/gcc-2/gcc-2.6.3.tar.bz2
+ * (.tar.gz form is gone from ftp.gnu.org and every mirror; old-releases
+ * carries the .bz2). Download works from the sandbox. The -da recipe:
+ *   mkdir -p build/probe && cd build/probe && \
+ *   CC1FLAGS_EXTRA="-da" sh ../../tools/cc.sh -o x.o <probe.c>
+ * dumps land in CWD as <input>.<pass> (.rtl/.jump/.cse/.loop/.cse2/
+ * .flow/.combine/.sched/.lreg/.greg/.sched2/.jump2/.dbr); the .sched2
+ * file carries the FULL backward-scheduler trace (ready lists, picks,
+ * hazard swaps) plus final RTL.
  *
  * STATUS: 200 of 193 words - the loop body matches retail shape
  * modulo the entry cascade, and the entry block is the ONE remaining
@@ -29,7 +74,10 @@
  *    compilers (v1o highest); pk (stack parm) takes the LOWEST
  *    callee-saved in ours (s1) but retail's s5 - the packet-base
  *    pick (s5 vs s1) follows from the home batching, not the source.
- * 5. THE DEFERRAL IS BACKEND PLACEMENT, NOT SCHEDULING: the deferred
+ * 5. (SUPERSEDED by the ROOT CAUSE block above - the "not scheduling"
+ *    claim and the reload lazy-equivalence theory below are both
+ *    WRONG; kept for the record) THE DEFERRAL IS BACKEND PLACEMENT,
+ *    NOT SCHEDULING: the deferred
  *    copy is the first instruction of the cnt!=0 block (the beqz
  *    delay slot fill), placed by local-alloc/reload - the scheduler
  *    only filled the slot. Five source shapes cannot move it. The
