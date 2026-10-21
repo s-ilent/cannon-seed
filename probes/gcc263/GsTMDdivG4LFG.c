@@ -92,6 +92,58 @@
  * lands.
  */
 
+/*
+ * STATUS (window cron-202610212014): the committed header had LOST its
+ * COMMENT OPENER on this block (the final edit landed after the last
+ * verified compile) so cpp exited 33 on the prose apostrophes and the
+ * probe could not compile at all - repaired first (acd1a4ea).  Then the
+ * allocation war was re-opened with the exact gcc source in hand:
+ *
+ * 1. THE PRI LAW CORRECTED: global.c allocno_compare sorts by
+ *    ((floor_log2(n_refs) * n_refs) / live_length) * 10000 * size
+ *    descending, tie -> ascending allocno number - floor_log2, NOT
+ *    log2.  The STATUS above ("pri 0.469 vs 0.448 says it should") used
+ *    exact log2 and INVERTED the verdict: with floors the color is
+ *    2*6/LL vs v4o's 3*12/LL_class - the color LOSES unless its numbers
+ *    change.  The sort was right; the measurement was wrong.
+ * 2. THE INSTRUMENT: cc1 -da's .flow dump prints the authoritative
+ *    inputs verbatim ("Register 131 used 6 times across 39 insns") -
+ *    scripts/allocno_pri.py turns it into the pri table; the .greg
+ *    dump's "regs to allocate" line is the POST-local-alloc ground
+ *    truth (local-alloc.c copy propagation MUTATES reg_n_refs at its
+ *    lines 780/912/1109, so flow-order != greg-order; observed delta:
+ *    pk 78 falls 2nd -> 7th, the v*o quartet flips 83,82,81,80 -> 80,
+ *    81 then 82,83).  Current greg order: 167 80 81 131 82 83 78 72 73
+ *    84 79 71 138 77 75 85 76 = the v5 register map exactly.
+ * 3. THE PSEUDO MAP (flow dump, this compile): 167 = the reduced giv
+ *    (s0), 80/81/82/83 = v4o/v3o/v2o/v1o, 131 = the color, 78 = pk,
+ *    72 = vt, 73 = nt, 71 = tmd (spilled 0x50), 85 = ret (0x58), 84 =
+ *    the counter (0x60), 138 = &u44 (0x70), &p78 = the fifth spill
+ *    (0x68); cnt/shift/otp are equiv-REPLACED (no slot - re-read from
+ *    the incoming area every iteration: lw 0xB8/0xBC/0xC0).
+ * 4. THE FRAME DECOMPOSED: the "4-byte hole at 0x4C" is AUTOMATIC -
+ *    the declared locals end at 0x48+4 and the reload spill zone is
+ *    8-aligned, so 0x4C is skipped by construction.  The REAL delta is
+ *    ONE MORE 8-spaced spill slot at 0x78 (retail vars= 0x40 vs our
+ *    0x38): a sixth spilled pseudo whose every reference then died
+ *    (slot carved, never touched - the render reads/writes nothing at
+ *    0x78).  Three carve-then-die spellings REFUTED on our cc1: an
+ *    if (0) address-take, a self-compare-guarded address-take, and an
+ *    unreachable address-take after return - all three fold at tree
+ *    level and never carve.  The sixth spill's identity is open.
+ * NEXT LEVERS, in order: (a) the color's n_refs 6 -> 7 or 8 with a
+ *    zero-insn spelling (7 gives 14/39 = 0.359, 8 gives 24/39 = 0.615 -
+ *    both over v4o's 0.340; every loop-depth occurrence counts, so any
+ *    extra appearance in a pattern or call arg list works); (b) the
+ *    sixth retail spill: hunt a pseudo that ours equiv-replaced but
+ *    retail spilled-then-died, or a decl-order lever that re-times the
+ *    spill-zone carving; (c) model local-alloc's ref mutations so the
+ *    POST-mutation pri is predictable and the greg order stops being
+ *    trial-and-error.  Only after the color lands does the wave open
+ *    (6 targets: 4 flips + 2 splits, aliases _dv/_sz/_pk/_ft curated
+ *    per target), then the T sibling's K=0 re-derivation.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
