@@ -10534,3 +10534,66 @@ Next queue:
   region. (5) GSD lane round-5 (db2f96e) adopt/reject stays the lane
   owner's; parallel lanes stay theirs; the BIG de-frame item stays
   coordination-gated.
+
+## 2026-10-21 (window cron-202610211628): ApplyMatrixSV lands 8 of 8 as one C source - the wave the queue called x4 is really x8 (the 92-byte body byte-identical in every executable) - the twenty-fifth rollback's recovery (reset 7623cd2 -> 07fcb43d, 55-window RESTORE NOTE, witness 0/8 stale baselines, disc-return sequence rerun a fifteenth time: links still live until ~09:54 UTC, both CHDs sha256-gated, both raw bins, 8 EXEs --per-sector, witness 8/8 STRICT, build/probe mkdir needed by the rollback again), two prior windows' TASKS.md records lost to the rollback (their substance lives in the commit messages: 166ca7e5 the alias-comment rewording sweep + tools/audit_sym_comments.py, 0af56098 the extract-vs-tree reconciliation landing all 24 drifted renders with extract determinism tree-identical, 07fcb43d PCclose 4 of 4)
+* The scout that corrected the queue: a 92-byte needle cut from the g3_eu
+  render at file 0x2A348 (VA 0x80049B48, the pinned LIBGTE member) hits
+  exactly once in EVERY one of the eight baselines - the queue's
+  "ApplyMatrixSV x4" was an undercount; the wave is x8 with two
+  standalone-row flips (slps_00270 0x15460 / g3_eu 0x2A348, stale func_
+  row names retire) and six merged-parent splits.
+* The six splits in three classes: four data-row hosts on the banked
+  data_80066CF4 pattern (mainmenu_jp 0xe94 -> 0xc90 head + member +
+  0x1a8 tail data_8005E6A0; mainmenu_eu same shape, tail data_8005E080;
+  g3_jp 0x334 -> 0x130 + + 0x1a8 data_8004A18C; sces_00269 0x34c ->
+  0x274 + + 0x7c data_80034784) and two asm-row carves where the member
+  already renders as its own labeled nonmatching function inside the
+  merged row (g3org_jp func_8004D13C 0x464 -> 0x260 + + func_80047628
+  0x1a8; g3org_eu func_8004CA30 0x270 -> 0x20c + + func_80046FF8 0x8,
+  an honest 2-instruction tail function). All twelve cut points sat on
+  clean function boundaries (the render context check before every
+  edit); with extract deterministic since 0af56098 the splits are yaml
+  edits + make extract, no hand surgery.
+* The decode banks the ApplyMatrixSV shape: five lw from the matrix
+  record, five ctc2 into GTE regs 0..4, two lwc2 into VXY0/VZ0, nop,
+  mvmva 1,0,0,3,0 (0x4A486012, .word - GNU as has no GTE mnemonics),
+  three mfc2 from IR1/IR2/IR3, three sh through the out pointer, return
+  of the out pointer via addu $2,$6,$0 riding the $2 register-var
+  output (no post-block move), stock frameless epilogue. Unlike
+  SetColorMatrix, this member's ctc2/mfc2/lwc2/sh retail words match
+  gas's own encodings exactly (0x48C80000-family true ctc2 rs=6) - the
+  cop2 encoding law gains its first gas-native member beside the
+  .word-only ones.
+* judge 8/8 EXACT first shot after the 23/23-slot offline probe (full
+  masks: the body is relocation-free), verify 8/8 GREEN - the
+  whole-image byte oracle proves all six splits reassemble their parent
+  rows exactly (head + member + tail bytes = old row bytes, per file,
+  not per argument). ratchets 374/0 = baseline. clean_stale_asm removed
+  exactly the two orphaned flip rows. Six new pins (pinned member row);
+  the g3_jp synthesized func_8004A130 branch-target row retired with
+  its split (the d6ed2d1e rename law). progress 450 matched of 10633
+  census units (+8 exactly the eight rows). Commit d7ba0b98. No
+  --no-verify: the commit changes config segmentation alongside the
+  regenerated rows (the hook's regeneration-commit rule); the two
+  deletions are clean_stale_asm orphans (the hook's union rule).
+* Scout for the next wave (RotAverageNclipColorDpq3_1, 0x100): the body
+  (seeded from the ONE pinned copy, g3_eu 0x8005D44C file 0x3DC4C, sha1
+  f1a5a29a) hits exactly once in SIX targets - the two boots have no
+  member. Five copies are standalone asm rows at their curated
+  placements with stale func_ names (g3_eu func_8006665C, g3_jp
+  func_80066D48, g3org_jp func_80063AC4, g3org_eu func_800634C0,
+  mainmenu_eu func_8007DBE8 - all pure yaml flips); mainmenu_jp's copy
+  (file 0x5271C VA 0x80071F1C, an address MISSING from the curated
+  file - the byte search supplies it) sits at the head of a data row
+  (data_8007E1DC, next entry 0x5282C: a 0x10 data tail carve). Same
+  landing shape as today's member; the only new work is the 64-
+  instruction C decode (the landed 0xd0 sibling src/RotAverageNclipColor
+  Dpq3.c is the idiom reference).
+* Next: (1) RotAverageNclipColorDpq3_1: offline decode the 0x100 body
+  against the g3_eu row (probe first, sibling idiom), then the
+  five-flips-plus-one-carve landing. (2) mainmenu_jp 0x304 sdk row
+  decode (file 0x4E894, true VA 0x8006E094) - genuinely new shape, no
+  twin. (3) JP/EU 0x8002E350..0x8002E3F8 split audit before landing
+  that region. (4) GSD lane round-5 (db2f96e) adopt/reject stays the
+  lane owner's; parallel lanes stay theirs; the BIG de-frame item stays
+  coordination-gated.
