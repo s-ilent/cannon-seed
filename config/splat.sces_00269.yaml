@@ -212,7 +212,7 @@ segments:
       - [0x1322C, c, SetData32]   # 0xc sdk
       - [0x13238, c, SetGeomOffset]   # 0x18 sdk
       - [0x13250, c, SetGeomScreen]   # 0xc sdk
-      - [0x1325C, asm, func_8003577C]   # 0xc sdk
+      - [0x1325C, c, SetDQA]   # 0xc sdk
       - [0x13268, asm, func_80035788]   # 0x18 sdk
       - [0x13280, asm, func_800357A0]   # 0xf4 sdk
       - [0x13374, data, data_80035894]   # 0x474

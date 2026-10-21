@@ -247,7 +247,7 @@ segments:
       - [0x2A3C8, asm, func_8004FF88]   # 0x124 sdk
       - [0x2A4EC, asm, func_800500AC]   # 0x30 sdk
       - [0x2A51C, asm, func_800500DC]   # 0x30 sdk
-      - [0x2A54C, asm, func_8005010C]   # 0x30 sdk
+      - [0x2A54C, c, SetColorMatrix]   # 0x30 sdk
       - [0x2A57C, asm, func_8005013C]   # 0x24 sdk
       - [0x2A5A0, data, data_80050160]   # 0x290
       - [0x2A830, c, func_80050520]   # 0x18
@@ -328,7 +328,7 @@ segments:
       - [0x2EBE8, c, SetData32]   # 0xc sdk
       - [0x2EBF4, c, SetGeomOffset]   # 0x18 sdk
       - [0x2EC0C, c, SetGeomScreen]   # 0xc sdk
-      - [0x2EC18, asm, func_80055288]   # 0xc sdk
+      - [0x2EC18, c, SetDQA]   # 0xc sdk
       - [0x2EC24, asm, func_80055294]   # 0x18 sdk
       - [0x2EC3C, data, data_800552AC]   # 0x62c
       - [0x2F268, asm, func_80055A08]   # 0x7c sdk
