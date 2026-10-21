@@ -10424,3 +10424,56 @@ Next queue:
   tractable list (PCclose x4, ApplyMatrixSV x4,
   RotAverageNclipColorDpq3_1 x4). The BIG de-frame item stays
   coordination-gated.
+## 2026-10-21 (window cron-202610210213): SetTransMatrix lands 4 of 4 and SetColorMatrix completes 5 of 5 via the merged-parent split pattern - the twenty-second rollback's recovery (worklog reverted to its 2026-10-14 state, 54-window RESTORE NOTE, the last window's section reconstructed from its commit message, its skipped TASKS.md header re-added, disc-return sequence rerun a twelfth time, witness 8/8 STRICT), the x8 sibling discovery (three lw then TRX/TRY/TRZ moves, identity banked by the sdk_members link-map adjacency at +0x30 after SetColorMatrix), and the ld.err lesson (missing data objects die at objcopy, not at the link)
+* Twenty-second rollback: the worklog file itself reverted to its
+  2026-10-14 21:28 state (54 windows gone from the file; the digest
+  pipeline-exit trap - piping the digest through tail made $? report
+  tail's status - initially masked it). Recovery: digest rerun with the
+  true exit code (exit 1, 54 missing), 54-bullet RESTORE NOTE appended,
+  the cron-202610202343 section reconstructed verbatim from commit
+  2576011b's message, and the re-added TASKS.md header commit 622c7f4d.
+  Disc-return opening sequence a twelfth time: both CHDs sha256-gated,
+  both raw bins, 8 EXEs --per-sector, witness 8/8 STRICT, verify smoke
+  GREEN (slps_00270, 33 s) before any tool output was trusted.
+* Baseline scan (repo-external scratch): SetColorMatrix's 5-word move
+  run appears exactly once per target AND is followed at +0x30 in all
+  eight by a byte-identical 0x20 sibling: three lw at +0x14/+0x18/+0x1c
+  then three moves into translation registers 5/6/7 (TRX/TRY/TRZ per
+  the landed map). Identity banked by the checked-in sdk_members
+  link-map: SetTransMatrix sits immediately after SetColorMatrix in the
+  LIBGTE member sequence (the report's own addresses are stale-era, but
+  the member adjacency is structural and matches the bytes exactly).
+* The split pattern (AverageSZ precedent, applied to true merged
+  parents): sces_00269 func_800379D0 0x17c -> 0x12c head + SetColorMatrix
+  + SetTransMatrix; g3org_jp func_8004D13C 0x494 -> 0x464 head +
+  SetColorMatrix; g3org_eu func_8004CE98.rowdef 0x128 -> 0xd8 head +
+  SetColorMatrix + SetTransMatrix. All three parents' carved sections
+  were exact file tails - no re-boundary, no cross-boundary branches;
+  g3_eu's standalone 0x24 row split into the 0x20 body plus a 0x4
+  boundary-pad data row; slps_00270's sibling flipped from its
+  mis-classified data row. mainmenu_jp/mainmenu_eu/g3_jp/g3org_jp
+  sibling copies sit inside data rows and stay parked.
+* NEW BUILD LAW: build.sh's link swallow (`|| true` + grep undefined
+  reference) only rescues undefined symbols - a MISSING data object
+  (the new 0x4 pad row's .s, hand-written on the 11-line template)
+  surfaces as objcopy "No such file" with build/ld.err holding the
+  real cause. Check build/ld.err whenever objcopy reports a missing
+  ELF.
+* Four jal sites renamed to the landed spellings; the sces stale
+  branch-target pin (func_8003492C) replaced by the two member pins.
+  judge 7/7 EXACT first shot, verify 5/5 GREEN (slps_00270, sces_00269,
+  g3_eu, g3org_jp, g3org_eu), ratchets 374/0 = baseline,
+  clean_stale_asm removed exactly the one orphaned shared-dir data .s,
+  progress 431 matched of 10622 (+7 exactly the seven rows). Commit
+  9747e7c1.
+* Next: (1) the SetTransMatrix/SetColorMatrix copies inside the four
+  data rows (mainmenu_jp data_80066CF4, mainmenu_eu data_800665A4,
+  g3_jp data_80050464, g3org_jp data_8004D6BC) need the data-row split
+  pattern - same carve, data-class neighbors. (2) wave_standalone next
+  tractable waves: PCclose x4, ApplyMatrixSV x4,
+  RotAverageNclipColorDpq3_1 x4. (3) mainmenu_jp 0x304 sdk row decode
+  (file 0x4E894, true VA 0x8006E094) - genuinely new shape, no twin.
+  (4) JP/EU 0x8002E350..0x8002E3F8 split audit before landing that
+  region. (5) GSD lane round-5 (db2f96e) adopt/reject stays the lane
+  owner's; parallel lanes stay theirs; the BIG de-frame item stays
+  coordination-gated.
