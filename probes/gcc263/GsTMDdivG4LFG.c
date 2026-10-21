@@ -144,6 +144,52 @@
  *    per target), then the T sibling's K=0 re-derivation.
  */
 
+/*
+ * STATUS (window cron-20261021-1443): lever (a) is TESTED AND REFUTED,
+ * and the retail shape question it depended on is CLOSED.
+ *
+ * 1. RETAIL s1 SHAPE CONFIRMED from the render word-for-word: s1 is a
+ *    PER-ITERATION CSE TEMP, not a self-incrementing giv.  addiu s1,t1,4
+ *    at file 0x4B99C (t1 = the reloaded raw tmd biv), the dv arg-7 stack
+ *    store sw s1,0x18(sp) at 0x4B9DC, the NormalColorDpq arg-2 copy
+ *    addu a1,s1,zero at 0x4BA24, and the loop bottom increments ONLY s0
+ *    (addiu s0,s0,0x18 at 0x4BA98) - s1 carries NO loop-bottom increment,
+ *    it is recomputed from the reloaded biv every iteration.  That is
+ *    structurally IDENTICAL to our pseudo 131: one def (131 = biv+4),
+ *    the dv arg-7 store, the a1 copy, no self-increment, 6 refs / LL 33
+ *    post-loop (6/39 pre-loop).  The allocation war is purely about what
+ *    the mutated pri sort does with these identical inputs.
+ *
+ * 2. THE REF-RAISING LEVER REFUTED with the empty-asm experiment: an
+ *    extra loop-depth value use of the color pointer (asm volatile with
+ *    an r operand spelled tmd+4, placed before the NormalColorDpq call)
+ *    does NOT add one occurrence to pseudo 131 - it CONVERTS the temp:
+ *    loop.c turns the value use into a proper value GIV, the CSE temp
+ *    merges into it, and the pseudo renumbers with 11 refs / LL 91 /
+ *    crosses 5 calls (a whole-function giv - a shape retail does NOT
+ *    have) and the render breaks (172 words vs 176; the barrier also
+ *    disturbs the loop scheduling).  Every conceivable clean spelling
+ *    collapses at tree level (constant folding) or takes the giv shape,
+ *    so there is NO zero-insn +1-ref spelling on our cc1: lever (a) is
+ *    dead in both its zero-insn and added-value-use forms.  Even in giv
+ *    form (11 refs) the pseudo still allocated after 80/81 in the greg
+ *    line - the post-mutation quartet rise beats it.
+ *
+ * 3. CONSEQUENCE: the color flip must come from the MUTATION side (the
+ *    2014 window's lever (c)) - our post-local-alloc order 80 81 131 82
+ *    83 means copy propagation RAISES 80/81 above the color; what it
+ *    chews is determined by the copy insns present, which differ between
+ *    our compile and retail's exactly where the entry-cascade wall sits
+ *    (the deferred a2 home, the deferred pk load timing, the counter
+ *    spill init).  The color allocation, the sixth spill and the entry
+ *    cascade are ONE coupled question: any entry-block spelling change
+ *    re-times local-alloc's propagation walk and can move all three.
+ *    Next window: read local-alloc.c 780/912/1109 against the .lreg
+ *    dump's copy list for THIS function, enumerate which copies fire,
+ *    and derive the entry spelling that leaves the color's mutated pri
+ *    on top - the same stroke should explain the sixth spill.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
