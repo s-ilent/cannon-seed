@@ -73,6 +73,7 @@ func_800658C8 = 0x8005C800; // type:func
 func_80066724 = 0x8005D514; // type:func
 func_80066B48 = 0x8005D808; // type:func
 func_80066BE8 = 0x8005D8A8; // type:func
+ApplyMatrixSV = 0x8005e644; // type:func (pinned member row)
 GsClearOt_clear = 0x80060374; // type:func (shared-alias GsClearOt callee)
 func_8006E398 = 0x800640E8; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8006EE40.rowdef and the retail-encoded definition owns the plain name): func_8006EE40 = 0x80064A60; // type:func

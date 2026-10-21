@@ -95,6 +95,7 @@ func_800663E0 = 0x8005D1D0; // type:func
 func_80066474 = 0x8005D264; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8006EBF0.rowdef and the retail-encoded definition owns the plain name): func_8006EBF0 = 0x80064810; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8006F130.rowdef and the retail-encoded definition owns the plain name): func_8006F130 = 0x80064D50; // type:func
+ApplyMatrixSV = 0x8005e024; // type:func (pinned member row)
 GsClearOt_clear = 0x8005FCAC; // type:func (shared-alias GsClearOt callee)
 func_8006F6A4 = 0x80065194; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_80070070.rowdef and the retail-encoded definition owns the plain name): func_80070070 = 0x80065A30; // type:func

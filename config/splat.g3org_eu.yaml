@@ -290,7 +290,9 @@ segments:
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x2CC10, data, data_8004C410]   # 0x88
       - [0x27000, asm, func_8004C498]   # 0x528
       - [0x27528, data, data_8004C9C8]   # 0x68
-      - [0x27590, asm, func_8004CA30]   # 0x270
+      - [0x27590, asm, func_8004CA30]   # 0x20c
+      - [0x2779C, c, ApplyMatrixSV]   # 0x5c sdk
+      - [0x277F8, asm, func_80046FF8]   # 0x8
       - [0x27800, data, data_8004CD14]   # 0xc8
       - [0x278C8, asm, func_8004CE98.rowdef]   # 0xd8
       - [0x279A0, c, SetColorMatrix]   # 0x30 sdk

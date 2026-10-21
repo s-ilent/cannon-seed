@@ -80,6 +80,7 @@ func_8004BD54 = 0x800461E4; // type:func
 func_8004C498 = 0x80046800; // type:func
 func_8004CA30 = 0x80046D90; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8004CE98.rowdef and the retail-encoded definition owns the plain name): func_8004CE98 = 0x800470C8; // type:func
+ApplyMatrixSV = 0x80046f9c; // type:func (pinned member row)
 SetColorMatrix = 0x800471A0; // type:func (pinned member row)
 SetTransMatrix = 0x800471D0; // type:func (pinned member row)
 func_8004D050 = 0x80047280; // type:func

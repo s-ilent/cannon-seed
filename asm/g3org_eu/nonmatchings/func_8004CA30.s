@@ -155,39 +155,3 @@ glabel func_80046F4C
     /* 27794 80046F94 0800E003 */  jr         $ra
     /* 27798 80046F98 00000000 */   nop
 endlabel func_80046F4C
-
-/* Handwritten function */
-nonmatching func_80046F9C, 0x5C
-
-glabel func_80046F9C
-    /* 2779C 80046F9C 0000888C */  lw         $t0, 0x0($a0)
-    /* 277A0 80046FA0 0400898C */  lw         $t1, 0x4($a0)
-    /* 277A4 80046FA4 08008A8C */  lw         $t2, 0x8($a0)
-    /* 277A8 80046FA8 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 277AC 80046FAC 10008C8C */  lw         $t4, 0x10($a0)
-    /* 277B0 80046FB0 0000C848 */  ctc2       $t0, $0 /* handwritten instruction */
-    /* 277B4 80046FB4 0008C948 */  ctc2       $t1, $1 /* handwritten instruction */
-    /* 277B8 80046FB8 0010CA48 */  ctc2       $t2, $2 /* handwritten instruction */
-    /* 277BC 80046FBC 0018CB48 */  ctc2       $t3, $3 /* handwritten instruction */
-    /* 277C0 80046FC0 0020CC48 */  ctc2       $t4, $4 /* handwritten instruction */
-    /* 277C4 80046FC4 0000A0C8 */  lwc2       $0, 0x0($a1)
-    /* 277C8 80046FC8 0400A1C8 */  lwc2       $1, 0x4($a1)
-    /* 277CC 80046FCC 00000000 */  nop
-    /* 277D0 80046FD0 1260484A */  mvmva      1, 0, 0, 3, 0
-    /* 277D4 80046FD4 00480848 */  mfc2       $t0, $9 /* handwritten instruction */
-    /* 277D8 80046FD8 00500948 */  mfc2       $t1, $10 /* handwritten instruction */
-    /* 277DC 80046FDC 00580A48 */  mfc2       $t2, $11 /* handwritten instruction */
-    /* 277E0 80046FE0 0000C8A4 */  sh         $t0, 0x0($a2)
-    /* 277E4 80046FE4 0200C9A4 */  sh         $t1, 0x2($a2)
-    /* 277E8 80046FE8 0400CAA4 */  sh         $t2, 0x4($a2)
-    /* 277EC 80046FEC 2110C000 */  addu       $v0, $a2, $zero
-    /* 277F0 80046FF0 0800E003 */  jr         $ra
-    /* 277F4 80046FF4 00000000 */   nop
-endlabel func_80046F9C
-
-nonmatching func_80046FF8, 0x8
-
-glabel func_80046FF8
-    /* 277F8 80046FF8 0000A88C */  lw         $t0, 0x0($a1)
-    /* 277FC 80046FFC 0400A98C */  lw         $t1, 0x4($a1)
-endlabel func_80046FF8
