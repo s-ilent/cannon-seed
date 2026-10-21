@@ -10389,3 +10389,38 @@ Next queue:
 3. The BIG de-frame item stays coordination-gated; the parallel lanes
    (GSD round-5, setIntr base->a1, startIntr reopen, trapIntr
    fingerprint) stay theirs.
+## 2026-10-20 (window cron-202610202343): SetDQA lands 5 of 5 and SetColorMatrix 2 of 2 as the first .word-encoded cop2 rows - the twenty-first rollback's recovery (reset 7623cd2 -> 87543b24, 54-window RESTORE NOTE, disc-return sequence rerun an eleventh time, witness 8/8 STRICT, tools/cc.sh exec-bit flip fixed again), the wave_standalone cross-check that splits the census's byte-identical waves into yaml-row classes, and the retail-mixes-both-cop2-encodings law
+* Twenty-first rollback: HEAD reverted to 7623cd2 (worklog RESTORE NOTE
+  for the 54-window loss), disc-return opening sequence rerun an
+  eleventh time: both CHDs sha256-gated, both raw bins, 8 EXEs
+  --per-sector, witness 8/8 STRICT, tools/cc.sh exec-bit flip fixed
+  again, verify re-proven 8/8 GREEN before any tool output was trusted.
+* wave_standalone cross-check (repo-external scratch) splits the
+  census's byte-identical waves into yaml-row classes and caught that
+  the x24 0x14 wave members are branch-target labels INSIDE parent
+  rows (symbols.<t>.txt "type:func (branch target)"), not standalone
+  units - the census's one-C-source-per-wave reading only holds for
+  true yaml rows; 157 waves reduce to 10 with independent members.
+* SetDQA (0xc: one move-to-gte-data -> reg 27, frameless jr) is
+  byte-identical x5 across slps_00270/sces_00269/g3_jp/g3_eu/g3org_jp
+  and lands 5 of 5; SetColorMatrix (0x30: five word loads -$12 then
+  five moves into regs 16..20, loads+moves in ONE asm block for the
+  retail order) is byte-identical x5 with only the slps_00270/g3_eu
+  copies standing alone - the sces/g3org_jp/g3org_eu copies sit inside
+  merged parent rows and stay parked for the AverageSZ split pattern.
+* NEW LAW: retail mixes BOTH cop2 encodings across sdk members -
+  AverageZ3/AverageZ4 retail carry the rs=4 form (gas's mtc2 mnemonic
+  matches) while SetDQA/SetColorMatrix retail carry rs=6 (gas mtc2
+  emits 0x4884D800, retail is 0x48C4D800), so the moves are banked as
+  exact retail .word literals per the avsz3 precedent (first caught
+  offline by judge_unit before any verify cycle).
+* judge 7/7 EXACT, verify re-proven on the five touched targets
+  (slps_00270/sces_00269/g3_jp/g3_eu/g3org_jp) GREEN, ratchets 374/0 =
+  baseline, clean_stale_asm nothing stale, progress 424 matched of
+  10622 census units (+7 exactly the seven rows). Commit 2576011b.
+* Next: SetColorMatrix x3 split landing (sces_00269/g3org_jp/g3org_eu
+  merged-parent splits, AverageSZ pattern) + the sibling SetDQA-class
+  micro members likely in the same merged rows; then the wave_standalone
+  tractable list (PCclose x4, ApplyMatrixSV x4,
+  RotAverageNclipColorDpq3_1 x4). The BIG de-frame item stays
+  coordination-gated.
