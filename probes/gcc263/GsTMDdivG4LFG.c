@@ -352,6 +352,27 @@
  *    config/sha1 gate and were quarantined outside the repo; discs
  *    eaten, links expired, last window already asked for fresh ones).
  *    verify state unchanged (8/8 on 616d653a); ratchets 374/0.
+ *
+ * ADDENDUM (same window, the lemma MEASURED): the copy-chain lemma was
+ *    put to the test - a variant reroutes the NCDpq arg-2 through a
+ *    loop-top intermediate (cp2 = tmd+4 first statement, NCDpq takes
+ *    cp2).  RESULT, all four dials: the temp's .flow count stays 6
+ *    (89 in the variant vs 131 committed - the cp2 declaration only
+ *    shifts pseudo numbering, 138 -> 139), the .lreg sort inputs are
+ *    IDENTICAL (used 6 times across 33 insns both sides), the greg
+ *    line is positionally identical (167 80 81 <color> 82 83 78 72 73
+ *    84 79 71 <&u44> 77 75 85 76) and the .mas.s render differs ONLY
+ *    in the .file line.  The rerouting copy never reaches the tally:
+ *    it is eliminated BEFORE life_analysis counts (an earlier read of
+ *    the same run mistook the renumbered temp 89 for a surviving copy
+ *    - the byte-identical render proves no extra insn exists).  CONSEQUENCE: consumer rerouting is
+ *    FULLY TRANSPARENT to global alloc - the stale count is immovable
+ *    from the consumer side, and with it every pure-C path to the
+ *    even-delta worlds (A)/(D).  The +2, if retail's compile carried
+ *    one, must originate in the pre-loop entry-cascade structure (the
+ *    coupled question the 1443 window named) - that hunt is the
+ *    surviving path to the color flip.  Variant retained at
+ *    probe-work/gdiv/lemma/ (repo-external).
  */
 
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
