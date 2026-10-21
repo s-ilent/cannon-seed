@@ -448,6 +448,83 @@
  *    unchanged: world A's order above + render byte-identical.
  */
 
+/*
+ * STATUS (window cron-20261021-2213): THE COMBINE-FOLD ENUMERATION IS
+ * EMPTY - the color war PARKS AS A COMPILER-VERSION DELTA per the
+ * 2058 acceptance gate's own fallback.  Oracle-blocked window (the
+ * thirty-third rollback's class: worklog reverted with all 62 windows
+ * missing - RESTORE NOTE appended; baselines on disk are the WOVEN
+ * set, witness 0/8; discs eaten, the 2026-10-20 links expired).  The
+ * enumeration ran on the baseline-independent probe line, BOTH
+ * source-read and measured.  The gcc-2.6.3 source is re-mirrored at
+ * probe-work/gcc-2.6.3 (tarball gcc-2.6.3.tar.bz2, sha256
+ * 71f673849f4dc7f20aba6ba1ecb6221c6704ef3152779aef15602e974ae3c140,
+ * from gcc.gnu.org/pub/gcc/old-releases/gcc-2/ - the .tar.gz URL 404s;
+ * the tree extracts FLAT, gcc/ combine.c is combine.c at the top).
+ *
+ * 1. SOURCE VERDICT (combine.c/cse.c/flow.c read end to end for the
+ *    deletion paths): combine pairs insns EXCLUSIVELY through
+ *    LOG_LINKS (combine_instructions walks links and links-of-links;
+ *    flow.c 1995-2003 builds a link only from an insn that USES a reg
+ *    back to its setter), so a redefinition that does not read the
+ *    previous value (the "t := cp; t := Y" dead-def pair, whose sweep
+ *    count stays nonzero via the later use of t's SECOND value -
+ *    delete_dead_from_cse counts remaining uses function-wide, cse.c
+ *    8535's backward scan) is NEVER PAIRED and renders.  Every
+ *    paired merge SUBSTITUTES i2src into i3 (subst) and retires i2
+ *    (PUT_CODE NOTE, combine.c 2138-2146) with the reads TRANSFERRED
+ *    into the merged pattern - count-neutral (the c513c18f
+ *    transparency lemma, now source-explained).  A read can vanish
+ *    only two ways: (a) the substituted form hits an arithmetic
+ *    self-kill (minus/xor of the same rtx, mult by 0, and x with 0,
+ *    compare-with-itself) - every C shape for those folds at tree
+ *    level (fold-const) or at cse (fold_rtx folds x-x once both
+ *    operands land in one quantity class), pre-flow; or (b) the
+ *    value-propagation substitution expands a known reg_last_set
+ *    value (cp -> (plus tmd_reload 4)), which RETARGETS the read to
+ *    another pseudo and leaves a render-visible residue.  There is
+ *    no third path: no store folding (SET_DEST mem is always live in
+ *    the sweep), no memory forwarding in combine, no cross-block
+ *    merges, MIPS has no CC0, and the i3_subst_into_i2 special case
+ *    requires a PARALLEL i2 the stream does not have.
+ * 2. MEASURED (three variants, each compiled EXIT 0 through cc.sh
+ *    with -da; sources retained repo-external at
+ *    probe-work/combine-enum/{vA,vB,vF}.c; base state re-reproduced
+ *    first: greg 17/17 via allocno_model, g_struct_diff 164/176 SAME
+ *    with the known-class tail): (vA) the dead-copy pair "tA = tmd+4;
+ *    tA = (u8*)v4o" with no later use - color row 6 refs / 39 insns
+ *    UNCHANGED (renumbered 131->132 by the extra decl, order shape
+ *    identical: 168 80 81 132 82 83 78 72 73 84 79 71 139 77 75 85
+ *    76) and the render byte-identical modulo the .file line - the
+ *    sweep kills the dead defs pre-flow exactly as read; (vB) naming
+ *    ONE consumer's eval (cpB at the NCDpq arg-2, dv keeps the
+ *    inline expr) - the family RESTRUCTURES (color 91: 6 refs / 50
+ *    insns, LL 39->50, pri 2*6/50 = 0.24 WORSE), no gain, the
+ *    eval-family law again; (vF) the split-constant def "cpF = tmd+2;
+ *    cpF += 2" with both consumers on cpF - cse's fold_rtx folds the
+ *    constant association pre-flow (color 91: 6 / 50 again), the def
+ *    line itself changes in the render (addu $19,$9,4 gone), no
+ *    gain.  NO shape produced the +1 in-loop ref; the 1443 result
+ *    already covered the value-use class (any loop-depth value use
+ *    becomes a giv, 11 refs / LL 91, render breaks).
+ * 3. CONSEQUENCE (the honest 2058 fallback): stock gcc 2.6.3 cannot
+ *    express retail's pre-combine stream from ANY C spelling - the
+ *    8-ref stream retail's sort saw is unreachable from C on our
+ *    cc1, so the color war parks as a COMPILER-VERSION DELTA
+ *    (retail's cc1 is not behaviorally identical to stock 2.6.3 in
+ *    its combine/cse surface, or retail's source differs from our
+ *    reconstruction in a way that survives the family law - both
+ *    unprovable from the binaries alone).  The G wave and the T
+ *    sibling's K=0 re-derivation stay gated on the color taking s1;
+ *    the sixth spill stays parked with it.  The two live reopeners:
+ *    (a) fresh disc links - the oracle lane (witness 8/8 STRICT,
+ *    pair_report/density, the parked renames); (b) a MODIFIED-cc1
+ *    experiment (a combine/cse-patched build proving the map is
+ *    REACHABLE) - a different evidence class that can never show
+ *    retail's compiler did it that way, so it stays a tool, not a
+ *    landing path.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
