@@ -121,7 +121,7 @@ glabel GsTMDdivG4LFG
     /* 4B9E4 8006B1E4 3800A8AF */  sw         $t0, 0x38($sp)
     /* 4B9E8 8006B1E8 C0180300 */  sll        $v1, $v1, 3
     /* 4B9EC 8006B1EC 2118C303 */  addu       $v1, $fp, $v1
-    /* 4B9F0 8006B1F0 C7C7010C */  jal        func_80071F1C
+    /* 4B9F0 8006B1F0 C7C7010C */  jal        RotAverageNclipColorDpq3_1
     /* 4B9F4 8006B1F4 1400A3AF */   sw        $v1, 0x14($sp)
     /* 4B9F8 8006B1F8 27004018 */  blez       $v0, .L8006B298
     /* 4B9FC 8006B1FC 21204002 */   addu      $a0, $s2, $zero

@@ -125,7 +125,7 @@ glabel GsTMDdivTG4LFG
     /* 4EA50 8006E250 C0180300 */  sll        $v1, $v1, 3
     /* 4EA54 8006E254 2118E302 */  addu       $v1, $s7, $v1
     /* 4EA58 8006E258 3800A8AF */  sw         $t0, 0x38($sp)
-    /* 4EA5C 8006E25C C7C7010C */  jal        func_80071F1C
+    /* 4EA5C 8006E25C C7C7010C */  jal        RotAverageNclipColorDpq3_1
     /* 4EA60 8006E260 1400A3AF */   sw        $v1, 0x14($sp)
     /* 4EA64 8006E264 39004018 */  blez       $v0, .L8006E34C
     /* 4EA68 8006E268 0100DE27 */   addiu     $fp, $fp, 0x1

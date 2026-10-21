@@ -512,7 +512,7 @@ segments:
       - [0x3AE48, data, data_80063138]   # 0x1b8
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x43BB4, data, data_800633B4]   # 0x60 pinned
       - [0x3B000, data, data_80063414]   # 0xa0
-      - [0x3B0A0, asm, func_800634C0]   # 0x100 sdk
+      - [0x3B0A0, c, RotAverageNclipColorDpq3_1]   # 0x100 sdk
       - [0x3B1A0, data, data_800635C0]   # 0x30
       - [0x3B1D0, asm, func_800635F0]   # 0x54
       - [0x3B224, data, data_80063644]   # 0x830

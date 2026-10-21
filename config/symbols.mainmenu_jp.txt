@@ -1874,3 +1874,4 @@ state_record_1 = 0x800C9B44; // type:s32
 _svm_stereo_mono = 0x8018DA40; // type:s32
 PSDIDX = 0x80194E34; // type:s32
 // END GENERATED DATA SYMBOLS
+RotAverageNclipColorDpq3_1 = 0x80071F1C; // type:func (pinned member row)
