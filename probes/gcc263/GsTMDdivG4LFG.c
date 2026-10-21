@@ -266,6 +266,94 @@
  * the color's s1 preference a spelling property of the NCDpq arg-2 copy?
  */
 
+/*
+ * STATUS (window cron-20261021-1943): the preference hunt RAN - and the
+ * source verdict retires the 1828 reframe while opening the world its
+ * odd-delta refutation could not see.  Everything below is source-read
+ * (gcc-2.6.3 re-mirrored, tarball is gcc-2.6.3.tar.bz2 at gcc.gnu.org
+ * /pub/gcc/old-releases/gcc-2/, NOT .tar.gz) plus one fresh -da compile
+ * of this probe (greg line reproduced 17/17: 167 80 81 131 82 83 78 72
+ * 73 84 79 71 138 77 75 85 76).
+ *
+ * 1. THE 1828 PASS-0 MECHANISM IS REFUTED.  find_reg (global.c ~916):
+ *    pass 0 runs with used = used1 | ~regs_used_so_far |
+ *    regs_someone_prefers - the ~regs_used_so_far term means pass 0 can
+ *    ONLY take a hard reg some EARLIER allocno already took ("we never
+ *    allocate a register for the first time in pass 0", the comment at
+ *    the pass loop).  At v4o's turn in our order the used-so-far set is
+ *    {s0} and v4o CONFLICTS with 167, so pass 0 fails and pass 1 lands
+ *    the first free reg - s1 - regardless of regs_someone_prefers (pass
+ *    1 re-copies used = used1 and DROPS the someone-prefers exclusion).
+ *    "v4o pass-0-skips s1 -> s2" is therefore unreachable; someone_prefers
+ *    only ever steers the choice among ALREADY-USED regs.
+ * 2. THE REAL STEERING PATH IS THE POST-PASS OVERRIDE, and it is EMPTY
+ *    here.  After best_reg, find_reg replaces it with a copy-preferred
+ *    reg (hard_reg_copy_preferences) and then any preferred reg
+ *    (hard_reg_preferences) of the same class when not in used.  The
+ *    preference producers, source-verified: set_preference (global.c
+ *    ~1534) fires per SET insns scanned by mark_reg (global.c ~1320,
+ *    called from global_conflicts) when ONE side is already a hard reg
+ *    (reg_renumber >= 0, i.e. local-alloc-assigned or a true hard reg)
+ *    and the other a global pseudo - plain copies also set the
+ *    copy_preferences bit; a PLUS source (e.g. addiu pseudo,hard,4)
+ *    counts as non-copy (copy=0, src unwrapped one level).  The
+ *    NCDpq arg-2 copy CANNOT be one of them: addu a1,s1,zero is a
+ *    RELOAD-created insn, and reload runs AFTER global alloc - at
+ *    global-alloc time the color's consumers are a stack store (src is
+ *    a MEM - set_preference returns) and a call-arg use (no copy at
+ *    all).  expand_preferences (global.c ~780) only IORs across
+ *    pseudo-pseudo single_set copies whose src dies and does not
+ *    conflict with the dest - there is no such copy on the color's
+ *    chain.  EMPIRICAL CONFIRMATION: dump_conflicts prints a
+ *    ";; N preferences:" line for EVERY allocno with non-empty
+ *    hard_reg_preferences (it `continue`s otherwise) and our .greg
+ *    dump has NONE - all 17 preference sets are EMPTY; .lreg shows
+ *    local-alloc assigned NOTHING to $16-$23/$30, so no s-reg hard-reg
+ *    copy can even exist; config/mips/mips.h defines NO REG_ALLOC_ORDER
+ *    so pass 1 scans regs in NUMERIC order - the observed map is the
+ *    pure sequential numeric fill (16,17,...,23,30) with zero
+ *    steering, and the same will hold for any spelling of THIS shape.
+ * 3. THE WORLD THE ODD-DELTA REFUTATION MISSED.  allocno_compare
+ *    (global.c ~630) is (int)((double)(floor_log2(n_refs)*n_refs) /
+ *    live_length * 10000 * size), ties -> ascending allocno - a DOUBLE
+ *    division truncated to int (pri ladder 3750/3673/3636/3600 for
+ *    80/81/131/82).  The stale count is the PRE-COMBINE life_analysis
+ *    tally (flow.c set-path ~1977 / use-path ~2406, += loop_depth per
+ *    set and per use), never recounted after combine folds refs
+ *    (combine.c:55 admits it) - so a ref combine folds ADDS to the
+ *    count the sort sees while leaving the scheduled stream, the spans
+ *    and the LL writeback UNCHANGED.  The 1828 refutation covered only
+ *    the odd deltas (color 7, quartet 11).  The EVEN siblings:
+ *    (A) color n_refs 6 -> 8 crosses the floor_log2 boundary (2 -> 3):
+ *        pri 3*8/33 = 7272 > v4o's 3750 - the color sorts FIRST among
+ *        the s-candidates and pure sequential fill produces retail's
+ *        exact map (color=s1, v4o=s2, v3o=s3, v2o=s4, v1o=s5) with NO
+ *        preference steering; (D) quartet 12 -> 10 each (one folded
+ *        in-loop ref per v*o): 3*10/96 = 3125, 30/98 = 3061, 30/100 =
+ *        3000 - all drop below the color's 3636, same retail map.  Both
+ *        are reachable by weighting (+-loop_depth = +-2) and both are
+ *        INVISIBLE in the retail stream - the stale pre-combine count
+ *        is the one pri input the span measurement cannot witness.
+ * 4. THE COPY-CHAIN LEMMA (why the naive spelling cannot buy the +2):
+ *    rerouting ONE consumer through an intermediate temp moves a use,
+ *    it does not add one - def + consumer-use + copy-read = def + 2
+ *    uses = the same 3 in-loop refs (count flat at 6), and the dead
+ *    second copy folds at tree level before any ref exists.  The +1
+ *    in-loop ref must come from a ref combine folds WITHOUT cse
+ *    rerouting a use off the temp - i.e. a shape where the temp is
+ *    read by an insn combine later eliminates.  Candidate shapes for
+ *    the next probe round: an address-temp for one of the v*o addiu
+ *    fans (world D, one folded read per v*o) and any folded read of
+ *    the color pointer (world A).  THIS FILE's committed shape keeps
+ *    count 6 = real 6 (.flow 6/39 = .lreg 6/33, combine folded zero
+ *    color refs - verified by grep across the cse2/combine dumps).
+ * 5. SESSION STATE: oracle-blocked window (witness 0/8 - the sandbox
+ *    re-provision restored the WOVEN baseline set, all 8 failed the
+ *    config/sha1 gate and were quarantined outside the repo; discs
+ *    eaten, links expired, last window already asked for fresh ones).
+ *    verify state unchanged (8/8 on 616d653a); ratchets 374/0.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
