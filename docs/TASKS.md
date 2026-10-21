@@ -10477,3 +10477,60 @@ Next queue:
   region. (5) GSD lane round-5 (db2f96e) adopt/reject stays the lane
   owner's; parallel lanes stay theirs; the BIG de-frame item stays
   coordination-gated.
+
+## 2026-10-21 (window cron-20261021-0328): the data-row split pattern lands the last three SetColorMatrix copies and SetTransMatrix reaches 8 of 8 - the twenty-third rollback's recovery (worklog reverted to its 2026-10-14 state again, 54-window RESTORE NOTE, disc-return sequence rerun a thirteenth time: both CHDs sha256-gated from re-downloaded links, both raw bins, 8 EXEs --per-sector, witness 8/8 STRICT, verify smoke GREEN), the make-extract latent breakage root-caused (the shared-alias comment spelling trips splat's attribute parser), and the symbols.glue hygiene fix
+* Twenty-third rollback: the worklog file reverted to its 2026-10-14
+  state (54 windows gone). Recovery per the SOP: reset 7623cd2 ->
+  c16cabbc, digest exit 1, 54-bullet RESTORE NOTE appended. The discs
+  were eaten too; both CHDs re-downloaded from the 2026-10-20 links
+  (still ~6h to expiry) and the full opening sequence rerun a
+  thirteenth time - witness 8/8 STRICT, exec bits clean, verify smoke
+  GREEN (slps_00270) before any tool output was trusted.
+* The data-row split pattern (the parked queue item): the pair
+  SetColorMatrix 0x30 + SetTransMatrix 0x20 (SetTransMatrix always at
+  SetColorMatrix + 0x30) carved out of the four data rows - three
+  splits (mainmenu_jp/mainmenu_eu/g3_jp: 0xe94/0xe94/0x334 heads, both
+  c rows, 0x3e8/0x294/0x3e8 tails) and one headless split (g3org_jp:
+  the 0x5c row was the SetTransMatrix body at its exact start plus a
+  0x3c tail). SetColorMatrix therefore completes 8 of 8 and
+  SetTransMatrix reaches 8 of 8; the wave is fully landed in one
+  source pair across all eight targets.
+* NEW BANKED FIND - make extract is latent-broken repo-wide since
+  66a5284f: splat's symbol attribute parser space-splits the comment
+  text, so the shared-alias spelling "(shared alias: GsClearOt
+  callee)" dies on the empty-value "alias:" token (and the
+  GsSetLightMode data-alias lines carry the same pattern plus
+  "(target: ...)"); the parser processes every non-comment line, so
+  the FIRST such line in each symbols file kills the load. Every
+  extract-dependent step since 66a5284f has in fact run on the
+  hand-surgery + regen-exception path; the rewording sweep across the
+  nine symbols files (alias -> alias / target -> at, or any
+  colon-less prose) is parked as its own small item and unblocks
+  make scan/extract for the first time since the GsClearOt wave.
+* The heads' .s shrink by hand (truncation at the enddlabel that
+  exactly precedes each carve boundary - all three cut points were
+  clean dlabel ends); the four tails are hand-written on the
+  data_80049D9C 11-line template with D_ labels; the g3org_jp tail's
+  word dump opens on the twin-island signature (lhu, addu
+  v0,a1,zero, the bne ladder) - data-row-hosted code stays data.
+  Eight jal sites renamed to the landed spellings (x2 mainmenu_jp, x2
+  mainmenu_eu, x2 g3_jp, g3org_jp SetTransMatrix, and slps_00270
+  SetTransMatrix - that last one unmasked by the symbols.glue hygiene
+  fix from the previous window: the two glued symbol lines split
+  properly, retiring the synthesized func_80034E94 definition).
+* judge 7/7 EXACT first shot, verify 5/5 GREEN (slps_00270,
+  mainmenu_jp, mainmenu_eu, g3_jp, g3org_jp), ratchets 374/0 =
+  baseline, clean_stale_asm removed exactly the one orphaned data .s
+  (data_8004D6BC), progress 438 matched of 10629 census units (+7
+  exactly the seven rows). Commit d6ed2d1e.
+* Next: (1) the alias-comment rewording sweep across the nine symbols
+  files unblocks make extract/scan (small, self-checking: extract
+  must regenerate byte-identical asm for all eight targets, so it
+  doubles as the extract-vs-committed-tree determinism audit). (2)
+  wave_standalone next tractable waves: PCclose x4, ApplyMatrixSV x4,
+  RotAverageNclipColorDpq3_1 x4. (3) mainmenu_jp 0x304 sdk row decode
+  (file 0x4E894, true VA 0x8006E094) - genuinely new shape, no twin.
+  (4) JP/EU 0x8002E350..0x8002E3F8 split audit before landing that
+  region. (5) GSD lane round-5 (db2f96e) adopt/reject stays the lane
+  owner's; parallel lanes stay theirs; the BIG de-frame item stays
+  coordination-gated.
