@@ -114,6 +114,58 @@
  * Landed callees called by name: RotTransPers, NormalColorDpq.
  */
 
+/*
+ * STATUS (window cron-20261021-1328): the K=0 dodge is APPLIED and the
+ * re-base delta is CLOSED.  The committed probe's render rode the fold
+ * host at tmd+0xC (empirically: the vertex indices read at +0xA/+0xE/
+ * +0x12/+0x16 from its base vs retail's +6/+0xA/+0xE/+0x12, plus a
+ * SECOND address register t0 = a0+0x10 materialized and spilled to
+ * 0x70(sp) for the *(long *) read).  This window re-spelled every field
+ * read DIRECTLY off the tmd biv (tmd += 0x24 at the loop bottom; reads
+ * at the absolute offsets 3/4/6/8/0xA/0xC/0x10/0x14/0x16/0x18/0x1A/
+ * 0x1C/0x1E/0x20/0x22; the LAST-recorded read = *(long *)(tmd + 0x10),
+ * exactly as the sibling G header's dodge note prescribed) and
+ * re-spelled the four v8 copy destinations from *(v8 *)(pk + 0x18..0x60)
+ * to *(v8 *)v1o..v4o (the register spelling the dodged G probe already
+ * uses - retail derives the copy dests from the v*o registers, not by
+ * re-adding the pk offsets).  Result vs func_80079B04.s: WORD COUNT
+ * EQUAL 193 = 193 (the committed probe rendered 200 words) with 144/193
+ * slots byte-exact and the loop body carrying ZERO structural delta -
+ * the fold now materializes retail's own entry s0 = a0 + 0x10 (slot 35
+ * = 24900010 on BOTH sides) and every s0-relative read word matches.
+ * The remaining 49 mismatched slots are ALL the banked entry-cascade
+ * wall and its mechanical consequences: the entry block 0-34 (retail
+ * homes BOTH parms at entry, addu s6,a1 @2 + addu s7,a2 @4; ours homes
+ * a1 at entry and defers a2 - the unsolved Sony sched2/DBR question),
+ * the pk pick (retail pk = s5 vs ours s1) shifting the v*o block one
+ * s-register down (retail v1o=s4..v4o=s1 vs ours v1o=s5..v4o=s2), the
+ * frame 0x98 vs retail 0xA0 (= ONE dead 8-spaced spill slot - PRESENT
+ * IN T's RETAIL RENDER TOO, same shape as G's 0xA0-vs-0xA8: the sixth
+ * spill is divider-family-systematic, not G-specific), and the +8
+ * sp-offset consequences (the otp/shift/cnt incoming-area re-reads lw
+ * 0xb8/0xb4/0xb0 vs our 0xb0/0xac/0xa8 at slots 135/138/141/174, and
+ * the epilogue register restores 180-190).
+ *
+ * LOCATION PIN CORRECTED: the blocks above pin the retail row at
+ * "mainmenu_jp file 0x4E894 (true 0x8006E094)" with a literal NOP at
+ * 0x8006E108 - WRONG against the true baseline.  func_80079B04.s's 193
+ * words match mainmenu_jp.bin at 0x5A304 = true VA 0x80079B04 EXACTLY
+ * (the woven name IS the true VA for this row), and baseline @ 0x4E894
+ * is a different small-frame function (first word 34080064).  Every
+ * absolute VA in the root-cause block above carries the same -0xBA70
+ * error (the 0x8006E108 literal-NOP slot is row offset 0x74 = true VA
+ * 0x80079B78); the row-relative offsets and the reversed-chain pick
+ * numbers stand.  WAVE RE-DERIVED at the true offset with the current
+ * baselines (scripts/tmd_div_census.py, 7 masked relocation slots
+ * 0x1c8/0x1e4/0x1f8/0x214/0x24c/0x250/0x2ac): EXACTLY 5 rows -
+ * mainmenu_jp 0x5A304 (VA 0x80079B04), mainmenu_eu 0x59BE0 (VA
+ * 0x800793E0), g3_jp 0x42D40 (VA 0x80062540), g3org_jp 0x3FBEC (VA
+ * 0x8005F3EC), g3org_eu 0x3F4B8 (VA 0x8005ECB8); g3_eu and both boots
+ * carry NO copy - the header's 5-row claim survives, its file-offset
+ * pin did not.  Probe compiles clean post-edit; probe/comment-only,
+ * no build or ratchet touched (374/0 = baseline).
+ */
+
 typedef struct { char b[8]; } GsTMDdivTG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
@@ -146,7 +198,6 @@ long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
     long p4C;
     long *p48;
     long *p40;
-    unsigned char *s0;
     unsigned long fp;
     unsigned long otz;
     unsigned long dv;
@@ -160,22 +211,21 @@ long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
     if (cnt != 0) {
         p40 = buf40;
         p48 = &buf48;
-        s0 = tmd + 0x10;
         fp = 0;
         do {
-            *(GsTMDdivTG4LFG_v8 *)(pk + 0x18) =
-                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 6) * 8);
-            *(GsTMDdivTG4LFG_v8 *)(pk + 0x30) =
-                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0xA) * 8);
-            *(GsTMDdivTG4LFG_v8 *)(pk + 0x48) =
-                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0xE) * 8);
-            *(GsTMDdivTG4LFG_v8 *)(pk + 0x60) =
-                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(s0 + 0x12) * 8);
+            *(GsTMDdivTG4LFG_v8 *)v1o =
+                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(tmd + 0x16) * 8);
+            *(GsTMDdivTG4LFG_v8 *)v2o =
+                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(tmd + 0x1A) * 8);
+            *(GsTMDdivTG4LFG_v8 *)v3o =
+                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(tmd + 0x1E) * 8);
+            *(GsTMDdivTG4LFG_v8 *)v4o =
+                *(GsTMDdivTG4LFG_v8 *)(vt + *(unsigned short *)(tmd + 0x22) * 8);
 
             if (GsTMDdivTG4LFG_dv(v1o, v2o, v3o,
-                                  nt_ + *(unsigned short *)(s0 + 4) * 8,
-                                  nt_ + *(unsigned short *)(s0 + 8) * 8,
-                                  nt_ + *(unsigned short *)(s0 + 0xC) * 8,
+                                  nt_ + *(unsigned short *)(tmd + 0x14) * 8,
+                                  nt_ + *(unsigned short *)(tmd + 0x18) * 8,
+                                  nt_ + *(unsigned short *)(tmd + 0x1C) * 8,
                                   p40, v1o + 4, v2o + 4, v3o + 4,
                                   (long *)((char *)v1o + 0xC),
                                   (long *)((char *)v2o + 0xC),
@@ -186,24 +236,23 @@ long GsTMDdivTG4LFG(tmd, vt, nt_, pkin, cnt, shift, otp, pk)
                                   (long *)((char *)v2o + 0x14),
                                   (long *)((char *)v3o + 0x14),
                                   (long *)((char *)v4o + 0x14));
-                NormalColorDpq((long *)(nt_ + *(unsigned short *)(s0 + 0x10) * 8),
+                NormalColorDpq((long *)(nt_ + *(unsigned short *)(tmd + 0x20) * 8),
                                p40, p4C, (long *)((char *)v4o + 0xC));
                 otz = *(unsigned short *)&buf40[1];
                 dv = (otz - otp[2]) >> shift;
                 *(long *)(pk + 0x14) = (long)((dv << 2) + otp[1]);
                 *(unsigned char *)(pk + 0x13) =
-                    (unsigned char)((GsTMDdivTG4LFG_ft[0] << 1)
-                                    | s0[-0xD]);
-                *(unsigned short *)(pk + 0xC) = *(unsigned short *)(s0 - 0xA);
-                *(unsigned short *)(pk + 0xE) = *(unsigned short *)(s0 - 6);
-                *(long *)((char *)v1o + 8) = *(long *)(s0 - 0xC);
-                *(long *)((char *)v2o + 8) = *(long *)(s0 - 8);
-                *(long *)((char *)v3o + 8) = *(long *)(s0 - 4);
-                *(long *)((char *)v4o + 8) = *(long *)s0;
+                    (unsigned char)((GsTMDdivTG4LFG_ft[0] << 1) | tmd[3]);
+                *(unsigned short *)(pk + 0xC) = *(unsigned short *)(tmd + 6);
+                *(unsigned short *)(pk + 0xE) = *(unsigned short *)(tmd + 0xA);
+                *(long *)((char *)v1o + 8) = *(long *)(tmd + 4);
+                *(long *)((char *)v2o + 8) = *(long *)(tmd + 8);
+                *(long *)((char *)v3o + 8) = *(long *)(tmd + 0xC);
+                *(long *)((char *)v4o + 8) = *(long *)(tmd + 0x10);
                 ret = GsTMDdivTG4LFG_pk(ret, pk, 0, p78);
             }
             fp++;
-            s0 += 0x24;
+            tmd += 0x24;
         } while (fp < cnt);
     }
     return ret;
