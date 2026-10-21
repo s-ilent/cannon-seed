@@ -233,7 +233,7 @@ segments:
       - [0x15604, asm, func_80037FE4]   # 0x30 sdk
       - [0x15634, asm, func_80038014]   # 0x30 sdk
       - [0x15664, c, SetColorMatrix]   # 0x30 sdk
-      - [0x15694, data, data_80038074]   # 0x20
+      - [0x15694, c, SetTransMatrix]   # 0x20 sdk
       - [0x156B4, data, data_80038094]   # 0x4 pinned
       - [0x156B8, asm, func_80038098]   # 0xb8 pinned
       - [0x15770, data, data_80038150]   # 0x90

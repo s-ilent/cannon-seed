@@ -77,35 +77,3 @@ glabel func_80047170
     /* 27998 80047198 0800E003 */  jr         $ra
     /* 2799C 8004719C 00000000 */   nop
 endlabel func_80047170
-
-/* Handwritten function */
-nonmatching func_800471A0, 0x30
-
-glabel func_800471A0
-    /* 279A0 800471A0 0000888C */  lw         $t0, 0x0($a0)
-    /* 279A4 800471A4 0400898C */  lw         $t1, 0x4($a0)
-    /* 279A8 800471A8 08008A8C */  lw         $t2, 0x8($a0)
-    /* 279AC 800471AC 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 279B0 800471B0 10008C8C */  lw         $t4, 0x10($a0)
-    /* 279B4 800471B4 0080C848 */  ctc2       $t0, $16 /* handwritten instruction */
-    /* 279B8 800471B8 0088C948 */  ctc2       $t1, $17 /* handwritten instruction */
-    /* 279BC 800471BC 0090CA48 */  ctc2       $t2, $18 /* handwritten instruction */
-    /* 279C0 800471C0 0098CB48 */  ctc2       $t3, $19 /* handwritten instruction */
-    /* 279C4 800471C4 00A0CC48 */  ctc2       $t4, $20 /* handwritten instruction */
-    /* 279C8 800471C8 0800E003 */  jr         $ra
-    /* 279CC 800471CC 00000000 */   nop
-endlabel func_800471A0
-
-/* Handwritten function */
-nonmatching func_800471D0, 0x20
-
-glabel func_800471D0
-    /* 279D0 800471D0 1400888C */  lw         $t0, 0x14($a0)
-    /* 279D4 800471D4 1800898C */  lw         $t1, 0x18($a0)
-    /* 279D8 800471D8 1C008A8C */  lw         $t2, 0x1C($a0)
-    /* 279DC 800471DC 0028C848 */  ctc2       $t0, $5 /* handwritten instruction */
-    /* 279E0 800471E0 0030C948 */  ctc2       $t1, $6 /* handwritten instruction */
-    /* 279E4 800471E4 0038CA48 */  ctc2       $t2, $7 /* handwritten instruction */
-    /* 279E8 800471E8 0800E003 */  jr         $ra
-    /* 279EC 800471EC 00000000 */   nop
-endlabel func_800471D0

@@ -248,7 +248,8 @@ segments:
       - [0x2A4EC, asm, func_800500AC]   # 0x30 sdk
       - [0x2A51C, asm, func_800500DC]   # 0x30 sdk
       - [0x2A54C, c, SetColorMatrix]   # 0x30 sdk
-      - [0x2A57C, asm, func_8005013C]   # 0x24 sdk
+      - [0x2A57C, c, SetTransMatrix]   # 0x20 sdk
+      - [0x2A59C, data, data_80049D9C]   # 0x4
       - [0x2A5A0, data, data_80050160]   # 0x290
       - [0x2A830, c, func_80050520]   # 0x18
       - [0x2A848, c, func_80050538]   # 0x10

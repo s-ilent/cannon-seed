@@ -147,7 +147,8 @@ TransMatrix = 0x80034CBC; // type:func (pinned member row)
 ScaleMatrix = 0x80034CE0; // type:func (pinned member row)
 SetRotMatrix = 0x80034E04; // type:func (pinned member row)
 SetLightMatrix = 0x80034E34; // type:func (pinned member row)
-SetColorMatrix = 0x80034E64; // type:func (pinned member row)
+SetColorMatrix = 0x80034E64; // type:func (pinned member row)SetTransMatrix = 0x80034E94; // type:func (pinned member row)
+
 gte_rotate_z_matrix = 0x80034EB8; // type:func (pinned member row)
 RotMatrixC = 0x800350E8; // type:func (pinned member row)
 LightColor = 0x80036440; // type:func

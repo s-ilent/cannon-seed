@@ -30,7 +30,7 @@ glabel gte_set_lc
     /* 3C760 8005BF60 1C00838C */  lw         $v1, 0x1C($a0)
     /* 3C764 8005BF64 1800C2AC */  sw         $v0, 0x18($a2)
     /* 3C768 8005BF68 1C00C3AC */  sw         $v1, 0x1C($a2)
-    /* 3C76C 8005BF6C 681C010C */  jal        func_800471A0
+    /* 3C76C 8005BF6C 681C010C */  jal        SetColorMatrix
     /* 3C770 8005BF70 00000000 */   nop
     /* 3C774 8005BF74 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3C778 8005BF78 1800BD27 */  addiu      $sp, $sp, 0x18

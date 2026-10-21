@@ -1,8 +1,8 @@
 /* Matched 2026-10-21 through the judge oracle (byte-identical pair from
  * the in-repo near-twin census: file offsets 0x15664 slps_00270, 0x2A54C
  * g3_eu - both the 0x30 sdk rows at the pinned LIBGTE member addresses;
- * the sces/g3org copies of the same member sit inside merged parent rows
- * and stay parked for the split pattern).
+ * the sces/g3org_jp/g3org_eu copies landed the next window via the
+ * merged-parent split pattern).
  *
  * LIBGTE SetColorMatrix: the argument is the 0x14-byte matrix record,
  * five word loads into $8-$12 and five move-to-GTE-data-register forms

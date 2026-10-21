@@ -333,21 +333,3 @@ glabel func_800477A0
     /* 27FC8 800477C8 0800E003 */  jr         $ra
     /* 27FCC 800477CC 00000000 */   nop
 endlabel func_800477A0
-
-/* Handwritten function */
-nonmatching func_800477D0, 0x30
-
-glabel func_800477D0
-    /* 27FD0 800477D0 0000888C */  lw         $t0, 0x0($a0)
-    /* 27FD4 800477D4 0400898C */  lw         $t1, 0x4($a0)
-    /* 27FD8 800477D8 08008A8C */  lw         $t2, 0x8($a0)
-    /* 27FDC 800477DC 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 27FE0 800477E0 10008C8C */  lw         $t4, 0x10($a0)
-    /* 27FE4 800477E4 0080C848 */  ctc2       $t0, $16 /* handwritten instruction */
-    /* 27FE8 800477E8 0088C948 */  ctc2       $t1, $17 /* handwritten instruction */
-    /* 27FEC 800477EC 0090CA48 */  ctc2       $t2, $18 /* handwritten instruction */
-    /* 27FF0 800477F0 0098CB48 */  ctc2       $t3, $19 /* handwritten instruction */
-    /* 27FF4 800477F4 00A0CC48 */  ctc2       $t4, $20 /* handwritten instruction */
-    /* 27FF8 800477F8 0800E003 */  jr         $ra
-    /* 27FFC 800477FC 00000000 */   nop
-endlabel func_800477D0

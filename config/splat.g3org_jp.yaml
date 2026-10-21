@@ -305,7 +305,8 @@ segments:
       - [0x2713C, data, data_8004C5DC]   # 0x76c
       - [0x278A8, asm, func_8004CE78.rowdef]   # 0x2b0
       - [0x27B58, data, data_8004D128]   # 0x14
-      - [0x27B6C, asm, func_8004D13C]   # 0x494
+      - [0x27B6C, asm, func_8004D13C]   # 0x464
+      - [0x27FD0, c, SetColorMatrix]   # 0x30 sdk
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x2DDD0, data, data_8004D5D0]   # 0xc4
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x2DE94, data, data_8004D694]   # 0x28 pinned
       - [0x28000, data, data_8004D6BC]   # 0x5c

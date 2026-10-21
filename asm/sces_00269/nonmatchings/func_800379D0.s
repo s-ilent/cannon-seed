@@ -129,35 +129,3 @@ nonmatching func_80034928, 0x4
 glabel func_80034928
     /* 15128 80034928 00000000 */  nop
 endlabel func_80034928
-
-/* Handwritten function */
-nonmatching func_8003492C, 0x30
-
-glabel func_8003492C
-    /* 1512C 8003492C 0000888C */  lw         $t0, 0x0($a0)
-    /* 15130 80034930 0400898C */  lw         $t1, 0x4($a0)
-    /* 15134 80034934 08008A8C */  lw         $t2, 0x8($a0)
-    /* 15138 80034938 0C008B8C */  lw         $t3, 0xC($a0)
-    /* 1513C 8003493C 10008C8C */  lw         $t4, 0x10($a0)
-    /* 15140 80034940 0080C848 */  ctc2       $t0, $16 /* handwritten instruction */
-    /* 15144 80034944 0088C948 */  ctc2       $t1, $17 /* handwritten instruction */
-    /* 15148 80034948 0090CA48 */  ctc2       $t2, $18 /* handwritten instruction */
-    /* 1514C 8003494C 0098CB48 */  ctc2       $t3, $19 /* handwritten instruction */
-    /* 15150 80034950 00A0CC48 */  ctc2       $t4, $20 /* handwritten instruction */
-    /* 15154 80034954 0800E003 */  jr         $ra
-    /* 15158 80034958 00000000 */   nop
-endlabel func_8003492C
-
-/* Handwritten function */
-nonmatching func_8003495C, 0x20
-
-glabel func_8003495C
-    /* 1515C 8003495C 1400888C */  lw         $t0, 0x14($a0)
-    /* 15160 80034960 1800898C */  lw         $t1, 0x18($a0)
-    /* 15164 80034964 1C008A8C */  lw         $t2, 0x1C($a0)
-    /* 15168 80034968 0028C848 */  ctc2       $t0, $5 /* handwritten instruction */
-    /* 1516C 8003496C 0030C948 */  ctc2       $t1, $6 /* handwritten instruction */
-    /* 15170 80034970 0038CA48 */  ctc2       $t2, $7 /* handwritten instruction */
-    /* 15174 80034974 0800E003 */  jr         $ra
-    /* 15178 80034978 00000000 */   nop
-endlabel func_8003495C

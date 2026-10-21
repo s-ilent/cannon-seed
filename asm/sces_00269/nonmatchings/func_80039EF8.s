@@ -208,7 +208,7 @@ glabel func_800368A8
     /* 172E8 80036AE8 5800A2AF */   sw        $v0, 0x58($sp)
     /* 172EC 80036AEC 33D2000C */  jal        func_800348CC
     /* 172F0 80036AF0 2800A427 */   addiu     $a0, $sp, 0x28
-    /* 172F4 80036AF4 57D2000C */  jal        func_8003495C
+    /* 172F4 80036AF4 57D2000C */  jal        SetTransMatrix
     /* 172F8 80036AF8 2800A427 */   addiu     $a0, $sp, 0x28
     /* 172FC 80036AFC 18000386 */  lh         $v1, 0x18($s0)
     /* 17300 80036B00 1A000886 */  lh         $t0, 0x1A($s0)

@@ -15,7 +15,7 @@ glabel GsSetLsMatrix
     /* 169C8 800361C8 1400BFAF */  sw         $ra, 0x14($sp)
     /* 169CC 800361CC 33D2000C */  jal        func_800348CC
     /* 169D0 800361D0 21808000 */   addu      $s0, $a0, $zero
-    /* 169D4 800361D4 57D2000C */  jal        func_8003495C
+    /* 169D4 800361D4 57D2000C */  jal        SetTransMatrix
     /* 169D8 800361D8 21200002 */   addu      $a0, $s0, $zero
     /* 169DC 800361DC 1400BF8F */  lw         $ra, 0x14($sp)
     /* 169E0 800361E0 1000B08F */  lw         $s0, 0x10($sp)
