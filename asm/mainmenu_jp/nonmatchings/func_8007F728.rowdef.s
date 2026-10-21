@@ -155,7 +155,7 @@ glabel func_80073294
     /* 53AD8 800732D8 1C00838C */  lw         $v1, 0x1C($a0)
     /* 53ADC 800732DC 1800C2AC */  sw         $v0, 0x18($a2)
     /* 53AE0 800732E0 1C00C3AC */  sw         $v1, 0x1C($a2)
-    /* 53AE4 800732E4 127A010C */  jal        func_8005E848
+    /* 53AE4 800732E4 127A010C */  jal        SetColorMatrix
     /* 53AE8 800732E8 00000000 */   nop
     /* 53AEC 800732EC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 53AF0 800732F0 1800BD27 */  addiu      $sp, $sp, 0x18

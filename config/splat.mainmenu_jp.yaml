@@ -360,7 +360,10 @@ segments:
       - [0x3E008, asm, func_80066B48]   # 0xc
       - [0x3E014, data, data_80066B54]   # 0x94
       - [0x3E0A8, asm, func_80066BE8]   # 0x10c
-      - [0x3E1B4, data, data_80066CF4]   # 0x12cc
+      - [0x3E1B4, data, data_80066CF4]   # 0xe94
+      - [0x3F048, c, SetColorMatrix]   # 0x30 sdk
+      - [0x3F078, c, SetTransMatrix]   # 0x20 sdk
+      - [0x3F098, data, data_8005E898]   # 0x3e8
       - [0x3F480, c, func_80068220]   # 0x10 sdk
       - [0x3F490, c, func_80068230]   # 0x18 sdk
       - [0x3F4A8, c, func_80068248]   # 0x1c sdk

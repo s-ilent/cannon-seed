@@ -373,7 +373,10 @@ segments:
       - [0x3D9D0, asm, func_800663E0]   # 0x24
       - [0x3D9F4, data, data_80066404]   # 0x70
       - [0x3DA64, asm, func_80066474]   # 0x130
-      - [0x3DB94, data, data_800665A4]   # 0x1178
+      - [0x3DB94, data, data_800665A4]   # 0xe94
+      - [0x3EA28, c, SetColorMatrix]   # 0x30 sdk
+      - [0x3EA58, c, SetTransMatrix]   # 0x20 sdk
+      - [0x3EA78, data, data_8005E478]   # 0x294
       - [0x3ED0C, c, func_8006797C]   # 0x18
       - [0x3ED24, c, func_80067994]   # 0x10
       - [0x3ED34, data, data_800679A4]   # 0x154

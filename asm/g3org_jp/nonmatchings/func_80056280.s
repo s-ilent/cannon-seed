@@ -183,7 +183,7 @@ glabel GsSortSprite
     /* 2FC40 8004F440 5800A2AF */   sw        $v0, 0x58($sp)
     /* 2FC44 8004F444 DC1D010C */  jal        func_80047770
     /* 2FC48 8004F448 2800A427 */   addiu     $a0, $sp, 0x28
-    /* 2FC4C 8004F44C 001E010C */  jal        func_80047800
+    /* 2FC4C 8004F44C 001E010C */  jal        SetTransMatrix
     /* 2FC50 8004F450 2800A427 */   addiu     $a0, $sp, 0x28
     /* 2FC54 8004F454 18000386 */  lh         $v1, 0x18($s0)
     /* 2FC58 8004F458 1A000886 */  lh         $t0, 0x1A($s0)

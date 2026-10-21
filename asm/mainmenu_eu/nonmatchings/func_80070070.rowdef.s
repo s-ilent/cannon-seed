@@ -426,7 +426,7 @@ glabel func_80065DE0
     /* 465E4 80065DE4 5800A2AF */   sw        $v0, 0x58($sp)
     /* 465E8 80065DE8 7278010C */  jal        func_8005E1C8
     /* 465EC 80065DEC 2800A427 */   addiu     $a0, $sp, 0x28
-    /* 465F0 80065DF0 9678010C */  jal        func_8005E258
+    /* 465F0 80065DF0 9678010C */  jal        SetTransMatrix
     /* 465F4 80065DF4 2800A427 */   addiu     $a0, $sp, 0x28
     /* 465F8 80065DF8 18000386 */  lh         $v1, 0x18($s0)
     /* 465FC 80065DFC 1A000886 */  lh         $t0, 0x1A($s0)

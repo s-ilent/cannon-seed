@@ -262,7 +262,7 @@ endlabel func_80066490
 nonmatching func_800664C4, 0x14
 
 glabel func_800664C4
-    /* 46CC4 800664C4 1E7A010C */  jal        func_8005E878
+    /* 46CC4 800664C4 1E7A010C */  jal        SetTransMatrix
     /* 46CC8 800664C8 2800A427 */   addiu     $a0, $sp, 0x28
     /* 46CCC 800664CC 18000386 */  lh         $v1, 0x18($s0)
     /* 46CD0 800664D0 1A000886 */  lh         $t0, 0x1A($s0)

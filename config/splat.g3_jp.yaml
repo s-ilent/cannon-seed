@@ -240,7 +240,10 @@ segments:
       - [0x2A700, asm, func_800502C0]   # 0x100
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x30BDC, data, data_800503DC]   # 0x70
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x30C4C, data, data_8005044C]   # 0x18 pinned
-      - [0x2A800, data, data_80050464]   # 0x76c
+      - [0x2A800, data, data_80050464]   # 0x334
+      - [0x2AB34, c, SetColorMatrix]   # 0x30 sdk
+      - [0x2AB64, c, SetTransMatrix]   # 0x20 sdk
+      - [0x2AB84, data, data_8004A384]   # 0x3e8
       - [0x2AF6C, c, func_80050C5C]   # 0x10 sdk
       - [0x2AF7C, c, func_80050C6C]   # 0x18 sdk
       - [0x2AF94, c, func_80050C84]   # 0x1c sdk

@@ -15,7 +15,7 @@ glabel func_80039C68
     /* 16F00 80036700 1400BFAF */  sw         $ra, 0x14($sp)
     /* 16F04 80036704 81D3000C */  jal        SetRotMatrix
     /* 16F08 80036708 21808000 */   addu      $s0, $a0, $zero
-    /* 16F0C 8003670C A5D3000C */  jal        func_80034E94
+    /* 16F0C 8003670C A5D3000C */  jal        SetTransMatrix
     /* 16F10 80036710 21200002 */   addu      $a0, $s0, $zero
     /* 16F14 80036714 1400BF8F */  lw         $ra, 0x14($sp)
     /* 16F18 80036718 1000B08F */  lw         $s0, 0x10($sp)
