@@ -10644,3 +10644,46 @@ Next queue:
   sdk row decode) and (3) (JP/EU 0x8002E350..0x8002E3F8 split audit) stay
   queued; GSD round-5 and the parallel lanes stay theirs; the BIG de-frame
   item stays coordination-gated.
+
+## 2026-10-21 (window cron-202610211743b): RotAverageNclipColorDpq3_1 LANDS 6 of 6 as one C source across every game module - the disc-return sequence ran a sixteenth time on Silent's fresh links (~7 minutes refresh-to-witness) and the staged recipe executed exactly as banked (commit 616d653a)
+* The discs return: both CHDs sha256-gated (EU 382613010 bytes 98ccd877 /
+  JP 382607234 bytes a6025267), both raw bins (267752/267504 sectors), 8
+  EXEs --per-sector, witness 8/8 STRICT against origin/main's config - the
+  twenty-sixth rollback's woven-baseline false pass is closed and the
+  oracle is back.
+* The landing, first-shot: five standalone 0x100 sdk rows flip to c
+  RotAverageNclipColorDpq3_1 (g3_eu file 0x3DC4C, g3_jp 0x3E208, g3org_jp
+  0x3B6A4, g3org_eu 0x3B0A0, mainmenu_eu 0x52128 - all five labels are
+  stale woven-era names; the true VAs are the curated pins 0x8005D44C /
+  0x8005DA08 / 0x8005AEA4 / 0x8005A8A0 / 0x80071928) and mainmenu_jp's
+  copy splits out of the 0x110 data row at file 0x5271C as its head, the
+  0x10 tail landing as its own asm row (a four-word gp-store stub - lui
+  $at,%hi(D_80194D70); sw $a0,%lo(D_80194D70)($at); jr $ra; nop - code,
+  not data, exactly as the correction predicted) plus the new curated pin
+  RotAverageNclipColorDpq3_1 = 0x80071F1C in symbols.mainmenu_jp.txt.
+* make extract x6 ran clean; clean_stale_asm removed exactly the six
+  orphaned rows (the five flips plus the data row); the two mmjp
+  TMD-divider call sites (GsTMDdivG4LFG / GsTMDdivTG4LFG) resolve their
+  jal to the curated name - pure renames, the d6ed2d1e law again. The
+  member has its callers: the TMD dividers call it per-primitive.
+* judge 6/6 EXACT first shot (256 bytes each, 0.2s per unit) exactly as
+  the offline probe promised; verify 8/8 GREEN - the whole-image byte
+  oracle proves every flip and the split (head + tail bytes reassemble
+  the old rows exactly, per file).
+* Ratchet catch: the first src draft carried six func_ comment tokens
+  (the five flip labels + the stub name) and the ratchet read 380 >
+  374 - the no-placeholder law holds (cite file offsets instead);
+  reworded, ratchets 374/0 = baseline, judge + verify re-run on the
+  final bytes.
+* progress stays 450: the counting heuristic misses multi-line-arg
+  definitions (the brace-scan stops at the first continuation line) - the
+  landed 0xd0 sibling shares the blind spot; the whole-image SHA-1
+  remains the real oracle. The census moved 10633 -> 10626 with the
+  mmjp row split.
+* Next: (1) the queue's item (2): mainmenu_jp 0x304 sdk row decode (file
+  0x4E894, true VA 0x8006E094) - genuinely new shape, no twin. (2) item
+  (3): JP/EU 0x8002E350..0x8002E3F8 split audit before landing that
+  region. (3) coddog reports -> clusters -> judge loop resumes; the
+  pair_report needs a fresh run on the restored baselines. (4) GSD lane
+  round-5 and the parallel lanes stay theirs; the BIG de-frame item stays
+  coordination-gated.
