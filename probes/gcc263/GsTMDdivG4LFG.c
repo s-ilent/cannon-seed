@@ -190,6 +190,56 @@
  *    on top - the same stroke should explain the sixth spill.
  */
 
+/*
+ * STATUS (window cron-20261021-1713): lever (c) CLOSED AS AN INSTRUMENT
+ * - the greg order is now fully PREDICTABLE, and the prediction retires
+ * the copy-prop theory.  Oracle-blocked window (witness 0/8, discs
+ * eaten, CHD links expired); everything below is offline on the tree.
+ *
+ * 1. THE MECHANISM CHAIN, source-verified (gcc-2.6.3 re-mirrored to
+ *    /tmp/gcc-2.6.3 from gcc.gnu.org/pub/gcc/old-releases/gcc-2/):
+ *    the flow->greg order shift is NOT local-alloc copy propagation.
+ *    The chain is: (i) .flow = pre-combine life_analysis numbers;
+ *    (ii) schedule_insns runs BETWEEN combine and local_alloc
+ *    (toplev.c 3053/3082/3098-3101) and REWRITES reg_live_length from
+ *    the scheduled stream (sched.c 4899-4905; every rewrite prints as
+ *    ";; register N life shortened/extended from X to Y" in the .sched
+ *    dump - 131: 39->33, 80: 106->96, 78: 108->104); (iii) regclass()
+ *    never recounts reg_n_refs (no reg_scan call in it), so n_refs at
+ *    the sort is the STALE pre-combine reg_scan count; (iv) inside
+ *    local_alloc, update_equiv_regs gives every MEM-loaded parm a
+ *    REG_EQUIV note and DOUBLES its reg_live_length (local-alloc.c
+ *    1063) - 75/76/77/78 on this function (lreg = 2x the sched-final
+ *    value verbatim), the SAME four on the T sibling; (v) the
+ *    copy-prop optimizers (780/782, 912/913) netted ZERO n_refs delta
+ *    on all rows of BOTH dividers - the 2014/1443 "copy propagation
+ *    RAISES 80/81" reading is retired; (vi) the equiv-kill (line
+ *    1109) zeroes 74/122/139/150 (cnt/shift/otp + one more), the four
+ *    rows missing from the .lreg table.
+ * 2. THE INSTRUMENT: tools/allocno_model.py sorts the .lreg table
+ *    with global.c allocno_compare verbatim (pri = floor_log2(n) *
+ *    n / LL * 10000 * size, descending, tie -> ascending allocno) and
+ *    reproduces the observed greg line EXACTLY: G 17/17, T sibling
+ *    16/16, first shot, both first tries.  The trial-and-error era of
+ *    the allocation war is over: compile with CC1FLAGS_EXTRA='-da',
+ *    run the model, READ the order before touching a register map.
+ * 3. THE NUMERIC GATE (why the color cannot take s1 here): post-sched
+ *    pri - color 2*6/33 = 0.3636, v4o 3*12/96 = 0.375, v3o 36/98 =
+ *    0.3673, v2o 36/100 = 0.36.  The color sits between v3o and v2o;
+ *    retail's color-over-v4o needs color LL <= 31 (12/31 = 0.387;
+ *    12/32 = 0.375 TIES and the tie sends 80 first - allocno 80 < 131),
+ *    or BOTH v4o/v3o LL >= 100, or n_refs >= 8 (lever (a), refuted).
+ *    All three spans are sched-slaved: the color's 33 = def (the
+ *    per-iteration biv+4 recompute, which must precede dv's arg-7
+ *    stack store) to death (the NCDpq arg-2 copy) - the loop body
+ *    between them is byte-exact already, so no local spelling can
+ *    shave it; the v*o spans likewise.  THE COUPLING IS NOW PROVEN
+ *    WITH THE TRANSFER MECHANISM: entry shape -> combine -> sched
+ *    placement -> LL writeback -> equiv x2 -> sort.  The color flip,
+ *    the sixth spill and the entry cascade are one question, and the
+ *    instrument to CHECK any future entry-cascade candidate is banked.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
