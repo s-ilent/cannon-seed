@@ -375,6 +375,79 @@
  *    probe-work/gdiv/lemma/ (repo-external).
  */
 
+/*
+ * STATUS (window cron-20261021-2058): the entry cascade is MEASURED
+ * STRUCTURALLY IDENTICAL and the hunt's map is redrawn - three closes
+ * and one correction, all offline (witness 0/8 woven set, discs
+ * missing, links expired; verify state unchanged 8/8 on 616d653a;
+ * ratchets 374/0).
+ *
+ * 1. THE STRUCTURAL DIFF (tools/g_struct_diff.py, banked): position-
+ *    by-position alignment of the retail row (func_80076388.s
+ *    glabel GsTMDdivG4LFG block, 176 insns) against the committed
+ *    probe's .mas.s render (175 + the lui/lbu macro pair), with
+ *    role normalization (the two allocation maps), frame
+ *    normalization (sp-offsets >= 0x78 shift by the 0xA8-0xA0
+ *    delta), and gas-macro forms (beqz == beq r,$0, j $31 == jr
+ *    $ra, srl d,t,reg == srlv, addu/subu imm == addiu signed).
+ *    RESULT: 164/176 SAME; EVERY delta is a known class - 2 FRAME
+ *    (prologue sp decrement and its epilogue mirror, 0xA8 vs 0xA0),
+ *    1 PAIR (retail lui %hi + lbu %lo(D_80194CD4) vs the probe's
+ *    single lbu-symbol macro form), and the 7-insn loop-bottom block
+ *    where the two reload temporaries are NAME-SWAPPED (retail
+ *    tmd=t1/counter=t0 vs probe tmd=t0/counter=t1 - a pure
+ *    isomorphic permutation downstream of the s-reg shift, zero
+ *    structural content).  THE ENTRY CASCADES ARE IDENTICAL: every
+ *    insn, same order, same offsets modulo frame, same shapes.  The
+ *    probe's entry spelling ALREADY produces retail's entry
+ *    structure - the lemma addendum's surviving path ("the +2 must
+ *    originate in the pre-loop entry-cascade structure") is REFUTED
+ *    AT THE RENDER LEVEL: there is no structural delta left to hunt.
+ *
+ * 2. THE PRI-INPUT PIN-DOWN: with identical post-sched streams and
+ *    an identical pipeline, every sort input is pinned except the
+ *    stale pre-combine n_refs (combine folds refs without
+ *    recounting, combine.c:55).  The update_equiv_regs x2 set is
+ *    determined by the post-sched stream itself (update_equiv runs
+ *    inside local_alloc on that stream) - identical input means
+ *    identical decisions, so it cannot differ; the sweep below
+ *    confirms no single-row divergence could explain retail's map
+ *    even if it could happen.
+ *
+ * 3. THE X2 SWEEP (repo-external one-off, scripts/x2_variants.py):
+ *    for every row, add the x2 (13 eligible) and drop it (the
+ *    committed four): NO single-row equiv-set change reproduces
+ *    retail's order (+x2 on 85/138/167 and every -x2 reproduce the
+ *    observed order unchanged; every other variant scrambles it
+ *    differently).  The equiv-divergence path is CLOSED at the
+ *    single-dial level.
+ *
+ * 4. WORLD D REFUTED (corrects the 1943 record): quartet 12->10 on
+ *    all four drops 81/82/83 BELOW pk 78's x2'd 4*16/208 = 3077 (81:
+ *    30/98 = 3061 < 3077), so the model order becomes 167 131 80 78
+ *    81 82 83 ... - pk INTERPOSES and retail's exact map does NOT
+ *    follow.  The 1943 "same map" claim overlooked pk.  World D is
+ *    dead in both its single-row and all-four forms (single-row
+ *    variants leave the untouched quartet members above the color).
+ *
+ * 5. WORLD A STANDS ALONE (model-confirmed on the real dumps): color
+ *    stale n_refs 6->8 sorts the color FIRST and reproduces retail's
+ *    exact 17-row order verbatim (167 131 80 81 82 83 78 72 73 84 79
+ *    71 138 77 75 85 76).  The color war reduces to ONE open
+ *    question: does a C spelling exist whose pre-combine stream
+ *    reads the color ONE extra time in-loop, where COMBINE (not cse)
+ *    folds that insn away - cse killing the rerouting-copy class
+ *    pre-flow is the measured lemma (c513c18f); preference steering
+ *    is refuted (f54082f3); the entry cascade is measured empty of
+ *    structure deltas (this window, point 1); the x2 set is closed
+ *    (this window, point 3).  The remaining test enumerates
+ *    combine's fold repertoire against the color's two consumers
+ *    (the arg-7 stack store, the call-arg use) for any two-insn
+ *    shape that survives cse2 into the .flow tally and dies in
+ *    combine with the .mas.s render byte-identical.  Acceptance gate
+ *    unchanged: world A's order above + render byte-identical.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
