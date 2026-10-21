@@ -479,9 +479,9 @@ glabel func_8002FD5C
     /* 10610 8002FE10 00000000 */   nop
 endlabel func_8002FD5C
 
-nonmatching func_8002FE14, 0x98
+nonmatching GsClearOt_clear, 0x98
 
-glabel func_8002FE14
+glabel GsClearOt_clear
     /* 10614 8002FE14 0580023C */  lui        $v0, %hi(D_8004E06A)
     /* 10618 8002FE18 6AE04290 */  lbu        $v0, %lo(D_8004E06A)($v0)
     /* 1061C 8002FE1C E0FFBD27 */  addiu      $sp, $sp, -0x20
@@ -521,7 +521,7 @@ glabel func_8002FE14
     /* 106A0 8002FEA0 2000BD27 */  addiu      $sp, $sp, 0x20
     /* 106A4 8002FEA4 0800E003 */  jr         $ra
     /* 106A8 8002FEA8 00000000 */   nop
-endlabel func_8002FE14
+endlabel GsClearOt_clear
 
 nonmatching func_8002FEAC, 0x60
 

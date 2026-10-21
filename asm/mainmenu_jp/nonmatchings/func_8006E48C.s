@@ -32,8 +32,8 @@ glabel GsInit3D
     /* 44A28 80064228 1980013C */  lui        $at, %hi(D_80194D70)
     /* 44A2C 8006422C 704D22AC */  sw         $v0, %lo(D_80194D70)($at)
     /* 44A30 80064230 FF3F0234 */  ori        $v0, $zero, 0x3FFF
-    /* 44A34 80064234 1980013C */  lui        $at, %hi(D_80194D6C)
-    /* 44A38 80064238 6C4D20AC */  sw         $zero, %lo(D_80194D6C)($at)
+    /* 44A34 80064234 1980013C */  lui        $at, 0x8019
+    /* 44A38 80064238 6C4D20AC */  sw         $zero, (0x80194D6C & 0xFFFF)($at)
     /* 44A3C 8006423C 1980013C */  lui        $at, %hi(D_8018DF30)
     /* 44A40 80064240 30DF22AC */  sw         $v0, %lo(D_8018DF30)($at)
     /* 44A44 80064244 1000BF8F */  lw         $ra, 0x10($sp)

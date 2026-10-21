@@ -32,8 +32,8 @@ glabel GsInit3D
     /* 30514 8004FD14 1780013C */  lui        $at, %hi(D_80171D80)
     /* 30518 8004FD18 801D22AC */  sw         $v0, %lo(D_80171D80)($at)
     /* 3051C 8004FD1C FF3F0234 */  ori        $v0, $zero, 0x3FFF
-    /* 30520 8004FD20 1780013C */  lui        $at, %hi(D_80171D7C)
-    /* 30524 8004FD24 7C1D20AC */  sw         $zero, %lo(D_80171D7C)($at)
+    /* 30520 8004FD20 1780013C */  lui        $at, 0x8017
+    /* 30524 8004FD24 7C1D20AC */  sw         $zero, (0x80171D7C & 0xFFFF)($at)
     /* 30528 8004FD28 1780013C */  lui        $at, %hi(D_8016AFC0)
     /* 3052C 8004FD2C C0AF22AC */  sw         $v0, %lo(D_8016AFC0)($at)
     /* 30530 8004FD30 1000BF8F */  lw         $ra, 0x10($sp)

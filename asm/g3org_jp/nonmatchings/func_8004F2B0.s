@@ -225,9 +225,9 @@ glabel func_80049244
     /* 29AF8 800492F8 00000000 */   nop
 endlabel func_80049244
 
-nonmatching func_800492FC, 0x98
+nonmatching GsClearOt_clear, 0x98
 
-glabel func_800492FC
+glabel GsClearOt_clear
     /* 29AFC 800492FC 0A80023C */  lui        $v0, %hi(D_800A427A)
     /* 29B00 80049300 7A424290 */  lbu        $v0, %lo(D_800A427A)($v0)
     /* 29B04 80049304 E0FFBD27 */  addiu      $sp, $sp, -0x20
@@ -267,7 +267,7 @@ glabel func_800492FC
     /* 29B88 80049388 2000BD27 */  addiu      $sp, $sp, 0x20
     /* 29B8C 8004938C 0800E003 */  jr         $ra
     /* 29B90 80049390 00000000 */   nop
-endlabel func_800492FC
+endlabel GsClearOt_clear
 
 nonmatching func_80049394, 0x60
 

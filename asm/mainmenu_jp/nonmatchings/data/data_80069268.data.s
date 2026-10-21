@@ -753,9 +753,9 @@ dlabel func_80060330
     /* 40B70 80060370 00000000 */ .word 0x00000000
 enddlabel func_80060330
 
-nonmatching func_80060374
+nonmatching GsClearOt_clear
 
-dlabel func_80060374
+dlabel GsClearOt_clear
     /* 40B74 80060374 0B80023C */ .word 0x3C02800B
     /* 40B78 80060378 A64D4290 */ .word 0x90424DA6
     /* 40B7C 8006037C E0FFBD27 */ .word 0x27BDFFE0
@@ -847,7 +847,7 @@ dlabel func_80060374
     /* 40CD4 800604D4 1800BD27 */ .word 0x27BD0018
     /* 40CD8 800604D8 0800E003 */ .word 0x03E00008
     /* 40CDC 800604DC 00000000 */ .word 0x00000000
-enddlabel func_80060374
+enddlabel GsClearOt_clear
 
 nonmatching func_800604E0
 
