@@ -10597,3 +10597,50 @@ Next queue:
   that region. (4) GSD lane round-5 (db2f96e) adopt/reject stays the
   lane owner's; parallel lanes stay theirs; the BIG de-frame item stays
   coordination-gated.
+
+## 2026-10-21 (window cron-202610211743): RotAverageNclipColorDpq3_1 decodes OFFLINE to a shape-exact 64/64 schedule on all five standalone-row renders - the Dpq depth-cue carry is the member's mechanism and the landing recipe is staged first-shot-ready - the twenty-sixth rollback's recovery (rehydrate 1s, HEAD 7623cd2 184 commits behind -> reset to f6733062, worklog re-ate: 55-window RESTORE NOTE appended, the digest's two format-anomaly misses noted: the cron-202610210213/cron-202610211628 headers lack the second dash so the scan skips them, and window cron-20261021-0443 has no TASKS.md record at all - its substance lives in 166ca7e5/0af56098/07fcb43d), THE WOVEN-BASELINE TRAP AGAIN (the disk baselines are the pre-flip Oct-10 set: the opening witness read 8/8 OK against the OLD config at stale HEAD - a false pass - and the honest post-reset witness is 0/8; the disc-return sequence cannot rerun: disk/*.chd eaten, build/*.bin are Oct-14 woven-era, the Silent links expired ~09:54 UTC and 404 at ~10:20 - oracle-blocked, judge/verify cannot run this window, fresh links requested in the Discord report)
+* The decode (commit 3647094e, probes/gcc263/RotAverageNclipColorDpq3_1.c):
+  three SINGLE rtps (0x4A180001 - not the landed sibling's one rtpt), one
+  per vertex, each followed by an mfc2 that CAPTURES IR0 into $15/$24/$25;
+  the per-vertex NCDS path (0x4AE80413 x3) then mtc2s each captured depth
+  quotient back into IR0 before its command - the Dpq depth-cue carry the
+  sibling's single ncdt never needs (its three normals ride one command).
+  Flag word is LZCR via cfc2 $31; the return rides the $2 register-var
+  mfc2 $24 MAC0 output (no post-block move, stock frameless epilogue -
+  gcc's jr+nop lands exactly on retail's 62nd/63rd slots). Branch law
+  delta: retail's b delay slot is a NOP here (the sibling's shared-slot
+  law does not hold) - both branches bank as exact retail .words, bgtz
+  offset 3 (0x1C400003), b offset 0x22 (0x10000022). Every mtc2/mfc2/cfc2/
+  lwc2/swc2 word matches gas's own encoding - only the four GTE commands
+  and two branches are .word. Probe 64/64 with full masks, ZERO
+  relocations, against ALL FIVE renders individually.
+* The scout corrections that fell out: (1) the render-text mtc2/mfc2
+  confusion - the first draft trusted a hand-rolled cop2 decoder that
+  mis-decoded the mfc2/mtc2 sub-op and read the render's mnemonic wrong;
+  the WORD BYTES are the truth (0x480F4000 = mfc2 $15,$8 read, 0x488F4000
+  = mtc2 $15,$8 write). (2) The mmjp tail is CODE not data: the 0x110 data
+  row's last 0x10 bytes render as their own labeled fragment func_8007201C
+  (lui $at,0x8019; sw $a0,0x4d70($gp); jr $ra; nop - a gp-store stub), so
+  the split lands an asm tail row, not a data tail row. (3) All five
+  standalone labels are stale woven names and each equals the body's
+  address in the WOVEN baseline (the deframe shift made visible): the
+  true VAs are the curated pins g3_eu 0x8005D44C / g3_jp 0x8005DA08 /
+  g3org_jp 0x8005AEA4 / g3org_eu 0x8005A8A0 / mainmenu_eu 0x80071928.
+* Landing recipe (staged in the probe prose, verified against the in-tree
+  yamls): five pure yaml flips - g3_eu [0x3DC4C] func_8006665C, g3_jp
+  [0x3E208] func_80066D48, g3org_jp [0x3B6A4] func_80063AC4, g3org_eu
+  [0x3B0A0] func_800634C0, mainmenu_eu [0x52128] func_8007DBE8, each
+  0x100 sdk asm -> c RotAverageNclipColorDpq3_1 - plus the mainmenu_jp
+  split [0x5271C, data, data_8007E1DC] 0x110 -> [0x5271C, c,
+  RotAverageNclipColorDpq3_1] 0x100 + [0x5281C, asm, func_8007201C] 0x10,
+  and a new curated pin in symbols.mainmenu_jp.txt: RotAverageNclipColorDpq3_1
+  = 0x80071F1C (type:func, pinned member row; the address is missing from
+  the curated file exactly as the scout said).
+* ratchets 374/0 = baseline (verified post-commit). Tree clean, pushed.
+* Next: (1) fresh CHD links from Silent -> disc-return sequence a sixteenth
+  time -> witness 8/8 STRICT -> land the six-target wave -> judge 6/6 ->
+  verify 8/8 -> progress. (2) The staged recipe needs no further decode
+  work - the wave is first-shot-ready. (3) The queue's item (2) (mmjp 0x304
+  sdk row decode) and (3) (JP/EU 0x8002E350..0x8002E3F8 split audit) stay
+  queued; GSD round-5 and the parallel lanes stay theirs; the BIG de-frame
+  item stays coordination-gated.
