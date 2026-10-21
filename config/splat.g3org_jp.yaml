@@ -290,7 +290,7 @@ segments:
       - [0x26B28, asm, func_8004BE98]   # 0x10 sdk
       - [0x26B38, asm, func_8004BEA8]   # 0x20 sdk
       - [0x26B58, asm, func_8004BEC8]   # 0x24 sdk
-      - [0x26B7C, asm, func_8004BEEC]   # 0x10 sdk
+      - [0x26B7C, c, PCclose]   # 0x10 sdk
       - [0x26B8C, data, data_8004BEFC]   # 0x44
       - [0x26BD0, asm, func_8004BF40]   # 0x7c
       - [0x26C4C, asm, func_8004BFBC]   # 0x18 sdk

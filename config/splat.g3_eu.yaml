@@ -226,7 +226,7 @@ segments:
       - [0x290A4, asm, func_8004EA04]   # 0x10 sdk
       - [0x290B4, asm, func_8004EA14]   # 0x20 sdk
       - [0x290D4, asm, func_8004EA34]   # 0x24 sdk
-      - [0x290F8, asm, func_8004EA58]   # 0x10 sdk
+      - [0x290F8, c, PCclose]   # 0x10 sdk
       - [0x29108, asm, func_8004EA68]   # 0xc0
       - [0x291C8, asm, func_8004EB28]   # 0x18 sdk
       - [0x291E0, asm, func_8004EB40]   # 0x198

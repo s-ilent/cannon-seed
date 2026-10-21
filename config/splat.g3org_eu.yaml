@@ -277,7 +277,7 @@ segments:
       - [0x264F8, asm, func_8004B738]   # 0x10 sdk
       - [0x26508, asm, func_8004B748]   # 0x20 sdk
       - [0x26528, asm, func_8004B768]   # 0x24 sdk
-      - [0x2654C, asm, func_8004B78C]   # 0x10 sdk
+      - [0x2654C, c, PCclose]   # 0x10 sdk
       - [0x2655C, data, data_8004B79C]   # 0x18
       - [0x26574, asm, func_8004B7B4.rowdef]   # 0xa8
       - [0x2661C, asm, func_8004B85C]   # 0x18 sdk
