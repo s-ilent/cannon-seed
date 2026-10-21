@@ -525,6 +525,78 @@
  *    landing path.
  */
 
+/*
+ * STATUS (window cron-20261021-2328): the MODIFIED-cc1 experiment's
+ * first milestone banked.  Oracle-blocked window (the thirty-fourth
+ * rollback's class: worklog reverted with all 62 windows missing -
+ * RESTORE NOTE appended; baselines on disk the WOVEN set, witness
+ * 0/8; discs eaten, the 2026-10-20 links expired).  Three things
+ * landed, all on the baseline-independent probe line.
+ *
+ * 1. BASE STATE RE-REPRODUCED on the rolled-back sandbox: the
+ *    committed probe compiles EXIT 0 through cc.sh with -da
+ *    (build/probe/gdiv.*); allocno_model 17/17 MATCH first shot
+ *    (equiv-DOUBLED rows [75,76,77,78] re-derived identically);
+ *    g_struct_diff 164/176 SAME + 1 PAIR with the known-class tail
+ *    (the 2 FRAME sp pair, the 7-insn name-swapped loop bottom).
+ *    The color's before-values pinned from the fresh dumps: .flow
+ *    Register 131 used 6 times across 39 insns; .lreg used 6 across
+ *    33 - World A's target is 6 -> 8 (one extra in-loop read at
+ *    depth 2).
+ * 2. THE SOURCE TARBALL IS BANKED: gcc-2.6.3.tar.bz2 at
+ *    /home/z/my-project/tools-local/ (survives re-provisions per
+ *    get_gcc.sh), sha256
+ *    71f673849f4dc7f20aba6ba1ecb6221c6704ef3152779aef15602e974ae3c140
+ *    - the exact hash the 2213 record pinned, re-downloaded from
+ *    gcc.gnu.org/pub/gcc/old-releases/gcc-2/gcc-2.6.3.tar.bz2 (the
+ *    extra gcc-2.6.3/ path component 404s).  The stock tree extracts
+ *    FLAT.  The tools-local/gcc-2.6.3-psx dir is BINARIES ONLY (no
+ *    source, no Makefile) - get_gcc.sh fetches prebuilt cc1 from
+ *    decompals/old-gcc, so the modified-cc1 build needs: the stock
+ *    source (now banked) + the PSX patch set (decompals' source
+ *    repo - locate next window) + a host-build recipe (gcc 2.6.3
+ *    under a modern host compiler needs -std=gnu89 -fcommon class
+ *    compat flags; the PSX patches are REQUIRED for the asm dialect
+ *    maspsx consumes, stock mips.c output is not drop-in).
+ * 3. THE PATCH-SEAM DESIGN (read off the 2213 source verdict, now
+ *    concretized): the fold that must move from pre-flow to combine
+ *    happens at THREE levels for the same-var self-kill shape - (i)
+ *    fold-const folds X-X at TREE level for any same-operand
+ *    integral expression, so no syntactic C spelling reaches RTL
+ *    with the self-kill intact on stock OR cse-patched cc1; (ii)
+ *    cse's fold_rtx folds it again post-substitution; (iii) combine
+ *    simplify folds it in the merged i3 - the one level we WANT.
+ *    So the patch must suppress the fold at (i) AND (ii) - and (ii)
+ *    is two guards, not one: fold_rtx's minus-self recognition AND
+ *    cse's value-propagation substitution into that insn (path (b)
+ *    of the 2213 verdict: substitution retargets the reads to the
+ *    color and leaves the insn rendering (minus cp cp) - a render
+ *    change even with the fold suppressed).  The working shape is
+ *    then the plain in-loop pair "t = cp; x = t - t" with t/x dead
+ *    after: tree fold suppressed -> the pair reaches RTL; cse fold
+ *    + substitution suppressed -> it survives cse2, .flow counts
+ *    the copy's cp read (6 -> 8, the tally feeds regclass stale);
+ *    combine pairs via LOG_LINKS (the subtract reads t, links to
+ *    the copy), merges to (minus cp cp), folds to 0, t/x dead, the
+ *    pair vanishes - render byte-identical to the committed render,
+ *    exactly the stock pipeline's output.  REJECTED shapes: the
+ *    conditional-set "u = c ? cp : cp2; x = u - u" (tree cannot
+ *    fold it, but the render carries the branch - mips1 has no
+ *    conditional move, combine folds the subtract and NOT the
+ *    conditional), and the memory-aliased self-subtract (the reads
+ *    are of the color's MEMORY, the wrong count class).  Open
+ *    risks for the build window: suppressing fold-const X-X
+ *    function-wide touches every other fold in the unit (the
+ *    render-diff gate catches collateral); cse's substitution
+ *    guard must be narrowed to the copy-set/read pair, not the
+ *    whole function, or unrelated forwarding breaks the render.
+ *    Success gate: patched cc1 + variant source compiles to .flow
+ *    color 8, allocno model sorts World A's retail order
+ *    (167 131 80 81 82 83 78 72 73 84 79 71 138 77 75 85 76), and
+ *    g_struct_diff vs the committed render stays 164/176+PAIR with
+ *    the known-class tail.
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
