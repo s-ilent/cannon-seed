@@ -238,6 +238,32 @@
  *    placement -> LL writeback -> equiv x2 -> sort.  The color flip,
  *    the sixth spill and the entry cascade are one question, and the
  *    instrument to CHECK any future entry-cascade candidate is banked.
+ *
+ * STATUS (window cron-20261021-1828): the LL framing RETIRED by direct
+ * measurement of the retail stream itself.  tools/g_span.py (banked this
+ * window) measures first-write -> last-use distances on BOTH post-scheduled
+ * streams, and retail's spans EQUAL ours for every resident: color 34=34,
+ * v4o 104=104, v3o/v2o/v1o 101=101, vt 67=67, nt 123=123, giv/pk +-1 (the
+ * frame slot).  The 1713 numeric gate's arm 1 (retail color LL <= 31) is
+ * FALSE IN RETAIL - retail's own loop carries the same 33-insn color span -
+ * and arm 2 (retail v4o/v3o LL >= 100) likewise.  Mechanism corrections
+ * from the gcc source: reg_scan counts NOTHING (first/last UIDs + sets
+ * only); reg_n_refs is life_analysis's LOOP-DEPTH-WEIGHTED tally
+ * (+= loop_depth per set AND per use - entry refs at depth 0 count ZERO;
+ * color 6 = 3 in-loop refs x 2, v4o 12 = 6 x 2) and combine.c:55 admits
+ * it is NOT adjusted when combine folds refs - every odd-delta world
+ * (color 7, quartet 11) is unreachable by weighting, the n==2->3 bump
+ * needs n==2, copy-prop moves are +-loop_depth = +-2.  THE SURVIVING
+ * REFRAME: the retail register MAP never proved the retail pri ORDER.
+ * global.c find_reg pass 0 excludes regs_someone_prefers (the union of
+ * conflicting lower-priority allocnos' hard_reg_full_preferences, merged
+ * along reg-reg copy chains by expand_preferences) - if the color carries
+ * a hard-reg preference for s1 that the quartet lacks, OUR OWN pri order
+ * (v4o v3o color v2o v1o) settles retail's exact map (v4o pass-0-skips
+ * s1 -> s2, v3o -> s3, color -> the untouched s1).  Next: what insn shape
+ * creates a hard-reg preference for a data pseudo (global_conflicts'
+ * recording site + expand_preferences' copy-chain propagation), and is
+ * the color's s1 preference a spelling property of the NCDpq arg-2 copy?
  */
 
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
