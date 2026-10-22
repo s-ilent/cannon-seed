@@ -241,12 +241,3 @@ glabel func_80031A80
     /* 122B4 80031AB4 B89122A4 */  sh         $v0, %lo(D_800B91B8)($at)
     /* 122B8 80031AB8 A4010234 */  ori        $v0, $zero, 0x1A4
 endlabel func_80031A80
-
-nonmatching func_80031ABC, 0x10
-
-glabel func_80031ABC
-    /* 122BC 80031ABC 0C80013C */  lui        $at, %hi(D_800B8D68)
-    /* 122C0 80031AC0 688D22AC */  sw         $v0, %lo(D_800B8D68)($at)
-    /* 122C4 80031AC4 0800E003 */  jr         $ra
-    /* 122C8 80031AC8 00000000 */   nop
-endlabel func_80031ABC

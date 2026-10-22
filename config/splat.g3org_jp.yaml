@@ -89,7 +89,11 @@ segments:
       - [0x60C4, asm, func_80026704]   # 0x73c
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x764C, data, data_80026E4C]   # 0x50
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x769C, data, data_80026E9C]   # 0xc4 pinned
-      - [0x6800, data, data_80026F60]   # 0x8c4
+      - [0x6800, asm, data_80026F60]   # 0x7c
+      - [0x687C, c, func_8002607C]   # 0x14
+      - [0x6890, asm, func_80026090]   # 0x54
+      - [0x68E4, c, func_800260E4]   # 0x14
+      - [0x68F8, asm, func_800260F8]   # 0x7cc
       - [0x70C4, asm, func_80027964]   # 0x73c
       - [0x7800, data, data_8002813C]   # 0x80c
       - [0x800C, asm, func_80028B0C]   # 0x7f4
@@ -161,7 +165,8 @@ segments:
       - [0x119B0, data, data_80033B40]   # 0x650
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x14A28, data, data_80034228]   # 0x34 pinned
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x14A5C, data, data_8003425C]   # 0x5c
-      - [0x12000, asm, func_800342B8]   # 0x2cc
+      - [0x12000, asm, func_800342B8]   # 0x2bc
+      - [0x122BC, c, func_80031ABC]   # 0x10
       - [0x122CC, data, data_8003458C]   # 0x4
       - [0x122D0, asm, func_80034590]   # 0x530
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x15310, data, data_80034B10]   # 0x4
@@ -260,7 +265,9 @@ segments:
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x2830C, data, data_80047B0C]   # 0x8
       - [0x23000, asm, func_80047B14.rowdef]   # 0x108
       - [0x23108, data, data_80047C28]   # 0x8
-      - [0x23110, asm, func_80047C30]   # 0x6f0
+      - [0x23110, asm, func_80047C30]   # 0x4d0
+      - [0x235E0, c, func_80042DE0]   # 0xc
+      - [0x235EC, asm, func_80042DEC]   # 0x214
       - [0x23800, data, data_80048368]   # 0x4
       - [0x23804, asm, func_80048454]   # 0x7fc
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x294A0, data, data_80048CA0]   # 0xd8
@@ -289,7 +296,9 @@ segments:
       - [0x26B18, asm, func_8004BE88]   # 0x10 sdk
       - [0x26B28, asm, func_8004BE98]   # 0x10 sdk
       - [0x26B38, asm, func_8004BEA8]   # 0x20 sdk
-      - [0x26B58, asm, func_8004BEC8]   # 0x24 sdk
+      - [0x26B58, asm, func_8004BEC8]   # 0x10
+      - [0x26B68, c, func_80046368]   # 0x10
+      - [0x26B78, asm, func_80046378]   # 0x4
       - [0x26B7C, c, PCclose]   # 0x10 sdk
       - [0x26B8C, data, data_8004BEFC]   # 0x44
       - [0x26BD0, asm, func_8004BF40]   # 0x7c
@@ -336,7 +345,8 @@ segments:
       - [0x28E5C, data, data_8004E68C]   # 0x1e4
       - [0x29040, asm, func_8004E9A0]   # 0x10 sdk
       - [0x29050, asm, func_8004E9B0]   # 0x10 sdk
-      - [0x29060, data, data_8004E9C0]   # 0x10
+      - [0x29060, asm, data_8004E9C0]   # 0x4
+      - [0x29064, c, func_80048864]   # 0xc
       - [0x29070, asm, func_8004E9D0]   # 0x10 sdk
       - [0x29080, asm, func_8004E9E0]   # 0x10 sdk
       - [0x29090, asm, func_8004E9F0]   # 0x10 sdk

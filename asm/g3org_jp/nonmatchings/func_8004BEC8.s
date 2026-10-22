@@ -15,19 +15,3 @@ glabel PClseek
     /* 26B60 80046360 21288000 */  addu       $a1, $a0, $zero
     /* 26B64 80046364 CD410000 */  break      0, 263
 endlabel PClseek
-
-nonmatching func_80046368, 0x10
-
-glabel func_80046368
-    /* 26B68 80046368 02004010 */  beqz       $v0, .L80046374
-    /* 26B6C 8004636C 21106000 */   addu      $v0, $v1, $zero
-    /* 26B70 80046370 FFFF0224 */  addiu      $v0, $zero, -0x1
-  .L80046374:
-    /* 26B74 80046374 0800E003 */  jr         $ra
-endlabel func_80046368
-
-nonmatching func_80046378, 0x4
-
-glabel func_80046378
-    /* 26B78 80046378 00000000 */  nop
-endlabel func_80046378

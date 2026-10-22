@@ -616,6 +616,7 @@ nonmatching func_80025FA4, 0x8
 
 glabel func_80025FA4
     /* 67A4 80025FA4 32006334 */  ori        $v1, $v1, 0x32
+  .L80025FA8:
     /* 67A8 80025FA8 0000C0A4 */  sh         $zero, 0x0($a2)
 endlabel func_80025FA4
 
