@@ -247,16 +247,16 @@ segments:
       - [0x16880, asm, func_800395F0]   # 0x3bc
       - [0x16C3C, data, data_800399AC]   # 0x4
       - [0x16C40, c, LightColor]   # 0x28 sdk
-      - [0x16C68, asm, func_800399D8]   # 0x28 sdk
-      - [0x16C90, asm, func_80039A00]   # 0x3c sdk
-      - [0x16CCC, asm, func_80039A3C]   # 0x24 sdk
+      - [0x16C68, c, DpqColorLight]   # 0x28 sdk
+      - [0x16C90, c, DpqColor3]   # 0x3c sdk
+      - [0x16CCC, c, Intpl]   # 0x24 sdk
       - [0x16CF0, asm, func_80039A60]   # 0x28 sdk
       - [0x16D18, asm, func_80039A88]   # 0x28 sdk
-      - [0x16D40, asm, func_80039AB0]   # 0x20 sdk
-      - [0x16D60, asm, func_80039AD0]   # 0x24 sdk
-      - [0x16D84, asm, func_80039AF4]   # 0x58 sdk
-      - [0x16DDC, asm, func_80039B4C]   # 0x58 sdk
-      - [0x16E34, asm, func_80039BA4]   # 0x1c sdk
+      - [0x16D40, c, AverageZ3]   # 0x20 sdk
+      - [0x16D60, c, AverageZ4]   # 0x24 sdk
+      - [0x16D84, c, OuterProduct12]   # 0x58 sdk
+      - [0x16DDC, c, OuterProduct0]   # 0x58 sdk
+      - [0x16E34, c, Lzc]   # 0x1c sdk
       - [0x16E50, data, data_80039BC0]   # 0xa8
       - [0x16EF8, asm, func_80039C68]   # 0x108
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x1A5A8, data, data_80039DA8]   # 0x54
