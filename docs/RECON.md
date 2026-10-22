@@ -21,18 +21,20 @@ Both files are CHD v5 CD-ROM images (`cdlz` primary codec). Extract files with `
 
 The game uses a chained multi-executable layout. A small boot executable launches three larger payloads from disc. Each executable is a separate byte-exact target with its own hash file under `config/sha1/`.
 
-| Target | Disc file | Size (B) | Payload (B) | SHA-1 |
-| --- | --- | --- | --- | --- |
-| `slps_00270` | SLPS_002.70;1 | 290,816 | 288,768 | `f2a13b5270876e8117ddcc38fb99716124195c46` |
-| `sces_00269` | SCES_002.69;1 | 290,816 | 288,768 | `1969898477965aefa053fabd07cd6c410e816986` |
-| `mainmenu_jp` | MAINMENU.EXE;1 | 698,368 | 696,320 | `ec26c6964ede52114254013c2b3da81c84d9aaa2` |
-| `mainmenu_eu` | MAINMENU.EXE;1 | 700,416 | 698,368 | `cbad60dc66b4d0c5b8f559c269b18ae2288ed8c5` |
-| `g3_jp` | DRAGOON/G3.EXE;1 | 575,488 | 573,440 | `6ab446ff7a802d95fba7efce8dae4bdb5457ff3a` |
-| `g3_eu` | DRAGOON/G3.EXE;1 | 577,536 | 575,488 | `80acb6d1ecccfcf2ee2f7e05b357b8331ef24e03` |
-| `g3org_jp` | GOURB/G3ORG.EXE;1 | 628,736 | 626,688 | `5923d4eb4b239630286ab4f9b26b88186690def9` |
-| `g3org_eu` | GOURB/G3ORG.EXE;1 | 630,784 | 624,768 | `c83138e295864531c0cb7234b6059b340803eb9b` |
+| Target | Disc file | Size (B) | Payload (B) |
+| --- | --- | --- | --- |
+| `slps_00270` | SLPS_002.70;1 | 290,816 | 288,768 |
+| `sces_00269` | SCES_002.69;1 | 290,816 | 288,768 |
+| `mainmenu_jp` | MAINMENU.EXE;1 | 698,368 | 696,320 |
+| `mainmenu_eu` | MAINMENU.EXE;1 | 700,416 | 698,368 |
+| `g3_jp` | DRAGOON/G3.EXE;1 | 575,488 | 573,440 |
+| `g3_eu` | DRAGOON/G3.EXE;1 | 577,536 | 575,488 |
+| `g3org_jp` | GOURB/G3ORG.EXE;1 | 628,736 | 626,688 |
+| `g3org_eu` | GOURB/G3ORG.EXE;1 | 630,784 | 624,768 |
 
 Payload size equals file size minus the 0x800-byte PS-X EXE header. The primary release is Japan. The European release is the secondary target.
+
+**The target hashes are NOT repeated here.** The only authoritative hashes are the committed oracles `config/sha1/<t>.sha1` — post-flip (de0b0d68) they carry the PER-SECTOR TRUE extractions' hashes, and the witness gate (sha1 of a local `baselines/<t>.bin` vs that file; judge_unit's baseline_gate, verify.sh gate 2) is the arbiter of every baseline question. This table's earlier SHA-1 column encoded the PRE-FLIP contiguous-read (woven) extraction and was retired at cron-20261022-1043: a local baseline set matching those retired values is exactly the all-woven sandbox trap the honest witness checks keep catching (witness 0/8, never compare against it, never edit the sha1 file to pass). The disc-image hashes in section 1 are retail provenance and stay.
 
 ## 3. Header facts (all eight executables): corrected v2
 

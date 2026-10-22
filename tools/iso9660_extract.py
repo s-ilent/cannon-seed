@@ -14,14 +14,18 @@ DEFAULT READ IS CONTIGUOUS (historical, kept for byte-compatibility): it
 starts at lba*2352+24 and reads `size` raw bytes straight across sector
 boundaries — every following sector's 280-byte EDC/ECC tail plus 24-byte
 sync/addr/subheader gets WOVEN INTO the extracted file, and the tail user
-data beyond `size` raw bytes is LOST. That is exactly the corruption the
-baselines/*.bin carry (see docs/TASKS.md, "the boot load model closes").
+data beyond `size` raw bytes is LOST. That woven view is what the
+pre-flip baselines carried (docs/TASKS.md, "the boot load model closes";
+the flip retired it everywhere - see the next paragraph).
 
 Pass --per-sector to get the TRUE file content instead: USER_LEN bytes per
 sector across ceil(size/2048) sectors, truncated to the recorded size —
-what the console's CD file layer actually delivers. A fresh extraction
-with --per-sector will NOT match the committed SHA-1 oracles (they encode
-the contiguous corruption); it is for the de-frame transition.
+what the console's CD file layer actually delivers. THIS IS THE MANDATORY
+MODE for the disc-return sequence: post-flip (de0b0d68) the committed
+SHA-1 oracles config/sha1/<t>.sha1 carry the PER-SECTOR TRUE extractions'
+hashes, so a per-sector extraction of the retail discs witnesses 8/8 and
+the witness gate (sha1 vs config/sha1, judge_unit's baseline_gate) is the
+arbiter of every baseline question. The contiguous view will NOT witness.
 """
 
 import struct
