@@ -454,7 +454,7 @@ segments:
       - [0x468F4, data, data_80070864]   # 0x4
       - [0x468F8, asm, func_80070868]   # 0x130 sdk
       - [0x46A28, asm, func_80070998]   # 0x4fc sdk
-      - [0x46F24, asm, func_80070E94]   # 0x80 sdk
+      - [0x46F24, c, RotTransPers4]   # 0x80 sdk
       - [0x46FA4, data, data_80070F14]   # 0x310
       - [0x472B4, asm, func_80071354]   # 0x94 sdk
       - [0x47348, asm, func_800713E8]   # 0xa0 sdk

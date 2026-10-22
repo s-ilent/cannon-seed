@@ -459,7 +459,7 @@ segments:
       - [0x45FE8, data, data_8006FCF8]   # 0x248
       - [0x46230, asm, func_80070070.rowdef]   # 0x5d0
       - [0x46800, data, data_80070650]   # 0x50
-      - [0x46850, asm, func_800707C0]   # 0x80 sdk
+      - [0x46850, c, RotTransPers4]   # 0x80 sdk
       - [0x468D0, c, ReadSZfifo3]   # 0x14 sdk
       - [0x468E4, c, ReadSZfifo4]   # 0x18 sdk
       - [0x468FC, c, ReadSXSYfifo]   # 0x14 sdk
@@ -559,7 +559,7 @@ segments:
       - [0x4F768, data, data_8007AB08]   # 0x98
       - [0x4F800, asm, func_8007ACC4]   # 0x94
       - [0x4F894, data, data_8007AD64]   # 0x110
-      - [0x4F9A4, asm, func_8007AE74]   # 0xd0 sdk
+      - [0x4F9A4, c, RotAverageNclipColorCol3]   # 0xd0 sdk
       - [0x4FA74, asm, func_8007AF44]   # 0xd0 sdk
       - [0x4FB44, data, data_8007B014]   # 0x494
       - [0x4FFD8, asm, func_8007B4A8]   # 0x28
