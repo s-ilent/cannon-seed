@@ -598,7 +598,7 @@ segments:
       - [0x49DE4, asm, func_80074474]   # 0x78 sdk
       - [0x49E5C, asm, func_800744EC]   # 0xe4 sdk
       - [0x49F40, data, data_800745D0]   # 0x240
-      - [0x4A180, asm, func_80074940]   # 0x50 sdk
+      - [0x4A180, c, SsSetMVol]   # 0x50 sdk
       - [0x4A1D0, asm, func_80074990]   # 0x394 sdk
       - [0x4A564, c, SsSetSerialVol]   # 0x160 sdk
       - [0x4A6C4, c, SsVabTransCompleted]   # 0x2c sdk
