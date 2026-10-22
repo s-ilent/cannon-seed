@@ -15,9 +15,22 @@ shared across all eight exes), U = unmatched (asm .s only).
 Also emits, per pair, the contiguous runs ("clusters") of exact (100.00%)
 UNMATCHED pairs ordered by density - the matching lane's pick list.
 
+INPUT GATES (cron-20261022-0928): every consumer of baselines/ or build/
+runs input_gates() first and refuses unwitnessed inputs -
+* baseline_witness: sha1(baselines/<t>.bin) must equal the committed
+  config/sha1/<t>.sha1 hash (judge_unit's gate, verify.sh's gate 2). The
+  woven-set sandbox (witness 0/8 since the 40th rollback) slices garbage
+  into every byte comparison - a different hash is a different build.
+* stale_symbols: build/<t>.elf is ephemeral (a rollback restores it from
+  a stale snapshot); any yaml c-row label the ELF links OUTSIDE its own
+  row span proves the ELF predates the committed yaml (the 0658 audit's
+  57 stale-ELF-VA relocations) and every VA it yields is poison.
+
 Usage: pair_report.py [--clusters N] [pair ...]
 Default pairs: the four same-program region pairs.
+Exit: 0 report produced; 2 every requested pair refused (gates).
 """
+import hashlib
 import os
 import re
 import struct
@@ -79,6 +92,41 @@ def baseline_bytes(target, va, size):
     if off < 0 or off + size > len(d):
         return None
     return d[off:off + size]
+
+
+def baseline_witness(target):
+    """(ok, why) - is baselines/<t>.bin the committed oracle?
+
+    Mirrors tools/judge_unit.py's baseline_gate (verify.sh's gate 2): the
+    sha1sum-format file's first non-comment line's first field, lowercased,
+    against sha1 of the local baseline. Post-flip (de0b0d68) the committed
+    values are the TRUE baselines' hashes; the all-woven set a rollback
+    restores (witness 0/8, re-confirmed every disc-blocked window since)
+    slices garbage into every byte comparison. A different hash is a
+    different build - never compare against it, never edit the sha1 file
+    to pass. The true baselines return with the discs.
+    """
+    path = os.path.join(REPO, f"baselines/{target}.bin")
+    if not os.path.exists(path):
+        return False, "baselines/%s.bin missing" % target
+    sha_file = os.path.join(REPO, f"config/sha1/{target}.sha1")
+    expected = None
+    with open(sha_file) as f:
+        for ln in f:
+            ln = ln.strip()
+            if ln and not ln.startswith("#"):
+                expected = ln.split()[0].lower()
+                break
+    if expected is None:
+        return False, "config/sha1/%s.sha1 has no hash field" % target
+    with open(path, "rb") as f:
+        actual = hashlib.sha1(f.read()).hexdigest()
+    if expected != actual:
+        return False, (
+            "baselines/%s.bin sha1 %s != committed oracle %s "
+            "(the woven-set class; witness 0/8)" % (target, actual[:12],
+                                                    expected[:12]))
+    return True, ""
 
 
 _C_ROWS = {}
@@ -149,6 +197,55 @@ def is_matched(target, name, va=None):
     if va is not None:
         return any(lo <= va < hi for lo, hi, _ in rows)
     return any(lbl == name for _, _, lbl in rows)
+
+
+def stale_symbols(target, funcs=None):
+    """[(label, va, spans)] - c-row labels the build ELF links outside
+    their own yaml row span: the stale-build signature.
+
+    build/<t>.elf is an ephemeral artifact a sandbox rollback restores
+    from an old snapshot; the committed yaml is oracle-gated by the next
+    verify. A c-row label linked at a VA no row of the committed yaml
+    covers proves the ELF was laid out from a DIFFERENT (older) yaml -
+    the cron-20261022-0658 audit's 57 True->False stale-ELF-VA
+    relocations (GsSetLightMode linked at g3org_jp's woven 0x80063FD4
+    while the committed true row sits at 0x8005B284; the check returns
+    exactly those 57 on the 40th-rollback tree). Every elf_funcs VA is
+    then poison for any VA-derived tool output. Labels absent from the
+    ELF, asm/rowdef names, and multi-span labels hit in at least one
+    span are all consistent - no violation.
+    """
+    if funcs is None:
+        funcs = elf_funcs(os.path.join(REPO, f"build/{target}.elf"))
+    spans = {}
+    for lo, hi, lbl in c_rows(target):
+        spans.setdefault(lbl, []).append((lo, hi))
+    bad = []
+    for lbl, (va, _size) in sorted(funcs.items()):
+        sp = spans.get(lbl)
+        if sp and not any(lo <= va < hi for lo, hi in sp):
+            bad.append((lbl, va, sp))
+    return bad
+
+
+def input_gates(target, funcs=None):
+    """(ok, problems) - both input gates, for every baseline/ELF consumer.
+
+    Call BEFORE reading baselines/<t>.bin or build/<t>.elf-derived data;
+    on False, print the problems and refuse (the caller decides skip vs
+    exit 2). No bypass: judge_unit's oracle gate has none either.
+    """
+    problems = []
+    ok, why = baseline_witness(target)
+    if not ok:
+        problems.append("witness: " + why)
+    bad = stale_symbols(target, funcs)
+    if bad:
+        problems.append(
+            "build/%s.elf stale vs committed yaml: %d c-row label(s) "
+            "linked outside their own row span (first: %s at %08X)"
+            % (target, len(bad), bad[0][0], bad[0][1]))
+    return (not problems), problems
 
 
 _ANCHORS = None
@@ -312,9 +409,26 @@ def bucket(s):
 def main():
     want = sys.argv[1:] or None
     all_rows = {}
+    refused = []
+    gates = {}                     # per-target gate memo across pairs
+
+    def gated(t):
+        if t not in gates:
+            gates[t] = input_gates(t)
+        return gates[t]
+
     for a, b in PAIRS:
         label = f"{a}-{b}"
         if want and label not in want and a not in want and b not in want:
+            continue
+        ga_ok, ga = gated(a)
+        gb_ok, gb = gated(b)
+        if not (ga_ok and gb_ok):
+            refused.append(label)
+            print(f"== {label}: REFUSED - inputs not witnessed/consistent ==")
+            for t, probs in ((a, ga), (b, gb)):
+                for p in probs:
+                    print(f"   {t}: {p}")
             continue
         fa = elf_funcs(os.path.join(REPO, f"build/{a}.elf"))
         fb = elf_funcs(os.path.join(REPO, f"build/{b}.elf"))
@@ -413,6 +527,15 @@ def main():
                     for r in c:
                         f.write(f"{r[8]} {r[0]} {r[1]:08X} {r[2]}\n")
 
+    if refused and not all_rows:
+        print("\nall requested pairs REFUSED - no report produced. The "
+              "witness gate needs the disc-return sequence (witness 8/8 "
+              "STRICT), then `make verify TARGET=<t>` per target to "
+              "rebuild the stale build/ tree before this report means "
+              "anything.", file=sys.stderr)
+        return 2
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

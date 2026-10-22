@@ -13,6 +13,12 @@ ELFs - fixtures are synthetic bytes and temp-dir yamls):
    signal (func_8002E3D0: sz 0x28, closing bne 0x4c past the symbol end
    - the over-0x10 slice the old unconditional False let through to the
    compiler class).
+3. The input gates (cron-20261022-0928): baseline_witness (the local
+   baseline must BE the committed oracle - the woven-set class slices
+   garbage into every byte comparison) and stale_symbols (a yaml c-row
+   label the build ELF links outside its own row span proves the ELF
+   predates the committed yaml - the 0658 audit's 57 stale-ELF-VA
+   relocations).
 
 Run:  python3 -m unittest tests/test_pair_report.py -v
 """
@@ -212,6 +218,141 @@ class TestIsFragmentOver16(Fixture):
     def test_missing_baseline_is_not_fragment(self):
         pr.baseline_bytes = lambda t, va, size: None
         self.assertFalse(pr.is_fragment("t", VA, 0x28))
+
+
+# --- input gates: baseline witness + stale-build detection -------------------
+
+class TestBaselineWitness(Fixture):
+    def setUp(self):
+        super().setUp()
+        os.makedirs(os.path.join(self._tmp.name, "baselines"))
+        os.makedirs(os.path.join(self._tmp.name, "config", "sha1"))
+
+    def put_oracle(self, target, blob):
+        import hashlib
+        with open(os.path.join(self._tmp.name, "baselines",
+                               f"{target}.bin"), "wb") as f:
+            f.write(blob)
+        h = hashlib.sha1(blob).hexdigest()
+        # the real files' shape: comment lines, then the sha1sum row
+        with open(os.path.join(self._tmp.name, "config", "sha1",
+                               f"{target}.sha1"), "w") as f:
+            f.write(f"# config/sha1/{target}.sha1 - THE ORACLE\n")
+            f.write(f"{h}  {target}.bin\n")
+
+    def test_witnessed_baseline_passes(self):
+        self.put_oracle("t", b"\x01\x02\x03\x04")
+        ok, why = pr.baseline_witness("t")
+        self.assertTrue(ok)
+        self.assertEqual(why, "")
+
+    def test_wrong_bytes_fail_with_the_woven_class_message(self):
+        self.put_oracle("t", b"\x01\x02\x03\x04")
+        with open(os.path.join(self._tmp.name, "baselines", "t.bin"),
+                  "wb") as f:
+            f.write(b"\xff" * 4)          # the all-woven set re-extracted
+        ok, why = pr.baseline_witness("t")
+        self.assertFalse(ok)
+        self.assertIn("!= committed oracle", why)
+        self.assertIn("woven-set class", why)
+
+    def test_missing_baseline_fails(self):
+        ok, why = pr.baseline_witness("t")
+        self.assertFalse(ok)
+        self.assertIn("missing", why)
+
+    def test_sha1_file_without_hash_field_fails(self):
+        with open(os.path.join(self._tmp.name, "baselines", "t.bin"),
+                  "wb") as f:
+            f.write(b"\x01")
+        with open(os.path.join(self._tmp.name, "config", "sha1",
+                               "t.sha1"), "w") as f:
+            f.write("# comments only - no hash row\n")
+        ok, why = pr.baseline_witness("t")
+        self.assertFalse(ok)
+        self.assertIn("no hash field", why)
+
+
+class TestStaleSymbols(Fixture):
+    """The cron-20261022-0658 stale-build signature: a yaml c-row label
+    the build ELF links outside its own row span."""
+
+    ROWS = [(0x80020000, 0x80020040, "func_80020000"),
+            (0x80020040, 0x80020080, "GsSetLightMode")]
+
+    def setUp(self):
+        super().setUp()
+        pr._C_ROWS = {"t": list(self.ROWS)}
+
+    def test_consistent_tree_has_no_violations(self):
+        funcs = {"func_80020000": (0x80020000, 0x40),
+                 "GsSetLightMode": (0x80020040, 0x2C),
+                 "asm_only_unit": (0x80030000, 0x20)}   # no row: unchecked
+        self.assertEqual(pr.stale_symbols("t", funcs), [])
+
+    def test_label_outside_its_row_span_is_the_signature(self):
+        # the 0658 class: GsSetLightMode linked at its woven VA while the
+        # committed true row sits elsewhere
+        funcs = {"GsSetLightMode": (0x800678BC, 0x2C)}
+        bad = pr.stale_symbols("t", funcs)
+        self.assertEqual([(b[0], b[1]) for b in bad],
+                         [("GsSetLightMode", 0x800678BC)])
+        self.assertEqual(bad[0][2], [self.ROWS[1][:2]])   # spans reported
+
+    def test_label_hit_in_one_of_its_spans_is_consistent(self):
+        pr._C_ROWS = {"t": [(0x80020000, 0x80020040, "dup"),
+                            (0x80030000, 0x80030040, "dup")]}
+        funcs = {"dup": (0x80030000, 0x10)}
+        self.assertEqual(pr.stale_symbols("t", funcs), [])
+
+    def test_label_absent_from_elf_is_skipped(self):
+        funcs = {"other": (0x80020000, 0x10)}
+        self.assertEqual(pr.stale_symbols("t", funcs), [])
+
+    def test_row_hi_is_exclusive(self):
+        funcs = {"func_80020000": (0x80020040, 0x10)}   # == row hi
+        self.assertTrue(pr.stale_symbols("t", funcs))
+        funcs = {"func_80020000": (0x8002003C, 0x4)}    # last word inside
+        self.assertEqual(pr.stale_symbols("t", funcs), [])
+
+
+class TestInputGates(Fixture):
+    def setUp(self):
+        super().setUp()
+        os.makedirs(os.path.join(self._tmp.name, "baselines"))
+        os.makedirs(os.path.join(self._tmp.name, "config", "sha1"))
+
+    def test_aggregates_both_problem_classes(self):
+        import hashlib
+        # baseline present but unwitnessed (wrong bytes)
+        with open(os.path.join(self._tmp.name, "baselines", "t.bin"),
+                  "wb") as f:
+            f.write(b"\xff")
+        with open(os.path.join(self._tmp.name, "config", "sha1",
+                               "t.sha1"), "w") as f:
+            f.write(f"{hashlib.sha1(b'good').hexdigest()}  t.bin\n")
+        pr._C_ROWS = {"t": [(0x80020000, 0x80020040, "GsSetLightMode")]}
+        funcs = {"GsSetLightMode": (0x800678BC, 0x2C)}   # the stale class
+        ok, problems = pr.input_gates("t", funcs)
+        self.assertFalse(ok)
+        self.assertEqual(len(problems), 2)
+        self.assertIn("witness:", problems[0])
+        self.assertIn("stale vs committed yaml", problems[1])
+
+    def test_clean_inputs_pass(self):
+        import hashlib
+        blob = b"\x01\x02\x03\x04"
+        with open(os.path.join(self._tmp.name, "baselines", "t.bin"),
+                  "wb") as f:
+            f.write(blob)
+        with open(os.path.join(self._tmp.name, "config", "sha1",
+                               "t.sha1"), "w") as f:
+            f.write(f"{hashlib.sha1(blob).hexdigest()}  t.bin\n")
+        pr._C_ROWS = {"t": [(0x80020000, 0x80020040, "func_80020000")]}
+        funcs = {"func_80020000": (0x80020000, 0x40)}
+        ok, problems = pr.input_gates("t", funcs)
+        self.assertTrue(ok)
+        self.assertEqual(problems, [])
 
 
 if __name__ == "__main__":

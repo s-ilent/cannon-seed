@@ -20,6 +20,9 @@ Usage: python3 tools/near_twin_census.py [min_members]
 Output is ranked: byte-identical waves first (by member count, then size),
 near groups after. Everything printed is a DECODE CANDIDATE, not a
 landing - judge_unit.py + make verify remain the oracles.
+Gated (cron-20261022-0928): a target enters the pool only through
+pair_report.input_gates (witnessed baseline + build ELF consistent with
+the committed yaml); every requested target refused = exit 2.
 """
 import hashlib
 import os
@@ -37,9 +40,9 @@ TARGETS = [
 ]
 
 
-def collect():
+def collect(targets=None):
     rows = []
-    for t in TARGETS:
+    for t in (targets or TARGETS):
         funcs = pr.elf_funcs(os.path.join(pr.REPO, f"build/{t}.elf"))
         for name, (va, size) in sorted(funcs.items()):
             if pr.is_matched(t, name, va):
@@ -61,9 +64,21 @@ def word_diffs(a, b):
 
 def main():
     min_members = int(sys.argv[1]) if len(sys.argv) > 1 else 2
-    rows = collect()
+    allowed, refused = [], []
+    for t in TARGETS:
+        ok, problems = pr.input_gates(t)
+        if ok:
+            allowed.append(t)
+        else:
+            refused.append(t)
+            print(f"{t}: REFUSED - {'; '.join(problems)}")
+    if refused and not allowed:
+        print("\nall targets REFUSED - no census. Run the disc-return "
+              "sequence first (witness 8/8 STRICT).", file=sys.stderr)
+        return 2
+    rows = collect(allowed)
     print(f"pool: {len(rows)} unmatched non-veneer non-fragment rows "
-          f"across {len(TARGETS)} targets")
+          f"across {len(allowed)} witnessed targets")
 
     # ---- byte-identical groups ----
     exact = {}
@@ -111,4 +126,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

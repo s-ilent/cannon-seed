@@ -9,6 +9,11 @@ matched function's bytes (a C source or c row on the matched side).
 
 Usage: twin_probe.py [target ...]     (default: all eight)
 Output: stdout summary + build/twin_probe.txt, one candidate per line.
+Gated (cron-20261022-0928): each target must pass pair_report.input_gates
+(witnessed baseline + build ELF consistent with the committed yaml) or it
+is skipped as unwitnessed - twin hashes off the woven set are artifacts.
+Exit: 0 report produced (possibly partial); 2 every requested target
+refused.
 """
 import hashlib
 import os
@@ -16,7 +21,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pair_report import (REPO, baseline_bytes, elf_funcs,  # noqa: E402
-                         fn_class, is_matched)
+                         fn_class, input_gates, is_matched)
 
 TARGETS = ["slps_00270", "sces_00269", "mainmenu_jp", "mainmenu_eu",
            "g3_jp", "g3_eu", "g3org_jp", "g3org_eu"]
@@ -26,7 +31,13 @@ MIN_SIZE = 0x18   # below this, leaves collide on jr ra; nop
 def main():
     want = sys.argv[1:] or TARGETS
     groups = {}
+    refused = []
     for t in want:
+        ok, problems = input_gates(t)
+        if not ok:
+            refused.append(t)
+            print(f"{t}: REFUSED - {'; '.join(problems)}")
+            continue
         elf = os.path.join(REPO, f"build/{t}.elf")
         if not os.path.exists(elf):
             print(f"{t}: no build ELF, skipped")
@@ -61,7 +72,13 @@ def main():
         for r in rows:
             f.write(f"{r[0]} {r[1]} {r[2]:08X} {r[3]} "
                     f"{r[4]} {r[5]} {r[6]:08X}\n")
+    if refused and not groups:
+        print("\nall requested targets REFUSED - no twin report. Run the "
+              "disc-return sequence first (witness 8/8 STRICT).",
+              file=sys.stderr)
+        return 2
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
