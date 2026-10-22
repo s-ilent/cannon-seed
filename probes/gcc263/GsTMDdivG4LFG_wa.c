@@ -728,6 +728,49 @@
  *     72 73 84 79 71 138 77 75 85 76), then g_struct_diff vs the committed
  *     render (the 164/176+PAIR known-class tail).
  */
+ *
+ * STATUS (window cron-20261022-0543): MILESTONE 5 - THE WORLD A GATE CLOSES,
+ * ALL ARMS PASS.  Session start: the 39th rollback (worklog fully reverted to
+ * its 2026-10-14 state, RESTORE NOTE cron-20261022-0543-restore re-indexed all
+ * 82 windows, digest exit 0; the 03:33 CHDs eaten with the prompt links 404 -
+ * witness 0/8, the oracle DOWN, fresh links requested; the tools-local cc1
+ * tree eaten and rebuilt via the banked one-command setup, guards 1-4
+ * re-applied idempotently).  Regression first: the unmodified G probe through
+ * the freshly rebuilt guarded cc1 renders byte-identical to the decompals
+ * stock render (the 0428 gate re-proved on the new tree).  All milestone-4
+ * gates reproduce exactly on the fresh tree: .flow color 132 = 6 -> 10 uses /
+ * 39 -> 46 insns / crosses 3 -> 4 calls, the minus live in .cse2, renders
+ * 179 = 179.  THE MODEL: allocno_model predicted == observed 17/17 on ALL
+ * THREE compiles (G-probe stock, wa stock, wa guarded) - the 1713 instrument
+ * holds on every table.  THE ORDER: the guarded wa greg line = 170 132 80 81
+ * 82 83 78 72 73 84 79 71 139 77 75 85 76 == the World A target 167 131 80 81
+ * 82 83 78 72 73 84 79 71 138 77 75 85 76 VERBATIM under the wa spelling's
+ * pseudo renumbering (dv-temp 167->170, color 131->132, the 92-insn reg
+ * 138->139); the tail 15/15 raw-identical.  THE MAP: the guarded render's
+ * s-map = RETAIL'S EXACT NINE-REGISTER MAP (16 GIV / 17 COLOR / 18 V4O /
+ * 19 V3O / 20 V2O / 21 V1O / 22 PK / 23 VT / 30 NT); stock vs guarded is
+ * 179 = 179 insns with EXACTLY 23 differing lines, every one an instance of
+ * the single body 3-cycle (v4o $17->$18, v3o $18->$19, color $19->$17), the
+ * prologue/epilogue byte-identical - the color TAKES s1 exactly as retail
+ * does ($17 = tmd+4, feeding the dv arg store and NormalColorDpq's a1).
+ * THE ROLE CORRECTION (fixes this file's own 2058-era reading): in the
+ * G-probe numbering 167 is the DV-TEMP (the reduced-giv role: 23 refs across
+ * 91, no pointer tag), NOT the color; 131 is the color (6 refs across 33,
+ * pointer - the row the wa spelling carries at 132).  World A therefore reads
+ * dv-temp first, color second, and the guarded compile delivers exactly that
+ * pair order (the dv-temp's stale 23 refs outrank the color's 10 at
+ * global-alloc time; the reduced giv's insns then die in combine, freeing s1
+ * for the color - the map-level mechanism the 0428 record armed).  THE 0428
+ * FOOTNOTE RESOLVES: the model on the fresh G-probe table returns the World A
+ * order for BOTH the designed tally (color stale n_refs 6 -> 8) and the
+ * measured tally (6 -> 10) - the numeric gate is n_refs >= 7 (pri 2*7/33 =
+ * 0.4242 beats the quartet head's 12/96 = 0.3750; n=6 gives 0.3636 and
+ * loses), so the exact +2/+4 ref accounting no longer matters at the order
+ * level.  NEXT: the map and order arms are proven end to end; landing the G
+ * wave + T sibling stays gated on the lane-owner decision (the guarded cc1 is
+ * an experiment instrument, not the build compiler); the oracle lane stays
+ * blocked on fresh disc links (witness 0/8).
+ */
 
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
