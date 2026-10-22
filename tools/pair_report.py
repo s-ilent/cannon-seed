@@ -8,10 +8,10 @@ functions by NAME across the two regions, compares their baseline bytes
 buckets by byte-equality ratio exactly like the banked coddog table
 (100.00 / 95-99.99 / 80-94.99 / <80).
 
-Flags: M = matched (src/<name>.c exists, or the target's splat yaml row
-at that VA is already a `c` row - curated-name C rows keep the func_
-row name, so the file-existence test alone false-flags them unmatched),
-U = unmatched (asm .s only).
+Flags: M = matched (the unit renders as C in THAT target: a build/src
+section covers its VA in the target's generated linker script - see
+c_sections; src/<name>.c existence alone is NOT target-scoped, src/ is
+shared across all eight exes), U = unmatched (asm .s only).
 Also emits, per pair, the contiguous runs ("clusters") of exact (100.00%)
 UNMATCHED pairs ordered by density - the matching lane's pick list.
 
@@ -84,28 +84,71 @@ def baseline_bytes(target, va, size):
 _C_ROWS = {}
 
 
-def c_row_vas(target):
-    """VAs of the target's splat yaml rows already flipped to C."""
-    vas = set()
-    path = os.path.join(REPO, f"config/splat.{target}.yaml")
-    with open(path) as f:
-        for line in f:
-            m = re.search(r"\[0x([0-9A-Fa-f]+),\s*c,", line)
-            if m:
-                # yaml offsets are file offsets (baseline .bin offsets,
-                # 0x800 header included): VA = off + 0x80020000 - 0x800
-                vas.add(int(m.group(1), 16) + BASE_VA - HDR)
-    return vas
+def c_rows(target):
+    """(va_lo, va_hi, label) of the target's yaml c rows - the matched map.
+
+    Structured parse mirroring tools/build.sh's c_list generation and
+    tools/gen_ld.py's addressing exactly: yaml.safe_load over the code
+    segments only, every 3+-element subsegment row of type `c`, VA =
+    segment vram + (rom - 0x800). A row's span runs to the next
+    subsegment row in payload order, so a merged parent covers the
+    member functions split out of it (the ApplyMatrixSV data-row-host
+    pattern) and `<base>.pN` piece rows cover their windows.
+
+    The yaml (commit-tracked, oracle-gated by the next verify) is the
+    right source - NOT build/<t>.gen.ld or .c_entries: those are
+    ephemeral build-dir artifacts a sandbox rollback restores from a
+    stale snapshot (the 40th rollback's build tree still lives in the
+    woven era, thirty landings behind the committed yaml), and NOT a
+    bare src/<name>.c existence test: src/ is shared across all eight
+    exes, so a name can belong to another executable's build entirely
+    (src/func_80037CAC.c is mainmenu_eu's; g3_eu's yaml covers
+    0x80037CAC with an asm rowdef - the cron-20261022-0313b artifact).
+    """
+    if target in _C_ROWS:
+        return _C_ROWS[target]
+    import yaml
+    rows = []
+    with open(os.path.join(REPO, f"config/splat.{target}.yaml")) as f:
+        cfg = yaml.safe_load(f)
+    for si, seg in enumerate(cfg["segments"]):
+        if not (isinstance(seg, dict) and seg.get("type") == "code"):
+            continue
+        base = seg.get("vram", BASE_VA)
+        subs = [e for e in seg.get("subsegments", []) if isinstance(e, list)]
+        # the segment's rom end bounds its last row's span (the next
+        # segment's start; +0x40000 when the code segment is the last)
+        seg_end = None
+        for nxt_seg in cfg["segments"][si + 1:]:
+            if isinstance(nxt_seg, dict) and nxt_seg.get("start") is not None:
+                seg_end = nxt_seg["start"]
+                break
+        for i, e in enumerate(subs):
+            if len(e) < 3 or e[1] != "c":
+                continue
+            lo = base + (e[0] - HDR)
+            if i + 1 < len(subs):
+                hi = base + (subs[i + 1][0] - HDR)
+            elif seg_end is not None:
+                hi = base + (seg_end - HDR)
+            else:                       # last row of the last segment
+                hi = lo + 0x40000
+            rows.append((lo, hi, e[2]))
+    _C_ROWS[target] = rows
+    return rows
 
 
 def is_matched(target, name, va=None):
-    if os.path.exists(os.path.join(REPO, f"src/{name}.c")):
-        return True
-    if va is None:
-        return False
-    if target not in _C_ROWS:
-        _C_ROWS[target] = c_row_vas(target)
-    return va in _C_ROWS[target]
+    """Target-scoped matched test: the unit renders as C in THIS target.
+
+    A c row of the target's own yaml covers the unit's VA (or, for
+    name-only calls, a c row carries the unit's label). See c_rows for
+    why the yaml decides and the file-existence test does not.
+    """
+    rows = c_rows(target)
+    if va is not None:
+        return any(lo <= va < hi for lo, hi, _ in rows)
+    return any(lbl == name for _, _, lbl in rows)
 
 
 _ANCHORS = None
@@ -180,9 +223,17 @@ def is_fragment(target, va, size):
     inside one function; they are not matchable units of their own. A real
     function of this size always ends in jr $ra (or a tail j), so a small
     symbol with no terminator is a body slice.
+
+    Over 0x10 the epilogue-tail signatures no longer decide; the
+    out-of-symbol branch signal does (the cron-20261022-0313b class:
+    func_8002E3D0, sz 0x28, first insn move s0,v0, closing bne 0x4c past
+    the symbol end). A compiled function's local branches never leave its
+    own bounds, so any branch targeting outside [va, va+size) marks the
+    symbol as a mid-body slice of the enclosing body. bal (branch-and-
+    link with rs=0) is a call, not a local branch, and does not count.
     """
     if size > 0x10:
-        return False
+        return _branch_out_of_symbol(target, va, size)
     b = baseline_bytes(target, va, size)
     if b is None:
         return False
@@ -194,6 +245,34 @@ def is_fragment(target, va, size):
     if op == 0x23 and base == 29 and (16 <= rt <= 23 or rt == 31):
         return True                  # restores a saved reg before any store
     return 0x03E00008 not in w                       # no return at all
+
+
+def _branch_out_of_symbol(target, va, size):
+    """True when any local branch inside the symbol targets outside it."""
+    b = baseline_bytes(target, va, size)
+    if b is None:
+        return False
+    n = size // 4
+    w = struct.unpack_from("<%dI" % n, b, 0)
+    end = va + size
+    for i, x in enumerate(w):
+        op = (x >> 26) & 0x3F
+        rs = (x >> 21) & 0x1F
+        rt = (x >> 16) & 0x1F
+        if op in (0x04, 0x05, 0x06, 0x07):           # beq/bne/blez/bgtz
+            pass
+        elif op == 0x01 and rt in (0x00, 0x01, 0x10, 0x11):
+            if rs == 0:          # bltzal/bgezal with rs=0 is bal, a call
+                continue
+        else:
+            continue
+        off = x & 0xFFFF
+        if off >= 0x8000:
+            off -= 0x10000
+        tgt = va + 4 * i + 4 + off * 4
+        if tgt < va or tgt >= end:
+            return True
+    return False
 
 
 def fn_class(target, va, size, name=""):
