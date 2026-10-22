@@ -144,7 +144,7 @@ segments:
       - [0xFC9C, data, data_8003196C]   # 0xb0
       - [0xFD4C, asm, func_80031A1C]   # 0x58 sdk
       - [0xFDA4, asm, func_80031A74]   # 0x7c sdk
-      - [0xFE20, asm, func_80031AF0]   # 0x2c sdk
+      - [0xFE20, c, setIntrVSync]   # 0x2c sdk
       - [0xFE4C, asm, func_80031B1C]   # 0x2c sdk
       - [0xFE78, data, data_80031B48]   # 0x188
       - [0x10000, asm, func_80031DE8]   # 0x5c
@@ -351,8 +351,8 @@ segments:
       - [0x24818, asm, func_800496C8]   # 0x7c sdk
       - [0x24894, asm, func_80049744]   # 0x10 sdk
       - [0x248A4, asm, func_80049754]   # 0x10 sdk
-      - [0x248B4, asm, func_80049764]   # 0x14 sdk
-      - [0x248C8, asm, func_80049778]   # 0x10 sdk
+      - [0x248B4, c, SsSetMono]   # 0x14 sdk
+      - [0x248C8, c, SsSetStereo]   # 0x10 sdk
       - [0x248D8, asm, func_80049788]   # 0x34 sdk
       - [0x2490C, asm, func_800497BC]   # 0x34 sdk
       - [0x24940, asm, func_800497F0]   # 0x34 sdk

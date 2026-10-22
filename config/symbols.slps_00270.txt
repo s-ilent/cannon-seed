@@ -858,4 +858,6 @@ boot_flag_0 = 0x80066368; // type:s32
 boot_flag_1 = 0x80066394; // type:s32
 _spu_inTransfer = 0x80065DE4; // type:s32 absolute:true RETAIL-BOUND retail C rows encode 0x80065DE4 (the pre-flip entry, restored 2026-10-19)
 PSDIDX = 0x8011C304; // type:s32
+_svm_stereo_mono = 0x80114FF8; // type:s32 (LIBSND VS_MONO bss static beyond the payload; SsSetMono/SsSetStereo sh %lo(0x4FF8)($at) with lui 0x8011)
+intr_vb_cb_slots = 0x8004E360; // type:s32 (LIBETC INTR_VB member .data+0 in a no-row gap; setIntrVSync lui/addiu pair; retail bytes at the address: eight zero slots then 0x1F801114/0x1F801814/0x1F801110)
 // END GENERATED DATA SYMBOLS
