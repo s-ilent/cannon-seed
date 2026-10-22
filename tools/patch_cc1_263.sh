@@ -13,18 +13,25 @@
 #          "&x - &x" X-X -> integer_zero_node fold.
 #   GUARD 2 (M2, cron-20261022-0043)  cse.c ~3631 - simplify_binary_
 #          _operation's direct rtx_equal_p MINUS self-kill -> CONST0_RTX.
-#   GUARD 3 (M3, this window)         cse.c fold_rtx entry short-circuit
+#   GUARD 3 (M3, cron-20261022-0158)  cse.c fold_rtx entry short-circuit
 #          for a same-operand integral MINUS.  Every other cse-level door
 #          for the shape (the sbop X*C-X coefficient distribution and the
 #          simplify_plus_minus negs[] associate path, cse.c ~4124+) sits
 #          behind a fold_rtx call, so one entry guard closes them all.
-#          This is the 0043 record's milestone-3 entry option ("short-
-#          circuit fold_rtx for same-operand MINUS at entry"), chosen over
-#          a second clause-level guard because the associate path reaches
-#          the fold through fold_rtx-mediated calls and clause guards left
-#          one of two doors open in the milestone-2 smoke.
+#   GUARD 4 (M4, cron-20261022-0428)  loop.c: a replaceable giv whose insn
+#          is a same-operand integral MINUS keeps its dest->new_reg map
+#          unset.  The 0158 "cse reg substitution" reading is REFUTED by
+#          the fresh pass dumps: the pair survives the first cse as a true
+#          self-kill (minus 132 132), then loop.c's giv reduction creates
+#          the reduced reg, reg_map rewrites the CONSUMER to read it, the
+#          original minus is orphaned and the second cse's dead-deletion
+#          cascade eats it.  Skipping the reg_map write keeps the consumer
+#          on the original giv reg (minus live into cse2/combine), the
+#          reduced reg stays unread so its init/increment insns die, and
+#          biv elimination (all_reduced) is untouched - the pair, not the
+#          function.
 #
-# All three are `if (0 && ...)` / early-return suppressions tagged
+# All four are `if (0 && ...)` / early-return suppressions tagged
 # MODIFIED-CC1; combine's fold (the level we WANT) is untouched.
 # Regression gate: the unmodified G probe must still render byte-identical
 # through the guarded cc1 (the probe carries no same-operand MINUS shape).
@@ -115,6 +122,30 @@ edit('cse.c',
   code = GET_CODE (x);
   switch (code)""",
 "MODIFIED-CC1 (GUARD 3")
+
+# ---- GUARD 4: loop.c giv reduction keeps the minus's dest map unset (M4) ----
+edit('loop.c',
+"""	  else if (v->replaceable)
+	    {
+	      reg_map[REGNO (v->dest_reg)] = v->new_reg;""",
+"""	  else if (v->replaceable)
+	    {
+	      /* MODIFIED-CC1 (GUARD 4, M4 cron-20261022-0428): a giv whose
+	      insn is a same-operand integral MINUS does not get the
+	      dest->new_reg map - the color-war pair's consumer must
+	      keep reading the original giv reg so the minus insn
+	      survives cse2 (GUARD 3 holds it unfolded) and dies in
+	      combine via LOG_LINKS (see probes/gcc263/GsTMDdivG4LFG_
+	      wa.c STATUS).  The reduced reg stays unread, so its
+	      init/increment insns die downstream; biv elimination is
+	      untouched.  */
+	      if (! (GET_CODE (PATTERN (v->insn)) == SET
+	    		     && GET_CODE (SET_SRC (PATTERN (v->insn))) == MINUS
+	    		     && INTEGRAL_MODE_P (GET_MODE (SET_SRC (PATTERN (v->insn))))
+	    		     && rtx_equal_p (XEXP (SET_SRC (PATTERN (v->insn)), 0),
+	    				     XEXP (SET_SRC (PATTERN (v->insn)), 1))))
+			reg_map[REGNO (v->dest_reg)] = v->new_reg;""",
+"MODIFIED-CC1 (GUARD 4")
 
 print("[patch_cc1] all guards present")
 EOF

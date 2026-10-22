@@ -687,6 +687,48 @@
  *    (the 2328 copy was eaten by the rollback).
  */
 
+/*
+ * STATUS (window cron-20261022-0428): MILESTONE 4 - GUARD 4 IS IN AND ALL
+ * GATES PASS.  The 38th rollback opened the window (clone at 7623cd2, worklog
+ * reverted, the 03:33 links' CHDs eaten and re-downloaded + sha256-gated, the
+ * tools-local cc1 tree eaten and rebuilt via the banked one-command setup,
+ * guards 1-3 re-applied idempotently).  THE 0158 READING IS REFUTED BY THE
+ * FRESH PASS DUMPS: the pre-cse RTL ALREADY splits the shape across two
+ * insns - insn 257 (minus (reg/v 90) (reg 155)) is (otz - otp[2]), and the
+ * ACTUAL self-kill is insn 259 (minus (reg/v 89) (reg/v 89)) = (tcol - tcol),
+ * which SURVIVES the first cse pass (as (minus 132 132), guards 1-3 holding
+ * every fold door).  The real eater is LOOP.C: "giv at 259 reduced to
+ * (reg:SI 171)" - loop.c strength-reduces the minus's own dest into a new
+ * giv register, reg_map rewrites the CONSUMER (insn 261: 156 -> 171), the
+ * original minus is orphaned, and the second cse's dead-deletion cascade
+ * eats it.  GUARD 4 (loop.c, pair-narrowed): a replaceable giv whose insn
+ * is a same-operand integral MINUS keeps its dest->new_reg map UNSET - the
+ * consumer stays on the original giv reg, the minus stays live into cse2,
+ * the reduced reg goes unread so its init/increment insns die downstream,
+ * and biv elimination (all_reduced) is untouched.  THE MEASUREMENT (the
+ * wa variant through the GUARD-4 cc1 vs the decompals stock, both -da):
+ * (1) SURVIVAL - .cse2 insn 259 = (minus:SI (reg:SI 132) (reg:SI 132)) as a
+ *     live {subsi3_internal}; (2) TALLY - the color giv reg 132 used 6 -> 10
+ *     across 39 -> 46 insns and now crosses 4 calls (+3 - the subtract's
+ *     reads extend the life; the exact +4-ref accounting vs the designed
+ *     +1-copy-read class is the one open footnote); (3) COMBINE CANCELS -
+ *     the final renders carry the SAME 162 instruction words (the diff is
+ *     register RENUMBERING ONLY: 18/17 -> 19/18 in the v*o block, the
+ *     reduced giv 168 -> 170, block-3 shifts - NO surviving copy/sub pair),
+ *     the World A allocation-shift mechanism armed.  REGRESSIONS: the
+ *     UNMODIFIED G probe through the GUARD-4 cc1 renders byte-identical to
+ *     the decompals binary (0 diff lines); the two smoke units via
+ *     tools/cc1_smoke_run.sh - smoke1 (register-consumer) render PASS with
+ *     no .flow delta exactly as the 0043 record predicted, smoke2
+ *     (store-consumer) render PASS with the m3 tally class preserved.  The
+ *     smoke harness's tally gate had a filename bug ($stem.c.flow vs cc.sh's
+ *     $stem.i.flow) - fixed in the same commit.  NEXT (the World A gate):
+ *     the 1713 allocno-order instrument on this guarded render - the
+ *     .greg/.lreg order vs World A's retail order (167 131 80 81 82 83 78
+ *     72 73 84 79 71 138 77 75 85 76), then g_struct_diff vs the committed
+ *     render (the 164/176+PAIR known-class tail).
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);

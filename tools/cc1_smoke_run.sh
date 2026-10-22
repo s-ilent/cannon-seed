@@ -38,12 +38,13 @@ for stem in $STEMS; do
     fi
 
     # the .flow register-usage table: "Register NNN used X times across Y insns"
-    if [ -f "$WORK/stock/$stem.c.flow" ] && [ -f "$WORK/patched/$stem.c.flow" ]; then
-        if diff -q "$WORK/stock/$stem.c.flow" "$WORK/patched/$stem.c.flow" >/dev/null; then
+    # (cc.sh names the -da dumps after the preprocessed .i, not the .c)
+    if [ -f "$WORK/stock/$stem.i.flow" ] && [ -f "$WORK/patched/$stem.i.flow" ]; then
+        if diff -q "$WORK/stock/$stem.i.flow" "$WORK/patched/$stem.i.flow" >/dev/null; then
             echo "  TALLY GATE:   no .flow delta (the +1 read did NOT survive cse2)"
         else
             echo "  TALLY GATE:   .flow delta (reads survived cse2):"
-            diff "$WORK/stock/$stem.c.flow" "$WORK/patched/$stem.c.flow" \
+            diff "$WORK/stock/$stem.i.flow" "$WORK/patched/$stem.i.flow" \
                 | grep -E '^[<>].*Register' | head -12
         fi
     else
