@@ -664,7 +664,7 @@ segments:
       - [0x4DDD4, asm, func_80078DE4]   # 0xa0 sdk
       - [0x4DE74, asm, func_80078E84]   # 0x64 sdk
       - [0x4DED8, data, data_80078EE8]   # 0x1e0
-      - [0x4E0B8, asm, func_800791F8]   # 0x94 sdk
+      - [0x4E0B8, c, SsSetSerialAttr]   # 0x94 sdk
       - [0x4E14C, asm, func_8007928C]   # 0x10 sdk
       - [0x4E15C, asm, func_8007929C]   # 0x10 sdk
       - [0x4E16C, asm, func_800792AC]   # 0x10 sdk

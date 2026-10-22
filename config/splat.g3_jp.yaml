@@ -578,7 +578,7 @@ segments:
       - [0x50938, asm, func_8007C068]   # 0xa0 sdk
       - [0x509D8, asm, func_8007C108]   # 0x64 sdk
       - [0x50A3C, asm, func_8007C16C]   # 0x1e0 sdk
-      - [0x50C1C, asm, func_8007C34C]   # 0x94 sdk
+      - [0x50C1C, c, SsSetSerialAttr]   # 0x94 sdk
       - [0x50CB0, asm, func_8007C3E0]   # 0x10 sdk
       - [0x50CC0, asm, func_8007C3F0]   # 0x10 sdk
       - [0x50CD0, asm, func_8007C400]   # 0x10 sdk
