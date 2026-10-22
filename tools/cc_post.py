@@ -213,6 +213,7 @@ def apply_rules(insns: list[str]) -> list[str]:
         res = _rule1_epilogue_swap(res)
     if SDK_ASPSX:
         res = _rule8_sdk_hazard_nop(res)
+        res = _rule9_param_copy_order(res)
     res = _rule2_extend_pair(res)
     res = _rule3_return_move(res)
     res = _rule4_prologue_save(res)
@@ -237,6 +238,38 @@ def _rule8_sdk_hazard_nop(res: list[str]) -> list[str]:
                 res[i + 1 : i + 1] = ["nop"]
                 i += 2
                 continue
+        i += 1
+    return res
+
+
+PARAM_COPY_A = re.compile(r"^addu\t\$(\w+),\$5,\$zero$")
+PARAM_COPY_B = re.compile(r"^addu\t\$(\w+),\$4,\$zero$")
+ANDI_0XFF = re.compile(r"^andi\t\$2,\$(\w+),0x00ff$")
+
+
+def _rule9_param_copy_order(res: list[str]) -> list[str]:
+    # Rule 9 (--sdk-aspsx; found 2026-10-22, slps_00270 SsSetSerialVol,
+    # the LIBSND SSSETSV member). GCC's first scheduler hoists the
+    # a1-copy above the a0-copy so the a0-copy (the andi's input) sits
+    # adjacent to the andi; retail keeps the a0-copy first:
+    #     addu $A,$5,$zero        addu $B,$4,$zero
+    #     addu $B,$4,$zero   ->   addu $A,$5,$zero
+    #     andi $2,$B,0x00ff       andi $2,$B,0x00ff
+    # Fires only on that exact three-instruction window; both copies
+    # are pure register moves from distinct incoming-arg registers and
+    # the andi still reads $B after the swap, so the reorder is
+    # semantically a no-op.
+    i = 0
+    while i < len(res) - 2:
+        mA = PARAM_COPY_A.match(res[i])
+        if mA:
+            mB = PARAM_COPY_B.match(res[i + 1])
+            if mB and mB.group(1) != mA.group(1):
+                mI = ANDI_0XFF.match(res[i + 2])
+                if mI and mI.group(1) == mB.group(1):
+                    res[i], res[i + 1] = res[i + 1], res[i]
+                    i += 3
+                    continue
         i += 1
     return res
 
