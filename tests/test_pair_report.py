@@ -19,6 +19,10 @@ ELFs - fixtures are synthetic bytes and temp-dir yamls):
    label the build ELF links outside its own row span proves the ELF
    predates the committed yaml - the 0658 audit's 57 stale-ELF-VA
    relocations).
+4. The pinned-class decisions (cron-20261022-1043): is_veneer's 3-word
+   BIOS-dispatch shape (A0/B0/C0 vector, jr $t2, ordinal, banked pad) and
+   fn_class precedence (veneer > fragment > sdk by name or span >
+   compiler) - the classification that orders every pick list.
 
 Run:  python3 -m unittest tests/test_pair_report.py -v
 """
@@ -353,6 +357,97 @@ class TestInputGates(Fixture):
         ok, problems = pr.input_gates("t", funcs)
         self.assertTrue(ok)
         self.assertEqual(problems, [])
+
+
+# --- is_veneer + fn_class: the pinned-class decisions ------------------------
+
+A0_VEC = [0x240A00A0,        # addiu $t2, $zero, 0xA0  (the A0 vector)
+          0x01400008,        # jr $t2
+          0x24090005,        # addiu $t1, $zero, 5      (the stub ordinal)
+          0x00000000]        # the banked pad word
+
+
+class TestIsVeneer(Fixture):
+    """The 3-word dispatch stub over the 0xA0/0xB0/0xC0 BIOS tables; the
+    row may pad one zero word past the stub (the banked pad law)."""
+
+    def test_a0_stub_with_pad_is_veneer(self):
+        self.put_bytes(A0_VEC)
+        self.assertTrue(pr.is_veneer("t", VA, 0x10))
+
+    def test_b0_and_c0_vectors_are_veneers(self):
+        self.put_bytes([0x240A00B0, 0x01400008, 0x2409000C])
+        self.assertTrue(pr.is_veneer("t", VA, 0xC))    # no pad word yet
+        self.put_bytes([0x240A00C0, 0x01400008, 0x24090038])
+        self.assertTrue(pr.is_veneer("t", VA, 0xC))
+
+    def test_unknown_vector_is_not_veneer(self):
+        self.put_bytes([0x240A0090, 0x01400008, 0x24090005, 0])
+        self.assertFalse(pr.is_veneer("t", VA, 0x10))
+
+    def test_nonzero_pad_word_is_not_veneer(self):
+        self.put_bytes([0x240A00A0, 0x01400008, 0x24090005, 0x0000000D])
+        self.assertFalse(pr.is_veneer("t", VA, 0x10))
+
+    def test_wrong_jr_target_is_not_veneer(self):
+        # jr $t1 would jump to the ordinal, not the vector
+        self.put_bytes([0x240A00A0, 0x01200008, 0x24090005, 0])
+        self.assertFalse(pr.is_veneer("t", VA, 0x10))
+
+    def test_other_sizes_are_not_veneer(self):
+        self.put_bytes(A0_VEC)
+        self.assertFalse(pr.is_veneer("t", VA, 0x14))
+        self.assertFalse(pr.is_veneer("t", VA, 0x8))
+
+
+class TestFnClass(Fixture):
+    """fn_class precedence: veneer > fragment > sdk (name, then span) >
+    compiler - the classification that orders every pick list."""
+
+    def setUp(self):
+        super().setUp()
+        self._save_sdk = (pr._ANCHORS, pr._LIBNAMES)
+        self.addCleanup(self._restore_sdk)
+        pr._ANCHORS = None
+        pr._LIBNAMES = None
+        with open(os.path.join(self._tmp.name, "config",
+                               "sdk_anchors.txt"), "w") as f:
+            f.write("// target: t\n")
+            f.write("0x80030000 0x40 LibFn a b c\n")
+        with open(os.path.join(self._tmp.name, "config",
+                               "sdk_members.txt"), "w") as f:
+            f.write("")                      # no member rows in this fixture
+
+    def _restore_sdk(self):
+        pr._ANCHORS, pr._LIBNAMES = self._save_sdk
+
+    def test_veneer_beats_everything(self):
+        self.put_bytes(A0_VEC)               # a veneer-shaped stub...
+        self.assertEqual(pr.fn_class("t", 0x80030000, 0x10, "LibFn"),
+                         "veneer")           # ...even inside an sdk span
+
+    def test_fragment_beats_sdk(self):
+        self.put_bytes([NOP] * 4)            # 0x10, no return -> fragment
+        self.assertEqual(pr.fn_class("t", 0x80030010, 0x10, "LibFn"),
+                         "fragment")
+
+    def test_sdk_by_name(self):
+        self.put_bytes([NOP, NOP, NOP, 0x03E00008])   # not a fragment
+        self.assertEqual(pr.fn_class("t", 0x80020000, 0x10, "LibFn"), "sdk")
+
+    def test_sdk_by_span(self):
+        self.put_bytes([NOP, NOP, NOP, 0x03E00008])
+        self.assertEqual(pr.fn_class("t", 0x80030020, 0x10, "random"), "sdk")
+        # last full-size slot inside the span (0x80030030+0x10 == span hi)
+        self.assertEqual(pr.fn_class("t", 0x80030030, 0x10, "random"), "sdk")
+
+    def test_compiler_when_nothing_pinned(self):
+        self.put_bytes([NOP, NOP, NOP, 0x03E00008])
+        self.assertEqual(pr.fn_class("t", 0x80020000, 0x10, "random"),
+                         "compiler")
+        # span hi is exclusive: 0x80030040 is outside the anchor
+        self.assertEqual(pr.fn_class("t", 0x80030040, 0x10, "random"),
+                         "compiler")
 
 
 if __name__ == "__main__":
