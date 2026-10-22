@@ -29,6 +29,13 @@ runs input_gates() first and refuses unwitnessed inputs -
 Usage: pair_report.py [--clusters N] [pair ...]
 Default pairs: the four same-program region pairs.
 Exit: 0 report produced; 2 every requested pair refused (gates).
+
+PICK DELTA (cron-20261022-1158): the density print carries a one-line
+instrument delta per pair - matched_delta_line, the 0658 audit's
+classes (span-coverage gains, cross-exe artifact dissolves) recomputed
+against the retired pre-0658 test, so a re-derived pick list's drift
+from the banked lists is attributable at a glance instead of looking
+like matching progress or a regression.
 """
 import hashlib
 import os
@@ -199,6 +206,23 @@ def is_matched(target, name, va=None):
     return any(lbl == name for _, _, lbl in rows)
 
 
+def sym_funcs(target):
+    """[(name, va)] for the target's curated function symbols.
+
+    The shared symbol universe every report iterates (moved here from
+    inventory_report so the delta helpers below run on the SAME
+    universe the pick lists derive from). Config only - no ELF, no
+    baseline - so it is legal on an unwitnessed tree.
+    """
+    out = []
+    path = os.path.join(REPO, f"config/symbols.{target}.txt")
+    for line in open(path):
+        m = re.match(r"(\w+) = 0x([0-9A-Fa-f]+); // type:func", line)
+        if m:
+            out.append((m.group(1), int(m.group(2), 16)))
+    return out
+
+
 def stale_symbols(target, funcs=None):
     """[(label, va, spans)] - c-row labels the build ELF links outside
     their own yaml row span: the stale-build signature.
@@ -246,6 +270,87 @@ def input_gates(target, funcs=None):
             "linked outside their own row span (first: %s at %08X)"
             % (target, len(bad), bad[0][0], bad[0][1]))
     return (not problems), problems
+
+
+_RET_C_ROWS = {}
+
+
+def retired_matched(target, name, va=None):
+    """The RETIRED pre-0658 matched test, kept verbatim for the delta.
+
+    This is the exact predicate the banked pick lists were generated
+    with (through cron-20261022-0313b; retired by the 0658 window's
+    474ebd3b): src/<name>.c existence - UNSCOPED, src/ is shared across
+    all eight exes - OR the VA sits exactly ON a yaml c row's low
+    address (the old line-regex c_row_vas set, NOT span coverage).
+
+    Its known gaps are the delta's two classes: a merged-parent member
+    sits MID-span with no src file of its own (under-counted - the 0658
+    audit's 85 False->True span-coverage gains), and a cross-exe name
+    collision has a src file while the target's yaml covers the VA with
+    asm (over-counted - the audit's 15 True->False artifact fixes).
+    Uses its own cache; never touches _C_ROWS (the live test's map).
+    """
+    if os.path.exists(os.path.join(REPO, "src", f"{name}.c")):
+        return True
+    if va is None:
+        return False
+    if target not in _RET_C_ROWS:
+        vas = set()
+        path = os.path.join(REPO, f"config/splat.{target}.yaml")
+        with open(path) as f:
+            for line in f:
+                m = re.search(r"\[0x([0-9A-Fa-f]+),\s*c,", line)
+                if m:
+                    vas.add(int(m.group(1), 16) + BASE_VA - HDR)
+        _RET_C_ROWS[target] = vas
+    return va in _RET_C_ROWS[target]
+
+
+def matched_delta(target):
+    """(gains, dissolves) - the matched-test instrument delta, per target.
+
+    Over the target's own symbols-file universe (sym_funcs; the same
+    universe the pick lists derive from):
+    * gains     - matched NOW, unmatched by the retired test: the
+      span-coverage gains (merged-parent members, the ApplyMatrixSV
+      data-row-host pattern). They LEFT the pick lists when the
+      instrument changed - not matching progress.
+    * dissolves - the retired test matched them, the yaml-span test
+      does not. Two flavors, both honest corrections:
+      (a) cross-exe name collisions - src/<name>.c is another exe's
+      unit (func_80037CAC is mainmenu_eu's; the 0313b artifact);
+      (b) cross-target landings - the unit renders as C in a SIBLING
+      target's wave only, this target's yaml still renders it as asm
+      (g3_eu's NormalColor sits in the asm gap between RotTrans and
+      NormalColor3 while src/NormalColor.c exists). Flavor (b) units
+      are REAL unmatched work the old lists hid - the dissolves RE-ADD
+      them to the pick lists.
+    Reads yaml + src/ + the symbols file ONLY: no baseline, no build
+    ELF - so unlike the gated report paths this delta is legal on an
+    unwitnessed tree (inventory_report --delta runs it there, and the
+    gated runs print the same numbers inline).
+    """
+    gains, dissolves = [], []
+    for name, va in sym_funcs(target):
+        new = is_matched(target, name, va)
+        old = retired_matched(target, name, va)
+        if new and not old:
+            gains.append((name, va))
+        elif old and not new:
+            dissolves.append((name, va))
+    return gains, dissolves
+
+
+def matched_delta_line(a, b):
+    """One-line delta summary for a report/pair header (the 0928 bank:
+    'the pick list re-derives with the 85 span gains and the dissolves
+    visible at a glance')."""
+    ga, da = matched_delta(a)
+    gb, db = matched_delta(b)
+    return ("pick delta vs the retired test: %s +%d/-%d, %s +%d/-%d "
+            "(span gains / dissolves; instrument, not progress)"
+            % (a, len(ga), len(da), b, len(gb), len(db)))
 
 
 _ANCHORS = None
@@ -496,6 +601,7 @@ def main():
         print(f"\n-- {label}: {len(exact)} exact unmatched, "
               f"{len(clusters)} clusters; {nc} compiler / {nlib} library "
               f"subject; density order --")
+        print(f"   {matched_delta_line(jp, label.split('-')[1])}")
         shown_lib = 0
         for c in clusters:
             ncomp = sum(1 for r in c if r[8] == "compiler")

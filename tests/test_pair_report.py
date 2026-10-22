@@ -23,6 +23,12 @@ ELFs - fixtures are synthetic bytes and temp-dir yamls):
    BIOS-dispatch shape (A0/B0/C0 vector, jr $t2, ordinal, banked pad) and
    fn_class precedence (veneer > fragment > sdk by name or span >
    compiler) - the classification that orders every pick list.
+5. The pick delta (cron-20261022-1158): retired_matched (the pre-0658
+   predicate kept verbatim) and matched_delta's classification - the
+   span-coverage gains (mid-span, fileless merged-parent members) and
+   the dissolves (file without span: cross-exe collisions AND
+   cross-target landings), over the symbols-file universe the pick
+   lists iterate.
 
 Run:  python3 -m unittest tests/test_pair_report.py -v
 """
@@ -448,6 +454,146 @@ class TestFnClass(Fixture):
         # span hi is exclusive: 0x80030040 is outside the anchor
         self.assertEqual(pr.fn_class("t", 0x80030040, 0x10, "random"),
                          "compiler")
+
+
+# --- the pick delta (cron-20261022-1158) --------------------------------------
+
+# a yaml whose first code-segment c row starts at file offset 0x900
+# (VA 0x80020100) and runs to the asm row at 0x948 (VA 0x80020148);
+# the trailing data segment carries a `c` row line the OLD line regex
+# wrongly entered the matched set (segments ignored)
+DELTA_YAML = """\
+segments:
+  - type: code
+    vram: 0x80020000
+    start: 0x800
+    subsegments:
+      - [0x800, data, data_80020000]
+      - [0x900, c, func_80020100]      # c span 0x80020100..0x80020148
+      - [0x948, asm, func_80020148]    # the asm gap
+      - [0x960, data, tail]
+  - type: data
+    start: 0x1000
+    subsegments:
+      - [0x1000, c, not_code_segment]
+"""
+
+
+class TestRetiredMatched(Fixture):
+    """The retired pre-0658 predicate, kept for the delta measurement -
+    its exact shape (file-existence OR the row's lo VA, segments and
+    spans both ignored) is what the banked pick lists were made with."""
+
+    def setUp(self):
+        super().setUp()
+        saved = pr._RET_C_ROWS
+        pr._RET_C_ROWS = {}
+        self.addCleanup(setattr, pr, "_RET_C_ROWS", saved)
+        self.put_yaml("t", DELTA_YAML)
+
+    def test_file_exists_matches_any_va(self):
+        """The unscoped defect itself: the file matches regardless of
+        the target's yaml layout."""
+        self.put_src("func_elsewhere")
+        self.assertTrue(pr.retired_matched("t", "func_elsewhere",
+                                           0x80020148))
+
+    def test_row_lo_va_matches(self):
+        self.assertTrue(pr.retired_matched("t", "func_80020100",
+                                           0x80020100))
+
+    def test_mid_span_va_does_not_match(self):
+        """The gap that creates the gains: only the row's LO address
+        entered the old set, so a merged-parent member mid-span was
+        invisible to the old test."""
+        self.assertFalse(pr.retired_matched("t", "member", 0x80020120))
+
+    def test_asm_va_without_file_is_false(self):
+        self.assertFalse(pr.retired_matched("t", "func_80020148",
+                                            0x80020148))
+
+    def test_data_segment_c_line_pollutes_the_old_set(self):
+        """Faithful-behavior documentation: the old line regex ignored
+        segment types, so a `c` row inside a data segment entered the
+        set too (0x1000 -> VA 0x80020800) - one of the imprecisions the
+        0658 rewrite retired."""
+        self.assertTrue(pr.retired_matched("t", "not_code_segment",
+                                           0x80020800))
+
+    def test_does_not_pollute_the_live_cache(self):
+        pr._C_ROWS = {"t": [(0x80020100, 0x80020148, "func_80020100")]}
+        pr.retired_matched("t", "func_80020100", 0x80020100)
+        self.assertEqual(pr._C_ROWS["t"],
+                         [(0x80020100, 0x80020148, "func_80020100")])
+        self.assertIn("t", pr._RET_C_ROWS)
+
+
+class TestMatchedDelta(Fixture):
+    """matched_delta's classification over the symbols-file universe."""
+
+    def setUp(self):
+        super().setUp()
+        saved = pr._RET_C_ROWS
+        pr._RET_C_ROWS = {}
+        self.addCleanup(setattr, pr, "_RET_C_ROWS", saved)
+        self.put_yaml("t", DELTA_YAML)
+
+    def put_symbols(self, target, entries):
+        with open(os.path.join(self._tmp.name, "config",
+                               f"symbols.{target}.txt"), "w") as f:
+            for name, va in entries:
+                f.write(f"{name} = 0x{va:08X}; // type:func\n")
+
+    def test_gain_is_mid_span_and_fileless(self):
+        """A merged-parent member: no src file of its own, VA strictly
+        inside a c row - the old test missed it, the new one covers it
+        (the ApplyMatrixSV data-row-host pattern; the audit's 85)."""
+        self.put_symbols("t", [("func_80020100", 0x80020100),
+                               ("member_mid", 0x80020120)])
+        gains, dissolves = pr.matched_delta("t")
+        self.assertEqual(gains, [("member_mid", 0x80020120)])
+        self.assertEqual(dissolves, [])
+
+    def test_dissolve_is_file_without_span(self):
+        """src file exists, no c row covers the VA: both dissolve
+        flavors share the mechanics - the cross-exe collision (the
+        file is another exe's unit) and the cross-target landing (the
+        unit renders as C only in a sibling target; here the yaml row
+        is still asm). Both are honest re-scopes of the lists."""
+        self.put_symbols("t", [("func_80020148", 0x80020148)])
+        self.put_src("func_80020148")
+        gains, dissolves = pr.matched_delta("t")
+        self.assertEqual(gains, [])
+        self.assertEqual(dissolves, [("func_80020148", 0x80020148)])
+
+    def test_both_or_neither_stay_out(self):
+        """Matched either way and unmatched either way are the workhorse
+        populations; only the disagreement classes enter the delta."""
+        self.put_symbols("t", [("both", 0x80020100),
+                               ("neither", 0x80020148)])
+        self.put_src("both")
+        gains, dissolves = pr.matched_delta("t")
+        self.assertEqual((gains, dissolves), ([], []))
+
+    def test_universe_is_the_symbols_file(self):
+        """Names absent from the symbols file never enter the delta -
+        the universe is exactly what the pick lists iterate."""
+        self.put_symbols("t", [])
+        self.put_src("ghost")
+        gains, dissolves = pr.matched_delta("t")
+        self.assertEqual((gains, dissolves), ([], []))
+
+    def test_delta_line_counts_both_targets(self):
+        self.put_yaml("a", DELTA_YAML)
+        self.put_yaml("b", DELTA_YAML)
+        self.put_symbols("a", [("member_mid", 0x80020120),
+                               ("both", 0x80020100)])
+        self.put_symbols("b", [("ghost", 0x80020148)])
+        self.put_src("ghost")
+        line = pr.matched_delta_line("a", "b")
+        self.assertIn("a +1/-0", line)
+        self.assertIn("b +0/-1", line)
+        self.assertIn("instrument, not progress", line)
 
 
 if __name__ == "__main__":

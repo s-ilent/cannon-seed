@@ -230,6 +230,8 @@ The per-window landing rate, not the total, decides when this project finishes. 
 * `veneer` - the 3-word `addiu $t2,vec; jr $t2; addiu $t1,idx` dispatch, vectors 0xA0/0xB0/0xC0 (a row may pad one zero word). Pinned. Never a pick.
 * `fragment` - a symbol that starts mid-function (split-detection artifact). Not a matching unit; it belongs to a segmentation audit, not the queue.
 
+**Read the pick delta before crediting progress.** Every density/inventory run prints the instrument delta vs the retired pre-0658 matched test (`pair_report.matched_delta`): `+gains` are span-coverage members the old file/lo-VA test under-counted (they leave the lists without any landing), `-dissolves` are names it over-counted (cross-exe collisions, and units landed in a sibling target only — those re-enter the lists as real work). Attribute only the residual drift to matching effort. The ungated `inventory_report.py --delta` re-derives the numbers on an unwitnessed tree — it reads no baseline and no ELF, so the gates do not apply to it by construction.
+
 **Bucket order is not class order.** Similarity does not imply provenance: at 2026-10-20 the `95-99.99%` cross-region pool is 55 of 64 SDK members (`Gs*`/`Ss*` library variants), while the `80-94.99%` pool is roughly half compiler output. Read the class first, then the bucket.
 
 **Land a batch per commit, not a window per function.** N rows of the same shape cost one decode, one `make verify` sweep and one record - the marginal row is near-free. A window that lands fewer than about ten rows should say why (new shape, probe, recovery). Consume one first-in-class probe per window at most: if a new shape needs more than one probe without a match, park it and return to the dense queue.
