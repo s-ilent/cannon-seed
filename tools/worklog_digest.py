@@ -18,9 +18,17 @@ Usage:
     worklog_path defaults to /home/z/my-project/worklog.md (missing file = nothing covered)
     --all lists every window regardless of worklog coverage.
 Coverage levels: a full "Task ID: cron-..." section, or a digest bullet
-"- cron-... (hash): ..." from a prior RESTORE NOTE - only windows with
-neither trace are listed as missing. Exit status: 0 when nothing is
-missing, 1 when the digest lists missing windows.
+"- cron-... (hash): ..." / "cron-... :: ..." from a prior RESTORE NOTE - only
+windows with neither trace are listed as missing. Exit status: 0 when nothing
+is missing, 1 when the digest lists missing windows.
+
+cron-20261022-0313 merge: IDs normalize (all non-alphanumerics stripped, lowercased)
+before every comparison, so the banked dashless spellings (cron-202610200118, the
+format anomaly the 4eb782ed-era notes recorded), the same-session letter suffixes
+(cron-202610211743b) and RESTORE NOTE Task IDs (cron-...-restore, never coverage)
+all reconcile; the three banked records that lost their "## " prefix to a markdown
+glitch parse again via the date-anchored liberal pattern. Same-session duplicate
+headers still merge into the first.
 """
 import re
 import subprocess
@@ -31,7 +39,18 @@ REPO = Path(__file__).resolve().parent.parent
 TASKS = REPO / "docs" / "TASKS.md"
 DEFAULT_WORKLOG = Path("/home/z/my-project/worklog.md")
 HDR_RE = re.compile(
-    r"^## (\d{4}-\d{2}-\d{2})[^\n(]*\(window (cron-\d{8}-\d{4})(?:, same session)?\)(.*)$")
+    r"^(?:## )?(\d{4}-\d{2}-\d{2})[^\n(]*\(window (cron-[^\s,):]+?)"
+    r"(?:, same session)?\)(.*)$")
+SECT_RE = re.compile(r"^Task ID:\s*(cron-[^\s,]+)", re.M)
+BULLET_RE = re.compile(
+    r"^- (cron-[^\s:]+) \((?:[0-9a-f]{8}(?:, [0-9a-f]{8})*(?:, \.\.\.)?|\?\?)\): ",
+    re.M)
+INDEX_RE = re.compile(r"^\s+(cron-[^\s:]+)\s*::", re.M)
+
+
+def norm(ident):
+    """cron-YYYYMMDD-HHMM / cron-YYYYMMDDHHMM / ...b all fold to one key."""
+    return re.sub(r"[^0-9a-z]", "", ident.lower())
 
 
 def git_log():
@@ -58,9 +77,10 @@ def header_windows():
         if not m:
             continue
         wid = m.group(2)
-        if wid in seen:
+        key = norm(wid)
+        if key in seen:
             continue  # "same session" duplicate headers merge into the first
-        seen.add(wid)
+        seen.add(key)
         # The header summary wraps across consecutive "## "-prefixed lines; join.
         text = re.sub(r"^[\s:—-]+", "", m.group(3)).strip()
         j = i + 1
@@ -80,11 +100,11 @@ def header_windows():
 
 
 def anchor_map(entries):
-    """window_id -> list of commit hashes whose subject names the window."""
+    """norm(window_id) -> list of commit hashes whose subject names the window."""
     anchors = {}
     for h, _date, subj in entries:
-        for m in re.finditer(r"window (cron-\d{8}-\d{4})", subj):
-            anchors.setdefault(m.group(1), []).append(h)
+        for m in re.finditer(r"window (cron-[^\s,):]+)", subj):
+            anchors.setdefault(norm(m.group(1)), []).append(h)
     return anchors
 
 
@@ -106,22 +126,25 @@ def main():
     digest = set()
     if worklog.exists():
         text = worklog.read_text(errors="replace")
-        sections = set(re.findall(r"^Task ID: (cron-\d{8}-\d{4})", text, re.M))
+        sections = {norm(m.group(1)) for m in SECT_RE.finditer(text)
+                    if not norm(m.group(1)).endswith("restore")}
         # RESTORE NOTE digest bullets: "- cron-YYYYMMDD-HHMM (hash[, hash]): ..."
-        digest = set(re.findall(r"^- (cron-\d{8}-\d{4}) \((?:[0-9a-f]{8}(?:, [0-9a-f]{8})*(?:, \.\.\.)?|\?\?)\): ", text, re.M))
+        # and the cron-20261022-0313 note's index lines: "  cron-... :: title"
+        digest = {norm(m.group(1)) for m in BULLET_RE.finditer(text)}
+        digest |= {norm(m.group(1)) for m in INDEX_RE.finditer(text)}
 
     entries = git_log()
     subjects = anchor_map(entries)
     windows = header_windows()
 
     covered = sections | digest
-    missing = [(wid, t) for wid, t in windows if show_all or wid not in covered]
+    missing = [(wid, t) for wid, t in windows if show_all or norm(wid) not in covered]
     print(f"worklog_digest: {len(windows)} window(s) in docs/TASKS.md, "
-          f"{sum(1 for w, _ in windows if w in sections)} full section(s), "
-          f"{sum(1 for w, _ in windows if w in digest - sections)} digest-level, "
+          f"{sum(1 for w, _ in windows if norm(w) in sections)} full section(s), "
+          f"{sum(1 for w, _ in windows if norm(w) in digest - sections)} digest-level, "
           f"{len(missing)} missing  [{worklog}]")
     for wid, text in missing:
-        anchors = subjects.get(wid)
+        anchors = subjects.get(norm(wid))
         if anchors:
             short = ", ".join(anchors[:2]) + (", ..." if len(anchors) > 2 else "")
         else:
