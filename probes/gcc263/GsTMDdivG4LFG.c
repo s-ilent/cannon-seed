@@ -660,6 +660,66 @@
  *    probe-work/cc1-smoke (the smoke units + dumps).  The stock
  *    tarball re-downloaded to tools-local at the 2213-pinned sha256
  *    (the 2328 copy was eaten by the rollback).
+ *
+ * STATUS (window cron-20261022-0158): MILESTONE 3 - THE ASSOCIATE PATH
+ * IS GUARDED AND THE MECHANISM IS PROVEN AT SMOKE LEVEL.  Thirty-sixth
+ * rollback class on entry (clone back at 7623cd2, worklog lost all 63
+ * windows - RESTORE NOTE cron-20261022-0158-restore appended; witness
+ * 0/8 woven set on the surviving baselines, disc links expired - the
+ * oracle stays blocked, this window is offline again and needed to be).
+ *
+ * 1. THE WHOLE CC1 SETUP IS NOW ONE COMMAND, IN-REPO: the rollback ate
+ *    every repo-external piece (source tree, recipe clone, smoke
+ *    units), so the recipe is banked as tools/build_cc1_263.sh (fetch
+ *    the pinned tarball + clone decompals/old-gcc + the decompals
+ *    patch set + the strerror adaptation + build, idempotent) and
+ *    tools/patch_cc1_263.sh (the three guards + rebuild, idempotent,
+ *    each guard anchored by a uniqueness-checked source text).  The
+ *    smoke units live in-repo as probes/gcc263/cc1_smoke{1,2}.c with
+ *    tools/cc1_smoke_run.sh driving stock-vs-patched and checking the
+ *    two gates.  Re-setup cost this window: tarball fetch + build
+ *    ~5 min, equivalence gate ZERO diff lines (self-built cc1 renders
+ *    the committed G probe byte-identical to the decompals binary,
+ *    reproducing 0043 first shot).
+ * 2. GUARD 3 IS IN AND PROVEN: fold_rtx entry short-circuit for a
+ *    same-operand integral MINUS (cse.c, MODIFIED-CC1 GUARD 3,
+ *    early-return x).  This is the 0043 milestone-3 ENTRY option: the
+ *    code map is fold_rtx (cse.c 4638) -> simplify_binary_operation
+ *    (3305; the guarded direct site at 3631 plus the X*C-X coefficient
+ *    distribution) -> simplify_plus_minus (4124; the negs[] associate
+ *    path, whose pair-merges recurse back into simplify_binary_
+ *    _operation) - every door sits behind a fold_rtx call, so one
+ *    entry guard closes them all where a second clause-level guard
+ *    would leave a third open.  Regression: the unmodified G probe
+ *    through the guarded cc1 renders byte-identical (0 diff lines).
+ * 3. THE SMOKE PASSES - THE WORLD A CLASS IS REAL: store-consumer
+ *    shape (cc1_smoke2: t=a; *gp=t-t; y0=y0+t), stock Register 71
+ *    (the a pseudo) used 2 -> patched 4 (+2 = the surviving subtract's
+ *    two reads; insns 5 -> 6), final renders byte-identical, and the
+ *    patched .cse2 carries the LIVE (minus:SI (reg 71) (reg 71)) as a
+ *    real subsi3.  The register-consumer shape (cc1_smoke1) stays at
+ *    zero delta as the 0043 record predicted (value forwarding eats
+ *    it; the guards do not and should not save that shape).  The +2
+ *    measured here is exactly the 6->8 color-tally class World A
+ *    needs; the 0043 signature's "+1" was loose.
+ * 4. THE G-PROBE INTEGRATION BLOCKER IS NAMED AND BANKED: the plain
+ *    in-loop pair folded into the live dv computation
+ *    (probes/gcc263/GsTMDdivG4LFG_wa.c, header documents the refuta-
+ *    tion) survives cse2 as (minus (reg/v 90) (reg 155)) - cse's reg
+ *    substitution retargets the two tcol reads to two DIFFERENT
+ *    pseudos (the canonical color giv and the copy's own pseudo), so
+ *    every .flow used-count is IDENTICAL to the control (no +2, the
+ *    reads land on no existing pseudo) and combine cannot fold a
+ *    non-self-kill.  The 2328 design's plain-pair working shape is
+ *    refuted at the G-probe level; the smoke worked because its
+ *    operand is a single static extern with one cse equivalence.
+ *    MILESTONE 4 (next window): GUARD 4 - suppress cse's reg
+ *    substitution INTO the same-operand MINUS insn (the 2328 design's
+ *    own path-(b) guard, narrowed to the pair shape, not function-
+ *    wide), rebuild, rerun the G-probe variant: expected survival
+ *    copy+minus with the color tally +1 (the copy's read) and combine
+ *    cancelling the pair via LOG_LINKS; then the World A gate (the
+ *    allocno order instrument from the 1713 record) decides.
  */
 
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
