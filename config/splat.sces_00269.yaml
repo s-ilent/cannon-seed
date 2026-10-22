@@ -365,7 +365,7 @@ segments:
       - [0x2578C, data, data_8004A76C]   # 0x8c
       - [0x25818, asm, func_8004A928]   # 0x308
       - [0x25B20, asm, func_8004AC30]   # 0x160 sdk
-      - [0x25C80, asm, func_8004AD90]   # 0x2c sdk
+      - [0x25C80, c, SsVabTransCompleted]   # 0x2c sdk
       - [0x25CAC, asm, func_8004ADBC]   # 0xa8 sdk
       - [0x25D54, asm, func_8004AE64]   # 0x274 sdk
       - [0x25FC8, data, data_8004B0D8]   # 0x104

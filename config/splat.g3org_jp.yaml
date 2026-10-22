@@ -642,7 +642,7 @@ segments:
       - [0x49610, asm, func_80073B70]   # 0x50 sdk
       - [0x49660, data, data_80073BC0]   # 0x394
       - [0x499F4, asm, func_80074084]   # 0x160 sdk
-      - [0x49B54, asm, func_800741E4]   # 0x2c sdk
+      - [0x49B54, c, SsVabTransCompleted]   # 0x2c sdk
       - [0x49B80, asm, func_80074210]   # 0xa8 sdk
       - [0x49C28, asm, func_800742B8]   # 0x274 sdk
       - [0x49E9C, data, data_8007452C]   # 0x4b0
