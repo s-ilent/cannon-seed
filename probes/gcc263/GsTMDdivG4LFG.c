@@ -597,6 +597,71 @@
  *    the known-class tail.
  */
 
+/*
+ * STATUS (window cron-20261022-0043): MILESTONE 2 - THE MODIFIED CC1
+ * EXISTS AND IS RENDER-EQUIVALENT.  Oracle-blocked again (the
+ * thirty-fifth rollback's class: clone 210 commits behind, worklog
+ * reverted with all 63 windows missing - RESTORE NOTE appended;
+ * witness 0/8 woven set; discs still missing, no fresh links yet -
+ * the request stands from 2328, not repeated).
+ *
+ * 1. THE BUILD RECIPE IS LOCATED AND PROVEN: decompals/old-gcc
+ *    (cloned repo-external to tools-local/old-gcc-src) carries
+ *    gcc-2.6.3-psx.Dockerfile + patches/ - the EXACT patch set:
+ *    varargs.h->stdarg.h sed, obstack-2.7.2.h.patch, sdbout-2.6.3.c.patch,
+ *    g++-2.6.3.c.patch, then psx-2.5.7.patch (the ASPSX backend,
+ *    creates config/mips/psx.h + xm-psx.h); configure --target=
+ *    mips-sony-psx --with-endian-little --with-gnu-as; make CFLAGS=
+ *    "-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -march=i686
+ *    -DHAVE_STRERROR".  Adaptations for this sandbox: no multilib
+ *    (no Scrt1.o/crti.o) -> the -m32 pair dropped, -fcommon added
+ *    (64-bit host); gcc.c hardcodes sys_errlist/sys_nerr (removed
+ *    from modern glibc, no strerror path in 1994 code) -> patched
+ *    to strerror(errno) with #include <string.h> + sys_nerr defined
+ *    away (the ONLY source change beyond the Dockerfile recipe).
+ *    BUILD: exit 0, ~5 min, cc1+cpp+xgcc static.
+ * 2. THE EQUIVALENCE GATE PASSES FIRST SHOT: the self-built
+ *    64-bit-host cc1 renders the committed G probe BYTE-IDENTICAL
+ *    to the decompals 32-bit binary (diff of the .gcc.s, modulo the
+ *    flags-echo comment line: ZERO lines).  Host word size does not
+ *    change the mips target output on this unit.  qemu bypass for
+ *    the 64-bit binary: QEMU=/usr/bin/env in cc.sh's env overrides.
+ * 3. THE GUARDS ARE IN AND PROVEN INERT: two one-line suppressions -
+ *    fold-const.c ~3750 (the "&x - &x" tree fold, X-X ->
+ *    integer_zero_node) and cse.c ~3630 (fold_rtx's rtx_equal_p
+ *    MINUS self-kill -> CONST0_RTX), each `if (0 && ...)` with a
+ *    MODIFIED-CC1 comment.  Rebuild clean.  REGRESSION: the
+ *    UNMODIFIED G probe through the patched cc1 renders
+ *    byte-identical to the decompals render (the probe has no X-X
+ *    shape; the guards are inert on it) - the collateral-risk
+ *    question from 2328 is answered for this unit.
+ * 4. THE MECHANISM SMOKE (probe-work/cc1-smoke/, two shapes, stock
+ *    vs patched on identical .i): smoke1 "t=a; x=t-t; y=y+t; return
+ *    y" and smoke2 "t=a; *gp=t-t; y=y+t" - FINAL RENDERS IDENTICAL
+ *    both shapes (good), but the .flow counts are IDENTICAL TOO
+ *    (the +1 read never materialized).  Dump inspection: the patched
+ *    cse2 stream has NO copy and NO subtract - two unguarded
+ *    mechanisms ate the chain: (a) cse's plain VALUE FORWARDING
+ *    rewrote y=y+t into y=y+a (count-neutral move, kills the copy),
+ *    and (b) the dead subtract then died in delete_dead_from_cse's
+ *    cascade (the 2213 vA law), taking the copy's read with it; the
+ *    store-consumer variant (stores are never sweep-dead) still lost
+ *    the subtract to (c) THE ASSOCIATE PATH: fold_rtx's PLUS/MINUS
+ *    op-list decomposition (the negs[] machinery, cse.c ~4130+)
+ *    cancels a-a independently of the ~3630 direct site - the guard
+ *    closed ONE of TWO doors.  MILESTONE 3 (next window): guard the
+ *    associate-path cancellation (or short-circuit fold_rtx for
+ *    same-operand MINUS at entry), then re-run the smoke - the
+ *    success signature is .flow a-count +1 on the patched side with
+ *    IDENTICAL final renders; then integrate the spelling into the
+ *    G probe's loop and measure the World A gate.
+ * 5. Banked repo-externally: tools-local/gcc-2.6.3-src/gcc-2.6.3
+ *    (patched tree + build), tools-local/old-gcc-src (the recipe),
+ *    probe-work/cc1-smoke (the smoke units + dumps).  The stock
+ *    tarball re-downloaded to tools-local at the 2213-pinned sha256
+ *    (the 2328 copy was eaten by the rollback).
+ */
+
 typedef struct { char b[8]; } GsTMDdivG4LFG_v8;
 
 extern long RotTransPers(long *a0, long *a1, long *a2, long *a3);
