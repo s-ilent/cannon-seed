@@ -552,7 +552,7 @@ segments:
       - [0x4BF34, data, data_80076A84]   # 0x240
       - [0x4C174, asm, func_80076DF4]   # 0x50 sdk
       - [0x4C1C4, asm, func_80076E44]   # 0x394 sdk
-      - [0x4C558, asm, func_800771D8]   # 0x160 sdk
+      - [0x4C558, c, SsSetSerialVol]   # 0x160 sdk
       - [0x4C6B8, asm, func_80077338]   # 0x2c sdk
       - [0x4C6E4, asm, func_80077364]   # 0xa8 sdk
       - [0x4C78C, data, data_8007740C]   # 0x274

@@ -600,7 +600,7 @@ segments:
       - [0x49F40, data, data_800745D0]   # 0x240
       - [0x4A180, asm, func_80074940]   # 0x50 sdk
       - [0x4A1D0, asm, func_80074990]   # 0x394 sdk
-      - [0x4A564, asm, func_80074D24]   # 0x160 sdk
+      - [0x4A564, c, SsSetSerialVol]   # 0x160 sdk
       - [0x4A6C4, c, SsVabTransCompleted]   # 0x2c sdk
       - [0x4A6F0, asm, func_80074EB0]   # 0xa8 sdk
       - [0x4A798, data, data_80074F58]   # 0x274
