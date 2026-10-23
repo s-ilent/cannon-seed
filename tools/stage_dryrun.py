@@ -73,6 +73,41 @@ RECIPES = {
     # The head-split class fields walk_label=None / orphan_line=None
     # remain legal (no walk block; the whole source file retires; woven
     # row names LIE - the label-vs-VA law).
+    #
+    # The ABSORB class ("class": "absorb") is the C-SPILL recipe: the
+    # matched C body is LONGER than its covering woven row, so the c row
+    # replaces a contiguous RUN of yaml rows whose extents sum exactly to
+    # the body. No cutting, no re-homing - the whole absorbed span retires
+    # (the census proves the bytes dw=0 eq N/N against the landed source;
+    # the build + verify arbitrate the landing itself). Checks re-derive
+    # the yaml geometry: per-row type/extent/abutment, tiling sum, flush
+    # end at the next row, the c name not yet landed, and the per-label
+    # reference inventory (absorbed labels must have no LIVE consumers -
+    # self-refs inside a retiree's own nonmatchings file are pinned, any
+    # external consumer changes the count and fails).
+    "rotnclip4-g3org_jp": {
+        "class": "absorb",
+        "target": "g3org_jp",
+        "yaml": "config/splat.g3org_jp.yaml",
+        "src": "src/RotAverageNclip4.c",
+        "c_name": "RotAverageNclip4",
+        "c_yaml": 0x33FC4,
+        "c_extent": 0xB0,
+        "absorb": [
+            ("data_8005B214", "data", 0x8),
+            ("func_8005B21C", "asm", 0xC),
+            ("data_8005B228", "data", 0x4),
+            ("func_8005B22C", "asm", 0x24),
+            ("data_8005B278", "data", 0x74),
+        ],
+        "refs": {
+            "data_8005B214": 0,
+            "func_8005B21C": 3,
+            "data_8005B228": 0,
+            "func_8005B22C": 3,
+            "data_8005B278": 0,
+        },
+    },
 }
 
 
@@ -370,6 +405,99 @@ def run_recipe(name: str, r: dict) -> int:
     return 0 if ck.fails == 0 else 1
 
 
+def run_absorb_recipe(name: str, r: dict) -> int:
+    """The C-SPILL absorb-next-row class: a matched C row replaces a
+    contiguous run of yaml rows whose extents sum exactly to the body.
+    No cutting, no re-homing - the whole absorbed span retires (the census
+    proves the bytes dw=0 eq N/N against the landed source; build + verify
+    arbitrate the landing). Every check re-derives the geometry from the
+    yaml itself so a drifted anchor surfaces as a concrete failure."""
+    print(f"recipe {name} (target {r['target']}) [absorb class]")
+    ck = Checker(name)
+    src = REPO / r["src"]
+
+    # 1. source present
+    if not ck.check("src-exists", src.is_file(), str(r["src"])):
+        return 1
+
+    # 2. parse the yaml once, index rows by offset (file order = offset order)
+    ytext = (REPO / r["yaml"]).read_text().splitlines()
+    rows = {}
+    order = []
+    for t in ytext:
+        m = YAML_ROW_RE.match(t)
+        if m:
+            off = int(m.group(1), 16)
+            rows[off] = (m.group(2), m.group(3), int(m.group(4), 16))
+            order.append(off)
+    by_label = {rows[off][1]: off for off in order}
+
+    # 3. each absorbed row: present, right type, right extent, abutting
+    edge = None
+    for lbl, typ, ext in r["absorb"]:
+        off = by_label.get(lbl)
+        if not ck.check(f"absorb {lbl} present", off is not None):
+            continue
+        ck.check(f"absorb {lbl} type", rows[off][0] == typ,
+                 f"{rows[off][0]} != {typ}")
+        ck.check(f"absorb {lbl} extent", rows[off][2] == ext,
+                 f"0x{rows[off][2]:X} != 0x{ext:X}")
+        if edge is not None:
+            ck.check(f"absorb {lbl} abuts", off == edge,
+                     f"0x{off:X} != 0x{edge:X}")
+        edge = off + rows[off][2]
+    if edge is None:
+        print(f"== {name}: 1 FAILURE(S) ==")
+        return 1
+
+    # 4. tiling: first absorbed offset == c yaml, extent sum == c extent
+    start = edge - sum(ext for _, _, ext in r["absorb"])
+    ck.check("c-start", start == r["c_yaml"],
+             f"0x{start:X} != 0x{r['c_yaml']:X}")
+    total = sum(ext for _, _, ext in r["absorb"])
+    ck.check("tiling-sum", total == r["c_extent"],
+             f"0x{total:X} != 0x{r['c_extent']:X}")
+
+    # 5. flush end: the next yaml row abuts the absorbed run's end
+    nxt = [off for off in order if off >= edge]
+    ck.check("next-row-abuts", bool(nxt) and nxt[0] == edge,
+             "no next row" if not nxt else f"0x{nxt[0]:X} != 0x{edge:X}")
+
+    # 6. c name not yet landed in this yaml
+    dup = [t for t in ytext
+           if YAML_ROW_RE.match(t) and YAML_ROW_RE.match(t).group(3) == r["c_name"]]
+    ck.check("c not-yet-landed", not dup, dup[0].strip() if dup else "")
+
+    # 7. reference inventory across the target subtree + src/include
+    # (same scoping law as the head-split class: labels collide across
+    # targets, so the count is per-target; absorbed labels must have no
+    # LIVE consumers - the pinned counts cover each retiree's own
+    # nonmatchings self-refs, any external consumer changes the count)
+    for lbl, expect in sorted(r["refs"].items()):
+        pat = re.compile(r"\b" + re.escape(lbl) + r"\b")
+        count = 0
+        files = set()
+        bases = [REPO / "asm" / r["target"], REPO / "src", REPO / "include"]
+        for base in bases:
+            for p in base.rglob("*") if base.is_dir() else []:
+                if not p.is_file():
+                    continue
+                try:
+                    text = p.read_text(errors="replace")
+                except OSError:
+                    continue
+                hits = pat.findall(text)
+                if hits:
+                    count += len(hits)
+                    files.add(str(p.relative_to(REPO)))
+        ck.check(f"refs {lbl} == {expect}", count == expect,
+                 f"{count} refs in {sorted(files)[:3]}")
+
+    verdict = "ALL CHECKS PASS" if ck.fails == 0 else f"{ck.fails} FAILURE(S)"
+    print(f"== {name}: {verdict} ==")
+    return 0 if ck.fails == 0 else 1
+
+
 def main() -> int:
     names = sys.argv[1:] or list(RECIPES)
     unknown = [n for n in names if n not in RECIPES]
@@ -379,7 +507,9 @@ def main() -> int:
         return 2
     rc = 0
     for n in names:
-        rc |= run_recipe(n, RECIPES[n])
+        r = RECIPES[n]
+        rc |= (run_absorb_recipe if r.get("class") == "absorb"
+               else run_recipe)(n, r)
     return rc
 
 
