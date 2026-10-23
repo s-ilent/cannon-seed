@@ -211,7 +211,7 @@ segments:
       - [0x13AF4, asm, func_80036144]   # 0x27c sdk
       - [0x13D70, asm, func_800363C0]   # 0x168 sdk
       - [0x13ED8, asm, func_80036528]   # 0x98 sdk
-      - [0x13F70, data, data_800365C0]   # 0xe4
+      - [0x13F70, c, GsGetTimInfo]   # 0xe4 sdk
       - [0x14054, asm, func_800367D4]   # 0x78 sdk
       - [0x140CC, asm, func_8003684C]   # 0x3c8 sdk
       - [0x14494, asm, func_80036C14]   # 0xe8 pinned
