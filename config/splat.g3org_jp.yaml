@@ -401,7 +401,9 @@ segments:
       - [0x2C76C, c, SetGeomScreen]   # 0xc sdk
       - [0x2C778, c, SetDQA]   # 0xc sdk
       - [0x2C784, asm, func_80052804]   # 0x18 sdk
-      - [0x2C79C, data, data_8005281C]   # 0xa14
+      - [0x2C79C, data, data_8005281C]   # 0x6a8
+      - [0x2CE44, c, GsInitCoord2param]   # 0x2c sdk
+      - [0x2CE70, data, data_8004CE70]   # 0x340
       - [0x2D1B0, asm, func_80053490]   # 0x98 sdk
       - [0x2D248, asm, func_80053528]   # 0x78 sdk
       - [0x2D2C0, c, GsGetTimInfo]   # 0xe4 sdk
