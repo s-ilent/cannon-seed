@@ -245,8 +245,10 @@ segments:
       - [0x16024, asm, func_80038C64]   # 0xe4
       - [0x16108, data, data_80038D48]   # 0x4
       - [0x1610C, asm, func_80038D4C.rowdef]   # 0x5f8
-      - [0x16704, data, data_80039344]   # 0x170
-      - [0x16874, asm, func_800395E4]   # 0xa0
+      - [0x16704, data, data_80039344]   # 0x148
+      - [0x1684C, c, OuterProduct12]   # 0x58 sdk
+      - [0x168A4, c, OuterProduct0]   # 0x58 sdk
+      - [0x168FC, data, data_800360FC]   # 0x18
       - [0x16914, data, data_80039684]   # 0x4 pinned
       - [0x16918, asm, func_80039688]   # 0x7c pinned
       - [0x16994, asm, func_80039704]   # 0x8 pinned

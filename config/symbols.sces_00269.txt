@@ -37,7 +37,6 @@ func_80037C24 = 0x80034A44; // type:func
 func_80038518 = 0x80035208; // type:func
 func_80038C64 = 0x80035824; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_80038D4C.rowdef and the retail-encoded definition owns the plain name): func_80038D4C = 0x8003590C; // type:func
-func_800395E4 = 0x80036074; // type:func
 func_8003970C = 0x8003619C; // type:func
 func_8003A77C = 0x80037000; // type:func
 func_8003A8BC = 0x800370EC; // type:func

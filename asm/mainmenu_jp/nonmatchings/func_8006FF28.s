@@ -38,11 +38,11 @@ glabel func_8006592C
     /* 46138 80065938 2400A2AF */  sw         $v0, 0x24($sp)
     /* 4613C 8006593C 0A006284 */  lh         $v0, 0xA($v1)
     /* 46140 80065940 21302002 */  addu       $a2, $s1, $zero
-    /* 46144 80065944 0B98010C */  jal        func_8006602C
+    /* 46144 80065944 0B98010C */  jal        OuterProduct12
     /* 46148 80065948 2800A2AF */   sw        $v0, 0x28($sp)
     /* 4614C 8006594C 21204002 */  addu       $a0, $s2, $zero
     /* 46150 80065950 21282002 */  addu       $a1, $s1, $zero
-    /* 46154 80065954 0B98010C */  jal        func_8006602C
+    /* 46154 80065954 0B98010C */  jal        OuterProduct12
     /* 46158 80065958 1000A627 */   addiu     $a2, $sp, 0x10
     /* 4615C 8006595C 1000A427 */  addiu      $a0, $sp, 0x10
     /* 46160 80065960 3A97010C */  jal        func_80065CE8
@@ -150,11 +150,11 @@ nonmatching func_80065A5C, 0x1C
 glabel func_80065A5C
     /* 4625C 80065A5C 10006284 */  lh         $v0, 0x10($v1)
     /* 46260 80065A60 1000A627 */  addiu      $a2, $sp, 0x10
-    /* 46264 80065A64 0B98010C */  jal        func_8006602C
+    /* 46264 80065A64 0B98010C */  jal        OuterProduct12
     /* 46268 80065A68 3800A2AF */   sw        $v0, 0x38($sp)
     /* 4626C 80065A6C 1000A427 */  addiu      $a0, $sp, 0x10
     /* 46270 80065A70 21284002 */  addu       $a1, $s2, $zero
-    /* 46274 80065A74 0B98010C */  jal        func_8006602C
+    /* 46274 80065A74 0B98010C */  jal        OuterProduct12
 endlabel func_80065A5C
 
 nonmatching func_80065A78, 0xB0
@@ -247,11 +247,11 @@ nonmatching func_80065B7C, 0x24
 glabel func_80065B7C
     /* 4637C 80065B7C 04006284 */  lh         $v0, 0x4($v1)
     /* 46380 80065B80 21300002 */  addu       $a2, $s0, $zero
-    /* 46384 80065B84 0B98010C */  jal        func_8006602C
+    /* 46384 80065B84 0B98010C */  jal        OuterProduct12
     /* 46388 80065B88 1800A2AF */   sw        $v0, 0x18($sp)
     /* 4638C 80065B8C 21200002 */  addu       $a0, $s0, $zero
     /* 46390 80065B90 21284002 */  addu       $a1, $s2, $zero
-    /* 46394 80065B94 0B98010C */  jal        func_8006602C
+    /* 46394 80065B94 0B98010C */  jal        OuterProduct12
     /* 46398 80065B98 1000A627 */   addiu     $a2, $sp, 0x10
     /* 4639C 80065B9C 1000A427 */  addiu      $a0, $sp, 0x10
 endlabel func_80065B7C
