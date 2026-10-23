@@ -111,6 +111,16 @@
  * The 58% sites sit where the walks' byte streams diverge mid-member
  * (the wrapper-2 inner-SCA vintage split class); the landing stages the
  * 92% pins immediately and hands the 58% rows to the census.
+ * LANDING CORRECTION (window cron-20261023-0057): the per-target
+ * static table above SWAPPED slotbits/tab for g3org_jp - the walk
+ * names the fp base (the +4-advancing pointer-array role) as the
+ * 0x8017FA38 row and the lw (the bit-test long read) as the 0x80178C9C
+ * row; the first x2 landing (slps 0x80045538, g3org_jp 0x80069428,
+ * commits 44d022db + f0a076bd) proved the shared-alias mechanism
+ * absorbs the correction with ZERO C changes. The fp/lw role audit of
+ * the remaining three walks (sces 0x8011B7EC/0x80114A94, mainmenu_eu
+ * 0x80194EB8/0x8018E070, g3_eu 0x80171EA4/0x8016B10C) shows the table
+ * correct for those three - only g3org_jp was swapped.
  * Probe-only names below; no yaml edit, no curation edit this window.
  */
 extern long SsSeqCalledTbyT_guard;       /* slps D_8011506C */
