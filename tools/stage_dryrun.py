@@ -69,7 +69,10 @@ RECIPES = {
     # normdpq3-g3_jp (c259ba64), rotpers4-g3org_eu (5c8b9fd7),
     # rotnclipdpq3-g3org_jp (the first c_retire landing: the c head
     # swallowed func_800587F0 + func_80058858's first 24 words, tail
-    # data_800588B8 re-homed verbatim past the skipped orphan enddlabel).
+    # data_800588B8 re-homed verbatim past the skipped orphan enddlabel),
+    # rotnclip4-g3org_jp (the first ABSORB landing: the 0xB0 body
+    # flush-covered five woven rows summing exactly to it - the C-SPILL
+    # class proven).
     # The head-split class fields walk_label=None / orphan_line=None
     # remain legal (no walk block; the whole source file retires; woven
     # row names LIE - the label-vs-VA law).
@@ -85,29 +88,6 @@ RECIPES = {
     # reference inventory (absorbed labels must have no LIVE consumers -
     # self-refs inside a retiree's own nonmatchings file are pinned, any
     # external consumer changes the count and fails).
-    "rotnclip4-g3org_jp": {
-        "class": "absorb",
-        "target": "g3org_jp",
-        "yaml": "config/splat.g3org_jp.yaml",
-        "src": "src/RotAverageNclip4.c",
-        "c_name": "RotAverageNclip4",
-        "c_yaml": 0x33FC4,
-        "c_extent": 0xB0,
-        "absorb": [
-            ("data_8005B214", "data", 0x8),
-            ("func_8005B21C", "asm", 0xC),
-            ("data_8005B228", "data", 0x4),
-            ("func_8005B22C", "asm", 0x24),
-            ("data_8005B278", "data", 0x74),
-        ],
-        "refs": {
-            "data_8005B214": 0,
-            "func_8005B21C": 3,
-            "data_8005B228": 0,
-            "func_8005B22C": 3,
-            "data_8005B278": 0,
-        },
-    },
 }
 
 
