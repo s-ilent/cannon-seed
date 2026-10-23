@@ -74,7 +74,11 @@ RECIPES = {
     # flush-covered five woven rows summing exactly to it - the C-SPILL
     # class proven), rotnclipcol3-mainmenu_jp (the second ABSORB landing:
     # the 0xD0 row span - fn 0xc8 + 8 ld-zero-fill pad bytes, the pad
-    # law inside the validator - flush-covered three woven rows).
+    # law inside the validator - flush-covered three woven rows),
+    # rotpers3-mainmenu_eu (the third ABSORB landing: the first .rowdef
+    # absorption - the dotted-label regex widening, the rowdef's live
+    # glabel retires with zero consumers, the woven plain name's jal
+    # collision survivor untouched).
     # The head-split class fields walk_label=None / orphan_line=None
     # remain legal (no walk block; the whole source file retires; woven
     # row names LIE - the label-vs-VA law).
@@ -94,23 +98,6 @@ RECIPES = {
     # than the landed row extent (0xd0, the source twin's span) - the
     # trailing pad words are ld zero fill, the c_extent field tracks the
     # ROW span (absorbed sum), the build + verify arbitrate the fill.
-    "rotpers3-mainmenu_eu": {
-        "class": "absorb",
-        "target": "mainmenu_eu",
-        "yaml": "config/splat.mainmenu_eu.yaml",
-        "src": "src/RotTransPers3.c",
-        "c_name": "RotTransPers3",
-        "c_yaml": 0x4E5D0,
-        "c_extent": 0x54,
-        "absorb": [
-            ("data_8006DDD0", "data", 0x48),
-            ("func_80079758.rowdef", "asm", 0xC),
-        ],
-        "refs": {
-            "data_8006DDD0": 2,
-            "func_8006DE18": 3,
-        },
-    },
 }
 
 
