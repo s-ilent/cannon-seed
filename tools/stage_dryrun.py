@@ -69,9 +69,43 @@ RECIPES = {
     # normdpq3-g3_jp (c259ba64), rotpers4-g3org_eu (5c8b9fd7). The
     # head-split class fields walk_label=None / orphan_line=None remain
     # legal (no walk block; the whole source file retires; woven row names
-    # LIE - the label-vs-VA law). The g3org_jp RotAverageNclipColorDpq3
-    # head-split (data_80060E20 0x414 -> c 0xC8 + tail 0x34C data_800588B8,
-    # census eq 50/50 votes 21, all dw=0) is the next staged candidate.
+    # LIE - the label-vs-VA law).
+    #
+    # The g3org_jp RotAverageNclipColorDpq3 head-split (docs/TASKS.md,
+    # aa2dea5a next waves; census eq 50/50 votes 21, all dw=0 vs the landed
+    # 0xc8 body): the woven row data_80060E20 (true VA 0x800587F0 - the
+    # row name LIES) splits c 0xC8 + tail 0x34C data_800588B8. The c head
+    # swallows TWO complete spimdisasm blocks (func_800587F0 0x68 + the
+    # first 24 words of func_80058858) - the c_retire field attests them;
+    # func_800587F0's single jal site (func_8005EAE4) renames to the landed
+    # spelling, func_80058858 has zero external refs. The block's last 4
+    # words (0x390B8..0x390C8) + its enddlabel (line 69) fall to the tail
+    # side: the tail extract SKIPS the orphan enddlabel line (orphan_line
+    # documents the skip) and carries the 4 words raw before the complete
+    # func_800588C8 block (4 live jal sites, preserved verbatim).
+    "rotnclipdpq3-g3org_jp": dict(
+        target="g3org_jp",
+        src="asm/g3org_jp/nonmatchings/data/data_80060E20.data.s",
+        yaml="config/splat.g3org_jp.yaml",
+        row_label="data_80060E20", row_yaml=0x38FF0, row_extent=0x414,
+        walk_label=None,
+        head_extent=0x0, head_last=0, append_enddlabel=None,
+        c_retire={"func_800587F0": "RotAverageNclipColorDpq3",
+                  "func_80058858": None},
+        pieces=[
+            dict(kind="c", label="RotAverageNclipColorDpq3", yaml=0x38FF0,
+                 extent=0xC8, first=10, last=64),
+            dict(kind="tail", label="data_800588B8", yaml=0x390B8,
+                 extent=0x34C, first=65, last=280,
+                 tail_ranges=[(65, 68), (70, None)]),
+        ],
+        orphan_line=69, orphan_text="enddlabel func_80058858",
+        boundary={10: 0xC8800000, 64: 0x00000000, 65: 0x00000000,
+                  68: 0x24060000, 280: 0x00000000},
+        refs={"data_80060E20": 0, "func_80058858": 0,
+              "func_800587F0": 1, "func_800588C8": 4},
+        rename={"func_800587F0": "RotAverageNclipColorDpq3"},
+    ),
 }
 
 
@@ -171,8 +205,32 @@ def run_recipe(name: str, r: dict) -> int:
                      f"0x{offs[-1]:X} != 0x{p['yaml'] + p['extent'] - 4:X}")
         if p["kind"] in ("c", "gap"):
             labels_inside = [l for l in labels if p["first"] <= l[0] <= p["last"]]
-            ck.check(f"piece {p['label']} label-free", not labels_inside,
-                     str(labels_inside[:3]))
+            retire = r.get("c_retire") if p["kind"] == "c" else None
+            if retire:
+                # The c head swallows complete spimdisasm blocks whose
+                # dlabel/enddlabel pairs CROSS the word span (the dlabel of
+                # the first block opens before the span's first word, the
+                # last block's enddlabel closes after its last word). The
+                # whole source file retires, so the labels are fictional -
+                # but the recipe must attest exactly which names the c row
+                # consumes: names_inside == c_retire, and every retiree is
+                # a proper single dlabel/enddlabel pair in the full file.
+                names_inside = sorted({l[2] for l in labels_inside})
+                expected = sorted(retire)
+                ck.check(f"piece {p['label']} retire-labels",
+                         names_inside == expected,
+                         f"{names_inside} != {expected}")
+                for nm in expected:
+                    d_all = [l for l in labels
+                             if l[1] == "dlabel" and l[2] == nm]
+                    e_all = [l for l in labels
+                             if l[1] == "enddlabel" and l[2] == nm]
+                    ck.check(f"piece {p['label']} retire {nm} file-pair",
+                             len(d_all) == 1 and len(e_all) == 1,
+                             f"{len(d_all)} dlabel / {len(e_all)} enddlabel")
+            else:
+                ck.check(f"piece {p['label']} label-free", not labels_inside,
+                         str(labels_inside[:3]))
 
     # 7. tiling: head + pieces == row, pieces abut
     total = r["head_extent"] + sum(p["extent"] for p in r["pieces"])
@@ -336,7 +394,9 @@ def run_recipe(name: str, r: dict) -> int:
                  len(sites) == r["refs"][retiree],
                  f"{len(sites)} sites")
         ck.check(f"rename target {new_name} not-yet-used-here",
-                 not [t for t in ytext if new_name in t and "c," in t])
+                 not [t for t in ytext
+                      if re.search(r"\b" + re.escape(new_name) + r"\b", t)
+                      and "c," in t])
 
     verdict = "ALL CHECKS PASS" if ck.fails == 0 else f"{ck.fails} FAILURE(S)"
     print(f"== {name}: {verdict} ==")
