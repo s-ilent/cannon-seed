@@ -53,6 +53,12 @@ MINWIN_SMALL = 2      # bodies < 0x100 (step 1, denser windows)
 MIN_EQ = 0.50         # candidate must agree on >= half its words
 
 
+def better_eq(new_eq, new_n, p_eq, p_n):
+    """True when the new row's word-eq fraction beats the prev row's.
+    Cross-multiplied (no floats), strict: ties keep the first-seen row."""
+    return new_eq * p_n > p_eq * new_n
+
+
 def elf_syms(path):
     """{name: (va, size, type)} for STT_FUNC|STT_OBJECT symbols, size>0."""
     d = open(path, "rb").read()
@@ -185,9 +191,21 @@ def scan_member(src_t, name, va, size, body, imgs, symmaps):
                 continue
             key = (tgt, s)
             prev = found.get(key)
-            if prev is None or eq * prev[6] > prev[4] * eq:
+            if prev is None or better_eq(eq, n, prev[4], prev[5]):
                 found[key] = (tgt, s, cls, encl or "-", eq, n, len(wset))
     return list(found.values())
+
+
+def dedupe_best(rows):
+    """One row per (tgt, start) key: keep the best-eq row.
+    row = (src_t, name, size, tgt, start, cls, encl, eq, n, votes)"""
+    best = {}
+    for r in rows:
+        key = (r[3], r[4])
+        prev = best.get(key)
+        if prev is None or better_eq(r[7], r[8], prev[7], prev[8]):
+            best[key] = r
+    return list(best.values())
 
 
 def main():
@@ -224,14 +242,7 @@ def main():
                 rows.append((src_t, name, size) + hit)
 
     # dedupe (tgt, start) surfacing under several members: keep best eq
-    # row = (src_t, name, size, tgt, start, cls, encl, eq, n, votes)
-    best = {}
-    for r in rows:
-        key = (r[3], r[4])
-        prev = best.get(key)
-        if prev is None or r[7] * prev[8] < r[8] * prev[7]:
-            best[key] = r
-    rows = sorted(best.values(),
+    rows = sorted(dedupe_best(rows),
                   key=lambda r: (r[5] != "DATA-ROW", r[5] != "uncarved",
                                  -r[7] / max(1, r[8]), r[3], r[4]))
 
