@@ -458,7 +458,11 @@ segments:
       - [0x45C30, asm, func_8006F940.rowdef]   # 0x3d0
       - [0x46000, data, data_8006FD54]   # 0xe8
       - [0x460E8, asm, func_8006FF28]   # 0x5fc
-      - [0x466E4, data, data_80070524]   # 0x11c
+      - [0x466E4, data, data_80070524]   # 0x4
+      - [0x466E8, c, LightColor]   # 0x28
+      - [0x46710, c, DpqColorLight]   # 0x28
+      - [0x46738, c, DpqColor3]   # 0x3c
+      - [0x46774, data, data_80065F74]   # 0x8c
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x50E64, data, data_80070664]   # 0x10 pinned
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x50E74, data, data_80070674]   # 0x8c
       - [0x46800, asm, func_80070700.rowdef]   # 0x2c
