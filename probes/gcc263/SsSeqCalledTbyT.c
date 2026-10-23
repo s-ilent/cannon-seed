@@ -74,6 +74,22 @@
  * landing needs either a sig-db extension against the psyq LIBSND
  * archive (SndPitch/SndVolume-class candidates for the 0x10/0x20 arms)
  * or the carve-name rename class for per-target function aliases.
+ * CALLEE RESOLUTION (same window, scripts/sndcallee_hunt.py against the
+ * psyq 3.3 LIBSND.LIB via sdk_members' LNK parser): the 0x10 arm body
+ * IS the CRES member (61/64 words, 3 reloc diffs) exporting
+ * Snd_crescendo; the 0x20 arm IS DECRE exporting Snd_decrescendo; the
+ * 0x04 arm IS STOP (exports Snd_stop/SsSepStop/SsSeqStop - one body)
+ * exporting Snd_stop; the head init matches NOTHING in any psyq 3.3
+ * archive - it is GAME-SIDE, unnamed (rename-lane item). The retail
+ * call sites set only a0/a1 for CRES/DECRE (the 3.3 header's third
+ * long arg never materializes) and pass slot RAW for the stop call,
+ * so the landing source declares the three as 2-arg (short,short) /
+ * (long,long) forms - the probe's proven shapes. The landing now needs
+ * ONLY the curated pins: Snd_tempo x3 (slps 0x800497E8, g3_eu
+ * 0x8006CEBC, g3org_jp 0x8006D6D8), Snd_crescendo / Snd_decrescendo /
+ * Snd_stop pins wherever the walks show woven jal names (the census
+ * placed CRES x1 / DECRE x2 / STOP x0), the five shared-alias static
+ * sets, and one resolve for the game-side init.
  * Probe-only names below; no yaml edit, no curation edit this window.
  */
 extern long SsSeqCalledTbyT_guard;       /* slps D_8011506C */
