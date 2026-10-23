@@ -88,6 +88,31 @@ RECIPES = {
     # reference inventory (absorbed labels must have no LIVE consumers -
     # self-refs inside a retiree's own nonmatchings file are pinned, any
     # external consumer changes the count and fails).
+    # NOTE the pad law: the census's fn size (0xc8 here) can be SMALLER
+    # than the landed row extent (0xd0, the source twin's span) - the
+    # trailing pad words are ld zero fill, the c_extent field tracks the
+    # ROW span (absorbed sum), the build + verify arbitrate the fill.
+    "rotnclipcol3-mainmenu_jp": {
+        "class": "absorb",
+        "target": "mainmenu_jp",
+        "yaml": "config/splat.mainmenu_jp.yaml",
+        "src": "src/RotAverageNclipColorCol3.c",
+        "c_name": "RotAverageNclipColorCol3",
+        "c_yaml": 0x4FF98,
+        "c_extent": 0xD0,
+        "absorb": [
+            ("data_8007B468", "data", 0x68),
+            ("func_8007B5DC", "asm", 0x34),
+            ("data_8007B634", "data", 0x34),
+        ],
+        "refs": {
+            "data_8007B468": 0,
+            "func_8007B5DC": 3,
+            "data_8007B634": 0,
+            "D_8006F834": 3,
+            "func_8006F85C": 3,
+        },
+    },
 }
 
 
