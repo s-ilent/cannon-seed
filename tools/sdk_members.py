@@ -33,6 +33,18 @@ Usage:
     python3 tools/sdk_members.py --libs ~/psyq/4.0/PSX/LIB
     python3 tools/sdk_members.py --libs <dir> --check
     python3 tools/sdk_members.py --libs <dir> --target slps_00270 --json
+    python3 tools/sdk_members.py --windows \
+        --libs ~/psyq/3.3/PSX/LIB --libs ~/psyq/3.5/PSX/LIB \
+        --libs ~/psyq/3.6/PSX/LIB --libs ~/psyq/4.0/PSX/LIB
+
+`--libs` may be repeated to index several Psy-Q versions; members whose
+bytes are identical across versions collapse to one entry. `--windows`
+switches to the symbol-window census: instead of requiring a whole member
+to sit contiguously in the image (which presumes the game's SDK grouped
+functions into members like the local drop), every function-symbol window
+of every member is slid over the payload and exact byte spans are kept.
+That mode writes config/sdk_windows.txt and never edits the whole-member
+report.
 
 The archives are the ones tools/sdk_symbols.py already reads (see
 docs/MATCHING.md section 3b for how to get them); this script exits 0
@@ -47,6 +59,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 OUT = REPO / "config" / "sdk_members.txt"
+OUT_WINDOWS = REPO / "config" / "sdk_windows.txt"
 
 SEC_TEXT = 2          # section id of .text in every Psy-Q object seen
 SEC_NAMES = {1: ".rdata", 2: ".text", 3: ".data", 4: ".sdata", 5: ".sbss",
@@ -478,6 +491,55 @@ def locate(payload, member, min_fixed=8):
             out.append((s, verify(payload, member, s)))
 
 
+def locate_windows(payload, member, min_span=0x40, probe=0x40):
+    """[(offset, size, [sym names])] exact member-text spans in `payload`.
+
+    The whole-member slide above assumes the game's SDK grouped functions
+    into archive members exactly like the local drop. When it grouped them
+    differently (a member ends early, or continues with functions ours puts
+    elsewhere), the whole member is not in the image and the slide sees
+    nothing - even though a contiguous run of library functions is there
+    byte for byte. Slide from every function symbol instead and extend to
+    the first divergence. Relocated fields are NOT wildcarded here: a span
+    is reported only if every byte matches the unlinked object, so a hit
+    is library code verbatim.
+    """
+    text = member.text()
+    syms = [s for s in member.text_syms()
+            if isinstance(s, tuple) and len(s) == 2]
+    if len(text) < min_span or len(syms) < 2:
+        return []
+    out = []
+    for soff, _sname in syms:
+        if len(text) - soff < min_span:
+            break
+        want = text[soff:soff + probe]
+        if len(want) < probe // 2:
+            continue
+        off = payload.find(want)
+        while off != -1:
+            if not (off & 3):
+                end = soff + len(want)
+                lim = min(len(text), len(payload) - off + soff)
+                while end < lim and text[end] == payload[off + end - soff]:
+                    end += 1
+                size = end - soff
+                if size >= min_span:
+                    names = [(s2 - soff, str(n)) for s2, n in syms
+                             if soff <= s2 < end and end - s2 >= 8]
+                    if len(names) >= 2 or size >= 0x100:
+                        out.append((off, size, names))
+            off = payload.find(want, off + 4)
+    # nested windows of the same span collapse to the longest
+    out.sort(key=lambda x: (x[0], -x[1]))
+    kept = []
+    for off, size, names in out:
+        if kept and off < kept[-1][0] + kept[-1][1]:
+            continue
+        kept.append((off, size, names))
+    return kept
+
+
 def load_sigs(sigdir):
     """{MEMBER: (pattern, mask)} from psx_psyq_signatures JSON, if available.
 
@@ -571,6 +633,41 @@ def cfg_subsegments(target):
     return out
 
 
+def subsegment_kinds(target):
+    """[(vram_start, kind, name)] for every named subsegment in the yaml."""
+    import yaml
+    yml = REPO / "config" / f"splat.{target}.yaml"
+    if not yml.is_file():
+        return []
+    cfg = yaml.safe_load(yml.read_text())
+    seg = cfg["segments"][0]
+    lo, vram = seg["start"], seg["vram"]
+    out = []
+    for sub in seg["subsegments"]:
+        if isinstance(sub, list) and len(sub) >= 3 and isinstance(sub[0], int):
+            out.append((vram + sub[0] - lo, sub[1], sub[2]))
+    return out
+
+
+def known_addresses(target):
+    """Addresses (per symbol) already reported for `target` in
+    sdk_anchors.txt and sdk_members.txt, so window hits can be flagged."""
+    out = set()
+    for fn in ("sdk_anchors.txt", "sdk_members.txt"):
+        p = REPO / "config" / fn
+        if not p.is_file():
+            continue
+        cur = None
+        for line in p.read_text().splitlines():
+            if line.startswith("// target:"):
+                cur = line.split()[2]
+            elif cur == target:
+                body = line.lstrip("/ ").strip()
+                if body.startswith("0x"):
+                    out.add(int(body.split()[0], 16))
+    return out
+
+
 def load_target(target):
     """(payload, file_offset_of_payload, vram_of_payload) from the splat yaml."""
     import yaml
@@ -587,10 +684,86 @@ def load_target(target):
     return path.read_bytes(), seg["start"], seg["vram"]
 
 
+def run_windows(args, members, targets):
+    """--windows mode: verbatim symbol-window census -> config/sdk_windows.txt."""
+    report = {}
+    for t in targets:
+        loaded = load_target(t)
+        if not loaded:
+            print(f"  {t:<12} skipped (no yaml or no baseline image)")
+            continue
+        payload, lo, vram = loaded
+        spans = []
+        for m, vers in members:
+            for off, size, names in locate_windows(payload, m):
+                spans.append((vram + off - lo, size, m,
+                              "+".join(sorted(vers)), names))
+        spans.sort(key=lambda x: (x[0], -x[1]))
+        kept = []
+        for vr, size, m, vers, names in spans:
+            if kept and vr < kept[-1][0] + kept[-1][1]:
+                continue
+            kept.append((vr, size, m, vers, names))
+        report[t] = (lo, vram, kept)
+        nf = sum(len(k[4]) for k in kept)
+        print(f"  {t:<12} {len(kept):<4} verbatim spans, {nf} functions")
+
+    lines = [
+        "// SDK verbatim-window report - GENERATED by tools/sdk_members.py --windows.",
+        "//",
+        "// Regenerate:  python3 tools/sdk_members.py --windows \\",
+        "//     --libs ~/psyq/3.3/PSX/LIB --libs ~/psyq/3.5/PSX/LIB \\",
+        "//     --libs ~/psyq/3.6/PSX/LIB --libs ~/psyq/4.0/PSX/LIB",
+        "//",
+        "// The whole-member report (sdk_members.txt) assumes the game's SDK",
+        "// grouped functions into archive members exactly like the local drop.",
+        "// When it grouped them differently, a contiguous run of library",
+        "// functions can sit in the image byte for byte and the whole-member",
+        "// slide still sees nothing. This report slides every function-symbol",
+        "// window of every member (all indexed Psy-Q versions) and keeps spans",
+        "// whose bytes match the unlinked object EXACTLY - relocated fields",
+        "// are not wildcarded, so a span here is library code verbatim.",
+        "// A member whose .text carries relocations stops at the first one;",
+        "// such members stay the whole-member report's business.",
+        "//",
+        "// Columns: address, size, member@versions, [kind of the yaml",
+        "// subsegment the span starts in], function symbols inside the span.",
+        "// A trailing * on a name: no line in sdk_anchors.txt or",
+        "// sdk_members.txt carries that address - i.e. new evidence.",
+        "// Names are evidence, not configuration: adopted names live in",
+        "// config/symbols.curated.txt - read the guard block at its top first.",
+        "",
+    ]
+    for t in sorted(report):
+        lo, vram, kept = report[t]
+        known = known_addresses(t)
+        kinds = subsegment_kinds(t)
+        nf = sum(len(k[4]) for k in kept)
+        lines.append(f"// target: {t}  ({len(kept)} spans, {nf} functions)")
+        for vr, size, m, vers, names in kept:
+            kind = ""
+            for start, k, _n in kinds:
+                if start <= vr:
+                    kind = k
+            marked = [n + ("*" if (vr + d) not in known else "")
+                      for d, n in names]
+            lines.append(f"  {vr:#010x} {size:#06x} {m.lib}@{vers} {m.name} "
+                         f"[{kind}] " + " ".join(marked))
+        lines.append("")
+    OUT_WINDOWS.parent.mkdir(parents=True, exist_ok=True)
+    OUT_WINDOWS.write_text("\n".join(lines))
+    print(f"sdk_members: wrote {OUT_WINDOWS.relative_to(REPO)}")
+    return 0
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--libs", type=Path, required=True,
-                    help="directory holding the Psy-Q *.LIB archives")
+    ap.add_argument("--libs", type=Path, required=True, action="append",
+                    help="directory holding the Psy-Q *.LIB archives; "
+                         "repeat to index several Psy-Q versions")
+    ap.add_argument("--windows", action="store_true",
+                    help="scan for verbatim symbol-window spans instead of "
+                         "whole members; writes config/sdk_windows.txt")
     ap.add_argument("--target", action="append", default=None)
     ap.add_argument("--check", action="store_true", help="report only")
     ap.add_argument("--json", action="store_true")
@@ -603,15 +776,27 @@ def main(argv):
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args(argv[1:])
 
-    if not args.libs.is_dir():
-        print(f"sdk_members: {args.libs} is not a directory", file=sys.stderr)
-        return 0
-
-    members = []
-    for lib in sorted(args.libs.glob("LIB*.LIB")):
-        members.extend(parse_archive(lib))
-    members = [m for m in members if m.text()]
-    print(f"sdk_members: {len(members)} SDK members parsed from {args.libs}")
+    import re
+    members = []          # (Member, {psy-q versions it was parsed from})
+    seen = {}
+    for libdir in args.libs:
+        if not libdir.is_dir():
+            print(f"sdk_members: {libdir} is not a directory", file=sys.stderr)
+            return 0
+        m = re.search(r"(\d+\.\d+)", str(libdir))
+        ver = m.group(1) if m else libdir.name
+        for lib in sorted(libdir.glob("LIB*.LIB")):
+            for mem in parse_archive(lib):
+                if not mem.text():
+                    continue
+                key = (mem.lib, mem.name, mem.text())
+                if key in seen:
+                    seen[key][1].add(ver)
+                else:
+                    seen[key] = (mem, {ver})
+                    members.append(seen[key])
+    print(f"sdk_members: {len(members)} distinct SDK members parsed from "
+          f"{len(args.libs)} lib dir(s)")
     if not members:
         print(f"sdk_members: no members found under {args.libs}", file=sys.stderr)
         return 0
@@ -621,6 +806,10 @@ def main(argv):
         print(f"sdk_members: {len(sigs)} signature patterns from {args.sigs}")
     targets = args.target or [p.name[len("splat."):-len(".yaml")]
                               for p in sorted((REPO / "config").glob("splat.*.yaml"))]
+
+    if args.windows:
+        return run_windows(args, members, targets)
+
     report = {}
     for t in targets:
         loaded = load_target(t)
@@ -629,7 +818,7 @@ def main(argv):
             continue
         payload, lo, vram = loaded
         placements = []
-        for m in members:
+        for m, _vers in members:
             for off, stats in locate(payload, m, args.min_fixed):
                 placements.append((off, m, stats))
         placements.sort(key=lambda x: x[0])

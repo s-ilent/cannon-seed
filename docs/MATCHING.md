@@ -173,6 +173,22 @@ another function is evidence about that region but cannot be applied as it
 stands. Adoption is the §3b path — a line in `config/symbols.curated.txt`,
 then `make extract` and `make verify`.
 
+`--libs` may be repeated to index several Psy-Q versions at once (3.3/3.5/
+3.6/4.0 all live under `~/psyq/`); identical members collapse, so the report
+gains the placements only a later-version archive explains. `--windows` runs
+the symbol-window census into `config/sdk_windows.txt`: the whole-member
+slide presumes the game's SDK grouped functions into members exactly like
+the local drop, and it does not — mainmenu_eu's `data_8006FCF8` island
+carried `LightColor`/`DpqColorLight`/`DpqColor3` byte-exact while the local
+member continues past them, so the whole-member slide saw nothing and the
+functions had to be hand-derived across targets (commit 68f0df80). The
+window census slides every function-symbol window of every member, keeps
+exact spans (relocated fields are *not* wildcarded — a span is library code
+verbatim), and marks names whose address no line in `sdk_members.txt` or
+`sdk_anchors.txt` carries with `*`. First run: 1,026 function instances in
+verbatim spans across the 8 targets, 240 of them at addresses no prior
+report carried — whole PRIM/LIBGTE runs sitting inside `data` islands.
+
 Two things this does **not** do, both measured, both worth knowing:
 
 * **Section-relative jump targets do not reduce to `member + offset`.** An
