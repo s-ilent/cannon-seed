@@ -1,10 +1,14 @@
 /* cc-post: keep-epilogue
  *
  * GsGetTimInfo - LIBGS SCLIB member (extent 0xe4), landed as ONE source
- * across SIX curated placements (file offsets 0x13A38 sces_00269,
+ * across EIGHT placements (file offsets 0x13A38 sces_00269,
  * 0x44338 mainmenu_jp, 0x43C3C mainmenu_eu, 0x2FE24 g3_jp, 0x2D2C0
- * g3org_jp, 0x2CBB4 g3org_eu - the pinned LIBGS SCLIB member addresses;
- * the boots' slps_00270 image has no placement). Decoded offline against
+ * g3org_jp, 0x2CBB4 g3org_eu, then 0x2F760 g3_eu and 0x13F70
+ * slps_00270 - the boots' copy the data-row copy census surfaced as a
+ * whole 0xe4 data row, retiring this comment's original no-placement
+ * claim). The two census finds sit as whole data rows and flipped with
+ * zero new pins: their single cross-copy variant slot is the internal
+ * join jump, self-resolving per placement. Decoded offline against
  * the mainmenu_jp retail words through the cc.sh probe loop to 57/57
  * slots (the single cross-copy variant is the internal join jump, an
  * R_MIPS_26 relocation masked in the compare; all fifteen cross-target
