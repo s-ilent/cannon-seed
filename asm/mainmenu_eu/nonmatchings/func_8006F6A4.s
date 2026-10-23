@@ -62,11 +62,11 @@ glabel func_800651EC
     /* 45A3C 8006523C 2400A2AF */  sw         $v0, 0x24($sp)
     /* 45A40 80065240 0A006284 */  lh         $v0, 0xA($v1)
     /* 45A44 80065244 21302002 */  addu       $a2, $s1, $zero
-    /* 45A48 80065248 4C96010C */  jal        func_80065930
+    /* 45A48 80065248 4C96010C */  jal        OuterProduct12
     /* 45A4C 8006524C 2800A2AF */   sw        $v0, 0x28($sp)
     /* 45A50 80065250 21204002 */  addu       $a0, $s2, $zero
     /* 45A54 80065254 21282002 */  addu       $a1, $s1, $zero
-    /* 45A58 80065258 4C96010C */  jal        func_80065930
+    /* 45A58 80065258 4C96010C */  jal        OuterProduct12
     /* 45A5C 8006525C 1000A627 */   addiu     $a2, $sp, 0x10
     /* 45A60 80065260 1000A427 */  addiu      $a0, $sp, 0x10
     /* 45A64 80065264 7B95010C */  jal        func_800655EC
@@ -139,11 +139,11 @@ glabel func_8006530C
     /* 45B5C 8006535C 3400A2AF */  sw         $v0, 0x34($sp)
     /* 45B60 80065360 10006284 */  lh         $v0, 0x10($v1)
     /* 45B64 80065364 1000A627 */  addiu      $a2, $sp, 0x10
-    /* 45B68 80065368 4C96010C */  jal        func_80065930
+    /* 45B68 80065368 4C96010C */  jal        OuterProduct12
     /* 45B6C 8006536C 3800A2AF */   sw        $v0, 0x38($sp)
     /* 45B70 80065370 1000A427 */  addiu      $a0, $sp, 0x10
     /* 45B74 80065374 21284002 */  addu       $a1, $s2, $zero
-    /* 45B78 80065378 4C96010C */  jal        func_80065930
+    /* 45B78 80065378 4C96010C */  jal        OuterProduct12
     /* 45B7C 8006537C 21302002 */   addu      $a2, $s1, $zero
     /* 45B80 80065380 1000A427 */  addiu      $a0, $sp, 0x10
     /* 45B84 80065384 7B95010C */  jal        func_800655EC
@@ -236,11 +236,11 @@ nonmatching func_80065484, 0x18
 
 glabel func_80065484
     /* 45C84 80065484 21300002 */  addu       $a2, $s0, $zero
-    /* 45C88 80065488 4C96010C */  jal        func_80065930
+    /* 45C88 80065488 4C96010C */  jal        OuterProduct12
     /* 45C8C 8006548C 1800A2AF */   sw        $v0, 0x18($sp)
     /* 45C90 80065490 21200002 */  addu       $a0, $s0, $zero
     /* 45C94 80065494 21284002 */  addu       $a1, $s2, $zero
-    /* 45C98 80065498 4C96010C */  jal        func_80065930
+    /* 45C98 80065498 4C96010C */  jal        OuterProduct12
 endlabel func_80065484
 
 nonmatching func_8006549C, 0x38

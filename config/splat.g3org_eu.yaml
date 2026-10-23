@@ -383,7 +383,10 @@ segments:
       - [0x2D9DC, asm, func_80053DEC]   # 0xb8 sdk
       - [0x2DA94, data, data_80053EA4]   # 0x178
       - [0x2DC0C, asm, func_8005401C]   # 0x180 sdk
-      - [0x2DD8C, data, data_8005419C]   # 0x1540
+      - [0x2DD8C, data, data_8005419C]   # 0x131c
+      - [0x2F0A8, c, OuterProduct12]   # 0x58 sdk
+      - [0x2F100, c, OuterProduct0]   # 0x58 sdk
+      - [0x2F158, data, data_8004E958]   # 0x174
       - [0x2F2CC, asm, func_80055A6C]   # 0x4fc sdk
       - [0x2F7C8, c, RotTransPers4]   # 0x78 sdk
       - [0x2F840, data, data_8004F040]   # 0x8
