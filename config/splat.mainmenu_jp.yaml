@@ -466,7 +466,11 @@ segments:
       - [0x468F8, asm, func_80070868]   # 0x130 sdk
       - [0x46A28, asm, func_80070998]   # 0x4fc sdk
       - [0x46F24, c, RotTransPers4]   # 0x80 sdk
-      - [0x46FA4, data, data_80070F14]   # 0x310
+      - [0x46FA4, data, data_80070F14]   # 0x14
+      - [0x46FB8, c, ReadSZfifo4]   # 0x18 sdk
+      - [0x46FD0, data, data_800667D0]   # 0x28
+      - [0x46FF8, c, ReadGeomOffset]   # 0x20 sdk
+      - [0x47018, data, data_80066818]   # 0x29c
       - [0x472B4, asm, func_80071354]   # 0x94 sdk
       - [0x47348, asm, func_800713E8]   # 0xa0 sdk
       - [0x473E8, data, data_80071488]   # 0x710

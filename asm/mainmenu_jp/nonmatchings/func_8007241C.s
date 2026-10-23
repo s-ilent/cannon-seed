@@ -108,7 +108,7 @@ glabel GsTMDdivG4NL
     /* 48294 80067A94 14008426 */  addiu      $a0, $s4, 0x14
     /* 48298 80067A98 14006526 */  addiu      $a1, $s3, 0x14
     /* 4829C 80067A9C 14004626 */  addiu      $a2, $s2, 0x14
-    /* 482A0 80067AA0 EE99010C */  jal        func_800667B8
+    /* 482A0 80067AA0 EE99010C */  jal        ReadSZfifo4
     /* 482A4 80067AA4 14002726 */   addiu     $a3, $s1, 0x14
     /* 482A8 80067AA8 9000A88F */  lw         $t0, 0x90($sp)
     /* 482AC 80067AAC 3400A297 */  lhu        $v0, 0x34($sp)

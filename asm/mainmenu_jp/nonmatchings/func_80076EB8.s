@@ -110,7 +110,7 @@ glabel GsTMDdivTG4NL
     /* 4C3B8 8006BBB8 14008426 */  addiu      $a0, $s4, 0x14
     /* 4C3BC 8006BBBC 14006526 */  addiu      $a1, $s3, 0x14
     /* 4C3C0 8006BBC0 14004626 */  addiu      $a2, $s2, 0x14
-    /* 4C3C4 8006BBC4 EE99010C */  jal        func_800667B8
+    /* 4C3C4 8006BBC4 EE99010C */  jal        ReadSZfifo4
     /* 4C3C8 8006BBC8 14002726 */   addiu     $a3, $s1, 0x14
     /* 4C3CC 8006BBCC 9800A88F */  lw         $t0, 0x98($sp)
     /* 4C3D0 8006BBD0 3400A297 */  lhu        $v0, 0x34($sp)
