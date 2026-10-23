@@ -644,7 +644,7 @@ segments:
       - [0x499F4, c, SsSetSerialVol]   # 0x160 sdk
       - [0x49B54, c, SsVabTransCompleted]   # 0x2c sdk
       - [0x49B80, asm, func_80074210]   # 0xa8 sdk
-      - [0x49C28, asm, func_800742B8]   # 0x274 sdk
+      - [0x49C28, c, SsSeqCalledTbyT]   # 0x274 sdk
       - [0x49E9C, data, data_8007452C]   # 0x4b0
       - [0x4A34C, asm, func_80074B0C]   # 0x68 sdk
       - [0x4A3B4, asm, func_80074B74]   # 0x2c sdk

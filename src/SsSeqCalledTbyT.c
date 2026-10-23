@@ -49,9 +49,11 @@
  *   slot count: slps 0x8011C2F4, g3org_jp 0x8017FAB8 (sits at the
  *              track count minus 4 in every target)
  *   track count: slps 0x8011C2F8, g3org_jp 0x8017FABC
- *   slotbits:  slps 0x80115518, g3org_jp 0x8017FA38
- *   track table: slps 0x8011C274, g3org_jp 0x80178C9C (array of
- *              pointers to 0xAC-stride records, flags word at +0x90)
+ *   slotbits:  slps 0x80115518, g3org_jp 0x80178C9C (clustered near
+ *              the guard in both targets - 0x4ac / 0x40c below-plus)
+ *   track table: slps 0x8011C274, g3org_jp 0x8017FA38 (array of
+ *              pointers to 0xAC-stride records, flags word at +0x90;
+ *              clustered 0x80 / 0x80 below the counts in both)
  */
 extern long SsSeqCalledTbyT_guard;
 extern short SsSeqCalledTbyT_nslots;
