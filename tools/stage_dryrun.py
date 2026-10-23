@@ -72,7 +72,9 @@ RECIPES = {
     # data_800588B8 re-homed verbatim past the skipped orphan enddlabel),
     # rotnclip4-g3org_jp (the first ABSORB landing: the 0xB0 body
     # flush-covered five woven rows summing exactly to it - the C-SPILL
-    # class proven).
+    # class proven), rotnclipcol3-mainmenu_jp (the second ABSORB landing:
+    # the 0xD0 row span - fn 0xc8 + 8 ld-zero-fill pad bytes, the pad
+    # law inside the validator - flush-covered three woven rows).
     # The head-split class fields walk_label=None / orphan_line=None
     # remain legal (no walk block; the whole source file retires; woven
     # row names LIE - the label-vs-VA law).
@@ -92,27 +94,6 @@ RECIPES = {
     # than the landed row extent (0xd0, the source twin's span) - the
     # trailing pad words are ld zero fill, the c_extent field tracks the
     # ROW span (absorbed sum), the build + verify arbitrate the fill.
-    "rotnclipcol3-mainmenu_jp": {
-        "class": "absorb",
-        "target": "mainmenu_jp",
-        "yaml": "config/splat.mainmenu_jp.yaml",
-        "src": "src/RotAverageNclipColorCol3.c",
-        "c_name": "RotAverageNclipColorCol3",
-        "c_yaml": 0x4FF98,
-        "c_extent": 0xD0,
-        "absorb": [
-            ("data_8007B468", "data", 0x68),
-            ("func_8007B5DC", "asm", 0x34),
-            ("data_8007B634", "data", 0x34),
-        ],
-        "refs": {
-            "data_8007B468": 0,
-            "func_8007B5DC": 3,
-            "data_8007B634": 0,
-            "D_8006F834": 3,
-            "func_8006F85C": 3,
-        },
-    },
 }
 
 
