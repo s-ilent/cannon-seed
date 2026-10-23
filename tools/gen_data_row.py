@@ -13,14 +13,17 @@ this tool reads the gated baseline and formats the spimdisasm-style words:
 Usage: python3 tools/gen_data_row.py <target> <yaml_off> <extent>
        yaml_off is the yaml row offset (VA = yaml_off + 0x8001F800);
        extent in bytes; output on stdout (redirect into the new .data.s).
-Gated: input_gates(target) - refuses unwitnessed baselines.
+Gated: baseline_witness(target) - refuses unwitnessed baselines. (This
+tool is a baseline-only consumer - it never reads the build tree - so the
+stale_symbols half of input_gates does not apply; the build elf may
+legitimately be absent while a split is being staged.)
 """
 import os
 import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from pair_report import REPO, input_gates  # noqa: E402
+from pair_report import REPO, baseline_witness  # noqa: E402
 
 BASE_VA = 0x8001F800
 
@@ -32,7 +35,7 @@ def main():
     t, off_s, ext_s = sys.argv[1], sys.argv[2], sys.argv[3]
     off = int(off_s, 16) if off_s.lower().startswith("0x") else int(off_s, 16)
     ext = int(ext_s, 16) if ext_s.lower().startswith("0x") else int(ext_s, 16)
-    ok, problems = input_gates(t)
+    ok, problems = baseline_witness(t)
     if not ok:
         print(f"gen_data_row: {t} REFUSED - {'; '.join(problems)}",
               file=sys.stderr)

@@ -19,7 +19,7 @@ endlabel GsSetAmbient
 nonmatching func_800641C4, 0x18
 
 glabel func_800641C4
-    /* 449C4 800641C4 C68B010C */  jal        func_80062F18
+    /* 449C4 800641C4 C68B010C */  jal        SetBackColor
     /* 449C8 800641C8 03310600 */   sra       $a2, $a2, 4
     /* 449CC 800641CC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 449D0 800641D0 1800BD27 */  addiu      $sp, $sp, 0x18
