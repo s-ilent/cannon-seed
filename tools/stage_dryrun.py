@@ -61,96 +61,17 @@ YAML_ROW_RE = re.compile(
 # ---------------------------------------------------------------------------
 
 RECIPES = {
-    # The g3_jp dw=0 HEAD-SPLIT pair (docs/TASKS.md, aa2dea5a next-window
-    # (a); line anchors pinned at HEAD aa2dea5a). NormalColor3 lands g3_jp
-    # at the head of the woven row data_80062948 (true VA 0x80059F88 - the
-    # label-vs-VA law: the row name LIES, offset arithmetic rules); the
-    # 0x1C boundary tail is the COMPLETE func_80059FC4 spimdisasm block
-    # (jal'd from 3 walk sites) -> re-homed VERBATIM (label preservation
-    # class), not gen_data_row. No walk block: head_extent 0, the whole
-    # file retires after the tail is carved out. walk_label=None and
-    # orphan_line=None are legal now: the head-split class has no walk
-    # block and retires the whole source file.
-    "normcolor3-g3_jp": dict(
-        target="g3_jp",
-        src="asm/g3_jp/nonmatchings/data/data_80062948.data.s",
-        yaml="config/splat.g3_jp.yaml",
-        row_label="data_80062948", row_yaml=0x3A788, row_extent=0x58,
-        walk_label=None,
-        head_extent=0x0, head_last=0, append_enddlabel=None,
-        pieces=[
-            dict(kind="c", label="NormalColor3", yaml=0x3A788,
-                 extent=0x3C, first=10, last=24),
-            dict(kind="tail", label="data_80059FC4", yaml=0x3A7C4,
-                 extent=0x1C, first=30, last=36,
-                 tail_ranges=[(29, 37)]),
-        ],
-        orphan_line=None,
-        boundary={10: 0xC8800000, 24: 0x00000000,
-                  30: 0xC8800000, 36: 0xE8F60000},
-        refs={"D_80059F88": 0, "data_80062948": 0, "func_80059FC4": 3},
-    ),
-
-    # NormalColorDpq3 lands g3_jp at the head of the woven row
-    # data_800629A8 (true VA 0x80059FE8; the row IS the 8005A058
-    # DpqColor3 MID-ROW's covering row - one split serves both lists, the
-    # dw>0 MID-ROW stays parked inside the tail). The 0x7D0 tail re-homes
-    # VERBATIM: eight balanced spimdisasm blocks; func_8005A030/50/13C/4AC
-    # carry 15 live jal sites, func_80059FE8's single site renames to the
-    # landed spelling. The gsinit-g3org_jp / gsinit-mainmenu_jp /
-    # readsz4-mainmenu_jp recipes RETIRED from the table on execution
-    # (landed GREEN first shot, 1b127649 + d366138c) - the table carries
-    # staged (not-yet-executed) recipes only.
-    "normdpq3-g3_jp": dict(
-        target="g3_jp",
-        src="asm/g3_jp/nonmatchings/data/data_800629A8.data.s",
-        yaml="config/splat.g3_jp.yaml",
-        row_label="data_800629A8", row_yaml=0x3A7E8, row_extent=0x818,
-        walk_label=None,
-        head_extent=0x0, head_last=0, append_enddlabel=None,
-        pieces=[
-            dict(kind="c", label="NormalColorDpq3", yaml=0x3A7E8,
-                 extent=0x48, first=10, last=27),
-            dict(kind="tail", label="data_8005A030", yaml=0x3A830,
-                 extent=0x7D0, first=33, last=567,
-                 tail_ranges=[(30, 568)]),
-        ],
-        orphan_line=None,
-        boundary={10: 0xC8800000, 27: 0x00000000,
-                  33: 0xC8800000, 567: 0x8CECFFEC},
-        refs={"func_80059FE8": 1, "func_8005A030": 3, "func_8005A050": 1,
-              "func_8005A13C": 4, "func_8005A15C": 0, "func_8005A460": 0,
-              "func_8005A4AC": 6, "func_8005A6B8": 0, "func_8005A6D0": 0},
-        rename={"func_80059FE8": "NormalColorDpq3"},
-    ),
-
-    # RotTransPers4 lands g3org_eu at the head of the woven row
-    # data_80055F68 (true VA 0x8004EFC8, census eq 30/30 votes 19, src
-    # slps_00270): c head 0x78 (30 words, jr+delay close) + the 2-word
-    # zero pad tail data_8004F040 via gen_data_row (the tail words sit
-    # INSIDE the single spimdisasm block, so verbatim extraction cannot
-    # split them out - the slps_00270 placement keeps the same pad inside
-    # its 0x80 c row). func_8004EFC8's single jal site renames.
-    "rotpers4-g3org_eu": dict(
-        target="g3org_eu",
-        src="asm/g3org_eu/nonmatchings/data/data_80055F68.data.s",
-        yaml="config/splat.g3org_eu.yaml",
-        row_label="data_80055F68", row_yaml=0x2F7C8, row_extent=0x80,
-        walk_label=None,
-        head_extent=0x0, head_last=0, append_enddlabel=None,
-        pieces=[
-            dict(kind="c", label="RotTransPers4", yaml=0x2F7C8,
-                 extent=0x78, first=10, last=39),
-            dict(kind="tail", label="data_8004F040", yaml=0x2F840,
-                 extent=0x8, first=40, last=41,
-                 tail_ranges=[(40, 41)]),
-        ],
-        orphan_line=None,
-        boundary={10: 0xC8800000, 39: 0x00021083,
-                  40: 0x00000000, 41: 0x00000000},
-        refs={"func_8004EFC8": 1, "data_80055F68": 0},
-        rename={"func_8004EFC8": "RotTransPers4"},
-    ),
+    # The table carries STAGED (not-yet-executed) recipes only; executed
+    # entries retire in the window that lands them (the default suite must
+    # stay green - a permanently-red validator is useless). Retired on
+    # execution: gsinit-g3org_jp / gsinit-mainmenu_jp / readsz4-mainmenu_jp
+    # (landed GREEN first shot, 1b127649 + d366138c), normcolor3-g3_jp /
+    # normdpq3-g3_jp (c259ba64), rotpers4-g3org_eu (5c8b9fd7). The
+    # head-split class fields walk_label=None / orphan_line=None remain
+    # legal (no walk block; the whole source file retires; woven row names
+    # LIE - the label-vs-VA law). The g3org_jp RotAverageNclipColorDpq3
+    # head-split (data_80060E20 0x414 -> c 0xC8 + tail 0x34C data_800588B8,
+    # census eq 50/50 votes 21, all dw=0) is the next staged candidate.
 }
 
 
