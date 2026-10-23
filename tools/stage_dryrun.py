@@ -48,7 +48,7 @@ WORD_RE = re.compile(
     r"\s*\.word\s+0x([0-9A-Fa-f]{8})\s*$")
 LABEL_RE = re.compile(r"^(dlabel|enddlabel|nonmatching|glabel)\s+(\S+)\s*$")
 YAML_ROW_RE = re.compile(
-    r"^\s*-\s*\[\s*(0x[0-9A-Fa-f]+)\s*,\s*([a-z0-9_]+)\s*,\s*([A-Za-z0-9_]+)"
+    r"^\s*-\s*\[\s*(0x[0-9A-Fa-f]+)\s*,\s*([a-z0-9_]+)\s*,\s*([A-Za-z0-9_.]+)"
     r"\s*\]\s*#\s*(0x[0-9A-Fa-f]+)")
 
 # ---------------------------------------------------------------------------
@@ -94,6 +94,23 @@ RECIPES = {
     # than the landed row extent (0xd0, the source twin's span) - the
     # trailing pad words are ld zero fill, the c_extent field tracks the
     # ROW span (absorbed sum), the build + verify arbitrate the fill.
+    "rotpers3-mainmenu_eu": {
+        "class": "absorb",
+        "target": "mainmenu_eu",
+        "yaml": "config/splat.mainmenu_eu.yaml",
+        "src": "src/RotTransPers3.c",
+        "c_name": "RotTransPers3",
+        "c_yaml": 0x4E5D0,
+        "c_extent": 0x54,
+        "absorb": [
+            ("data_8006DDD0", "data", 0x48),
+            ("func_80079758.rowdef", "asm", 0xC),
+        ],
+        "refs": {
+            "data_8006DDD0": 2,
+            "func_8006DE18": 3,
+        },
+    },
 }
 
 
