@@ -1,0 +1,419 @@
+#!/usr/bin/env python3
+"""stage_dryrun.py - offline validator for staged data-row split recipes.
+
+The staged-landing workflow banks first-shot recipes (docs/TASKS.md) while
+the oracle is down; the landing itself waits for a witnessed oracle window.
+The recipe line anchors drift when upstream moves the tree, and the dry-run
+script that validated them originally lived in the (wiped) agent workspace.
+This tool rebuilds that validation IN-REPO so any window can re-prove a
+staged recipe against the current tree in seconds, offline.
+
+What it checks per recipe (pure text - reads no baseline, no build tree):
+  * the source .data.s exists with the spimdisasm header shape;
+  * every word line obeys the yaml-offset law (VA = file_off + 0x8001F800,
+    word == byte-swapped encoding column) - corruption catches here;
+  * each planned piece (c row / gap row / tail row) covers exactly its
+    extent, is word-contiguous, starts/ends at the claimed yaml offsets,
+    and the pieces tile the covering row with no gap or overlap;
+  * the boundary words (last head word, first/last c words, first tail
+    word) carry the recipe's expected encodings - the landed-class
+    signatures (e.g. GsInitCoord2param's 0x34021000..0xAC800018 schedule);
+  * the simulated head extract balances dlabel/enddlabel (appending the
+    walk enddlabel where the recipe says so) and the simulated tail
+    extract contains no c/gap words and no orphan enddlabel;
+  * the yaml covering row exists with the claimed extent comment and the
+    insert arithmetic closes (piece extents sum to the row extent);
+  * the walk labels' spellings agree with their content VAs (the name-VA
+    law for func_ labels) and the c member sits at the staged block-rel;
+  * the reference inventory still holds: each externally-referenced label
+    has its recipe-stated number of textual references outside the source
+    file (jal sites / rowdef mentions), and for a retiring block the jal
+    sites to rename are all present at the staged count.
+
+Usage: python3 tools/stage_dryrun.py [recipe ...]   (default: all)
+Output: per-check [ok]/[FAIL] lines + final verdict per recipe.
+Exit: 0 all recipes pass; 1 any failure; 2 unknown recipe name.
+"""
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+BASE_VA = 0x8001F800   # yaml offset -> retail VA (the pair_report law)
+
+WORD_RE = re.compile(
+    r"^\s*/\*\s*([0-9A-Fa-f]+)\s+([0-9A-Fa-f]{8})\s+([0-9A-Fa-f]{8})\s*\*/"
+    r"\s*\.word\s+0x([0-9A-Fa-f]{8})\s*$")
+LABEL_RE = re.compile(r"^(dlabel|enddlabel|nonmatching|glabel)\s+(\S+)\s*$")
+YAML_ROW_RE = re.compile(
+    r"^\s*-\s*\[\s*(0x[0-9A-Fa-f]+)\s*,\s*([a-z0-9_]+)\s*,\s*([A-Za-z0-9_]+)"
+    r"\s*\]\s*#\s*(0x[0-9A-Fa-f]+)")
+
+# ---------------------------------------------------------------------------
+# Recipes. Line anchors are 1-based and were pinned at HEAD 6f7ae8d4; every
+# check re-derives the geometry independently so a drifted anchor surfaces
+# as a concrete failure instead of a silent wrong cut.
+# Piece dict: kind (head/c/gap/tail), label (yaml row name), yaml, extent,
+# first/last = source line span of the piece's WORD lines (head spans the
+# whole file prefix), tail_ranges = the sed ranges that build the tail row.
+# ---------------------------------------------------------------------------
+
+RECIPES = {
+    # The GsInitCoord2param completion wave (docs/TASKS.md, 88b35a08):
+    # g3org_jp's last census copy, MID-ROW inside walk block func_8004C5C8
+    # at block-rel +0x7C; the g3org_eu shape (tail-preservation class).
+    "gsinit-g3org_jp": dict(
+        target="g3org_jp",
+        src="asm/g3org_jp/nonmatchings/data/data_8005281C.data.s",
+        yaml="config/splat.g3org_jp.yaml",
+        row_label="data_8005281C", row_yaml=0x2C79C, row_extent=0xA14,
+        walk_label="func_8004C5C8", walk_rel=0x7C,
+        head_extent=0x6A8, head_last=445, append_enddlabel="func_8004C5C8",
+        pieces=[
+            dict(kind="c", label="GsInitCoord2param", yaml=0x2CE44,
+                 extent=0x2C, first=446, last=456),
+            dict(kind="tail", label="data_8004CE70", yaml=0x2CE70,
+                 extent=0x340, first=457, last=557,
+                 tail_ranges=[(457, 557), (559, None)]),
+        ],
+        orphan_line=558, orphan_text="enddlabel func_8004C5C8",
+        boundary={445: 0x00000000, 446: 0x34021000,
+                  456: 0xAC800018, 457: 0x27BDFFE8},
+        refs={"func_8004C5C8": 3, "func_8004C804": 2, "func_8004C888": 1,
+              "func_8004BF9C": 1, "func_8004C460": 1},
+    ),
+
+    # Same wave, mainmenu_jp's copy: MID-ROW inside walk block func_80063640
+    # at block-rel +0x7C; same tail-preservation class, same 11-word body.
+    "gsinit-mainmenu_jp": dict(
+        target="mainmenu_jp",
+        src="asm/mainmenu_jp/nonmatchings/data/data_8006D690.data.s",
+        yaml="config/splat.mainmenu_jp.yaml",
+        row_label="data_8006D690", row_yaml=0x43E40, row_extent=0x3E8,
+        walk_label="func_80063640", walk_rel=0x7C,
+        head_extent=0x7C, head_last=40, append_enddlabel="func_80063640",
+        pieces=[
+            dict(kind="c", label="GsInitCoord2param", yaml=0x43EBC,
+                 extent=0x2C, first=41, last=51),
+            dict(kind="tail", label="data_80063738", yaml=0x43EE8,
+                 extent=0x340, first=52, last=152,
+                 tail_ranges=[(52, 152), (154, None)]),
+        ],
+        orphan_line=153, orphan_text="enddlabel func_80063640",
+        boundary={40: 0x00000000, 41: 0x34021000,
+                  51: 0xAC800018, 52: 0x27BDFFE8},
+        refs={"func_80063640": 4, "func_8006387C": 2, "func_80063900": 2},
+    ),
+
+    # The ReadSZfifo4+ReadGeomOffset wave (docs/TASKS.md, 6f7ae8d4):
+    # mainmenu_jp data_80070F14 splits head 0x14 (complete walk block, no
+    # append) + c ReadSZfifo4 0x18 + gap 0x28 + c ReadGeomOffset 0x20 +
+    # tail 0x29C from the func_80066818 label boundary; the retiring block
+    # func_800667B8 is jal'd from 13 sites that all rename to ReadSZfifo4.
+    "readsz4-mainmenu_jp": dict(
+        target="mainmenu_jp",
+        src="asm/mainmenu_jp/nonmatchings/data/data_80070F14.data.s",
+        yaml="config/splat.mainmenu_jp.yaml",
+        row_label="data_80070F14", row_yaml=0x46FA4, row_extent=0x310,
+        walk_label="func_800667B8", walk_rel=0x0,
+        head_extent=0x14, head_last=15, append_enddlabel=None,
+        pieces=[
+            dict(kind="c", label="ReadSZfifo4", yaml=0x46FB8,
+                 extent=0x18, first=20, last=25),
+            dict(kind="gap", label="data_800667D0", yaml=0x46FD0,
+                 extent=0x28, first=26, last=35),
+            dict(kind="c", label="ReadGeomOffset", yaml=0x46FF8,
+                 extent=0x20, first=36, last=43),
+            dict(kind="tail", label="data_80066818", yaml=0x47018,
+                 extent=0x29C, first=46, last=221,
+                 tail_ranges=[(46, None)]),
+        ],
+        orphan_line=44, orphan_text="enddlabel func_800667B8",
+        boundary={14: 0x00000000, 20: 0xE8900000, 25: 0x00000000,
+                  26: 0xE88C0000, 36: 0x4848C000, 43: 0x00000000,
+                  49: 0x4842D000},
+        refs={"func_800667B8": 13, "func_80066818": 1, "func_80066824": 1},
+        rename={"func_800667B8": "ReadSZfifo4"},
+    ),
+}
+
+
+def parse_source(path: Path):
+    """Return (lines, words, labels). words = (lineno, file_off, va, word)."""
+    lines = path.read_text().splitlines()
+    words, labels = [], []
+    for i, text in enumerate(lines, start=1):
+        m = WORD_RE.match(text)
+        if m:
+            off = int(m.group(1), 16)
+            va = int(m.group(2), 16)
+            enc = bytes.fromhex(m.group(3))
+            word = int(m.group(4), 16)
+            words.append((i, off, va, enc, word))
+            continue
+        m = LABEL_RE.match(text)
+        if m:
+            labels.append((i, m.group(1), m.group(2)))
+    return lines, words, labels
+
+
+def byteswap(word: int) -> bytes:
+    return word.to_bytes(4, "big")[::-1]
+
+
+class Checker:
+    def __init__(self, name: str):
+        self.name = name
+        self.fails = 0
+
+    def check(self, label: str, ok: bool, detail: str = "") -> bool:
+        if ok:
+            print(f"  [ok]   {label}")
+        else:
+            self.fails += 1
+            print(f"  [FAIL] {label}{': ' + detail if detail else ''}")
+        return ok
+
+
+def words_in_range(words, first, last):
+    return [w for w in words if first <= w[0] <= last]
+
+
+def run_recipe(name: str, r: dict) -> int:
+    print(f"recipe {name} (target {r['target']})")
+    ck = Checker(name)
+    src = REPO / r["src"]
+
+    # 1. source present
+    if not ck.check("src-exists", src.is_file(), str(r["src"])):
+        return 1
+    lines, words, labels = parse_source(src)
+
+    # 2. header shape
+    ok = (len(lines) >= 7
+          and lines[0].startswith('.include "macro.inc"')
+          and lines[2].startswith(".section .data")
+          and "Generated by spimdisasm" in lines[4]
+          and lines[6].startswith("nonmatching"))
+    ck.check("header-shape", ok)
+
+    # 3. parse coverage: the file must be fully understood
+    n_word_lines = sum(1 for t in lines if t.strip().startswith("/* ") and ".word" in t)
+    ck.check("parse-coverage", len(words) == n_word_lines and len(words) > 0,
+             f"{len(words)}/{n_word_lines} word lines parsed")
+
+    # 4. VA + encoding law on every word line
+    bad = [w for w in words
+           if w[2] != w[1] + BASE_VA or bytes.fromhex(w[3].hex()) != byteswap(w[4])]
+    ck.check("va-law", not bad,
+             f"{len(bad)} offending lines" if bad else
+             f"{len(words)} words, VA = file_off + 0x{BASE_VA:X} holds")
+
+    by_line = {w[0]: w for w in words}
+
+    # 5/6. per-piece geometry: word count, contiguity, yaml anchors
+    for p in r["pieces"]:
+        if p["kind"] == "tail":
+            span_words = []
+            for a, b in p["tail_ranges"]:
+                span_words += words_in_range(words, a, b if b else len(lines))
+        else:
+            span_words = words_in_range(words, p["first"], p["last"])
+        want = p["extent"] // 4
+        ck.check(f"piece {p['label']} word-count",
+                 len(span_words) == want,
+                 f"{len(span_words)} != {want}")
+        offs = [w[1] for w in span_words]
+        contiguous = all(offs[i + 1] - offs[i] == 4 for i in range(len(offs) - 1))
+        ck.check(f"piece {p['label']} contiguity", contiguous)
+        if offs:
+            ck.check(f"piece {p['label']} start-offset",
+                     offs[0] == p["yaml"], f"0x{offs[0]:X} != 0x{p['yaml']:X}")
+            ck.check(f"piece {p['label']} end-offset",
+                     offs[-1] == p["yaml"] + p["extent"] - 4,
+                     f"0x{offs[-1]:X} != 0x{p['yaml'] + p['extent'] - 4:X}")
+        if p["kind"] in ("c", "gap"):
+            labels_inside = [l for l in labels if p["first"] <= l[0] <= p["last"]]
+            ck.check(f"piece {p['label']} label-free", not labels_inside,
+                     str(labels_inside[:3]))
+
+    # 7. tiling: head + pieces == row, pieces abut
+    total = r["head_extent"] + sum(p["extent"] for p in r["pieces"])
+    ck.check("tiling-sum", total == r["row_extent"],
+             f"0x{total:X} != 0x{r['row_extent']:X}")
+    edge = r["row_yaml"] + r["head_extent"]
+    for p in r["pieces"]:
+        ck.check(f"tiling-abut {p['label']}", p["yaml"] == edge,
+                 f"0x{p['yaml']:X} != 0x{edge:X}")
+        edge += p["extent"]
+    ck.check("tiling-row-end", edge == r["row_yaml"] + r["row_extent"],
+             f"0x{edge:X} != 0x{r['row_yaml'] + r['row_extent']:X}")
+
+    # 8. boundary words
+    for lineno, want in sorted(r["boundary"].items()):
+        w = by_line.get(lineno)
+        ck.check(f"boundary line {lineno}",
+                 w is not None and w[4] == want,
+                 "" if w is None else f"0x{w[4]:08X} != 0x{want:08X}")
+
+    # 9. simulated head extract
+    head_words = words_in_range(words, 1, r["head_last"])
+    ck.check("head word-count", len(head_words) == r["head_extent"] // 4,
+             f"{len(head_words)} != {r['head_extent'] // 4}")
+    head_labels = [l for l in labels if l[0] <= r["head_last"]]
+    d = sum(1 for l in head_labels if l[1] == "dlabel")
+    e = sum(1 for l in head_labels if l[1] == "enddlabel")
+    if r["append_enddlabel"]:
+        e += 1  # the recipe appends the walk enddlabel at head end
+        ck.check("head walk-dlabel-open",
+                 any(l[1] == "dlabel" and l[2] == r["walk_label"]
+                     for l in head_labels) and e == d)
+    else:
+        ck.check("head labels-balanced-in-place", d == e, f"{d} dlabel / {e} enddlabel")
+
+    # 10. simulated tail extract
+    tail_specs = [p for p in r["pieces"] if p["kind"] == "tail"]
+    for p in tail_specs:
+        span_words = []
+        for a, b in p["tail_ranges"]:
+            span_words += words_in_range(words, a, b if b else len(lines))
+        ck.check(f"tail {p['label']} word-count",
+                 len(span_words) == p["extent"] // 4,
+                 f"{len(span_words)} != {p['extent'] // 4}")
+        c_gaps = {q["yaml"] + k for q in r["pieces"]
+                  if q["kind"] in ("c", "gap")
+                  for k in range(0, q["extent"], 4)}
+        leaked = [w for w in span_words if w[1] in c_gaps]
+        ck.check(f"tail {p['label']} no-c/gap-leak", not leaked,
+                 f"{len(leaked)} leaked words" if leaked else "")
+        tail_labels = [l for l in labels if any(a <= l[0] and (b is None or l[0] <= b)
+                                                for a, b in p["tail_ranges"])]
+        d = sum(1 for l in tail_labels if l[1] == "dlabel")
+        e = sum(1 for l in tail_labels if l[1] == "enddlabel")
+        ck.check(f"tail {p['label']} labels-balanced", d == e,
+                 f"{d} dlabel / {e} enddlabel")
+
+    # 11. orphan enddlabel
+    orphan = lines[r["orphan_line"] - 1].strip() if r["orphan_line"] <= len(lines) else ""
+    ck.check("orphan-line", orphan == r["orphan_text"],
+             f"{orphan!r} != {r['orphan_text']!r}")
+
+    # 12. yaml covering row + next-row extent proof
+    ytext = (REPO / r["yaml"]).read_text().splitlines()
+    row_re = None
+    next_row = None
+    for t in ytext:
+        m = YAML_ROW_RE.match(t)
+        if not m:
+            continue
+        off = int(m.group(1), 16)
+        if row_re is not None and next_row is None:
+            next_row = off, m.group(2), m.group(3)
+        if (off == r["row_yaml"] and m.group(3) == r["row_label"]):
+            row_re = m
+    ck.check("yaml-row-present", row_re is not None)
+    if row_re is not None:
+        ck.check("yaml-row-extent",
+                 int(row_re.group(4), 16) == r["row_extent"],
+                 f"0x{int(row_re.group(4), 16):X} != 0x{r['row_extent']:X}")
+    if next_row:
+        ck.check("yaml-next-row-abuts",
+                 next_row[0] == r["row_yaml"] + r["row_extent"],
+                 f"next row 0x{next_row[0]:X} != 0x{r['row_yaml'] + r['row_extent']:X}")
+
+    # 13. yaml insert arithmetic + landed-name collision
+    for p in r["pieces"]:
+        line = f"- [0x{p['yaml']:X}, {p['kind']}, {p['label']}]   # 0x{p['extent']:x}"
+        if p["kind"] == "c":
+            dup = [t for t in ytext
+                   if YAML_ROW_RE.match(t) and YAML_ROW_RE.match(t).group(3) == p["label"]]
+            ck.check(f"yaml-insert {p['label']} not-yet-landed", not dup,
+                     dup[0].strip() if dup else "")
+        else:
+            ck.check(f"yaml-insert {p['label']} shape-ok",
+                     line.endswith(f"# 0x{p['extent']:x}"))
+
+    # 14. name-VA law on walk + tail dlabels; walk member sits at walk_rel
+    def label_first_word(label):
+        for i, l in enumerate(labels):
+            if l[1] == "dlabel" and l[2] == label:
+                nxt = [w for w in words if w[0] > l[0]]
+                return nxt[0] if nxt else None
+        return None
+
+    for lbl in [r["walk_label"]] + [p.get("keep") for p in r["pieces"] if p.get("keep")]:
+        w = label_first_word(lbl)
+        if not ck.check(f"name-VA {lbl}", w is not None):
+            continue
+        name_va = int(lbl.split("_")[1], 16)
+        ck.check(f"name-VA {lbl} agrees", w[2] == name_va,
+                 f"content VA 0x{w[2]:X} != name 0x{name_va:X}")
+    walk_first = label_first_word(r["walk_label"])
+    member_yaml = r["pieces"][0]["yaml"]
+    ck.check("walk-member-rel",
+             walk_first is not None
+             and member_yaml == walk_first[1] + r["walk_rel"],
+             f"0x{member_yaml:X} != walk+0x{r['walk_rel']:X}")
+
+    # 15. reference inventory outside the source file.
+    # Scoped to the recipe's target subtree: label names collide across
+    # targets (each target has its own 0x800xxxxx namespace), so a global
+    # count reads other targets' same-named labels.
+    for lbl, expect in sorted(r["refs"].items()):
+        pat = re.compile(r"\b" + re.escape(lbl) + r"\b")
+        count = 0
+        files = set()
+        bases = [REPO / "asm" / r["target"], REPO / "src", REPO / "include"]
+        for base in bases:
+            for p in base.rglob("*") if base.is_dir() else []:
+                if not p.is_file() or p == src:
+                    continue
+                try:
+                    text = p.read_text(errors="replace")
+                except OSError:
+                    continue
+                hits = pat.findall(text)
+                if hits:
+                    count += len(hits)
+                    files.add(str(p.relative_to(REPO)))
+        ck.check(f"refs {lbl} == {expect}", count == expect,
+                 f"{count} refs in {sorted(files)[:3]}")
+
+    # 16. rename inventory (retiring block; same per-target scoping)
+    for retiree, new_name in r.get("rename", {}).items():
+        jal_re = re.compile(r"jal\s+" + re.escape(retiree) + r"\b")
+        sites = []
+        for p in (REPO / "asm" / r["target"]).rglob("*.s"):
+            if p == src:
+                continue
+            for i, t in enumerate(p.read_text(errors="replace").splitlines(), 1):
+                if jal_re.search(t):
+                    sites.append((str(p.relative_to(REPO)), i))
+        ck.check(f"rename {retiree} jal-sites == {len(r['refs']) and r['refs'][retiree]}",
+                 len(sites) == r["refs"][retiree],
+                 f"{len(sites)} sites")
+        ck.check(f"rename target {new_name} not-yet-used-here",
+                 not [t for t in ytext if new_name in t and "c," in t])
+
+    verdict = "ALL CHECKS PASS" if ck.fails == 0 else f"{ck.fails} FAILURE(S)"
+    print(f"== {name}: {verdict} ==")
+    return 0 if ck.fails == 0 else 1
+
+
+def main() -> int:
+    names = sys.argv[1:] or list(RECIPES)
+    unknown = [n for n in names if n not in RECIPES]
+    if unknown:
+        print(f"unknown recipe(s): {', '.join(unknown)}", file=sys.stderr)
+        print(f"known: {', '.join(RECIPES)}", file=sys.stderr)
+        return 2
+    rc = 0
+    for n in names:
+        rc |= run_recipe(n, RECIPES[n])
+    return rc
+
+
+if __name__ == "__main__":
+    sys.exit(main())
