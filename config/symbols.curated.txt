@@ -361,6 +361,12 @@ state_table_7 = 0x800201D8; // state table: -> 0x8002644C
 state_table_8 = 0x800201DC; // state table: -> 0x800263A4
 
 // target: g3_eu
+//
+// Snd_ callee pins for the SsSeqCalledTbyT landing (window
+// cron-20261022-2341; the 58 percent vintage-split rows wait for
+// the census):
+Snd_tempo = 0x8006CEBC; // LIBSND TEMPO member .text+0x0 (extent 0x1E0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_stop = 0x80070A5C; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
@@ -523,6 +529,14 @@ SsSetStereo = 0x80068B28; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x800A4344; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
 // target: g3org_jp
+//
+// Snd_ callee pins for the SsSeqCalledTbyT landing (window
+// cron-20261022-2341; the 58 percent vintage-split rows wait for
+// the census):
+Snd_tempo = 0x8006D6D8; // LIBSND TEMPO member .text+0x0 (extent 0x1E0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_crescendo = 0x8006CD7C; // LIBSND CRES member .text+0x0 (extent 0x57C); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_decrescendo = 0x8006969C; // LIBSND DECRE member .text+0x0 (extent 0x4B0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_stop = 0x8006D2F8; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
@@ -573,6 +587,11 @@ _svm_stereo_mono = 0x8017881C; // LIBSND VS_MONO member bss static; evidence und
 SsSetMono = 0x80067FA4; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x80067FB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
+//
+// Snd_ callee pins for the SsSeqCalledTbyT landing (window
+// cron-20261022-2341; the 58 percent vintage-split rows wait for
+// the census):
+Snd_stop = 0x80086040; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
@@ -843,6 +862,11 @@ SsSetStereo = 0x80080138; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // the flag, jr $ra with sltiu $v0,$v0,1 in the delay slot = return
 // flag == 0). S_ITC.OBJ carries no bss of its own - S_INI.OBJ defines
 // _spu_inTransfer (Psy-Q 2.60 xbss) and the getter reads it as an
+//
+// Snd_ callee pins for the SsSeqCalledTbyT landing (window
+// cron-20261022-2341; the 58 percent vintage-split rows wait for
+// the census):
+Snd_stop = 0x8004946C; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 // extern. The flag sits beyond the payload segment (EXE bss; no dlabel
 // renders), resolved extern by the C. Full evidence under target:
 // mainmenu_jp.
@@ -896,6 +920,14 @@ SsSetStereo = 0x800440E4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x8005C988; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
 // target: slps_00270
+//
+// Snd_ callee pins for the SsSeqCalledTbyT landing (window
+// cron-20261022-2341; the 58 percent vintage-split rows wait for
+// the census):
+Snd_tempo = 0x800497E8; // LIBSND TEMPO member .text+0x0 (extent 0x1E0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_crescendo = 0x80048E8C; // LIBSND CRES member .text+0x0 (extent 0x57C); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_decrescendo = 0x800457AC; // LIBSND DECRE member .text+0x0 (extent 0x4B0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_stop = 0x80049408; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
