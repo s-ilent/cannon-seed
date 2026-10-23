@@ -670,7 +670,7 @@ segments:
       - [0x626F4, data, data_800907B4]   # 0x160
       - [0x62854, c, SsVabTransCompleted]   # 0x2c sdk
       - [0x62880, asm, func_80090A70]   # 0xa8 sdk
-      - [0x62928, asm, func_80090B18]   # 0x274 sdk
+      - [0x62928, c, SsSeqCalledTbyT]   # 0x274 sdk
       - [0x62B9C, asm, func_80090D8C]   # 0xa0 sdk
       - [0x62C3C, asm, func_80090E2C]   # 0x64 sdk
       - [0x62CA0, asm, func_80090E90]   # 0x1e0 sdk

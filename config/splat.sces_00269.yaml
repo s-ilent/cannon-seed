@@ -367,7 +367,7 @@ segments:
       - [0x25B20, c, SsSetSerialVol]   # 0x160 sdk
       - [0x25C80, c, SsVabTransCompleted]   # 0x2c sdk
       - [0x25CAC, asm, func_8004ADBC]   # 0xa8 sdk
-      - [0x25D54, asm, func_8004AE64]   # 0x274 sdk
+      - [0x25D54, c, SsSeqCalledTbyT]   # 0x274 sdk
       - [0x25FC8, data, data_8004B0D8]   # 0x104
       - [0x260CC, asm, func_8004B30C]   # 0x1e0 sdk
       - [0x262AC, data, data_8004B4EC]   # 0x328
