@@ -98,6 +98,23 @@ RECIPES = {
     # than the landed row extent (0xd0, the source twin's span) - the
     # trailing pad words are ld zero fill, the c_extent field tracks the
     # ROW span (absorbed sum), the build + verify arbitrate the fill.
+    "colordpq-mainmenu_eu": {
+        "class": "absorb",
+        "target": "mainmenu_eu",
+        "yaml": "config/splat.mainmenu_eu.yaml",
+        "src": "src/ColorDpq.c",
+        "c_name": "ColorDpq",
+        "c_yaml": 0x4E7B4,
+        "c_extent": 0x28,
+        "absorb": [
+            ("data_800798F4", "data", 0x8),
+            ("func_800798FC", "asm", 0x20),
+        ],
+        "refs": {
+            "data_800798F4": 0,
+            "func_800798FC": 3,
+        },
+    },
 }
 
 
