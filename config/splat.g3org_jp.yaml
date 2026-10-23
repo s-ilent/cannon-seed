@@ -420,7 +420,11 @@ segments:
       - [0x2E0E8, asm, func_80054628]   # 0xb8 sdk
       - [0x2E1A0, data, data_800546E0]   # 0x178
       - [0x2E318, asm, func_80054858]   # 0x180 sdk
-      - [0x2E498, data, data_800549D8]   # 0x131c
+      - [0x2E498, data, data_800549D8]   # 0x11d8
+      - [0x2F670, c, LightColor]   # 0x28
+      - [0x2F698, c, DpqColorLight]   # 0x28
+      - [0x2F6C0, c, DpqColor3]   # 0x3c
+      - [0x2F6FC, data, data_8004EEFC]   # 0xb8
       - [0x2F7B4, c, OuterProduct12]   # 0x58 sdk
       - [0x2F80C, c, OuterProduct0]   # 0x58 sdk
       - [0x2F864, data, data_8004F064]   # 0x1c
