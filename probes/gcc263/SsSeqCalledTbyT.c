@@ -68,9 +68,9 @@
  * func_80040C40 / func_80048E8C / func_800457AC / func_80049408; sces
  * func_80040930 / func_800490AC / func_80045AAC / func_8004946C;
  * mainmenu_eu func_8007D504 / func_80085C80 / func_80082680 /
- * func_80086040; g3_eu func_80067FBC / func_80070A5C / func_8007069C /
- * func_8006D09C; g3org_jp func_80064BCC / func_8006D2F8 / func_8006CD7C /
- * func_8006969C) - they are NOT sdk_members placements, so the
+ * func_80086040; g3_eu func_80067FBC / func_8007069C / func_8006D09C /
+ * func_80070A5C; g3org_jp func_80064BCC / func_8006CD7C / func_8006969C /
+ * func_8006D2F8) - they are NOT sdk_members placements, so the
  * landing needs either a sig-db extension against the psyq LIBSND
  * archive (SndPitch/SndVolume-class candidates for the 0x10/0x20 arms)
  * or the carve-name rename class for per-target function aliases.
@@ -90,6 +90,27 @@
  * Snd_stop pins wherever the walks show woven jal names (the census
  * placed CRES x1 / DECRE x2 / STOP x0), the five shared-alias static
  * sets, and one resolve for the game-side init.
+ * PER-TARGET PIN TABLE (scripts/stage_snd_pins.py, positional from the
+ * walks' jal immediates, byte-verified 0x60-deep against the LIBSND.LIB
+ * member bodies on each target's own baseline; the tempo40/80 sites hit
+ * the CURATED Snd_tempo VAs exactly in sces/mainmenu_eu, which
+ * validates the positional mapping):
+ *   slps_00270:  tempo 0x800497E8 / crescendo 0x80048E8C /
+ *                decrescendo 0x800457AC / stop 0x80049408   (all 92%)
+ *   sces_00269:  tempo 0x800458CC (curated) / stop 0x8004946C (92%);
+ *                crescendo 0x800490AC + decrescendo 0x80045AAC read
+ *                58% at 0x60 depth - DIFFERENT-VINTAGE bodies, the pin
+ *                verdict must come from the census, not this prefix
+ *   mainmenu_eu: tempo 0x800824A0 (curated) / stop 0x80086040 (92%);
+ *                crescendo 0x80085C80 + decrescendo 0x80082680 at 58%
+ *                (same vintage question)
+ *   g3_eu:       tempo 0x8006CEBC / stop 0x80070A5C (92% each);
+ *                crescendo 0x8007069C + decrescendo 0x8006D09C at 58%
+ *   g3org_jp:    tempo 0x8006D6D8 / crescendo 0x8006CD7C /
+ *                decrescendo 0x8006969C / stop 0x8006D2F8   (all 92%)
+ * The 58% sites sit where the walks' byte streams diverge mid-member
+ * (the wrapper-2 inner-SCA vintage split class); the landing stages the
+ * 92% pins immediately and hands the 58% rows to the census.
  * Probe-only names below; no yaml edit, no curation edit this window.
  */
 extern long SsSeqCalledTbyT_guard;       /* slps D_8011506C */
