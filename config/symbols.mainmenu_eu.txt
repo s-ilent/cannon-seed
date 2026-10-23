@@ -120,7 +120,6 @@ func_80077704 = 0x8006C154; // type:func
 func_80078288 = 0x8006CBA8; // type:func
 func_800791E0 = 0x8006D8A0; // type:func
 func_800798C8 = 0x8006DF88; // type:func
-func_800798FC = 0x8006DFBC; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_80079AD8.rowdef and the retail-encoded definition owns the plain name): func_80079AD8 = 0x8006E068; // type:func
 func_80079D68 = 0x8006E2F8; // type:func
 // FLIP-ROWDEF (woven row name retired, the row is func_8007A020.rowdef and the retail-encoded definition owns the plain name): func_8007A020 = 0x8006E5B0; // type:func

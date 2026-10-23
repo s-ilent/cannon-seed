@@ -78,7 +78,8 @@ RECIPES = {
     # rotpers3-mainmenu_eu (the third ABSORB landing: the first .rowdef
     # absorption - the dotted-label regex widening, the rowdef's live
     # glabel retires with zero consumers, the woven plain name's jal
-    # collision survivor untouched).
+    # collision survivor untouched), colordpq-mainmenu_eu (the fourth:
+    # the C-SPILL wave drains 4/4).
     # The head-split class fields walk_label=None / orphan_line=None
     # remain legal (no walk block; the whole source file retires; woven
     # row names LIE - the label-vs-VA law).
@@ -98,23 +99,6 @@ RECIPES = {
     # than the landed row extent (0xd0, the source twin's span) - the
     # trailing pad words are ld zero fill, the c_extent field tracks the
     # ROW span (absorbed sum), the build + verify arbitrate the fill.
-    "colordpq-mainmenu_eu": {
-        "class": "absorb",
-        "target": "mainmenu_eu",
-        "yaml": "config/splat.mainmenu_eu.yaml",
-        "src": "src/ColorDpq.c",
-        "c_name": "ColorDpq",
-        "c_yaml": 0x4E7B4,
-        "c_extent": 0x28,
-        "absorb": [
-            ("data_800798F4", "data", 0x8),
-            ("func_800798FC", "asm", 0x20),
-        ],
-        "refs": {
-            "data_800798F4": 0,
-            "func_800798FC": 3,
-        },
-    },
 }
 
 
