@@ -430,7 +430,16 @@ segments:
       - [0x3FBA0, data, data_80068A70]   # 0x2c24
       - [0x427C4, asm, func_8006BC84]   # 0x10 sdk
       - [0x427D4, asm, func_8006BC94]   # 0x10 sdk
-      - [0x427E4, data, data_8006BCA4]   # 0x934
+      - [0x427E4, data, data_8006BCA4]   # 0x7e4
+      - [0x42FC8, c, SetVertexTri]   # 0x20 sdk
+      - [0x42FE8, data, data_800627E8]   # 0x34
+      - [0x4301C, c, SetBackColor]   # 0x20 sdk
+      - [0x4303C, c, SetFarColor]   # 0x20 sdk
+      - [0x4305C, data, data_8006285C]   # 0x14
+      - [0x43070, c, SetSZfifo4]   # 0x18 sdk
+      - [0x43088, data, data_80062888]   # 0x48
+      - [0x430D0, c, SetGeomOffset]   # 0x18 sdk
+      - [0x430E8, data, data_800628E8]   # 0x30
       - [0x43118, asm, func_8006C838]   # 0x78 sdk
       - [0x43190, asm, func_8006C8B0]   # 0x158 sdk
       - [0x432E8, asm, func_8006CA08]   # 0x78 sdk

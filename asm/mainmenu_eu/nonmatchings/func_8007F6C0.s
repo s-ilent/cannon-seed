@@ -16,10 +16,10 @@ glabel gte_init
     /* 5387C 8007307C 00000000 */   nop
     /* 53880 80073080 21200000 */  addu       $a0, $zero, $zero
     /* 53884 80073084 21280000 */  addu       $a1, $zero, $zero
-    /* 53888 80073088 0F8A010C */  jal        func_8006283C
+    /* 53888 80073088 0F8A010C */  jal        SetFarColor
     /* 5388C 8007308C 21300000 */   addu      $a2, $zero, $zero
     /* 53890 80073090 21200000 */  addu       $a0, $zero, $zero
-    /* 53894 80073094 348A010C */  jal        func_800628D0
+    /* 53894 80073094 348A010C */  jal        SetGeomOffset
     /* 53898 80073098 21280000 */   addu      $a1, $zero, $zero
     /* 5389C 8007309C 1980013C */  lui        $at, %hi(D_8018DC34)
     /* 538A0 800730A0 34DC20A4 */  sh         $zero, %lo(D_8018DC34)($at)
