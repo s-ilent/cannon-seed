@@ -445,7 +445,9 @@ segments:
       - [0x432E8, asm, func_8006CA08]   # 0x78 sdk
       - [0x43360, asm, func_8006CA80]   # 0x27c sdk
       - [0x435DC, asm, func_8006CCFC]   # 0x168 sdk
-      - [0x43744, data, data_8006CE64]   # 0x3e8
+      - [0x43744, data, data_8006CE64]   # 0x7c
+      - [0x437C0, c, GsInitCoord2param]   # 0x2c sdk
+      - [0x437EC, data, data_80062FEC]   # 0x340
       - [0x43B2C, asm, func_8006D37C]   # 0x98 sdk
       - [0x43BC4, asm, func_8006D414]   # 0x78 sdk
       - [0x43C3C, c, GsGetTimInfo]   # 0xe4 sdk
