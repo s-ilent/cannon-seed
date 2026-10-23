@@ -14,7 +14,7 @@ glabel GsSetAmbient
     /* 2D234 8004CA34 1000BFAF */  sw         $ra, 0x10($sp)
     /* 2D238 8004CA38 03210400 */  sra        $a0, $a0, 4
     /* 2D23C 8004CA3C 03290500 */  sra        $a1, $a1, 4
-    /* 2D240 8004CA40 E52D010C */  jal        func_8004B794
+    /* 2D240 8004CA40 E52D010C */  jal        SetBackColor
     /* 2D244 8004CA44 03310600 */   sra       $a2, $a2, 4
     /* 2D248 8004CA48 1000BF8F */  lw         $ra, 0x10($sp)
     /* 2D24C 8004CA4C 1800BD27 */  addiu      $sp, $sp, 0x18

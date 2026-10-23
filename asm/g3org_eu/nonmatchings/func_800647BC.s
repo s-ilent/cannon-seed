@@ -72,7 +72,7 @@ glabel GsSetDrawBuffOffset
     /* 3C21C 8005BA1C 00007084 */  lh         $s0, 0x0($v1)
     /* 3C220 8005BA20 00000000 */  nop
     /* 3C224 8005BA24 21805000 */  addu       $s0, $v0, $s0
-    /* 3C228 8005BA28 122E010C */  jal        func_8004B848
+    /* 3C228 8005BA28 122E010C */  jal        SetGeomOffset
     /* 3C22C 8005BA2C 21280002 */   addu      $a1, $s0, $zero
     /* 3C230 8005BA30 1880013C */  lui        $at, %hi(D_80178984)
     /* 3C234 8005BA34 848931A4 */  sh         $s1, %lo(D_80178984)($at)
