@@ -123,6 +123,34 @@ RECIPES = {
               "func_8005A4AC": 6, "func_8005A6B8": 0, "func_8005A6D0": 0},
         rename={"func_80059FE8": "NormalColorDpq3"},
     ),
+
+    # RotTransPers4 lands g3org_eu at the head of the woven row
+    # data_80055F68 (true VA 0x8004EFC8, census eq 30/30 votes 19, src
+    # slps_00270): c head 0x78 (30 words, jr+delay close) + the 2-word
+    # zero pad tail data_8004F040 via gen_data_row (the tail words sit
+    # INSIDE the single spimdisasm block, so verbatim extraction cannot
+    # split them out - the slps_00270 placement keeps the same pad inside
+    # its 0x80 c row). func_8004EFC8's single jal site renames.
+    "rotpers4-g3org_eu": dict(
+        target="g3org_eu",
+        src="asm/g3org_eu/nonmatchings/data/data_80055F68.data.s",
+        yaml="config/splat.g3org_eu.yaml",
+        row_label="data_80055F68", row_yaml=0x2F7C8, row_extent=0x80,
+        walk_label=None,
+        head_extent=0x0, head_last=0, append_enddlabel=None,
+        pieces=[
+            dict(kind="c", label="RotTransPers4", yaml=0x2F7C8,
+                 extent=0x78, first=10, last=39),
+            dict(kind="tail", label="data_8004F040", yaml=0x2F840,
+                 extent=0x8, first=40, last=41,
+                 tail_ranges=[(40, 41)]),
+        ],
+        orphan_line=None,
+        boundary={10: 0xC8800000, 39: 0x00021083,
+                  40: 0x00000000, 41: 0x00000000},
+        refs={"func_8004EFC8": 1, "data_80055F68": 0},
+        rename={"func_8004EFC8": "RotTransPers4"},
+    ),
 }
 
 

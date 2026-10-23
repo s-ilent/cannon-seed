@@ -224,7 +224,7 @@ glabel GsSortSprite
     /* 2F600 8004EE00 9000A227 */  addiu      $v0, $sp, 0x90
     /* 2F604 8004EE04 2000A2AF */  sw         $v0, 0x20($sp)
     /* 2F608 8004EE08 9400A227 */  addiu      $v0, $sp, 0x94
-    /* 2F60C 8004EE0C F23B010C */  jal        func_8004EFC8
+    /* 2F60C 8004EE0C F23B010C */  jal        RotTransPers4
     /* 2F610 8004EE10 2400A2AF */   sw        $v0, 0x24($sp)
     /* 2F614 8004EE14 8000023C */  lui        $v0, (0x800000 >> 16)
     /* 2F618 8004EE18 24102202 */  and        $v0, $s1, $v0
