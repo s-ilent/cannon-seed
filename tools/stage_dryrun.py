@@ -66,46 +66,13 @@ RECIPES = {
     # stay green - a permanently-red validator is useless). Retired on
     # execution: gsinit-g3org_jp / gsinit-mainmenu_jp / readsz4-mainmenu_jp
     # (landed GREEN first shot, 1b127649 + d366138c), normcolor3-g3_jp /
-    # normdpq3-g3_jp (c259ba64), rotpers4-g3org_eu (5c8b9fd7). The
-    # head-split class fields walk_label=None / orphan_line=None remain
-    # legal (no walk block; the whole source file retires; woven row names
-    # LIE - the label-vs-VA law).
-    #
-    # The g3org_jp RotAverageNclipColorDpq3 head-split (docs/TASKS.md,
-    # aa2dea5a next waves; census eq 50/50 votes 21, all dw=0 vs the landed
-    # 0xc8 body): the woven row data_80060E20 (true VA 0x800587F0 - the
-    # row name LIES) splits c 0xC8 + tail 0x34C data_800588B8. The c head
-    # swallows TWO complete spimdisasm blocks (func_800587F0 0x68 + the
-    # first 24 words of func_80058858) - the c_retire field attests them;
-    # func_800587F0's single jal site (func_8005EAE4) renames to the landed
-    # spelling, func_80058858 has zero external refs. The block's last 4
-    # words (0x390B8..0x390C8) + its enddlabel (line 69) fall to the tail
-    # side: the tail extract SKIPS the orphan enddlabel line (orphan_line
-    # documents the skip) and carries the 4 words raw before the complete
-    # func_800588C8 block (4 live jal sites, preserved verbatim).
-    "rotnclipdpq3-g3org_jp": dict(
-        target="g3org_jp",
-        src="asm/g3org_jp/nonmatchings/data/data_80060E20.data.s",
-        yaml="config/splat.g3org_jp.yaml",
-        row_label="data_80060E20", row_yaml=0x38FF0, row_extent=0x414,
-        walk_label=None,
-        head_extent=0x0, head_last=0, append_enddlabel=None,
-        c_retire={"func_800587F0": "RotAverageNclipColorDpq3",
-                  "func_80058858": None},
-        pieces=[
-            dict(kind="c", label="RotAverageNclipColorDpq3", yaml=0x38FF0,
-                 extent=0xC8, first=10, last=64),
-            dict(kind="tail", label="data_800588B8", yaml=0x390B8,
-                 extent=0x34C, first=65, last=280,
-                 tail_ranges=[(65, 68), (70, None)]),
-        ],
-        orphan_line=69, orphan_text="enddlabel func_80058858",
-        boundary={10: 0xC8800000, 64: 0x00000000, 65: 0x00000000,
-                  68: 0x24060000, 280: 0x00000000},
-        refs={"data_80060E20": 0, "func_80058858": 0,
-              "func_800587F0": 1, "func_800588C8": 4},
-        rename={"func_800587F0": "RotAverageNclipColorDpq3"},
-    ),
+    # normdpq3-g3_jp (c259ba64), rotpers4-g3org_eu (5c8b9fd7),
+    # rotnclipdpq3-g3org_jp (the first c_retire landing: the c head
+    # swallowed func_800587F0 + func_80058858's first 24 words, tail
+    # data_800588B8 re-homed verbatim past the skipped orphan enddlabel).
+    # The head-split class fields walk_label=None / orphan_line=None
+    # remain legal (no walk block; the whole source file retires; woven
+    # row names LIE - the label-vs-VA law).
 }
 
 
