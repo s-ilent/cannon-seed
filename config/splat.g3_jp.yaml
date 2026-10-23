@@ -433,7 +433,8 @@ segments:
       - [0x39B60, asm, func_80061BF0]   # 0x300 sdk
       - [0x39E60, data, data_80061EF0]   # 0x520
       - [0x3A380, asm, func_80062540]   # 0x304 sdk
-      - [0x3A684, data, data_80062844]   # 0xf0
+      - [0x3A684, c, RotTransPers]   # 0x2c sdk
+      - [0x3A6B0, data, data_80059EB0]   # 0xc4
       - [0x3A774, asm, func_80062934]   # 0x14
       - [0x3A788, data, data_80062948]   # 0x58
       - [0x3A7E0, c, func_800629A0]   # 0x8

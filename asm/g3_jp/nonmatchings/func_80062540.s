@@ -132,7 +132,7 @@ glabel GsTMDdivTG4LFG
     /* 3A558 80059D58 21202002 */  addu       $a0, $s1, $zero
     /* 3A55C 80059D5C 10002526 */  addiu      $a1, $s1, 0x10
     /* 3A560 80059D60 6000A78F */  lw         $a3, 0x60($sp)
-    /* 3A564 80059D64 A167010C */  jal        func_80059E84
+    /* 3A564 80059D64 A167010C */  jal        RotTransPers
     /* 3A568 80059D68 4C00A627 */   addiu     $a2, $sp, 0x4C
     /* 3A56C 80059D6C 14008426 */  addiu      $a0, $s4, 0x14
     /* 3A570 80059D70 14006526 */  addiu      $a1, $s3, 0x14
