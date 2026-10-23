@@ -245,7 +245,11 @@ segments:
       - [0x16024, asm, func_80038C64]   # 0xe4
       - [0x16108, data, data_80038D48]   # 0x4
       - [0x1610C, asm, func_80038D4C.rowdef]   # 0x5f8
-      - [0x16704, data, data_80039344]   # 0x148
+      - [0x16704, data, data_80039344]   # 0x4
+      - [0x16708, c, LightColor]   # 0x28
+      - [0x16730, c, DpqColorLight]   # 0x28
+      - [0x16758, c, DpqColor3]   # 0x3c
+      - [0x16794, data, data_80035F94]   # 0xb8
       - [0x1684C, c, OuterProduct12]   # 0x58 sdk
       - [0x168A4, c, OuterProduct0]   # 0x58 sdk
       - [0x168FC, data, data_800360FC]   # 0x18
