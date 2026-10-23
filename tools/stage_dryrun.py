@@ -61,81 +61,67 @@ YAML_ROW_RE = re.compile(
 # ---------------------------------------------------------------------------
 
 RECIPES = {
-    # The GsInitCoord2param completion wave (docs/TASKS.md, 88b35a08):
-    # g3org_jp's last census copy, MID-ROW inside walk block func_8004C5C8
-    # at block-rel +0x7C; the g3org_eu shape (tail-preservation class).
-    "gsinit-g3org_jp": dict(
-        target="g3org_jp",
-        src="asm/g3org_jp/nonmatchings/data/data_8005281C.data.s",
-        yaml="config/splat.g3org_jp.yaml",
-        row_label="data_8005281C", row_yaml=0x2C79C, row_extent=0xA14,
-        walk_label="func_8004C5C8", walk_rel=0x7C,
-        head_extent=0x6A8, head_last=445, append_enddlabel="func_8004C5C8",
+    # The g3_jp dw=0 HEAD-SPLIT pair (docs/TASKS.md, aa2dea5a next-window
+    # (a); line anchors pinned at HEAD aa2dea5a). NormalColor3 lands g3_jp
+    # at the head of the woven row data_80062948 (true VA 0x80059F88 - the
+    # label-vs-VA law: the row name LIES, offset arithmetic rules); the
+    # 0x1C boundary tail is the COMPLETE func_80059FC4 spimdisasm block
+    # (jal'd from 3 walk sites) -> re-homed VERBATIM (label preservation
+    # class), not gen_data_row. No walk block: head_extent 0, the whole
+    # file retires after the tail is carved out. walk_label=None and
+    # orphan_line=None are legal now: the head-split class has no walk
+    # block and retires the whole source file.
+    "normcolor3-g3_jp": dict(
+        target="g3_jp",
+        src="asm/g3_jp/nonmatchings/data/data_80062948.data.s",
+        yaml="config/splat.g3_jp.yaml",
+        row_label="data_80062948", row_yaml=0x3A788, row_extent=0x58,
+        walk_label=None,
+        head_extent=0x0, head_last=0, append_enddlabel=None,
         pieces=[
-            dict(kind="c", label="GsInitCoord2param", yaml=0x2CE44,
-                 extent=0x2C, first=446, last=456),
-            dict(kind="tail", label="data_8004CE70", yaml=0x2CE70,
-                 extent=0x340, first=457, last=557,
-                 tail_ranges=[(457, 557), (559, None)]),
+            dict(kind="c", label="NormalColor3", yaml=0x3A788,
+                 extent=0x3C, first=10, last=24),
+            dict(kind="tail", label="data_80059FC4", yaml=0x3A7C4,
+                 extent=0x1C, first=30, last=36,
+                 tail_ranges=[(29, 37)]),
         ],
-        orphan_line=558, orphan_text="enddlabel func_8004C5C8",
-        boundary={445: 0x00000000, 446: 0x34021000,
-                  456: 0xAC800018, 457: 0x27BDFFE8},
-        refs={"func_8004C5C8": 3, "func_8004C804": 2, "func_8004C888": 1,
-              "func_8004BF9C": 1, "func_8004C460": 1},
+        orphan_line=None,
+        boundary={10: 0xC8800000, 24: 0x00000000,
+                  30: 0xC8800000, 36: 0xE8F60000},
+        refs={"D_80059F88": 0, "data_80062948": 0, "func_80059FC4": 3},
     ),
 
-    # Same wave, mainmenu_jp's copy: MID-ROW inside walk block func_80063640
-    # at block-rel +0x7C; same tail-preservation class, same 11-word body.
-    "gsinit-mainmenu_jp": dict(
-        target="mainmenu_jp",
-        src="asm/mainmenu_jp/nonmatchings/data/data_8006D690.data.s",
-        yaml="config/splat.mainmenu_jp.yaml",
-        row_label="data_8006D690", row_yaml=0x43E40, row_extent=0x3E8,
-        walk_label="func_80063640", walk_rel=0x7C,
-        head_extent=0x7C, head_last=40, append_enddlabel="func_80063640",
+    # NormalColorDpq3 lands g3_jp at the head of the woven row
+    # data_800629A8 (true VA 0x80059FE8; the row IS the 8005A058
+    # DpqColor3 MID-ROW's covering row - one split serves both lists, the
+    # dw>0 MID-ROW stays parked inside the tail). The 0x7D0 tail re-homes
+    # VERBATIM: eight balanced spimdisasm blocks; func_8005A030/50/13C/4AC
+    # carry 15 live jal sites, func_80059FE8's single site renames to the
+    # landed spelling. The gsinit-g3org_jp / gsinit-mainmenu_jp /
+    # readsz4-mainmenu_jp recipes RETIRED from the table on execution
+    # (landed GREEN first shot, 1b127649 + d366138c) - the table carries
+    # staged (not-yet-executed) recipes only.
+    "normdpq3-g3_jp": dict(
+        target="g3_jp",
+        src="asm/g3_jp/nonmatchings/data/data_800629A8.data.s",
+        yaml="config/splat.g3_jp.yaml",
+        row_label="data_800629A8", row_yaml=0x3A7E8, row_extent=0x818,
+        walk_label=None,
+        head_extent=0x0, head_last=0, append_enddlabel=None,
         pieces=[
-            dict(kind="c", label="GsInitCoord2param", yaml=0x43EBC,
-                 extent=0x2C, first=41, last=51),
-            dict(kind="tail", label="data_80063738", yaml=0x43EE8,
-                 extent=0x340, first=52, last=152,
-                 tail_ranges=[(52, 152), (154, None)]),
+            dict(kind="c", label="NormalColorDpq3", yaml=0x3A7E8,
+                 extent=0x48, first=10, last=27),
+            dict(kind="tail", label="data_8005A030", yaml=0x3A830,
+                 extent=0x7D0, first=33, last=567,
+                 tail_ranges=[(30, 568)]),
         ],
-        orphan_line=153, orphan_text="enddlabel func_80063640",
-        boundary={40: 0x00000000, 41: 0x34021000,
-                  51: 0xAC800018, 52: 0x27BDFFE8},
-        refs={"func_80063640": 4, "func_8006387C": 2, "func_80063900": 2},
-    ),
-
-    # The ReadSZfifo4+ReadGeomOffset wave (docs/TASKS.md, 6f7ae8d4):
-    # mainmenu_jp data_80070F14 splits head 0x14 (complete walk block, no
-    # append) + c ReadSZfifo4 0x18 + gap 0x28 + c ReadGeomOffset 0x20 +
-    # tail 0x29C from the func_80066818 label boundary; the retiring block
-    # func_800667B8 is jal'd from 13 sites that all rename to ReadSZfifo4.
-    "readsz4-mainmenu_jp": dict(
-        target="mainmenu_jp",
-        src="asm/mainmenu_jp/nonmatchings/data/data_80070F14.data.s",
-        yaml="config/splat.mainmenu_jp.yaml",
-        row_label="data_80070F14", row_yaml=0x46FA4, row_extent=0x310,
-        walk_label="func_800667B8", walk_rel=0x0,
-        head_extent=0x14, head_last=15, append_enddlabel=None,
-        pieces=[
-            dict(kind="c", label="ReadSZfifo4", yaml=0x46FB8,
-                 extent=0x18, first=20, last=25),
-            dict(kind="gap", label="data_800667D0", yaml=0x46FD0,
-                 extent=0x28, first=26, last=35),
-            dict(kind="c", label="ReadGeomOffset", yaml=0x46FF8,
-                 extent=0x20, first=36, last=43),
-            dict(kind="tail", label="data_80066818", yaml=0x47018,
-                 extent=0x29C, first=46, last=221,
-                 tail_ranges=[(46, None)]),
-        ],
-        orphan_line=44, orphan_text="enddlabel func_800667B8",
-        boundary={14: 0x00000000, 20: 0xE8900000, 25: 0x00000000,
-                  26: 0xE88C0000, 36: 0x4848C000, 43: 0x00000000,
-                  49: 0x4842D000},
-        refs={"func_800667B8": 13, "func_80066818": 1, "func_80066824": 1},
-        rename={"func_800667B8": "ReadSZfifo4"},
+        orphan_line=None,
+        boundary={10: 0xC8800000, 27: 0x00000000,
+                  33: 0xC8800000, 567: 0x8CECFFEC},
+        refs={"func_80059FE8": 1, "func_8005A030": 3, "func_8005A050": 1,
+              "func_8005A13C": 4, "func_8005A15C": 0, "func_8005A460": 0,
+              "func_8005A4AC": 6, "func_8005A6B8": 0, "func_8005A6D0": 0},
+        rename={"func_80059FE8": "NormalColorDpq3"},
     ),
 }
 
@@ -295,10 +281,12 @@ def run_recipe(name: str, r: dict) -> int:
         ck.check(f"tail {p['label']} labels-balanced", d == e,
                  f"{d} dlabel / {e} enddlabel")
 
-    # 11. orphan enddlabel
-    orphan = lines[r["orphan_line"] - 1].strip() if r["orphan_line"] <= len(lines) else ""
-    ck.check("orphan-line", orphan == r["orphan_text"],
-             f"{orphan!r} != {r['orphan_text']!r}")
+    # 11. orphan enddlabel (skipped when the whole file retires:
+    # head-split class, orphan_line=None)
+    if r.get("orphan_line") is not None:
+        orphan = lines[r["orphan_line"] - 1].strip() if r["orphan_line"] <= len(lines) else ""
+        ck.check("orphan-line", orphan == r["orphan_text"],
+                 f"{orphan!r} != {r['orphan_text']!r}")
 
     # 12. yaml covering row + next-row extent proof
     ytext = (REPO / r["yaml"]).read_text().splitlines()
@@ -336,6 +324,8 @@ def run_recipe(name: str, r: dict) -> int:
                      line.endswith(f"# 0x{p['extent']:x}"))
 
     # 14. name-VA law on walk + tail dlabels; walk member sits at walk_rel
+    # (both skipped when walk_label=None: the head-split class has no walk
+    # block, and the woven row names LIE by design - label-vs-VA law)
     def label_first_word(label):
         for i, l in enumerate(labels):
             if l[1] == "dlabel" and l[2] == label:
@@ -343,19 +333,21 @@ def run_recipe(name: str, r: dict) -> int:
                 return nxt[0] if nxt else None
         return None
 
-    for lbl in [r["walk_label"]] + [p.get("keep") for p in r["pieces"] if p.get("keep")]:
+    walk = r.get("walk_label")
+    for lbl in ([walk] if walk else []) + [p.get("keep") for p in r["pieces"] if p.get("keep")]:
         w = label_first_word(lbl)
         if not ck.check(f"name-VA {lbl}", w is not None):
             continue
         name_va = int(lbl.split("_")[1], 16)
         ck.check(f"name-VA {lbl} agrees", w[2] == name_va,
                  f"content VA 0x{w[2]:X} != name 0x{name_va:X}")
-    walk_first = label_first_word(r["walk_label"])
-    member_yaml = r["pieces"][0]["yaml"]
-    ck.check("walk-member-rel",
-             walk_first is not None
-             and member_yaml == walk_first[1] + r["walk_rel"],
-             f"0x{member_yaml:X} != walk+0x{r['walk_rel']:X}")
+    if walk:
+        walk_first = label_first_word(walk)
+        member_yaml = r["pieces"][0]["yaml"]
+        ck.check("walk-member-rel",
+                 walk_first is not None
+                 and member_yaml == walk_first[1] + r["walk_rel"],
+                 f"0x{member_yaml:X} != walk+0x{r['walk_rel']:X}")
 
     # 15. reference inventory outside the source file.
     # Scoped to the recipe's target subtree: label names collide across
