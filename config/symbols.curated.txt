@@ -537,7 +537,7 @@ _spu_inTransfer = 0x800b7df4; // LIBSPU S_INI member bss static; gp:absolute (re
 Snd_tempo = 0x8006D6D8; // LIBSND TEMPO member .text+0x0 (extent 0x1E0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 Snd_crescendo = 0x8006CD7C; // LIBSND CRES member .text+0x0 (extent 0x57C); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
 Snd_decrescendo = 0x8006969C; // LIBSND DECRE member .text+0x0 (extent 0x4B0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
-Snd_stop = 0x8006D2F8; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_stop = 0x8006D2F8; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements  [addr-updated from 0x80086040: scan-verified]
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
@@ -588,11 +588,6 @@ _svm_stereo_mono = 0x8017881C; // LIBSND VS_MONO member bss static; evidence und
 SsSetMono = 0x80067FA4; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sig-db sig matches retail
 SsSetStereo = 0x80067FB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig-db sig matches retail
 // _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
-//
-// Snd_ callee pins for the SsSeqCalledTbyT landing (window
-// cron-20261022-2341; the 58 percent vintage-split rows wait for
-// the census):
-Snd_stop = 0x8006d2f8; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements  [addr-updated from 0x80086040: scan-verified]
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
@@ -939,12 +934,7 @@ PSDIDX = 0x8011C304; // LIBGS GS_002 member bss static; evidence under target: m
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x8005CD04; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
-// _spu_inTransfer: SPU in-transfer flag polled by the S_ITC
-// member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
-// S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
-// bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x80065de4; // LIBSPU S_INI member bss static; evidence under target: mainmenu_jp  [addr-updated from 0x8005CD04: scan-verified]
+_spu_inTransfer = 0x80065de4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x8005CD04: scan-verified]
 // ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
 //
 // Evidence base: config/sdk_members.txt (tools/sdk_members.py)
@@ -1022,7 +1012,7 @@ _96_init = 0x8004ADD4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x8004ADE4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8004ADF4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8004AE04; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x8004AE14; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x8004AE14; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x8004AE24; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8004AE44; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 TestEvent = 0x8004AE54; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1262,7 +1252,7 @@ _96_init = 0x8004B454; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 PAD_init = 0x8004B464; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 LoadExec = 0x8004B474; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8004B484; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// ResetEntryInt = 0x8004B4A4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// ResetEntryInt = 0x8004B4A4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x8004B4B4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8004B4C4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8004B4D4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1498,7 +1488,7 @@ _96_init = 0x80048228; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x80048238; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x80048248; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x80048258; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// ResetEntryInt = 0x80048268; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// ResetEntryInt = 0x80048268; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x80048278; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x80048288; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x80048298; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1715,7 +1705,7 @@ PAD_init = 0x80048900; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x80048910; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x80048920; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x80048930; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// ResetEntryInt = 0x80048940; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// ResetEntryInt = 0x80048940; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x80048950; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x80048960; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x80048970; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1939,19 +1929,19 @@ SetMem = 0x8005F260; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py 
 EnableEvent = 0x8005F270; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 delete = 0x8005F280; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 format = 0x8005F290; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// HookEntryInt = 0x8005F2A0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_restart_begin at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// HookEntryInt = 0x8005F2A0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_restart_begin at the same address: one curated name per address, the C-referenced name wins]
 _96_init = 0x8005F2B0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 LoadExec = 0x8005F2C0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8005F2D0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8005F2E0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// ResetEntryInt = 0x8005F2F0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// ResetEntryInt = 0x8005F2F0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x8005F300; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8005F310; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8005F320; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 TestEvent = 0x8005F330; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearRCnt = 0x8005F350; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 open = 0x8005F360; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// _96_remove = 0x8005F370; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_start_aux6 at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// _96_remove = 0x8005F370; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_start_aux6 at the same address: one curated name per address, the C-referenced name wins]
 firstfile = 0x8005F380; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ReturnFromException = 0x8005F390; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 memcpy = 0x80061FC4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2138,7 +2128,7 @@ PAD_init = 0x8005F978; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x8005F988; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8005F998; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8005F9A8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// ResetEntryInt = 0x8005F9B8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// ResetEntryInt = 0x8005F9B8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x8005F9C8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8005F9D8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8005F9E8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2359,7 +2349,7 @@ HookEntryInt = 0x8002F408; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_membe
 LoadExec = 0x8002F428; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8002F438; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8002F448; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// ResetEntryInt = 0x8002F458; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address - one curated name per address, the C-referenced name wins; sdk_curated.py REGENERATES this block and will re-add this row: teach it to skip addresses another curated row claims]
+// ResetEntryInt = 0x8002F458; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x8002F468; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8002F478; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8002F488; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2527,13 +2517,13 @@ SetMem = 0x8002F8BC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py 
 EnableEvent = 0x8002F8CC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 delete = 0x8002F8DC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 format = 0x8002F8EC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-// HookEntryInt = 0x8002F8FC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_restart_begin at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
+// HookEntryInt = 0x8002F8FC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_restart_begin at the same address: one curated name per address, the C-referenced name wins]
 _96_init = 0x8002F90C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 PAD_init = 0x8002F91C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 LoadExec = 0x8002F92C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8002F93C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8002F94C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x8002F95C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x8002F95C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement [alias of intr_stop_commit at the same address: one curated name per address, the C-referenced name wins]
 nextfile = 0x8002F96C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8002F97C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8002F98C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
