@@ -100,6 +100,17 @@ PARKED (reverted to HEAD, verify GREEN, one shared blocker):
   spimdisasm's own sub-block detection), or extract needs a post-pass
   renaming interior default glabels that collide with linked symbols. THE POST-PASS OPTION LANDED (tools/glabel_collision_pass.py, wired into make extract, idempotent): C-side definitions own the name (c yaml rows + column-0 census-shaped declarations in their src files, externs and prototypes excluded), every asm glabel carrying a C-owned name takes the first free _N suffix, loser files rewritten only, nonmatching headers untouched; no-op proof 3/5 verified trees clean, the 2 residual fires (sces func_80049780.2's plain-glabel row, g3_eu's orphan func_8004D704.s) are REAL inert instances of the class; asm-asm duplicate glabels are TOLERATED by the pipeline (verified g3_eu links GREEN with hundreds) and are deliberately NOT renamed.
 
+SIBLING-FINDER SWEEP over the 16 candidates (this window, read-only):
+4 carry strong cross-target proposals for the landing lane -
+  mainmenu_eu 0x8005AE34 <- g3_eu/func_8004C4CC +0x3C  score 0.99 EXACT
+  mainmenu_eu 0x8005AE70 <- g3_eu/func_8004C508 +0x30  score 0.97
+  mainmenu_eu 0x8005AC68 <- g3_eu/func_8004C508 +0x30  score 0.97
+  g3org_jp     0x80043E94 <- g3_eu/func_8004C508 +0x30  score 0.97
+(the first is at the census candidate's own address - carve site certain).
+The SDK-named families (SetColorMatrix / ApplyMatrixSV / SsVabTransCompleted
+mid-rows) need the query resolved through their landed src rows first - the
+sweep's src resolution covers address-named families only.
+
 QUEUE after the campaign (census 185 rows, classifier 16 candidates, all
 D-MID-ROW): the SDK slice has DRAINED out of the census — the carved rows
 are landed, so the classifier's candidates are now pure game-code mid-rows.
