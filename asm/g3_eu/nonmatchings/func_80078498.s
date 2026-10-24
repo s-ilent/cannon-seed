@@ -13,8 +13,8 @@ glabel Snd_pause
     /* 4D5B8 8006CDB8 E0FFBD27 */  addiu      $sp, $sp, -0x20
     /* 4D5BC 8006CDBC 00240400 */  sll        $a0, $a0, 16
     /* 4D5C0 8006CDC0 03240400 */  sra        $a0, $a0, 16
-    /* 4D5C4 8006CDC4 1780023C */  lui        $v0, %hi(D_80171EA4)
-    /* 4D5C8 8006CDC8 A41E4224 */  addiu      $v0, $v0, %lo(D_80171EA4)
+    /* 4D5C4 8006CDC4 1780023C */  lui        $v0, %hi(SsSeqCalledTbyT_tab)
+    /* 4D5C8 8006CDC8 A41E4224 */  addiu      $v0, $v0, %lo(SsSeqCalledTbyT_tab)
     /* 4D5CC 8006CDCC 1800B2AF */  sw         $s2, 0x18($sp)
     /* 4D5D0 8006CDD0 80900400 */  sll        $s2, $a0, 2
     /* 4D5D4 8006CDD4 21904202 */  addu       $s2, $s2, $v0
