@@ -927,6 +927,18 @@ def main(argv):
     kept, pinned, sdk, sdk_c, noseed = preserved_types(
         yaml_path := REPO / "config" / f"splat.{target}.yaml")
 
+    # Name-uniqueness registry (cron-20261024-0331): preserved rows claim
+    # their (historical) names first - a new anchor row, walk range, or
+    # data gap must never re-use a name the tree already carries at a
+    # different offset. Two rows with one name share ONE .s file (splat
+    # derives the path from the name) and ONE rom entry (build.sh's awk
+    # first-match over the yaml map), so one site gets the other's bytes
+    # (witnessed: sces_00269 func_800318E8 at 0xFC18 vs the anchor at
+    # 0x120E8 - the reproduced 8,982-byte image corruption).
+    claimed = {}
+    for _off, (_kt, _kn, _ks) in kept.items():
+        claimed[_kn] = _off
+
     # v6 SDK anchors (docstring 13): byte-verified member spans become
     # pinned-class asm rows. The tree's kept rows win: an anchor at an
     # already-kept offset (a hand pin, a c function, or a previously carved
@@ -969,7 +981,24 @@ def main(argv):
                   f"{BASE + off:08X}: extent runs past the payload - skipped")
             n_sdk_clash += 1
             continue
-        kept[off] = ("asm", f"func_{BASE + off:08X}", size)
+        # Name-uniqueness (cron-20261024-0331): the linear name of a new
+        # anchor row can collide with a PRESERVED row's historical (woven
+        # carve) name - witnessed: sces_00269 func_800318E8, the 0x10-byte
+        # sdk row at 0xFC18, vs the v6 anchor at 0x120E8 whose linear name
+        # is the same. Two rows with one name share ONE .s file (splat
+        # derives the path from the name) and ONE rom entry (build.sh's
+        # awk first-match over the yaml map), so one site gets the other's
+        # bytes - the reproduced 8,982-byte image corruption. Preserved
+        # rows keep their names (the tree's contract); the new row takes
+        # the first free dotted suffix instead.
+        lin_name = f"func_{BASE + off:08X}"
+        if lin_name in claimed:
+            n_suf = 2
+            while f"{lin_name}.{n_suf}" in claimed:
+                n_suf += 1
+            lin_name = f"{lin_name}.{n_suf}"
+        claimed[lin_name] = off
+        kept[off] = ("asm", lin_name, size)
         sdk.add(off)
         n_sdk_new += 1
     if anchors:
@@ -1100,16 +1129,32 @@ def main(argv):
         typ, name = "asm", f"func_{BASE + s:08X}"
         if s in kept:
             typ, name = kept[s][0], kept[s][1]
+        elif name in claimed:
+            # Same name-uniqueness law as the anchor pass: a walk range
+            # whose linear name a preserved row already claims takes a
+            # dotted suffix (the file identity must stay one-to-one).
+            n_suf = 2
+            while f"{name}.{n_suf}" in claimed:
+                n_suf += 1
+            name = f"{name}.{n_suf}"
         # NOTE: curated names are deliberately NOT applied to subsegment
         # names. splat derives each output file's name from them, and
         # tools/build.sh reads each section's address out of that file
         # name (`func_XXXXXXXX`). Curated names go into the symbols file
         # only, where the linker resolves them by address.
+        claimed[name] = s
         subsegs.append((s, typ, name, e - s))
     for off, typ, name, ksize in kept_gap_rows:
         subsegs.append((off, typ, name, ksize))
     for s, e in gaps:
-        subsegs.append((s, "data", f"data_{BASE + s:08X}", e - s))
+        dname = f"data_{BASE + s:08X}"
+        if dname in claimed:
+            n_suf = 2
+            while f"{dname}.{n_suf}" in claimed:
+                n_suf += 1
+            dname = f"{dname}.{n_suf}"
+        claimed[dname] = s
+        subsegs.append((s, "data", dname, e - s))
     subsegs.sort()
 
     code_bytes = sum(e - s for s, e in ranges)
