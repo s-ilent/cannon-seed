@@ -52,17 +52,17 @@ GetVideoMode = 0x80032668; // LIBETC VMODE member .text+0x18; tools/sdk_members.
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
-video_mode = 0x800484D0; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+video_mode = 0x8004e500; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp  [addr-updated from 0x800484D0: scan-verified]
 CheckCallback = 0x8002EC24; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x8002EC34; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x8002EC4C; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
-intr_active_flag = 0x800474CC; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x800474FE; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x80047500; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_imask_ptr = 0x800482F8; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
-intr_dicr_ptr = 0x80048300; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
+intr_active_flag = 0x8004d29c; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp  [addr-updated from 0x800474CC: scan-verified]
+intr_saved_mask = 0x8004d2ce; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x800474FE: scan-verified]
+intr_saved_dicr = 0x8004d2d0; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80047500: scan-verified]
+intr_imask_ptr = 0x8004e328; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp  [addr-updated from 0x800482F8: scan-verified]
+intr_dicr_ptr = 0x8004e330; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp  [addr-updated from 0x80048300: scan-verified]
 intr_stop_begin = 0x8002F87C; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x8002D81C; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_commit = 0x8002f95c; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x8002D81C: scan-verified]
 stopIntr = 0x8002F080; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntr = 0x8002EC68; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
 intr_start_aux1 = 0x8002D1A8; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
@@ -76,8 +76,8 @@ intr_restart_begin = 0x8002F8FC; // INTR restart cluster entry 1, jal from resta
 intr_restart_commit = 0x8002D86C; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x8002D194; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
 restartIntr = 0x8002F130; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
-intr_trap_flag = 0x800474CE; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
-intr_mask_ptr = 0x800482FC; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
+intr_trap_flag = 0x8004d29e; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp  [addr-updated from 0x800474CE: scan-verified]
+intr_mask_ptr = 0x8004e32c; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp  [addr-updated from 0x800482FC: scan-verified]
 gte_rotate_z_matrix = 0x80034EB8; // LIBGS SCLIB member .text+0x0 (extent 0xb8); tools/sdk_members.py, unique placement
 scale_view_param = 0x80033C94; // LIBGS MATRIX3 member .text+0x0 (true extent 0xe8; the archive next-symbol extent 0xf0 overshoots into the empty function func_80036CFC); tools/sdk_members.py, unique placement
 RotMatrixC = 0x800350E8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools/sdk_members.py, unique placement + signature DB agrees
@@ -115,6 +115,7 @@ GsMulCoord3 = 0x800363D8; // LIBGS MATRIX member .text+0x2c0; unique placement +
 print_matrix = 0x8003645C; // LIBGS MATRIX member .text+0x344; unique placement + signature DB agrees
 print_vector = 0x800364CC; // LIBGS MATRIX member .text+0x3b4; unique placement + signature DB agrees
 
+// ResetEntryInt = 0x8002f458;  [alias of intr_stop_commit at the same address: one curated name per address, C-referenced wins]
 // target: g3org_jp
 StSetRing = 0x80060A08; // LIBCD CDROM member; tools/sdk_members.py, unique placement + signature DB agrees
 _SpuDataCallback = 0x8006208C; // LIBSPU S_DCB member; tools/sdk_members.py, unique placement + signature DB agrees
@@ -372,16 +373,16 @@ Snd_stop = 0x80070A5C; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
-video_mode = 0x80087634; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
-intr_trap_flag = 0x8008763A; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
-intr_mask_ptr = 0x80088468; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
-intr_active_flag = 0x80087638; // LIBETC INTR member backing static (halfword at the INTR state base; startIntr/stopIntr/restartIntr run gate); evidence under target: g3_eu
-intr_saved_mask = 0x8008766A; // LIBETC INTR member backing static (halfword saved by stopIntr through intr_mask_ptr, restored by restartIntr); evidence under target: g3_eu
-intr_saved_dicr = 0x8008766C; // LIBETC INTR member backing static (word saved through intr_dicr_ptr by stopIntr, restored by restartIntr); evidence under target: g3_eu
-intr_imask_ptr = 0x80088464; // LIBETC INTR member backing static (word pointer; the re-read mask halfword is written through it - I_MASK semantics); evidence under target: g3_eu
-intr_dicr_ptr = 0x8008846C; // LIBETC INTR member backing static (word pointer; stopIntr ANDs its target with 0x77777777 - DMA DICR channel-disable semantics); evidence under target: g3_eu
-intr_stop_begin = 0x80045434; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (reads the state via s0; inside data_8004A828 - real code mis-typed data); evidence under target: g3_eu
-intr_stop_commit = 0x80045504; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside data_8004A828 - real code mis-typed data); evidence under target: g3_eu
+video_mode = 0x80096c04; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp  [addr-updated from 0x80087634: scan-verified]
+intr_trap_flag = 0x80096c0a; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp  [addr-updated from 0x8008763A: scan-verified]
+intr_mask_ptr = 0x80097c98; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp  [addr-updated from 0x80088468: scan-verified]
+intr_active_flag = 0x80096c08; // LIBETC INTR member backing static (halfword at the INTR state base; startIntr/stopIntr/restartIntr run gate); evidence under target: g3_eu  [addr-updated from 0x80087638: scan-verified]
+intr_saved_mask = 0x80096c3a; // LIBETC INTR member backing static (halfword saved by stopIntr through intr_mask_ptr, restored by restartIntr); evidence under target: g3_eu  [addr-updated from 0x8008766A: scan-verified]
+intr_saved_dicr = 0x80096c3c; // LIBETC INTR member backing static (word saved through intr_dicr_ptr by stopIntr, restored by restartIntr); evidence under target: g3_eu  [addr-updated from 0x8008766C: scan-verified]
+intr_imask_ptr = 0x80097c94; // LIBETC INTR member backing static (word pointer; the re-read mask halfword is written through it - I_MASK semantics); evidence under target: g3_eu  [addr-updated from 0x80088464: scan-verified]
+intr_dicr_ptr = 0x80097c9c; // LIBETC INTR member backing static (word pointer; stopIntr ANDs its target with 0x77777777 - DMA DICR channel-disable semantics); evidence under target: g3_eu  [addr-updated from 0x8008846C: scan-verified]
+intr_stop_begin = 0x8004ad44; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (reads the state via s0; inside data_8004A828 - real code mis-typed data); evidence under target: g3_eu  [addr-updated from 0x80045434: scan-verified]
+intr_stop_commit = 0x8004ae14; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside data_8004A828 - real code mis-typed data); evidence under target: g3_eu  [addr-updated from 0x80045504: scan-verified]
 intr_start_aux1 = 0x80044F60; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
 intr_start_aux2 = 0x80044F8C; // INTR start-path aux 2, jal from startIntr with (flag+0x38) arg in the call delay slot; return tested by beqz; evidence under target: mainmenu_jp
 intr_start_aux3 = 0x80044AEC; // INTR start-path aux 3, no-arg jal from startIntr on the aux2-failure path; evidence under target: mainmenu_jp
@@ -396,7 +397,7 @@ intr_restart_tail = 0x80044F4C; // INTR restart shared tail: restartIntr's closi
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
-intr_vb_cb_slots = 0x8008849C; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
+intr_vb_cb_slots = 0x80097ccc; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp  [addr-updated from 0x8008849C: scan-verified]
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -414,7 +415,7 @@ SsSetStereo = 0x8006B6D4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x80099058; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+_spu_inTransfer = 0x800ab0e8; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x80099058: scan-verified]
 
 // target: g3_jp
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
@@ -483,12 +484,12 @@ CheckCallback = 0x80047600; // LIBETC INTR member .text+0x154 (extent 0x10); sdk
 GetIntrMask = 0x80047610; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x80047628; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
 intr_active_flag = 0x800A3914; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x80092826; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x80092828; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_imask_ptr = 0x80093750; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
-intr_dicr_ptr = 0x80093758; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x80042E78; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x80042F48; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_saved_mask = 0x800a3946; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80092826: scan-verified]
+intr_saved_dicr = 0x800a3948; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80092828: scan-verified]
+intr_imask_ptr = 0x800a49a0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp  [addr-updated from 0x80093750: scan-verified]
+intr_dicr_ptr = 0x800a49a8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp  [addr-updated from 0x80093758: scan-verified]
+intr_stop_begin = 0x80048198; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x80042E78: scan-verified]
+intr_stop_commit = 0x80048268; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x80042F48: scan-verified]
 stopIntr = 0x80047A5C; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntr = 0x80047644; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
 intr_start_aux1 = 0x80042874; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
@@ -503,12 +504,12 @@ intr_restart_commit = 0x80042F98; // INTR restart cluster entry 2, no-arg jal fr
 intr_restart_tail = 0x80042860; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
 restartIntr = 0x80047B0C; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
 intr_trap_flag = 0x800A3916; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
-intr_mask_ptr = 0x80093754; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
+intr_mask_ptr = 0x800a49a4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp  [addr-updated from 0x80093754: scan-verified]
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
 // member .data layout: slots +0x00, exported Vcount +0x20, I_MASK
 // const 0x1F801114 +0x24). setIntrVSync's own relocs resolve here.
 // Full evidence under target: mainmenu_jp.
-intr_vb_cb_slots = 0x80093788; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp
+intr_vb_cb_slots = 0x800a49d8; // LIBETC INTR_VB member .data+0; evidence under target: mainmenu_jp  [addr-updated from 0x80093788: scan-verified]
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
 // bss beyond the payload segment - extern-resolved by the C.
@@ -526,7 +527,7 @@ SsSetStereo = 0x80068B28; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x800A4344; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+_spu_inTransfer = 0x800b7df4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x800A4344: scan-verified]
 
 // target: g3org_jp
 //
@@ -547,17 +548,17 @@ intr_vb_cb_slots = 0x800A41F8; // LIBETC INTR_VB member .data+0; evidence under 
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
-video_mode = 0x80093148; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
+video_mode = 0x800a4398; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp  [addr-updated from 0x80093148: scan-verified]
 CheckCallback = 0x80047C08; // LIBETC INTR member .text+0x154 (extent 0x10); sdk_members.py unique placement + sig-db agrees
 GetIntrMask = 0x80047C18; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_members.py unique placement + sig-db agrees
 SetIntrMask = 0x80047C30; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
-intr_active_flag = 0x80092144; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x80092176; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x80092178; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+intr_active_flag = 0x800a3134; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp  [addr-updated from 0x80092144: scan-verified]
+intr_saved_mask = 0x800a3166; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80092176: scan-verified]
+intr_saved_dicr = 0x800a3168; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80092178: scan-verified]
 intr_imask_ptr = 0x800A41C0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
 intr_dicr_ptr = 0x800A41C8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x80043410; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x800434F0; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_begin = 0x80048860; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x80043410: scan-verified]
+intr_stop_commit = 0x80048940; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x800434F0: scan-verified]
 stopIntr = 0x80048064; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntr = 0x80047C4C; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
 intr_start_aux1 = 0x80042E7C; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
@@ -571,7 +572,7 @@ intr_restart_begin = 0x80043490; // INTR restart cluster entry 1, jal from resta
 intr_restart_commit = 0x80043540; // INTR restart cluster entry 2, no-arg jal from restartIntr after the saved-mask/DICR restore; the same entry startIntr calls; evidence under target: mainmenu_jp
 intr_restart_tail = 0x80042E68; // INTR restart shared tail: restartIntr's closing jump target, frame NOT popped and ra left holding the commit call's return address (dead code in retail); a mid-body entry inside the dispatcher cluster; evidence under target: mainmenu_jp
 restartIntr = 0x80048114; // LIBETC INTR member (extent 0x88; 34-slot masked-word fingerprint match across all 8 targets, scripts/restartintr_fp.py); evidence under target: mainmenu_jp
-intr_trap_flag = 0x80092146; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp
+intr_trap_flag = 0x800a3136; // LIBETC INTR member backing static (halfword); evidence under target: mainmenu_jp  [addr-updated from 0x80092146: scan-verified]
 intr_mask_ptr = 0x800A41C4; // LIBETC INTR member backing static (word pointer); evidence under target: mainmenu_jp
 // PSDIDX: GS_002.OBJ member bss static (active draw buffer
 // index); GsGetActiveBuff lh-loads it into $v0. Halfword-sized
@@ -591,11 +592,11 @@ SsSetStereo = 0x80067FB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // Snd_ callee pins for the SsSeqCalledTbyT landing (window
 // cron-20261022-2341; the 58 percent vintage-split rows wait for
 // the census):
-Snd_stop = 0x80086040; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_stop = 0x8006d2f8; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements  [addr-updated from 0x80086040: scan-verified]
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x800A3C74; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+_spu_inTransfer = 0x800b75f4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x800A3C74: scan-verified]
 
 // target: mainmenu_eu
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
@@ -866,7 +867,7 @@ SsSetStereo = 0x80080138; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // Snd_ callee pins for the SsSeqCalledTbyT landing (window
 // cron-20261022-2341; the 58 percent vintage-split rows wait for
 // the census):
-Snd_stop = 0x8004946C; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements
+Snd_stop = 0x80085478; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte-verified 92 percent at 0x60 depth vs the psyq 3.3 archive member on this target's baseline (scripts/stage_snd_pins.py); positional match with the five census-named Snd_tempo placements  [addr-updated from 0x8004946C: scan-verified]
 // extern. The flag sits beyond the payload segment (EXE bss; no dlabel
 // renders), resolved extern by the C. Full evidence under target:
 // mainmenu_jp.
@@ -878,15 +879,15 @@ _spu_inTransfer = 0x800C85AC; // LIBSPU S_INI member bss static; gp:absolute (re
 // static; SetVideoMode reads it into $v0 then stores $a0, GetVideoMode
 // returns it. No Psy-Q symbol name exists (3.3 archive checked) - full
 // evidence block under target: mainmenu_jp.
-video_mode = 0x80047150; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp
-intr_active_flag = 0x80047154; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp
-intr_saved_mask = 0x80047186; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp
-intr_saved_dicr = 0x80047188; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp
+video_mode = 0x8004cf20; // LIBETC VMODE member backing static; evidence under target: mainmenu_jp  [addr-updated from 0x80047150: scan-verified]
+intr_active_flag = 0x8004cf24; // LIBETC INTR member backing static (halfword at the INTR state base; stopIntr gate via s0, startIntr/restartIntr share it); evidence under target: mainmenu_jp  [addr-updated from 0x80047154: scan-verified]
+intr_saved_mask = 0x8004cf56; // LIBETC INTR member backing static (halfword, flag+0x32; stopIntr saves the mask through intr_mask_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80047186: scan-verified]
+intr_saved_dicr = 0x8004cf58; // LIBETC INTR member backing static (word, flag+0x34; stopIntr saves the DMA DICR word through intr_dicr_ptr, restartIntr restores); evidence under target: mainmenu_jp  [addr-updated from 0x80047188: scan-verified]
 intr_mask_ptr = 0x8004DFB4; // LIBETC INTR member backing static (word pointer; the save/zero I_MASK port slot); evidence under target: mainmenu_jp
 intr_imask_ptr = 0x8004DFB0; // LIBETC INTR member backing static (word pointer, mask-4; receives the re-read zeroed mask halfword); evidence under target: mainmenu_jp
 intr_dicr_ptr = 0x8004DFB8; // LIBETC INTR member backing static (word pointer, mask+4; stopIntr ANDs its target with 0x77777777); evidence under target: mainmenu_jp
-intr_stop_begin = 0x8002D378; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp
-intr_stop_commit = 0x8002D448; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp
+intr_stop_begin = 0x8002f388; // INTR shutdown cluster entry 1, no-arg jal from stopIntr (real code inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x8002D378: scan-verified]
+intr_stop_commit = 0x8002f458; // INTR shutdown cluster entry 2, no-arg jal from stopIntr before the active-flag clear (inside the mis-typed data row); evidence under target: mainmenu_jp  [addr-updated from 0x8002D448: scan-verified]
 stopIntr = 0x8002EC4C; // LIBETC INTR member (extent 0xb0; 44-slot masked-word fingerprint match across all 8 targets, scripts/stopintr_final.py); evidence under target: mainmenu_jp
 startIntr = 0x8002E834; // LIBETC INTR member .text+0x198 (extent 0xdc; 55-slot masked-word fingerprint match, scripts/startintr_fp.py); evidence under target: mainmenu_jp
 intr_start_aux1 = 0x8002CEA4; // INTR start-path aux 1, jal from startIntr with (intr_active_flag, 0x41a) args; evidence under target: mainmenu_jp
@@ -917,7 +918,7 @@ SsSetStereo = 0x800440E4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x8005C988; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
+_spu_inTransfer = 0x80065a68; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x8005C988: scan-verified]
 
 // target: slps_00270
 //
@@ -943,7 +944,7 @@ _spu_inTransfer = 0x8005CD04; // LIBSPU S_INI member bss static; gp:absolute (re
 // member's getter (Psy-Q 2.60/3.00 S_ITC.OBJ sig matches retail;
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
-_spu_inTransfer = 0x8005CD04; // LIBSPU S_INI member bss static; evidence under target: mainmenu_jp
+_spu_inTransfer = 0x80065de4; // LIBSPU S_INI member bss static; evidence under target: mainmenu_jp  [addr-updated from 0x8005CD04: scan-verified]
 // ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
 //
 // Evidence base: config/sdk_members.txt (tools/sdk_members.py)
@@ -1206,6 +1207,16 @@ _card_read = 0x80070D60; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 PAD_dr = 0x80071FA0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x80071FB0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x80071FC0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsClearOt_clear = 0x8004b7d0; // // type:func (shared-alias GsClearOt callee)
+SpuSetCommonAttr = 0x8006c57c; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x80067fbc; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x8016ad04; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x80172724; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x80172728; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x8016b10c; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x80171ea4; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+Snd_crescendo = 0x8007069c; // // type:func (pinned member row)
+Snd_decrescendo = 0x8006d09c; // // type:func (pinned member row)
 
 // target: g3_jp  (220 sdk-member adoptions)
 GsSetOrign = 0x80027A60; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1251,7 +1262,7 @@ _96_init = 0x8004B454; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 PAD_init = 0x8004B464; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 LoadExec = 0x8004B474; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8004B484; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x8004B4A4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x8004B4A4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 nextfile = 0x8004B4B4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8004B4C4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8004B4D4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1430,6 +1441,18 @@ _new_card = 0x80070550; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members
 _card_read = 0x80070560; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x80071770; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x80071780; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+ApplyMatrixSV = 0x8004a130; // // type:func (pinned member row)
+GsClearOt_clear = 0x8004be60; // // type:func (shared-alias GsClearOt callee)
+SsSeqCalledTbyT = 0x8006bf8c; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x80067730; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x8016abdc; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x80171e04; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x80171e08; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x8016afe8; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x80171d84; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+Snd_stop = 0x8006fe5c; // // type:func (pinned member row)
+SetColorMatrix = 0x8004a334; // // type:func (pinned member row)
+SetTransMatrix = 0x8004a364; // // type:func (pinned member row)
 
 // target: g3org_eu  (198 sdk-member adoptions)
 GsSetOrign = 0x800286BC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1475,7 +1498,7 @@ _96_init = 0x80048228; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x80048238; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x80048248; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x80048258; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x80048268; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x80048268; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 nextfile = 0x80048278; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x80048288; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x80048298; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1632,6 +1655,20 @@ _card_read = 0x8006E1B4; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 PAD_dr = 0x8006F3F4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8006F404; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8006F414; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+ApplyMatrixSV = 0x80046f9c; // // type:func (pinned member row)
+SetColorMatrix = 0x800471a0; // // type:func (pinned member row)
+SetTransMatrix = 0x800471d0; // // type:func (pinned member row)
+GsClearOt_clear = 0x80048c24; // // type:func (shared-alias GsClearOt callee)
+SsSeqCalledTbyT = 0x80069f98; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x80065410; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x8017897c; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x8018039c; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x801803a0; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x80178d84; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x8017fb1c; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+Snd_crescendo = 0x8006daf0; // // type:func (pinned member row)
+Snd_decrescendo = 0x8006a4f0; // // type:func (pinned member row)
+Snd_stop = 0x8006deb0; // // type:func (pinned member row)
 
 // target: g3org_jp  (220 sdk-member adoptions)
 GsSetOrign = 0x80028708; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1678,7 +1715,7 @@ PAD_init = 0x80048900; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x80048910; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x80048920; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x80048930; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x80048940; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x80048940; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 nextfile = 0x80048950; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x80048960; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x80048970; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -1856,6 +1893,17 @@ _new_card = 0x8006D9EC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members
 _card_read = 0x8006D9FC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8006EC0C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8006EC1C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+ApplyMatrixSV = 0x800475cc; // // type:func (pinned member row)
+GsClearOt_clear = 0x800492fc; // // type:func (shared-alias GsClearOt callee)
+SetColorMatrix = 0x800477d0; // // type:func (pinned member row)
+SetTransMatrix = 0x80047800; // // type:func (pinned member row)
+SpuSetCommonAttr = 0x80068e60; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x80064bcc; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x80178890; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x8017fab8; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x8017fabc; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x80178c9c; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x8017fa38; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
 
 // target: mainmenu_eu  (174 sdk-member adoptions)
 GsSetOrign = 0x800396CC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1891,19 +1939,19 @@ SetMem = 0x8005F260; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py 
 EnableEvent = 0x8005F270; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 delete = 0x8005F280; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 format = 0x8005F290; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-HookEntryInt = 0x8005F2A0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// HookEntryInt = 0x8005F2A0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_restart_begin at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 _96_init = 0x8005F2B0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 LoadExec = 0x8005F2C0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8005F2D0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8005F2E0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x8005F2F0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x8005F2F0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 nextfile = 0x8005F300; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8005F310; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8005F320; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 TestEvent = 0x8005F330; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearRCnt = 0x8005F350; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 open = 0x8005F360; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-_96_remove = 0x8005F370; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// _96_remove = 0x8005F370; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_start_aux6 at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 firstfile = 0x8005F380; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ReturnFromException = 0x8005F390; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 memcpy = 0x80061FC4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2034,6 +2082,20 @@ _card_read = 0x80086344; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 PAD_dr = 0x80087584; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x80087594; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x800875A4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+ApplyMatrixSV = 0x8005e024; // // type:func (pinned member row)
+GsClearOt_clear = 0x8005fcac; // // type:func (shared-alias GsClearOt callee)
+SsSetSerialVol = 0x80081ef4; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x8007d504; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x8018dc28; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x80195738; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x8019573c; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x8018e070; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x80194eb8; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+Snd_stop = 0x80086040; // // type:func (pinned member row)
+Snd_crescendo = 0x80085c80; // // type:func (pinned member row)
+Snd_decrescendo = 0x80082680; // // type:func (pinned member row)
+SetColorMatrix = 0x8005e228; // // type:func (pinned member row)
+SetTransMatrix = 0x8005e258; // // type:func (pinned member row)
 
 // target: mainmenu_jp  (204 sdk-member adoptions)
 GsSetOrign = 0x80039734; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -2076,7 +2138,7 @@ PAD_init = 0x8005F978; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.p
 LoadExec = 0x8005F988; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8005F998; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8005F9A8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x8005F9B8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x8005F9B8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 nextfile = 0x8005F9C8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8005F9D8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8005F9E8; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2242,6 +2304,21 @@ _new_card = 0x80085B6C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members
 _card_read = 0x80085B7C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x80086D8C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x80086D9C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+ApplyMatrixSV = 0x8005e644; // // type:func (pinned member row)
+GsClearOt_clear = 0x80060374; // // type:func (shared-alias GsClearOt callee)
+SpuSetCommonAttr = 0x80080fe0; // // type:func (pinned member row)
+SsSeqCalledTbyT = 0x800815a8; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x8007ccb0; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x8018db0c; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x80194e24; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x80194e28; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x8018df58; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x80194da4; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+Snd_crescendo = 0x80084efc; // // type:func (pinned member row)
+Snd_pause = 0x80085754; // // type:func (pinned member row)
+SetColorMatrix = 0x8005e848; // // type:func (pinned member row)
+SetTransMatrix = 0x8005e878; // // type:func (pinned member row)
+RotAverageNclipColorDpq3_1 = 0x80071f1c; // // type:func (pinned member row)
 
 // target: sces_00269  (156 sdk-member adoptions)
 GsSetOrign = 0x80026C5C; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -2282,7 +2359,7 @@ HookEntryInt = 0x8002F408; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_membe
 LoadExec = 0x8002F428; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 ChangeClearPAD = 0x8002F438; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 InitHeap = 0x8002F448; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-ResetEntryInt = 0x8002F458; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// ResetEntryInt = 0x8002F458; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_stop_commit at the same address - one curated name per address, the C-referenced name wins; sdk_curated.py REGENERATES this block and will re-add this row: teach it to skip addresses another curated row claims]
 nextfile = 0x8002F468; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 OpenEvent = 0x8002F478; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 read = 0x8002F488; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2400,6 +2477,21 @@ _card_read = 0x80049770; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_member
 PAD_dr = 0x8004A9B0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8004A9C0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8004A9D0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+GsClearOt_clear = 0x8002fe14; // // type:func (shared-alias GsClearOt callee)
+ApplyMatrixSV = 0x80034728; // // type:func (pinned member row)
+SetColorMatrix = 0x8003492c; // // type:func (pinned member row)
+SetTransMatrix = 0x8003495c; // // type:func (pinned member row)
+SpuSetCommonAttr = 0x80044f8c; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x80040930; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x801145ec; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x8011c06c; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x8011c070; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x80114a94; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x8011b7ec; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+Snd_pause = 0x800457c8; // // type:func (pinned member row)
+Snd_stop = 0x8004946c; // // type:func (pinned member row)
+Snd_crescendo = 0x800490ac; // // type:func (pinned member row)
+Snd_decrescendo = 0x80045aac; // // type:func (pinned member row)
 
 // target: slps_00270  (185 sdk-member adoptions)
 GsSetOrign = 0x80026C14; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -2435,7 +2527,7 @@ SetMem = 0x8002F8BC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py 
 EnableEvent = 0x8002F8CC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 delete = 0x8002F8DC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 format = 0x8002F8EC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
-HookEntryInt = 0x8002F8FC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+// HookEntryInt = 0x8002F8FC; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement  [alias of intr_restart_begin at the same address: the scan's curated parser applies one name per address, and the C-referenced name wins]
 _96_init = 0x8002F90C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 PAD_init = 0x8002F91C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 LoadExec = 0x8002F92C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -2587,3 +2679,15 @@ _new_card = 0x80049AFC; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members
 _card_read = 0x80049B0C; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysDeqIntRP = 0x8004AD1C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 SysEnqIntRP = 0x8004AD2C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+entry = 0x8002be94; // // type:func
+GsClearOt_clear = 0x80030318; // // type:func (shared-alias GsClearOt callee)
+SetTransMatrix = 0x80034e94; // // type:func (pinned member row)
+SpuSetCommonAttr = 0x80044f70; // // type:func (pinned member row)
+SsSeqCalledTbyT_init = 0x80040c40; // // type:func (game-side init callee, shared alias)
+SsSeqCalledTbyT_guard = 0x8011506c; // // ignore:true (shared-alias SsSeqCalledTbyT guard static)
+SsSeqCalledTbyT_nslots = 0x8011c2f4; // // ignore:true (shared-alias SsSeqCalledTbyT slot-count static)
+SsSeqCalledTbyT_ntracks = 0x8011c2f8; // // ignore:true (shared-alias SsSeqCalledTbyT track-count static)
+SsSeqCalledTbyT_slotbits = 0x80115518; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
+SsSeqCalledTbyT_tab = 0x8011c274; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
+_svm_stereo_mono = 0x80114ff8; // // type:s32 (LIBSND VS_MONO bss static beyond the payload; SsSetMono/SsSetStereo sh %lo(0x4FF8)($at) with lui 0x8011)
+intr_vb_cb_slots = 0x8004e360; // // type:s32 (LIBETC INTR_VB member .data+0 in a no-row gap; setIntrVSync lui/addiu pair; retail bytes at the address: eight zero slots then 0x1F801114/0x1F801814/0x1F801110)

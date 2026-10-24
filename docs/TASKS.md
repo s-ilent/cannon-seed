@@ -6,6 +6,38 @@ sandbox agent, which is where the build toolchain lives.
 
 ## Queued
 
+### Tooling lane: land the window carve batch (2,026 sdk anchor rows are one `make scan` away)
+
+The carve pipe is PROVEN end to end (2026-10-24, live on sces_00269):
+`sdk_anchors.py` now emits per-function rows from the symbol-window census
+(`window-verbatim`/`window-fixed`, stub-family name collisions dropped,
+whole-member rows always win overlap), and one scan carved **298 rows** on
+sces_00269 alone — including the five 68f0df80 stragglers `Intpl`/`Square12`/
+`Square0`/`AverageZ3`/`AverageZ4`, tiled exactly to the member layout.
+`config/sdk_anchors.txt` carries 4,607 rows (~2,000 window rows) across all
+8 targets; `config/sdk_windows.txt` is the name-space evidence report.
+
+The scan that carves them is NOT run tree-wide yet. Three classes of
+hand state ride outside curated and a re-scan flushes them (witnessed live
+on sces, reverted; tree is verify-GREEN at HEAD):
+
+1. symbols-file-only names (pinned member rows, RETAIL-BOUND s32 address
+   constants, shared-alias statics) — FIXED: 103 rows added + 48 stale
+   addresses corrected in `config/symbols.curated.txt`, 9 same-address
+   alias pairs resolved to the C-referenced name.
+2. asm-file-embedded state (hand names/splits inside `asm/**` — witnessed:
+   `func_800318E8.s` carried the `_96_init` veneer; the regenerated file
+   lost it and broke 8,982 bytes) — NOT FIXED. Port = compare each target's
+   asm inner `glabel`s against curated before its scan; port missing names,
+   then re-scan, re-split, `make verify`.
+3. `tools/sdk_curated.py` REGENERATES its adoption block and will re-add
+   the `ResetEntryInt` row that collides with `intr_stop_commit` (one
+   curated name per address) — teach it to skip addresses another curated
+   row claims before re-running it.
+
+Queue state after the 2026-10-24 rerun: census 631 rows, classifier
+**229 candidates** (was 221) in `build/split_classifier.txt`.
+
 ### Matching lane: roll the region-pair exact clusters (the unattended-agent grind)
 
 OPEN — first fruits landed 2026-10-17 (see Log): `tools/pair_report.py` (the
@@ -64,7 +96,11 @@ thunks (exactly 9 non-zero bytes each) census. 425→748 members, 1068→1975
 placements, 144→145 anchored (thunks are `unique`, not anchored: zero
 relocations to reconstruct), sdk_anchors.txt 856→1703 rows. mainmenu_eu is
 landed and verified GREEN; the remaining seven targets' scan/extract/verify
-landing is the open part of this item.
+landing is the open part of this item. [2026-10-24 update: the report side is
+fully current — multi-version regen (a65eabed) + the window pass put 4,607
+rows in sdk_anchors.txt; the seven-target landing is now blocked only by the
+hand-state port documented in the "land the window carve batch" item above,
+not by this tool.]
 
 Original finding, for the record:
 

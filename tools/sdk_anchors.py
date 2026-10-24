@@ -28,7 +28,8 @@ to agree with, the second has no name to agree on.
 Row grammar (one function per row, sorted by address):
     0x<vram> 0x<size> <symname> <member> <lib> <verdict>
 
-Regenerate:  python3 tools/sdk_anchors.py --libs ~/psyq/3.3/PSX/LIB
+Regenerate:  python3 tools/sdk_anchors.py --libs ~/psyq/3.3/PSX/LIB \
+    [--libs ~/psyq/3.5/PSX/LIB ...]
 (the report is the evidence base - regenerate IT first when the maps move)
 """
 
@@ -37,6 +38,9 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sdk_members as sm  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 REPORT = REPO / "config" / "sdk_members.txt"
@@ -82,54 +86,131 @@ def agree_addrs(rows):
     return out
 
 
-def load_extents(libdir: Path):
+def load_extents(libdirs):
     """(lib, member, symname) -> extent, from the archives' .text symbols."""
-    sys.path.insert(0, str(REPO / "tools"))
-    import sdk_members as sm  # noqa: E402
-
     ext = {}
     clashes = 0
-    for libpath in sorted(libdir.glob("LIB*.LIB")):
-        try:
-            members = sm.parse_archive(libpath)
-        except Exception as e:  # noqa: BLE001 - report and move on
-            print(f"sdk_anchors: WARNING: {libpath.name}: {e}", file=sys.stderr)
-            continue
-        for m in members:
-            text = m.text()
-            if not text:
+    for libdir in libdirs:
+        if not libdir.is_dir():
+            raise SystemExit(f"{libdir} is not a directory")
+        for libpath in sorted(libdir.glob("LIB*.LIB")):
+            try:
+                members = sm.parse_archive(libpath)
+            except Exception as e:  # noqa: BLE001 - report and move on
+                print(f"sdk_anchors: WARNING: {libpath.name}: {e}",
+                      file=sys.stderr)
                 continue
-            syms = m.text_syms()
-            offs = sorted({o for o, _ in syms})
-            for soff, sname in syms:
-                nxt = next((x for x in offs if x > soff), len(text))
-                extent = nxt - soff
-                key = (m.lib, m.name, sname)
-                if key in ext:
-                    if ext[key] != extent:
-                        clashes += 1
-                    continue  # first definition wins
-                ext[key] = extent
+            for m in members:
+                text = m.text()
+                if not text:
+                    continue
+                syms = m.text_syms()
+                offs = sorted({o for o, _ in syms})
+                for soff, sname in syms:
+                    nxt = next((x for x in offs if x > soff), len(text))
+                    extent = nxt - soff
+                    key = (m.lib, m.name, sname)
+                    if key in ext:
+                        if ext[key] != extent:
+                            clashes += 1
+                        continue  # first definition wins
+                    ext[key] = extent
     if clashes:
         print(f"sdk_anchors: WARNING: {clashes} extent clash(es) across "
               f"same-named members; first definition kept", file=sys.stderr)
     return ext
 
 
+def load_members(libdirs):
+    """[(Member, {psy-q versions})] deduped across dirs by
+    (lib, member name, .text bytes) - sdk_members.main's rule."""
+    out = []
+    seen = {}
+    for libdir in libdirs:
+        if not libdir.is_dir():
+            raise SystemExit(f"{libdir} is not a directory")
+        m = re.search(r"(\d+\.\d+)", str(libdir))
+        ver = m.group(1) if m else libdir.name
+        for libpath in sorted(libdir.glob("LIB*.LIB")):
+            try:
+                members = sm.parse_archive(libpath)
+            except Exception as e:  # noqa: BLE001 - report and move on
+                print(f"sdk_anchors: WARNING: {libpath.name}: {e}",
+                      file=sys.stderr)
+                continue
+            for mem in members:
+                if not mem.text():
+                    continue
+                key = (mem.lib, mem.name, mem.text())
+                if key in seen:
+                    seen[key][1].add(ver)
+                else:
+                    seen[key] = (mem, {ver})
+                    out.append(seen[key])
+    return out
+
+
+def window_rows(members, target):
+    """Per-function anchor rows from the symbol-window census.
+
+    The whole-member report cannot see a member prefix or interior run
+    (the game SDK grouped members differently), so whole-member rows miss
+    library code that sits in the image verbatim. sdk_members.locate_
+    windows finds those spans; this tiles each span into one row per
+    function symbol. Guard: when several members claim the same span
+    start with DIFFERENT first symbols, the naming is ambiguous (the
+    byte-identical stub families) and the claim is dropped - the same
+    exclusion the whole-member pass applies. Rows carry the mark,
+    `window-verbatim` (every byte equals the archive) or `window-fixed`
+    (relocated object zeroes wildcarded).
+    """
+    loaded = sm.load_target(target)
+    if not loaded:
+        return [], 0
+    payload, lo, vram = loaded
+    claims = defaultdict(list)
+    for mem, vers in members:
+        for off, size, names, mark in sm.locate_windows(payload, mem):
+            if names:
+                claims[off].append((size, names, mark, mem, vers))
+    rows = []
+    amb = 0
+    for off, cs in sorted(claims.items()):
+        firsts = {c[1][0][1] for c in cs}
+        if len(firsts) > 1:
+            amb += len(cs)
+            continue
+        size, names, mark, mem, vers = max(cs, key=lambda c: c[0])
+        libver = f"{mem.lib}@{'+'.join(sorted(vers))}"
+        for i, (delta, name) in enumerate(names):
+            end_d = names[i + 1][0] if i + 1 < len(names) else size
+            fsize = end_d - delta
+            if fsize <= 0 or fsize % 4:
+                continue
+            rows.append((off + delta - lo + vram, fsize, name,
+                         mem.name, libver, f"window-{mark}"))
+    return rows, amb
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--libs", type=Path, required=True,
-                    help="directory holding the Psy-Q LIB*.LIB archives")
+    ap.add_argument("--libs", type=Path, required=True, action="append",
+                    help="directory holding the Psy-Q LIB*.LIB archives; "
+                         "repeat to index several Psy-Q versions")
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--no-windows", action="store_true",
+                    help="skip the symbol-window pass (whole-member rows only)")
     args = ap.parse_args(argv[1:])
     if not REPORT.is_file():
         raise SystemExit(f"missing {REPORT} - run tools/sdk_members.py first")
-    if not args.libs.is_dir():
-        raise SystemExit(f"{args.libs} is not a directory")
 
     report = load_report()
     ext = load_extents(args.libs)
-    print(f"sdk_anchors: {len(ext)} symbol extents from {args.libs}")
+    print(f"sdk_anchors: {len(ext)} symbol extents from "
+          f"{len(args.libs)} lib dir(s)")
+    members = None if args.no_windows else load_members(args.libs)
+    if members:
+        print(f"sdk_anchors: window pass over {len(members)} distinct members")
 
     lines = [
         "// SDK anchor rows - GENERATED by tools/sdk_anchors.py. Do not edit.",
@@ -145,24 +226,36 @@ def main(argv):
         "// Extent from the member: next .text symbol's offset, or .text",
         "// size for the last symbol.",
         "//",
+        "// window-* rows come from the symbol-window pass (sdk_members",
+        "// locate_windows): spans of member .text the whole-member slide",
+        "// cannot see because the game SDK grouped members differently.",
+        "// window-verbatim: every byte equals the archive. window-fixed:",
+        "// relocated object zeroes were wildcards (the whole-member",
+        "// standard) - the BYTES are the image's either way, so the carve",
+        "// is safe; the name rides on the span's symbol layout. Spans",
+        "// several members claim under DIFFERENT first symbols are dropped",
+        "// (the stub-family exclusion). Window rows never overwrite a",
+        "// whole-member row: the overlap chain skips them.",
+        "//",
         "// The scanner (tools/scan_functions.py) carves these spans out of the",
         "// rows the map labels `data` as pinned-class asm rows at their exact",
         "// addresses. The extent makes the carve END where the member ends.",
         "// Names are evidence, not configuration: adoption goes through",
         "// config/symbols.curated.txt (read its guard block first).",
         "//",
-        "// Regenerate:  python3 tools/sdk_anchors.py --libs <psyq lib dir>",
+        "// Regenerate:  python3 tools/sdk_anchors.py --libs <dir> "
+        "[--libs <dir> ...]",
         "//",
         "//   0x<vram> 0x<size> <symname> <member> <lib> <verdict>",
         "",
     ]
     stats = {}
     for t in sorted(report):
-        rows = []
-        prev_end = 0
-        skipped = {"verdict": 0, "extent": 0, "align": 0, "overlap": 0}
+        merged = []            # (vram, is_window, size, text)
+        skipped = {"verdict": 0, "extent": 0, "align": 0, "overlap": 0,
+                   "wamb": 0, "wover": 0}
         agrees = agree_addrs(report[t])
-        for vram, lib, member, mark, sname in sorted(report[t]):
+        for vram, lib, member, mark, sname in report[t]:
             if vram in agrees:
                 verdict = "agree"
             elif mark in ("anchored", "unique"):
@@ -177,20 +270,36 @@ def main(argv):
             if size <= 0 or size % 4:
                 skipped["align"] += 1
                 continue
+            merged.append((vram, 0, size,
+                           f"{sname} {member} {lib} {verdict}"))
+        if members:
+            wins, amb = window_rows(members, t)
+            skipped["wamb"] = amb
+            for vram, size, sname, member, libver, verdict in wins:
+                merged.append((vram, 1, size,
+                               f"{sname} {member} {libver} {verdict}"))
+        merged.sort(key=lambda x: (x[0], x[1]))
+        rows = []
+        prev_end = 0
+        nwin = 0
+        for vram, isw, size, text in merged:
             if vram < prev_end:
-                skipped["overlap"] += 1
+                skipped["wover" if isw else "overlap"] += 1
                 continue
-            rows.append(f"0x{vram:08X} 0x{size:X} {sname} {member} {lib} {verdict}")
+            rows.append(f"0x{vram:08X} 0x{size:X} {text}")
             prev_end = vram + size
+            nwin += isw
         if not rows:
             continue
-        lines.append(f"// target: {t}  ({len(rows)} anchors)")
+        lines.append(f"// target: {t}  ({len(rows)} anchors, {nwin} window)")
         lines.extend(rows)
         lines.append("")
         stats[t] = (len(rows), skipped)
         s = skipped
-        print(f"  {t:<12} {len(rows):<4} anchors  (skipped: {s['verdict']} verdict, "
-              f"{s['extent']} no-extent, {s['align']} align, {s['overlap']} overlap)")
+        print(f"  {t:<12} {len(rows):<4} anchors (+{nwin} window)  "
+              f"(skipped: {s['verdict']} verdict, {s['extent']} no-extent, "
+              f"{s['align']} align, {s['overlap']} overlap, "
+              f"{s['wover']} win-overlap, {s['wamb']} win-ambiguous)")
 
     args.out.write_text("\n".join(lines) + "\n")
     print(f"sdk_anchors: wrote {args.out.relative_to(REPO)} "
