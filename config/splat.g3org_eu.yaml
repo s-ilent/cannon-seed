@@ -507,7 +507,8 @@ segments:
       - [0x38688, asm, func_80060388]   # 0x58
       - [0x386E0, data, data_800603E0]   # 0x1dc
       - [0x388BC, asm, func_800606EC]   # 0x60
-      - [0x3891C, asm, func_8006074C]   # 0xd0 sdk
+      - [0x3891C, c, RotAverageNclipColorCol3]   # 0xc8 sdk
+      - [0x389E4, data, data_800581E4]   # 0x8
       - [0x389EC, c, RotAverageNclipColorDpq3]   # 0xd0 sdk
       - [0x38ABC, data, data_800608EC]   # 0x704
       - [0x391C0, asm, func_80061120]   # 0xf0
