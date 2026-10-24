@@ -32,8 +32,8 @@ glabel GsInit3D
     /* 2D9B0 8004D1B0 1880013C */  lui        $at, %hi(D_8017FA34)
     /* 2D9B4 8004D1B4 34FA22AC */  sw         $v0, %lo(D_8017FA34)($at)
     /* 2D9B8 8004D1B8 FF3F0234 */  ori        $v0, $zero, 0x3FFF
-    /* 2D9BC 8004D1BC 1880013C */  lui        $at, 0x8018
-    /* 2D9C0 8004D1C0 30FA20AC */  sw         $zero, -0x5D0($at)
+    /* 2D9BC 8004D1BC 1880013C */  lui        $at, %hi(GsSetLightMode_lmode)
+    /* 2D9C0 8004D1C0 30FA20AC */  sw         $zero, %lo(GsSetLightMode_lmode)($at)
     /* 2D9C4 8004D1C4 1880013C */  lui        $at, %hi(D_80178C74)
     /* 2D9C8 8004D1C8 748C22AC */  sw         $v0, %lo(D_80178C74)($at)
     /* 2D9CC 8004D1CC 1000BF8F */  lw         $ra, 0x10($sp)

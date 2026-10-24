@@ -14,9 +14,4 @@ glabel strcmp
     /* 25CAC 800454AC 08004001 */  jr         $t2
     /* 25CB0 800454B0 17000924 */   addiu     $t1, $zero, 0x17
 endlabel strcmp
-
-nonmatching func_800454B4, 0x4
-
-glabel func_800454B4
     /* 25CB4 800454B4 00000000 */  nop
-endlabel func_800454B4

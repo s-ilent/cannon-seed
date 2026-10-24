@@ -76,7 +76,18 @@ GREEN with carves (byte-exact, ratchets 386/0, suite 73):
 
 PARKED (reverted to HEAD, verify GREEN, one shared blocker):
 
-* g3org_jp, mainmenu_eu, mainmenu_jp — the INTERIOR-DEFAULT-GLABEL class:
+* g3org_jp, mainmenu_eu — CLOSED by the landed glabel_collision_pass.py
+  (2ca1200e, run manually post-extract — the Makefile wiring is still
+  pending): g3org_jp GREEN with 1 rename (func_800258F4_2), mainmenu_eu
+  GREEN with 2 (func_80037A0C_2 / func_80037C1C_2). 7/8 scan-verified.
+* mainmenu_jp — parked on a NEW instance the pass's scope law calls
+  tolerated but that breaks the link: `func_800588D4` defined by BOTH its
+  standalone row file AND an interior +0x6070 sub-block in
+  func_80052864.s, with a `func_800588D4.NON_MATCHING` duplicate on top.
+  The scope law's tolerated-class proof (g3_eu) covered interior labels
+  spelled like standalone rows' labels; this witness has the standalone
+  row file AND the interior label both live in the link plus the
+  NON_MATCHING metadata symbol — needs the scope-law owner to adjudicate.
   spimdisasm default-names an interior block start `func_<linear-vram>` when
   no symbols entry claims that vram, and the spelled name can equal a symbol
   a preserved C file defines (witnessed twice: g3org_jp `func_800258F4`

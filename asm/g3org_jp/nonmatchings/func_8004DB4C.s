@@ -32,7 +32,7 @@ glabel startIntr
     /* 28498 80047C98 C841428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* 2849C 80047C9C 21200002 */  addu       $a0, $s0, $zero
     /* 284A0 80047CA0 000045AC */  sw         $a1, 0x0($v0)
-    /* 284A4 80047CA4 6720010C */  jal        func_8004819C
+    /* 284A4 80047CA4 6720010C */  jal        func_8004E1CC
     /* 284A8 80047CA8 1A040534 */   ori       $a1, $zero, 0x41A
     /* 284AC 80047CAC 7220010C */  jal        setjmp
     /* 284B0 80047CB0 38000426 */   addiu     $a0, $s0, 0x38

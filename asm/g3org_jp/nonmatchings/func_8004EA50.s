@@ -14,9 +14,4 @@ glabel _96_init
     /* 290F4 800488F4 08004001 */  jr         $t2
     /* 290F8 800488F8 71000924 */   addiu     $t1, $zero, 0x71
 endlabel _96_init
-
-nonmatching func_800488FC, 0x4
-
-glabel func_800488FC
     /* 290FC 800488FC 00000000 */  nop
-endlabel func_800488FC

@@ -14,9 +14,4 @@ glabel delete
     /* 290C4 800488C4 08004001 */  jr         $t2
     /* 290C8 800488C8 45000924 */   addiu     $t1, $zero, 0x45
 endlabel delete
-
-nonmatching func_800488CC, 0x4
-
-glabel func_800488CC
     /* 290CC 800488CC 00000000 */  nop
-endlabel func_800488CC
