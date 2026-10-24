@@ -87,7 +87,7 @@ PARKED (reverted to HEAD, verify GREEN, one shared blocker):
   starts of walk rows that sit next to c rows (cross-target pass already
   handles jump targets; these two witnesses were NOT in cross_targets —
   spimdisasm's own sub-block detection), or extract needs a post-pass
-  renaming interior default glabels that collide with linked symbols.
+  renaming interior default glabels that collide with linked symbols. THE POST-PASS OPTION LANDED (tools/glabel_collision_pass.py, wired into make extract, idempotent): C-side definitions own the name (c yaml rows + column-0 census-shaped declarations in their src files, externs and prototypes excluded), every asm glabel carrying a C-owned name takes the first free _N suffix, loser files rewritten only, nonmatching headers untouched; no-op proof 3/5 verified trees clean, the 2 residual fires (sces func_80049780.2's plain-glabel row, g3_eu's orphan func_8004D704.s) are REAL inert instances of the class; asm-asm duplicate glabels are TOLERATED by the pipeline (verified g3_eu links GREEN with hundreds) and are deliberately NOT renamed.
 
 QUEUE after the campaign (census 185 rows, classifier 16 candidates, all
 D-MID-ROW): the SDK slice has DRAINED out of the census — the carved rows
