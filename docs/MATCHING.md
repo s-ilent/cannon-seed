@@ -182,12 +182,47 @@ the local drop, and it does not — mainmenu_eu's `data_8006FCF8` island
 carried `LightColor`/`DpqColorLight`/`DpqColor3` byte-exact while the local
 member continues past them, so the whole-member slide saw nothing and the
 functions had to be hand-derived across targets (commit 68f0df80). The
-window census slides every function-symbol window of every member, keeps
-exact spans (relocated fields are *not* wildcarded — a span is library code
-verbatim), and marks names whose address no line in `sdk_members.txt` or
-`sdk_anchors.txt` carries with `*`. First run: 1,026 function instances in
-verbatim spans across the 8 targets, 240 of them at addresses no prior
-report carried — whole PRIM/LIBGTE runs sitting inside `data` islands.
+window census slides every function-symbol window of every member and keeps
+spans marked `verbatim` (every byte equals the unlinked object) or `fixed`
+(object zeroes — relocated fields — wildcarded, the whole-member slide's
+standard with its fixed-byte gate). Names whose raw offset no line in
+`sdk_members.txt`/`sdk_anchors.txt` carries are starred. First wildcard run:
+3,488 function instances across the 8 targets, 1,008 at offsets no prior
+report carried — whole LIBETC/LIBGPU/LIBGTE runs sitting inside `data`
+islands.
+
+**Address spaces (learned the hard way, cron-20261024).** The yaml is a
+scatter list: `build.sh` places each subsegment's file range at the vram in
+its NAME, and vram is not linear in file offset — names drift up to 0xf5d0
+past any linear map (mainmenu_eu). Names are the ground truth (verify is
+green against them). `sdk_windows.txt` addresses are NAME space, converted
+through the yaml anchors (`yaml_anchors`/`raw_to_name`/`name_to_raw` in
+tools/sdk_members.py). `sdk_members.txt` and `sdk_anchors.txt` stay in the
+scan's linear space (address − segment vram = payload offset), because
+`load_sdk_anchors` in scan_functions.py consumes them that way; their
+offsets are byte-true either way.
+
+### 3d. Cross-target siblings: the sibling finder
+
+A landed unit proves one compilation of a function family; the twin in the
+next chained executable was compiled differently (`lwc2` vs `mtc2` — the
+parked color war), so byte matching cannot find it, and twins inside
+`data` islands are invisible to function scans. `tools/sibling_finder.py`
+takes the landed unit's bytes as a query, anchors on its rare aligned
+words in each other target, and scores candidates structurally —
+disassembled word by word, registers masked: mnemonic-sequence ratio,
+immediate overlap, literal/GTE-constant overlap. Capstone lives in the
+toolchain venv, so run it with `$PY`:
+
+```sh
+$PY tools/sibling_finder.py --src slps_00270 --at 0x800399B0 --size 0x8C
+```
+
+Every proposal is a carve candidate for the landing queue, never evidence
+on its own — acceptance stays `make verify`. Ground truth: queried with
+the landed mainmenu_eu color triple, it returns exactly one 1.00 hit per
+target, reproducing the known six-module family including the sces_00269
+carve site.
 
 Two things this does **not** do, both measured, both worth knowing:
 

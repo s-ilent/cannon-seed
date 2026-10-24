@@ -491,8 +491,9 @@ def locate(payload, member, min_fixed=8):
             out.append((s, verify(payload, member, s)))
 
 
-def locate_windows(payload, member, min_span=0x40, probe=0x40):
-    """[(offset, size, [sym names])] exact member-text spans in `payload`.
+def locate_windows(payload, member, min_span=0x40, probe=0x40,
+                   min_fixed=8, max_wild_run=0x10):
+    """[(offset, size, [(delta, name)], mark)] member-text spans in payload.
 
     The whole-member slide above assumes the game's SDK grouped functions
     into archive members exactly like the local drop. When it grouped them
@@ -500,9 +501,16 @@ def locate_windows(payload, member, min_span=0x40, probe=0x40):
     elsewhere), the whole member is not in the image and the slide sees
     nothing - even though a contiguous run of library functions is there
     byte for byte. Slide from every function symbol instead and extend to
-    the first divergence. Relocated fields are NOT wildcarded here: a span
-    is reported only if every byte matches the unlinked object, so a hit
-    is library code verbatim.
+    the first divergence.
+
+    mark is 'verbatim' when every byte of the span equals the unlinked
+    object's .text, or 'fixed' when bytes that are zero in the object
+    (relocated fields at link time) were treated as wildcards and every
+    other byte matched - the same standard the whole-member slide uses,
+    gated on `min_fixed` non-wildcard bytes so a span cannot ride on a
+    handful of coincidences. A span breaks after `max_wild_run` consecutive
+    wildcard bytes, so it cannot wander through unrelated data on a chain
+    of zero fields.
     """
     text = member.text()
     syms = [s for s in member.text_syms()
@@ -511,32 +519,71 @@ def locate_windows(payload, member, min_span=0x40, probe=0x40):
         return []
     out = []
     for soff, _sname in syms:
-        if len(text) - soff < min_span:
+        window = text[soff:]
+        if len(window) < min_span:
             break
-        want = text[soff:soff + probe]
-        if len(want) < probe // 2:
+        # needle: longest run of non-zero bytes in the probe. A masked
+        # scan needs at least 4 fixed bytes or the window is degenerate
+        # (the BIOS-thunk families) and stays the whole-member report's
+        # business.
+        head = window[:probe]
+        run = 0
+        best = (0, 0)          # (length, start)
+        for i, b in enumerate(head + b"\x01"):
+            if b:
+                run += 1
+                if run > best[0]:
+                    best = (run, i - run + 1)
+            else:
+                run = 0
+        nlen, noff = best
+        if nlen < 4:
             continue
-        off = payload.find(want)
+        needle = head[noff:noff + nlen]
+        off = payload.find(needle)
         while off != -1:
-            if not (off & 3):
-                end = soff + len(want)
-                lim = min(len(text), len(payload) - off + soff)
-                while end < lim and text[end] == payload[off + end - soff]:
-                    end += 1
-                size = end - soff
-                if size >= min_span:
-                    names = [(s2 - soff, str(n)) for s2, n in syms
-                             if soff <= s2 < end and end - s2 >= 8]
-                    if len(names) >= 2 or size >= 0x100:
-                        out.append((off, size, names))
-            off = payload.find(want, off + 4)
+            s = off - noff
+            off = payload.find(needle, off + 1)
+            if s < 0 or s & 3:
+                continue
+            # extend over whole words; a word matches when every nonzero
+            # object byte in it equals the payload byte
+            end = 0
+            wild = 0
+            for k in range(0, len(window) - 3, 4):
+                if s + k + 4 > len(payload):
+                    break
+                w = window[k:k + 4]
+                pw = payload[s + k:s + k + 4]
+                if not any(w):
+                    wild += 4
+                    if wild > max_wild_run:
+                        break
+                    end = k + 4
+                    continue
+                if any(a and a != b for a, b in zip(w, pw)):
+                    break
+                wild = 0
+                end = k + 4
+            size = end
+            if size < min_span:
+                continue
+            fixed = sum(1 for b in window[:size] if b)
+            if fixed < min_fixed:
+                continue
+            names = [(s2 - soff, str(n)) for s2, n in syms
+                     if soff <= s2 < soff + size and soff + size - s2 >= 8]
+            if len(names) < 2 and size < 0x100:
+                continue
+            exact = window[:size] == payload[s:s + size]
+            out.append((s, size, names, "verbatim" if exact else "fixed"))
     # nested windows of the same span collapse to the longest
     out.sort(key=lambda x: (x[0], -x[1]))
     kept = []
-    for off, size, names in out:
+    for off, size, names, mark in out:
         if kept and off < kept[-1][0] + kept[-1][1]:
             continue
-        kept.append((off, size, names))
+        kept.append((off, size, names, mark))
     return kept
 
 
@@ -634,25 +681,101 @@ def cfg_subsegments(target):
 
 
 def subsegment_kinds(target):
-    """[(vram_start, kind, name)] for every named subsegment in the yaml."""
+    """[(vram_start, kind, name)] for every named subsegment in the yaml.
+
+    vram_start is the address carried in the subsegment NAME - the ground
+    truth the build links by - not the linear vram+off-lo map (the yaml is
+    a scatter list; see yaml_anchors).
+    """
+    out = []
+    for off, kind, name, nv in yaml_anchors(target, with_kind=True):
+        if nv is not None:
+            out.append((nv, kind, name))
+    return out
+
+
+_NAME_RE = None
+
+
+def yaml_anchors(target, with_kind=False):
+    """[(raw_file_off, name_vram)] anchors from the target's yaml.
+
+    The yaml is a scatter list: build.sh places each subsegment's file
+    range at the vram in its name, and vram is NOT linear in file offset -
+    the images carry load-region gaps (mainmenu_eu names drift up to
+    0xf5d0 past any linear map). Names are the ground truth: verify is
+    green against them. Convert offsets and vram through these anchors.
+
+    Only names carrying an _XXXXXXXX address anchor positions; with_kind
+    also returns (off, kind, name, vram) for EVERY typed subsegment -
+    vram None for real names (a landed `c` row like LightColor has no
+    address in its name), which is how callers find landed starts.
+    """
+    global _NAME_RE
+    import re
     import yaml
+    if _NAME_RE is None:
+        _NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9]*_([0-9A-Fa-f]{8})"
+                              r"(?:\.[A-Za-z0-9_]+)?$")
     yml = REPO / "config" / f"splat.{target}.yaml"
     if not yml.is_file():
         return []
     cfg = yaml.safe_load(yml.read_text())
-    seg = cfg["segments"][0]
-    lo, vram = seg["start"], seg["vram"]
     out = []
-    for sub in seg["subsegments"]:
+    for sub in cfg["segments"][0]["subsegments"]:
         if isinstance(sub, list) and len(sub) >= 3 and isinstance(sub[0], int):
-            out.append((vram + sub[0] - lo, sub[1], sub[2]))
+            m = _NAME_RE.match(str(sub[2]))
+            if with_kind:
+                out.append((sub[0], sub[1], str(sub[2]),
+                            int(m.group(1), 16) if m else None))
+            elif m:
+                out.append((sub[0], int(m.group(1), 16)))
+    out.sort(key=lambda x: x[0])
     return out
 
 
+def raw_to_name(off, anchors):
+    """File offset -> vram, linear within the bracketing anchor pair."""
+    import bisect
+    if not anchors:
+        return None
+    i = bisect.bisect_right([a[0] for a in anchors], off) - 1
+    if i < 0:
+        return None
+    a0, v0 = anchors[i]
+    return v0 + (off - a0)
+
+
+def name_to_raw(v, anchors):
+    """vram -> file offset, linear within the bracketing anchor pair."""
+    import bisect
+    if not anchors:
+        return None
+    byv = sorted((v0, a0) for a0, v0 in anchors)
+    i = bisect.bisect_right([b[0] for b in byv], v) - 1
+    if i < 0:
+        return None
+    v0, a0 = byv[i]
+    return a0 + (v - v0)
+
+
 def known_addresses(target):
-    """Addresses (per symbol) already reported for `target` in
-    sdk_anchors.txt and sdk_members.txt, so window hits can be flagged."""
+    """RAW file offsets already reported for `target` in sdk_anchors.txt
+    and sdk_members.txt, so window hits can be flagged.
+
+    Those reports carry linear-space addresses (address - segment vram =
+    payload offset; the scan's consumption contract), so each address is
+    converted back to the raw offset it was found at - the space the
+    window census works in.
+    """
     out = set()
+    yml = REPO / "config" / f"splat.{target}.yaml"
+    if not yml.is_file():
+        return out
+    import yaml
+    cfg = yaml.safe_load(yml.read_text())
+    seg = cfg["segments"][0]
+    lo, vram = seg["start"], seg["vram"]
     for fn in ("sdk_anchors.txt", "sdk_members.txt"):
         p = REPO / "config" / fn
         if not p.is_file():
@@ -664,7 +787,7 @@ def known_addresses(target):
             elif cur == target:
                 body = line.lstrip("/ ").strip()
                 if body.startswith("0x"):
-                    out.add(int(body.split()[0], 16))
+                    out.add(int(body.split()[0], 16) - vram + lo)
     return out
 
 
@@ -685,7 +808,12 @@ def load_target(target):
 
 
 def run_windows(args, members, targets):
-    """--windows mode: verbatim symbol-window census -> config/sdk_windows.txt."""
+    """--windows mode: symbol-window census -> config/sdk_windows.txt.
+
+    Addresses in the output are the yaml NAME space (the vram the build
+    links by), converted through yaml_anchors; the star comparison works
+    in raw file offsets.
+    """
     report = {}
     for t in targets:
         loaded = load_target(t)
@@ -693,23 +821,25 @@ def run_windows(args, members, targets):
             print(f"  {t:<12} skipped (no yaml or no baseline image)")
             continue
         payload, lo, vram = loaded
+        anchors = yaml_anchors(t)
         spans = []
         for m, vers in members:
-            for off, size, names in locate_windows(payload, m):
-                spans.append((vram + off - lo, size, m,
-                              "+".join(sorted(vers)), names))
+            for off, size, names, mark in locate_windows(payload, m):
+                spans.append((off, size, m, "+".join(sorted(vers)),
+                              names, mark))
         spans.sort(key=lambda x: (x[0], -x[1]))
         kept = []
-        for vr, size, m, vers, names in spans:
-            if kept and vr < kept[-1][0] + kept[-1][1]:
+        for off, size, m, vers, names, mark in spans:
+            if kept and off < kept[-1][0] + kept[-1][1]:
                 continue
-            kept.append((vr, size, m, vers, names))
-        report[t] = (lo, vram, kept)
+            kept.append((off, size, m, vers, names, mark))
+        report[t] = kept
         nf = sum(len(k[4]) for k in kept)
-        print(f"  {t:<12} {len(kept):<4} verbatim spans, {nf} functions")
+        nv = sum(1 for k in kept if k[5] == "verbatim")
+        print(f"  {t:<12} {len(kept):<4} spans ({nv} verbatim), {nf} functions")
 
     lines = [
-        "// SDK verbatim-window report - GENERATED by tools/sdk_members.py --windows.",
+        "// SDK symbol-window report - GENERATED by tools/sdk_members.py --windows.",
         "//",
         "// Regenerate:  python3 tools/sdk_members.py --windows \\",
         "//     --libs ~/psyq/3.3/PSX/LIB --libs ~/psyq/3.5/PSX/LIB \\",
@@ -718,15 +848,21 @@ def run_windows(args, members, targets):
         "// The whole-member report (sdk_members.txt) assumes the game's SDK",
         "// grouped functions into archive members exactly like the local drop.",
         "// When it grouped them differently, a contiguous run of library",
-        "// functions can sit in the image byte for byte and the whole-member",
-        "// slide still sees nothing. This report slides every function-symbol",
-        "// window of every member (all indexed Psy-Q versions) and keeps spans",
-        "// whose bytes match the unlinked object EXACTLY - relocated fields",
-        "// are not wildcarded, so a span here is library code verbatim.",
-        "// A member whose .text carries relocations stops at the first one;",
-        "// such members stay the whole-member report's business.",
+        "// functions can sit in the image and the whole-member slide sees",
+        "// nothing. This report slides every function-symbol window of every",
+        "// member (all indexed Psy-Q versions).",
         "//",
-        "// Columns: address, size, member@versions, [kind of the yaml",
+        "// MARKS",
+        "//",
+        "//   verbatim  every byte of the span equals the unlinked object's",
+        "//             .text: library code verbatim.",
+        "//   fixed     bytes that are zero in the object (relocated fields at",
+        "//             link time) were wildcards and every other byte",
+        "//             matched - the whole-member slide's standard, with its",
+        "//             >= 8 fixed-byte gate. A span breaks after 0x10",
+        "//             consecutive wildcard bytes.",
+        "//",
+        "// Columns: address, size, mark, member@versions, [kind of the yaml",
         "// subsegment the span starts in], function symbols inside the span.",
         "// A trailing * on a name: no line in sdk_anchors.txt or",
         "// sdk_members.txt carries that address - i.e. new evidence.",
@@ -735,20 +871,26 @@ def run_windows(args, members, targets):
         "",
     ]
     for t in sorted(report):
-        lo, vram, kept = report[t]
+        kept = report[t]
         known = known_addresses(t)
         kinds = subsegment_kinds(t)
+        anchors = yaml_anchors(t)
         nf = sum(len(k[4]) for k in kept)
-        lines.append(f"// target: {t}  ({len(kept)} spans, {nf} functions)")
-        for vr, size, m, vers, names in kept:
+        nv = sum(1 for k in kept if k[5] == "verbatim")
+        lines.append(f"// target: {t}  ({len(kept)} spans, {nv} verbatim, "
+                     f"{nf} functions)")
+        for off, size, m, vers, names, mark in kept:
+            vr = raw_to_name(off, anchors)
+            if vr is None:
+                continue
             kind = ""
             for start, k, _n in kinds:
                 if start <= vr:
                     kind = k
-            marked = [n + ("*" if (vr + d) not in known else "")
+            marked = [n + ("*" if (off + d) not in known else "")
                       for d, n in names]
-            lines.append(f"  {vr:#010x} {size:#06x} {m.lib}@{vers} {m.name} "
-                         f"[{kind}] " + " ".join(marked))
+            lines.append(f"  {vr:#010x} {size:#06x} {mark:<9} {m.lib}@{vers} "
+                         f"{m.name} [{kind}] " + " ".join(marked))
         lines.append("")
     OUT_WINDOWS.parent.mkdir(parents=True, exist_ok=True)
     OUT_WINDOWS.write_text("\n".join(lines))
