@@ -64,6 +64,37 @@ regex (`\w+` cannot match dotted names) is a known separate class.]
 Queue state after the 2026-10-24 rerun: census 631 rows, classifier
 **229 candidates** (was 221) in `build/split_classifier.txt`.
 
+### Tooling lane: the window carve campaign — 5/8 targets scan-verified, 2 parked on the interior-glabel class
+
+STATE 2026-10-24 (unattended window, `24ca1de9` + `819876d1`): the remaining
+five targets were run through the full scan -> extract -> verify cycle.
+
+GREEN with carves (byte-exact, ratchets 386/0, suite 73):
+
+* g3_eu        323 carved (252 carried) — FOURTH scan-verified target
+* g3org_eu     349 carved (223 carried) — FIFTH scan-verified target
+
+PARKED (reverted to HEAD, verify GREEN, one shared blocker):
+
+* g3org_jp, mainmenu_eu, mainmenu_jp — the INTERIOR-DEFAULT-GLABEL class:
+  spimdisasm default-names an interior block start `func_<linear-vram>` when
+  no symbols entry claims that vram, and the spelled name can equal a symbol
+  a preserved C file defines (witnessed twice: g3org_jp `func_800258F4`
+  inside func_800250FC.s vs src/func_800258F4.c; mainmenu_eu `func_80037A0C`
+  + `func_80037C1C` inside func_80034EBC.s vs the statics in
+  src/func_800379E4.c). The row-start name-uniqueness registry does not
+  cover interior labels. Fix shape: scan must claim the interior block
+  starts of walk rows that sit next to c rows (cross-target pass already
+  handles jump targets; these two witnesses were NOT in cross_targets —
+  spimdisasm's own sub-block detection), or extract needs a post-pass
+  renaming interior default glabels that collide with linked symbols.
+
+QUEUE after the campaign (census 185 rows, classifier 16 candidates, all
+D-MID-ROW): the SDK slice has DRAINED out of the census — the carved rows
+are landed, so the classifier's candidates are now pure game-code mid-rows.
+Unit totals per target roughly tripled (each carved sdk row is its own
+unit): g3_eu 1,101 -> 4,988, g3org_eu 1,483 -> 5,122, sces 781 -> 2,076.
+
 ### Matching lane: roll the region-pair exact clusters (the unattended-agent grind)
 
 OPEN — first fruits landed 2026-10-17 (see Log): `tools/pair_report.py` (the
