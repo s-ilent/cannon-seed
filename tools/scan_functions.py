@@ -1262,6 +1262,63 @@ def main(argv):
             continue
         gen_syms.append(f"func_{BASE + o:08X} = 0x{BASE + o:08X}; // type:func (branch target)")
     gen_syms.append("// END GENERATED FUNCTION SYMBOLS")
+    # The symbol registry (cron-20261024-1146): every symbol line the file
+    # already carries claims BOTH its name and its vram - the hand seed
+    # head (slps_00270's `entry`), the generated function block, and every
+    # curated offset (a curated word on a data row names that address just
+    # as surely as a func line names its row start).
+    claimed_names = set()
+    claimed_vrams = set()
+    for line in head.splitlines():
+        m = re.match(r"\s*([A-Za-z_][\w.]*)\s*=\s*0x([0-9A-Fa-f]+)\s*;", line)
+        if m:
+            claimed_names.add(m.group(1))
+            claimed_vrams.add(m.group(2).upper())
+    for line in gen_syms:
+        m = re.match(r"\s*([A-Za-z_][\w.]*)\s*=\s*0x([0-9A-Fa-f]+)\s*;", line)
+        if m:
+            claimed_names.add(m.group(1))
+            claimed_vrams.add(m.group(2).upper())
+    # NOTE: curated offsets are deliberately NOT seeded into claimed_vrams
+    # here - the data pass below iterates curated itself, and seeding its
+    # own vrams would skip every curated data symbol (witnessed first
+    # g3_jp run: 28 skips -> 18 unresolved name-routed references, link
+    # failure). The glabel pass checks `off in curated` directly instead.
+    # The glabel law (cron-20261024-1146, witnessed g3_jp): a new row whose
+    # yaml name took a dotted suffix from the name-uniqueness registry has
+    # a FILE name that no longer equals spimdisasm's default glabel for
+    # its vram (func_{vram}). Without a symbols-file claim the emitted .s
+    # defines the DEFAULT name - witnessed: g3_jp func_800629A0.2.s at
+    # 0x800629A0 carried `glabel func_800629A0` while the name-holder, the
+    # matched C row src/func_800629A0.c (preserved at 0x80059FE0 under its
+    # historical woven-carve name), defines the same symbol - ld:
+    # multiple definition, second-pass link failure. Claim the vram with
+    # the row name so the glabel is derived from it and stays unique;
+    # splat sanitizes the dot to an underscore for the actual symbol
+    # (func_800629A0.2 -> glabel func_800629A0_2), which cannot collide
+    # with any func_{vram} default or curated word. Rows whose vram or
+    # name is already claimed keep the earlier claim (the curated-name
+    # law: witnessed g3_jp func_80028D60, a historical-name preserved row
+    # at curated GsSetOrign's vram - claiming the row name too would
+    # refuse the whole file). Plain-named rows are skipped: their default
+    # glabel equals their row name and the yaml registry already
+    # guarantees that name claims no other row.
+    n_row_syms = 0
+    for off, typ, name, _size in subsegs:
+        if typ != "asm" or name == f"func_{BASE + off:08X}":
+            continue
+        if off in curated:
+            continue
+        vram = f"{BASE + off:08X}"
+        if vram in claimed_vrams or name in claimed_names:
+            continue
+        gen_syms.append(f"{name} = 0x{vram}; // type:func (row name)")
+        claimed_names.add(name)
+        claimed_vrams.add(vram)
+        n_row_syms += 1
+    if n_row_syms:
+        print(f"scan: symbols: {n_row_syms} dotted-row glabel claim(s) "
+              f"written (the row name becomes the link symbol)")
     # Curated data symbols: any curated offset that is not a function
     # entry names a data location (state-map words, record tables). Emit
     # them as `// type:s32` (the curated data contract: all current
@@ -1280,29 +1337,15 @@ def main(argv):
             consumed.add(off)
     data_syms = []
     gp_abs = load_curated_gp_markers(target)
-    # The name-uniqueness registry at the SYMBOLS-FILE level (the yaml
-    # gained one in 7a6daec1): every symbol line the file already carries
-    # - the hand seed head (e.g. slps_00270's `entry = ... // type:func`,
-    # the pc0-proven entry routing line) and the generated function block
-    # - claims BOTH its name and its vram, and a curated data symbol may
-    # not re-claim either. Witnessed live (first slps_00270 scan run,
-    # 2026-10-24): the data pass re-emitted the head's `entry` as
-    # type:s32 at the same vram and splat refused the whole file
-    # ("Duplicate symbol detected! entry has already been defined at vram
-    # 0x8002BE94"). The earlier claim wins, same rule as the pinned rows
-    # above; the skip is reported so the count stays auditable.
-    claimed_names = set()
-    claimed_vrams = set()
-    for line in head.splitlines():
-        m = re.match(r"\s*([A-Za-z_][\w.]*)\s*=\s*0x([0-9A-Fa-f]+)\s*;", line)
-        if m:
-            claimed_names.add(m.group(1))
-            claimed_vrams.add(m.group(2).upper())
-    for line in gen_syms:
-        m = re.match(r"\s*([A-Za-z_][\w.]*)\s*=\s*0x([0-9A-Fa-f]+)\s*;", line)
-        if m:
-            claimed_names.add(m.group(1))
-            claimed_vrams.add(m.group(2).upper())
+    # The name-uniqueness law at the SYMBOLS-FILE level (the yaml gained
+    # one in 7a6daec1; the registry above is shared): a curated data
+    # symbol may not re-claim a name or vram the file already carries.
+    # Witnessed live (first slps_00270 scan run, 2026-10-24): the data
+    # pass re-emitted the head's `entry` as type:s32 at the same vram and
+    # splat refused the whole file ("Duplicate symbol detected! entry has
+    # already been defined at vram 0x8002BE94"). The earlier claim wins,
+    # same rule as the pinned rows; the skip is reported so the count
+    # stays auditable.
     n_data_skips = 0
     for off in sorted(curated):
         if off in consumed:

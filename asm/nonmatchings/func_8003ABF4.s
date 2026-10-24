@@ -171,7 +171,7 @@ glabel func_8003ABF4
     /* 1B63C 8003AE3C 00000000 */  nop
     /* 1B640 8003AE40 03004014 */  bnez       $v0, .L8003AE50
     /* 1B644 8003AE44 00000000 */   nop
-    /* 1B648 8003AE48 A7EB000C */  jal        func_8003AE9C
+    /* 1B648 8003AE48 A7EB000C */  jal        func_8003AE9C.2
     /* 1B64C 8003AE4C 21200000 */   addu      $a0, $zero, $zero
   .L8003AE50:
     /* 1B650 8003AE50 0500C016 */  bnez       $s6, .L8003AE68

@@ -1281,6 +1281,18 @@ func_8004AAE0 = 0x8004AAE0; // type:func (branch target)
 func_8004AB20 = 0x8004AB20; // type:func (branch target)
 func_8004AB2C = 0x8004AB2C; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
+func_80024430 = 0x80023AB0; // type:func (row name)
+func_80024D90 = 0x800242E0; // type:func (row name)
+func_80024ED4 = 0x80024424; // type:func (row name)
+func_8002507C = 0x800245CC; // type:func (row name)
+func_8002E560 = 0x8002C7B0; // type:func (row name)
+func_80031688 = 0x8002F1B8; // type:func (row name)
+func_80031B1C = 0x8002F64C; // type:func (row name)
+func_80035268.2 = 0x80035268; // type:func (row name)
+func_80037E9C.2 = 0x80037E9C; // type:func (row name)
+func_8003AE9C.2 = 0x8003AE9C; // type:func (row name)
+func_80042C84.2 = 0x80042C84; // type:func (row name)
+func_8004EFD8 = 0x80048E78; // type:func (row name)
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
 intr_start_aux3 = 0x8002CE64; // type:s32
 intr_restart_tail = 0x8002D194; // type:s32

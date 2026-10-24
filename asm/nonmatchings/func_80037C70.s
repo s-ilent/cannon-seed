@@ -39,7 +39,7 @@ glabel func_80037C70
   .L80037CCC:
     /* 184CC 80037CCC 000082AC */  sw         $v0, 0x0($a0)
     /* 184D0 80037CD0 00008594 */  lhu        $a1, 0x0($a0)
-    /* 184D4 80037CD4 A7DF000C */  jal        func_80037E9C
+    /* 184D4 80037CD4 A7DF000C */  jal        func_80037E9C.2
     /* 184D8 80037CD8 00000000 */   nop
     /* 184DC 80037CDC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 184E0 80037CE0 1800BD27 */  addiu      $sp, $sp, 0x18
