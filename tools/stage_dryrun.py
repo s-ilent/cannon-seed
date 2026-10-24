@@ -99,6 +99,69 @@ RECIPES = {
     # than the landed row extent (0xd0, the source twin's span) - the
     # trailing pad words are ld zero fill, the c_extent field tracks the
     # ROW span (absorbed sum), the build + verify arbitrate the fill.
+    #
+    # The len_param x3 wave (docs/TASKS.md, cron-20261023-1517 next-window
+    # (a), unblocked by the SOURCE-MAPPING ANSWER of cron-20261024-0503:
+    # build.sh compiles src/<row>.c only for targets whose yaml lists the
+    # row, and none of g3_eu/g3org_eu/mainmenu_eu carries a len_param
+    # definer (the MATRIX3 units func_80036DCC/func_8005436C/func_8006EA84
+    # compile only in slps_00270/g3org_jp/mainmenu_jp) - a new
+    # src/len_param.c collides with nothing. memclr stays PARKED: every
+    # target already carries exactly one memclr definer row (the LIBETC
+    # intr.c curated unit), so a new src/memclr.c would be a second
+    # definition per target - a lane decision, not a recipe. The cut is
+    # c-at-row-end single-cut (head 0x580 + c 0x1C, no tail) inside
+    # scan-era true-position files, so the walk label is the file's own
+    # dlabel (name-VA true) and the c row takes the last 7 words
+    # (0x18800004..0x00000000, the blez-guarded bit-length leaf). refs=6
+    # = the three slps-space MATRIX3 definer files' two textual mentions
+    # each; zero in the target subtrees. Line anchors pinned at HEAD
+    # 5e6709a7.
+    "lenparam-g3_eu": dict(
+        target="g3_eu",
+        src="asm/g3_eu/nonmatchings/data/data_8005674C.data.s",
+        yaml="config/splat.g3_eu.yaml",
+        row_label="data_8005674C", row_yaml=0x2FE7C, row_extent=0x59C,
+        walk_label="D_8004F67C", walk_rel=0x580,
+        head_extent=0x580, head_last=361, append_enddlabel=True,
+        pieces=[
+            dict(kind="c", label="len_param", yaml=0x303FC,
+                 extent=0x1C, first=362, last=368),
+        ],
+        orphan_line=None,
+        boundary={361: 0x00A01021, 362: 0x18800004, 368: 0x00000000},
+        refs={"len_param": 6},
+    ),
+    "lenparam-g3org_eu": dict(
+        target="g3org_eu",
+        src="asm/g3org_eu/nonmatchings/data/data_800535B0.data.s",
+        yaml="config/splat.g3org_eu.yaml",
+        row_label="data_800535B0", row_yaml=0x2D2D0, row_extent=0x59C,
+        walk_label="func_8004CAD0", walk_rel=0x580,
+        head_extent=0x580, head_last=361, append_enddlabel=True,
+        pieces=[
+            dict(kind="c", label="len_param", yaml=0x2D850,
+                 extent=0x1C, first=362, last=368),
+        ],
+        orphan_line=None,
+        boundary={361: 0x00A01021, 362: 0x18800004, 368: 0x00000000},
+        refs={"len_param": 6},
+    ),
+    "lenparam-mainmenu_eu": dict(
+        target="mainmenu_eu",
+        src="asm/mainmenu_eu/nonmatchings/data/data_8006DCD8.data.s",
+        yaml="config/splat.mainmenu_eu.yaml",
+        row_label="data_8006DCD8", row_yaml=0x44358, row_extent=0x59C,
+        walk_label="func_80064084", walk_rel=0x54,
+        head_extent=0x580, head_last=396, append_enddlabel=True,
+        pieces=[
+            dict(kind="c", label="len_param", yaml=0x448D8,
+                 extent=0x1C, first=397, last=403),
+        ],
+        orphan_line=None,
+        boundary={396: 0x00A01021, 397: 0x18800004, 403: 0x00000000},
+        refs={"len_param": 6},
+    ),
 }
 
 
