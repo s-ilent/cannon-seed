@@ -17,23 +17,27 @@ sces_00269 alone — including the five 68f0df80 stragglers `Intpl`/`Square12`/
 `config/sdk_anchors.txt` carries 4,607 rows (~2,000 window rows) across all
 8 targets; `config/sdk_windows.txt` is the name-space evidence report.
 
-The scan that carves them is NOT run tree-wide yet. Three classes of
-hand state ride outside curated and a re-scan flushes them (witnessed live
-on sces, reverted; tree is verify-GREEN at HEAD):
-
-1. symbols-file-only names (pinned member rows, RETAIL-BOUND s32 address
-   constants, shared-alias statics) — FIXED: 103 rows added + 48 stale
-   addresses corrected in `config/symbols.curated.txt`, 9 same-address
-   alias pairs resolved to the C-referenced name.
-2. asm-file-embedded state (hand names/splits inside `asm/**` — witnessed:
-   `func_800318E8.s` carried the `_96_init` veneer; the regenerated file
-   lost it and broke 8,982 bytes) — NOT FIXED. Port = compare each target's
-   asm inner `glabel`s against curated before its scan; port missing names,
-   then re-scan, re-split, `make verify`.
-3. `tools/sdk_curated.py` REGENERATES its adoption block and will re-add
-   the `ResetEntryInt` row that collides with `intr_stop_commit` (one
-   curated name per address) — teach it to skip addresses another curated
-   row claims before re-running it.
+The scan that carves them is NOT run tree-wide yet. Diagnosis corrected
+2026-10-24 after the live sces run and a full audit: the NAME ports are
+DONE and sufficient (all 8 targets' asm-embedded glabels checked against
+curated — clean; the symbols-only class is migrated: 103 rows added, 48
+stale addresses fixed, 9 same-address alias pairs resolved to the
+C-referenced name; the sdk_curated.py adoption block regenerated and its
+address-claimed rule correctly yields the collision to `intr_stop_commit`).
+The REAL blocker is structural: **scan_functions.py emits the yaml
+offset↔name pairing LINEARLY** (`0x{HDR + off:X}` row offsets,
+`func_{BASE+off}` names — the emission around line 1154), but the retail
+map is a SCATTER list whose names drift up to 0xf5d0 past linear (see
+docs/MATCHING.md "Address spaces"). A wholesale scan-regenerated yaml
+re-pairs offsets with linear names, the build places bytes by the names,
+and every drifted region breaks (witnessed: sces 8,982 bytes at
+`func_800318E8`/`_96_init`; tree reverted, verify GREEN). Fix = teach the
+scan to emit offsets/names through the EXISTING yaml's scatter anchors —
+preserved rows keep their (offset, name) pairing, new rows get
+`raw_to_name` names (`yaml_anchors` in tools/sdk_members.py already
+provides the map) — then the scan→extract→verify loop per target,
+smallest first. Until then DO NOT run `make scan` on any target whose
+yaml carries hand-paired rows.
 
 Queue state after the 2026-10-24 rerun: census 631 rows, classifier
 **229 candidates** (was 221) in `build/split_classifier.txt`.
