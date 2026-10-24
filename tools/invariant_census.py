@@ -158,6 +158,15 @@ class SymMap:
                 break
         return None, None
 
+    def enclosing_row(self, va):
+        """(lo, hi, name, typ) of the enclosing walk row, all None if none."""
+        for lo, hi, name, typ in self.rows:
+            if lo <= va < hi:
+                return lo, hi, name, typ
+            if lo > va:
+                break
+        return None, None, None, None
+
 
 def scan_member(src_t, name, va, size, body, imgs, symmaps):
     """[(tgt, start, class, enclosing_name, eq, n, nvotes)] for one body."""
@@ -177,7 +186,7 @@ def scan_member(src_t, name, va, size, body, imgs, symmaps):
         for s, wset in votes.items():
             if len(wset) < minwin:
                 continue
-            encl, typ = symmaps[tgt].enclosing(s)
+            encl_lo, _encl_hi, encl, typ = symmaps[tgt].enclosing_row(s)
             if encl == name and is_matched(tgt, name, s):
                 cls = "known"
             elif typ == 2:
@@ -189,10 +198,17 @@ def scan_member(src_t, name, va, size, body, imgs, symmaps):
             eq, n = word_eq(img, s, body)
             if cls != "known" and eq < n * MIN_EQ:
                 continue
+            # head-aligned eq at the enclosing row's own start (cron-202610250551):
+            # a candidate whose best window is an INTERIOR of a landed row shows
+            # a low head-eq - the votes are that row's own tail, not a new copy
+            # (the -0xC shift class, see docs/TASKS.md cron-202610250436).
+            heq = -1
+            if encl_lo is not None and encl_lo != s:
+                heq = word_eq(img, encl_lo, body)[0]
             key = (tgt, s)
             prev = found.get(key)
             if prev is None or better_eq(eq, n, prev[4], prev[5]):
-                found[key] = (tgt, s, cls, encl or "-", eq, n, len(wset))
+                found[key] = (tgt, s, cls, encl or "-", eq, n, len(wset), heq)
     return list(found.values())
 
 
@@ -261,10 +277,15 @@ def main():
                                                  k: order.get(k, 9))))
     lines.append("")
     for r in rows:
-        lines.append(
+        line = (
             "%-12s %08X %-12s | src %-12s %-22s size 0x%-5X "
             "word-eq %3d/%-3d votes %d"
             % (r[5], r[4], r[3], r[0], r[1], r[2], r[7], r[8], r[9]))
+        if r[6] != "-":
+            line += " | encl %s" % r[6]
+            if len(r) > 10 and r[10] >= 0:
+                line += " head-eq %d/%d" % (r[10], r[8])
+        lines.append(line)
     out_path = os.path.join(REPO, "build/invariant_census.txt")
     with open(out_path, "w") as f:
         f.write("\n".join(lines) + "\n")
