@@ -84,7 +84,9 @@ segments:
       - [0x1407C, data, data_8003387C]   # 0x30
       - [0x140AC, asm, func_800338AC]   # 0x10ef4
       - [0x24FA0, asm, func_80049E50]   # 0x14 sdk
-      - [0x24FB4, asm, func_800447B4]   # 0x2078
+      - [0x24FB4, asm, func_800447B4]   # 0x1eac
+      - [0x26E60, c, func_80046660]     # 0x30
+      - [0x26E90, asm, func_80046690]   # 0x19c
       - [0x2702C, c, func_8004C4CC]   # 0xdc
       - [0x27108, asm, func_80046908]   # 0xefc
       - [0x28004, c, func_8004D704]   # 0x40
