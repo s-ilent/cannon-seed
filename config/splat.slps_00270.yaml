@@ -354,7 +354,7 @@ segments:
       - [0x16DDC, c, OuterProduct0]   # 0x58 sdk
       - [0x16E34, c, Lzc]   # 0x1c sdk
       - [0x16E50, asm, func_80036650]   # 0x7c sdk
-      - [0x16ECC, asm, func_800366CC]   # 0x2c sdk
+      - [0x16ECC, c, GsInitCoord2param]   # 0x2c sdk
       - [0x16EF8, asm, func_800366F8]   # 0x30 sdk
       - [0x16F28, asm, func_80036728]   # 0x9c sdk
       - [0x16FC4, asm, func_800367C4]   # 0x34 sdk
