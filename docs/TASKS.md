@@ -36,8 +36,30 @@ scan to emit offsets/names through the EXISTING yaml's scatter anchors —
 preserved rows keep their (offset, name) pairing, new rows get
 `raw_to_name` names (`yaml_anchors` in tools/sdk_members.py already
 provides the map) — then the scan→extract→verify loop per target,
-smallest first. Until then DO NOT run `make scan` on any target whose
-yaml carries hand-paired rows.
+smallest first.
+
+[2026-10-24 window cron-202610241031: the REAL byte-corruption class is
+found and fixed — NAME COLLISIONS, not scatter pairing per se. Reproduced
+the sces 8,982-byte breakage live: the scan's new sdk-anchor rows take
+LINEAR names (`func_{BASE+off}`), which collided with PRESERVED rows'
+historical (woven-carve) names — sces `func_800318E8` existed at BOTH
+0xFC18 (preserved 0x10-byte sdk row) and 0x120E8 (new anchor's linear
+name). Two rows with one name share ONE .s file (splat names the path
+from the row) and ONE rom entry (build.sh's awk first-match over the
+asm_roms map), so one site gets the other's bytes. Fix: scan_functions.py
+now keeps a name-uniqueness registry — preserved rows claim their names
+first, new rows take the first free dotted suffix (`func_800318E8.2`).
+With that one law, the full scan→extract→verify cycle is **GREEN
+byte-exact on sces_00269** (298 anchor rows carved, all 49 c rows
+untouched, ratchets 386/0, 127 orphaned .s files from the re-derived
+extents removed). The walk's extent re-derivation merges hand-split
+unmarked boundaries into bigger rows, but bytes are bytes — placement is
+linear (gen_ld AT roms) and the image verifies. REMAINING WORK: run the
+same loop on the other 7 targets (each: scan → extract → verify → sweep
+orphaned .s files whose names left the yaml), then the census rerun +
+classifier re-derive. The DO-NOT-SCAN warning above is LIFTED for the
+collision class; the .rowdef-name invisibility in preserved_types'
+regex (`\w+` cannot match dotted names) is a known separate class.]
 
 Queue state after the 2026-10-24 rerun: census 631 rows, classifier
 **229 candidates** (was 221) in `build/split_classifier.txt`.

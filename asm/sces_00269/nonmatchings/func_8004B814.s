@@ -11,8 +11,8 @@ nonmatching Snd_replay, 0x68
 
 glabel Snd_replay
     /* 265D4 80045DD4 00240400 */  sll        $a0, $a0, 16
-    /* 265D8 80045DD8 1280023C */  lui        $v0, %hi(D_8011B7EC)
-    /* 265DC 80045DDC ECB74224 */  addiu      $v0, $v0, %lo(D_8011B7EC)
+    /* 265D8 80045DD8 1280023C */  lui        $v0, %hi(SsSeqCalledTbyT_tab)
+    /* 265DC 80045DDC ECB74224 */  addiu      $v0, $v0, %lo(SsSeqCalledTbyT_tab)
     /* 265E0 80045DE0 83230400 */  sra        $a0, $a0, 14
     /* 265E4 80045DE4 21208200 */  addu       $a0, $a0, $v0
     /* 265E8 80045DE8 002C0500 */  sll        $a1, $a1, 16

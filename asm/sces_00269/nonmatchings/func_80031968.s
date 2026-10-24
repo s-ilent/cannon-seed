@@ -14,9 +14,4 @@ glabel TestEvent
     /* FC9C 8002F49C 08004001 */  jr         $t2
     /* FCA0 8002F4A0 0B000924 */   addiu     $t1, $zero, 0xB
 endlabel TestEvent
-
-nonmatching func_8002F4A4, 0x4
-
-glabel func_8002F4A4
     /* FCA4 8002F4A4 00000000 */  nop
-endlabel func_8002F4A4

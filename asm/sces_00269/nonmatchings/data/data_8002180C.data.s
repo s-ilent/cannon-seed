@@ -8,7 +8,12 @@ nonmatching D_8002147C
 
 dlabel D_8002147C
     /* 1C7C 8002147C 00000000 */ .word 0x00000000
+enddlabel D_8002147C
+
+nonmatching D_80021480
+
+dlabel D_80021480
     /* 1C80 80021480 43445F63 */ .word 0x635F4443
     /* 1C84 80021484 61636865 */ .word 0x65686361
     /* 1C88 80021488 66696C65 */ .word 0x656C6966
-enddlabel D_8002147C
+enddlabel D_80021480

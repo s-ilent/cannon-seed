@@ -21,8 +21,8 @@ glabel Snd_tempo
     /* 260EC 800458EC 80100200 */  sll        $v0, $v0, 2
     /* 260F0 800458F0 23104300 */  subu       $v0, $v0, $v1
     /* 260F4 800458F4 80100200 */  sll        $v0, $v0, 2
-    /* 260F8 800458F8 1280013C */  lui        $at, %hi(D_8011B7EC)
-    /* 260FC 800458FC ECB72124 */  addiu      $at, $at, %lo(D_8011B7EC)
+    /* 260F8 800458F8 1280013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 260FC 800458FC ECB72124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 26100 80045900 21082600 */  addu       $at, $at, $a2
     /* 26104 80045904 0000238C */  lw         $v1, 0x0($at)
     /* 26108 80045908 21308000 */  addu       $a2, $a0, $zero
@@ -111,8 +111,8 @@ glabel Snd_tempo
     /* 26234 80045A34 1B006214 */  bne        $v1, $v0, .L80045AA4
     /* 26238 80045A38 00000000 */   nop
   .L80045A3C:
-    /* 2623C 80045A3C 1280023C */  lui        $v0, %hi(D_8011B7EC)
-    /* 26240 80045A40 ECB74224 */  addiu      $v0, $v0, %lo(D_8011B7EC)
+    /* 2623C 80045A3C 1280023C */  lui        $v0, %hi(SsSeqCalledTbyT_tab)
+    /* 26240 80045A40 ECB74224 */  addiu      $v0, $v0, %lo(SsSeqCalledTbyT_tab)
     /* 26244 80045A44 83330600 */  sra        $a2, $a2, 14
     /* 26248 80045A48 2130C200 */  addu       $a2, $a2, $v0
     /* 2624C 80045A4C 001C0500 */  sll        $v1, $a1, 16

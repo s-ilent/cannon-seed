@@ -11,20 +11,30 @@ dlabel D_80020000
     /* 800 80020000 */ .asciz "cdrom:\\MAINMENU.EXE;1"
     /* 6364726F6D3A5C4D41494E4D454E552E4558453B31000000 */
 .align 2
+enddlabel D_80020000
+
 .align 2
+nonmatching D_80020018
+
+dlabel D_80020018
     /* 818 80020018 */ .asciz "file not found\n"
     /* 66696C65206E6F7420666F756E640A00 */
 .align 2
-    /* 828 80020028 681E0280 */ .word D_80021E68
-    /* 82C 8002002C 881E0280 */ .word D_80021E88
-    /* 830 80020030 9C1E0280 */ .word D_80021E9C
-    /* 834 80020034 C01E0280 */ .word D_80021EC0
-    /* 838 80020038 F01E0280 */ .word D_80021EF0
-    /* 83C 8002003C 141F0280 */ .word D_80021F14
+enddlabel D_80020018
+
+nonmatching jtbl_80020028
+
+dlabel jtbl_80020028
+    /* 828 80020028 681E0280 */ .word 0x80021E68
+    /* 82C 8002002C 881E0280 */ .word 0x80021E88
+    /* 830 80020030 9C1E0280 */ .word 0x80021E9C
+    /* 834 80020034 C01E0280 */ .word 0x80021EC0
+    /* 838 80020038 F01E0280 */ .word 0x80021EF0
+    /* 83C 8002003C 141F0280 */ .word 0x80021F14
     /* 840 80020040 5C573136 */ .word 0x3631575C
     /* 844 80020044 2E444154 */ .word 0x5441442E
     /* 848 80020048 3B310000 */ .word 0x0000313B
-enddlabel D_80020000
+enddlabel jtbl_80020028
 
 .align 2
 nonmatching D_8002004C
@@ -33,11 +43,16 @@ dlabel D_8002004C
     /* 84C 8002004C */ .asciz "VOICE=%d"
     /* 564F4943453D256400000000 */
 .align 2
+enddlabel D_8002004C
+
 .align 2
+nonmatching D_80020058
+
+dlabel D_80020058
     /* 858 80020058 */ .asciz "%s(%d):Invalid mission value in set_game_info()\n"
     /* 2573282564293A496E76616C6964206D697373696F6E2076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
-enddlabel D_8002004C
+enddlabel D_80020058
 
 .align 2
 nonmatching D_8002008C
@@ -46,51 +61,111 @@ dlabel D_8002008C
     /* 88C 8002008C */ .asciz "gameinfo.c"
     /* 67616D65696E666F2E630000 */
 .align 2
+enddlabel D_8002008C
+
 .align 2
+nonmatching D_80020098
+
+dlabel D_80020098
     /* 898 80020098 */ .asciz "%s(%d):Invalid TV_MODE value in set_game_info()\n"
     /* 2573282564293A496E76616C69642054565F4D4F44452076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_80020098
+
 .align 2
+nonmatching D_800200CC
+
+dlabel D_800200CC
     /* 8CC 800200CC */ .asciz "%s(%d):Invalid PAUSE_DISP value in set_game_info()\n"
     /* 2573282564293A496E76616C69642050415553455F444953502076616C756520696E207365745F67616D655F696E666F28290A00 */
 .align 2
+enddlabel D_800200CC
+
 .align 2
+nonmatching D_80020100
+
+dlabel D_80020100
     /* 900 80020100 */ .asciz "%s(%d):Invalid MUTEKI_MODE value in set_game_info()\n"
     /* 2573282564293A496E76616C6964204D5554454B495F4D4F44452076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_80020100
+
 .align 2
+nonmatching D_80020138
+
+dlabel D_80020138
     /* 938 80020138 */ .asciz "%s(%d):Invalid MAP_COUNTER_DISP value in set_game_info()\n"
     /* 2573282564293A496E76616C6964204D41505F434F554E5445525F444953502076616C756520696E207365745F67616D655F696E666F28290A000000 */
 .align 2
+enddlabel D_80020138
+
 .align 2
+nonmatching D_80020174
+
+dlabel D_80020174
     /* 974 80020174 */ .asciz "%s(%d):Invalid TUNE_LEVE value in set_game_info()\n"
     /* 2573282564293A496E76616C69642054554E455F4C4556452076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_80020174
+
 .align 2
+nonmatching D_800201A8
+
+dlabel D_800201A8
     /* 9A8 800201A8 */ .asciz "%s(%d):Invalid LEVEL value in set_game_info()\n"
     /* 2573282564293A496E76616C6964204C4556454C2076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_800201A8
+
 .align 2
+nonmatching D_800201D8
+
+dlabel D_800201D8
     /* 9D8 800201D8 */ .asciz "%s(%d):Too long PARTNER NAME in set_game_info()\n"
     /* 2573282564293A546F6F206C6F6E6720504152544E4552204E414D4520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_800201D8
+
 .align 2
+nonmatching D_8002020C
+
+dlabel D_8002020C
     /* A0C 8002020C */ .asciz "%s(%d):Invalid PLAY_RECORDING value in set_game_info()\n"
     /* 2573282564293A496E76616C696420504C41595F5245434F5244494E472076616C756520696E207365745F67616D655F696E666F28290A00 */
 .align 2
+enddlabel D_8002020C
+
 .align 2
+nonmatching D_80020244
+
+dlabel D_80020244
     /* A44 80020244 */ .asciz "%s(%d):Invalid CLEAR_LEVEL value in set_game_info()\n"
     /* 2573282564293A496E76616C696420434C4541525F4C4556454C2076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_80020244
+
 .align 2
+nonmatching D_8002027C
+
+dlabel D_8002027C
     /* A7C 8002027C */ .asciz "%s(%d):Invalid PARTNER_G_NUM value in set_game_info()\n"
     /* 2573282564293A496E76616C696420504152544E45525F475F4E554D2076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_8002027C
+
 .align 2
+nonmatching D_800202B4
+
+dlabel D_800202B4
     /* AB4 800202B4 */ .asciz "%s(%d):Invalid SUPER_BLASTER value in set_game_info()\n"
     /* 2573282564293A496E76616C69642053555045525F424C41535445522076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_800202B4
+
 .align 2
+nonmatching D_800202EC
+
+dlabel D_800202EC
     /* AEC 800202EC */ .asciz "%s(%d):Invalid mode switch in set_game_info()\n"
     /* 2573282564293A496E76616C6964206D6F64652073776974636820696E207365745F67616D655F696E666F28290A0000 */
 .align 2
@@ -98,6 +173,11 @@ dlabel D_8002008C
     /* B1C 8002031C */ .asciz ""
     /* 00000000 */
 .align 2
+enddlabel D_800202EC
+
+nonmatching jtbl_80020320
+
+dlabel jtbl_80020320
     /* B20 80020320 283E0280 */ .word 0x80023E28
     /* B24 80020324 643E0280 */ .word 0x80023E64
     /* B28 80020328 B03F0280 */ .word 0x80023FB0
@@ -116,7 +196,7 @@ dlabel D_8002008C
     /* B5C 8002035C 6C3F0280 */ .word 0x80023F6C
     /* B60 80020360 D0400280 */ .word 0x800240D0
     /* B64 80020364 A83F0280 */ .word 0x80023FA8
-enddlabel D_8002008C
+enddlabel jtbl_80020320
 
 .align 2
 nonmatching D_80020368
@@ -127,12 +207,12 @@ dlabel D_80020368
 .align 2
 enddlabel D_80020368
 
-nonmatching D_80020398
+nonmatching jtbl_80020398
 
-dlabel D_80020398
+dlabel jtbl_80020398
     /* B98 80020398 D4410280 */ .word 0x800241D4
     /* B9C 8002039C E0410280 */ .word 0x800241E0
-    /* BA0 800203A0 4C420280 */ .word func_8002424C
+    /* BA0 800203A0 4C420280 */ .word 0x8002424C
     /* BA4 800203A4 58420280 */ .word 0x80024258
     /* BA8 800203A8 6C420280 */ .word 0x8002426C
     /* BAC 800203AC 74420280 */ .word 0x80024274
@@ -148,7 +228,7 @@ dlabel D_80020398
     /* BD4 800203D4 34420280 */ .word 0x80024234
     /* BD8 800203D8 98420280 */ .word 0x80024298
     /* BDC 800203DC 40420280 */ .word 0x80024240
-enddlabel D_80020398
+enddlabel jtbl_80020398
 
 .align 2
 nonmatching D_800203E0
@@ -341,15 +421,25 @@ dlabel D_800206A0
     /* EA0 800206A0 */ .asciz "%s(%d):Invalid player entry in set_score()\n"
     /* 2573282564293A496E76616C696420706C6179657220656E74727920696E207365745F73636F726528290A00 */
 .align 2
+enddlabel D_800206A0
+
 .align 2
+nonmatching D_800206CC
+
+dlabel D_800206CC
     /* ECC 800206CC */ .asciz "%s(%d):Invalid player entry in get_score_list()\n"
     /* 2573282564293A496E76616C696420706C6179657220656E74727920696E206765745F73636F72655F6C69737428290A00000000 */
 .align 2
+enddlabel D_800206CC
+
 .align 2
+nonmatching D_80020700
+
+dlabel D_80020700
     /* F00 80020700 */ .asciz "%s(%d):Invalid mode(%d) in init_play_record()\n"
     /* 2573282564293A496E76616C6964206D6F64652825642920696E20696E69745F706C61795F7265636F726428290A0000 */
 .align 2
-enddlabel D_800206A0
+enddlabel D_80020700
 
 .align 2
 nonmatching D_80020730
@@ -367,6 +457,11 @@ dlabel D_8002073C
     /* F3C 8002073C */ .asciz "%s(%d):move_counter over the record area !\n"
     /* 2573282564293A6D6F76655F636F756E746572206F76657220746865207265636F7264206172656120210A00 */
 .align 2
+enddlabel D_8002073C
+
+nonmatching jtbl_80020768
+
+dlabel jtbl_80020768
     /* F68 80020768 80730280 */ .word 0x80027380
     /* F6C 8002076C AC730280 */ .word 0x800273AC
     /* F70 80020770 D8730280 */ .word 0x800273D8
@@ -375,6 +470,11 @@ dlabel D_8002073C
     /* F7C 8002077C 5C740280 */ .word 0x8002745C
     /* F80 80020780 88740280 */ .word 0x80027488
     /* F84 80020784 B4740280 */ .word 0x800274B4
+enddlabel jtbl_80020768
+
+nonmatching jtbl_80020788
+
+dlabel jtbl_80020788
     /* F88 80020788 3C980280 */ .word 0x8002983C
     /* F8C 8002078C 44980280 */ .word 0x80029844
     /* F90 80020790 6C980280 */ .word 0x8002986C
@@ -395,7 +495,7 @@ dlabel D_8002073C
     /* FCC 800207CC 54980280 */ .word 0x80029854
     /* FD0 800207D0 5C980280 */ .word 0x8002985C
     /* FD4 800207D4 64980280 */ .word 0x80029864
-enddlabel D_8002073C
+enddlabel jtbl_80020788
 
 .align 2
 nonmatching D_800207D8
@@ -404,12 +504,22 @@ dlabel D_800207D8
     /* FD8 800207D8 */ .asciz "BESCES-00269"
     /* 4245534345532D303032363900000000 */
 .align 2
+enddlabel D_800207D8
+
+nonmatching D_800207E8
+
+dlabel D_800207E8
     /* FE8 800207E8 82668260 */ .word 0x60826682
     /* FEC 800207EC 826B8260 */ .word 0x60826B82
     /* FF0 800207F0 82778268 */ .word 0x68827782
     /* FF4 800207F4 8260826D */ .word 0x6D826082
     /* FF8 800207F8 82528140 */ .word 0x40815282
     /* FFC 800207FC 00000000 */ .word 0x00000000
+enddlabel D_800207E8
+
+nonmatching D_80020800
+
+dlabel D_80020800
     /* 1000 80020800 82638271 */ .word 0x71826382
     /* 1004 80020804 82608266 */ .word 0x66826082
     /* 1008 80020808 826E826E */ .word 0x6E826E82
@@ -417,12 +527,22 @@ dlabel D_800207D8
     /* 1010 80020810 826F826B */ .word 0x6B826F82
     /* 1014 80020814 82608278 */ .word 0x78826082
     /* 1018 80020818 00000000 */ .word 0x00000000
+enddlabel D_80020800
+
+nonmatching D_8002081C
+
+dlabel D_8002081C
     /* 101C 8002081C 8266826E */ .word 0x6E826682
     /* 1020 80020820 82748271 */ .word 0x71827482
     /* 1024 80020824 82618146 */ .word 0x46816182
     /* 1028 80020828 826F826B */ .word 0x6B826F82
     /* 102C 8002082C 82608278 */ .word 0x78826082
     /* 1030 80020830 00000000 */ .word 0x00000000
+enddlabel D_8002081C
+
+nonmatching D_80020834
+
+dlabel D_80020834
     /* 1034 80020834 82638271 */ .word 0x71826382
     /* 1038 80020838 82608266 */ .word 0x66826082
     /* 103C 8002083C 826E826E */ .word 0x6E826E82
@@ -431,6 +551,11 @@ dlabel D_800207D8
     /* 1048 80020848 82728272 */ .word 0x72827282
     /* 104C 8002084C 8268826E */ .word 0x6E826882
     /* 1050 80020850 826D0000 */ .word 0x00006D82
+enddlabel D_80020834
+
+nonmatching D_80020854
+
+dlabel D_80020854
     /* 1054 80020854 8266826E */ .word 0x6E826682
     /* 1058 80020858 82748271 */ .word 0x71827482
     /* 105C 8002085C 82618146 */ .word 0x46816182
@@ -438,7 +563,7 @@ dlabel D_800207D8
     /* 1064 80020864 82728272 */ .word 0x72827282
     /* 1068 80020868 8268826E */ .word 0x6E826882
     /* 106C 8002086C 826D0000 */ .word 0x00006D82
-enddlabel D_800207D8
+enddlabel D_80020854
 
 .align 2
 nonmatching D_80020870
@@ -627,7 +752,12 @@ dlabel D_80020AA4
     /* 12A4 80020AA4 */ .asciz "Enough memory\n"
     /* 456E6F756768206D656D6F72790A0000 */
 .align 2
+enddlabel D_80020AA4
+
 .align 2
+nonmatching D_80020AB4
+
+dlabel D_80020AB4
     /* 12B4 80020AB4 */ .asciz "LOAD_C_GUNNER:fault!\n"
     /* 4C4F41445F435F47554E4E45523A6661756C74210A000000 */
 .align 2
@@ -635,23 +765,43 @@ dlabel D_80020AA4
     /* 12CC 80020ACC */ .asciz "$Id: intr.c,v 1.73 1995/11/10 05:29:40 suzu Exp $"
     /* 2449643A20696E74722E632C7620312E373320313939352F31312F31302030353A32393A34302073757A75204578702024000000 */
 .align 2
+enddlabel D_80020AB4
+
 .align 2
+nonmatching D_80020B00
+
+dlabel D_80020B00
     /* 1300 80020B00 */ .asciz "unexpected interrupt(%04x)\n"
     /* 756E657870656374656420696E746572727570742825303478290A00 */
 .align 2
+enddlabel D_80020B00
+
 .align 2
+nonmatching D_80020B1C
+
+dlabel D_80020B1C
     /* 131C 80020B1C */ .asciz "intr timeout(%04x:%04x)\n"
     /* 696E74722074696D656F757428253034783A25303478290A00000000 */
 .align 2
+enddlabel D_80020B1C
+
 .align 2
+nonmatching D_80020B38
+
+dlabel D_80020B38
     /* 1338 80020B38 */ .asciz "DMA bus error: code=%08x\n"
     /* 444D4120627573206572726F723A20636F64653D253038780A000000 */
 .align 2
+enddlabel D_80020B38
+
 .align 2
+nonmatching D_80020B54
+
+dlabel D_80020B54
     /* 1354 80020B54 */ .asciz "MADR[%d]=%08x\n"
     /* 4D4144525B25645D3D253038780A0000 */
 .align 2
-enddlabel D_80020AA4
+enddlabel D_80020B54
 
 .align 2
 nonmatching D_80020B64
@@ -664,27 +814,52 @@ dlabel D_80020B64
     /* 1374 80020B74 */ .asciz "$Id: sys.c,v 1.116 1995/12/01 07:03:58 suzu Exp $"
     /* 2449643A207379732E632C7620312E31313620313939352F31322F30312030373A30333A35382073757A75204578702024000000 */
 .align 2
+enddlabel D_80020B64
+
 .align 2
+nonmatching D_80020BA8
+
+dlabel D_80020BA8
     /* 13A8 80020BA8 */ .asciz "ResetGraph:jtb=%08x,env=%08x\n"
     /* 526573657447726170683A6A74623D253038782C656E763D253038780A000000 */
 .align 2
+enddlabel D_80020BA8
+
 .align 2
+nonmatching D_80020BC8
+
+dlabel D_80020BC8
     /* 13C8 80020BC8 */ .asciz "ResetGraph(%d)...\n"
     /* 52657365744772617068282564292E2E2E0A0000 */
 .align 2
+enddlabel D_80020BC8
+
 .align 2
+nonmatching D_80020BDC
+
+dlabel D_80020BDC
     /* 13DC 80020BDC */ .asciz "SetGraphReverse(%d)...\n"
     /* 536574477261706852657665727365282564292E2E2E0A00 */
 .align 2
+enddlabel D_80020BDC
+
 .align 2
+nonmatching D_80020BF4
+
+dlabel D_80020BF4
     /* 13F4 80020BF4 */ .asciz "SetGraphDebug:level:%d,type:%d reverse:%d\n"
     /* 536574477261706844656275673A6C6576656C3A25642C747970653A256420726576657273653A25640A0000 */
 .align 2
+enddlabel D_80020BF4
+
 .align 2
+nonmatching D_80020C20
+
+dlabel D_80020C20
     /* 1420 80020C20 */ .asciz "SetGrapQue(%d)...\n"
     /* 53657447726170517565282564292E2E2E0A0000 */
 .align 2
-enddlabel D_80020B64
+enddlabel D_80020C20
 
 .align 2
 nonmatching D_80020C34
@@ -837,50 +1012,110 @@ dlabel D_80020D74
     /* 1574 80020D74 */ .asciz "func=(%08x)(%08x,%08x)\n"
     /* 66756E633D28253038782928253038782C25303878290A00 */
 .align 2
+enddlabel D_80020D74
+
 .align 2
+nonmatching D_80020D8C
+
+dlabel D_80020D8C
     /* 158C 80020D8C */ .asciz "tpage: (%d,%d,%d,%d)\n"
     /* 74706167653A202825642C25642C25642C2564290A000000 */
 .align 2
+enddlabel D_80020D8C
+
 .align 2
+nonmatching D_80020DA4
+
+dlabel D_80020DA4
     /* 15A4 80020DA4 */ .asciz "clut: (%d,%d)\n"
     /* 636C75743A202825642C2564290A0000 */
 .align 2
+enddlabel D_80020DA4
+
 .align 2
+nonmatching D_80020DB4
+
+dlabel D_80020DB4
     /* 15B4 80020DB4 */ .asciz "clip (%3d,%3d)-(%d,%d)\n"
     /* 636C697020282533642C253364292D2825642C2564290A00 */
 .align 2
+enddlabel D_80020DB4
+
 .align 2
+nonmatching D_80020DCC
+
+dlabel D_80020DCC
     /* 15CC 80020DCC */ .asciz "ofs  (%3d,%3d)\n"
     /* 6F66732020282533642C253364290A00 */
 .align 2
+enddlabel D_80020DCC
+
 .align 2
+nonmatching D_80020DDC
+
+dlabel D_80020DDC
     /* 15DC 80020DDC */ .asciz "tw   (%d,%d)-(%d,%d)\n"
     /* 74772020202825642C2564292D2825642C2564290A000000 */
 .align 2
+enddlabel D_80020DDC
+
 .align 2
+nonmatching D_80020DF4
+
+dlabel D_80020DF4
     /* 15F4 80020DF4 */ .asciz "dtd   %d\n"
     /* 64746420202025640A000000 */
 .align 2
+enddlabel D_80020DF4
+
 .align 2
+nonmatching D_80020E00
+
+dlabel D_80020E00
     /* 1600 80020E00 */ .asciz "dfe   %d\n"
     /* 64666520202025640A000000 */
 .align 2
+enddlabel D_80020E00
+
 .align 2
+nonmatching D_80020E0C
+
+dlabel D_80020E0C
     /* 160C 80020E0C */ .asciz "disp   (%3d,%3d)-(%d,%d)\n"
     /* 64697370202020282533642C253364292D2825642C2564290A000000 */
 .align 2
+enddlabel D_80020E0C
+
 .align 2
+nonmatching D_80020E28
+
+dlabel D_80020E28
     /* 1628 80020E28 */ .asciz "screen (%3d,%3d)-(%d,%d)\n"
     /* 73637265656E20282533642C253364292D2825642C2564290A000000 */
 .align 2
+enddlabel D_80020E28
+
 .align 2
+nonmatching D_80020E44
+
+dlabel D_80020E44
     /* 1644 80020E44 */ .asciz "isinter %d\n"
     /* 6973696E7465722025640A00 */
 .align 2
+enddlabel D_80020E44
+
 .align 2
+nonmatching D_80020E50
+
+dlabel D_80020E50
     /* 1650 80020E50 */ .asciz "isrgb24 %d\n"
     /* 697372676232342025640A00 */
 .align 2
+enddlabel D_80020E50
+
+nonmatching jtbl_80020E5C
+
+dlabel jtbl_80020E5C
     /* 165C 80020E5C 34570380 */ .word 0x80035734
     /* 1660 80020E60 34570380 */ .word 0x80035734
     /* 1664 80020E64 34570380 */ .word 0x80035734
@@ -890,7 +1125,7 @@ dlabel D_80020D74
     /* 1674 80020E74 00570380 */ .word 0x80035700
     /* 1678 80020E78 00570380 */ .word 0x80035700
     /* 167C 80020E7C 00570380 */ .word 0x80035700
-enddlabel D_80020D74
+enddlabel jtbl_80020E5C
 
 .align 2
 nonmatching D_80020E80
@@ -908,11 +1143,16 @@ dlabel D_80020EA4
     /* 16A4 80020EA4 */ .asciz "(%d %d %d)\n"
     /* 282564202564202564290A00 */
 .align 2
+enddlabel D_80020EA4
+
 .align 2
+nonmatching D_80020EB0
+
+dlabel D_80020EB0
     /* 16B0 80020EB0 */ .asciz "ps_sort_sprite,bg: z resolution overflow\n"
     /* 70735F736F72745F7370726974652C62673A207A207265736F6C7574696F6E206F766572666C6F770A000000 */
 .align 2
-enddlabel D_80020EA4
+enddlabel D_80020EB0
 
 nonmatching jtbl_80020EDC
 
@@ -952,25 +1192,18 @@ dlabel jtbl_80020EDC
     /* 175C 80020F5C 10720380 */ .word 0x80037210
     /* 1760 80020F60 28720380 */ .word 0x80037228
     /* 1764 80020F64 40720380 */ .word 0x80037240
+    /* 1768 80020F68 4D444543 */ .word 0x4345444D
+    /* 176C 80020F6C 5F726573 */ .word 0x7365725F
+    /* 1770 80020F70 743A6261 */ .word 0x61623A74
+    /* 1774 80020F74 64206F70 */ .word 0x706F2064
+    /* 1778 80020F78 74696F6E */ .word 0x6E6F6974
+    /* 177C 80020F7C 28256429 */ .word 0x29642528
+    /* 1780 80020F80 0A000000 */ .word 0x0000000A
+    /* 1784 80020F84 4D444543 */ .word 0x4345444D
+    /* 1788 80020F88 5F696E5F */ .word 0x5F6E695F
+    /* 178C 80020F8C 73796E63 */ .word 0x636E7973
+    /* 1790 80020F90 00000000 */ .word 0x00000000
 enddlabel jtbl_80020EDC
-
-.align 2
-nonmatching D_80020F68
-
-dlabel D_80020F68
-    /* 1768 80020F68 */ .asciz "MDEC_rest:bad option(%d)\n"
-    /* 4D4445435F726573743A626164206F7074696F6E282564290A000000 */
-.align 2
-enddlabel D_80020F68
-
-.align 2
-nonmatching D_80020F84
-
-dlabel D_80020F84
-    /* 1784 80020F84 */ .asciz "MDEC_in_sync"
-    /* 4D4445435F696E5F73796E6300000000 */
-.align 2
-enddlabel D_80020F84
 
 .align 2
 nonmatching D_80020F94
@@ -1015,7 +1248,12 @@ dlabel D_80021014
     /* 1814 80021014 */ .asciz "MDEC_vlec: invalid VLC ID\n"
     /* 4D4445435F766C65633A20696E76616C696420564C432049440A0000 */
 .align 2
+enddlabel D_80021014
+
 .align 2
+nonmatching D_80021030
+
+dlabel D_80021030
     /* 1830 80021030 */ .asciz "none"
     /* 6E6F6E6500000000 */
 .align 2
@@ -1135,7 +1373,7 @@ dlabel D_80021014
     /* 196C 8002116C */ .asciz "NoIntr"
     /* 4E6F496E74720000 */
 .align 2
-enddlabel D_80021014
+enddlabel D_80021030
 
 .align 2
 nonmatching D_80021174
@@ -1153,19 +1391,39 @@ dlabel D_80021184
     /* 1984 80021184 */ .asciz "%s:(%s) Sync=%s, Ready=%s\n"
     /* 25733A282573292053796E633D25732C2052656164793D25730A0000 */
 .align 2
+enddlabel D_80021184
+
 .align 2
+nonmatching D_800211A0
+
+dlabel D_800211A0
     /* 19A0 800211A0 */ .asciz "DiskError: "
     /* 4469736B4572726F723A2000 */
 .align 2
+enddlabel D_800211A0
+
 .align 2
+nonmatching D_800211AC
+
+dlabel D_800211AC
     /* 19AC 800211AC */ .asciz "com=%s,code=(%02x:%02x)\n"
     /* 636F6D3D25732C636F64653D28253032783A25303278290A00000000 */
 .align 2
+enddlabel D_800211AC
+
 .align 2
+nonmatching D_800211C8
+
+dlabel D_800211C8
     /* 19C8 800211C8 */ .asciz "CDROM: unknown intr"
     /* 4344524F4D3A20756E6B6E6F776E20696E747200 */
 .align 2
+enddlabel D_800211C8
+
 .align 2
+nonmatching D_800211DC
+
+dlabel D_800211DC
     /* 19DC 800211DC */ .asciz "(%d)\n"
     /* 282564290A000000 */
 .align 2
@@ -1173,17 +1431,35 @@ dlabel D_80021184
     /* 19E4 800211E4 */ .asciz ""
     /* 00000000 */
 .align 2
+enddlabel D_800211DC
+
+nonmatching jtbl_800211E8
+
+dlabel jtbl_800211E8
     /* 19E8 800211E8 1C930380 */ .word 0x8003931C
     /* 19EC 800211EC D0920380 */ .word 0x800392D0
     /* 19F0 800211F0 CC910380 */ .word 0x800391CC
     /* 19F4 800211F4 68930380 */ .word 0x80039368
     /* 19F8 800211F8 F0930380 */ .word 0x800393F0
-    /* 19FC 800211FC 43445F73 */ .word 0x735F4443
-    /* 1A00 80021200 796E6300 */ .word 0x00636E79
-    /* 1A04 80021204 43445F72 */ .word 0x725F4443
-    /* 1A08 80021208 65616479 */ .word 0x79646165
-    /* 1A0C 8002120C 00000000 */ .word 0x00000000
-enddlabel D_80021184
+enddlabel jtbl_800211E8
+
+.align 2
+nonmatching D_800211FC
+
+dlabel D_800211FC
+    /* 19FC 800211FC */ .asciz "CD_sync"
+    /* 43445F73796E6300 */
+.align 2
+enddlabel D_800211FC
+
+.align 2
+nonmatching D_80021204
+
+dlabel D_80021204
+    /* 1A04 80021204 */ .asciz "CD_ready"
+    /* 43445F726561647900000000 */
+.align 2
+enddlabel D_80021204
 
 .align 2
 nonmatching D_80021210
@@ -1268,15 +1544,25 @@ dlabel D_800212AC
     /* 1AAC 800212AC */ .asciz "%d,pos=(%02x:%02x:%02x)\n"
     /* 25642C706F733D28253032783A253032783A25303278290A00000000 */
 .align 2
+enddlabel D_800212AC
+
 .align 2
+nonmatching D_800212C8
+
+dlabel D_800212C8
     /* 1AC8 800212C8 */ .asciz "CD_read"
     /* 43445F7265616400 */
 .align 2
+enddlabel D_800212C8
+
 .align 2
+nonmatching D_800212D0
+
+dlabel D_800212D0
     /* 1AD0 800212D0 */ .asciz "CD_datasync"
     /* 43445F6461746173796E6300 */
 .align 2
-enddlabel D_800212AC
+enddlabel D_800212D0
 
 .align 2
 nonmatching D_800212DC
@@ -1285,58 +1571,128 @@ dlabel D_800212DC
     /* 1ADC 800212DC */ .asciz "CdInit: Init failed\n"
     /* 4364496E69743A20496E6974206661696C65640A00000000 */
 .align 2
+enddlabel D_800212DC
+
 .align 2
+nonmatching D_800212F4
+
+dlabel D_800212F4
     /* 1AF4 800212F4 */ .asciz "%s: path level (%d) error\n"
     /* 25733A2070617468206C6576656C2028256429206572726F720A0000 */
 .align 2
+enddlabel D_800212F4
+
 .align 2
+nonmatching D_80021310
+
+dlabel D_80021310
     /* 1B10 80021310 */ .asciz "%s: dir was not found\n"
     /* 25733A2064697220776173206E6F7420666F756E640A0000 */
 .align 2
+enddlabel D_80021310
+
 .align 2
+nonmatching D_80021328
+
+dlabel D_80021328
     /* 1B28 80021328 */ .asciz "CdSearchFile: disc error\n"
     /* 436453656172636846696C653A2064697363206572726F720A000000 */
 .align 2
+enddlabel D_80021328
+
 .align 2
+nonmatching D_80021344
+
+dlabel D_80021344
     /* 1B44 80021344 */ .asciz "CdSearchFile: searching %s...\n"
     /* 436453656172636846696C653A20736561726368696E672025732E2E2E0A0000 */
 .align 2
+enddlabel D_80021344
+
 .align 2
+nonmatching D_80021364
+
+dlabel D_80021364
     /* 1B64 80021364 */ .asciz "%s:  found\n"
     /* 25733A2020666F756E640A00 */
 .align 2
+enddlabel D_80021364
+
 .align 2
+nonmatching D_80021370
+
+dlabel D_80021370
     /* 1B70 80021370 */ .asciz "%s: not found\n"
     /* 25733A206E6F7420666F756E640A0000 */
 .align 2
+enddlabel D_80021370
+
 .align 2
+nonmatching D_80021380
+
+dlabel D_80021380
     /* 1B80 80021380 */ .asciz "CD_newmedia: Read error in cd_read(PVD)\n"
     /* 43445F6E65776D656469613A2052656164206572726F7220696E2063645F7265616428505644290A00000000 */
 .align 2
+enddlabel D_80021380
+
 .align 2
+nonmatching D_800213AC
+
+dlabel D_800213AC
     /* 1BAC 800213AC */ .asciz "CD001"
     /* 4344303031000000 */
 .align 2
+enddlabel D_800213AC
+
 .align 2
+nonmatching D_800213B4
+
+dlabel D_800213B4
     /* 1BB4 800213B4 */ .asciz "CD_newmedia: Disc format error in cd_read(PVD)\n"
     /* 43445F6E65776D656469613A204469736320666F726D6174206572726F7220696E2063645F7265616428505644290A00 */
 .align 2
+enddlabel D_800213B4
+
 .align 2
+nonmatching D_800213E4
+
+dlabel D_800213E4
     /* 1BE4 800213E4 */ .asciz "CD_newmedia: Read error (PT:%08x)\n"
     /* 43445F6E65776D656469613A2052656164206572726F72202850543A25303878290A0000 */
 .align 2
+enddlabel D_800213E4
+
 .align 2
+nonmatching D_80021408
+
+dlabel D_80021408
     /* 1C08 80021408 */ .asciz "CD_newmedia: sarching dir..\n"
     /* 43445F6E65776D656469613A207361726368696E67206469722E2E0A00000000 */
 .align 2
+enddlabel D_80021408
+
 .align 2
+nonmatching D_80021428
+
+dlabel D_80021428
     /* 1C28 80021428 */ .asciz "\t%08x,%04x,%04x,%s\n"
     /* 09253038782C253034782C253034782C25730A00 */
 .align 2
+enddlabel D_80021428
+
 .align 2
+nonmatching D_8002143C
+
+dlabel D_8002143C
     /* 1C3C 8002143C */ .asciz "CD_newmedia: %d dir entries found\n"
     /* 43445F6E65776D656469613A2025642064697220656E747269657320666F756E640A0000 */
 .align 2
+enddlabel D_8002143C
+
+nonmatching D_80021460
+
+dlabel D_80021460
     /* 1C60 80021460 43445F63 */ .word 0x635F4443
     /* 1C64 80021464 61636865 */ .word 0x65686361
     /* 1C68 80021468 66696C65 */ .word 0x656C6966
@@ -1344,4 +1700,4 @@ dlabel D_800212DC
     /* 1C70 80021470 72206E6F */ .word 0x6F6E2072
     /* 1C74 80021474 7420666F */ .word 0x6F662074
     /* 1C78 80021478 756E640A */ .word 0x0A646E75
-enddlabel D_800212DC
+enddlabel D_80021460
