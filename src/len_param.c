@@ -13,8 +13,8 @@
  * data rows (head 0x580 + this 0x1C row, no tail). The build compiles
  * src/<row>.c only for targets whose yaml lists the row, so this unit
  * coexists with the slps_00270 / g3org_jp / mainmenu_jp MATRIX3
- * placements (src/func_80036DCC.c / func_8005436C.c / func_8006EA84.c)
- * without a second definition in any one target.
+ * .text+0x580 placements (each that target's own src row) without a
+ * second definition in any one target.
  */
 int len_param(int n)
 {
