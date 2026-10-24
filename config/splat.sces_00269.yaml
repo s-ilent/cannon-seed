@@ -124,12 +124,12 @@ segments:
       - [0xF2F8, asm, func_8002EAF8]   # 0x154 sdk
       - [0xF44C, c, stopIntr]   # 0xb0 sdk
       - [0xF4FC, asm, func_8003109C]   # 0x88 sdk
-      - [0xF584, asm, func_80031124]   # 0x2c sdk
+      - [0xF584, c,   func_80031124]   # 0x2c sdk
       - [0xF5B0, asm, func_80031150]   # 0x10 sdk
       - [0xF5C0, asm, func_8002EDC0]   # 0x50 sdk
       - [0xF610, asm, func_8002EE10]   # 0x184 sdk
       - [0xF794, asm, func_8002EF94]   # 0xa8 sdk
-      - [0xF83C, asm, func_8002F03C]   # 0x2c sdk
+      - [0xF83C, c,   func_8002F03C]   # 0x2c sdk
       - [0xF868, asm, func_80031538]   # 0x58 sdk
       - [0xF8C0, asm, func_80031590]   # 0x7c sdk
       - [0xF93C, asm, func_8003160C]   # 0x2c sdk

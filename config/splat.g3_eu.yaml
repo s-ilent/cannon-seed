@@ -166,11 +166,11 @@ segments:
       - [0x2AF7C, asm, func_8004A77C]   # 0x50 sdk
       - [0x2AFCC, asm, func_8004A7CC]   # 0x184 sdk
       - [0x2B150, asm, func_8004A950]   # 0xa8 sdk
-      - [0x2B1F8, asm, func_8004A9F8]   # 0x2c sdk
+      - [0x2B1F8, c,   func_8004A9F8]   # 0x2c sdk
       - [0x2B224, asm, func_80051044]   # 0x58 sdk
       - [0x2B27C, asm, func_8005109C]   # 0x7c sdk
       - [0x2B2F8, c, func_80051118]   # 0x2c sdk
-      - [0x2B324, asm, func_80051144]   # 0x2c sdk
+      - [0x2B324, c,   func_80051144]   # 0x2c sdk
       - [0x2B350, asm, func_80051170]   # 0x148 sdk
       - [0x2B498, asm, func_800512B8]   # 0x9c sdk
       - [0x2B534, asm, func_80051354]   # 0x10 sdk
