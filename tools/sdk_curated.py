@@ -27,7 +27,9 @@ config/symbols.curated.txt: one curated line per report symbol that
 Collision rules, applied per target:
 
   * an address that already holds a curated entry keeps it (hand-written
-    facts win over generated ones);
+    facts win over generated ones); the skipped name is recorded below the
+    block's live rows as a commented alias line, so the record survives
+    re-runs and the write-time guard recognizes it as tool-owned;
   * a name already curated for the target at another address (the SDK
     veneers, earlier hand adoptions) stays with its existing entry;
   * the same name reachable at several addresses is real - LIBC and LIBC2
@@ -62,6 +64,18 @@ CURATED = REPO / "config" / "symbols.curated.txt"
 
 MARKER = ("// ==== generated sdk-member adoptions below -- "
           "tools/sdk_curated.py; do not hand-edit below this line ====")
+
+# A curated address another curated row claims is skipped - but the skipped
+# name is recorded as a commented alias row inside the block, so a re-run
+# reproduces it (the write-time guard treats these as tool-owned content):
+#   // ResetEntryInt = 0x8004AE14; // LIBAPI ? member ... [alias of
+#   intr_stop_commit at the same address: one curated name per address, ...]
+ALIAS_NOTE = (" [alias of {winner} at the same address: one curated name "
+              "per address, the C-referenced name wins]")
+ALIAS_LINE = re.compile(
+    r"^// [A-Za-z_]\w* = 0x[0-9A-Fa-f]{8}; .+ \[alias of [A-Za-z_]\w+ at the "
+    r"same address: one curated name per address"
+    r"(, the C-referenced name wins)?\]$")
 
 ROW = re.compile(
     r"^//\s+(0x[0-9a-fA-F]+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(adoptable)?"
@@ -195,7 +209,9 @@ def main(argv):
         h_addr, h_name = hand_addr.get(t, {}), hand_name.get(t, {})
 
         skipped = defaultdict(int)
-        # pass 1: names already curated for this target keep their entry
+        # pass 1: names already curated for this target keep their entry;
+        # an addr-curated skip records the loser as a commented alias row
+        aliases = []
         pool = []
         for addr, lib, member, mark, sname, sig, aglibs in cands:
             if not NAME_OK.match(sname):
@@ -203,6 +219,8 @@ def main(argv):
                 continue
             if addr in h_addr:
                 skipped["addr-curated"] += 1
+                aliases.append((addr, lib, member, mark, sname, sig, aglibs,
+                                h_addr[addr]))
                 continue
             if sname in h_name:
                 skipped["name-curated"] += 1
@@ -252,10 +270,10 @@ def main(argv):
                 chosen.append(best)
             else:
                 chosen.append(rows[0])
-        if not chosen:
+        if not chosen and not aliases:
             continue
-        lines = [f"// target: {t}  ({len(chosen)} sdk-member adoptions)"]
-        for addr, lib, member, mark, sname, sig, aglibs in sorted(chosen):
+
+        def _note(lib, member, sname, mark, sig, aglibs):
             note = f"{lib} {member} member"
             e = ext.get((lib, member, sname))
             if e:
@@ -269,7 +287,17 @@ def main(argv):
                 note += " + sig-db agrees"
             elif sig:
                 note += f" (sig-db {sig})"
+            return note
+
+        lines = [f"// target: {t}  ({len(chosen)} sdk-member adoptions)"]
+        for addr, lib, member, mark, sname, sig, aglibs in sorted(chosen):
+            note = _note(lib, member, sname, mark, sig, aglibs)
             lines.append(f"{sname} = 0x{addr:08X}; // {note}")
+        # the addr-curated losers, recorded so a re-run reproduces them
+        for addr, lib, member, mark, sname, sig, aglibs, winner in sorted(aliases):
+            note = _note(lib, member, sname, mark, sig, aglibs)
+            lines.append("// " + sname + f" = 0x{addr:08X}; // " + note
+                         + ALIAS_NOTE.format(winner=winner))
         lines.append("")
         blocks.extend(lines)
         adopted += len(chosen)
@@ -278,7 +306,7 @@ def main(argv):
               f"{s.get('bad-name', 0)} bad-name, {s.get('addr-curated', 0)} "
               f"addr-curated, {s.get('name-curated', 0)} name-curated, "
               f"{s.get('name-dup', 0)} name-dup, {s.get('addr-dup', 0)} "
-              f"addr-dup)")
+              f"addr-dup; {len(aliases)} alias rows)")
 
     if adopted:
         head = CURATED.read_text(errors="replace")
@@ -292,7 +320,8 @@ def main(argv):
             # instead; move hand facts above the marker first.
             import collections
             cur_below = [l for l in head[cut:].splitlines()
-                         if l.strip() and l != MARKER]
+                         if l.strip() and l != MARKER
+                         and not ALIAS_LINE.match(l)]
             want = collections.Counter(
                 l for l in "\n".join(blocks).splitlines()
                 if l.strip() and l != MARKER)
