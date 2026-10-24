@@ -11,8 +11,8 @@ nonmatching Snd_nextpause, 0x64
 
 glabel Snd_nextpause
     /* 62C3C 8008243C 00240400 */  sll        $a0, $a0, 16
-    /* 62C40 80082440 1980023C */  lui        $v0, %hi(D_80194EB8)
-    /* 62C44 80082444 B84E4224 */  addiu      $v0, $v0, %lo(D_80194EB8)
+    /* 62C40 80082440 1980023C */  lui        $v0, %hi(SsSeqCalledTbyT_tab)
+    /* 62C44 80082444 B84E4224 */  addiu      $v0, $v0, %lo(SsSeqCalledTbyT_tab)
     /* 62C48 80082448 83230400 */  sra        $a0, $a0, 14
     /* 62C4C 8008244C 21208200 */  addu       $a0, $a0, $v0
     /* 62C50 80082450 002C0500 */  sll        $a1, $a1, 16

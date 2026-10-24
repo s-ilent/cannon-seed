@@ -32,7 +32,7 @@ glabel startIntr
     /* 3EF18 8005E718 0855428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* 3EF1C 8005E71C 21200002 */  addu       $a0, $s0, $zero
     /* 3EF20 8005E720 000045AC */  sw         $a1, 0x0($v0)
-    /* 3EF24 8005E724 077B010C */  jal        func_8005EC1C
+    /* 3EF24 8005E724 077B010C */  jal        func_800681BC
     /* 3EF28 8005E728 1A040534 */   ori       $a1, $zero, 0x41A
     /* 3EF2C 8005E72C 127B010C */  jal        setjmp
     /* 3EF30 8005E730 38000426 */   addiu     $a0, $s0, 0x38
@@ -45,7 +45,7 @@ glabel startIntr
     /* 3EF48 8005E748 B0441026 */  addiu      $s0, $s0, %lo(D_800B44B0)
     /* 3EF4C 8005E74C FCFF0426 */  addiu      $a0, $s0, -0x4
     /* 3EF50 8005E750 DC0F0226 */  addiu      $v0, $s0, 0xFDC
-    /* 3EF54 8005E754 A87C010C */  jal        HookEntryInt
+    /* 3EF54 8005E754 A87C010C */  jal        intr_restart_begin
     /* 3EF58 8005E758 000002AE */   sw        $v0, 0x0($s0)
     /* 3EF5C 8005E75C 01000234 */  ori        $v0, $zero, 0x1
     /* 3EF60 8005E760 C07B010C */  jal        startIntrVSync
@@ -56,9 +56,9 @@ glabel startIntr
     /* 3EF74 8005E774 140062AC */   sw        $v0, 0x14($v1)
     /* 3EF78 8005E778 0B80043C */  lui        $a0, %hi(intr_start_tab)
     /* 3EF7C 8005E77C FC54848C */  lw         $a0, %lo(intr_start_tab)($a0)
-    /* 3EF80 8005E780 DC7C010C */  jal        _96_remove
+    /* 3EF80 8005E780 DC7C010C */  jal        intr_start_aux6
     /* 3EF84 8005E784 040082AC */   sw        $v0, 0x4($a0)
-    /* 3EF88 8005E788 D07C010C */  jal        func_8005F340
+    /* 3EF88 8005E788 D07C010C */  jal        intr_restart_commit
     /* 3EF8C 8005E78C C4FF1026 */   addiu     $s0, $s0, -0x3C
     /* 3EF90 8005E790 21100002 */  addu       $v0, $s0, $zero
   .L8005E794:

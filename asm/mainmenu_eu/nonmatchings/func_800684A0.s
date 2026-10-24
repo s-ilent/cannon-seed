@@ -20,7 +20,7 @@ glabel startIntrVSync
     /* 3F71C 8005EF1C 000062AC */  sw         $v0, 0x0($v1)
     /* 3F720 8005EF20 0B80013C */  lui        $at, %hi(D_800B5558)
     /* 3F724 8005EF24 585520AC */  sw         $zero, %lo(D_800B5558)($at)
-    /* 3F728 8005EF28 007C010C */  jal        func_8005F000
+    /* 3F728 8005EF28 007C010C */  jal        func_800686D0
     /* 3F72C 8005EF2C 08000534 */   ori       $a1, $zero, 0x8
     /* 3F730 8005EF30 0680053C */  lui        $a1, %hi(trapIntrVSync)
     /* 3F734 8005EF34 58EFA524 */  addiu      $a1, $a1, %lo(trapIntrVSync)

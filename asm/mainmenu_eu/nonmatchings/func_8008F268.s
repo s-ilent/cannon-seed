@@ -18,7 +18,7 @@ glabel SpuQuit
     /* 6141C 80080C1C 1000BFAF */   sw        $ra, 0x10($sp)
     /* 61420 80080C20 0D80013C */  lui        $at, %hi(D_800C8D98)
     /* 61424 80080C24 988D20AC */  sw         $zero, %lo(D_800C8D98)($at)
-    /* 61428 80080C28 887C010C */  jal        func_8005F220
+    /* 61428 80080C28 887C010C */  jal        intr_stop_begin
     /* 6142C 80080C2C 00000000 */   nop
     /* 61430 80080C30 21200000 */  addu       $a0, $zero, $zero
     /* 61434 80080C34 0D80013C */  lui        $at, %hi(D_800C8DD8)
@@ -35,7 +35,7 @@ glabel SpuQuit
     /* 61460 80080C60 9489848C */  lw         $a0, %lo(D_800C8994)($a0)
     /* 61464 80080C64 2503020C */  jal        DisableEvent
     /* 61468 80080C68 00000000 */   nop
-    /* 6146C 80080C6C D07C010C */  jal        func_8005F340
+    /* 6146C 80080C6C D07C010C */  jal        intr_restart_commit
     /* 61470 80080C70 00000000 */   nop
   .L80080C74:
     /* 61474 80080C74 1000BF8F */  lw         $ra, 0x10($sp)

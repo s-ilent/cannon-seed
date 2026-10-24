@@ -14,9 +14,4 @@ glabel strcat
     /* 3CA50 8005C250 08004001 */  jr         $t2
     /* 3CA54 8005C254 15000924 */   addiu     $t1, $zero, 0x15
 endlabel strcat
-
-nonmatching func_8005C258, 0x4
-
-glabel func_8005C258
     /* 3CA58 8005C258 00000000 */  nop
-endlabel func_8005C258

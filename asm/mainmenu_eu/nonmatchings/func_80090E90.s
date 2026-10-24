@@ -21,8 +21,8 @@ glabel Snd_tempo
     /* 62CC0 800824C0 80100200 */  sll        $v0, $v0, 2
     /* 62CC4 800824C4 23104300 */  subu       $v0, $v0, $v1
     /* 62CC8 800824C8 80100200 */  sll        $v0, $v0, 2
-    /* 62CCC 800824CC 1980013C */  lui        $at, %hi(D_80194EB8)
-    /* 62CD0 800824D0 B84E2124 */  addiu      $at, $at, %lo(D_80194EB8)
+    /* 62CCC 800824CC 1980013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 62CD0 800824D0 B84E2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 62CD4 800824D4 21082600 */  addu       $at, $at, $a2
     /* 62CD8 800824D8 0000238C */  lw         $v1, 0x0($at)
     /* 62CDC 800824DC 21308000 */  addu       $a2, $a0, $zero
@@ -111,8 +111,8 @@ glabel Snd_tempo
     /* 62E08 80082608 1B006214 */  bne        $v1, $v0, .L80082678
     /* 62E0C 8008260C 00000000 */   nop
   .L80082610:
-    /* 62E10 80082610 1980023C */  lui        $v0, %hi(D_80194EB8)
-    /* 62E14 80082614 B84E4224 */  addiu      $v0, $v0, %lo(D_80194EB8)
+    /* 62E10 80082610 1980023C */  lui        $v0, %hi(SsSeqCalledTbyT_tab)
+    /* 62E14 80082614 B84E4224 */  addiu      $v0, $v0, %lo(SsSeqCalledTbyT_tab)
     /* 62E18 80082618 83330600 */  sra        $a2, $a2, 14
     /* 62E1C 8008261C 2130C200 */  addu       $a2, $a2, $v0
     /* 62E20 80082620 001C0500 */  sll        $v1, $a1, 16

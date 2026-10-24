@@ -14,9 +14,4 @@ glabel SysDeqIntRP
     /* 67D98 80087598 08004001 */  jr         $t2
     /* 67D9C 8008759C 03000924 */   addiu     $t1, $zero, 0x3
 endlabel SysDeqIntRP
-
-nonmatching func_800875A0, 0x4
-
-glabel func_800875A0
     /* 67DA0 800875A0 00000000 */  nop
-endlabel func_800875A0

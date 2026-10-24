@@ -14,9 +14,4 @@ glabel WaitEvent
     /* 65FA0 800857A0 08004001 */  jr         $t2
     /* 65FA4 800857A4 0A000924 */   addiu     $t1, $zero, 0xA
 endlabel WaitEvent
-
-nonmatching func_800857A8, 0x4
-
-glabel func_800857A8
     /* 65FA8 800857A8 00000000 */  nop
-endlabel func_800857A8
