@@ -11,9 +11,19 @@ dlabel D_800229F8
     /* 31F8 800229F8 */ .asciz "_read(PVD)\n"
     /* 5F7265616428505644290A00 */
 .align 2
+enddlabel D_800229F8
+
 .align 2
+nonmatching D_80022A04
+
+dlabel D_80022A04
     /* 3204 80022A04 */ .asciz "CD_newmedia: Read error (PT:%08x)\n"
     /* 43445F6E65776D656469613A2052656164206572726F72202850543A25303878290A0000 */
 .align 2
+enddlabel D_80022A04
+
+nonmatching D_80022A28
+
+dlabel D_80022A28
     /* 3228 80022A28 43445F6E */ .word 0x6E5F4443
-enddlabel D_800229F8
+enddlabel D_80022A28
