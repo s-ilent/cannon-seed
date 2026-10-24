@@ -18,7 +18,7 @@ glabel SpuQuit
     /* 2482C 8004402C 1000BFAF */   sw        $ra, 0x10($sp)
     /* 24830 80044030 0680013C */  lui        $at, %hi(D_80065DA8)
     /* 24834 80044034 A85D20AC */  sw         $zero, %lo(D_80065DA8)($at)
-    /* 24838 80044038 1FBE000C */  jal        func_8002F87C
+    /* 24838 80044038 1FBE000C */  jal        intr_stop_begin
     /* 2483C 8004403C 00000000 */   nop
     /* 24840 80044040 21200000 */  addu       $a0, $zero, $zero
     /* 24844 80044044 0680013C */  lui        $at, %hi(D_80065DE8)

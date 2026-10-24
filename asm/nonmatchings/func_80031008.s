@@ -12,24 +12,24 @@ nonmatching startIntr, 0xDC
 glabel startIntr
     /* F468 8002EC68 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* F46C 8002EC6C 1000B0AF */  sw         $s0, 0x10($sp)
-    /* F470 8002EC70 0580103C */  lui        $s0, %hi(D_8004D29C)
-    /* F474 8002EC74 9CD21026 */  addiu      $s0, $s0, %lo(D_8004D29C)
+    /* F470 8002EC70 0580103C */  lui        $s0, %hi(intr_active_flag)
+    /* F474 8002EC74 9CD21026 */  addiu      $s0, $s0, %lo(intr_active_flag)
     /* F478 8002EC78 1400BFAF */  sw         $ra, 0x14($sp)
     /* F47C 8002EC7C 00000296 */  lhu        $v0, 0x0($s0)
     /* F480 8002EC80 00000000 */  nop
     /* F484 8002EC84 2A004014 */  bnez       $v0, .L8002ED30
     /* F488 8002EC88 21100000 */   addu      $v0, $zero, $zero
-    /* F48C 8002EC8C 0580033C */  lui        $v1, %hi(D_8004E328)
-    /* F490 8002EC90 28E3638C */  lw         $v1, %lo(D_8004E328)($v1)
-    /* F494 8002EC94 0580023C */  lui        $v0, %hi(D_8004E32C)
-    /* F498 8002EC98 2CE3428C */  lw         $v0, %lo(D_8004E32C)($v0)
+    /* F48C 8002EC8C 0580033C */  lui        $v1, %hi(intr_imask_ptr)
+    /* F490 8002EC90 28E3638C */  lw         $v1, %lo(intr_imask_ptr)($v1)
+    /* F494 8002EC94 0580023C */  lui        $v0, %hi(intr_mask_ptr)
+    /* F498 8002EC98 2CE3428C */  lw         $v0, %lo(intr_mask_ptr)($v0)
     /* F49C 8002EC9C 3333053C */  lui        $a1, (0x33333333 >> 16)
     /* F4A0 8002ECA0 000040A4 */  sh         $zero, 0x0($v0)
     /* F4A4 8002ECA4 00004294 */  lhu        $v0, 0x0($v0)
     /* F4A8 8002ECA8 3333A534 */  ori        $a1, $a1, (0x33333333 & 0xFFFF)
     /* F4AC 8002ECAC 000062A4 */  sh         $v0, 0x0($v1)
-    /* F4B0 8002ECB0 0580023C */  lui        $v0, %hi(D_8004E330)
-    /* F4B4 8002ECB4 30E3428C */  lw         $v0, %lo(D_8004E330)($v0)
+    /* F4B0 8002ECB0 0580023C */  lui        $v0, %hi(intr_dicr_ptr)
+    /* F4B4 8002ECB4 30E3428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* F4B8 8002ECB8 21200002 */  addu       $a0, $s0, $zero
     /* F4BC 8002ECBC 000045AC */  sw         $a1, 0x0($v0)
     /* F4C0 8002ECC0 6EBC000C */  jal        func_8002F1B8
@@ -45,7 +45,7 @@ glabel startIntr
     /* F4E4 8002ECE4 D8D21026 */  addiu      $s0, $s0, %lo(D_8004D2D8)
     /* F4E8 8002ECE8 FCFF0426 */  addiu      $a0, $s0, -0x4
     /* F4EC 8002ECEC DC0F0226 */  addiu      $v0, $s0, 0xFDC
-    /* F4F0 8002ECF0 3FBE000C */  jal        HookEntryInt
+    /* F4F0 8002ECF0 3FBE000C */  jal        intr_restart_begin
     /* F4F4 8002ECF4 000002AE */   sw        $v0, 0x0($s0)
     /* F4F8 8002ECF8 01000234 */  ori        $v0, $zero, 0x1
     /* F4FC 8002ECFC 53BD000C */  jal        startIntrVSync

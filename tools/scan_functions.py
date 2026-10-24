@@ -1280,12 +1280,45 @@ def main(argv):
             consumed.add(off)
     data_syms = []
     gp_abs = load_curated_gp_markers(target)
+    # The name-uniqueness registry at the SYMBOLS-FILE level (the yaml
+    # gained one in 7a6daec1): every symbol line the file already carries
+    # - the hand seed head (e.g. slps_00270's `entry = ... // type:func`,
+    # the pc0-proven entry routing line) and the generated function block
+    # - claims BOTH its name and its vram, and a curated data symbol may
+    # not re-claim either. Witnessed live (first slps_00270 scan run,
+    # 2026-10-24): the data pass re-emitted the head's `entry` as
+    # type:s32 at the same vram and splat refused the whole file
+    # ("Duplicate symbol detected! entry has already been defined at vram
+    # 0x8002BE94"). The earlier claim wins, same rule as the pinned rows
+    # above; the skip is reported so the count stays auditable.
+    claimed_names = set()
+    claimed_vrams = set()
+    for line in head.splitlines():
+        m = re.match(r"\s*([A-Za-z_][\w.]*)\s*=\s*0x([0-9A-Fa-f]+)\s*;", line)
+        if m:
+            claimed_names.add(m.group(1))
+            claimed_vrams.add(m.group(2).upper())
+    for line in gen_syms:
+        m = re.match(r"\s*([A-Za-z_][\w.]*)\s*=\s*0x([0-9A-Fa-f]+)\s*;", line)
+        if m:
+            claimed_names.add(m.group(1))
+            claimed_vrams.add(m.group(2).upper())
+    n_data_skips = 0
     for off in sorted(curated):
         if off in consumed:
+            continue
+        vram = f"{BASE + off:08X}"
+        if curated[off] in claimed_names or vram in claimed_vrams:
+            n_data_skips += 1
             continue
         marker = " absolute:true" if off in gp_abs else ""
         data_syms.append(f"{curated[off]} = 0x{BASE + off:08X}; // type:s32{marker}")
         n_curated += 1
+        claimed_names.add(curated[off])
+        claimed_vrams.add(vram)
+    if n_data_skips:
+        print(f"scan: symbols: {n_data_skips} curated data symbol(s) skipped - "
+              f"name/vram already claimed (the earlier claim wins)")
     out = head + "\n" + "\n".join(gen_syms) + "\n"
     if data_syms:
         out += "// BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)\n"

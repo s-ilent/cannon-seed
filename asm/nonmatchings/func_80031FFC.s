@@ -14,9 +14,4 @@ glabel ReturnFromException
     /* 10200 8002FA00 08004001 */  jr         $t2
     /* 10204 8002FA04 17000924 */   addiu     $t1, $zero, 0x17
 endlabel ReturnFromException
-
-nonmatching func_8002FA08, 0x4
-
-glabel func_8002FA08
     /* 10208 8002FA08 00000000 */  nop
-endlabel func_8002FA08

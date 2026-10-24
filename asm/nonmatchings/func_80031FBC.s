@@ -14,9 +14,4 @@ glabel ChangeClearRCnt
     /* 101C0 8002F9C0 08004001 */  jr         $t2
     /* 101C4 8002F9C4 0A000924 */   addiu     $t1, $zero, 0xA
 endlabel ChangeClearRCnt
-
-nonmatching func_8002F9C8, 0x4
-
-glabel func_8002F9C8
     /* 101C8 8002F9C8 00000000 */  nop
-endlabel func_8002F9C8

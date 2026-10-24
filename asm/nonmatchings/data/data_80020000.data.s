@@ -11,33 +11,45 @@ dlabel D_80020000
     /* 800 80020000 */ .asciz "cdrom:\\MAINMENU.EXE;1"
     /* 6364726F6D3A5C4D41494E4D454E552E4558453B31000000 */
 .align 2
+enddlabel D_80020000
+
 .align 2
+nonmatching D_80020018
+
+dlabel D_80020018
     /* 818 80020018 */ .asciz "file not found\n"
     /* 66696C65206E6F7420666F756E640A00 */
 .align 2
-    /* 828 80020028 101E0280 */ .word D_80021E10
-    /* 82C 8002002C 301E0280 */ .word D_80021E30
-    /* 830 80020030 441E0280 */ .word D_80021E44
-    /* 834 80020034 681E0280 */ .word D_80021E68
-    /* 838 80020038 981E0280 */ .word D_80021E98
-    /* 83C 8002003C BC1E0280 */ .word D_80021EBC
-    /* 840 80020040 564F4943 */ .word 0x43494F56
-    /* 844 80020044 453D2564 */ .word 0x64253D45
-    /* 848 80020048 00000000 */ .word 0x00000000
-    /* 84C 8002004C 25732825 */ .word 0x25287325
-    /* 850 80020050 64293A49 */ .word 0x493A2964
-    /* 854 80020054 6E76616C */ .word 0x6C61766E
-    /* 858 80020058 6964206D */ .word 0x6D206469
-    /* 85C 8002005C 69737369 */ .word 0x69737369
-    /* 860 80020060 6F6E2076 */ .word 0x76206E6F
-    /* 864 80020064 616C7565 */ .word 0x65756C61
-    /* 868 80020068 20696E20 */ .word 0x206E6920
-    /* 86C 8002006C 7365745F */ .word 0x5F746573
-    /* 870 80020070 67616D65 */ .word 0x656D6167
-    /* 874 80020074 5F696E66 */ .word 0x666E695F
-    /* 878 80020078 6F28290A */ .word 0x0A29286F
-    /* 87C 8002007C 00000000 */ .word 0x00000000
-enddlabel D_80020000
+enddlabel D_80020018
+
+nonmatching jtbl_80020028
+
+dlabel jtbl_80020028
+    /* 828 80020028 101E0280 */ .word 0x80021E10
+    /* 82C 8002002C 301E0280 */ .word 0x80021E30
+    /* 830 80020030 441E0280 */ .word 0x80021E44
+    /* 834 80020034 681E0280 */ .word 0x80021E68
+    /* 838 80020038 981E0280 */ .word 0x80021E98
+    /* 83C 8002003C BC1E0280 */ .word 0x80021EBC
+enddlabel jtbl_80020028
+
+.align 2
+nonmatching D_80020040
+
+dlabel D_80020040
+    /* 840 80020040 */ .asciz "VOICE=%d"
+    /* 564F4943453D256400000000 */
+.align 2
+enddlabel D_80020040
+
+.align 2
+nonmatching D_8002004C
+
+dlabel D_8002004C
+    /* 84C 8002004C */ .asciz "%s(%d):Invalid mission value in set_game_info()\n"
+    /* 2573282564293A496E76616C6964206D697373696F6E2076616C756520696E207365745F67616D655F696E666F28290A00000000 */
+.align 2
+enddlabel D_8002004C
 
 .align 2
 nonmatching D_80020080
@@ -46,51 +58,111 @@ dlabel D_80020080
     /* 880 80020080 */ .asciz "gameinfo.c"
     /* 67616D65696E666F2E630000 */
 .align 2
+enddlabel D_80020080
+
 .align 2
+nonmatching D_8002008C
+
+dlabel D_8002008C
     /* 88C 8002008C */ .asciz "%s(%d):Invalid TV_MODE value in set_game_info()\n"
     /* 2573282564293A496E76616C69642054565F4D4F44452076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_8002008C
+
 .align 2
+nonmatching D_800200C0
+
+dlabel D_800200C0
     /* 8C0 800200C0 */ .asciz "%s(%d):Invalid PAUSE_DISP value in set_game_info()\n"
     /* 2573282564293A496E76616C69642050415553455F444953502076616C756520696E207365745F67616D655F696E666F28290A00 */
 .align 2
+enddlabel D_800200C0
+
 .align 2
+nonmatching D_800200F4
+
+dlabel D_800200F4
     /* 8F4 800200F4 */ .asciz "%s(%d):Invalid MUTEKI_MODE value in set_game_info()\n"
     /* 2573282564293A496E76616C6964204D5554454B495F4D4F44452076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_800200F4
+
 .align 2
+nonmatching D_8002012C
+
+dlabel D_8002012C
     /* 92C 8002012C */ .asciz "%s(%d):Invalid MAP_COUNTER_DISP value in set_game_info()\n"
     /* 2573282564293A496E76616C6964204D41505F434F554E5445525F444953502076616C756520696E207365745F67616D655F696E666F28290A000000 */
 .align 2
+enddlabel D_8002012C
+
 .align 2
+nonmatching D_80020168
+
+dlabel D_80020168
     /* 968 80020168 */ .asciz "%s(%d):Invalid TUNE_LEVE value in set_game_info()\n"
     /* 2573282564293A496E76616C69642054554E455F4C4556452076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_80020168
+
 .align 2
+nonmatching D_8002019C
+
+dlabel D_8002019C
     /* 99C 8002019C */ .asciz "%s(%d):Invalid LEVEL value in set_game_info()\n"
     /* 2573282564293A496E76616C6964204C4556454C2076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_8002019C
+
 .align 2
+nonmatching D_800201CC
+
+dlabel D_800201CC
     /* 9CC 800201CC */ .asciz "%s(%d):Too long PARTNER NAME in set_game_info()\n"
     /* 2573282564293A546F6F206C6F6E6720504152544E4552204E414D4520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_800201CC
+
 .align 2
+nonmatching D_80020200
+
+dlabel D_80020200
     /* A00 80020200 */ .asciz "%s(%d):Invalid PLAY_RECORDING value in set_game_info()\n"
     /* 2573282564293A496E76616C696420504C41595F5245434F5244494E472076616C756520696E207365745F67616D655F696E666F28290A00 */
 .align 2
+enddlabel D_80020200
+
 .align 2
+nonmatching D_80020238
+
+dlabel D_80020238
     /* A38 80020238 */ .asciz "%s(%d):Invalid CLEAR_LEVEL value in set_game_info()\n"
     /* 2573282564293A496E76616C696420434C4541525F4C4556454C2076616C756520696E207365745F67616D655F696E666F28290A00000000 */
 .align 2
+enddlabel D_80020238
+
 .align 2
+nonmatching D_80020270
+
+dlabel D_80020270
     /* A70 80020270 */ .asciz "%s(%d):Invalid PARTNER_G_NUM value in set_game_info()\n"
     /* 2573282564293A496E76616C696420504152544E45525F475F4E554D2076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_80020270
+
 .align 2
+nonmatching D_800202A8
+
+dlabel D_800202A8
     /* AA8 800202A8 */ .asciz "%s(%d):Invalid SUPER_BLASTER value in set_game_info()\n"
     /* 2573282564293A496E76616C69642053555045525F424C41535445522076616C756520696E207365745F67616D655F696E666F28290A0000 */
 .align 2
+enddlabel D_800202A8
+
 .align 2
+nonmatching D_800202E0
+
+dlabel D_800202E0
     /* AE0 800202E0 */ .asciz "%s(%d):Invalid mode switch in set_game_info()\n"
     /* 2573282564293A496E76616C6964206D6F64652073776974636820696E207365745F67616D655F696E666F28290A0000 */
 .align 2
@@ -98,6 +170,11 @@ dlabel D_80020080
     /* B10 80020310 */ .asciz ""
     /* 00000000 */
 .align 2
+enddlabel D_800202E0
+
+nonmatching jtbl_80020314
+
+dlabel jtbl_80020314
     /* B14 80020314 003E0280 */ .word 0x80023E00
     /* B18 80020318 3C3E0280 */ .word 0x80023E3C
     /* B1C 8002031C 883F0280 */ .word 0x80023F88
@@ -116,7 +193,7 @@ dlabel D_80020080
     /* B50 80020350 443F0280 */ .word 0x80023F44
     /* B54 80020354 A8400280 */ .word 0x800240A8
     /* B58 80020358 803F0280 */ .word 0x80023F80
-enddlabel D_80020080
+enddlabel jtbl_80020314
 
 .align 2
 nonmatching D_8002035C
@@ -377,14 +454,24 @@ dlabel D_80020730
     /* F30 80020730 */ .asciz "%s(%d):move_counter over the record area !\n"
     /* 2573282564293A6D6F76655F636F756E746572206F76657220746865207265636F7264206172656120210A00 */
 .align 2
+enddlabel D_80020730
+
+nonmatching jtbl_8002075C
+
+dlabel jtbl_8002075C
     /* F5C 8002075C 38730280 */ .word 0x80027338
     /* F60 80020760 64730280 */ .word 0x80027364
     /* F64 80020764 90730280 */ .word 0x80027390
     /* F68 80020768 BC730280 */ .word 0x800273BC
-    /* F6C 8002076C E8730280 */ .word func_800273E8
+    /* F6C 8002076C E8730280 */ .word 0x800273E8
     /* F70 80020770 14740280 */ .word 0x80027414
     /* F74 80020774 40740280 */ .word 0x80027440
     /* F78 80020778 6C740280 */ .word 0x8002746C
+enddlabel jtbl_8002075C
+
+nonmatching jtbl_8002077C
+
+dlabel jtbl_8002077C
     /* F7C 8002077C F4970280 */ .word 0x800297F4
     /* F80 80020780 FC970280 */ .word 0x800297FC
     /* F84 80020784 24980280 */ .word 0x80029824
@@ -405,7 +492,7 @@ dlabel D_80020730
     /* FC0 800207C0 0C980280 */ .word 0x8002980C
     /* FC4 800207C4 14980280 */ .word 0x80029814
     /* FC8 800207C8 1C980280 */ .word 0x8002981C
-enddlabel D_80020730
+enddlabel jtbl_8002077C
 
 .align 2
 nonmatching D_800207CC
@@ -414,6 +501,11 @@ dlabel D_800207CC
     /* FCC 800207CC */ .asciz "BISLPS-00270"
     /* 4249534C50532D303032373000000000 */
 .align 2
+enddlabel D_800207CC
+
+nonmatching D_800207DC
+
+dlabel D_800207DC
     /* FDC 800207DC 82668260 */ .word 0x60826682
     /* FE0 800207E0 826B8260 */ .word 0x60826B82
     /* FE4 800207E4 82778268 */ .word 0x68827782
@@ -427,6 +519,11 @@ dlabel D_800207CC
     /* 1004 80020804 815B8366 */ .word 0x66835B81
     /* 1008 80020808 83428393 */ .word 0x93834283
     /* 100C 8002080C 834F0000 */ .word 0x00004F83
+enddlabel D_800207DC
+
+nonmatching D_80020810
+
+dlabel D_80020810
     /* 1010 80020810 82668260 */ .word 0x60826682
     /* 1014 80020814 826B8260 */ .word 0x60826B82
     /* 1018 80020818 82778268 */ .word 0x68827782
@@ -439,6 +536,11 @@ dlabel D_800207CC
     /* 1034 80020834 815B8366 */ .word 0x66835B81
     /* 1038 80020838 83428393 */ .word 0x93834283
     /* 103C 8002083C 834F0000 */ .word 0x00004F83
+enddlabel D_80020810
+
+nonmatching D_80020840
+
+dlabel D_80020840
     /* 1040 80020840 82668260 */ .word 0x60826682
     /* 1044 80020844 826B8260 */ .word 0x60826B82
     /* 1048 80020848 82778268 */ .word 0x68827782
@@ -451,6 +553,11 @@ dlabel D_800207CC
     /* 1064 80020864 83878393 */ .word 0x93838783
     /* 1068 80020868 8366815B */ .word 0x5B816683
     /* 106C 8002086C 835E0000 */ .word 0x00005E83
+enddlabel D_80020840
+
+nonmatching D_80020870
+
+dlabel D_80020870
     /* 1070 80020870 82668260 */ .word 0x60826682
     /* 1074 80020874 826B8260 */ .word 0x60826B82
     /* 1078 80020878 82778268 */ .word 0x68827782
@@ -462,7 +569,7 @@ dlabel D_800207CC
     /* 1090 80020890 83878393 */ .word 0x93838783
     /* 1094 80020894 8366815B */ .word 0x5B816683
     /* 1098 80020898 835E0000 */ .word 0x00005E83
-enddlabel D_800207CC
+enddlabel D_80020870
 
 .align 2
 nonmatching D_8002089C
@@ -471,11 +578,16 @@ dlabel D_8002089C
     /* 109C 8002089C */ .asciz "SEARCH FILE VIOLATION"
     /* 5345415243482046494C452056494F4C4154494F4E000000 */
 .align 2
+enddlabel D_8002089C
+
 .align 2
+nonmatching D_800208B4
+
+dlabel D_800208B4
     /* 10B4 800208B4 */ .asciz "time out in decoding !\n"
     /* 74696D65206F757420696E206465636F64696E6720210A00 */
 .align 2
-enddlabel D_8002089C
+enddlabel D_800208B4
 
 .align 2
 nonmatching D_800208CC
@@ -511,55 +623,115 @@ dlabel D_80020900
     /* 1100 80020900 */ .asciz "set VVol err\n"
     /* 7365742056566F6C206572720A000000 */
 .align 2
+enddlabel D_80020900
+
 .align 2
+nonmatching D_80020910
+
+dlabel D_80020910
     /* 1110 80020910 */ .asciz "FLOAD:fault!\n"
     /* 464C4F41443A6661756C74210A000000 */
 .align 2
+enddlabel D_80020910
+
 .align 2
+nonmatching D_80020920
+
+dlabel D_80020920
     /* 1120 80020920 */ .asciz "Cannot find file(%s) in snd_fload3_TransBody()\n,filename"
     /* 43616E6E6F742066696E642066696C652825732920696E20736E645F666C6F6164335F5472616E73426F647928290A2C66696C656E616D6500000000 */
 .align 2
+enddlabel D_80020920
+
 .align 2
+nonmatching D_8002095C
+
+dlabel D_8002095C
     /* 115C 8002095C */ .asciz "No enough memory in snd_fload3_TransBody()\n"
     /* 4E6F20656E6F756768206D656D6F727920696E20736E645F666C6F6164335F5472616E73426F647928290A00 */
 .align 2
+enddlabel D_8002095C
+
 .align 2
+nonmatching D_80020988
+
+dlabel D_80020988
     /* 1188 80020988 */ .asciz "Enough memory\n"
     /* 456E6F756768206D656D6F72790A0000 */
 .align 2
+enddlabel D_80020988
+
 .align 2
+nonmatching D_80020998
+
+dlabel D_80020998
     /* 1198 80020998 */ .asciz "CdReadSync in snd_fload3_TransBody()\n"
     /* 43645265616453796E6320696E20736E645F666C6F6164335F5472616E73426F647928290A000000 */
 .align 2
+enddlabel D_80020998
+
 .align 2
+nonmatching D_800209C0
+
+dlabel D_800209C0
     /* 11C0 800209C0 */ .asciz "Cannot find file(%s) in fload3()\n,filename"
     /* 43616E6E6F742066696E642066696C652825732920696E20666C6F61643328290A2C66696C656E616D650000 */
 .align 2
+enddlabel D_800209C0
+
 .align 2
+nonmatching D_800209EC
+
+dlabel D_800209EC
     /* 11EC 800209EC */ .asciz "No enough memory in fload3()\n"
     /* 4E6F20656E6F756768206D656D6F727920696E20666C6F61643328290A000000 */
 .align 2
+enddlabel D_800209EC
+
 .align 2
+nonmatching D_80020A0C
+
+dlabel D_80020A0C
     /* 120C 80020A0C */ .asciz "Fault CdSync in fload3()\n"
     /* 4661756C7420436453796E6320696E20666C6F61643328290A000000 */
 .align 2
+enddlabel D_80020A0C
+
 .align 2
+nonmatching D_80020A28
+
+dlabel D_80020A28
     /* 1228 80020A28 */ .asciz "Fault CdRead in fload3()\n"
     /* 4661756C742043645265616420696E20666C6F61643328290A000000 */
 .align 2
+enddlabel D_80020A28
+
 .align 2
+nonmatching D_80020A44
+
+dlabel D_80020A44
     /* 1244 80020A44 */ .asciz "Fault CdReadSync in fload3()\n"
     /* 4661756C742043645265616453796E6320696E20666C6F61643328290A000000 */
 .align 2
+enddlabel D_80020A44
+
 .align 2
+nonmatching D_80020A64
+
+dlabel D_80020A64
     /* 1264 80020A64 */ .asciz "Invalid pixel mode (24bit Direct) ! (in InitSprite())\n"
     /* 496E76616C696420706978656C206D6F646520283234626974204469726563742920212028696E20496E69745370726974652829290A0000 */
 .align 2
+enddlabel D_80020A64
+
 .align 2
+nonmatching D_80020A9C
+
+dlabel D_80020A9C
     /* 129C 80020A9C */ .asciz "file not found\n"
     /* 66696C65206E6F7420666F756E640A00 */
 .align 2
-enddlabel D_80020900
+enddlabel D_80020A9C
 
 .align 2
 nonmatching D_80020AAC
@@ -648,63 +820,133 @@ dlabel D_80020B90
     /* 13A0 80020BA0 */ .asciz "$Id: sys.c,v 1.109 1995/10/26 13:06:43 suzu Exp $"
     /* 2449643A207379732E632C7620312E31303920313939352F31302F32362031333A30363A34332073757A75204578702024000000 */
 .align 2
+enddlabel D_80020B90
+
 .align 2
+nonmatching D_80020BD4
+
+dlabel D_80020BD4
     /* 13D4 80020BD4 */ .asciz "ResetGraph:jtb=%08x,env=%08x\n"
     /* 526573657447726170683A6A74623D253038782C656E763D253038780A000000 */
 .align 2
+enddlabel D_80020BD4
+
 .align 2
+nonmatching D_80020BF4
+
+dlabel D_80020BF4
     /* 13F4 80020BF4 */ .asciz "ResetGraph(%d)...\n"
     /* 52657365744772617068282564292E2E2E0A0000 */
 .align 2
+enddlabel D_80020BF4
+
 .align 2
+nonmatching D_80020C08
+
+dlabel D_80020C08
     /* 1408 80020C08 */ .asciz "SetGraphReverse(%d)...\n"
     /* 536574477261706852657665727365282564292E2E2E0A00 */
 .align 2
+enddlabel D_80020C08
+
 .align 2
+nonmatching D_80020C20
+
+dlabel D_80020C20
     /* 1420 80020C20 */ .asciz "SetGraphDebug:level:%d,type:%d reverse:%d\n"
     /* 536574477261706844656275673A6C6576656C3A25642C747970653A256420726576657273653A25640A0000 */
 .align 2
+enddlabel D_80020C20
+
 .align 2
+nonmatching D_80020C4C
+
+dlabel D_80020C4C
     /* 144C 80020C4C */ .asciz "SetGrapQue(%d)...\n"
     /* 53657447726170517565282564292E2E2E0A0000 */
 .align 2
+enddlabel D_80020C4C
+
 .align 2
+nonmatching D_80020C60
+
+dlabel D_80020C60
     /* 1460 80020C60 */ .asciz "DrawSyncCallback(%08x)...\n"
     /* 4472617753796E6343616C6C6261636B2825303878292E2E2E0A0000 */
 .align 2
+enddlabel D_80020C60
+
 .align 2
+nonmatching D_80020C7C
+
+dlabel D_80020C7C
     /* 147C 80020C7C */ .asciz "SetDispMask(%d)...\n"
     /* 536574446973704D61736B282564292E2E2E0A00 */
 .align 2
+enddlabel D_80020C7C
+
 .align 2
+nonmatching D_80020C90
+
+dlabel D_80020C90
     /* 1490 80020C90 */ .asciz "DrawSync(%d)...\n"
     /* 4472617753796E63282564292E2E2E0A00000000 */
 .align 2
+enddlabel D_80020C90
+
 .align 2
+nonmatching D_80020CA4
+
+dlabel D_80020CA4
     /* 14A4 80020CA4 */ .asciz "%s:bad RECT"
     /* 25733A626164205245435400 */
 .align 2
+enddlabel D_80020CA4
+
 .align 2
+nonmatching D_80020CB0
+
+dlabel D_80020CB0
     /* 14B0 80020CB0 */ .asciz "(%d,%d)-(%d,%d)\n"
     /* 2825642C2564292D2825642C2564290A00000000 */
 .align 2
+enddlabel D_80020CB0
+
 .align 2
+nonmatching D_80020CC4
+
+dlabel D_80020CC4
     /* 14C4 80020CC4 */ .asciz "%s:"
     /* 25733A00 */
 .align 2
+enddlabel D_80020CC4
+
 .align 2
+nonmatching D_80020CC8
+
+dlabel D_80020CC8
     /* 14C8 80020CC8 */ .asciz "ClearImage"
     /* 436C656172496D6167650000 */
 .align 2
+enddlabel D_80020CC8
+
 .align 2
+nonmatching D_80020CD4
+
+dlabel D_80020CD4
     /* 14D4 80020CD4 */ .asciz "LoadImage"
     /* 4C6F6164496D616765000000 */
 .align 2
+enddlabel D_80020CD4
+
 .align 2
+nonmatching D_80020CE0
+
+dlabel D_80020CE0
     /* 14E0 80020CE0 */ .asciz "StoreImage"
     /* 53746F7265496D6167650000 */
 .align 2
-enddlabel D_80020B90
+enddlabel D_80020CE0
 
 .align 2
 nonmatching D_80020CEC
@@ -785,11 +1027,16 @@ dlabel D_80020DB8
     /* 15B8 80020DB8 */ .asciz "tpage: (%d,%d,%d,%d)\n"
     /* 74706167653A202825642C25642C25642C2564290A000000 */
 .align 2
+enddlabel D_80020DB8
+
 .align 2
+nonmatching D_80020DD0
+
+dlabel D_80020DD0
     /* 15D0 80020DD0 */ .asciz "clut: (%d,%d)\n"
     /* 636C75743A202825642C2564290A0000 */
 .align 2
-enddlabel D_80020DB8
+enddlabel D_80020DD0
 
 .align 2
 nonmatching D_80020DE0
@@ -960,19 +1207,34 @@ dlabel D_80020F94
     /* 1794 80020F94 */ .asciz "MDEC_rest:bad option(%d)\n"
     /* 4D4445435F726573743A626164206F7074696F6E282564290A000000 */
 .align 2
+enddlabel D_80020F94
+
 .align 2
+nonmatching D_80020FB0
+
+dlabel D_80020FB0
     /* 17B0 80020FB0 */ .asciz "MDEC_in_sync"
     /* 4D4445435F696E5F73796E6300000000 */
 .align 2
+enddlabel D_80020FB0
+
 .align 2
+nonmatching D_80020FC0
+
+dlabel D_80020FC0
     /* 17C0 80020FC0 */ .asciz "MDEC_out_sync"
     /* 4D4445435F6F75745F73796E63000000 */
 .align 2
+enddlabel D_80020FC0
+
 .align 2
+nonmatching D_80020FD0
+
+dlabel D_80020FD0
     /* 17D0 80020FD0 */ .asciz "\t DMA=(%d,%d), ADDR=(0x%08x->0x%08x)\n"
     /* 0920444D413D2825642C2564292C20414444523D283078253038782D3E307825303878290A000000 */
 .align 2
-enddlabel D_80020F94
+enddlabel D_80020FD0
 
 .align 2
 nonmatching D_80020FF8
@@ -981,15 +1243,30 @@ dlabel D_80020FF8
     /* 17F8 80020FF8 */ .asciz "\t FIFO=(%d,%d),BUSY=%d,DREQ=(%d,%d),RGB24=%d,STP=%d\n"
     /* 09204649464F3D2825642C2564292C425553593D25642C445245513D2825642C2564292C52474232343D25642C5354503D25640A00000000 */
 .align 2
+enddlabel D_80020FF8
+
 .align 2
+nonmatching D_80021030
+
+dlabel D_80021030
     /* 1830 80021030 */ .asciz "%s timeout:\n"
     /* 25732074696D656F75743A0A00000000 */
 .align 2
+enddlabel D_80021030
+
 .align 2
+nonmatching D_80021040
+
+dlabel D_80021040
     /* 1840 80021040 */ .asciz "MDEC_vlec: invalid VLC ID\n"
     /* 4D4445435F766C65633A20696E76616C696420564C432049440A0000 */
 .align 2
+enddlabel D_80021040
+
 .align 2
+nonmatching D_8002105C
+
+dlabel D_8002105C
     /* 185C 8002105C */ .asciz "none"
     /* 6E6F6E6500000000 */
 .align 2
@@ -1109,7 +1386,7 @@ dlabel D_80020FF8
     /* 1998 80021198 */ .asciz "NoIntr"
     /* 4E6F496E74720000 */
 .align 2
-enddlabel D_80020FF8
+enddlabel D_8002105C
 
 .align 2
 nonmatching D_800211A0
@@ -1118,52 +1395,107 @@ dlabel D_800211A0
     /* 19A0 800211A0 */ .asciz "%s:(%s) timeout Sync=%s, Ready=%s\n"
     /* 25733A282573292074696D656F75742053796E633D25732C2052656164793D25730A0000 */
 .align 2
+enddlabel D_800211A0
+
 .align 2
+nonmatching D_800211C4
+
+dlabel D_800211C4
     /* 19C4 800211C4 */ .asciz "%s: DiskError(%02x:%02x)\n"
     /* 25733A204469736B4572726F7228253032783A25303278290A000000 */
 .align 2
+enddlabel D_800211C4
+
 .align 2
+nonmatching D_800211E0
+
+dlabel D_800211E0
     /* 19E0 800211E0 */ .asciz "CDROM: unknown intr(%d)\n"
     /* 4344524F4D3A20756E6B6E6F776E20696E7472282564290A00000000 */
 .align 2
+enddlabel D_800211E0
+
+nonmatching jtbl_800211FC
+
+dlabel jtbl_800211FC
     /* 19FC 800211FC 70970380 */ .word 0x80039770
     /* 1A00 80021200 24970380 */ .word 0x80039724
     /* 1A04 80021204 20960380 */ .word 0x80039620
     /* 1A08 80021208 BC970380 */ .word 0x800397BC
     /* 1A0C 8002120C 44980380 */ .word 0x80039844
-    /* 1A10 80021210 43445F73 */ .word 0x735F4443
-    /* 1A14 80021214 796E6300 */ .word 0x00636E79
-    /* 1A18 80021218 43445F72 */ .word 0x725F4443
-    /* 1A1C 8002121C 65616479 */ .word 0x79646165
-    /* 1A20 80021220 00000000 */ .word 0x00000000
-    /* 1A24 80021224 25732E2E */ .word 0x2E2E7325
-    /* 1A28 80021228 2E0A0000 */ .word 0x00000A2E
-    /* 1A2C 8002122C 25733A20 */ .word 0x203A7325
-    /* 1A30 80021230 6E6F2070 */ .word 0x70206F6E
-    /* 1A34 80021234 6172616D */ .word 0x6D617261
-    /* 1A38 80021238 0A000000 */ .word 0x0000000A
-    /* 1A3C 8002123C 43445F63 */ .word 0x635F4443
-    /* 1A40 80021240 77000000 */ .word 0x00000077
-    /* 1A44 80021244 4344206F */ .word 0x6F204443
-    /* 1A48 80021248 70656E28 */ .word 0x286E6570
-    /* 1A4C 8002124C 25303278 */ .word 0x78323025
-    /* 1A50 80021250 292E2E2E */ .word 0x2E2E2E29
-    /* 1A54 80021254 0A000000 */ .word 0x0000000A
-    /* 1A58 80021258 43445F69 */ .word 0x695F4443
-    /* 1A5C 8002125C 6E69743A */ .word 0x3A74696E
-    /* 1A60 80021260 61646472 */ .word 0x72646461
-    /* 1A64 80021264 3D253038 */ .word 0x3830253D
-    /* 1A68 80021268 780A0000 */ .word 0x00000A78
-    /* 1A6C 8002126C 43442072 */ .word 0x72204443
-    /* 1A70 80021270 65616420 */ .word 0x20646165
-    /* 1A74 80021274 72657472 */ .word 0x72746572
-    /* 1A78 80021278 79202532 */ .word 0x32252079
-    /* 1A7C 8002127C 64282530 */ .word 0x30252864
-    /* 1A80 80021280 32783A25 */ .word 0x253A7832
-    /* 1A84 80021284 3032783A */ .word 0x3A783230
-    /* 1A88 80021288 25303278 */ .word 0x78323025
-    /* 1A8C 8002128C 290A0000 */ .word 0x00000A29
-enddlabel D_800211A0
+enddlabel jtbl_800211FC
+
+.align 2
+nonmatching D_80021210
+
+dlabel D_80021210
+    /* 1A10 80021210 */ .asciz "CD_sync"
+    /* 43445F73796E6300 */
+.align 2
+enddlabel D_80021210
+
+.align 2
+nonmatching D_80021218
+
+dlabel D_80021218
+    /* 1A18 80021218 */ .asciz "CD_ready"
+    /* 43445F726561647900000000 */
+.align 2
+enddlabel D_80021218
+
+.align 2
+nonmatching D_80021224
+
+dlabel D_80021224
+    /* 1A24 80021224 */ .asciz "%s...\n"
+    /* 25732E2E2E0A0000 */
+.align 2
+enddlabel D_80021224
+
+.align 2
+nonmatching D_8002122C
+
+dlabel D_8002122C
+    /* 1A2C 8002122C */ .asciz "%s: no param\n"
+    /* 25733A206E6F20706172616D0A000000 */
+.align 2
+enddlabel D_8002122C
+
+.align 2
+nonmatching D_8002123C
+
+dlabel D_8002123C
+    /* 1A3C 8002123C */ .asciz "CD_cw"
+    /* 43445F6377000000 */
+.align 2
+enddlabel D_8002123C
+
+.align 2
+nonmatching D_80021244
+
+dlabel D_80021244
+    /* 1A44 80021244 */ .asciz "CD open(%02x)...\n"
+    /* 4344206F70656E2825303278292E2E2E0A000000 */
+.align 2
+enddlabel D_80021244
+
+.align 2
+nonmatching D_80021258
+
+dlabel D_80021258
+    /* 1A58 80021258 */ .asciz "CD_init:addr=%08x\n"
+    /* 43445F696E69743A616464723D253038780A0000 */
+.align 2
+enddlabel D_80021258
+
+.align 2
+nonmatching D_8002126C
+
+dlabel D_8002126C
+    /* 1A6C 8002126C */ .asciz "CD read retry %2d(%02x:%02x:%02x)\n"
+    /* 434420726561642072657472792025326428253032783A253032783A25303278290A0000 */
+.align 2
+enddlabel D_8002126C
 
 .align 2
 nonmatching D_80021290
@@ -1199,27 +1531,52 @@ dlabel D_800212BC
     /* 1ABC 800212BC */ .asciz "waring:old type streaming mode in CdRead2\n"
     /* 776172696E673A6F6C6420747970652073747265616D696E67206D6F646520696E20436452656164320A0000 */
 .align 2
+enddlabel D_800212BC
+
 .align 2
+nonmatching D_800212E8
+
+dlabel D_800212E8
     /* 1AE8 800212E8 */ .asciz "%s: path level (%d) error\n"
     /* 25733A2070617468206C6576656C2028256429206572726F720A0000 */
 .align 2
+enddlabel D_800212E8
+
 .align 2
+nonmatching D_80021304
+
+dlabel D_80021304
     /* 1B04 80021304 */ .asciz "%s: dir was not found\n"
     /* 25733A2064697220776173206E6F7420666F756E640A0000 */
 .align 2
+enddlabel D_80021304
+
 .align 2
+nonmatching D_8002131C
+
+dlabel D_8002131C
     /* 1B1C 8002131C */ .asciz "CdSearchFile: disc error\n"
     /* 436453656172636846696C653A2064697363206572726F720A000000 */
 .align 2
+enddlabel D_8002131C
+
 .align 2
+nonmatching D_80021338
+
+dlabel D_80021338
     /* 1B38 80021338 */ .asciz "CdSearchFile: searching %s...\n"
     /* 436453656172636846696C653A20736561726368696E672025732E2E2E0A0000 */
 .align 2
+enddlabel D_80021338
+
 .align 2
+nonmatching D_80021358
+
+dlabel D_80021358
     /* 1B58 80021358 */ .asciz "%s:  found\n"
     /* 25733A2020666F756E640A00 */
 .align 2
-enddlabel D_800212BC
+enddlabel D_80021358
 
 .align 2
 nonmatching D_80021364
