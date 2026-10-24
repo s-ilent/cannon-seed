@@ -11,8 +11,8 @@ nonmatching Snd_nextsep, 0x100
 
 glabel Snd_nextsep
     /* 4FE00 8006F600 00240400 */  sll        $a0, $a0, 16
-    /* 4FE04 8006F604 1780023C */  lui        $v0, %hi(D_80171D84)
-    /* 4FE08 8006F608 841D4224 */  addiu      $v0, $v0, %lo(D_80171D84)
+    /* 4FE04 8006F604 1780023C */  lui        $v0, %hi(SsSeqCalledTbyT_tab)
+    /* 4FE08 8006F608 841D4224 */  addiu      $v0, $v0, %lo(SsSeqCalledTbyT_tab)
     /* 4FE0C 8006F60C 83230400 */  sra        $a0, $a0, 14
     /* 4FE10 8006F610 21208200 */  addu       $a0, $a0, $v0
     /* 4FE14 8006F614 002C0500 */  sll        $a1, $a1, 16

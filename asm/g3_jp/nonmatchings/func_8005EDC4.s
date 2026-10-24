@@ -127,7 +127,7 @@ glabel GsTMDdivG4LFG
     /* 374E8 80056CE8 21204002 */   addu      $a0, $s2, $zero
     /* 374EC 80056CEC 10004526 */  addiu      $a1, $s2, 0x10
     /* 374F0 80056CF0 7000A78F */  lw         $a3, 0x70($sp)
-    /* 374F4 80056CF4 A167010C */  jal        RotTransPers
+    /* 374F4 80056CF4 A167010C */  jal        func_80059E84
     /* 374F8 80056CF8 4800A627 */   addiu     $a2, $sp, 0x48
     /* 374FC 80056CFC 1400A426 */  addiu      $a0, $s5, 0x14
     /* 37500 80056D00 14008526 */  addiu      $a1, $s4, 0x14

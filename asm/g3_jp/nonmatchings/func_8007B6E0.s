@@ -13,8 +13,8 @@ glabel Snd_crescendo
     /* 500E0 8006F8E0 B0FFBD27 */  addiu      $sp, $sp, -0x50
     /* 500E4 8006F8E4 21388000 */  addu       $a3, $a0, $zero
     /* 500E8 8006F8E8 00140700 */  sll        $v0, $a3, 16
-    /* 500EC 8006F8EC 1780033C */  lui        $v1, %hi(D_80171D84)
-    /* 500F0 8006F8F0 841D6324 */  addiu      $v1, $v1, %lo(D_80171D84)
+    /* 500EC 8006F8EC 1780033C */  lui        $v1, %hi(SsSeqCalledTbyT_tab)
+    /* 500F0 8006F8F0 841D6324 */  addiu      $v1, $v1, %lo(SsSeqCalledTbyT_tab)
     /* 500F4 8006F8F4 83130200 */  sra        $v0, $v0, 14
     /* 500F8 8006F8F8 3C00B3AF */  sw         $s3, 0x3C($sp)
     /* 500FC 8006F8FC 21984300 */  addu       $s3, $v0, $v1
@@ -163,8 +163,8 @@ glabel Snd_crescendo
     /* 50314 8006FB14 23104300 */  subu       $v0, $v0, $v1
     /* 50318 8006FB18 80100200 */  sll        $v0, $v0, 2
     /* 5031C 8006FB1C 23104300 */  subu       $v0, $v0, $v1
-    /* 50320 8006FB20 1780013C */  lui        $at, %hi(D_80171D84)
-    /* 50324 8006FB24 841D2124 */  addiu      $at, $at, %lo(D_80171D84)
+    /* 50320 8006FB20 1780013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 50324 8006FB24 841D2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 50328 8006FB28 21082400 */  addu       $at, $at, $a0
     /* 5032C 8006FB2C 0000238C */  lw         $v1, 0x0($at)
     /* 50330 8006FB30 80100200 */  sll        $v0, $v0, 2
@@ -246,8 +246,8 @@ glabel Snd_crescendo
     /* 50450 8006FC50 23104300 */  subu       $v0, $v0, $v1
     /* 50454 8006FC54 80100200 */  sll        $v0, $v0, 2
     /* 50458 8006FC58 23104300 */  subu       $v0, $v0, $v1
-    /* 5045C 8006FC5C 1780013C */  lui        $at, %hi(D_80171D84)
-    /* 50460 8006FC60 841D2124 */  addiu      $at, $at, %lo(D_80171D84)
+    /* 5045C 8006FC5C 1780013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 50460 8006FC60 841D2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 50464 8006FC64 21082400 */  addu       $at, $at, $a0
     /* 50468 8006FC68 0000238C */  lw         $v1, 0x0($at)
     /* 5046C 8006FC6C 80100200 */  sll        $v0, $v0, 2
@@ -317,8 +317,8 @@ glabel Snd_crescendo
     /* 50558 8006FD58 23104300 */  subu       $v0, $v0, $v1
     /* 5055C 8006FD5C 80100200 */  sll        $v0, $v0, 2
     /* 50560 8006FD60 23104300 */  subu       $v0, $v0, $v1
-    /* 50564 8006FD64 1780013C */  lui        $at, %hi(D_80171D84)
-    /* 50568 8006FD68 841D2124 */  addiu      $at, $at, %lo(D_80171D84)
+    /* 50564 8006FD64 1780013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 50568 8006FD68 841D2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 5056C 8006FD6C 21082400 */  addu       $at, $at, $a0
     /* 50570 8006FD70 0000238C */  lw         $v1, 0x0($at)
     /* 50574 8006FD74 80100200 */  sll        $v0, $v0, 2
@@ -357,8 +357,8 @@ glabel Snd_crescendo
     /* 505E4 8006FDE4 23104300 */  subu       $v0, $v0, $v1
     /* 505E8 8006FDE8 80100200 */  sll        $v0, $v0, 2
     /* 505EC 8006FDEC 23104300 */  subu       $v0, $v0, $v1
-    /* 505F0 8006FDF0 1780013C */  lui        $at, %hi(D_80171D84)
-    /* 505F4 8006FDF4 841D2124 */  addiu      $at, $at, %lo(D_80171D84)
+    /* 505F0 8006FDF0 1780013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 505F4 8006FDF4 841D2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 505F8 8006FDF8 21082400 */  addu       $at, $at, $a0
     /* 505FC 8006FDFC 0000238C */  lw         $v1, 0x0($at)
     /* 50600 8006FE00 80100200 */  sll        $v0, $v0, 2

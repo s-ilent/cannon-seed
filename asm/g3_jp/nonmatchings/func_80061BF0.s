@@ -143,7 +143,7 @@ glabel GsTMDdivTF3LFG
     /* 39D60 80059560 2120C403 */  addu       $a0, $fp, $a0
     /* 39D64 80059564 21288000 */  addu       $a1, $a0, $zero
     /* 39D68 80059568 21308000 */  addu       $a2, $a0, $zero
-    /* 39D6C 8005956C FA67010C */  jal        NormalColorDpq3
+    /* 39D6C 8005956C FA67010C */  jal        func_80059FE8
     /* 39D70 80059570 1000A3AF */   sw        $v1, 0x10($sp)
     /* 39D74 80059574 14006426 */  addiu      $a0, $s3, 0x14
   .L80059578:

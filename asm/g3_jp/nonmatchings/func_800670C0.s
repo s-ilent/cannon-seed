@@ -14,9 +14,4 @@ glabel FlushCache
     /* 3E584 8005DD84 08004001 */  jr         $t2
     /* 3E588 8005DD88 44000924 */   addiu     $t1, $zero, 0x44
 endlabel FlushCache
-
-nonmatching func_8005DD8C, 0x4
-
-glabel func_8005DD8C
     /* 3E58C 8005DD8C 00000000 */  nop
-endlabel func_8005DD8C

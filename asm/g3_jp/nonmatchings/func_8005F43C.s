@@ -150,7 +150,7 @@ glabel GsTMDdivTF4NL
     /* 37A8C 8005728C 0000028E */  lw         $v0, 0x0($s0)
     /* 37A90 80057290 4800A78F */  lw         $a3, 0x48($sp)
     /* 37A94 80057294 2120C003 */  addu       $a0, $fp, $zero
-    /* 37A98 80057298 0B6E010C */  jal        func_800646AC
+    /* 37A98 80057298 0B6E010C */  jal        func_8005B82C
     /* 37A9C 8005729C 080042AE */   sw        $v0, 0x8($s2)
     /* 37AA0 800572A0 21F04000 */  addu       $fp, $v0, $zero
   .L800572A4:

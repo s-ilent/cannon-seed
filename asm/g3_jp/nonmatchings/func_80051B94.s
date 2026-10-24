@@ -14,9 +14,4 @@ glabel HookEntryInt
     /* 2BC48 8004B448 08004001 */  jr         $t2
     /* 2BC4C 8004B44C 19000924 */   addiu     $t1, $zero, 0x19
 endlabel HookEntryInt
-
-nonmatching func_8004B450, 0x4
-
-glabel func_8004B450
     /* 2BC50 8004B450 00000000 */  nop
-endlabel func_8004B450

@@ -14,9 +14,4 @@ glabel open
     /* 2BD18 8004B518 08004001 */  jr         $t2
     /* 2BD1C 8004B51C 32000924 */   addiu     $t1, $zero, 0x32
 endlabel open
-
-nonmatching func_8004B520, 0x4
-
-glabel func_8004B520
     /* 2BD20 8004B520 00000000 */  nop
-endlabel func_8004B520

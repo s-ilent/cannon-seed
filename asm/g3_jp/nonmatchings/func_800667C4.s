@@ -118,7 +118,7 @@ glabel GsTMDdivNG3
     /* 3DF54 8005D754 0000028E */  lw         $v0, 0x0($s0)
     /* 3DF58 8005D758 3800A78F */  lw         $a3, 0x38($sp)
     /* 3DF5C 8005D75C 21300000 */  addu       $a2, $zero, $zero
-    /* 3DF60 8005D760 4B6A010C */  jal        func_8006354C
+    /* 3DF60 8005D760 4B6A010C */  jal        func_8005A92C
     /* 3DF64 8005D764 0C0022AE */   sw        $v0, 0xC($s1)
     /* 3DF68 8005D768 21B04000 */  addu       $s6, $v0, $zero
   .L8005D76C:

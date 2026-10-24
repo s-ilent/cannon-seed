@@ -13,8 +13,8 @@ glabel Snd_decrescendo
     /* 4CA00 8006C200 B8FFBD27 */  addiu      $sp, $sp, -0x48
     /* 4CA04 8006C204 21388000 */  addu       $a3, $a0, $zero
     /* 4CA08 8006C208 00140700 */  sll        $v0, $a3, 16
-    /* 4CA0C 8006C20C 1780033C */  lui        $v1, %hi(D_80171D84)
-    /* 4CA10 8006C210 841D6324 */  addiu      $v1, $v1, %lo(D_80171D84)
+    /* 4CA0C 8006C20C 1780033C */  lui        $v1, %hi(SsSeqCalledTbyT_tab)
+    /* 4CA10 8006C210 841D6324 */  addiu      $v1, $v1, %lo(SsSeqCalledTbyT_tab)
     /* 4CA14 8006C214 83130200 */  sra        $v0, $v0, 14
     /* 4CA18 8006C218 3800B2AF */  sw         $s2, 0x38($sp)
     /* 4CA1C 8006C21C 21904300 */  addu       $s2, $v0, $v1
@@ -257,8 +257,8 @@ glabel Snd_decrescendo
     /* 4CD94 8006C594 23104300 */  subu       $v0, $v0, $v1
     /* 4CD98 8006C598 80100200 */  sll        $v0, $v0, 2
     /* 4CD9C 8006C59C 23104300 */  subu       $v0, $v0, $v1
-    /* 4CDA0 8006C5A0 1780013C */  lui        $at, %hi(D_80171D84)
-    /* 4CDA4 8006C5A4 841D2124 */  addiu      $at, $at, %lo(D_80171D84)
+    /* 4CDA0 8006C5A0 1780013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 4CDA4 8006C5A4 841D2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 4CDA8 8006C5A8 21082400 */  addu       $at, $at, $a0
     /* 4CDAC 8006C5AC 0000238C */  lw         $v1, 0x0($at)
     /* 4CDB0 8006C5B0 80100200 */  sll        $v0, $v0, 2
@@ -303,8 +303,8 @@ glabel Snd_decrescendo
     /* 4CE3C 8006C63C 23104300 */  subu       $v0, $v0, $v1
     /* 4CE40 8006C640 80100200 */  sll        $v0, $v0, 2
     /* 4CE44 8006C644 23104300 */  subu       $v0, $v0, $v1
-    /* 4CE48 8006C648 1780013C */  lui        $at, %hi(D_80171D84)
-    /* 4CE4C 8006C64C 841D2124 */  addiu      $at, $at, %lo(D_80171D84)
+    /* 4CE48 8006C648 1780013C */  lui        $at, %hi(SsSeqCalledTbyT_tab)
+    /* 4CE4C 8006C64C 841D2124 */  addiu      $at, $at, %lo(SsSeqCalledTbyT_tab)
     /* 4CE50 8006C650 21082400 */  addu       $at, $at, $a0
     /* 4CE54 8006C654 0000238C */  lw         $v1, 0x0($at)
     /* 4CE58 8006C658 80100200 */  sll        $v0, $v0, 2
