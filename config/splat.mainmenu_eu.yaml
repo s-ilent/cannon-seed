@@ -563,8 +563,12 @@ segments:
       - [0x4E5D0, c, RotTransPers3]   # 0x54 sdk
       - [0x4E624, c, RotTrans]   # 0x28 sdk
       - [0x4E64C, c, LocalLight]   # 0x24 sdk
-      - [0x4E670, data, data_8006DE70]   # 0x118
-      - [0x4E788, asm, func_800798C8]   # 0x2c
+      - [0x4E670, data, data_8006DE70]   # 0x38
+      - [0x4E6A8, c, NormalColor3]   # 0x3c
+      - [0x4E6E4, data, data_8006DEE4]   # 0x24
+      - [0x4E708, c, NormalColorDpq3]   # 0x48
+      - [0x4E750, data, data_8006DF50]   # 0x20
+      - [0x4E770, c, NormalColorCol3]   # 0x44
       - [0x4E7B4, c, ColorDpq]   # 0x28 sdk
       - [0x4E7DC, data, data_8007991C]   # 0x8c
       - [0x4E868, asm, func_80079AD8.rowdef]   # 0x1c0
