@@ -377,7 +377,8 @@ segments:
       - [0x2D000, data, data_800531BC]   # 0x230
       - [0x2D230, asm, func_80053510]   # 0x28 sdk
       - [0x2D258, asm, func_80053538]   # 0x78 sdk
-      - [0x2D2D0, data, data_800535B0]   # 0x59c
+      - [0x2D2D0, data, data_800535B0]   # 0x580
+      - [0x2D850, c, len_param]   # 0x1c
       - [0x2D86C, asm, func_80053C7C]   # 0x50 sdk
       - [0x2D8BC, data, data_80053CCC]   # 0x120
       - [0x2D9DC, asm, func_80053DEC]   # 0xb8 sdk

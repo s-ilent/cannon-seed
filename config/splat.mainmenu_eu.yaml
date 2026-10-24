@@ -455,7 +455,8 @@ segments:
       - [0x43FF4, data, data_8006D844]   # 0x2c4
       - [0x442B8, asm, func_8006DC38]   # 0x28 sdk
       - [0x442E0, asm, func_8006DC60]   # 0x78 sdk
-      - [0x44358, data, data_8006DCD8]   # 0x59c
+      - [0x44358, data, data_8006DCD8]   # 0x580
+      - [0x448D8, c, len_param]   # 0x1c
       - [0x448F4, asm, func_8006E3A4]   # 0x50 sdk
       - [0x44944, data, data_8006E3F4]   # 0x120
       - [0x44A64, asm, func_8006E514]   # 0xb8 sdk
