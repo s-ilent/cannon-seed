@@ -359,7 +359,7 @@ segments:
       - [0x2DDA4, asm, func_800541B4]   # 0xf0 sdk
       - [0x2DE94, asm, func_800542A4]   # 0xc8 sdk
       - [0x2DF5C, c, func_8005436C]   # 0x1c
-      - [0x2DF78, asm, func_80054388]   # 0x50 sdk
+      - [0x2DF78, c, TransposeMatrix]   # 0x50 sdk
       - [0x2DFC8, asm, func_8004D7C8]   # 0x118
       - [0x2E0E0, data, data_8004D8E0]   # 0x8
       - [0x2E0E8, asm, func_80054628]   # 0xb8 sdk
