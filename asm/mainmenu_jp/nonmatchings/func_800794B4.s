@@ -112,7 +112,7 @@ glabel GsTMDdivTF4LFG
     /* 4E4FC 8006DCFC 1400A426 */  addiu      $a0, $s5, 0x14
     /* 4E500 8006DD00 14008526 */  addiu      $a1, $s4, 0x14
     /* 4E504 8006DD04 14006626 */  addiu      $a2, $s3, 0x14
-    /* 4E508 8006DD08 EE99010C */  jal        ReadSZfifo4
+    /* 4E508 8006DD08 EE99010C */  jal        func_800667B8
     /* 4E50C 8006DD0C 14004726 */   addiu     $a3, $s2, 0x14
     /* 4E510 8006DD10 3C00A527 */  addiu      $a1, $sp, 0x3C
     /* 4E514 8006DD14 10002726 */  addiu      $a3, $s1, 0x10

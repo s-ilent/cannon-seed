@@ -137,7 +137,7 @@ glabel GsTMDdivTG4LFG
     /* 4EA80 8006E280 14008426 */  addiu      $a0, $s4, 0x14
     /* 4EA84 8006E284 14006526 */  addiu      $a1, $s3, 0x14
     /* 4EA88 8006E288 14004626 */  addiu      $a2, $s2, 0x14
-    /* 4EA8C 8006E28C EE99010C */  jal        ReadSZfifo4
+    /* 4EA8C 8006E28C EE99010C */  jal        func_800667B8
     /* 4EA90 8006E290 14002726 */   addiu     $a3, $s1, 0x14
     /* 4EA94 8006E294 0C002726 */  addiu      $a3, $s1, 0xC
     /* 4EA98 8006E298 6800A58F */  lw         $a1, 0x68($sp)

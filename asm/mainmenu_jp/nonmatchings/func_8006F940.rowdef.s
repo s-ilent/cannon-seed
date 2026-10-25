@@ -240,7 +240,7 @@ glabel func_800654F0
     /* 45F48 80065748 21202002 */  addu       $a0, $s1, $zero
     /* 45F4C 8006574C 6800A527 */  addiu      $a1, $sp, 0x68
     /* 45F50 80065750 7800B027 */  addiu      $s0, $sp, 0x78
-    /* 45F54 80065754 0B98010C */  jal        OuterProduct12
+    /* 45F54 80065754 0B98010C */  jal        func_8006602C
     /* 45F58 80065758 21300002 */   addu      $a2, $s0, $zero
     /* 45F5C 8006575C 21200002 */  addu       $a0, $s0, $zero
     /* 45F60 80065760 8800B227 */  addiu      $s2, $sp, 0x88
@@ -264,7 +264,7 @@ glabel func_800654F0
     /* 45FA8 800657A8 0800C2A6 */  sh         $v0, 0x8($s6)
     /* 45FAC 800657AC B000A297 */  lhu        $v0, 0xB0($sp)
     /* 45FB0 800657B0 21300002 */  addu       $a2, $s0, $zero
-    /* 45FB4 800657B4 0B98010C */  jal        OuterProduct12
+    /* 45FB4 800657B4 0B98010C */  jal        func_8006602C
     /* 45FB8 800657B8 0E00C2A6 */   sh        $v0, 0xE($s6)
     /* 45FBC 800657BC 21200002 */  addu       $a0, $s0, $zero
     /* 45FC0 800657C0 3A97010C */  jal        func_80065CE8

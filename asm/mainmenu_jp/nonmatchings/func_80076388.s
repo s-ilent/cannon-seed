@@ -132,7 +132,7 @@ glabel GsTMDdivG4LFG
     /* 4BA10 8006B210 1400A426 */  addiu      $a0, $s5, 0x14
     /* 4BA14 8006B214 14008526 */  addiu      $a1, $s4, 0x14
     /* 4BA18 8006B218 14006626 */  addiu      $a2, $s3, 0x14
-    /* 4BA1C 8006B21C EE99010C */  jal        ReadSZfifo4
+    /* 4BA1C 8006B21C EE99010C */  jal        func_800667B8
     /* 4BA20 8006B220 14004726 */   addiu     $a3, $s2, 0x14
     /* 4BA24 8006B224 21282002 */  addu       $a1, $s1, $zero
     /* 4BA28 8006B228 0C004726 */  addiu      $a3, $s2, 0xC

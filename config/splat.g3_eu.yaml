@@ -128,7 +128,7 @@ segments:
       - [0x29AF8, asm, func_800492F8]   # 0x110 sdk
       - [0x29C08, asm, func_80049408]   # 0x160 sdk
       - [0x29D68, asm, func_80049568]   # 0x30 sdk
-      - [0x29D98, asm, func_80049598]   # 0x124 sdk
+      - [0x29D98, c, ScaleMatrixL]   # 0x124 sdk
       - [0x29EBC, asm, func_800496BC]   # 0x140
       - [0x29FFC, asm, func_800497FC]   # 0x48 sdk
       - [0x2A044, asm, func_80049844]   # 0x48 sdk

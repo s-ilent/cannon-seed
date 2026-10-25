@@ -124,7 +124,7 @@ segments:
       - [0x2A0E0, asm, func_800498E0]   # 0x110 sdk
       - [0x2A1F0, asm, func_800499F0]   # 0x160 sdk
       - [0x2A350, asm, func_80049B50]   # 0x30 sdk
-      - [0x2A380, asm, func_80049B80]   # 0x124 sdk
+      - [0x2A380, c, ScaleMatrixL]   # 0x124 sdk
       - [0x2A4A4, asm, func_80049CA4]   # 0x140
       - [0x2A5E4, asm, func_80049DE4]   # 0x48 sdk
       - [0x2A62C, asm, func_80049E2C]   # 0x48 sdk

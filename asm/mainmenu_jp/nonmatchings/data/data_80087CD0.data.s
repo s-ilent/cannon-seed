@@ -2561,9 +2561,14 @@ dlabel func_8007C4DC
     /* 5D4A4 8007CCA4 4000BD27 */ .word 0x27BD0040
     /* 5D4A8 8007CCA8 0800E003 */ .word 0x03E00008
     /* 5D4AC 8007CCAC 00000000 */ .word 0x00000000
+enddlabel func_8007C4DC
+
+nonmatching SsSeqCalledTbyT_init
+
+dlabel SsSeqCalledTbyT_init
     /* 5D4B0 8007CCB0 C8FFBD27 */ .word 0x27BDFFC8
     /* 5D4B4 8007CCB4 2000B0AF */ .word 0xAFB00020
-enddlabel func_8007C4DC
+enddlabel SsSeqCalledTbyT_init
 
 nonmatching func_8007CCB8
 

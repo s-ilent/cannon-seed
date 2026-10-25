@@ -11,6 +11,11 @@ dlabel D_80085744
     /* 65F48 80085748 C0D920A4 */ .word 0xA420D9C0
     /* 65F4C 8008574C 0800E003 */ .word 0x03E00008
     /* 65F50 80085750 00000000 */ .word 0x00000000
+enddlabel D_80085744
+
+nonmatching Snd_pause
+
+dlabel Snd_pause
     /* 65F54 80085754 E0FFBD27 */ .word 0x27BDFFE0
     /* 65F58 80085758 00240400 */ .word 0x00042400
     /* 65F5C 8008575C 03240400 */ .word 0x00042403
@@ -23,7 +28,7 @@ dlabel D_80085744
     /* 65F78 80085778 032C0500 */ .word 0x00052C03
     /* 65F7C 8008577C 1000B0AF */ .word 0xAFB00010
     /* 65F80 80085780 40800500 */ .word 0x00058040
-enddlabel D_80085744
+enddlabel Snd_pause
 
 nonmatching func_80085784
 
