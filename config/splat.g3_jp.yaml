@@ -317,7 +317,7 @@ segments:
       - [0x2F2B8, c, SetGeomOffset]   # 0x18 sdk
       - [0x2F2D0, c, SetGeomScreen]   # 0xc sdk
       - [0x2F2DC, c, SetDQA]   # 0xc sdk
-      - [0x2F2E8, asm, func_80055A88]   # 0x18 sdk
+      - [0x2F2E8, c, SetDQB]   # 0x18 sdk
       - [0x2F300, asm, func_8004EB00]   # 0x78 sdk
       - [0x2F378, asm, func_8004EB78]   # 0x158 sdk
       - [0x2F4D0, asm, func_8004ECD0]   # 0x78 sdk
@@ -369,8 +369,8 @@ segments:
       - [0x321FC, c, DpqColorLight]   # 0x28 sdk
       - [0x32224, c, DpqColor3]   # 0x3c sdk
       - [0x32260, c, Intpl]   # 0x24 sdk
-      - [0x32284, asm, func_80059144]   # 0x28 sdk
-      - [0x322AC, asm, func_8005916C]   # 0x28 sdk
+      - [0x32284, c, Square12]   # 0x28 sdk
+      - [0x322AC, c, Square0]   # 0x28 sdk
       - [0x322D4, c, AverageZ3]   # 0x20 sdk
       - [0x322F4, c, AverageZ4]   # 0x24 sdk
       - [0x32318, c, OuterProduct12]   # 0x58 sdk
@@ -742,7 +742,7 @@ segments:
       - [0x4E9B4, asm, func_8006E1B4]   # 0x354 sdk
       - [0x4ED08, asm, func_8006E508]   # 0xbc sdk
       - [0x4EDC4, c, _SsUtResolveADSR]   # 0x5c sdk
-      - [0x4EE20, asm, func_8007A090]   # 0x8c sdk
+      - [0x4EE20, c, _SsUtBuildADSR]   # 0x8c sdk
       - [0x4EEAC, asm, func_8006E6AC]   # 0x40
       - [0x4EEEC, asm, func_8006E6EC]   # 0xa4 sdk
       - [0x4EF90, asm, func_8006E790]   # 0x10 sdk

@@ -78,6 +78,17 @@ temporaries):
    move-to-$v0 (`addu $2,$X,$zero`, X != $2). Pure register move,
    side-effect free; the grown nop reproduces the retail delay slot.
 
+   OPPOSITE RETAIL BEHAVIOUR EXISTS (found 2026-10-26, the pair-pool
+   wave 2: Square0/Square12, the LIBGTE GTE SQR members): the same GCC
+   output [j $ra][addu $2,$X,$zero] carries the move IN the branch
+   delay slot at retail - the RotTransPers sra precedent generalized
+   to the bare out-pointer move. The getter class keeps the move
+   before the jump; these members fill the slot. Retail is per-unit
+   evidence, so the source marker `cc-post: keep-return-fill` skips
+   this rule for the units whose retail tail is the filled form (the
+   marker only ever toggles the order of a pure $v0 move - semantics
+   identical either way).
+
 4. PROLOGUE SAVE RESTORE (found 2026-10-11, mainmenu_eu
    func_80037A0C, `D_800C936C = 1;` wrapper). GCC's scheduler hoists
    an independent constant materialization for the first body store
@@ -202,6 +213,7 @@ def is_instruction(line: str) -> bool:
 
 
 KEEP_EPILOGUE = False
+KEEP_RETURN_FILL = False
 SDK_ASPSX = False
 
 
@@ -215,7 +227,8 @@ def apply_rules(insns: list[str]) -> list[str]:
         res = _rule8_sdk_hazard_nop(res)
         res = _rule9_param_copy_order(res)
     res = _rule2_extend_pair(res)
-    res = _rule3_return_move(res)
+    if not KEEP_RETURN_FILL:
+        res = _rule3_return_move(res)
     res = _rule4_prologue_save(res)
     res = _rule5_prologue_call(res)
     res = _rule7_gp_load(res)
@@ -422,11 +435,14 @@ def _rule7_gp_load(res: list[str]) -> list[str]:
 
 
 def main() -> None:
-    global KEEP_EPILOGUE, SDK_ASPSX
+    global KEEP_EPILOGUE, SDK_ASPSX, KEEP_RETURN_FILL
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
         args.remove("--keep-epilogue")
+    if "--keep-return-fill" in args:
+        KEEP_RETURN_FILL = True
+        args.remove("--keep-return-fill")
     if "--sdk-aspsx" in args:
         KEEP_EPILOGUE = True
         SDK_ASPSX = True

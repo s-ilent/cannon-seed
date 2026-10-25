@@ -91,6 +91,11 @@ if grep -q 'cc-post: sdk-aspsx' "$SRC" 2>/dev/null; then
     POSTFLAGS="--sdk-aspsx"
 elif grep -q 'cc-post: keep-epilogue' "$SRC" 2>/dev/null; then
     POSTFLAGS="--keep-epilogue"
+elif grep -q 'cc-post: keep-return-fill' "$SRC" 2>/dev/null; then
+    # Square0/Square12 wave 2026-10-26: retail fills the return jump's
+    # delay slot with the $v0 move (the getter class keeps it before
+    # the jump) - skip cc_post's return-move un-fill for these units.
+    POSTFLAGS="--keep-return-fill"
 fi
 python3 "$REPO/tools/cc_post.py" $POSTFLAGS "$STEM.mas.s"
 

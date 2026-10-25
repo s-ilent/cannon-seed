@@ -283,7 +283,7 @@ segments:
       - [0x13770, c, SetGeomOffset]   # 0x18 sdk
       - [0x13788, c, SetGeomScreen]   # 0xc sdk
       - [0x13794, c, SetDQA]   # 0xc sdk
-      - [0x137A0, asm, func_80035CC0]   # 0x18 sdk
+      - [0x137A0, c, SetDQB]   # 0x18 sdk
       - [0x137B8, asm, func_80032FB8]   # 0xf4 sdk
       - [0x138AC, asm, func_80035EFC]   # 0x78 sdk
       - [0x13924, asm, func_80035F74]   # 0x158 sdk
@@ -609,7 +609,7 @@ segments:
       - [0x27F60, asm, func_80047760]   # 0x354 sdk
       - [0x282B4, asm, func_80047AB4]   # 0xbc sdk
       - [0x28370, c, _SsUtResolveADSR]   # 0x5c sdk
-      - [0x283CC, asm, func_8004DACC]   # 0x8c sdk
+      - [0x283CC, c, _SsUtBuildADSR]   # 0x8c sdk
       - [0x28458, asm, func_80047C58]   # 0x40
       - [0x28498, asm, func_80047C98]   # 0xa4 sdk
       - [0x2853C, asm, func_80047D3C]   # 0x10 sdk

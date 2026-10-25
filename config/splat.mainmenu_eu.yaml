@@ -796,7 +796,7 @@ segments:
       - [0x64C30, asm, func_80084430]   # 0x354 sdk
       - [0x64F84, asm, func_80084784]   # 0xbc sdk
       - [0x65040, c, _SsUtResolveADSR]   # 0x5c sdk
-      - [0x6509C, asm, func_8009387C]   # 0x8c sdk
+      - [0x6509C, c, _SsUtBuildADSR]   # 0x8c sdk
       - [0x65128, asm, func_80084928]   # 0x40
       - [0x65168, asm, func_80084968]   # 0xa4 sdk
       - [0x6520C, asm, func_80084A0C]   # 0x10 sdk
