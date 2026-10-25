@@ -317,7 +317,7 @@ segments:
       - [0x15304, asm, func_80037CE4]   # 0x10c sdk
       - [0x15410, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x15460, c, ApplyMatrixSV]   # 0x5c sdk
-      - [0x154BC, asm, func_80037E9C]   # 0x24 sdk
+      - [0x154BC, c, TransMatrix]   # 0x24 sdk
       - [0x154E0, asm, func_80037EC0]   # 0x124 sdk
       - [0x15604, c, SetRotMatrix]   # 0x30 sdk
       - [0x15634, c, SetLightMatrix]   # 0x30 sdk

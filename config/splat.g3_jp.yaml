@@ -133,7 +133,7 @@ segments:
       - [0x2A7D4, asm, func_80049FD4]   # 0x10c sdk
       - [0x2A8E0, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x2A930, c, ApplyMatrixSV]   # 0x5c sdk
-      - [0x2A98C, asm, func_8004A18C]   # 0x24 sdk
+      - [0x2A98C, c, TransMatrix]   # 0x24 sdk
       - [0x2A9B0, asm, func_8004A1B0]   # 0x124 sdk
       - [0x2AAD4, c, SetRotMatrix]   # 0x30 sdk
       - [0x2AB04, c, SetLightMatrix]   # 0x30 sdk

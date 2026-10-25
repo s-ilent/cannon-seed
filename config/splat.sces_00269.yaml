@@ -312,7 +312,7 @@ segments:
       - [0x14DCC, asm, func_800345CC]   # 0x10c sdk
       - [0x14ED8, asm, func_800346D8]   # 0x50 sdk
       - [0x14F28, c, ApplyMatrixSV]   # 0x5c sdk
-      - [0x14F84, asm, func_80034784]   # 0x24 sdk
+      - [0x14F84, c, TransMatrix]   # 0x24 sdk
       - [0x14FA8, asm, func_800347A8]   # 0x124 sdk
       - [0x150CC, asm, func_800348CC]   # 0x30 sdk
       - [0x150FC, asm, func_800348FC]   # 0x30 sdk
