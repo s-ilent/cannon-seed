@@ -118,13 +118,13 @@ segments:
       - [0x26B08, asm, func_8004BE78]   # 0x10 sdk
       - [0x26B18, asm, func_8004BE88]   # 0x10 sdk
       - [0x26B28, asm, func_8004BE98]   # 0x10 sdk
-      - [0x26B38, asm, func_8004BEA8]   # 0x20 sdk
+      - [0x26B38, c, PCopen]   # 0x20 sdk
       - [0x26B58, asm, func_80046358]   # 0x10
       - [0x26B68, c, func_80046368]   # 0x10
       - [0x26B78, asm, func_80046378]   # 0x4
       - [0x26B7C, c, PCclose]   # 0x10 sdk
       - [0x26B8C, asm, func_8004638C]   # 0xc0
-      - [0x26C4C, asm, func_8004BFBC]   # 0x18 sdk
+      - [0x26C4C, c, _SN_write]   # 0x18 sdk
       - [0x26C64, asm, func_80046464]   # 0x198
       - [0x26DFC, data, data_800465FC]   # 0x8
       - [0x26E04, asm, func_80046604]   # 0x198

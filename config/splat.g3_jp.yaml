@@ -106,11 +106,11 @@ segments:
       - [0x2966C, asm, func_8004EFCC]   # 0x10 sdk
       - [0x2967C, asm, func_8004EFDC]   # 0x10 sdk
       - [0x2968C, asm, func_8004EFEC]   # 0x10 sdk
-      - [0x2969C, asm, func_8004EFFC]   # 0x20 sdk
-      - [0x296BC, asm, func_8004F01C]   # 0x24 sdk
+      - [0x2969C, c, PCopen]   # 0x20 sdk
+      - [0x296BC, c, PClseek]   # 0x24 sdk
       - [0x296E0, c, PCclose]   # 0x10 sdk
       - [0x296F0, asm, func_80048EF0]   # 0xc0
-      - [0x297B0, asm, func_8004F110]   # 0x18 sdk
+      - [0x297B0, c, _SN_write]   # 0x18 sdk
       - [0x297C8, asm, func_80048FC8]   # 0x198
       - [0x29960, data, data_80049160]   # 0x8
       - [0x29968, asm, func_80049168]   # 0x198
