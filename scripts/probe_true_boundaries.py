@@ -8,7 +8,7 @@ differently than the seven targets' asm rows, and the TRUE function
 boundaries = the head starts (the ten-word SetRotMatrix head or the
 vector-staging head spellings) + the epilogue ends (addu $v0, $x, $zero /
 jr $ra / nop).  This probe parses the two committed data rows, detects both
-boundary classes mechanically, and asserts the EIGHT closures the full
+boundary classes mechanically, and asserts the NINE closures the full
 instruction-level decode derived:
 
     0x8005DB1C..0x8005DC28  0x10C  #0x10c composite (the DAFC/DBA0 crossing pair)
@@ -56,6 +56,7 @@ LW_T1_4_A0 = 0x8C890004   # lw  $t1, 4($a0)
 LW_T2_C_A0 = 0x8C8A000C   # lw  $t2, 0xC($a0)
 
 STARTS = [
+    (0x8005D9BC, "rothead", []),                                   # SetRotMatrix head, D9B4+0x8 (banked SITES[0]; the two leading nops are row padding)
     (0x8005DB1C, "rothead", []),                                   # SetRotMatrix head, DAFC+0x20 (banked SITES[1])
     (0x8005DC28, "staging", [(0, LHU_T0_0_A0), (4, LW_T1_4_A0), (8, LW_T2_C_A0)]),  # DBA0's tail 0xC
     (0x8005DD0C, "staging", [(0, LW_T0_0_A0), (4, LW_T1_4_A0), (8, LW_T2_C_A0)]),   # DCD8+0x34
@@ -66,8 +67,9 @@ STARTS = [
     (0x8005E4E8, "rothead", []),                                   # the pair's head B
 ]
 
-# ---- the eight closures (start, end, size, label) --------------------------
+# ---- the nine closures (start, end, size, label) --------------------------
 CLOSURES = [
+    (0x8005D9BC, 0x8005DB1C, 0x160, "instance-1 #0x160 six-vector transform-and-add (func_8005DA90 = its interior +0xD4, the 1551 class-2)"),
     (0x8005DB1C, 0x8005DC28, 0x10C, "#0x10c composite (DAFC/DBA0 crossing pair; head = banked SITES[1])"),
     (0x8005DC28, 0x8005DD0C, 0x0E4, "#0xe4 composite - func_8005DC34's TRUE extent (slice 0xa4 + DCD8's 0x34 epilogue)"),
     (0x8005DD0C, 0x8005DDF4, 0x0E8, "#0xe8 in-place composite - func_8005DCD8+0x34's function (ends DD80+0x74)"),
@@ -123,6 +125,17 @@ def main():
     ends = epilogue_ends(pairs)
     print(f"[probe] merged word map: {len(words)} words, "
           f"0x{pairs[0][0]:08x}..0x{pairs[-1][0] + 4:08x}")
+    # the every-byte-accounted check: the two rows are FULLY covered, no holes
+    row1, row2 = (0x8005D9B4, 0x6E0), (0x8005E1B8, 0x43C)
+    acc_ok = len(words) == (row1[1] + row2[1]) // 4
+    if acc_ok:
+        for base, size in (row1, row2):
+            acc_ok = acc_ok and all(base + o in words for o in range(0, size, 4))
+    cover = 'FULLY covered' if acc_ok else 'HOLES'
+    print(f"[probe] row accounting: ROW1 0x{row1[0]:08x}+0x{row1[1]:x} and "
+          f"ROW2 0x{row2[0]:08x}+0x{row2[1]:x} = {cover} "
+          f"({len(words)} words = (0x6e0+0x43c)/4)")
+    fails = 0 if acc_ok else 1
     print(f"[probe] epilogue scanner: {len(ends)} ends found (both spellings)")
     for e in sorted(ends):
         print(f"        end 0x{e:08x}")
@@ -161,8 +174,9 @@ def main():
     if fails:
         print(f"[probe] FAIL ({fails} problem(s)) - the boundary record is wrong somewhere")
         return 1
-    print("[probe] PASS - all eight closures hold offline: true boundaries = "
-          "head starts + epilogue ends, exactly as the 1936-addendum law states")
+    print("[probe] PASS - all nine closures hold offline and every byte of both rows "
+          "is accounted: true boundaries = head starts + epilogue ends, exactly as "
+          "the 1936-addendum law states")
     return 0
 
 
