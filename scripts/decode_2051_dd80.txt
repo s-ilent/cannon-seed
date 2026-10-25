@@ -1,0 +1,87 @@
+== func_8005DD80 0x8005dd80..0x8005de24
+  [ 0] 8005dd80 480e4800  mfc2  $t6, r9
+  [ 1] 8005dd84 480f5000  mfc2  $t7, r10
+  [ 2] 8005dd88 48185800  mfc2  $t8, r11
+  [ 3] 8005dd8c 48880000  mtc2  $t0, r0
+  [ 4] 8005dd90 488a0800  mtc2  $t2, r1
+  [ 5] 8005dd94 00000000  nop
+  [ 6] 8005dd98 4a486012  COP2  MVMVA
+  [ 7] 8005dd9c 316bffff  andi  $t3, $t3, 0x0xffff
+  [ 8] 8005dda0 000e7400  sll   $t6, $t6, 16
+  [ 9] 8005dda4 01cb7025  or    $t6, $t6, $t3
+  [10] 8005dda8 ac8e0000  sw    $t6, +0x0($a0)
+  [11] 8005ddac 31adffff  andi  $t5, $t5, 0x0xffff
+  [12] 8005ddb0 0018c400  sll   $t8, $t8, 16
+  [13] 8005ddb4 030dc025  or    $t8, $t8, $t5
+  [14] 8005ddb8 ac98000c  sw    $t8, +0xc($a0)
+  [15] 8005ddbc 48084800  mfc2  $t0, r9
+  [16] 8005ddc0 48095000  mfc2  $t1, r10
+  [17] 8005ddc4 3108ffff  andi  $t0, $t0, 0x0xffff
+  [18] 8005ddc8 000c6400  sll   $t4, $t4, 16
+  [19] 8005ddcc 010c4025  or    $t0, $t0, $t4
+  [20] 8005ddd0 ac880004  sw    $t0, +0x4($a0)
+  [21] 8005ddd4 31efffff  andi  $t7, $t7, 0x0xffff
+  [22] 8005ddd8 00094c00  sll   $t1, $t1, 16
+  [23] 8005dddc 012f4825  or    $t1, $t1, $t7
+  [24] 8005dde0 ac890008  sw    $t1, +0x8($a0)
+  [25] 8005dde4 e88b0010  swc2  r11, +0x10($a0)
+  [26] 8005dde8 00801021  addu  $v0, $a0, $zero  (add)
+  [27] 8005ddec 03e00008  jr    $ra
+  [28] 8005ddf0 00000000  nop
+  [29] 8005ddf4 8c880000  lw    $t0, +0x0($a0)
+  [30] 8005ddf8 8c890004  lw    $t1, +0x4($a0)
+  [31] 8005ddfc 8c8a0008  lw    $t2, +0x8($a0)
+  [32] 8005de00 8c8b000c  lw    $t3, +0xc($a0)
+  [33] 8005de04 8c8c0010  lw    $t4, +0x10($a0)
+  [34] 8005de08 48c80000  ctc2  $t0, c0
+  [35] 8005de0c 48c90800  ctc2  $t1, c1
+  [36] 8005de10 48ca1000  ctc2  $t2, c2
+  [37] 8005de14 48cb1800  ctc2  $t3, c3
+  [38] 8005de18 48cc2000  ctc2  $t4, c4
+  [39] 8005de1c 94a80000  lhu   $t0, +0x0($a1)
+  [40] 8005de20 8ca90004  lw    $t1, +0x4($a1)
+== func_8005DE24 0x8005de24..0x8005ded4
+  [ 0] 8005de24 8caa000c  lw    $t2, +0xc($a1)
+  [ 1] 8005de28 3c01ffff  lui   $at, 0x0xffff
+  [ 2] 8005de2c 01214824  and   $t1, $t1, $at
+  [ 3] 8005de30 01094025  or    $t0, $t0, $t1
+  [ 4] 8005de34 48880000  mtc2  $t0, r0
+  [ 5] 8005de38 488a0800  mtc2  $t2, r1
+  [ 6] 8005de3c 00000000  nop
+  [ 7] 8005de40 4a486012  COP2  MVMVA
+  [ 8] 8005de44 94a80002  lhu   $t0, +0x2($a1)
+  [ 9] 8005de48 8ca90008  lw    $t1, +0x8($a1)
+  [10] 8005de4c 84aa000e  lh    $t2, +0xe($a1)
+  [11] 8005de50 00094c00  sll   $t1, $t1, 16
+  [12] 8005de54 01094025  or    $t0, $t0, $t1
+  [13] 8005de58 480b4800  mfc2  $t3, r9
+  [14] 8005de5c 480c5000  mfc2  $t4, r10
+  [15] 8005de60 480d5800  mfc2  $t5, r11
+  [16] 8005de64 48880000  mtc2  $t0, r0
+  [17] 8005de68 488a0800  mtc2  $t2, r1
+  [18] 8005de6c 00000000  nop
+  [19] 8005de70 4a486012  COP2  MVMVA
+  [20] 8005de74 94a80004  lhu   $t0, +0x4($a1)
+  [21] 8005de78 8ca90008  lw    $t1, +0x8($a1)
+  [22] 8005de7c 8caa0010  lw    $t2, +0x10($a1)
+  [23] 8005de80 3c01ffff  lui   $at, 0x0xffff
+  [24] 8005de84 01214824  and   $t1, $t1, $at
+  [25] 8005de88 01094025  or    $t0, $t0, $t1
+  [26] 8005de8c 480e4800  mfc2  $t6, r9
+  [27] 8005de90 480f5000  mfc2  $t7, r10
+  [28] 8005de94 48185800  mfc2  $t8, r11
+  [29] 8005de98 48880000  mtc2  $t0, r0
+  [30] 8005de9c 488a0800  mtc2  $t2, r1
+  [31] 8005dea0 00000000  nop
+  [32] 8005dea4 4a486012  COP2  MVMVA
+  [33] 8005dea8 316bffff  andi  $t3, $t3, 0x0xffff
+  [34] 8005deac 000e7400  sll   $t6, $t6, 16
+  [35] 8005deb0 01cb7025  or    $t6, $t6, $t3
+  [36] 8005deb4 31adffff  andi  $t5, $t5, 0x0xffff
+  [37] 8005deb8 0018c400  sll   $t8, $t8, 16
+  [38] 8005debc 030dc025  or    $t8, $t8, $t5
+  [39] 8005dec0 48084800  mfc2  $t0, r9
+  [40] 8005dec4 48095000  mfc2  $t1, r10
+  [41] 8005dec8 480a5800  mfc2  $t2, r11
+  [42] 8005decc 3108ffff  andi  $t0, $t0, 0x0xffff
+  [43] 8005ded0 000c6400  sll   $t4, $t4, 16
