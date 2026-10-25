@@ -145,12 +145,12 @@ segments:
       - [0x27B10, asm, func_80047310]   # 0x54 sdk
       - [0x27B64, asm, func_80047364]   # 0x10c sdk
       - [0x27C70, asm, func_80047470]   # 0x10c sdk
-      - [0x27D7C, asm, func_8004757C]   # 0x50 sdk
+      - [0x27D7C, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x27DCC, c, ApplyMatrixSV]   # 0x5c sdk
       - [0x27E28, asm, func_80047628]   # 0x24 sdk
       - [0x27E4C, asm, func_8004764C]   # 0x124 sdk
-      - [0x27F70, asm, func_80047770]   # 0x30 sdk
-      - [0x27FA0, asm, func_800477A0]   # 0x30 sdk
+      - [0x27F70, c, SetRotMatrix]   # 0x30 sdk
+      - [0x27FA0, c, SetLightMatrix]   # 0x30 sdk
       - [0x27FD0, c, SetColorMatrix]   # 0x30 sdk
       - [0x28000, c, SetTransMatrix]   # 0x20 sdk
       - [0x28020, data, data_80047820]   # 0x4
