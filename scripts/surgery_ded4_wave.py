@@ -188,6 +188,30 @@ def surgery(target, lines):
     fail(f"{target}: no surgery scheduled")
 
 
+def validate_result(target, new):
+    """Post-surgery guards: the yaml must still parse and every entry
+    address must stay strictly increasing - a mis-surgery can never hide
+    from the extract step this way."""
+    try:
+        import yaml  # splat's own dependency; present wherever extract runs
+    except ImportError:
+        fail(f"{target}: pyyaml unavailable - cannot validate the result")
+    try:
+        yaml.safe_load("".join(new))
+    except yaml.YAMLError as e:
+        fail(f"{target}: post-surgery yaml does not parse: {e}")
+    prev = None
+    for line in new:
+        m = LINE_RE.match(line.rstrip("\n"))
+        if not m:
+            continue
+        addr = int(m.group("addr"), 16)
+        if prev is not None and addr <= prev:
+            fail(f"{target}: post-surgery address order broke at "
+                 f"0x{addr:X} (prev 0x{prev:X})")
+        prev = addr
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true",
@@ -202,6 +226,7 @@ def main():
         path = CONFIG / f"splat.{target}.yaml"
         lines = path.read_text().splitlines(keepends=True)
         new, n = surgery(target, lines)
+        validate_result(target, new)
         total += n
         diff = list(difflib.unified_diff(
             lines, new, fromfile=f"a/config/splat.{target}.yaml",
