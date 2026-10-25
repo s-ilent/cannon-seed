@@ -29,6 +29,13 @@ ELFs - fixtures are synthetic bytes and temp-dir yamls):
    the dissolves (file without span: cross-exe collisions AND
    cross-target landings), over the symbols-file universe the pick
    lists iterate.
+6. The row-family span normalization (cron-202610251749): a c-row
+   label whose yaml carries the TWO-ROWS-ONE-NAME family (the matched
+   c row plus an asm sibling <label>.2 carrying the symtab entry - the
+   banked slps-sces pair refusal) is consistent; a foreign VA in no
+   row of the family is still the stale signature; the one-walk-two-
+   caches contract (c_rows filters type c, fam_rows keeps every
+   labeled row).
 
 Run:  python3 -m unittest tests/test_pair_report.py -v
 """
@@ -50,14 +57,17 @@ class Fixture(unittest.TestCase):
         self._tmp = tempfile.TemporaryDirectory()
         os.makedirs(os.path.join(self._tmp.name, "src"))
         os.makedirs(os.path.join(self._tmp.name, "config"))
-        self._save = (pr.REPO, dict(pr._C_ROWS), pr.baseline_bytes)
+        self._save = (pr.REPO, dict(pr._C_ROWS), dict(pr._FAM_ROWS),
+                      pr.baseline_bytes)
         pr.REPO = self._tmp.name
         pr._C_ROWS = {}
+        pr._FAM_ROWS = {}
         self.addCleanup(self._restore)
 
     def _restore(self):
-        pr.REPO, rows, bb = self._save
+        pr.REPO, rows, fam, bb = self._save
         pr._C_ROWS = rows
+        pr._FAM_ROWS = fam
         pr.baseline_bytes = bb
         self._tmp.cleanup()
 
@@ -153,6 +163,40 @@ segments:
         self.assertTrue(pr.is_matched("t", "q", 0x80020120))
         self.assertFalse(pr.is_matched("t", "q", 0x80020148))  # the asm row
         self.assertFalse(pr.is_matched("t", "q", 0x80021000))  # data segment
+
+    def test_one_walk_fills_the_family_map(self):
+        """The cron-202610251749 two-caches contract: fam_rows keeps
+        EVERY labeled row of the code segments (data, c, asm) with the
+        same span law c_rows uses; non-code segments stay out."""
+        self.put_yaml("t", """\
+segments:
+  - type: header
+    start: 0x0
+  - type: code
+    vram: 0x80020000
+    start: 0x800
+    subsegments:
+      - [0x800, data, data_80020000]
+      - [0x900, c, func_80020100]
+      - [0x948, asm, func_80020148.2]
+      - [0x960, c, func_80020160]
+  - type: data
+    start: 0x1000
+    subsegments:
+      - [0x1000, data, data_80021000]
+""")
+        fam = pr.fam_rows("t")
+        self.assertEqual(fam, [
+            (0x80020000, 0x80020100, "data_80020000", "data"),
+            (0x80020100, 0x80020148, "func_80020100", "c"),
+            (0x80020148, 0x80020160, "func_80020148.2", "asm"),
+            (0x80020160, 0x80020800, "func_80020160", "c"),
+        ])
+        # one walk, two caches: c_rows is already populated by fam_rows
+        self.assertEqual(pr.c_rows("t"), [
+            (0x80020100, 0x80020148, "func_80020100"),
+            (0x80020160, 0x80020800, "func_80020160"),
+        ])
 
     def test_piece_rows_get_own_spans(self):
         self.put_yaml("t", """\
@@ -324,6 +368,40 @@ class TestStaleSymbols(Fixture):
         self.assertTrue(pr.stale_symbols("t", funcs))
         funcs = {"func_80020000": (0x8002003C, 0x4)}    # last word inside
         self.assertEqual(pr.stale_symbols("t", funcs), [])
+
+    def test_two_rows_one_name_sibling_carries_the_entry(self):
+        """The banked slps-sces pair refusal (cron-202610251749): the
+        c row func_80049780 (0x14 sdk, compiling SsSetMono) plus the
+        asm sibling func_80049780.2 (0x1224) carrying glabel
+        func_80049780 - the single symtab entry at the SIBLING's VA is
+        consistent; verify is byte-exact so the image is right."""
+        pr._C_ROWS = {"t": [(0x800440D0, 0x800440E4, "func_80049780")]}
+        pr._FAM_ROWS = {"t": [
+            (0x800440D0, 0x800440E4, "func_80049780", "c"),
+            (0x80049780, 0x8004A9A4, "func_80049780.2", "asm")]}
+        funcs = {"func_80049780": (0x80049780, 0x24)}
+        self.assertEqual(pr.stale_symbols("t", funcs), [])
+
+    def test_family_does_not_mask_the_stale_class(self):
+        """A foreign VA in NO row of the family is still the signature
+        (the 0658 audit's 57 must survive the normalization)."""
+        pr._C_ROWS = {"t": [(0x800440D0, 0x800440E4, "func_80049780")]}
+        pr._FAM_ROWS = {"t": [
+            (0x800440D0, 0x800440E4, "func_80049780", "c"),
+            (0x80049780, 0x8004A9A4, "func_80049780.2", "asm")]}
+        funcs = {"func_80049780": (0x800678BC, 0x24)}
+        bad = pr.stale_symbols("t", funcs)
+        self.assertEqual([(b[0], b[1]) for b in bad],
+                         [("func_80049780", 0x800678BC)])
+        self.assertEqual(bad[0][2], [(0x800440D0, 0x800440E4)])
+
+    def test_without_family_spans_the_gate_is_unchanged(self):
+        """The injected-tests contract: _C_ROWS without _FAM_ROWS gives
+        exactly the pre-normalization predicate."""
+        pr._C_ROWS = {"t": [(0x80020000, 0x80020040, "GsSetLightMode")]}
+        self.assertEqual(pr._FAM_ROWS, {})
+        funcs = {"GsSetLightMode": (0x80020040, 0x2C)}   # the next row's VA
+        self.assertTrue(pr.stale_symbols("t", funcs))
 
 
 class TestInputGates(Fixture):

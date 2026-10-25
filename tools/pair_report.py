@@ -23,8 +23,10 @@ runs input_gates() first and refuses unwitnessed inputs -
   into every byte comparison - a different hash is a different build.
 * stale_symbols: build/<t>.elf is ephemeral (a rollback restores it from
   a stale snapshot); any yaml c-row label the ELF links OUTSIDE its own
-  row span proves the ELF predates the committed yaml (the 0658 audit's
-  57 stale-ELF-VA relocations) and every VA it yields is poison.
+  row span - or outside any sibling row of its name family (the
+  two-rows-one-name class, cron-202610251749) - proves the ELF predates
+  the committed yaml (the 0658 audit's 57 stale-ELF-VA relocations) and
+  every VA it yields is poison.
 
 Usage: pair_report.py [--clusters N] [pair ...]
 Default pairs: the four same-program region pairs.
@@ -137,6 +139,7 @@ def baseline_witness(target):
 
 
 _C_ROWS = {}
+_FAM_ROWS = {}
 
 
 def c_rows(target):
@@ -159,11 +162,16 @@ def c_rows(target):
     exes, so a name can belong to another executable's build entirely
     (src/func_80037CAC.c is mainmenu_eu's; g3_eu's yaml covers
     0x80037CAC with an asm rowdef - the cron-20261022-0313b artifact).
+
+    The single yaml walk also fills fam_rows(target) with EVERY labeled
+    row (any type) - one parse, two caches - so the stale-symbol gate
+    can normalize over the row family without a second read.
     """
     if target in _C_ROWS:
         return _C_ROWS[target]
     import yaml
     rows = []
+    fam = []
     with open(os.path.join(REPO, f"config/splat.{target}.yaml")) as f:
         cfg = yaml.safe_load(f)
     for si, seg in enumerate(cfg["segments"]):
@@ -179,7 +187,7 @@ def c_rows(target):
                 seg_end = nxt_seg["start"]
                 break
         for i, e in enumerate(subs):
-            if len(e) < 3 or e[1] != "c":
+            if len(e) < 3:
                 continue
             lo = base + (e[0] - HDR)
             if i + 1 < len(subs):
@@ -188,9 +196,30 @@ def c_rows(target):
                 hi = base + (seg_end - HDR)
             else:                       # last row of the last segment
                 hi = lo + 0x40000
-            rows.append((lo, hi, e[2]))
+            fam.append((lo, hi, e[2], e[1]))
+            if e[1] == "c":
+                rows.append((lo, hi, e[2]))
     _C_ROWS[target] = rows
+    _FAM_ROWS[target] = fam
     return rows
+
+
+def fam_rows(target):
+    """[(lo, hi, label, type)] - every labeled row of the target's code
+    segments (c, asm, data): the row-family map the stale-symbol gate
+    normalizes over (the base name up to the first '.', the same
+    spelling law the rowdef adjudication and the glabel_collision_pass
+    use: func_X / func_X.2 / func_X.rowdef are ONE family).
+
+    Same walk as c_rows - one parse fills both caches. A synthetic
+    _C_ROWS injection (the offline unit tests) leaves _FAM_ROWS empty
+    unless injected too, so gate behavior without a yaml is exactly the
+    pre-normalization predicate.
+    """
+    if target not in _FAM_ROWS:
+        c_rows(target)                  # the walk fills both caches
+        _FAM_ROWS.setdefault(target, [])  # injected _C_ROWS: no walk ran
+    return _FAM_ROWS[target]
 
 
 def is_matched(target, name, va=None):
@@ -238,17 +267,39 @@ def stale_symbols(target, funcs=None):
     then poison for any VA-derived tool output. Labels absent from the
     ELF, asm/rowdef names, and multi-span labels hit in at least one
     span are all consistent - no violation.
+
+    ROW-FAMILY NORMALIZATION (cron-202610251749, the banked slps-sces
+    pair observation retires): a c-row label whose yaml carries the
+    TWO-ROWS-ONE-NAME family - the matched c row plus an asm sibling
+    spelled <label>.2 (or <label>.rowdef) - is consistent when the
+    single symtab entry lands on the SIBLING row's VA: the sibling owns
+    the name in the ELF while the c row's TU exports its own retail
+    symbol (sces_00269: the c row func_80049780 at 0x800440D0 compiles
+    src/func_80049780.c -> SsSetMono, and the scanned 0x1224 sibling
+    func_80049780.2 at 0x80049780 carries glabel func_80049780 - the
+    symtab entry the gate reads). A label is therefore refused only
+    when its VA misses EVERY row of its family - the stale class (the
+    0658 audit's 57, a foreign VA in no row at all) is unchanged.
     """
     if funcs is None:
         funcs = elf_funcs(os.path.join(REPO, f"build/{target}.elf"))
     spans = {}
     for lo, hi, lbl in c_rows(target):
         spans.setdefault(lbl, []).append((lo, hi))
+    fam = {}
+    for lo, hi, lbl, _typ in fam_rows(target):
+        fam.setdefault(lbl.split(".")[0], []).append((lo, hi))
     bad = []
     for lbl, (va, _size) in sorted(funcs.items()):
         sp = spans.get(lbl)
-        if sp and not any(lo <= va < hi for lo, hi in sp):
-            bad.append((lbl, va, sp))
+        if not sp:
+            continue                    # not a c-row label: unchecked
+        if any(lo <= va < hi for lo, hi in sp):
+            continue                    # inside the label's own row span
+        base = lbl.split(".")[0]
+        if any(lo <= va < hi for lo, hi in fam.get(base, [])):
+            continue                    # inside a same-family sibling row
+        bad.append((lbl, va, sp))
     return bad
 
 
