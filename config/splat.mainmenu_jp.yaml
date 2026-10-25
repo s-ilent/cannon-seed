@@ -364,7 +364,7 @@ segments:
       - [0x3EDF4, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x3EE44, c, ApplyMatrixSV]   # 0x5c sdk
       - [0x3EEA0, c, TransMatrix]      # 0x24 sdk
-      - [0x3EEC4, data, data_8005E6C4]  # 0x124
+      - [0x3EEC4, c, ScaleMatrix]      # 0x124 sdk
       - [0x3EFE8, c, SetRotMatrix]   # 0x30 sdk
       - [0x3F018, c, SetLightMatrix]   # 0x30 sdk
       - [0x3F048, c, SetColorMatrix]   # 0x30 sdk
