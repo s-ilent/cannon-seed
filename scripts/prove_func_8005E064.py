@@ -51,14 +51,28 @@ DELTA = 0x8001F800    # VA = raw_off + DELTA (banked classifier law)
 
 
 def row_words():
-    """The 12 words at VA0..VA1 from the committed row, + a shape guard."""
+    """The 12 words at VA0..VA1 from the committed row, + a shape guard.
+
+    Pre-landing the words live in the graveyard head-row blob
+    (data_80066CF4.data.s). Post-landing the extent is its own committed
+    C row (src/func_8005E064.c, the landed one-cut) and the shrunk blob
+    no longer carries it - fall back to the compiled unit's .text, the
+    same 12 words (offline-proven word-identical pre-landing; make
+    verify 8/8 byte-exact post-landing). The gas 16-byte .text pad is
+    tolerated as in offline_proof.
+    """
     wm = {}
     for fn in P.parse(P.ROW1):
         for va, w in fn["words"]:
             wm[va] = w
     if any(va not in wm for va in range(VA0, VA1, 4)):
-        raise AssertionError("E064 range not fully covered by the committed row")
-    words = [wm[va] for va in range(VA0, VA1, 4)]
+        words = compile_unit()
+        extra = words[N:]
+        assert len(words) >= N and all(w == 0 for w in extra), \
+            f"compiled unit shape drifted (len {len(words)}, pad nonzero)"
+        words = words[:N]
+    else:
+        words = [wm[va] for va in range(VA0, VA1, 4)]
     # transcription guard: the banked instruction sketch must hold
     sketch = [
         (0x23, "lw $8,0($4)"), (0x23, "lw $9,4($4)"),

@@ -62,15 +62,30 @@ HEAD_SKETCH = [
 ]
 
 
-def row_words(lo, hi):
-    """The words at VA lo..hi from the committed row + shape guards."""
+def row_words(name, lo, hi):
+    """The words at VA lo..hi from the committed row + shape guards.
+
+    Pre-landing the words live in the graveyard tail-row blob
+    (data_8005E1B8.data.s). Post-landing each extent is its own
+    committed C row (src/func_8005E3DC.c / func_8005E4E8.c, the landed
+    ROW2 three-way split) and the shrunk blob no longer carries them -
+    fall back to the compiled unit's .text, the same 67 words
+    (offline-proven word-identical pre-landing; make verify 8/8
+    byte-exact post-landing). The gas 16-byte .text pad is tolerated
+    as in offline_proof.
+    """
     wm = {}
     for fn in P.parse(P.ROW2):
         for va, w in fn["words"]:
             wm[va] = w
     if any(va not in wm for va in range(lo, hi, 4)):
-        raise AssertionError(f"range 0x{lo:08x}..0x{hi:08x} not fully covered")
-    words = [wm[va] for va in range(lo, hi, 4)]
+        words = compile_unit(name)
+        extra = words[0x10C // 4:]
+        assert len(words) >= 0x10C // 4 and all(w == 0 for w in extra), \
+            f"{name}: compiled shape drifted (len {len(words)}, pad nonzero)"
+        words = words[:0x10C // 4]
+    else:
+        words = [wm[va] for va in range(lo, hi, 4)]
     assert len(words) == 0x10C // 4, f"expected 67 words, got {len(words)}"
     # head: 5 lw from ($4) + 5 ctc2 into c0..c4
     for i in range(5):
@@ -127,7 +142,7 @@ def compile_unit(name):
 def offline_proof():
     failures = 0
     for name, lo, hi in UNITS:
-        want = row_words(lo, hi)
+        want = row_words(name, lo, hi)
         got = compile_unit(name)
         print(f"{name}: compiled .text {len(got)} words; committed row body "
               f"{len(want)} words")
@@ -180,7 +195,7 @@ def site_search():
     patterns = {}
     for name, lo, hi in UNITS:
         patterns[name] = b"".join(w.to_bytes(4, "little")
-                                  for w in row_words(lo, hi))
+                                  for w in row_words(name, lo, hi))
     bad = []
     for t in TARGETS:
         ok, why = baseline_witness(t)
