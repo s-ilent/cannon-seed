@@ -1,0 +1,61 @@
+=== v22_u_prejoin [default]: 432 insns (retail unit = 433) ===
+--- prologue (first 16) ---
+    0 addiu	sp,sp,-40
+    1 lw	v1,68(sp)
+    2 sw	s4,32(sp)
+    3 move	s4,a0
+    4 sw	s2,24(sp)
+    5 move	s2,a1
+    6 sw	s0,16(sp)
+    7 lw	s0,56(sp)
+    8 move	a1,a2
+    9 sw	s3,28(sp)
+   10 move	s3,a3
+   11 sw	ra,36(sp)
+   12 sw	s1,20(sp)
+   13 addiu	v1,v1,512
+   14 bgez	v1,44 <func_8002ADA0+0x44>
+   15 move	v0,v1
+--- tail (last 42) ---
+  390 lui	s3,0x0
+  391 addiu	s3,s3,0
+  392 move	a1,s3
+  393 jal	0 <func_8002ADA0>
+  394 li	a2,0x200
+  395 move	s1,v0
+  396 li	v0,0x200
+  397 bne	s1,v0,670 <func_8002ADA0+0x670>
+  398 nop
+  399 jal	0 <func_8002ADA0>
+  400 move	a0,s0
+  401 move	a0,s4
+  402 jal	0 <func_8002ADA0>
+  403 li	a1,0x1
+  404 move	s0,v0
+  405 beq	s0,s2,678 <func_8002ADA0+0x678>
+  406 move	a0,s0
+  407 move	a1,s3
+  408 jal	0 <func_8002ADA0>
+  409 li	a2,0x200
+  410 beq	v0,s1,680 <func_8002ADA0+0x680>
+  411 nop
+  412 jal	0 <func_8002ADA0>
+  413 move	a0,s0
+  414 j	69c <func_8002ADA0+0x69c>
+  415 li	v0,-3
+  416 jal	0 <func_8002ADA0>
+  417 move	a0,s0
+  418 j	69c <func_8002ADA0+0x69c>
+  419 li	v0,0x1
+  420 jal	0 <func_8002ADA0>
+  421 move	a0,s0
+  422 li	v0,0x2
+  423 lw	ra,36(sp)
+  424 lw	s4,32(sp)
+  425 lw	s3,28(sp)
+  426 lw	s2,24(sp)
+  427 lw	s1,20(sp)
+  428 lw	s0,16(sp)
+  429 addiu	sp,sp,40
+  430 jr	ra
+  431 nop

@@ -1,0 +1,61 @@
+=== v22_u_prejoin [-fno-schedule-insns2]: 436 insns (retail unit = 433) ===
+--- prologue (first 16) ---
+    0 addiu	sp,sp,-40
+    1 sw	ra,36(sp)
+    2 sw	s4,32(sp)
+    3 sw	s3,28(sp)
+    4 sw	s2,24(sp)
+    5 sw	s1,20(sp)
+    6 sw	s0,16(sp)
+    7 move	s4,a0
+    8 move	s2,a1
+    9 move	a1,a2
+   10 move	s3,a3
+   11 lw	v1,68(sp)
+   12 nop
+   13 addiu	v1,v1,512
+   14 lw	s0,56(sp)
+   15 bgez	v1,48 <func_8002ADA0+0x48>
+--- tail (last 42) ---
+  394 addiu	s3,s3,0
+  395 move	a1,s3
+  396 jal	0 <func_8002ADA0>
+  397 li	a2,0x200
+  398 move	s1,v0
+  399 li	v0,0x200
+  400 bne	s1,v0,67c <func_8002ADA0+0x67c>
+  401 nop
+  402 jal	0 <func_8002ADA0>
+  403 move	a0,s0
+  404 move	a0,s4
+  405 jal	0 <func_8002ADA0>
+  406 li	a1,0x1
+  407 move	s0,v0
+  408 beq	s0,s2,684 <func_8002ADA0+0x684>
+  409 move	a0,s0
+  410 move	a1,s3
+  411 jal	0 <func_8002ADA0>
+  412 li	a2,0x200
+  413 beq	v0,s1,68c <func_8002ADA0+0x68c>
+  414 nop
+  415 jal	0 <func_8002ADA0>
+  416 move	a0,s0
+  417 j	6a8 <func_8002ADA0+0x6a8>
+  418 li	v0,-3
+  419 jal	0 <func_8002ADA0>
+  420 move	a0,s0
+  421 j	6a8 <func_8002ADA0+0x6a8>
+  422 li	v0,0x1
+  423 jal	0 <func_8002ADA0>
+  424 move	a0,s0
+  425 li	v0,0x2
+  426 lw	ra,36(sp)
+  427 lw	s4,32(sp)
+  428 lw	s3,28(sp)
+  429 lw	s2,24(sp)
+  430 lw	s1,20(sp)
+  431 lw	s0,16(sp)
+  432 addiu	sp,sp,40
+  433 jr	ra
+  434 nop
+  435 nop

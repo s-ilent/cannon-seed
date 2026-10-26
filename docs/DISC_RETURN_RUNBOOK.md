@@ -90,12 +90,18 @@ then commit (type: tools:) + push.
     rm -f src/func_8002ADA0.c asm/nonmatchings/func_8002B464.s
 
 cc.sh honors CC1FLAGS_EXTRA (cc.sh:64-66); judge_unit mini-links the one
-unit at its retail VA and diffs vs the baseline slice (~2 s). If the judge
-closes EXACT under a regime: land = yaml split + asm surgery + src file +
-the unit's data symbols added DURABLY to config/symbols.curated.txt
-(absolute:true class; mirror how earlier c-row landings staged symbols;
-the session-local generated-table append is NOT committed) -
-commit-only-on-green, ratchet-gated. Commit message: type: decode.
+unit at its retail VA and diffs vs the baseline slice (~2 s). The two
+regimes' head/tail readouts are PRE-BANKED (scripts/bm_unit_decode/
+v22_head_tail_default.txt 432 insns interleaved / v22_head_tail_nosched2.txt
+436 insns retail save-block shape; twin: twin_head_tail_*.txt 433/436) -
+diff the judge's actual build against them without re-deriving. If the
+judge closes EXACT under a regime: land = yaml split + asm surgery +
+src file ONLY - the units' data symbols are ALREADY durable in
+config/symbols.curated.txt (the slps eight banked cron-202610260919, the
+twin nine banked cron-20261026-2234; the session-local generated-table
+append is NOT committed - a scan regen or the build refreshes the
+generated tables from curated) - commit-only-on-green, ratchet-gated.
+Commit message: type: decode.
 
 Expected deltas (STATE.md LAW 5 + the allocator model, pre-registered):
 (a) thunk convention - FIXED by Phase C (retail k=6 swapped vs our

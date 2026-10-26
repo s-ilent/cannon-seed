@@ -124,6 +124,32 @@ D_801151F8 = 0x801151f8; // save frame 0x80 sub-block 2 (src6/src5 arm); gp:abso
 D_80115278 = 0x80115278; // save frame 0x80 sub-block 3 (src7/src5 arm); gp:absolute
 
 // target: sces_00269
+// The memory-card save unit's gap-region buffers (sces_00269 twin unit
+// func_8002ABC8, VA 0x8002ABC8..0x8002B28C, decoded cron-202610260919,
+// staged cron-20261026-2004; the unit's src references them and no yaml
+// data row hosts them yet - the two-pass link defines them in place).
+// All nine carry gp:absolute - D_800693F4 sits inside the gp range but
+// retail loads it lui/addiu (the D_8006974C precedent), and the
+// D_801146xx/D_801147xx frame bytes/records sit above the range where the
+// curated entry keeps the stager's unknown-name rewrite path from ever
+// seeing them. Roles from the instruction-level decode: 0x800693F4 = the
+// 0x200 work buffer the unit fills 0xFF and writes/reads through the card
+// verify path; 0x80114678..7B = the 'SC'+code+sector-count header block
+// (78 block base with the strcpy'd name at +4, 79 'C', 7A code byte, 7B
+// sector count shifted into the create-open flags); 0x801146D8 = the 0x30
+// name-record copy; 0x801146F8 = the FIRST 0x80 sub-block (reached as
+// hdr+0x80 in the C, both (short)code==0x13 arms copy src5 there);
+// 0x80114778/0x801147F8 = the second/third 0x80 sub-blocks (the 0x13 arm
+// copies src6/src7, the else arm re-copies src5).
+D_800693F4 = 0x800693f4; // save unit 0x200 work buffer (0xFF fill, card write/read copy); gp:absolute
+D_80114678 = 0x80114678; // save unit 'SC' header block base (0x200 save frame); gp:absolute
+D_80114679 = 0x80114679; // save unit header 'C' byte; gp:absolute
+D_8011467A = 0x8011467a; // save unit header code byte; gp:absolute
+D_8011467B = 0x8011467b; // save unit header sector-count byte; gp:absolute
+D_801146D8 = 0x801146d8; // save unit 0x30 name-record copy; gp:absolute
+D_801146F8 = 0x801146f8; // save frame 0x80 sub-block 1 (hdr+0x80; src5 both arms); gp:absolute
+D_80114778 = 0x80114778; // save frame 0x80 sub-block 2 (src6/src5 arm); gp:absolute
+D_801147F8 = 0x801147f8; // save frame 0x80 sub-block 3 (src7/src5 arm); gp:absolute
 _96_init = 0x8002F418; // SDK veneer: vector 0xa0, index 0x71
 DisableEvent = 0x800440C0; // SDK veneer: vector 0xb0, index 0x0d
 GsDefDispBuff = 0x800370E4; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; pinned member row
