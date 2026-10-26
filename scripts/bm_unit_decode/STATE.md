@@ -739,3 +739,58 @@ Tree untouched (head_tail_matrix.py + v23/v24/v25 land under
 scripts/bm_unit_decode/ only; screens compile into build/judge/ only).
 Suite + ratchets not perturbed (offline research only, nothing
 build-adjacent).
+
+## THE GLOBAL-ALLOC CASCADE MECHANIZES THE REGISTER DELTAS (cron-20261027-0134 window)
+
+Window shape: 79th rollback (HEAD -> 7623cd2, worklog stripped again -> RESTORE
+NOTE re-appended, Task ID cron-20261026-1735-restore, exit 0; helper scripts
+also eaten and re-created). Oracle still DOWN (witness 0/8, disc-return #35
+pending) -> offline window: the queued "middle's pseudo pressure" lever
+research, executed as a -da/reload mechanization of the str->a1 hoist and the
+-1 register choice. New tool: str_chain.py (compiles with -da, finds the
+strcpy call + str's pseudo in the expansion dump, tracks it across all passes
+and prints global-alloc's own commentary).
+
+STR'S PSEUDO (judge delta (ii), mechanized): str = pseudo 73, a textbook
+move-chain - insn 8 (set 73 <- a2) [entry bind, a2 dead after] and insn 133
+(set a1 <- 73) [the strcpy arg setup, 73 dead after]. The greg dump states
+"73 preferences: 5 6" (set_preference in global.c records BOTH move
+endpoints) and "73 conflicts: ... 2 4 7 29" - NEITHER endpoint hard reg is
+conflicted, so global-alloc picks from {5,6}: ours = 5 (a1), making the
+entry bind the surviving copy (move a1,a2 in the prologue) and the call
+setup a deleted no-op. Retail's a2 outcome needs hard reg 5 excluded at
+73's allocation turn (45th of 48) - an earlier allocno holding/conflicting
+a1 in retail's RTL - i.e. the allocation ORDER/CASCADE, not the C.
+
+THE -1 REGISTER (judge delta (b), mechanized to the pass-0 REUSE rule):
+-1 = pseudo 155, (set (reg:SI 155) (const_int -1)) with REG_EQUIV const,
+tail-only live range. Post-reload it lands in s2 (18) although s1 (17) is
+free and unconflicted ("155 conflicts: 71 82 155 162 163 2 4 5 6 29").
+global.c find_reg runs TWO passes: pass 0 considers ONLY already-allocated
+regs (never allocates a fresh one) minus regs_someone_prefers; pass 1
+(only if pass 0 fails) scans in REG_ALLOC_ORDER/ascending. s2 was
+allocated EARLIER (code's pseudo - disjoint live range, so shareable);
+s1's holder (hdr's pseudo, 72/74/71 region) is allocated AFTER 155. So
+pass 0 reuses s2 -> -1 shares the dead code's register. Retail's -1 in s1
+implies the same rule under a different allocation ORDER (s2 not yet
+allocated at -1's turn -> pass 0 empty -> pass 1 ascending -> s1).
+
+CONCLUSION (strengthens the 1620 falsification): the str hoist, the -1/0x200
+pair and (by the same rule) the s3 address cache are global-alloc cascade
+outcomes - the pseudo SET + allocation ORDER from the byte-exact middle is
+the input, not any local C form. The three C nudge classes are exhausted;
+the judge (and only the judge) can weigh whether retail's cascade can be
+reached from the same C, or whether the v22 shape IS the same-C optimum.
+find_reg's two-pass semantics (reuse-first, never-fresh-in-pass-0,
+someone-prefers exclusion) + set_preference's move-endpoint recording are
+BANKED as the allocator's decision procedure for all future tail judging.
+
+NEXT WINDOW (unchanged priorities): (1) disc-return #35 -> witness 8/8 ->
+verify 8/8 GREEN -> land the rule-1 k>=4 generalization -> judge v22 under
+both prologue regimes; (2) the sces twin func_8002ABC8 after the slps unit
+closes; (3) if still offline: the allocation-ORDER input (allocno_order's
+sort keys vs the middle's ref counts) is the next mechanization target.
+
+Tree untouched (str_chain.py lands under scripts/bm_unit_decode/ only;
+dumps compile into build/judge/ only). Offline research only, nothing
+build-adjacent.
