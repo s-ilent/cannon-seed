@@ -23,11 +23,21 @@ Sources (gcc 2.6.3, read from the local vanilla tree):
   * global.c dump_conflicts prints ";; N regs to allocate:" listing
     allocno_reg[allocno_order[i]] IN ALLOCATION ORDER - the dump states
     the order the allocator will attempt.
-  * global.c find_reg: pass 0 candidates = regs_used_so_far (local-alloc
-    regs + every earlier GLOBAL allocation - find_reg:1179 adds each
-    allocated reg) minus conflicts minus someone-prefers; scan ascending.
-    Pass 1 drops the reuse-only restriction; then copy-pref / pref
-    overrides (dump prints hard_reg_preferences only).
+  * global.c find_reg: pass 0 candidates = regs_used_so_far minus conflicts
+    minus someone-prefers; scan ascending.  Pass 1 drops the reuse-only
+    restriction; then copy-pref / pref overrides (dump prints
+    hard_reg_preferences only; copy-prefs are a subset of it, so the
+    printed-prefs override subsumes the copy-pref override's pick).
+  * global.c 331-359: regs_used_so_far is INITIALIZED to
+    call_used_regs | regs_ever_live | local-alloc renumberings - "we
+    consider registers that do not have to be saved over calls as if they
+    were already used since there is no cost in using them".  find_reg:1179
+    adds every global allocation on top.  The 1849 window modeled the pool
+    as {local-alloc regs} only, which under-produced the pass-0 pool and
+    mis-mechanized turns 3/20/23; this tool now reads regs_ever_live off
+    the .lreg RTL (hard regs named in the dump) and seeds the pool with
+    call_used | ever_live | local (non-leaf branch; the function makes
+    calls).
 
 Usage: python3 scripts/bm_unit_decode/alloc_order.py <variant.c> [cc1-extra]
 """
@@ -45,6 +55,9 @@ FIRST_PSEUDO_DEFAULT = 67  # vanilla config/mips/mips.h FIRST_PSEUDO_REGISTER
 GR_SCAN = [r for r in range(2, 32) if r not in (26, 27, 28, 29)]
 FIXED = {0, 1, 26, 27, 28, 29}
 CALL_USED = set(range(2, 16)) | {24, 25, 31}
+# mips.h CALL_USED_REGISTERS, GR part (global.c 344-352 seeds the pass-0
+# pool with this full set for a non-leaf function): 0-15, 24-29, 31.
+CALL_USED_FULL = set(range(0, 16)) | {24, 25, 26, 27, 28, 29, 31}
 
 
 def compile_variant(cand, extra):
@@ -72,6 +85,28 @@ def parse_lreg_flowinfo(path):
         c = re.search(r"crosses (\d+) call", m.group(4))
         calls[int(m.group(1))] = int(c.group(1)) if c else 0
     return refs, ll, calls
+
+
+def parse_lreg_everlive(path, fp):
+    """regs_ever_live read-out: hard regs (< fp) named in the .lreg RTL.
+
+    The .lreg dump carries the exact RTL global_conflicts/set_preference
+    scan (pre-prologue: mips emits the save block in machine_dependent
+    reorg, after global-alloc), so every (reg:MODE <n>) with n < fp in it
+    is a reg flow's life analysis has marked ever-live.
+    """
+    text = open(path, errors="replace").read()
+    start = text.find("\n(")
+    if start < 0:
+        print("LREG-RTL-PARSE-FAIL: no RTL section")
+        sys.exit(1)
+    rtl = text[start:]
+    regs = set()
+    for m in re.finditer(r"\(reg[a-z/]*:[A-Z]+\s+(\d+)(?:\s+[a-z0-9]+)?\)", rtl):
+        n = int(m.group(1))
+        if n < fp:
+            regs.add(n)
+    return regs
 
 
 def parse_greg(path):
@@ -141,6 +176,7 @@ def main():
 
     refs, ll, calls = parse_lreg_flowinfo(prefix + ".lreg")
     order, sizes, merges, conflicts, prefs, disp, used = parse_greg(prefix + ".greg")
+    ever_live = parse_lreg_everlive(prefix + ".lreg", FIRST_PSEUDO_DEFAULT)
 
     fp = FIRST_PSEUDO_DEFAULT
     bad = [p for p in order if p < fp]
@@ -200,18 +236,31 @@ def main():
               f" {max((ll.get(p, 0) for p in groups[h]), default=0):5d}"
               f" {sizes.get(h, 1):3d}  {reg:>3}  {note}")
 
-    # pass-0 reuse-pool trace at the cascade-critical turns
-    local_regs = {p: r for p, r in disp.items() if p not in pos and r >= 0}
-    pool0 = sorted({r for r in local_regs.values() if r < fp})
-    print(f"\nlocal-alloc-assigned pseudos: {len(local_regs)}; "
-          f"entry reuse pool = {pool0}")
+    # pass-0 pool seed = call_used | regs_ever_live | local-alloc renumberings
+    # (global.c 331-359, non-leaf else-branch; find_reg:1179 adds each global
+    # allocation as the walk proceeds).  Merge members are excluded from the
+    # local set: their renumber arrives with their group's allocation.
+    merge_members = {p for ml in merges.values() for p in ml}
+    local_regs = {p: r for p, r in disp.items()
+                  if p not in pos and p not in merge_members and 0 <= r < fp}
+    pool0 = CALL_USED_FULL | ever_live | set(local_regs.values())
+    pool0 = {r for r in pool0 if r < fp}
+    print(f"\nregs_ever_live (.lreg RTL) = {sorted(ever_live)}")
+    print(f"local-alloc-assigned pseudos: {len(local_regs)}; "
+          f"pass-0 pool seed = call_used | ever_live | local = "
+          f"{sorted(pool0)}")
 
     # full two-pass find_reg replay.  someone-prefers (prune_preferences) is
     # rebuilt from the PRINTED (already-pruned) preferences of conflicting
-    # lower-priority allocnos - a conservative subset: the dump never carries
-    # copy-prefs, so an allocno whose displacement came only through a
-    # copy-pref may still miss.  caller-saves and the local-alloc kick-out
-    # stay unmodeled (neither fires in this unit).
+    # lower-priority allocnos over the dump's symmetric conflict pairs - the
+    # C loop tests CONFLICTP(allocno, j) on the asymmetric matrix row, which
+    # the dump's OR of both directions only over-approximates; the replay
+    # below reproduces all 48 dispositions with this rebuild, so the
+    # over-approximation never bites in this unit.  Copy-prefs are a subset
+    # of the printed hard_reg_preferences (set_preference sets copy, prefs
+    # and full together), so the prefs override subsumes the copy-pref
+    # override's pick.  Caller-saves and the local-alloc kick-out stay
+    # unmodeled (neither fires in this unit).
     heads_pos = {h: i for i, h in enumerate(order)}
     full_prefs = {h: sorted(n for n in prefs.get(h, []) if n < fp) for h in order}
     someone = {}
@@ -276,9 +325,13 @@ def main():
         if got is not None and got >= 0:
             walk.update(range(got, got + sizes.get(h, 1)))
     print(f"\nreplay: {hits}/{hits + misses} dispositions reproduced "
-          f"(someone-prefers rebuilt from printed prefs only; copy-prefs are "
-          f"not in the dump - the residual misses are copy-pref-driven; "
-          f"caller-saves and the kick-out do not fire in this unit)")
+          f"(pass-0 pool = call_used | ever_live | local | global-so-far "
+          f"per global.c 331-359; someone-prefers rebuilt from printed prefs "
+          f"over the dump's symmetric conflict pairs; copy-prefs need no "
+          f"separate derivation - copy is a subset of the printed "
+          f"hard_reg_preferences, so the prefs override subsumes the "
+          f"copy-pref override's pick; caller-saves and the kick-out do not "
+          f"fire in this unit)")
     print("\nverdict: allocation order = deterministic function of the middle's "
           "(n_refs, live_length, size, calls_crossed) via allocno_compare" if match else
           "verdict: computed order diverges - aggregation rule needs work")

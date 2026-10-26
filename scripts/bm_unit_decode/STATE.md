@@ -887,3 +887,72 @@ still offline: derive copy_prefs from the .lreg RTL (mark_reg/expand_
 preferences semantics) to close the last 3 dispositions, or start the sces
 twin prep. Tree untouched beyond scripts/bm_unit_decode (dumps compile into
 build/judge/ only). Offline research only, nothing build-adjacent.
+
+## THE PASS-0 POOL SEED CLOSES THE REPLAY: 48/48, AND THE COPY-PREF ITEM CLOSES AS UNNECESSARY (cron-20261026-2004 window)
+
+Window shape: 81st rollback (worklog stripped -> RESTORE NOTE re-appended
+verbatim, Task ID cron-20261026-2004-restore, exit 0; append_restore_note.py
+and fetch_gcc263_src.py re-created; gcc-2.6.3-src re-mirrored, tarball
+sha256 re-verified). HEAD advanced 7623cd2 -> 886a4de5 (a3088375 confirmed
+ancestor; the 1735/1849 alloc-lane landings present). Oracle still DOWN
+(disk/ empty, woven-era baselines, witness 0/8, links expired, disc-return
+#35 pending) -> offline window: the queued copy-prefs item.
+
+THE DISCOVERY (the queued item's premise was wrong, in a productive way):
+global.c 331-359 initializes regs_used_so_far to
+    call_used_regs | regs_ever_live | local-alloc renumberings
+("we consider registers that do not have to be saved over calls as if they
+were already used since there is no cost in using them") - the 1849 model
+seeded the pass-0 pool with {local-alloc regs} ONLY, under-producing it by
+the entire call-clobbered class. regs_ever_live is read off the .lreg RTL
+(pre-prologue: mips emits the save block in machine_dependent reorg, AFTER
+global-alloc, so the dump RTL is the exact ever-live view global-alloc saw)
+= {2,3,4,5,6,7,31} - a SUBSET of call_used here. True seed =
+call_used | local = {0..15,24..29,31} | {2,3,5} = 23 regs, not 3.
+
+THE THREE RESIDUAL MISSES RESOLVE AS PLAIN PASS-0 PICKS under the true
+seed: turn 3 (121) -> 6, turn 20 (81) -> 4, turn 23 (108) -> 8 - each the
+ascending-first call-used reg outside used1 (their hard conflicts
+{2,3,4,5,29}+dyn block 2-5, the conflict-free call-used scan starts at
+6/4/8 respectively). NO someone change, NO copy-prefs. The 1849
+"copy-pref-driven" reading is FALSIFIED.
+
+THE COPY-PREFS ITEM CLOSES WITHOUT A TOOL: set_preference sets copy, prefs
+AND full together in both branches (plain-REG src sets the copy bit; every
+one-side-hard/one-side-global SET sets prefs+full); prune_preferences
+prunes all three with ONE mask -> copy is a SUBSET of the printed
+hard_reg_preferences; find_reg's copy-pref override reaches only the
+ascending-first class-related free reg, which the prefs override reaches
+too -> the printed-prefs override subsumes the copy-pref override's pick.
+(full == prefs for SImode spans, so someone-prefers is exactly rebuildable
+from the printed prefs modulo the matrix asymmetry - global.c 110:
+"conflicts is not symmetric; a conflict between allocno's i and j is
+recorded either in element i,j or in element j,i" - the dump prints the OR
+of both directions, the rebuild over-approximates the C loop's
+CONFLICTP(allocno, j) row test, and the 48/48 replay shows the
+over-approximation never bites in this unit.)
+
+MECHANISM UPGRADES + SURVIVORS: t2 (106->7) upgrades pass1+pref ->
+pass0+pref (6 was a pass-0 candidate all along; the prefs override still
+moves the pick to 7 = printed prefs). The 155->18 pass-1 reading SURVIVES:
+at t42 the pool's call-saved members are {16,17} (global allocations t7 /
+t41 - ever_live has NO call-saved regs pre-prologue) and both are
+dyn-blocked -> pass-0 fails -> pass-1 ascending -> 18. 73->5 pass-0
+SURVIVES (5 = local pool entry + own pref). mips.h tables banked:
+FIXED_REGISTERS GR = {0,1,26,27,28,29} ($at IS fixed),
+CALL_USED_REGISTERS GR = {0..15,24..29,31}.
+
+LANDED: alloc_order.py pool-seed upgrade (parse_lreg_everlive off the .lreg
+RTL, CALL_USED_FULL, merge-member exclusion from the local set) +
+re-banked alloc_order_v22_out.txt at 48/48. Tree untouched beyond
+scripts/bm_unit_decode (dumps compile into build/judge/ only); ratchets
+644/0 = baseline, suite 85/85 OK.
+
+NEXT WINDOW: (1) disc-return #35 -> witness 8/8 -> verify 8/8 GREEN ->
+land the rule-1 k>=4 generalization -> judge v22 under both prologue
+regimes (ratchet-gated, commit-only-on-green; the replay predicts the
+deltas at 48/48 - the judge's (b)/(c) deltas remain ORDER outcomes, now
+with the full pool model); (2) the sces twin func_8002ABC8 after the slps
+unit closes; (3) if still offline: start the sces twin prep - the
+alloc-side offline queue is now EMPTY (order AND dispositions both 48/48;
+no remaining alloc-side item).

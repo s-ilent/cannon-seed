@@ -50,18 +50,17 @@ turn pseudo(+merge)       pri  refs   LL  sz  reg  note
   47     74                   571     2    35   1   19  
   48     71                   507     5   197   1   20  
 
-local-alloc-assigned pseudos: 19; entry reuse pool = [2, 3, 5]
-  turn  1 pseudo 83: cc=0 pool=3 predicted=3(pass0) actual=3 OK
-  turn  2 pseudo 106: cc=0 pool=3 predicted=7(pass1+pref) actual=7 OK
-  turn  3 pseudo 121: cc=0 pool=4 predicted=7(pass0) actual=6 MISS
-  turn 20 pseudo 81: cc=0 pool=6 predicted=7(pass0) actual=4 MISS
-  turn 23 pseudo 108: cc=0 pool=7 predicted=16(pass0) actual=8 MISS
-  turn 42 pseudo 155: cc=6 pool=9 predicted=18(pass1) actual=18 OK <== const -1 (REG_EQUIV)
-  turn 45 pseudo 73: cc=0 pool=11 predicted=5(pass0) actual=5 OK <== str (move-chain pseudo)
-  turn 46 pseudo 72: cc=1 pool=11 predicted=18(pass0) actual=18 OK
-  turn 47 pseudo 74: cc=1 pool=11 predicted=19(pass0) actual=19 OK
-  turn 48 pseudo 71: cc=7 pool=11 predicted=20(pass1) actual=20 OK
+regs_ever_live (.lreg RTL) = [2, 3, 4, 5, 6, 7, 31]
+local-alloc-assigned pseudos: 19; pass-0 pool seed = call_used | ever_live | local = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 24, 25, 26, 27, 28, 29, 31]
+  turn  1 pseudo 83: cc=0 pool=23 predicted=3(pass0) actual=3 OK
+  turn  2 pseudo 106: cc=0 pool=23 predicted=7(pass0+pref) actual=7 OK
+  turn  3 pseudo 121: cc=0 pool=23 predicted=6(pass0) actual=6 OK
+  turn 42 pseudo 155: cc=6 pool=25 predicted=18(pass1) actual=18 OK <== const -1 (REG_EQUIV)
+  turn 45 pseudo 73: cc=0 pool=27 predicted=5(pass0) actual=5 OK <== str (move-chain pseudo)
+  turn 46 pseudo 72: cc=1 pool=27 predicted=18(pass0) actual=18 OK
+  turn 47 pseudo 74: cc=1 pool=27 predicted=19(pass0) actual=19 OK
+  turn 48 pseudo 71: cc=7 pool=27 predicted=20(pass1) actual=20 OK
 
-replay: 45/48 dispositions reproduced (someone-prefers rebuilt from printed prefs only; copy-prefs are not in the dump - the residual misses are copy-pref-driven; caller-saves and the kick-out do not fire in this unit)
+replay: 48/48 dispositions reproduced (pass-0 pool = call_used | ever_live | local | global-so-far per global.c 331-359; someone-prefers rebuilt from printed prefs over the dump's symmetric conflict pairs; copy-prefs need no separate derivation - copy is a subset of the printed hard_reg_preferences, so the prefs override subsumes the copy-pref override's pick; caller-saves and the kick-out do not fire in this unit)
 
 verdict: allocation order = deterministic function of the middle's (n_refs, live_length, size, calls_crossed) via allocno_compare
