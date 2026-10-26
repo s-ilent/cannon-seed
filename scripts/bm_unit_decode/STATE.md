@@ -683,3 +683,59 @@ rule1_corpus_scan.py, epilogue_audit.py, tail_screen.py; screens compile
 into build/judge/ only). Suite 85/85 OK; ratchets not run (nothing
 build-adjacent moved). Restore note re-appended (third attempt; the 1235
 capture files were rollback-eaten, a fresh capture was used).
+
+## LAW 2 CLOSES ON SCHEDULE-INSNS2 + THE TAIL-NUDGE FALSIFICATION MATRIX (cron-20261027 window)
+
+Window shape: oracle still DOWN (witness 0/8, the woven-era baselines match
+the PRE-FLIP oracle; disc-return #35 still pending) -> offline window.
+Executed the 2304 NEXT-WINDOW items (2) and (3): the one-use/renaming/
+redeclaration nudge screens for the v22 tail deltas, plus the LAW 2
+prologue hunt. New tool: head_tail_matrix.py (variant + cc1 flags ->
+total insns + prologue 16 + tail 42 read-out).
+
+LAW 2 (PROLOGUE SAVE-BLOCK) CLOSES ON -fno-schedule-insns2: our default
+compile interleaves saves and binds (lw v1,size hoisted BEFORE any save;
+ra saved 12th, s1 last) - that interleaving is schedule-insns2's work.
+Under -fno-schedule-insns2 the prologue becomes retail's exact save-block:
+addiu sp / sw ra FIRST / sw s4,s3,s2,s1,s0 descending / THEN the binds
+(s4<-a0, s2<-a1, a1<-a2, s3<-a3, lw v1,size, lw s0). Sizes: default 432,
+no-skip 440, no-sched2 436, no-skip+no-sched2 442 (retail 433) - the two
+flag laws are INDEPENDENT (skip-blocks governs the div2 head, sched2
+governs the prologue save-block; the tail deltas survive all four regimes).
+
+RESIDUAL PROLOGUE DELTAS (judge material): (i) bind order - retail binds
+s3<-a3 and lw v1,size BEFORE s2<-a1; ours binds s2<-a1 first; (ii) ours
+hoists move a1,a2 (str) into the prologue while retail binds str->a1 AT
+THE STRCPY CALL SITE (delay slot addu a1,a2,zero) - a2 safely carries str
+to strcpy in retail because NO call precedes strcpy; (iii) ours pads the
+size-load interlock with a nop under no-sched2 while retail fills it with
+the s2/s0 binds - the bind-order lever is upstream of scheduling.
+
+TAIL-NUDGE FALSIFICATION MATRIX (all screened vs retail through
+tail_screen/head_tail_matrix; sizes AND the discriminating registers are
+INVARIANT): v23_decl_fd_first (renaming class: fd declared first),
+v24_read_cmp_flip (one-use class: 0x200 != read(...) source-order flip),
+v25_buf_redecl (redeclaration class: &D_8006974C[0] at read's site) -
+each 432 default / 436 no-sched2 exactly like v22, -1 stays in s2, write's
+ret stays saved into s1 with the const in v0, s3 keeps the address cache.
+CONCLUSION: the (b)/(c) register deltas are NOT C-reachable by the three
+nudge classes - they are allocator-cascade outcomes (real-prologue
+pressure is the testbed); the judge remains the only arbiter.
+
+REGIME FALSIFICATION (tail vs the div2 law's retail regime): v22 at
+-fno-cse-skip-blocks does NOT realign the tail (440 insns, 60/60 tail
+mismatch) - the skip-blocks law and the tail deltas are orthogonal; retail
+cannot be both skip-blocks-off (div2 survives, +4) and 433 total unless
+the judge finds compensating deltas in (b)-(e) + the epilogue recipe.
+NEXT WINDOW (unchanged priorities, refined): (1) disc-return #35 ->
+witness 8/8 -> verify 8/8 GREEN -> land the rule-1 k>=4 generalization ->
+judge v22 under BOTH the default and the no-sched2 prologue regimes
+(ratchet-gated, commit-only-on-green); (2) if the judge keeps (b)/(c),
+the next lever class is the middle's pseudo pressure (the byte-exact
+middle constrains every experiment - do NOT perturb it); (3) the sces
+twin func_8002ABC8 after the slps unit closes.
+
+Tree untouched (head_tail_matrix.py + v23/v24/v25 land under
+scripts/bm_unit_decode/ only; screens compile into build/judge/ only).
+Suite + ratchets not perturbed (offline research only, nothing
+build-adjacent).
