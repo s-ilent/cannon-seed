@@ -99,6 +99,30 @@ RotMatrixC = 0x800350E8; // LIBGTE COR_00 member .text+0x0 (extent 0x180); tools
 boot_flag_0 = 0x80066368; // boot small-data: word flag, writes measured 0/1 via the leading-nop stub family
 boot_flag_1 = 0x80066394; // boot small-data: halfword flag, ==1 gate in func_80027100 re-enters the walk at func_80026288
 
+// The memory-card save unit's gap-region buffers (slps_00270 unit
+// func_8002ADA0, VA 0x8002ADA0..0x8002B464, decoded cron-202610260919;
+// the unit's src references them and no yaml data row hosts them yet -
+// the two-pass link defines them in place). All eight carry gp:absolute:
+// D_8006974C sits inside slps gp range but retail loads it lui/addiu
+// (the _spu_inTransfer precedent), and the D_80115xxx header-block
+// bytes/records sit above the range where the curated entry keeps the
+// stager's unknown-name rewrite path from ever seeing them. Roles from
+// the instruction-level decode: 0x8006974C = the 0x200 work buffer the
+// unit fills 0xFF and writes/reads through the card verify path;
+// 0x801150F8..FB = the 'SC'+code+sector-count header block (F8 block
+// base, F9 'C', FA code byte, FB sector count); 0x80115158 = the 0x30
+// name-record copy; 0x801151F8/0x80115278 = the second/third 0x80
+// sub-blocks of the save frame (the (short)code==0x13 arm copies
+// src6/src7 there, the else arm re-copies src5).
+D_8006974C = 0x8006974c; // save unit 0x200 work buffer (0xFF fill, card write/read copy); gp:absolute
+D_801150F8 = 0x801150f8; // save unit 'SC' header block base (0x200 save frame); gp:absolute
+D_801150F9 = 0x801150f9; // save unit header 'C' byte; gp:absolute
+D_801150FA = 0x801150fa; // save unit header code byte; gp:absolute
+D_801150FB = 0x801150fb; // save unit header sector-count byte; gp:absolute
+D_80115158 = 0x80115158; // save unit 0x30 name-record copy; gp:absolute
+D_801151F8 = 0x801151f8; // save frame 0x80 sub-block 2 (src6/src5 arm); gp:absolute
+D_80115278 = 0x80115278; // save frame 0x80 sub-block 3 (src7/src5 arm); gp:absolute
+
 // target: sces_00269
 _96_init = 0x8002F418; // SDK veneer: vector 0xa0, index 0x71
 DisableEvent = 0x800440C0; // SDK veneer: vector 0xb0, index 0x0d
