@@ -1,0 +1,67 @@
+== func_8002ABC8.c [default flags]
+allocnos=50  order-match: EXACT (keys mechanized)
+turn pseudo(+merge)       pri  refs   LL  sz  reg  note
+   1    168                 28000     7     5   1    2  
+   2    103                 25714    12    14   1    7  
+   3    118                 25714    12    14   1    6  
+   4    124                 25714    12    14   1    6  
+   5    141                 25714    12    14   1    6  
+   6    148                 25714    12    14   1    6  
+   7     82                 23333     7     6   1    3  
+   8     81                 22857    16    28   1   16  
+   9    112                 19285     9    14   1    6  
+  10    129                 19285     9    14   1    6  
+  11    135                 19285     9    14   1    6  
+  12    102                 16000     8    15   1    6  
+  13    111                 16000     8    15   1    7  
+  14    117                 16000     8    15   1    7  
+  15    123                 16000     8    15   1    7  
+  16    128                 16000     8    15   1    7  
+  17    134                 16000     8    15   1    7  
+  18    140                 16000     8    15   1    7  
+  19    147                 16000     8    15   1    7  
+  20     99                  9090     5    11   1    3  
+  21     79                  8000     4    10   1    3  
+  22     80                  6666     4    12   1    4  
+  23     85                  4285     3     7   1    2  
+  24    105                  4000     2     5   1    8  
+  25    106                  4000     2     5   1    8  
+  26    114                  4000     2     5   1    8  
+  27    115                  4000     2     5   1    8  
+  28    120                  4000     2     5   1    8  
+  29    121                  4000     2     5   1    8  
+  30    126                  4000     2     5   1    8  
+  31    127                  4000     2     5   1    8  
+  32    131                  4000     2     5   1    8  
+  33    132                  4000     2     5   1    8  
+  34    137                  4000     2     5   1    8  
+  35    138                  4000     2     5   1    8  
+  36    143                  4000     2     5   1    8  
+  37    144                  4000     2     5   1    8  
+  38     75                  2258    14   186   1   16  
+  39     92                  2142     3    14   1    7  
+  40    150                  2000     2    10   1    8  
+  41    151                  2000     2    10   1    8  
+  42    160                  2000     3    15   1   17  
+  43     78                  1875     3    16   1    4  
+  44    152                  1612     5    62   1   18  
+  45     83                  1388     5    72   1   17  
+  46    159                   937     3    32   1   19  
+  47     73                   588     2    34   1    5  str (move-chain pseudo)
+  48     72                   576     3    52   1   18  
+  49     74                   540     2    37   1   19  
+  50     71                   502     5   199   1   20  
+
+regs_ever_live (.lreg RTL) = [2, 3, 4, 5, 6, 7, 31]
+local-alloc-assigned pseudos: 19; pass-0 pool seed = call_used | ever_live | local = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 24, 25, 26, 27, 28, 29, 31]
+  turn  1 pseudo 168: cc=0 pool=23 predicted=2(pass0) actual=2 OK
+  turn  2 pseudo 103: cc=0 pool=23 predicted=7(pass0+pref) actual=7 OK
+  turn  3 pseudo 118: cc=0 pool=23 predicted=6(pass0) actual=6 OK
+  turn 47 pseudo 73: cc=0 pool=27 predicted=5(pass0) actual=5 OK <== str (move-chain pseudo)
+  turn 48 pseudo 72: cc=1 pool=27 predicted=18(pass0) actual=18 OK
+  turn 49 pseudo 74: cc=1 pool=27 predicted=19(pass0) actual=19 OK
+  turn 50 pseudo 71: cc=7 pool=27 predicted=20(pass1) actual=20 OK
+
+replay: 50/50 dispositions reproduced (pass-0 pool = call_used | ever_live | local | global-so-far per global.c 331-359; someone-prefers rebuilt from printed prefs over the dump's symmetric conflict pairs; copy-prefs need no separate derivation - copy is a subset of the printed hard_reg_preferences, so the prefs override subsumes the copy-pref override's pick; caller-saves and the kick-out do not fire in this unit)
+
+verdict: allocation order = deterministic function of the middle's (n_refs, live_length, size, calls_crossed) via allocno_compare

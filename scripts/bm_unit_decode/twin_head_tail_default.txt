@@ -1,0 +1,61 @@
+=== func_8002ABC8 [default]: 433 insns (retail unit = 433) ===
+--- prologue (first 16) ---
+    0 addiu	sp,sp,-40
+    1 sw	s4,32(sp)
+    2 move	s4,a0
+    3 lw	a0,68(sp)
+    4 sw	s2,24(sp)
+    5 move	s2,a1
+    6 sw	s0,16(sp)
+    7 lw	s0,56(sp)
+    8 move	a1,a2
+    9 sw	s3,28(sp)
+   10 move	s3,a3
+   11 sw	ra,36(sp)
+   12 sw	s1,20(sp)
+   13 addiu	v1,a0,512
+   14 bgez	v1,44 <func_8002ABC8+0x44>
+   15 move	v0,v1
+--- tail (last 42) ---
+  391 lui	s3,0x0
+  392 addiu	s3,s3,0
+  393 move	a1,s3
+  394 jal	0 <func_8002ABC8>
+  395 li	a2,0x200
+  396 move	s1,v0
+  397 li	v0,0x200
+  398 bne	s1,v0,674 <func_8002ABC8+0x674>
+  399 nop
+  400 jal	0 <func_8002ABC8>
+  401 move	a0,s0
+  402 move	a0,s4
+  403 jal	0 <func_8002ABC8>
+  404 li	a1,0x1
+  405 move	s0,v0
+  406 beq	s0,s2,67c <func_8002ABC8+0x67c>
+  407 move	a0,s0
+  408 move	a1,s3
+  409 jal	0 <func_8002ABC8>
+  410 li	a2,0x200
+  411 beq	v0,s1,684 <func_8002ABC8+0x684>
+  412 nop
+  413 jal	0 <func_8002ABC8>
+  414 move	a0,s0
+  415 j	6a0 <func_8002ABC8+0x6a0>
+  416 li	v0,-3
+  417 jal	0 <func_8002ABC8>
+  418 move	a0,s0
+  419 j	6a0 <func_8002ABC8+0x6a0>
+  420 li	v0,0x1
+  421 jal	0 <func_8002ABC8>
+  422 move	a0,s0
+  423 li	v0,0x2
+  424 lw	ra,36(sp)
+  425 lw	s4,32(sp)
+  426 lw	s3,28(sp)
+  427 lw	s2,24(sp)
+  428 lw	s1,20(sp)
+  429 lw	s0,16(sp)
+  430 addiu	sp,sp,40
+  431 jr	ra
+  432 nop

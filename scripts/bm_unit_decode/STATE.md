@@ -956,3 +956,32 @@ with the full pool model); (2) the sces twin func_8002ABC8 after the slps
 unit closes; (3) if still offline: start the sces twin prep - the
 alloc-side offline queue is now EMPTY (order AND dispositions both 48/48;
 no remaining alloc-side item).
+
+## THE SCES TWIN PREP: THE POOL MODEL GENERALIZES 50/50 AND LAW 2 CONFIRMS ON THE TWIN (cron-20261026-2004 window)
+
+* alloc_order.py on func_8002ABC8.c: 50 allocnos, order EXACT, dispositions
+  50/50 ON THE FIRST RUN - zero re-tuning; the corrected pool model
+  (call_used | ever_live | local seed) generalizes across the boots.
+  Critical rows identical: str = pseudo 73 -> 5 pass-0 (SAME pseudo number
+  as slps); 72 -> 18, 74 -> 19, 71 -> 20. The twin's const -1 = pseudo 152
+  (slps: 155), SAME pri 1612 (5 refs, LL 62), SAME disposition 18 = s2.
+* head_tail_matrix on the twin: default 433 insns (= retail 433! slps
+  default = 432), no-sched2 436 - the same +3 over retail as slps
+  no-sched2. The default compile hits the retail TOTAL while interleaving
+  the prologue (schedule2 shape); no-sched2 hits the retail SHAPE while
+  +3 (the size-load interlock nop + bind order) - the same tension as
+  slps, judge material unchanged in kind.
+* LAW 2 GENERALIZES: the retail sces prologue (committed asm/sces_00269/
+  nonmatchings/func_80027340.s:5185-5199) is the no-sched2 save-block
+  EXACTLY: addiu sp,-0x28 / sw ra 0x24 / sw s4,s3,s2,s1,s0 0x20..0x10
+  descending / binds after (s4<-a0, s3<-a3, lw v1,0x44(sp), s2<-a1,
+  lw s0,0x38(sp)). The twin's bind-order delta (i) (s3<-a3 + size load
+  before s2<-a1) and interlock (iii) (our no-sched2 nop at index 12)
+  reproduce slps's residual delta sheet exactly.
+* LANDED: alloc_order_twin_out.txt + twin_head_tail_default.txt +
+  twin_head_tail_nosched2.txt (all under scripts/bm_unit_decode/). Suite
+  85/85; ratchets untouched (nothing build-adjacent).
+* NEXT WINDOW: on disc return, judge the twin under BOTH prologue regimes
+  like slps (the 50/50 replay pre-predicts its cascade; expected deltas:
+  bind order, the str->a1 hoist at the callsite, the size-load interlock
+  - the same three).

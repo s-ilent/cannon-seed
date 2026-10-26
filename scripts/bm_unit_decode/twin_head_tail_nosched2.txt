@@ -1,0 +1,61 @@
+=== func_8002ABC8 [-fno-schedule-insns2]: 436 insns (retail unit = 433) ===
+--- prologue (first 16) ---
+    0 addiu	sp,sp,-40
+    1 sw	ra,36(sp)
+    2 sw	s4,32(sp)
+    3 sw	s3,28(sp)
+    4 sw	s2,24(sp)
+    5 sw	s1,20(sp)
+    6 sw	s0,16(sp)
+    7 move	s4,a0
+    8 move	s2,a1
+    9 move	a1,a2
+   10 move	s3,a3
+   11 lw	a0,68(sp)
+   12 nop
+   13 addiu	v1,a0,512
+   14 lw	s0,56(sp)
+   15 bgez	v1,48 <func_8002ABC8+0x48>
+--- tail (last 42) ---
+  394 lui	s3,0x0
+  395 addiu	s3,s3,0
+  396 move	a1,s3
+  397 jal	0 <func_8002ABC8>
+  398 li	a2,0x200
+  399 move	s1,v0
+  400 li	v0,0x200
+  401 bne	s1,v0,680 <func_8002ABC8+0x680>
+  402 nop
+  403 jal	0 <func_8002ABC8>
+  404 move	a0,s0
+  405 move	a0,s4
+  406 jal	0 <func_8002ABC8>
+  407 li	a1,0x1
+  408 move	s0,v0
+  409 beq	s0,s2,688 <func_8002ABC8+0x688>
+  410 move	a0,s0
+  411 move	a1,s3
+  412 jal	0 <func_8002ABC8>
+  413 li	a2,0x200
+  414 beq	v0,s1,690 <func_8002ABC8+0x690>
+  415 nop
+  416 jal	0 <func_8002ABC8>
+  417 move	a0,s0
+  418 j	6ac <func_8002ABC8+0x6ac>
+  419 li	v0,-3
+  420 jal	0 <func_8002ABC8>
+  421 move	a0,s0
+  422 j	6ac <func_8002ABC8+0x6ac>
+  423 li	v0,0x1
+  424 jal	0 <func_8002ABC8>
+  425 move	a0,s0
+  426 li	v0,0x2
+  427 lw	ra,36(sp)
+  428 lw	s4,32(sp)
+  429 lw	s3,28(sp)
+  430 lw	s2,24(sp)
+  431 lw	s1,20(sp)
+  432 lw	s0,16(sp)
+  433 addiu	sp,sp,40
+  434 jr	ra
+  435 nop
