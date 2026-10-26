@@ -122,3 +122,75 @@ LAWS BANKED (each oracle-observed):
 
 Register assignment CONFIRMED IDENTICAL both sides (path=s4, code=s2,
 src5=s0, rec=s3, size=t via v1) - only emission order and shapes differ.
+
+## JUDGE LOOP PROGRESS (cron-202610261304): THE DIV2 LAW CLOSES
+
+Window shape: rehydrate OK; HEAD 7623cd2 was 400 behind -> reset to 9f2c59fa;
+worklog_digest exit 1 (the rollback restored an ancient worklog snapshot, 134
+windows missing) -> RESTORE NOTE appended verbatim, digest exit 0. Disc-return
+#31: links still valid (expiry ~09:53 UTC), both CHDs re-downloaded in
+foreground, sha256 gates pass, per-sector extracts, witness 8/8 STRICT,
+verify 8/8 GREEN before any wiring.
+
+THE KEYSTONE (NEXT WINDOW (b) of cron-202610261034) IS SOLVED. The retail
+div2's full second division survives iff its operand is a DIFFERENT pseudo
+from div1's, i.e. the source's test divides the RAW size PARAM, not t:
+
+    total = t / 0x2000 * 0x2000;
+    if (t != size / 0x2000 * 0x2000)      /* div2 on size (P), LHS t (T) */
+        total += 0x2000;
+
+Mechanism (gcc 2.6.3 source-level, expmed.c ~2865): the signed TRUNC div by
+power-of-2 branchy path (BRANCH_COST < 3) is
+[copy_to_mode_reg(op0); bgez copy; addiu copy,0x1fff; sra] with a REG_EQUAL
+(div op0 op1) note on the quotient sra. CSE eliminates the second division
+iff its note canonicalizes to div1's (same operand pseudo via copy
+equivalences). The mips delay-slot trick (CSE rewrites the branch+correction
+reads to the operand's canonical register, then the copy rides the bgez
+delay slot) explains div1's retail shape; div2 keeps the before-copy shape
+(copy precedes the branch, nop slot, correction reads the copy) when the
+rewrite does not fire - observed for the size-operand form.
+
+Screen results (scripts/bm_unit_decode/div2_screen.py, cc.sh pipeline):
+- e1 (V4 repro) / e2 rem-var / e3 two quotient vars / e4 total-copy /
+  e5 body-rediv: ALL merge into ONE div (4-byte-class shrink) - the 1034
+  falsifications reproduce.
+- V6 `if (size != size / 0x2000 * 0x2000)` (both sides size): the second
+  division SURVIVES (div2's note (div P c) != div1's (div T c)) but BOTH
+  divisions take the delay-slot shape - div2's copy rides its own bgez slot,
+  WRONG vs retail (div2 must be the before-copy form).
+- W1 `if (t != size / 0x2000 * 0x2000)` (LHS t, div2 on size): RETAIL SHAPE
+  EXACT for the div2 region - div1 = delay-slot form (T live across, copy in
+  slot, correction reads the operand), div2 = before-copy form (move v0,P;
+  bgez v0; nop; addiu v0,v0,0x1fff; sra; sll; beq v1,v0 with t as LHS).
+  The winning form is committed as variants/v6_w1_size_div.c.
+- W3 (u = size copy; same test through u): shape-identical to W1 -
+  the copy variable is unnecessary; W1 is the minimal form.
+
+JUDGE v1 FACTS (wired split + W1 src, judge_unit slps_00270):
+- The wired tree compiles and mini-links CLEAN once the unit's eight data
+  symbols are appended (session-local) to the GENERATED table with
+  absolute:true - wire_split.py now does that step (curated file stays the
+  durable source; gp_flags.py reads only config/symbols.slps_00270.txt).
+- SIZE built 1752 vs retail 1732 (+5 insns). First diffs open at the
+  prologue bind interleave (LAW 2: ours interleaves saves/binds, retail
+  keeps all six saves ahead of every bind) and cascade; 419/433 words.
+- Div1's correction folds differently: ours `addiu v0,P,0x21ff` (t+bias
+  re-derived from the size register), retail `addiu v0,T,0x1fff` (reads t's
+  register) - the (mem sp+0x44) quantity-invalidation timing decides; expect
+  it to follow the prologue-order fix.
+- The div2 region itself: shape-exact. The +20 bytes live in the fill-loop
+  shape (ours countdown `li 0x1ff/.../bgez`, retail up-counter sltiu form,
+  LAW 3) and the tail scheduling (LAW 5).
+- Tree REVERTED per commit-only-on-green (RULES 4.1): yaml + giant asm +
+  generated table restored, tail .s and src/ removed. The wiring is now ONE
+  command: `python3 scripts/bm_unit_decode/wire_split.py
+  scripts/bm_unit_decode/variants/v6_w1_size_div.c`.
+
+NEXT WINDOW: the judge loop continues on the W1 base - (a) prologue
+block-save form (LAW 2; the 1034 iteration matrix + the correction-folding
+observation above), (b) fill loop (LAW 3), (c) tail + epilogue (LAW 5) and
+the -1 register (LAW 4, likely self-resolves), then the sces twin
+func_8002ABC8 (expect only scheduler deltas). Landing = split + srcs +
+converged loop; the ratchet gate (652/60) keeps the split out of the tree
+until convergence.
