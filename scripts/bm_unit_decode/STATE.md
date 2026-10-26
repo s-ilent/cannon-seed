@@ -194,3 +194,61 @@ the -1 register (LAW 4, likely self-resolves), then the sces twin
 func_8002ABC8 (expect only scheduler deltas). Landing = split + srcs +
 converged loop; the ratchet gate (652/60) keeps the split out of the tree
 until convergence.
+
+## JUDGE LOOP PROGRESS (cron-202610261419): THE FILL-LOOP LAW CLOSES
+
+Window shape: rehydrate OK; HEAD was behind (rollback-era clone) -> reset to
+87a9e62e; worklog_digest exit 1 (135 windows missing: the ancient worklog
+snapshot plus the other agents' landed TASKS records) -> RESTORE NOTE
+appended verbatim per SOP, re-run exit 0. Disc-return #32: links still valid
+(expire ~09:53 UTC), both CHDs foreground-downloaded + sha256-gated,
+per-sector extracts, witness 8/8 STRICT, verify 8/8 GREEN before any wiring.
+
+THE ITEM (NEXT WINDOW (b) of cron-202610261304): the fill-loop law (LAW 3)
+hunted through three screened forms + one wired judge run.
+
+LAW 3 CLOSES ON THE COUNTER'S TYPE. The retail fill loop (up-counter,
+per-iteration base materialization, sltiu bound, the 0xff constant and the
+'S' 0x53 header constant riding the loop's delay slots) is reproduced when
+the fill counter is UNSIGNED:
+
+    unsigned int i;   /* not int */
+
+    for (i = 0; i < 0x200; i++)
+        D_8006974C[i] = 0xFF;
+
+v7 (W1 + unsigned i) head screen: `move v1,zero / lui at,%hi / addu at,at,v1 /
+sb a3,0(at) / addiu v1,v1,1 / sltiu v0,v1,0x200 / bnez v0 / li v0,0x53` - the
+signed `int i` compile instead strength-reduced the loop into the countdown
+pointer walk (li v1,0x1ff ... bgez with the pointer decrement in the bgez
+slot), the pre-v7 diff. The `i != 0x200` bound form (v8) emits bne-against-
+0x200 with a nop slot (wrong shape); moving the div block after the fill
+loop (v9) degrades the prologue further (size into t0, div1 before-copy
+form) - both falsified.
+
+JUDGE v2 (wired v7, judge_unit slps_00270): SIZE built 1752 vs retail 1732
+(+5 insns, unchanged - both loop forms are 8 insns; the +20 bytes live in
+the tail scheduling LAW 5 and LAW 2's cascade), first diffs still open at
+the prologue interleave. The fill-loop SHAPE is now retail's; the remaining
+diff regions are LAW 2 (prologue block saves + the size-load register) and
+LAW 5 (tail + epilogue).
+
+LAW 2 REFINED (v10 falsification): the t-based test form (`t != t/0x2000*
+0x2000`) MERGES the second division again even on the v7 base (one chain,
+the 4-byte class shrink) - the div2 operand must stay the RAW size param
+(W1), and the prologue's size-load register (ours a3/t0 scratch vs retail
+v1) is downstream of the pseudo graph that W1's double size read creates.
+Note the retail div2 copy reads v1 (t's register) while W1's reads the size
+scratch - the convergence path likely runs through statement-order and
+reload-timing levers (e.g. `int t; t = size; t += 0x200;` making the first
+size read a plain copy into t's home), not through the test's operand.
+
+Tree REVERTED per commit-only-on-green. Variants v7/v8/v9/v10 snapshotted in
+variants/. Wiring remains ONE command: wire_split.py <candidate.c>.
+
+NEXT WINDOW: (a) LAW 2 hunt - block-save prologue forms (the scheduler
+interleave follows the pseudo graph; candidates: the `t = size; t += 0x200;`
+split, a first-statement order that binds s-regs in retail's order);
+(b) LAW 5 tail + epilogue scheduling (the +20 bytes); (c) then the sces twin
+func_8002ABC8 (expect only scheduler deltas). Landing = split + srcs +
+converged loop (ratchet-gated until the loop closes).
