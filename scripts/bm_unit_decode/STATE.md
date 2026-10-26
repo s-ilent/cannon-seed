@@ -252,3 +252,63 @@ split, a first-statement order that binds s-regs in retail's order);
 (b) LAW 5 tail + epilogue scheduling (the +20 bytes); (c) then the sces twin
 func_8002ABC8 (expect only scheduler deltas). Landing = split + srcs +
 converged loop (ratchet-gated until the loop closes).
+
+## JUDGE LOOP PROGRESS (cron-202610261649): THE CORRECTION-FOLDING LAW CLOSES; THE DIV2 OPERAND PARADOX IS NOW EXACT
+
+Window shape: rehydrate OK; rollback had reset HEAD to 7623cd2 and eaten the
+worklog restore note too -> reset to ee26f762, RESTORE NOTE re-appended
+(136 windows), digest exit 0. Disc-return #33: disk/ empty again, links still
+valid (expire ~09:53 UTC, ~1h left), CHDs foreground-downloaded + gated,
+per-sector extracts, witness 8/8 STRICT, verify 8/8 GREEN before any wiring.
+
+THE ITEM (NEXT WINDOW of cron-202610261419): LAW 2 (prologue block saves +
+size-load register) via the `t = size; t += 0x200;` split candidate, plus a
+systematic falsification sweep of the div2 operand classes.
+
+THE CORRECTION-FOLDING LAW CLOSES (v11). The 1304 prediction ("our div1
+correction folds 0x21ff from the size register vs retail's 0x1fff from t's
+register; expect it to follow the prologue-order fix") is REFIRMED-REVISED:
+it follows the T-SPLIT, not the prologue. `int t; t = size; t += 0x200;`
+loads size directly into t's home v1 (`lw v1,0x44(sp)` first insn) and the
+div1 correction becomes `addiu v0,v1,0x1fff` FROM V1 - retail's exact fold.
+Cost: one extra insn (the size scratch copy `move a3,v1` that div2's
+size-operand read now needs) - judge v3 wired v11: SIZE 1756 vs 1732, DIFF
+427/433, prologue still interleaved (now with the lw hoisted to insn 1).
+
+THE FALSIFICATION MATRIX (all on the v7 unsigned-i base, head-screened):
+- v12 `u = t` copy BEFORE div1, test both sides u: MERGED (one chain).
+- v14 `u = t` copy AFTER div1, test both sides u: MERGED.
+- v15 t eliminated, both divs + LHS on the raw `(size + 0x200)` expression:
+  MERGED (the expression CSEs to one temp; div2 shares div1's quotient).
+- v16 `size += 0x200` in place, both divs on the updated param: MERGED.
+- v18 div1 + LHS on the `(size + 0x200)` expression, div2 on RAW size:
+  SURVIVES - but the shape is W1's (div2 copy reads the param scratch a3,
+  div1 correction folds 0x21ff from a3). No gain over W1.
+- (v10, last window: t-based test on the v7 base: MERGED.)
+
+THE OPERAND LAW (strengthened): the second division survives IFF its
+operand is the RAW SIZE PARAM (its own pseudo, distinct from the t
+expression's temp). EVERY t-valued class merges: plain variable (W1 base),
+copy variable before or after div1 (v12/v14), inline expression (v15),
+in-place `size += 0x200` (v16).
+
+THE PARADOX (now exact, for the next window): retail's div2 copy reads V1 -
+T's register - while every surviving screened form's copy reads the PARAM
+SCRATCH (a3/t0). No screened C form can read v1 there: the param-operand
+class always materializes the param in its own scratch, and every t-valued
+operand merges. The reconciliation must come from gcc 2.6.3's actual
+mechanics, not more screening. NEXT WINDOW LEAD (mechanized): read the
+LOCAL gcc-2.6.3-psx source and answer three questions exactly:
+  Q1 cse.c: does a REG=REG copy insn create a quantity equivalence that
+     canonicalizes a later div's REG_EQUAL note (v12/v14 say behaviorally
+     yes - find the code path)?
+  Q2 expmed.c expand_divmod: what decides copy-before-branch vs
+     copy-in-delay-slot for the branchy signed path, and what op0 RTL goes
+     into the REG_EQUAL note (the original operand or the temp)?
+  Q3 what RTL does `param += const` expand to (in-place on the param's
+     pseudo, or a fresh pseudo)?
+Then re-derive the retail form from the answers and screen it.
+
+LAW 5 (tail + epilogue, the +20 bytes) untouched this window - the head
+consumed it. Tree REVERTED per commit-only-on-green; variants v11-v18
+snapshotted; suite 85/85; ratchets 644/0.
