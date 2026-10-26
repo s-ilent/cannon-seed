@@ -101,6 +101,15 @@ config/symbols.curated.txt (the slps eight banked cron-202610260919, the
 twin nine banked cron-20261026-2234; the session-local generated-table
 append is NOT committed - a scan regen or the build refreshes the
 generated tables from curated) - commit-only-on-green, ratchet-gated.
+
+NOTE (offline windows, banked cron-20261026-2349): judge_unit is
+sha1-gated on baselines/<t>.bin (judge_unit.py:192-212) - the woven-era
+baselines are refused by design, so judge VERDICTS ARE LIVE-ONLY,
+return-window material; the compile-side head/tail readouts are the only
+offline-checkable half, and the wheelhouse-rebuilt toolchain reproduces
+all four pre-banked readouts byte-identical (v22 432/436, twin 433/436;
+re-confirmed cron-20261026-2349 after a venv+toolchain rebuild), so the
+screening pipeline is trusted on return without revalidation.
 Commit message: type: decode.
 
 Expected deltas (STATE.md LAW 5 + the allocator model, pre-registered):
