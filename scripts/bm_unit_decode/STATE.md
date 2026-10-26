@@ -794,3 +794,96 @@ sort keys vs the middle's ref counts) is the next mechanization target.
 Tree untouched (str_chain.py lands under scripts/bm_unit_decode/ only;
 dumps compile into build/judge/ only). Offline research only, nothing
 build-adjacent.
+
+## THE ALLOCATION-ORDER INPUT CLOSES: ORDER 48/48 EXACT, DISPOSITIONS 45/48 REPLAYED (cron-20261026-1849 window)
+
+Window shape: 80th rollback (HEAD -> 7623cd2 again; worklog stripped to the
+cron-20261014-2112 tail -> RESTORE NOTE re-appended, Task ID
+cron-20261026-1849-restore, exit 0; helper scripts re-eaten and re-created).
+Discs still missing (disk/ empty, woven-era baselines, witness 0/8, links
+expired, disc-return #35 still pending) -> offline window: the queued item,
+the allocation-ORDER input (allocno_order's sort keys vs the middle's ref
+counts), executed to a full mechanization on the vanilla 2.6.3 source +
+-fda dumps. New tool: alloc_order.py (compiles a variant with -da, parses
+.lreg's dump_flow_info + .greg, recomputes the order, replays find_reg).
+Reference output banked at alloc_order_v22_out.txt (v22_u_prejoin, default
+flags). The vanilla source re-mirrored at tools-local/gcc-2.6.3-src/gcc-2.6.3
+(tarball sha256 71f67384...c140 re-verified; the tree is UNTRACKED and
+rollback-vulnerable - re-fetch recipe stays in TASKS.md 2026-10-25 2058).
+
+THE ORDER IS A DUMP READ-OUT: global.c dump_conflicts prints ";; N regs to
+allocate:" listing allocno_reg[allocno_order[i]] IN ALLOCATION ORDER (merges
+as +K, multi-reg sizes as (M)) - the .greg dump states the attempt sequence
+directly, no re-derivation needed for future tail judging.
+
+THE KEYS ARE A SECOND DUMP READ-OUT: allocno_compare = pri =
+trunc((double)(floor_log2(n_refs) * n_refs) / live_length * 10000 * size),
+sort DESCENDING, ties by ascending allocno (allocno index = ascending head-
+pseudo order; qsort therefore deterministic). global-alloc consumes the
+reg_n_refs / reg_live_length values set by flow_analysis and mutated only by
+local-alloc's copy opts - and toplev.c:3111 calls dump_flow_info AGAIN for
+the .lreg dump AFTER local_alloc and BEFORE global_alloc with NOTHING in
+between, so .lreg's "Register N used X times across Y insns" lines ARE the
+exact pri inputs. Aggregation (global.c 383-423): pseudo -> allocno iff
+n_refs != 0, not local-alloc-assigned, live_length != -1; merges sum n_refs,
+take max live_length; size = PSEUDO_REGNO_SIZE (SImode = 1); LL 0 -> -1
+before sorting. MEASURED: computed order == dump order 48/48 EXACT for
+v22_u_prejoin (the .flow dump's counts are the pre-combine view - the .lreg
+one is the global-alloc view; use .lreg).
+
+FIND_REG REPLAY (45/48 dispositions): used1 = fixed_reg_set when
+calls_crossed == 0 / call_used_reg_set when > 0 (CRITICAL: the -1 pseudo
+crosses 6 calls, so every call-clobbered GR is excluded for it - this, not
+pass 0, is what walks the ascending scan to the first free call-saved reg)
++ static hard conflicts + DYNAMIC adds from earlier-allocated conflicting
+allocnos (find_reg:1186-1190, after the dump is printed); pass 0 = reuse
+only (regs_used_so_far = local-alloc regs + every earlier GLOBAL allocation,
+find_reg:1179 - the pool grows turn by turn), pass 1 = plain ascending scan
+(no REG_ALLOC_ORDER on mips); then the pruned-preferences override MOVES the
+pick to an own-preferred reg when the pass pick is outside the set.
+
+THE TWO CRITICAL ROWS REPRODUCE EXACTLY:
+  * pseudo 155 (const -1, cc=6): pass 1 ascending -> 16 (dyn-conflicted by
+    82), 17 (dyn-conflicted by 163, allocated the turn before) -> 18 = s2.
+    The 1735 pass-0-reuse reading of the -1-in-s2 is SUPERSEDED: 18 was NOT
+    in the reuse pool at 155's turn (entry pool = {2,3,5} only, no earlier
+    allocno held 18); the actual rule chain is calls_crossed=6 ->
+    used1=call_used_reg_set -> pass-1 ascending. The cascade conclusion is
+    unchanged - 82->s0 (turn 7) and 163->s1 (turn 41) are higher-priority
+    allocnos, i.e. order outcomes - and retail's -1 in s1 = the same rule
+    under a retail order where 17 is still free at -1's turn.
+  * pseudo 73 (str, cc=0): pass 0 = reuse pool - conflicts{2,4,7,29+dyn} ->
+    candidates {5,18,19,20} ascending -> 5 = a1 (5 is in the ENTRY pool via
+    a local-alloc-assigned pseudo and is also 73's own preference, so no
+    override needed). Retail's a2 = the same pass-0 rule under a retail
+    pool/conflict state where 5 is unavailable at str's turn (turn 45 of 48).
+
+THE 3 RESIDUAL MISSES (turns 3/20/23) ARE COPY-PREF-DRIVEN: someone-prefers
+(prune_preferences) IS modeled - rebuilt from the PRINTED (already-pruned)
+preferences of conflicting lower-priority allocnos, reverse-priority scan,
+size rule - and it alone fixes turn 37 (95: someone-prefers evicts the pass-0
+pick, pass 1 ascends to 7 = the dump's answer). The dump never carries
+hard_reg_copy_preferences, so someone-prefers rebuilt from printed prefs is a
+conservative subset; the 3 misses are exactly the rows where a lower-priority
+conflicting allocno's COPY-pref displaces the pass-0 pick. caller-saves and
+the local-alloc kick-out do not fire in this unit.
+
+CONCLUSION (closes the queued input-side item): the allocation order and 45
+of 48 dispositions are now a PURE FUNCTION of dump-readable inputs
+(n_refs, live_length, size, calls_crossed from .lreg; conflicts/prefs from
+.greg) - the byte-exact middle pins the pseudo set, the keys pin the order,
+the order + find_reg's rules pin the cascade. The C-reachable space was
+already exhausted (1620 nudges falsified, 1735 cascade conclusion); this
+window mechanizes the cascade's INPUT side end to end. The judge remains the
+only arbiter of whether retail's cascade is reachable from the same C; when
+it returns, its (b)/(c) deltas are PREDICTED: -1 in s2 unless retail's order
+frees s1 at -1's turn, str -> a1 via pass-0 unless retail's pool lacks 5.
+
+NEXT WINDOW (unchanged priorities): (1) disc-return #35 -> witness 8/8 ->
+verify 8/8 GREEN -> land the rule-1 k>=4 generalization -> judge v22 under
+both prologue regimes (the replay above predicts the deltas the judge will
+see); (2) the sces twin func_8002ABC8 after the slps unit closes; (3) if
+still offline: derive copy_prefs from the .lreg RTL (mark_reg/expand_
+preferences semantics) to close the last 3 dispositions, or start the sces
+twin prep. Tree untouched beyond scripts/bm_unit_decode (dumps compile into
+build/judge/ only). Offline research only, nothing build-adjacent.

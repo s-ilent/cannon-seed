@@ -1,0 +1,67 @@
+== v22_u_prejoin.c [default flags]
+allocnos=48  order-match: EXACT (keys mechanized)
+turn pseudo(+merge)       pri  refs   LL  sz  reg  note
+   1     83                 45000     9     6   1    3  
+   2    106                 25714    12    14   1    7  
+   3    121                 25714    12    14   1    6  
+   4    127                 25714    12    14   1    6  
+   5    144                 25714    12    14   1    6  
+   6    151                 25714    12    14   1    6  
+   7     82                 22857    16    28   1   16  
+   8    115                 19285     9    14   1    6  
+   9    132                 19285     9    14   1    6  
+  10    138                 19285     9    14   1    6  
+  11    105                 16000     8    15   1    6  
+  12    114                 16000     8    15   1    7  
+  13    120                 16000     8    15   1    7  
+  14    126                 16000     8    15   1    7  
+  15    131                 16000     8    15   1    7  
+  16    137                 16000     8    15   1    7  
+  17    143                 16000     8    15   1    7  
+  18    150                 16000     8    15   1    7  
+  19     79                 12727     7    11   1    3  
+  20     81                 10000     5    10   1    4  
+  21    102                  9090     5    11   1    3  
+  22     86                  4285     3     7   1    2  
+  23    108                  4000     2     5   1    8  
+  24    109                  4000     2     5   1    8  
+  25    117                  4000     2     5   1    8  
+  26    118                  4000     2     5   1    8  
+  27    123                  4000     2     5   1    8  
+  28    124                  4000     2     5   1    8  
+  29    129                  4000     2     5   1    8  
+  30    130                  4000     2     5   1    8  
+  31    134                  4000     2     5   1    8  
+  32    135                  4000     2     5   1    8  
+  33    140                  4000     2     5   1    8  
+  34    141                  4000     2     5   1    8  
+  35    146                  4000     2     5   1    8  
+  36    147                  4000     2     5   1    8  
+  37     95                  3000     3    10   1    7  
+  38     75                  2307    14   182   1   16  
+  39    153                  2000     2    10   1    8  
+  40    154                  2000     2    10   1    8  
+  41    163                  2000     3    15   1   17  
+  42    155                  1612     5    62   1   18  const -1 (REG_EQUIV)
+  43     84                  1388     5    72   1   17  
+  44    162                   937     3    32   1   19  
+  45     73                   625     2    32   1    5  str (move-chain pseudo)
+  46     72                   600     3    50   1   18  
+  47     74                   571     2    35   1   19  
+  48     71                   507     5   197   1   20  
+
+local-alloc-assigned pseudos: 19; entry reuse pool = [2, 3, 5]
+  turn  1 pseudo 83: cc=0 pool=3 predicted=3(pass0) actual=3 OK
+  turn  2 pseudo 106: cc=0 pool=3 predicted=7(pass1+pref) actual=7 OK
+  turn  3 pseudo 121: cc=0 pool=4 predicted=7(pass0) actual=6 MISS
+  turn 20 pseudo 81: cc=0 pool=6 predicted=7(pass0) actual=4 MISS
+  turn 23 pseudo 108: cc=0 pool=7 predicted=16(pass0) actual=8 MISS
+  turn 42 pseudo 155: cc=6 pool=9 predicted=18(pass1) actual=18 OK <== const -1 (REG_EQUIV)
+  turn 45 pseudo 73: cc=0 pool=11 predicted=5(pass0) actual=5 OK <== str (move-chain pseudo)
+  turn 46 pseudo 72: cc=1 pool=11 predicted=18(pass0) actual=18 OK
+  turn 47 pseudo 74: cc=1 pool=11 predicted=19(pass0) actual=19 OK
+  turn 48 pseudo 71: cc=7 pool=11 predicted=20(pass1) actual=20 OK
+
+replay: 45/48 dispositions reproduced (someone-prefers rebuilt from printed prefs only; copy-prefs are not in the dump - the residual misses are copy-pref-driven; caller-saves and the kick-out do not fire in this unit)
+
+verdict: allocation order = deterministic function of the middle's (n_refs, live_length, size, calls_crossed) via allocno_compare
