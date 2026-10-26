@@ -600,3 +600,86 @@ wire_split.py (ratchet-gated, commit-only-on-green).
 Variants v22_u_prejoin.c snapshotted; da_chain_div2.py lands (dump-chain
 window tool); tree untouched (screens + dumps in build/judge/ only). Suite
 + ratchets not run (offline research only, nothing build-adjacent).
+
+## LAW 5 PROGRESS (cron-202610262304): THE EPILOGUE CONVENTION IS PER-PROVENANCE - THE RULE-1 K>=4 GENERALIZATION IS PROVEN BYTE-INERT AND SAFE, AND THE V22 TAIL DELTAS ARE ENUMERATED
+
+Window shape: the 1235 sandbox tool outage ENDED (probe first, per the
+blocked-window protocol). HEAD was behind (7623cd2 -> 657449e2: the
+cron-20261026-1349 join-boundary landing was already on origin/main) ->
+reset forward, tree clean. worklog_digest exit 1 (a fresh rollback restored
+the ancient snapshot AND ate the 1235 capture files restore_digest/
+restore_header_202610261235.txt) -> RESTORE NOTE appended verbatim from a
+fresh capture, exit 0 (140 windows; the gate is green for the first time
+since the rollback streak began). Oracle DOWN (witness 0/8, disk/ empty,
+Silent's links expired ~09:53 UTC; disc-return #35 re-requested) -> offline
+window: the 1349 NEXT-WINDOW item (3), the LAW 5 tail hunt.
+
+THE EPILOGUE CONVENTION IS PER-PROVENANCE, NOT PER-SHAPE (new tool
+rule1_corpus_scan.py): census every `lw $ra,N($sp)` epilogue window in every
+landed asm row (5219 windows corpus-wide) by reload count k and frame-
+release position. Game-code rows put the release in the BRANCH DELAY SLOT
+at EVERY k - 622 swapped windows at k>=4, up to k=9 (e.g. func_80022AFC
+rows); SDK/ASPSX rows keep GCC order at every k - 567 gcc-order windows at
+k>=4 (the LIBGT/0x8004xxxx-0x8006xxxx regions). The unit's shared epilogue
+thunk func_8002B444 (pinned in the giant row: lw ra/s4/s3/s2/s1/s0, jr ra,
+addiu sp,sp,0x28 IN the branch slot, no trailing nop) is the k=6 SWAPPED
+form - the form rule 1 exists to reproduce, currently out of its k<=3 reach.
+
+THE C-TREE AUDIT (new tool epilogue_audit.py): compile ALL 240 src units
+offline through cc.sh and census the PRE-cc_post maspsx epilogue windows.
+Result: k=0 x92, k=1 x10, k=2 x2, k=9 x1 - EXACTLY ONE unit produces a
+k>=4 epilogue, SsSeqCalledTbyT (k=9, gcc order, LIBSND SSCALL member,
+c-row in all eight targets, no asm row - oracle-gated), and its source
+ALREADY carries `cc-post: sdk-aspsx` (which implies keep-epilogue, so rule
+1 is disabled for it entirely). Every other C epilogue sits at k<=3 inside
+rule 1's current reach. The name-based census's two apparent C-tagged
+gcc-order k>=4 counterexamples (func_8004DB08 g3_eu, trapIntrDMA
+func_80068248 mainmenu_eu - both LIBETC INTR members) resolve as
+ASM-provenance in those targets (their yaml c entries are different, larger
+sdk extents elsewhere): the same symbol is c in one build and asm-sdk in
+another, and the asm rows carry the gcc-order retail bytes.
+
+THE LANDING RECIPE (build-affecting, so verify 8/8-gated; provably
+byte-inert until the unit's split lands): (1) generalize rule 1's swap to
+[lw $ra][lw $rX]{k>=2}[addu $sp][j $ra](nop)? -> [lws][j $ra][addu $sp]
+with the trailing nop absorbed - the k=1 base case keeps its own nop after
+the ra reload (its retail form is [lw ra][nop][j][addu], distinct from the
+k>=2 no-nop form); (2) NO marker work needed - the lone k>=4 C unit is
+already sdk-aspsx-exempt; (3) the generalization changes nothing on today's
+tree and activates only for func_8002ADA0's game-code k=6 thunk.
+
+THE V22 TAIL MAP (tail_screen.py lands; NOTE its end-aligned diff is noisy
+when the block ORDER differs - read it next to a raw objdump of the built
+unit): the deltas vs the retail tail enumerate as - (a) the epilogue-thunk
+convention itself (fixed by the recipe above; retail k=6 swapped, ours
+gcc-order + trailing nop); (b) the -1/0x200 register pair: retail holds -1
+in s1 from the prologue era and materializes 0x200 ONCE into s2
+(`ori s2,zero,0x200` right after write's delay slot) for BOTH the write and
+read compares; ours materializes -1 into s2 LATE (at the first fd test),
+saves write's ret into s1 (`move s1,v0`) and value-propagates it into
+read's compare (`beq v0,s1` - the compiler knows s1 == 0x200 there); the C
+is already the right SHAPE (direct compares, no result variables), so this
+is register-assignment/coalescing class - the REAL prologue's pressure is
+the testbed, judge material; (c) D_8006974C's address: retail re-derives
+`lui a1/%hi + addiu a1/%lo` at EACH of write and read, ours caches it in
+s3 once (`lui s3/addiu s3/move a1,s3`) - same class as (b); (d) the -3 err
+path: retail shares ONE 0xC block (func_8002B438: jal close/addu a0,s0/
+addiu v0,-3) targeted by BOTH `bne v0,s2` sites, ours inlines a close+
+return site per failure with flipped branch polarity (beq-to-ok instead of
+bne-to-err) - cross-jump/layout outcome; (e) return-2: retail emits
+`j func_8002B444 / ori v0,2` from mid-body, ours falls through into the
+inline epilogue after `li v0,2` - same layout class as (d).
+
+NEXT WINDOW: (1) disc-return #35 -> witness 8/8 -> verify 8/8 GREEN ->
+land the rule-1 k>=4 generalization (the recipe above) -> judge v22 wired
+via wire_split.py (ratchet-gated, commit-only-on-green; the judge is the
+only arbiter for deltas (b)-(e)); (2) if the judge keeps the (b)/(c)
+register deltas, screen one-use/renaming/redeclaration nudges; (3) LAW 2
+block-save hunt continues offline; (4) the sces twin func_8002ABC8 after
+the slps unit closes.
+
+Tree untouched (three tools land under scripts/bm_unit_decode/ only:
+rule1_corpus_scan.py, epilogue_audit.py, tail_screen.py; screens compile
+into build/judge/ only). Suite 85/85 OK; ratchets not run (nothing
+build-adjacent moved). Restore note re-appended (third attempt; the 1235
+capture files were rollback-eaten, a fresh capture was used).
