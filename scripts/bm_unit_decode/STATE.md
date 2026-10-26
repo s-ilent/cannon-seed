@@ -507,3 +507,96 @@ committed (full-head mode is authoritative; the window classifier is
 advisory only - div1's sll can sink into div2's delay slot at -O1 and
 break the window anchor). Variants unchanged (v0-v21). Suite + ratchets
 not run this window (offline research only, nothing build-adjacent).
+
+## JUDGE LOOP PROGRESS (cron-20261026-1349): THE JOIN-BOUNDARY LAW CLOSES - THE FIRST LOOSE+UNSTACKED DIV2 SURVIVOR IS SCREENED
+
+Window shape: oracle DOWN (witness 0/8, disk/ empty, Silent's links expired
+~09:53 UTC; disc-return #35 still pending) -> offline window by design.
+worklog_digest exit 1 AGAIN (a fresh rollback restored the ancient worklog
+snapshot AND ate the 1235 restore note) -> RESTORE NOTE appended, exit 0.
+HEAD was behind (7623cd2 -> c00c90a5, the 1919 landing) -> reset forward.
+The vanilla gcc-2.6.3 source (1919's extraction) was also rolled back
+(it lived in /tmp) -> re-fetched from gcc.gnu.org old-releases, now kept at
+tools-src/gcc-2.6.3-src/gcc-2.6.3/ under /home/z (rollback-resistant).
+
+ITEM (1) DONE - THE -DA CHAIN ON v21-no-skip (scripts/bm_unit_decode/
+da_chain_div2.py, new tool; every pass rtl->jump->cse->loop->cse2->flow->
+combine->sched->lreg->greg->sched2->jump2->dbr): THE DIV2 SET MAKES A FRESH
+UNLINKED QTY, AND THE RECOMPUTE-ENTERING REWRITE IS CSE'S CORRECTION FOLD.
+The .cse dump prints the block cut: "Processing block 2..36" ends at
+div1's join label; the div2 region (45 materialization, 47 copy, 49 branch,
+51 correction) lives in the NEXT block 37..52 - the t-split's addiu and
+t's qty are in the DEAD previous block. At block start new_basic_block()
+(cse.c:760) flushes the table AND resets reg_qty to self (= INVALID:
+REGNO_QTY_VALID_P(N) = reg_qty[N] != N, cse.c:485). Expansion's insns:
+45 (set 88 (plus 78 512)) - the expression materialization; 47 (set 90 88)
+- the loose copy; 49 (ge 90) branch on the copy; 51 (plus 90 8191)
+correction on the copy; the sra's REG_EQUAL note carries (div 88 8192).
+AT .cSE: 45's dest flips 88->90 and 47 becomes (set 88 90) (make_regs_eqv's
+first-reg liveness rule: the copy dest outlives the block via the sra at
+insn 53, so it wins canonical form); the branch STAYS on 90 (fresh qty's
+first reg - NO link to t/79 exists in this block); the correction FOLDS to
+(plus 78 8703) - the class of 90's qty holds the expression (plus 78 512)
+and fold_rtx's PLUS associativity + use_related_value re-derive it from
+size's home a3 (cheaper: kills the dependence on 90's addiu). flow deletes
+the dead flipped copy; cse2/combine/sched/lreg/greg/sched2 NEVER touch the
+region (counts identical); dbr only fills delay slots. THE RECOMPUTE IS
+BORN AT CSE, insn 51, via the expression entry created INSIDE the fresh
+block at insn 45.
+
+ITEM (2) DONE - THE v21-vs-v4 CORRECTION QUESTION CLOSES ON TABLE
+REACHABILITY: use_related_value (cse.c:1760) can only fold through
+expressions PRESENT in the CURRENT block's table. v21's operand-expression
+entry is created post-join (insn 45, same block as the correction) ->
+reachable -> the 8703 stack fires. v4's t-expression entry ((plus 78 512)
+at t's creation) lived pre-join -> died at the boundary -> use_related_value
+finds NOTHING -> the correction stays (plus 79 8191) unstacked on the
+canonicalized reg. canon_reg (cse.c:2456) rewrites a pseudo operand to
+qty_first_reg UNLESS the qty is invalid; insert_regs (cse.c:1001) gives a
+folded-src REG with an invalid qty a FRESH qty (this is how a plain copy of
+t REVIVES t's qty in the fresh block -> v4/v19-class tight), while an
+EXPRESSION set makes an unlinked fresh qty (v21-class loose).
+
+ITEM (3) DONE - THE C-FORM CANDIDATE EXISTS AND SURVIVES: v22
+(variants/v22_u_prejoin.c = v7 base + the t-split + u = t BEFORE div1 +
+test `t != u/0x2000*0x2000`), the NEVER-SCREENED v12-class corner at
+-fno-cse-skip-blocks. SCREEN RESULT (no-skip): div1 tight-unstacked
+(bgez v1 / [delay: move a3,v1] / addiu v0,v1,0x1fff), div2 = move v0,a3 /
+bgez v0 / nop / addiu v0,v0,0x1fff / sra / sll - BRANCH ON THE COPY,
+CORRECTION UNSTACKED ON THE COPY, test beq v1,v0 - THE RETAIL SHAPE, FIRST
+FORM EVER TO SHOW IT. Mechanism: u = t is a reg-copy in the PRE-join block;
+the join kills its link; in the fresh block the div2 copy (set 90 u) makes
+a fresh qty from u's INVALID reg (no t-revival - nothing reads 79 there),
+first_reg = 90 (u's last use is the copy itself; 90 outlives via the sra),
+and the qty's class holds NO expression -> no fold. AT DEFAULT FLAGS v22
+MERGES (beq v1,a0) - the regime dependence is real: RETAIL'S COMPILE =
+skip-blocks-OFF EFFECTIVE REGIME + the u-severance form (the PSX cc1
+driver/fork plausibly builds with the flag off; flag_bracket's 13-regime
+matrix showed ON = merge in every other respect).
+
+REMAINING DELTAS (judge-loop material, NOT screen-material): (a) div2's
+copy reads a3 (the u-copy sunk into div1's delay slot by dbr) where retail
+reads v1 DIRECTLY - both remaining deltas resolve if u's pseudo coalesces
+into t's hard reg (then the u-copy vanishes, div1's own W copy takes the
+delay slot exactly as retail's addu v0,v1, and div2's copy reads v1);
+coalescing is a local-alloc/reload outcome driven by pressure - the REAL
+prologue (LAW 2 context) is the testbed, screens cannot weigh it;
+(b) one stray dead copy (div1's canonicalization leftover, move v0,v1
+before the branch) - expected to follow the same coalescing; (c) LAW 2
+(prologue interleave) and LAW 5 (tail + epilogue, the +20 bytes) untouched.
+THE LANDING C MUST USE: the t-split + u-severance + the t-based test +
+unsigned i (NOT W1's size-based test - retail semantics are t-based, and
+the div2 operand is the JOIN-SEVERED copy, not the raw param).
+
+NEXT WINDOW: (1) judge v22 the moment the oracle returns (disc-return #35:
+the judge loop is the ONLY arbiter of the coalescing deltas; SIZE/DIFF +
+the head 30 vs retail); (2) if the judge keeps the a3-vs-v1 delta, screen
+one-use-coalescing nudges (u's def as the function's FIRST statement,
+renaming pressure) - still C-only, no flags; (3) LAW 5 tail hunt continues
+offline (the +20 bytes sit in the tail law + the epilogue); (4) when fresh
+links arrive: witness 8/8 -> verify 8/8 GREEN -> judge v22 wired via
+wire_split.py (ratchet-gated, commit-only-on-green).
+
+Variants v22_u_prejoin.c snapshotted; da_chain_div2.py lands (dump-chain
+window tool); tree untouched (screens + dumps in build/judge/ only). Suite
++ ratchets not run (offline research only, nothing build-adjacent).
