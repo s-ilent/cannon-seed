@@ -415,3 +415,95 @@ Variants v19_mixed_u.c / v20_expr_test.c / v21_expr_on_t.c snapshotted in
 variants/. Tree untouched (screens compile to build/judge only). Suite +
 ratchets not run this window (offline research only) - nothing
 build-adjacent touched.
+
+## JUDGE LOOP PROGRESS (cron-202610261919): THE DIV2 REWIRE IS ALL CSE, AND THE SOURCE IS FINALLY LOCAL
+
+Window shape: oracle DOWN (rollback left the Oct-10 woven-era baselines in
+place - they match the PRE-FLIP oracle, witness 0/8; Silent's links EXPIRED
+~09:53 UTC) -> offline window. worklog_digest exit 1 (138 windows missing -
+the rollback restored the ancient worklog snapshot) -> RESTORE NOTE appended,
+digest exit 0 (the digest tool itself is now rollback-proof: a0f77df2 put it
+IN-repo, so every reset --hard restores it - the cron-202610261804 "flagged
+for Silent" item is RESOLVED). HEAD was behind (7623cd2 -> aa3c98a4: the two
+intervening windows closed the correction-folding law on the t-split and
+reduced the div2 paradox to one cse parameter) -> reset forward, tree clean.
+
+ITEM (2) DONE - THE FLAG BRACKET (scripts/bm_unit_decode/flag_bracket.py,
+new tool): v21 across 13 regimes. THE MERGE IS GOVERNED BY EXACTLY ONE FLAG:
+-fcse-skip-blocks (ON: default-O2, O1+skip, O1+exp+skip, O1+all-O2 -> test
+becomes `beq v1,a0`, div2 gone). OFF: div2 survives in EVERY other config
+INCLUDING plain -O1 - as the a3-RECOMPUTE class (operand addiu v0,a3,512,
+stacked correction addiu v0,a3,8703). -fexpensive-optimizations,
+-fschedule-insns/-insns2, -fthread-jumps, -fcse-follow-jumps,
+-fstrength-reduce, -fcaller-saves: ZERO effect on the div2 region. NO flag
+regime produces the retail loose-copy shape. (The v20 falsification "at
+-O1" in the 1804 record was really a no-skip-survival - re-read the -da
+evidence below.)
+
+THE NEVER-SCREENED FORMS (v4/v20 at no-skip, first time): v4-inline
+(`t != t/0x2000*0x2000`, op0 = t's pseudo) at -fno-cse-skip-blocks ->
+div2 REGISTER-COUNT-RETAIL but TIGHT (bgez v1 / move v0,v1 in the delay
+slot / addiu v0,v1,0x1fff reading the source) - the canonicalized form.
+v20 at no-skip -> BOTH corrections as the stacked recompute (a3+0x21ff)
+while the branches stay on the fresh operand - the expression-qty form.
+LAW: the canonicalization target = the qty of the div2 operand pseudo:
+reg-link qty -> tight (v4/v19-class); expression qty -> recompute
+(v20/v21-class). Retail = NO canonicalization at all (branch + correction
+on the copy, nop slot).
+
+ITEM (1) PARTIAL - THE -DA CHAIN (v4, no-skip; pass order rtl -> jump ->
+cse -> flow -> combine -> loop -> cse2 -> jump2 -> lreg -> greg -> sched
+-> dbr -> sched2): EXPANSION EMITS THE RETAIL DIV2 SHAPE EXACTLY -
+insn 45 (set (reg 89) (reg/v 79)) copy, jump 47 (ge (reg 89)) branch on
+the copy, insn 49 (plus (reg 89) 8191) correction on the copy (the copy
+PRECEDES the branch = the loose form). THE REWRITE IS ALL CSE: at .cse
+the branch reads (reg/v 79) and div1's correction is FOLDED to
+(plus size 8703) (8191 count 3->2, 8703 0->1). COUNTS IDENTICAL ACROSS
+ALL TEN LATER PASSES - flow/combine/loop/cse2/jump2/lreg/greg/sched
+NEVER touch the region; the delay-slot copy sink = dbr's work. There is
+no post-CSE escape hatch in the local cc1.
+
+ITEM (3) DONE - THE SOURCE IS LOCAL: gcc-2.6.3.tar.bz2 fetched from
+https://gcc.gnu.org/pub/gcc/old-releases/gcc-2/gcc-2.6.3.tar.bz2 (the
+404s were the missing gcc-2/ level; ftp.gnu.org and every /gnu/gcc/
+mirror prune 2.6.3, but gcc.gnu.org's old-releases/gcc-2/ still has it),
+extracted at tools-src/gcc-2.6.3-src/gcc-2.6.3/ (untracked). THE RULE
+(cse.c canon_reg, line 2456): fold_rtx on a pseudo REG operand returns
+qty_first_reg[reg_qty[regno]] - THE FIRST REGISTER OF THE QUANTITY -
+UNCONDITIONALLY (hard regs exempt). The copy (set reg89 reg79) links
+reg89 to t's qty via insert_regs -> make_regs_eqv (the folded src's
+class contains a REG -> merge, line ~1017). qty_first_reg = t's pseudo
+-> the div2 rewrite is INEVITABLE in vanilla 2.6.3 once the operand's
+defining SET is a reg-to-reg copy whose src has a live qty. For retail's
+div2 to stay on the copy, the operand's SET must NOT have merged into a
+reg-linked qty: the only vanilla paths are (a) the folded src was NOT a
+plain REG (an expression class with no REG element -> make_new_qty for
+the dest -> qty_first_reg = the copy ITSELF), or (b) the src's qty was
+invalid with no REG in its class. The v21-class recompute IS path (a):
+branch stays LOOSE (reads the recompute's result reg = "the copy") but
+the correction still folds through the expression to a3+8703. RETAIL
+THEREFORE REQUIRES BOTH: an OPAQUE operand SET (no expression in the
+class -> the correction stays +0x1fff on the copy) AND no cheaper
+register source to re-derive from (no size register - which the REAL
+block-save prologue provides: size loads straight into v1 from 0x44(sp),
+so the only re-derivation is a mem-based expr, costlier than the copy).
+THE WALL IS NOW A C-FORM HUNT, NOT A FLAG HUNT: find the C that makes
+the div2 operand's SET opaque-or-unlinked while keeping the t-split.
+
+NEXT WINDOW:
+1. -da chain on v21-no-skip (the banked lead, still open): does the div2
+   SET merge with t's qty or make a fresh qty; at which insn does the
+   recompute-entering rewrite happen; does the class of (plus size 512)
+   hold a REG at div2's SET (it must NOT, for the fresh-qty path).
+2. Read cse_insn's correction-fold + use_related_value to pin why v21's
+   correction folds to (plus a3 8703) while v4's stays (plus 79 8191).
+3. Design + screen the C-form candidate from the qty-boundary rule
+   (operand SET opaque / unlinked; t-split kept; t-based test kept).
+4. Disc-return #35 when fresh links arrive - the judge loop is the only
+   path to convergence; the flag regime CANNOT close it (proven above).
+
+Tree untouched (screens + dumps live in build/judge/). flag_bracket.py
+committed (full-head mode is authoritative; the window classifier is
+advisory only - div1's sll can sink into div2's delay slot at -O1 and
+break the window anchor). Variants unchanged (v0-v21). Suite + ratchets
+not run this window (offline research only, nothing build-adjacent).
