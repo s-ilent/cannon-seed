@@ -312,3 +312,106 @@ Then re-derive the retail form from the answers and screen it.
 LAW 5 (tail + epilogue, the +20 bytes) untouched this window - the head
 consumed it. Tree REVERTED per commit-only-on-green; variants v11-v18
 snapshotted; suite 85/85; ratchets 644/0.
+
+## JUDGE LOOP PROGRESS (cron-202610261804): THE DIV2 PARADOX IS REDUCED TO ONE CSE BEHAVIORAL PARAMETER
+
+Window shape: oracle DOWN (rollback ate the discs + baselines are the Oct-10
+woven-era set, witness 0/8; Silent's links EXPIRED ~09:53 UTC) -> offline
+window by design. worklog_digest.py is GONE (local-only tool, not in git -
+rollback ate it; flagged to Silent). Reconstructed the retail head from the
+REPO ITSELF: asm/nonmatchings/func_8002ADA0.s (the pre-carve giant row) is
+git-tracked retail disassembly - NO baseline needed to pin the head.
+
+THE RETAIL HEAD IS NOW FULLY PINNED (B5A0..B60C, all three divisions):
+- t-split CONFIRMED in retail: lw v1,0x44(sp) (size into t's home) ...
+  addiu v1,v1,0x200 IN PLACE. v11's shape is retail's.
+- div1 TIGHT: bgez v1 / [delay: addu v0,v1] / addiu v0,v1,0x1fff (correction
+  reads t's home) / sra v0,13 / sll a0,v0,13. v11 already reproduces this.
+- div2 LOOSE: addu v0,v1 (THE PARADOX COPY - reads T'S HOME, value = t, NOT
+  raw size!) / bgez v0 (branch on the COPY) / nop / addiu v0,v0,0x1fff
+  (correction reads the COPY, unstacked 0x1fff) / sra v0,13 / sll v0,v0,13.
+- test: beq v1,v0 - LHS = t ITSELF, RHS = div2's product.
+- div3 (total/0x2000, the sector byte): loose, delay slot FILLED with the
+  strcpy-dst addiu, correction from the copy. A DIFFERENT operand value
+  (total), so no merge with div1/div2 - consistent.
+- SEMANTICS FIX: retail's test is T-BASED (t != t/0x2000*0x2000 class), not
+  size-based. Proof: t = size+0x200; size is DEAD after the in-place addiu
+  (no copy of raw size exists before it); div2's copy reads v1 = t. The
+  0x1E00 counterexample separates the two tests. W1/v11's C
+  (t != size/0x2000*0x2000) is the WRONG SOURCE SEMANTICS.
+
+THE MECHANISM (closed by -da RTL dumps on the local cc1, v19):
+- Expansion (pre-CSE) emits EVERY branchy signed division as the LOOSE
+  form: [W = op0; bgez W; addiu W,W,0x1fff; sra W] with REG_EQUAL note
+  (div:SI op0 8192) on the sra. Two divisions = two independent sequences.
+- The TIGHT form is CSE's WORK, not the expansion: cse canonicalizes the
+  branch's compare operand and the correction's input through the
+  copy-equivalences (W's qty = op0's qty -> rewire to op0's home), then
+  dbr-schedule sinks the now-branch-independent copy into the delay slot.
+- THE MERGE: div2's note (div u_pseudo 8192) folds through the u->t copy
+  equivalence to (div t_pseudo 8192) = div1's recorded qty -> the whole
+  div2 sequence dies, the test's RHS becomes div1's product (beq v1,a0).
+  v19's .cse dump shows this exactly (4 sra -> 3 sra across cse-main).
+- -fcse-skip-blocks governs whether the taken-path table crosses the
+  division's own join (bgez target): ON = note fold completes = merge;
+  OFF = fresh table at the join = note fold fails = div2 SURVIVES.
+
+THE FALSIFICATION MATRIX EXTENDED (all offline screens, no oracle):
+- v19 (u = t after div1; test t != u/0x2000*0x2000): default O2 MERGED;
+  -fno-cse-follow-jumps MERGED; -O1 div2 survives TIGHT (both divs tight,
+  u-copy eliminated); -fno-cse-skip-blocks div2 survives TIGHT (branch
+  REWIRED to v1); both flags off div2 survives TIGHT. The u->t chain is
+  canonicalized IN EVERY CONFIG - the copy never survives as the branch's
+  operand.
+- v20 (t-split + test LHS and div2 both on the (size+0x200) expression):
+  default MERGED (plus the 0x21ff stacked-correction artifact);
+  -fno-cse-skip-blocks div2 survives LOOSE but the operand RECOMPUTES
+  (addiu v0,a3,512 from the force-mem param home) and the correction
+  STACKS (addiu v0,a3,8703) - the fresh join table cannot fold the
+  expression to v1's qty.
+- v21 (t-split + LHS = t, div2 operand = the (size+0x200) expression):
+  default MERGED; -fno-cse-skip-blocks div2 survives LOOSE, branch on the
+  materialization, but operand = recompute-from-a3 + 0x21ff + the delay
+  slot filled with the taken-path sra (5-insn shape). NOT retail.
+
+THE WALL (the exact remaining divergence): the local cc1 canonicalizes
+div2's branch/correction operands through copy-chains UNCONDITIONALLY
+(same-block chain u->t recorded anywhere visible -> rewire). RETAIL's
+compile left div2's branch ON THE COPY (loose) with an UNSTACKED
+correction reading the copy. Under every (source, flags) combination
+tested, the local compiler either merges div2 or rewires it tight. Retail
+did neither. The copy survives in retail => its uses were never rewired =>
+the copy-equivalence was never in cse's table at div2's insns => either
+(a) the retail cc1's cse.c lacks/weakens the compare-canonicalization
+through copies (patch-level difference - but the local cc1 IS "2.6.3 [AL
+1.1, MM 40] Sony Playstation" from decompals/old-gcc 0.12, presumably the
+retail family), (b) a flag we haven't found disables it, or (c) retail's
+copy was created post-CSE (reload/regmove) from a pseudo whose CSE-time
+qty was unconnected to t. gcc-2.6.3 SOURCE IS NOT LOCAL (tools-local has
+binaries only; the aaca343d "local gcc source" lead was wrong) - ftp.gnu.org
+timed out, mirrors 404'd; the -da dumps substitute for most of it.
+
+NEXT WINDOW LEADS (mechanized):
+1. Diff the -da dump CHAIN (rtl/jump/cse/loop/cse2/flow/combine/lreg/greg/
+   sched/sched2/dbr) for v21-no-skip-blocks: find WHICH pass rewrites the
+   correction's input (the 0x21ff stack) and whether cse2/loop change the
+   div2 region. The .dbr dump explains the delay-slot sra trick.
+2. Test -O1 with selective O2 flags re-enabled (-fexpensive-optimizations,
+   -fschedule-insns) hunting a config where div2's branch keeps its own
+   register: the -O1 result (both tight) + skip-blocks-off (loose but
+   recompute) bracket the retail shape from two sides.
+3. Fetch gcc-2.6.3 source via a working mirror (kernel.org, ibiblio,
+   uk.gnu.org) or the decompals/old-gcc repo if it carries patches; read
+   cse.c's compare canonicalization (fold_rtx on SET_SRC/COMPARE) and
+   check for a psx-fork diff against vanilla 2.6.3.
+4. THE C-FORM DECISION: the t-based test is RETAIL'S SEMANTICS - when the
+   loop closes, the landed C must use it (v19-class), NOT W1's size-based
+   test. The landing gate stays: converged loop or nothing.
+5. Disc-return #34: witness 0/8, links expired - request fresh links (the
+   discs ARE missing AND needed: verify, judge, and every baseline
+   consumer are gated).
+
+Variants v19_mixed_u.c / v20_expr_test.c / v21_expr_on_t.c snapshotted in
+variants/. Tree untouched (screens compile to build/judge only). Suite +
+ratchets not run this window (offline research only) - nothing
+build-adjacent touched.
