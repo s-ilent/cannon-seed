@@ -1204,3 +1204,33 @@ no remaining alloc-side item).
   fetch-and-read detour (upstream gcc 2.6.3 source, both families) or park the twin unit
   and spend windows on lanes that can still move (the unit is 106/433 with every residual
   word attributed).
+
+## THE CSE.C FETCH-AND-READ DETOUR CLOSES BOTH FAMILIES AT THE SOURCE LEVEL (cron-20261027-1748)
+* SOURCE ACQUIRED: stock gcc 2.6.3 (gcc-2.6.3.tar.bz2, ftp.twaren.net old-gnu mirror - ftp.gnu.org
+  refused connections; decompals/old-gcc 0.12 is binaries-only). The psx patches touch the ABI, not
+  cse. Both compiler-internal families now read out of cse.c directly.
+* THE -1 FAMILY IS record_jump_equiv (cse.c:5662): gcc 2.6.3 cse records PATH-SENSITIVE
+  equivalences at conditional jumps - the comment is the exact law: "if we are following the taken
+  case of if (i == 2) we can add the fact that `i' and '2' are now equivalent" (5655-5661). On the
+  eq path of the read-compare branch (write result vs 512), record_jump_cond (5722) inserts both
+  operands and merge_equiv_classes (5915) joins {write-result pseudo 160, const 512} into ONE
+  class; last_jump_equiv_class (5918) is loop-invalidation only (7619). Downstream, cse_insn's
+  equivalence machinery sees the const's class carrying a REG and substitutes the register form -
+  the write-result capture stays ALIVE past its natural death (retail: it dies in v0). That is the
+  "jump->cse boundary" substitution, pinned to lines. The allocator consequence (s1 free for the -1
+  in retail vs s2 in ours) follows from the capture's extended live range - the 491ac374 finding is
+  now mechanism-exact.
+* THE SECOND-DIVISION FAMILY IS fold_rtx's HASH RULE (cse.c:4638): REG/CONST_INT operands pass
+  through fold_rtx untouched (the case list at 4673-4684 returns them unsubstituted); a
+  (div:SI (reg) (const_int 8192)) entry only HITS when the operand REG is the SAME rtl reg at both
+  division sites. P1's merge (beq a0,v1 collapse) and P2's propagation (copy same-class) are both
+  the hash-hit path; retail's test division is a hash MISS - its operand pseudo differs from line
+  80's (the reload-time-copy class), so the full 7-word signed-division idiom + beq v1,v0 is
+  re-emitted. The only source shapes that stay distinct are ones cse cannot see through - and the
+  pseudo that cse cannot unify is created by the compiler, not reachable from plain C.
+* VERDICT - THE DETOUR CLOSES AS ATTRIBUTED-AT-SOURCE-LEVEL: both families are equivalence-class
+  behaviors with NO remaining plain-C lever. Every source experiment is consistent with the reading
+  (M1 kept; M2/P1/P2/m3/m4 banked negative). The twin stays parked at m1 106/433 (built 1732 =
+  retail size exactly) with EVERY residual word attributed one lever deeper than the source - now
+  at the cse.c level, which is the deepest attribution available short of compiler surgery (the
+  lever class would be a cc1 patch, out of scope for source-shaped matching).
