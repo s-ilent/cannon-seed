@@ -92,6 +92,14 @@ epilogue (SsSeqCalledTbyT k=9, already sdk-aspsx-exempt) and n<=1 keeps
 its own rules; the change activates only for func_8002ADA0's game-code
 k=6 thunk. Re-run Phase B (verify all eight, ratchets 644/0, suite),
 then commit (type: tools:) + push.
+EMPIRICAL PROOF (offline, cron-20261027-0449): the patch was applied
+verbatim, all 240 src units compiled through cc.sh pre- and post-patch
+(scripts/bm_unit_decode/rule1_inert_diff.py pre/post/diff), and every
+object came back byte-identical - zero compile failures either side, the
+k=2 units reproduce the byte-verified three-load shape exactly at n=2,
+the k=9 exempt unit does not move. The analytic census (k=0 x92 / k=1
+x10 / k=2 x2 / k=9 x1) is now confirmed at the object level; only the
+whole-image verify gate remains for the landing itself.
 
 ## Phase D - judge v22 under BOTH prologue regimes (slps block-move unit)
 
@@ -174,11 +182,13 @@ _SsUtBuildADSR x8 + SetDQB x4 + Square0/12 x4 wave, ratchet 644/0 now).
 Do NOT re-run their recipes - the yaml rows are already c.
 
 What actually remains after the Phase D/E judge loop:
-1. census + classifier rerun (build/invariant_census.txt +
-   build/split_classifier.txt) - the freshly landed rows leave the pool
+1. census + classifier rerun - the freshly landed rows leave the pool
    and the votes re-derive the next waves; per the 0534 record the
    classifier's candidates are the lane-owned D-MID-ROW graveyard rows -
-   do NOT grab them.
+   do NOT grab them. Exact commands (both default to all eight targets,
+   the census output is the classifier's gated input):
+       python3 tools/invariant_census.py     # -> build/invariant_census.txt
+       python3 tools/split_classifier.py     # -> build/split_classifier.txt
 2. the pair pool's remaining exact-unmatched singles: the movstrsi
    block-move class IS the Phase C-E unit pair itself; the rest are
    adjudicated library-class stubs/veneers or lane-owned clusters.
