@@ -1122,3 +1122,36 @@ no remaining alloc-side item).
   (2) the prologue save/bind permutation (83 words, the only big
   cluster left); (3) slps: the shifted-run alignment problem means its
   next lever is whichever closes the -4 size shortfall, not count.
+
+## THE -1 REGISTER IS FULLY MECHANIZED (cron-20261027-1403 window - the find_reg replay + the cse substitution)
+
+* Phase A FOURTH production disc-return (92nd rollback ate worklog+discs again; RESTORE NOTE
+  cron-20261027-1404-restore; the 06:29 links still live ~7.6h later, witness 8/8 first shot).
+* THE TWIN'S FIND_REG REPLAY RAN 48/48 (alloc_order.py works on any variant; the tool's CRIT
+  tags are slps leftovers - ignore them for the twin). The -1 pseudo is IDENTIFIED: pseudo 152
+  (refs 5, LL 62, pri 1612, turn 42) -> reg 18 (s2). It did NOT take s1 because pseudo 160
+  (turn 41, refs 3, LL 15) took s1 one turn earlier and the dump's conflict list pairs 152<->160.
+* PSEUDO 160 = THE WRITE-RESULT CAPTURE, KEPT ALIVE BY A CSE SUBSTITUTION: at the jump pass the
+  read compare is (164)(165-const-512); at the cse pass it is (164)(160) - cse replaced the read
+  compare's 512-const with the write-result pseudo, PROVEN equal on the write compare's
+  eq-branch-to-success path (insn 510: eq (160)(161) -> label 524; the read only runs on that
+  path). The substitution stretches pseudo 160's life across the close/open calls between write
+  and read -> global-alloc -> s1, blocking the -1. RETAIL's compile does NOT substitute: its
+  write result dies at v0 (compare-adjacent) and the 0x200 const pseudo spans both compares in s2
+  - exactly retail's final bytes (bne v0,s2 at BOTH compares).
+* TWO SOURCE LEVERS TRIED, BOTH NO-OPS (judge byte-identical to m1: 106/433, same six-run
+  fulldiff map): m3_writeinv (the write compare inverted via if-nesting so success is the
+  fall-through - gcc's expand/jump canonicalization restores the eq-branch-target form because
+  the read is semantically reachable ONLY through the proof) and m4_subcmp (subtract-form
+  compares - gcc folds x-0x200!=0 back to x!=0x200). The substitution is COMPILER-INTERNAL
+  table state, not source polarity.
+* CONSEQUENCE: the -1-in-s2 family (23 of the 106 residual words: the 2+1+1+1 small runs + the
+  18-word run's root) is a CSE-LEVEL DELTA, one lever deeper than the source. Two honest roads
+  remain: (1) read gcc 2.6.3's cse.c branch-equivalence recording (the vanilla source is NOT in
+  the toolchain tarball - binaries only - and the previously-banked local copy was rollback-eaten;
+  re-fetch it upstream if the lever is worth it) to find what makes retail's table keep the const
+  canonical; or (2) accept the 23-word family as a compiler-version delta and take the PROLOGUE
+  CLUSTER (83 words, the only big one left) - the .i.sched2 dumps for the twin are ALREADY in
+  build/judge/ from this window's -da runs, ready for the schedule2 ready-list reading.
+* NEXT WINDOW: the prologue cluster via the sched2 dumps (the big fish), or the cse.c fetch-and-read
+  detour. The main candidate stays m1 (106/433); variants m3/m4 banked as negative results.
