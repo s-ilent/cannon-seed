@@ -101,17 +101,37 @@ the k=9 exempt unit does not move. The analytic census (k=0 x92 / k=1
 x10 / k=2 x2 / k=9 x1) is now confirmed at the object level; only the
 whole-image verify gate remains for the landing itself.
 
-## Phase D - judge v22 under BOTH prologue regimes (slps block-move unit)
+## Phase D - judge the slps block-move unit under BOTH prologue regimes
+
+Two candidates carry verdicts: **v26 (the best, guard-inverted, 425/432
+built 1728, size -4)** and **v22 (the banked artifact, 426/431 default,
+381/433 nosched2)**. Judge BOTH - v26 first (it is the tree's truth), then
+v22 (the readouts the pre-banked head/tail files pin):
 
     python3 scripts/bm_unit_decode/wire_split.py \
-        scripts/bm_unit_decode/variants/v22_u_prejoin.c
-    make verify TARGET=slps_00270          # whole-image truth first
+        scripts/bm_unit_decode/variants/v26_vr2.c
+    make verify TARGET=slps_00270          # expect RED - see NOTE below
     python3 tools/judge_unit.py slps_00270 func_8002ADA0
-    # regime 2:
-    CC1FLAGS_EXTRA="-fno-schedule-insns2" python3 tools/judge_unit.py slps_00270 func_8002ADA0
-    # revert between regimes and before any commit:
+    # revert, then the v22 artifact:
     git checkout -- config/splat.slps_00270.yaml asm/nonmatchings/func_800272F8.s config/symbols.slps_00270.txt
     rm -f src/func_8002ADA0.c asm/nonmatchings/func_8002B464.s
+    python3 scripts/bm_unit_decode/wire_split.py \
+        scripts/bm_unit_decode/variants/v22_u_prejoin.c
+    make verify TARGET=slps_00270
+    python3 tools/judge_unit.py slps_00270 func_8002ADA0
+    CC1FLAGS_EXTRA="-fno-schedule-insns2" python3 tools/judge_unit.py slps_00270 func_8002ADA0
+    # revert between regimes and before any commit (as above)
+
+NOTE (verify-RED is the expected probe shape, banked cron-20261027-1748):
+wiring a NON-EXACT candidate makes the whole-image verify fail - the
+first differing byte lands INSIDE the unit's own region (twin: file
+0xB3CC = word 2 of 0xB3C8..0xBA8C). That is the wiring building cleanly
+with a known-divergent unit, not a broken probe; the judge's mini-link is
+the measurement. Verify returns GREEN only after the revert.
+
+STABILITY (six returns, cron-20261027-0748..1748): these readouts have
+reproduced byte-identically on every fresh baseline set - re-run D/E only
+when a candidate file changed, a new variant landed, or the unit moved.
 
 cc.sh honors CC1FLAGS_EXTRA (cc.sh:64-66); judge_unit mini-links the one
 unit at its retail VA and diffs vs the baseline slice (~2 s). The two
@@ -159,6 +179,15 @@ judge is the only arbiter for (b)-(e).
     git checkout -- config/splat.sces_00269.yaml \
         asm/sces_00269/nonmatchings/func_80027340.s config/symbols.sces_00269.txt
     rm -f src/func_8002ABC8.c asm/sces_00269/nonmatchings/func_8002B28C.s
+
+STATUS (cron-20261027-1748): the twin is PARKED at the m1 candidate -
+106/433 default (built 1732 = retail size exactly), 423/433 nosched2
+(+12) - with EVERY residual word attributed one lever deeper than the
+source, at the gcc 2.6.3 cse.c level (record_jump_equiv's path-sensitive
+eq-branch equivalence for the -1 family; fold_rtx's same-reg hash rule
+for the second division; see STATE.md). No plain-C lever remains (M1
+kept; M2/P1/P2/m3/m4 banked negative), so a Phase E run is a STABILITY
+re-run unless a new variant or a cc1 patch lands.
 
 wire_split_twin.py is MEASURED + DRY-RUN VALIDATED on the committed tree
 (cron-20261026-2119): giant 7451 lines, twin region 598 lines (5183..5780,
