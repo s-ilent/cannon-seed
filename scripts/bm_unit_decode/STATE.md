@@ -1020,3 +1020,42 @@ no remaining alloc-side item).
   work is the bigger lift.
 * Both probes reverted per runbook after judging; tree back to HEAD +
   the wire-script fix.
+
+## THE TWIN MUTATION MATRIX OPENS (cron-20261027-1018 window - judge loop live, ~2s/iteration)
+
+* Phase A re-run: the sandbox rollback ate disk/+baselines/ again; the
+  06:29 links STILL LIVE ~4h later - disc_return.sh second production
+  run, witness 8/8 STRICT again.
+* New harness scripts/bm_unit_decode/judge_fulldiff.py (run with the
+  venv python - capstone lives there, NOT in system python): full
+  word-by-word diff of build/judge/<unit>.bin vs the retail slice with
+  both sides disassembled, run-grouped with anchors. The twin's 144
+  diff words = TWO clusters: run 1 (84 words, 0x8002ABCC..0x8002AD20)
+  and run 2 (60 words, 0x8002B194..0x8002B284).
+* RUN 1 DECODED: (a) the prologue save/bind permutation (schedule2
+  interleaves; retail keeps saves ahead of binds) - allocator outcome;
+  (b) the size param reload targets a0 (built) vs v1 (retail), and the
+  t-chain runs v1 = v1 + 0x200 in retail (lw v1,0x44(sp) DIRECTLY);
+  (c) THE FILL LOOP FORM: built = countdown (ori v1,0x1ff; bgez; -1
+  stride), retail = UPWARD (move v1,zero; sltiu v0,v1,0x200; bnez) -
+  gcc 2.6.3 REVERSED our int-induction loop.
+* MUTATION V-unsigned-i (mechanistic, CONFIRMED): `unsigned i` blocks
+  the loop reversal (i >= 0 is a tautology) and the built reproduces
+  the retail sltiu-bound upward form. Judge count equal (144/432, the
+  cascade relocates), but the retail-correct shape STAYS in the staged
+  candidate func_8002ABC8.c. The candidate's own law 4 ("sltiu bound")
+  is now actually reproduced by its source.
+* MUTATION V-minus1-fill (D[i] = -1): NEGATIVE - gcc constant-folds to
+  the identical 0xff store; no shared -1 pseudo is born.
+* RUN 2 DECODED (the return-2 path, delta (e) live): retail = addiu
+  s1,-1; beq s0,s1,create; [fall-through] jal close (a0 <- s0 in the
+  delay slot); j 0x8002b26c (the shared k=6 epilogue thunk) with
+  ori v0,2 in the j DELAY SLOT. Built = addiu s2,-1; bne s0,s2 (branch
+  INVERTED, return-2 laid out later); the create path falls through.
+  Retail's -1 in s1 vs ours in s2 (delta (b), live-confirmed).
+* NEXT: the two remaining levers are both gcc arrangement/allocator
+  outcomes - (1) coerce the fd==-1 guard's block order so close+return-2
+  falls through to the j-thunk (source-side try: invert the guard to
+  `if (fd != -1) { close(fd); return 2; }`); (2) the prologue/size-load
+  register choices via declaration/ref-order mutations. The fulldiff
+  harness makes every iteration readable; the judge is the arbiter.

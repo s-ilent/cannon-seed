@@ -69,7 +69,7 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
     int t;
     int total;
     int fd;
-    int i;
+    unsigned i;
     unsigned char *hdr;
 
     t = size + 0x200;
@@ -127,3 +127,22 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
     close(fd);
     return 2;
 }
+
+/* LIVE JUDGE MUTATION RECORD (cron-20261027-1018 window, oracle up):
+ * V-int-i (the original): the 0xff fill compiles to a COUNTDOWN loop
+ * (ori v1,0x1ff; bgez; -1 stride) while retail is UPWARD sltiu/bnez -
+ * gcc 2.6.3 reverses the int-induction loop. V-unsigned-i: `unsigned i`
+ * blocks the reversal (i >= 0 tautology) and the built reproduces the
+ * retail sltiu-bound upward form - law 4 is source-controllable and
+ * now REPRODUCED. Judge count equal (144/432 both - the cascade
+ * relocates rather than shrinks), but the shape is retail-correct so
+ * the mutation STAYS. V-minus1-fill (D[i] = -1): negative, gcc
+ * constant-folds to the same 0xff store, no shared pseudo.
+ * The remaining 144-word residual clusters: (1) the prologue
+ * save/bind permutation + the size-load target reg (a0 vs v1) +
+ * the total-in-a0 materialization - allocator/scheduler outcomes;
+ * (2) the return-2 path: retail falls THROUGH close(fd)+j-thunk with
+ * v0=2 in the j delay slot (the shared k=6 epilogue thunk), ours
+ * inverts the fd==-1 branch (bne) and lays return-2 out later;
+ * retail's -1 sits in s1, ours in s2 (delta (b), live-confirmed).
+ */
