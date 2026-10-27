@@ -290,24 +290,29 @@ def _rule9_param_copy_order(res: list[str]) -> list[str]:
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
     res = list(res)
 
-    # Rule 1 (three-load variant): [lw $ra][lw $rX][lw $rY][addu $sp]
-    # [j $ra](nop)? -> [lw $ra][lw $rX][lw $rY][j $ra][addu $sp] (nop
-    # absorbed). Checked first: the two-load window [lw $rY][addu][j]
+    # Rule 1 (n-load variant, n >= 2): [lw $ra][lw $rX]{n}[addu $sp]
+    # [j $ra](nop)? -> [lw $ra][lw $rX]{n}[j $ra][addu $sp] (nop
+    # absorbed). Generalizes the byte-verified three-load variant
+    # (n = 2) to any n >= 2 - the game-code k >= 4 epilogue thunks
+    # (func_8002B444-class, k = 6) put the frame release in the branch
+    # delay slot. Checked first: the two-load window [lw $rX][addu][j]
     # sits inside this shape and would otherwise fire first and
     # mis-swap.
     i = 0
     while i < len(res) - 4:
-        m_ra = LW_RA.match(res[i])
-        m_sx, m_sy = LW_SREG.match(res[i + 1]), LW_SREG.match(res[i + 2])
-        if (m_ra and m_sx and m_sy
-                and m_sx.group(1) not in ("31", "ra", "29", "sp")
-                and m_sy.group(1) not in ("31", "ra", "29", "sp")
-                and ADDU_SP.match(res[i + 3]) and JUMP_RA.match(res[i + 4])):
-            tail_nop = (i + 5 < len(res) and NOP.match(res[i + 5]))
-            res[i : i + (6 if tail_nop else 5)] = [
-                res[i], res[i + 1], res[i + 2], res[i + 4], res[i + 3]
-            ]
-            i += 5
+        if not LW_RA.match(res[i]):
+            i += 1
+            continue
+        j = i + 1
+        while (j < len(res) and LW_SREG.match(res[j])
+               and LW_SREG.match(res[j]).group(1) not in ("31", "ra", "29", "sp")):
+            j += 1
+        if (j - (i + 1) >= 2 and j + 1 < len(res)
+                and ADDU_SP.match(res[j]) and JUMP_RA.match(res[j + 1])):
+            tail_nop = (j + 2 < len(res) and NOP.match(res[j + 2]))
+            res[i : j + (3 if tail_nop else 2)] = (
+                res[i:j] + [res[j + 1], res[j]])
+            i = j + 2
             continue
         i += 1
 
