@@ -9,6 +9,12 @@ reset to origin/main, worklog tail read).
 
 ## Phase A - discs, baselines, witness 8/8 (before anything else)
 
+0. ONE-COMMAND PATH (banked cron-20261027-0219): `sh tools/disc_return.sh
+   '<EU .chd url>' '<JP .chd url>'` - every step below with the gates
+   inline (foreground downloads, sha256 + byte-size gates, sector-count
+   assertions, --per-sector hardcoded, witness gate as the exit code);
+   ~9 min, run under a >=600s shell timeout. The manual sequence stays
+   below as the fallback/reference.
 1. Download BOTH discs IN FOREGROUND in one Bash call (backgrounded curls
    get killed -> curl error 23). URLs come from Silent's fresh Discord
    links (the 2026-10-25 refresh expired ~2026-10-26 09:53 UTC; fresh links
@@ -146,16 +152,29 @@ func_8002B28C] # 0x1340, nine absolute:true data symbols
 D_801147F8). Idempotent. The 50/50 allocator replay pre-predicts its
 cascade; expected deltas = the same three prologue residuals as slps.
 
-## Phase F - the staged families (after the judge loop, or interleaved if GREEN)
+## Phase F - post-judge waves (rewritten cron-20261027-0219; the original text here was stale - it fell for the same stale-payload trap)
 
-1. MEMCLR FAMILY FLIP - 12 build-inert src units covering all 14 carved
-   copies (per-row one-line yaml asm->c flip + .s deletion + zero renames;
-   recipes in each src header + docs/TASKS.md 2026-10-24 1231/1347).
-2. PALETTE-FADE WRAPPER QUARTET - word-proven (scripts/prove_wrappers.py
-   PASS), D-MID-ROW two-cut splits (recipes in headers + docs/TASKS.md
-   2026-10-24 1502).
-Census rerun after EACH family lands. Verify 8/8 GREEN precedes each
-landing; commit+push per family.
+The original Phase F listed the memclr family flip and the palette-fade
+wrapper quartet as land-next. STALE: both landed 2026-10-24 with the live
+oracle - the memclr family flip 14/14 via scripts/land_memclr.sh (all
+seven targets GREEN first shot, ratchet 386->520) and the wrapper quartet
+e5d23db5 (ratchet ->625) - plus the 0x4B pair family (95ace34a) and the
+pair-pool harvests (d6b4bfb7 TransposeMatrix x6 + LIBSN x10; the 0534
+_SsUtBuildADSR x8 + SetDQB x4 + Square0/12 x4 wave, ratchet 644/0 now).
+Do NOT re-run their recipes - the yaml rows are already c.
+
+What actually remains after the Phase D/E judge loop:
+1. census + classifier rerun (build/invariant_census.txt +
+   build/split_classifier.txt) - the freshly landed rows leave the pool
+   and the votes re-derive the next waves; per the 0534 record the
+   classifier's candidates are the lane-owned D-MID-ROW graveyard rows -
+   do NOT grab them.
+2. the pair pool's remaining exact-unmatched singles: the movstrsi
+   block-move class IS the Phase C-E unit pair itself; the rest are
+   adjudicated library-class stubs/veneers or lane-owned clusters.
+3. slps_00270's two un-carved boot-region memclr copies stay parked on
+   the carve question (the scan lane's).
+Verify 8/8 GREEN precedes any landing; commit+push per landing.
 
 ## Standing gotchas
 
