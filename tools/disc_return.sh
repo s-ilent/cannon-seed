@@ -9,7 +9,13 @@
 #   - sha-gate skipped: the byte-size + sha256 gates refuse to proceed;
 #   - the woven-corruption trap: --per-sector is hardcoded on both ISO
 #     extracts (contiguous read cannot be reached from this script);
-#   - sector-count drift: both raw bins are asserted before extraction.
+#   - sector-count drift: both raw bins are asserted before extraction;
+#   - disk-full mid-extract (cron-20261027-1748: chd_extract died on
+#     Errno 28 at ~200k sectors after a full ~2.2GB of pipeline files):
+#     a pre-flight free-space gate fail-fasts BEFORE the first download.
+#
+# Space budget: both CHDs (~765MB) + both raw bins (~1.26GB) + ISO
+# extracts (~100MB) ~= 2.15GB; the gate demands 2.5GB free.
 #
 # Usage:
 #   sh tools/disc_return.sh '<EU .chd url>' '<JP .chd url>'
@@ -49,6 +55,21 @@ if bash tools/witness_check.sh >/dev/null 2>&1; then
     exit 0
 fi
 say "witness down -> running the disc-return sequence"
+
+# --- 0b. pre-flight free-space gate (fail-fast BEFORE downloading) ------
+# cron-20261027-1748 lost a full download+extract cycle to Errno 28 when
+# the sandbox rootfs hit 100%. 2.5GB covers the whole pipeline (~2.15GB)
+# with headroom. df -Pk: portable, 1K blocks, 'available' = field 4.
+avail_kb=$(df -Pk "$REPO" | awk 'NR==2{print $4}')
+if [ "$avail_kb" -lt 2500000 ]; then
+    say "FATAL: only ${avail_kb}KB free below $REPO - the pipeline needs ~2.15GB"
+    say "(CHDs 765MB + raw bins 1.26GB + iso extracts ~100MB)."
+    say "Evict stale disc dumps outside the repo (old manual-era *.bin /"
+    say "disc_* / work dirs are all regenerable from the sha256-gated CHDs)"
+    say "and re-run. NOT downloading anything."
+    exit 7
+fi
+say "pre-flight space OK (${avail_kb}KB free, need >= 2500000KB)"
 
 mkdir -p disk build
 
