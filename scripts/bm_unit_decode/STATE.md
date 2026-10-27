@@ -985,3 +985,38 @@ no remaining alloc-side item).
   like slps (the 50/50 replay pre-predicts its cascade; expected deltas:
   bind order, the str->a1 hoist at the callsite, the size-load interlock
   - the same three).
+
+## THE LIVE JUDGE VERDICTS (cron-20261027-0748 window - the discs returned)
+
+* Phase A witness 8/8 STRICT first shot (Silent's 2026-10-27 06:29 links);
+  Phase B verify 8/8 GREEN + suite 85/85 + ratchets 644/0 on HEAD
+  (7224aee4, which already carries the Phase C rule-1 n-load patch - the
+  runbook's Phase C acceptance is satisfied by that verify).
+* HARNESS BUG FOUND + FIXED en route: wire_split_twin.py wrote the twin's
+  yaml rows at VA low bits (0xABC8/0xB28C) instead of the +0x800 file
+  offsets its own docstring records (0xB3C8/0xBA8C) - the judge then
+  mini-linked the unit 0x800 low and sliced retail mid-previous-function
+  (432/432 total mismatch, first word jal). Byte test on the returned
+  baseline pinned the retail prologue addiu sp,-0x28 at file 0xB3C8 =
+  VA 0x8002ABC8; the giant's own address comments (B3C8 8002ABC8) agree.
+  Fixed in-script; the dry-run rehearsal validated the giant CUT (line
+  based) but nobody had ever run the judge, so the offset defect was
+  invisible until the oracle came back.
+* LIVE VERDICTS (judge_unit, sha1-gated on the returned baselines):
+  - slps func_8002ADA0 (v22_u_prejoin.c): default 426/431 words, built
+    1724 vs row 1732 (-8); no-sched2 381/433, built 1736 (+4). First
+    diffs: default diverges at +4 (save-order); no-sched2 diverges at
+    +0x20 - the save-block MATCHES retail under no-sched2 (Law 2 live).
+  - sces func_8002ABC8 (func_8002ABC8.c): default 144/432 words, built
+    1728 vs row 1732 (-4); no-sched2 416/433, built 1740 (+8). First
+    diffs: default diverges at +4; no-sched2 diverges at +0x20 (Law 2
+    live on the twin too).
+* READING: neither regime closes either unit - the pre-registered deltas
+  (b)-(e) (the -1/0x200 pair, the D_8006974C/D_800693F4 cache, the shared
+  -3 err block, the return-2 j-thunk layout) are REAL and live-only
+  confirmed. NEW SIGNAL: the twin candidate is 2/3 exact under the
+  DEFAULT regime (144/432) vs slps's 426/431 - the twin decode is much
+  closer to retail than the slps v22 candidate; the slps unit's remaining
+  work is the bigger lift.
+* Both probes reverted per runbook after judging; tree back to HEAD +
+  the wire-script fix.

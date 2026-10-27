@@ -13,8 +13,8 @@ Rehearsal numbers (mirror of the slps split; the twin region is 598 lines,
 IDENTICAL to slps's 598):
   - yaml: [0x7B40, asm, func_80027340] # 0x528c becomes
       [0x7B40, asm, func_80027340]   # 0x3888
-      [0xABC8, c,   func_8002ABC8]   # 0x6c4
-      [0xB28C, asm, func_8002B28C]   # 0x1340
+      [0xB3C8, c,   func_8002ABC8]   # 0x6c4
+      [0xBA8C, asm, func_8002B28C]   # 0x1340
   - asm: giant asm/sces_00269/nonmatchings/func_80027340.s (7451 lines);
     twin region = lines 5183..5780 (starts "nonmatching func_8002ABC8, 0x40",
     ends "endlabel func_8002B26C") leave the giant; the tail
@@ -40,8 +40,8 @@ SRC_DST = os.path.join(REPO, "src/func_8002ABC8.c")
 OLD_LINE = "      - [0x7B40, asm, func_80027340]   # 0x528c\n"
 NEW_LINES = (
     "      - [0x7B40, asm, func_80027340]   # 0x3888\n"
-    "      - [0xABC8, c, func_8002ABC8]   # 0x6c4\n"
-    "      - [0xB28C, asm, func_8002B28C]   # 0x1340\n"
+    "      - [0xB3C8, c, func_8002ABC8]   # 0x6c4\n"
+    "      - [0xBA8C, asm, func_8002B28C]   # 0x1340\n"
 )
 
 # 0-based slice bounds into the giant (7451 lines):
@@ -88,7 +88,7 @@ def main():
     # 1. yaml split
     y = open(YAML).read()
     if OLD_LINE not in y:
-        if "[0xABC8, c, func_8002ABC8]" in y:
+        if "[0xB3C8, c, func_8002ABC8]" in y:
             print("yaml already split")
         else:
             print("yaml anchor line not found", file=sys.stderr)

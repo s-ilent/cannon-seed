@@ -164,11 +164,18 @@ wire_split_twin.py is MEASURED + DRY-RUN VALIDATED on the committed tree
 (cron-20261026-2119): giant 7451 lines, twin region 598 lines (5183..5780,
 starts "nonmatching func_8002ABC8, 0x40", ends "endlabel func_8002B26C" -
 the SAME 598-line shape as slps), tail 5781..EOF -> func_8002B28C.s,
-yaml rows 0x3888 / [0xABC8, c, func_8002ABC8] # 0x6c4 / [0xB28C, asm,
+yaml rows 0x3888 / [0xB3C8, c, func_8002ABC8] # 0x6c4 / [0xBA8C, asm,
 func_8002B28C] # 0x1340, nine absolute:true data symbols
 (D_800693F4, D_80114678..7B, D_801146D8, D_801146F8, D_80114778,
 D_801147F8). Idempotent. The 50/50 allocator replay pre-predicts its
 cascade; expected deltas = the same three prologue residuals as slps.
+OFFSET CORRECTION (cron-20261027-0748, live-window): the script's yaml
+rows originally carried 0xABC8/0xB28C - the VA low bits, missing the
++0x800 file-offset shift; the judge then mini-linked 0x800 low and
+sliced retail mid-function (a total-mismatch mirage). Fixed in-script
+(the docstring's own extents 0xB3C8..0xBA8C were always right); the
+rehearsal validated only the line-based giant cut, so run the judge
+before trusting any wired split's numbers.
 
 ## Phase F - post-judge waves (rewritten cron-20261027-0219; the original text here was stale - it fell for the same stale-payload trap)
 
