@@ -169,3 +169,10 @@ landing; commit+push per family.
 - worklog digest gate + RESTORE NOTE SOP every session; end-of-session
   worklog append (Task ID: cron-<UTC yyyyMMdd-HHMM>) + Discord report
   with <t:UNIX:f> window stamps.
+- The RESTORE NOTE helper is IN-REPO and durable: `python3
+  tools/append_restore_note.py <digest_capture_file>` (banked
+  cron-20261027-0104 after the persistent-layer copy was rollback-eaten a
+  third time; forced -restore suffix, DIGEST_EXIT/EXIT lines filtered).
+  The exec-bit dance is dead too: cc.sh / witness_check.sh / rehydrate.sh
+  carry the executable bit IN the index (same banking), so resets and
+  checkouts restore it - no post-reset chmod needed for the entry points.
