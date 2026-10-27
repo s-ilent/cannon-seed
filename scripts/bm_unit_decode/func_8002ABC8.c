@@ -178,4 +178,23 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
  * register is the root: retail reuses hdr's freed s1, our build
  * assigns s2 - a global-alloc outcome (find_reg pass-0 reuse), the
  * twin's find_reg replay is the mechanized next step.
+ *
+ * PROLOGUE CLUSTER DECODED (cron-20261027-1518 window): the 83-word run
+ * is FOUR coupled compiler-internal sub-deltas. (1) the alignment test:
+ * our `t % 0x2000 != 0` folds to andi/beqz; retail recomputes
+ * trunc-align(t) with a SECOND full signed-division idiom + beq (7
+ * words) - the recomputed division is cse-DISTINCT from line 80's
+ * (needs a reload-time copy pseudo; P1 literal repeat and P2 copy
+ * variable both merge, 425/432 built 1728 each, banked negative). (2)
+ * the save/bind order: retail saves (ra,s3,s1) first, ours interleaves
+ * - the BB's priorities are all 1-2, a sched2 tie-break outcome (Law 2
+ * domain). (3) the fill register: retail 0xff in a1 with strcpy's arg
+ * set up late; ours in a3 with `move a1, a2` hoisted - global-alloc
+ * reg-choice. (4) the lo-fold: retail splits (addiu at,at,%lo; addu;
+ * sb 0(at)), ours embeds (sb a3,%lo(at)) - expand-time address RTX.
+ * The slps twin's retail prologue is structurally identical (same four
+ * sub-deltas, -0x68b4 lo) and our v26 build diverges the same way - the
+ * slps -4 size shortfall IS the second division. Every residual word of
+ * this unit is now attributed; the cluster is one lever deeper than the
+ * source, same honest class as the -1 family.
  */

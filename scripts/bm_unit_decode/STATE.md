@@ -1155,3 +1155,52 @@ no remaining alloc-side item).
   build/judge/ from this window's -da runs, ready for the schedule2 ready-list reading.
 * NEXT WINDOW: the prologue cluster via the sched2 dumps (the big fish), or the cse.c fetch-and-read
   detour. The main candidate stays m1 (106/433); variants m3/m4 banked as negative results.
+
+## THE PROLOGUE CLUSTER IS FULLY DECODED (cron-20261027-1518 window - four sub-deltas, all compiler-internal)
+
+* Phase A FIFTH production disc-return (the 93rd rollback ate worklog+discs again; RESTORE NOTE
+  cron-20261027-1520-restore, 157 lines - the worklog had reverted to an Oct-14 snapshot, 155
+  windows digest-level). Phase B re-verified green on 27764d44 (verify 8/8, suite 85/85,
+  ratchets 644/0). The 06:29 links still live ~9h later, witness 8/8 first shot.
+* THE 83-WORD PROLOGUE RUN DECODES AS FOUR COUPLED SUB-DELTAS (fulldiff + RTL/sched2 dump
+  cross-read, dumps regenerated via CC1FLAGS_EXTRA='-da' tools/cc.sh -o build/judge/<stem>.o):
+  (1) THE ALIGNMENT-TEST IDIOM: our source `t % 0x2000 != 0` folds to andi/beqz (2 words,
+  i=0 fill in the delay slot); RETAIL emits a SECOND FULL SIGNED-DIVISION IDIOM
+  (move v0,v1; bgez v0; nop; addiu-if-neg; sra; sll) + `beq v1, v0` (7 words) - the
+  trunc-align(t) recomputed for the compare, 5 words longer.
+  (2) THE SAVE/BIND ORDER: retail = 3 saves (ra, s3, s1) then the 5 binds/reloads; ours
+  interleaves loads/binds first and pushes the saves late (sw s3 war-pinned right before
+  move s3). The RTL shows the BB's priorities are all 1-2 (the div chain crosses the BB via
+  the bgez), so the order is a sched2 tie-break outcome - Law 2's domain (no-sched2 matches
+  the block but loses +12 elsewhere).
+  (3) THE FILL REGISTER + THE STRCPY HOIST: our build materializes `move a1, a2` (str ->
+  strcpy's arg reg) in the prologue and puts the 0xff fill in a3; retail keeps a1 for the
+  fill and sets strcpy's arg up late. Global-alloc reg-choice outcome (the find_reg pass-0
+  class).
+  (4) THE LO-FOLD SPLIT: our fill store is the embedded form (lui; addu at,at,v1;
+  sb a3,%lo(at)); retail splits (lui; addiu at,at,%lo; addu; sb a1,(at)) - one word, an
+  expand-time address-RTX formation outcome.
+* THE TEST-IDIOM LEVER IS DEAD - TWO NEW NEGATIVE EXPERIMENTS: P1 twin_p1_divtest (the
+  literal div-mul-compare repeat `t / 0x2000 * 0x2000 != t`) CSE-MERGES with line 80's
+  identical expression - the test collapses to `beq a0, v1` and the whole body shifts -4
+  (judge 425/432 built 1728, a 393-word run - WORSE than m1's 106/433). P2 twin_p2_ucopy
+  (the copy variable `u = t; if (u / 0x2000 * 0x2000 != u)`) is PROPAGATED by cse in the
+  same BB - byte-identical negative (425/432, built 1728). The 7-word shape needs the
+  test's division on a pseudo that is cse-DISTINCT from t's - a reload-time copy - the
+  same compiler-internal class as the -1 family (491ac374). Modulo shapes all fold to
+  andi (m1 proves it); every div-mul repeat merges (P1/P2 prove it).
+* THE SLPS -4 SIZE SHORTFALL IS THE SAME DELTA (cross-target unification): slps retail
+  func_8002ADA0's prologue is STRUCTURALLY IDENTICAL to sces retail's (saves-first, the
+  7-word second-division test, the split-lo fill store with -0x68b4, fill in a1), and our
+  v26 build diverges the same way (1-insn beq test, embedded lo). The 393-word run is the
+  shifted body. The queue item closes as ATTRIBUTED: the missing 4 words are the second
+  division, unreachable from source. That both targets' retail prologues share all four
+  sub-deltas while both our builds diverge identically confirms compile-state (not
+  source-shape) as the driver.
+* MAIN CANDIDATE STAYS m1 (106/433, built 1732 = retail size exactly). Variants banked:
+  twin_p1_divtest (negative, cse merge), twin_p2_ucopy (negative, copy propagated). The
+  83-word prologue cluster now carries the same honest label as the -1 family: a
+  compiler-internal delta set, one lever deeper than the source. NEXT: either the cse.c
+  fetch-and-read detour (upstream gcc 2.6.3 source, both families) or park the twin unit
+  and spend windows on lanes that can still move (the unit is 106/433 with every residual
+  word attributed).
