@@ -15,6 +15,16 @@ reset to origin/main, worklog tail read).
    assertions, --per-sector hardcoded, witness gate as the exit code);
    ~9 min, run under a >=600s shell timeout. The manual sequence stays
    below as the fallback/reference.
+   OFFLINE-VALIDATED (cron-20261027-0334): the script's disc-free surface
+   is proven - usage path exits 2; refusal path fail-fasts (connection-
+   refused URL -> curl 7 -> script exit 7 via set -e, NO partial file left
+   in disk/); the cp names are exact (`iso9660_extract.py` flattens
+   `DRAGOON/G3.EXE;1` -> `DRAGOON_G3.EXE;1` via `p.replace("/", "_")` and
+   mkdirs its own outdir); the sector asserts are real (chd_extract writes
+   bare 2352-byte sectors: EU 267752 x 2352 = 629752704, JP 267504 x 2352
+   = 629169408); baselines/ survives a fresh clone (committed
+   /baselines/.gitignore keeps the dir). Still disc-only: download ->
+   sha gate -> chd_extract -> iso extract -> witness 8/8.
 1. Download BOTH discs IN FOREGROUND in one Bash call (backgrounded curls
    get killed -> curl error 23). URLs come from Silent's fresh Discord
    links (the 2026-10-25 refresh expired ~2026-10-26 09:53 UTC; fresh links
