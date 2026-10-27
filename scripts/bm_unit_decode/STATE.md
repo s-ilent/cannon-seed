@@ -1078,3 +1078,47 @@ no remaining alloc-side item).
   candidate (v22_u_prejoin.c) - if its return-2 cluster also closes,
   the 426/431 drops the same way. Next window: slps VR2 first, then
   the twin's prologue cluster via declaration/ref-order mutations.
+
+## THE VR2 TRANSFER RUNS + THE TWIN PROLOGUE OPENS (cron-20261027-1248 window)
+
+* Phase A third production disc-return (91st rollback ate the worklog AND
+  the discs; 06:29 links still live ~6.4h later, witness 8/8 first shot).
+  Phase B all green (verify 8/8, suite 85/85, ratchets 644/0); Phase C
+  confirmed pre-landed (7224aee4 carries the rule-1 n-load patch; Phase B
+  doubles as its re-acceptance). 92nd-rollback cleanup: the committed twin
+  candidate func_8002ABC8.c had a MALFORMED comment (early `*/` at the
+  VR2 record) that broke the compile at HEAD - "unterminated character
+  constant" - the banked 107/433 verdict still reproduced after the
+  comment repair (pure comment fix, zero C-body change).
+* SLPS VR2 TRANSFER (the queued item, v26_vr2.c): the inverted guard
+  does NOT transfer its twin gain. v22 was 426/431 built 1724 (-8); v26
+  is 425/432 built 1728 (-4) - size +4 closer, count flat, and the
+  fulldiff shows ONE 393-word shifted run (the whole body misaligns at
+  +4 on the prologue save order) plus a 32-word tail run. The twin's
+  +4 came from the return-2 j-thunk materializing under the twin's
+  schedule; slps's scheduler keeps the old layout. CONCLUSION: the VR2
+  layout gain is PER-TARGET (a schedule2 outcome), not a source law.
+  v26 kept as the slps best (size -4 beats v22's -8).
+* TWIN M1 split-t (twin_m1_split_t.c, KEPT in the main candidate):
+  `t = size + 0x200` -> `t = size; t += 0x200;` moves the size reload
+  into t's home register - built now does lw v1,0x44(sp) DIRECTLY (the
+  exact retail instruction; the joint form reloads through a0). Judge
+  107/433 -> 106/433. no-sched2 re-check on the new candidate: 423/433
+  built 1744 (+12) - the no-sched2 regime stays dead for the twin.
+* TWIN M2 hdr-src (twin_m2_hdr_src.c, REJECTED): extending hdr's last
+  use to the 0x200 copy breaks the exact block-move bindings - judge
+  187/432, size 1728 (-4). hdr's death point stays before the first
+  open.
+* THE RESIDUAL DECODE (fulldiff on m1): 106 words = prologue cluster
+  (83, 0x8002ABCC..0x8002AD20) + a small-run family (2+1+1+18+1). The
+  whole small family is ONE post-hdr register re-assignment delta:
+  built [s1<-0x200-const, s2<-(-1), s3<-cached D_800693F4 addr] vs
+  retail [s1<-(-1), s2<-0x200-const, no cache] (fresh a1 per call).
+  The -1 register is the ROOT (5 compare words + the 18-word cascade);
+  retail reuses hdr's freed s1, ours assigns s2 - find_reg pass-0
+  reuse territory, the banked slps find_reg replay (48/48) is the
+  mechanized template for the twin's version.
+* NEXT: (1) the twin's find_reg replay -> the -1-in-s1 source lever;
+  (2) the prologue save/bind permutation (83 words, the only big
+  cluster left); (3) slps: the shifted-run alignment problem means its
+  next lever is whichever closes the -4 size shortfall, not count.

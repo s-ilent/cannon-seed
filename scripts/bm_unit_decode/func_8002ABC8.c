@@ -31,6 +31,9 @@
  * the create-open flags.
  *
  * Source shapes that make GCC 2.6.3 reproduce the retail body:
+ * 0. The t-chain is the SPLIT assignment (`t = size; t += 0x200;`) -
+ *    the size reload lands in t's home register (retail's direct
+ *    lw v1 form; the joint expression reloads through a0 instead).
  * 1. The sector math is SIGNED division/modulo, three separate
  *    expressions - t/0x2000*0x2000, then the t%0x2000 rebind, then the
  *    final total/0x2000 for the sector byte (the bgez+0x1fff-bias+sra
@@ -72,7 +75,8 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
     unsigned i;
     unsigned char *hdr;
 
-    t = size + 0x200;
+    t = size;
+    t += 0x200;
     total = t / 0x2000 * 0x2000;
     if (t % 0x2000 != 0)
         total += 0x2000;
@@ -145,7 +149,6 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
  * v0=2 in the j delay slot (the shared k=6 epilogue thunk), ours
  * inverts the fd==-1 branch (bne) and lays return-2 out later;
  * retail's -1 sits in s1, ours in s2 (delta (b), live-confirmed).
- */
  *
  * MUTATION VR2 (inverted guard) - THE WIN: `if (fd != -1) { close(fd);
  * return 2; }` with the create path falling through unguarded closes
@@ -157,4 +160,22 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
  * (built lw a0,0x44(sp) + addiu v1,a0; retail lw v1,0x44(sp) + addiu
  * v1,v1 - the t-chain reloads into its carry register) + the sector
  * math cascade - allocator/scheduler outcomes, next window's target.
+ *
+ * MUTATION M1 split-t (cron-20261027-1248 window): `t = size + 0x200`
+ * -> `t = size; t += 0x200;` moves the size reload into t's own home
+ * register: built now reloads DIRECTLY into v1 (lw v1,0x44(sp), the
+ * exact retail form) instead of through a0. Judge 107/433 -> 106/433
+ * (the prologue cluster's reload word matches; the save/bind
+ * permutation remains). Mutation KEPT: count-better AND shape-correct.
+ * MUTATION M2 hdr-src (same window): extending hdr's last use to the
+ * 0x200 copy (`= *(struct S200 *)hdr`) is NEGATIVE - judge 187/432,
+ * size 1728 (-4), the exact 0x200 block-move bindings break. Rejected;
+ * hdr's death point stays before the first open.
+ * The small-run family is decoded: ALL of it is one post-hdr register
+ * re-assignment delta - built maps [s1<-0x200-const, s2<-(-1),
+ * s3<-cached D_800693F4 address], retail maps [s1<-(-1), s2<-0x200,
+ * no cache] (fresh a1 materialization per write/read call). The -1
+ * register is the root: retail reuses hdr's freed s1, our build
+ * assigns s2 - a global-alloc outcome (find_reg pass-0 reuse), the
+ * twin's find_reg replay is the mechanized next step.
  */
