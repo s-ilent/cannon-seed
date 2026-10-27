@@ -1059,3 +1059,22 @@ no remaining alloc-side item).
   `if (fd != -1) { close(fd); return 2; }`); (2) the prologue/size-load
   register choices via declaration/ref-order mutations. The fulldiff
   harness makes every iteration readable; the judge is the arbiter.
+
+## VR2 CLOSES THE RETURN-2 CLUSTER (same window, next iteration)
+
+* MUTATION VR2 (inverted guard): `if (fd != -1) { close(fd); return 2; }`
+  + unguarded create-path fall-through - judge 144/432 -> **107/433**
+  AND the size delta DIES (built 1732 = retail exactly; both prior
+  builds were 1728). The whole 60-word run 2 is GONE: retail's layout
+  (guard branches into create; close+j-thunk with v0=2 in the j delay
+  slot falls through) is source-reproducible after all - delta (e) is
+  CLOSED at the source level, not an allocator outcome.
+* VR2 IS BANKED in the staged candidate func_8002ABC8.c (with VU's
+  unsigned i). Twin residual: 107/433, ONE cluster - the prologue
+  save/bind permutation, the size reload target (built: lw a0,0x44(sp)
+  then addiu v1,a0,0x200; retail: lw v1,0x44(sp) then addiu v1,v1 - the
+  t-carry register gets its own reload) and the sector-math cascade.
+* The v22 (slps) lesson transfers: TRY VR2's inverted guard on the slps
+  candidate (v22_u_prejoin.c) - if its return-2 cluster also closes,
+  the 426/431 drops the same way. Next window: slps VR2 first, then
+  the twin's prologue cluster via declaration/ref-order mutations.

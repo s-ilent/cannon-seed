@@ -101,31 +101,31 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
     *(struct S200 *)D_800693F4 = *(struct S200 *)D_80114678;
 
     fd = open(path, 1);
-    if (fd == -1) {
-        fd = open(path, (D_8011467B[0] << 16) | 0x200);
-        if (fd == -1)
-            return 0;
+    if (fd != -1) {
         close(fd);
-        fd = open(path, 2);
-        if (fd == -1)
-            return -3;
-        if (write(fd, D_800693F4, 0x200) != 0x200) {
-            close(fd);
-            return -3;
-        }
+        return 2;
+    }
+    fd = open(path, (D_8011467B[0] << 16) | 0x200);
+    if (fd == -1)
+        return 0;
+    close(fd);
+    fd = open(path, 2);
+    if (fd == -1)
+        return -3;
+    if (write(fd, D_800693F4, 0x200) != 0x200) {
         close(fd);
-        fd = open(path, 1);
-        if (fd == -1)
-            return -3;
-        if (read(fd, D_800693F4, 0x200) != 0x200) {
-            close(fd);
-            return -3;
-        }
-        close(fd);
-        return 1;
+        return -3;
     }
     close(fd);
-    return 2;
+    fd = open(path, 1);
+    if (fd == -1)
+        return -3;
+    if (read(fd, D_800693F4, 0x200) != 0x200) {
+        close(fd);
+        return -3;
+    }
+    close(fd);
+    return 1;
 }
 
 /* LIVE JUDGE MUTATION RECORD (cron-20261027-1018 window, oracle up):
@@ -145,4 +145,16 @@ int func_8002ABC8(char *path, int code, char *str, void *rec, void *src5,
  * v0=2 in the j delay slot (the shared k=6 epilogue thunk), ours
  * inverts the fd==-1 branch (bne) and lays return-2 out later;
  * retail's -1 sits in s1, ours in s2 (delta (b), live-confirmed).
+ */
+ *
+ * MUTATION VR2 (inverted guard) - THE WIN: `if (fd != -1) { close(fd);
+ * return 2; }` with the create path falling through unguarded closes
+ * the ENTIRE return-2 cluster: judge 144/432 -> 107/433 AND the size
+ * delta dies (built 1732 = retail exactly). Retail's layout is now
+ * reproduced: the guard branches INTO the create path and the
+ * close+j-thunk return-2 falls through. The residual is ONE cluster:
+ * the prologue save/bind permutation + the size reload target
+ * (built lw a0,0x44(sp) + addiu v1,a0; retail lw v1,0x44(sp) + addiu
+ * v1,v1 - the t-chain reloads into its carry register) + the sector
+ * math cascade - allocator/scheduler outcomes, next window's target.
  */
