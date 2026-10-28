@@ -60,6 +60,9 @@ def _base_norm(s):
     s = re.sub(r"^move(\$\d+),(\$\d+)$", r"addu\1,\2,$0", s)
     # addu/subu rd,rs,imm assemble as addiu rd,rs,±imm (no imm form of addu)
     s = re.sub(r"^addu([^,]*,[^,]*),(-?\d+)$", r"addiu\1,\2", s)
+    # j $reg assembles as jr $reg (gas macro; byte-proven: both -> 0x03e00008
+    # for $31, tools-local binutils, banked cron-20261028-0118)
+    s = re.sub(r"^j(\$\d+)$", r"jr\1", s)
     return s
 
 
