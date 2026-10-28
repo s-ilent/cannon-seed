@@ -232,6 +232,39 @@ What actually remains after the Phase D/E judge loop:
    the carve question (the scan lane's).
 Verify 8/8 GREEN precedes any landing; commit+push per landing.
 
+## Phase G - the GsMapModelingData six-row landing (banked cron-20261028-0233 + 0348; DRY-RUN-PROVEN TO THE ORACLES)
+
+State: scripts/bm_unit_decode/gmd_v14.c is BYTE-EXACT to the committed
+retail 0x78 (gmd_byte_proof.py, 30/30 words, default flags; v15 the
+alternate), all SIX game modules carry the body as standalone yaml rows
+word-identical to the g3org_jp reference (gmd_launch_audit.py), the boots
+carry no copy, and the dry-run build with the flip reproduced the committed
+whole-image oracle sha1 on ALL SIX TARGETS - verify's own criterion, no
+discs needed (re-certified on the 100th/101st-rollback toolchains).
+
+PREFERRED ORDER: right after Phase E (it is independent of C-E and only
+requires Phase B's green), so Phase F's census already reflects the six
+landed rows. Acceptance gate is the six verifies - the oracles already
+matched in the dry-run, so expect GREEN first shot:
+
+    python3 scripts/bm_unit_decode/gmd_apply_landing.py apply
+    make verify TARGET=g3org_jp      # then the other five; ALL must be GREEN
+    python3 tools/judge_unit.py g3org_jp GsMapModelingData
+    CC1FLAGS_EXTRA="-fno-schedule-insns2" python3 tools/judge_unit.py g3org_jp GsMapModelingData
+    # regime 2 expected to carry exactly the one i++/f0-load swap (first diff @15)
+    # spot-judge the five twins (g3org_eu g3_jp g3_eu mainmenu_jp mainmenu_eu);
+    # expected identical verdicts - the placements are word-identical and
+    # relocation-free (no %hi/%lo, no absolute addresses)
+    # then commit type: tools: - the tool leaves the tree flipped
+    # (1 new src + 6 one-line yaml flips + 6 dead listings removed)
+
+Revert (if anything refuses): `python3 scripts/bm_unit_decode/
+gmd_apply_landing.py revert`. Zero symbols edits needed (the curated names
+are in place for all six placements). Every flipped row's successor is the
+landed GsGetTimInfo c row, so judge_unit's c-row extent pins to exactly
+0x78 - no giant-row surgery, no data rows, no mainmenu exceptions (the
+2018-window CAUTION closed as a target cross-wire, Log cron-20261028-0233).
+
 ## Standing gotchas
 
 - Never commit: PAT, disc images, baselines, extracted assets. The
