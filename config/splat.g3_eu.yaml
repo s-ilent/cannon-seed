@@ -336,7 +336,7 @@ segments:
       - [0x2F5AC, asm, func_80055D4C]   # 0x70 sdk
       - [0x2F61C, asm, func_80055DBC]   # 0x34 sdk
       - [0x2F650, asm, func_80055DF0]   # 0x98 sdk
-      - [0x2F6E8, asm, func_80055E88]   # 0x78 sdk
+      - [0x2F6E8, c, GsMapModelingData]   # 0x78 sdk
       - [0x2F760, c, GsGetTimInfo]   # 0xe4 sdk
       - [0x2F844, asm, func_80056114]   # 0x2d4 sdk
       - [0x2FB18, asm, func_800563E8]   # 0x2c4 sdk
