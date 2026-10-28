@@ -121,7 +121,7 @@ segments:
       - [0xF72C, asm, func_8002EF2C]   # 0x154 sdk
       - [0xF880, c, func_80031550]   # 0xb0 sdk
       - [0xF930, asm, func_80031600]   # 0x88 sdk
-      - [0xF9B8, asm, func_80031688]   # 0x2c sdk
+      - [0xF9B8, c,   func_80031688]   # 0x2c sdk
       - [0xF9E4, asm, func_8002F1E4]   # 0xc
       - [0xF9F0, data, data_800316C0]   # 0x4 pinned
       - [0xF9F4, asm, func_800316C4]   # 0x44 pinned
@@ -135,7 +135,7 @@ segments:
       - [0xFD4C, asm, func_80031A1C]   # 0x58 sdk
       - [0xFDA4, asm, func_80031A74]   # 0x7c sdk
       - [0xFE20, c, setIntrVSync]   # 0x2c sdk
-      - [0xFE4C, asm, func_80031B1C]   # 0x2c sdk
+      - [0xFE4C, c,   func_80031B1C]   # 0x2c sdk
       - [0xFE78, asm, func_8002F678]   # 0x148 sdk
       - [0xFFC0, asm, func_8002F7C0]   # 0x9c sdk
       - [0x1005C, asm, func_80031E5C]   # 0x10 sdk
