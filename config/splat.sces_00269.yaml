@@ -292,7 +292,7 @@ segments:
       - [0x13B94, asm, func_80033394]   # 0x3c8 sdk
       - [0x13F5C, asm, func_8003375C]   # 0xf0 sdk
       - [0x1404C, asm, func_8003384C]   # 0xc8 sdk
-      - [0x14114, asm, func_80033914]   # 0x1c sdk
+      - [0x14114, c, len_param]   # 0x1c sdk
       - [0x14130, c, TransposeMatrix]   # 0x50 sdk
       - [0x14180, asm, func_80033980]   # 0x118
       - [0x14298, data, data_80033A98]   # 0x8
@@ -303,20 +303,20 @@ segments:
       - [0x146D8, asm, func_80033ED8]   # 0xe0 sdk
       - [0x147B8, c, func_8005DED4]     # 0x30 sdk
       - [0x147E8, asm, func_80033FE8]   # 0x160 sdk
-      - [0x14948, asm, func_80034148]   # 0x30 sdk
+      - [0x14948, c, func_8005E064]   # 0x30 sdk
       - [0x14978, c, ScaleMatrixL]   # 0x124 sdk
       - [0x14A9C, asm, func_8003429C]   # 0x140
       - [0x14BDC, asm, func_800343DC]   # 0x48 sdk
       - [0x14C24, asm, func_80034424]   # 0x48 sdk
       - [0x14C6C, asm, func_8003446C]   # 0x54 sdk
-      - [0x14CC0, asm, func_800344C0]   # 0x10c sdk
-      - [0x14DCC, asm, func_800345CC]   # 0x10c sdk
-      - [0x14ED8, asm, func_800346D8]   # 0x50 sdk
+      - [0x14CC0, c, func_8005E3DC]   # 0x10c sdk
+      - [0x14DCC, c, func_8005E4E8]   # 0x10c sdk
+      - [0x14ED8, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x14F28, c, ApplyMatrixSV]   # 0x5c sdk
       - [0x14F84, c, TransMatrix]   # 0x24 sdk
       - [0x14FA8, c, ScaleMatrix]   # 0x124 sdk
-      - [0x150CC, asm, func_800348CC]   # 0x30 sdk
-      - [0x150FC, asm, func_800348FC]   # 0x30 sdk
+      - [0x150CC, c, SetRotMatrix]   # 0x30 sdk
+      - [0x150FC, c, SetLightMatrix]   # 0x30 sdk
       - [0x1512C, c, SetColorMatrix]   # 0x30 sdk
       - [0x1515C, c, SetTransMatrix]   # 0x20 sdk
       - [0x1517C, data, data_8003497C]   # 0x4
@@ -342,8 +342,8 @@ segments:
       - [0x16730, c, DpqColorLight]   # 0x28
       - [0x16758, c, DpqColor3]   # 0x3c
       - [0x16794, asm, func_80035F94]   # 0x24 sdk
-      - [0x167B8, asm, func_80035FB8]   # 0x28 sdk
-      - [0x167E0, asm, func_80035FE0]   # 0x28 sdk
+      - [0x167B8, c, Square12]   # 0x28 sdk
+      - [0x167E0, c, Square0]   # 0x28 sdk
       - [0x16808, asm, func_80036008]   # 0x20 sdk
       - [0x16828, asm, func_80036028]   # 0x24 sdk
       - [0x1684C, c, OuterProduct12]   # 0x58 sdk
