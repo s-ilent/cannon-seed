@@ -3,7 +3,7 @@
  * g3org_eu x4 each; identities live in the yaml, the symbols file and the
  * landing commit - the headers name no siblings).
  *
- * Decode (26th window, cron-202610292157; both 25th-window open items closed):
+ * Decode (26th window, cron-202610292127; both 25th-window open items closed):
  * a frustum-honoring recursive triangle-subdivision driver feeding a
  * display-list builder. The row is a SIX-chunk multi-function listing - the
  * chunks are ONE handwritten routine, chained by intra-row beqz falls:

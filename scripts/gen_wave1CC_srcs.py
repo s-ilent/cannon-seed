@@ -2,7 +2,7 @@
 """gen_wave1CC_srcs.py - emit the twenty per-row src units for the 0x1CC
 recursive-triangle-subdivision own-row wave (sha1 28494af42860, 460 bytes
 x 20; the 26th window's landing prep, decode banked in docs/TASKS.md
-window cron-202610292157).
+window cron-202610292127).
 
 The wave104 one-mention law + the row-name==unit-name spelling law: every
 yaml row gets its own src/<walk-name>.c, the .globl + label named exactly
