@@ -224,9 +224,17 @@ PYUNITS
     n_c_fail=0
     while read -r cname crom; do
         [ -n "${cname:-}" ] || continue
-        [ -f "src/${cname}.c" ] || fail "yaml wants C at ${cname} but src/${cname}.c is missing"
-        if ! "$REPO/tools/cc.sh" -S -o "build/src/${cname}.o" "src/${cname}.c"; then
-            fail "C compile failed: src/${cname}.c"
+        # Per-target src override (the 1CC wave's cross-target walk-name
+        # collisions): src/$TARGET/$name.c wins when present, so one walk
+        # name can land different bodies in different targets while the
+        # yaml row name (and every symbol/ listing reference) stays the
+        # address-derived walk name. Object path build/src/<name>.o is
+        # unchanged, so gen_ld.py needs nothing.
+        csrc="src/${TARGET}/${cname}.c"
+        [ -f "$csrc" ] || csrc="src/${cname}.c"
+        [ -f "$csrc" ] || fail "yaml wants C at ${cname} but $csrc is missing"
+        if ! "$REPO/tools/cc.sh" -S -o "build/src/${cname}.o" "$csrc"; then
+            fail "C compile failed: $csrc"
         fi
         csec=$(printf '%08X' "0x${crom}")
         staged="build/src/${cname}.r.s"
@@ -256,9 +264,11 @@ PYUNITS
         [ "${#unit[@]}" -ge 3 ] || continue     # 2-field lines: plain rows
         base="${unit[0]}"; shift_count=0
         roms=("${unit[@]:1}")
-        [ -f "src/${base}.c" ] || fail "yaml wants C at ${base} but src/${base}.c is missing"
-        if ! "$REPO/tools/cc.sh" -S -o "build/src/${base}.o" "src/${base}.c"; then
-            fail "C compile failed: src/${base}.c"
+        csrc="src/${TARGET}/${base}.c"
+        [ -f "$csrc" ] || csrc="src/${base}.c"
+        [ -f "$csrc" ] || fail "yaml wants C at ${base} but $csrc is missing"
+        if ! "$REPO/tools/cc.sh" -S -o "build/src/${base}.o" "$csrc"; then
+            fail "C compile failed: $csrc"
         fi
         rom_args=()
         for r in "${roms[@]}"; do rom_args+=("0x$r"); done

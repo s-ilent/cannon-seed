@@ -97,10 +97,16 @@ def judge(target, name, rom, extent, gp_flags, asflags):
                   f"{work}.bin", f"{work}.ld", f"{work}.undef.ld", f"{work}.ld.err"):
         if os.path.exists(os.path.join(REPO, stale)):
             os.unlink(os.path.join(REPO, stale))
-    if not os.path.exists(os.path.join(REPO, f"src/{name}.c")):
+    # Per-target src override (matches tools/build.sh): src/$TARGET/$name.c
+    # wins when present, so cross-target walk-name collisions judge the
+    # body their own target actually links.
+    csrc = f"src/{target}/{name}.c"
+    if not os.path.exists(os.path.join(REPO, csrc)):
+        csrc = f"src/{name}.c"
+    if not os.path.exists(os.path.join(REPO, csrc)):
         return "NO-SOURCE", []
     t0 = time.time()
-    r = run([f"{REPO}/tools/cc.sh", "-S", "-o", f"{work}.o", f"src/{name}.c"])
+    r = run([f"{REPO}/tools/cc.sh", "-S", "-o", f"{work}.o", csrc])
     if r.returncode:
         return "COMPILE-FAIL", ["  " + ln for ln in r.stderr.strip().splitlines()[-5:]]
     gp_rewrite, gp_info = gp_flags

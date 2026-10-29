@@ -509,7 +509,7 @@ segments:
       - [0x4E834, asm, func_8006E034]   # 0x10 sdk
       - [0x4E844, asm, func_8006E044]   # 0x10 sdk
       - [0x4E854, data, data_8006E054]   # 0x8
-      - [0x4E85C, asm, func_8006E05C]   # 0x1cc
+      - [0x4E85C, c,   func_8006E05C]   # 0x1cc
       - [0x4EA28, data, data_8006E228]   # 0x14c
       - [0x4EB74, asm, func_8006E374]   # 0x4c
       - [0x4EBC0, data, data_8006E3C0]   # 0xc
@@ -517,7 +517,7 @@ segments:
       - [0x4EDAC, data, data_8006E5AC]   # 0x240
       - [0x4EFEC, asm, func_8006E7EC]   # 0x54
       - [0x4F040, data, data_8006E840]   # 0xc
-      - [0x4F04C, asm, func_8006E84C]   # 0x1cc
+      - [0x4F04C, c,   func_8006E84C]   # 0x1cc
       - [0x4F218, data, data_8006EA18]   # 0x1d8
       - [0x4F3F0, asm, func_8006EBF0]   # 0x2c4
       - [0x4F6B4, data, data_8006EEB4]   # 0x27c
@@ -525,7 +525,7 @@ segments:
       - [0x4F9A4, c, RotAverageNclipColorCol3]   # 0xd0 sdk
       - [0x4FA74, c, RotAverageNclipColorDpq3]   # 0xd0 sdk
       - [0x4FB44, data, data_8006F344]   # 0x8
-      - [0x4FB4C, asm, func_8006F34C]   # 0x1cc
+      - [0x4FB4C, c,   func_8006F34C]   # 0x1cc
       - [0x4FD18, data, data_8006F518]   # 0x1a8
       - [0x4FEC0, asm, func_8006F6C0]   # 0x7c
       - [0x4FF3C, data, data_8006F73C]   # 0x10
@@ -533,7 +533,7 @@ segments:
       - [0x501A4, data, data_8006F9A4]   # 0x230
       - [0x503D4, asm, func_8006FBD4]   # 0x8c
       - [0x50460, data, data_8006FC60]   # 0xc
-      - [0x5046C, asm, func_8006FC6C]   # 0x1cc
+      - [0x5046C, c,   func_8006FC6C]   # 0x1cc
       - [0x50638, data, data_8006FE38]   # 0x238
       - [0x50870, asm, func_80070070]   # 0x2f4
       - [0x50B64, data, data_80070364]   # 0x30c

@@ -27,7 +27,7 @@
  * complete V1/V2, cop2 RTPT transforms all three midpoints, and the depth
  * limit (a1->0) picks the exits: EMIT (leaf) stores SXY0/1/2 into the mid
  * records' +0x10 and emits the four quad-split sub-triangle packets through
- * the 0x4c packet shim (func_8005A454, a0 += 0x14 per packet, the returned
+ * the 0x4c packet shim (a0 += 0x14 per packet, the returned
  * cursor IS the routine's return value), RECURSE advances a3 by the 0x58
  * child-record stride, saves $ra at child->0x54, writes the sub-triangle
  * vertex pointers into child->0x48/4C/50 with the midpoints' SZ1/2/3 ->
@@ -35,8 +35,9 @@
  * times (self-recursion), restoring $ra after. Every vertex record - real
  * mesh vertex or 0x18-stride midpoint - carries screen X/Y at +0x10/+0x12
  * and depth at +0x14; the GTE control regs $24/$25/$26 carry APPLICATION
- * bounds (g3org_jp func_8005B0FC seeds R26=1000 (the depth line, consumed
- * as >>1), R24/R25=0 (the screen band centers), R27-R30 sibling scratch -
+ * bounds (the reboot/init ctc2 seed path in the g3org_jp tree writes
+ * R26=1000 (the depth line, consumed as >>1), R24/R25=0 (the screen band
+ * centers), R27-R30 sibling scratch -
  * the only ctc2 writers to $24-$30 in the tree).
  *
  * LANDING SHAPE: verbatim retail bytes as a hand-asm unit (the memmove/

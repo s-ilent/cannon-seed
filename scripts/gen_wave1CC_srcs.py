@@ -28,6 +28,7 @@ COMMIT WAITS FOR THE WITNESS per the INPUT GATES - the witness is UP as
 of this window (the 22nd production return, 8/8 STRICT ~21:44Z), so the
 next window's landing can go straight to the flips.
 """
+import subprocess
 import sys
 from pathlib import Path
 
@@ -82,8 +83,26 @@ def main() -> int:
     for target, fn in WAVE:
         out = outdir / f"{fn}.c"
         if out.exists() and not staging:
-            raise SystemExit(f"refusing to overwrite existing {out}")
+            # Cross-target walk-name collision (the flat src/ namespace is
+            # shared by every build): src/<fn>.c already TRACKED for another
+            # target's landed row -> this member lands per-target at
+            # src/<target>/<fn>.c (tools/build.sh + tools/judge_unit.py
+            # prefer src/$TARGET/$name.c when present). Untracked leftovers
+            # are this gen's own earlier products - overwrite.
+            probe = subprocess.run(
+                ["git", "-C", str(REPO), "ls-files", "--error-unmatch",
+                 f"src/{fn}.c"],
+                capture_output=True)
+            if probe.returncode == 0:
+                out = outdir / target / f"{fn}.c"
+                out.parent.mkdir(parents=True, exist_ok=True)
+            elif out.exists():
+                if out.read_text() == unit_text(text, fn):
+                    pass  # this gen's own earlier product - idempotent re-gen
+                else:
+                    raise SystemExit(f"refusing to overwrite foreign {out}")
         out.write_text(unit_text(text, fn))
+        print(f"  {target} {fn} -> {out.relative_to(REPO)}")
         total += 1
     print(f"emitted {total} units into {outdir}")
     return 0
