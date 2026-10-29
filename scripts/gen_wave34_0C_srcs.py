@@ -26,7 +26,9 @@ surgery shape: per-target flip + listing delete + make verify, slps LAST,
 revert on any failure). Run this gen BEFORE that script; ratchets move
 +7 (wave34) and +7 (wave0C) from the tree's current count in the landing
 commit (one raise per wave, definitions one mention per file, headers
-name no siblings) with the provenance entries. THE LANDING COMMITS WAIT
+name no siblings; after the 10C + 88 landings the expectation reads
+695 -> 709 - recompute from the tree in landing order) with the
+provenance entries. THE LANDING COMMITS WAIT
 FOR THE WITNESS per the INPUT GATES (the eighteenth return's NEXT 3 law)
 - this gen + the offline screens are the Law Zero offline half.
 """
@@ -72,9 +74,10 @@ def unit_text(tmpl_text: str, tmpl_name: str, ret: str,
         raise SystemExit(f"{tmpl_name}: definition rename hit {n} times, want 1")
     marker = " */\n"
     idx = body.index(marker)
-    provenance = (f" * This unit: {target} row {fn}, the {SIZES[tmpl_name]} member of its wave\n"
-                  f" (row-name==unit-name, one-src-unit-per-row).\n")
-    return body[:idx] + provenance + body[idx:]
+    # No per-unit provenance injection: the wave104 law holds - the only
+    # placeholder mention a unit carries is its own definition (headers name
+    # no siblings; identities live in the yaml + the landing commit).
+    return body
 
 
 def main() -> int:

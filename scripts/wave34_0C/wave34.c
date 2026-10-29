@@ -1,9 +1,10 @@
 /* wave34 - the x8 own-row wave at size 0x34 (the eighteenth return's phase F
- * item; the census sha 0e4f6b4412ab). Seven own-row members, one per game
- * target except mainmenu_jp (whose member is the parent-bound interior at
- * func_80085B5C +0x168): slps func_8003C8F8, sces func_8003C6EC,
- * mainmenu_eu func_800792C0, g3_jp func_8006334C, g3_eu func_80063CDC,
- * g3org_jp func_800607E8, g3org_eu func_80061130.
+ * item; the census sha 0e4f6b4412ab). One src unit per row under the row's
+ * own walk name; seven byte-identical own-row members, one per game target
+ * except mainmenu_jp (whose member is a parent-bound interior, not carvable
+ * alone - the census's classification; cross-target identities live in the
+ * yaml, the symbols file and the landing commit, not repeated here: the
+ * headers name no siblings).
  *
  * Decode (twenty-second window, offline): a word-copy loop over u32 units -
  * copy n words from (a1) to (a0), pointer walks + an up-counter against the
@@ -17,7 +18,7 @@
  * (addiu sp,-8 / addiu sp,8, nothing stored, no ra save) - gcc 2.6.3 does
  * not normally allocate unused frames; the memmove five-clause evidence
  * chain flagged exactly this shape. If no C spelling reproduces the frame,
- * the landing falls back to the banked hand-asm shape (the func_80031ABC
+ * the landing falls back to the banked hand-asm shape (the memclr hand-asm
  * precedent, the wave88 surgery): bare file-scope __asm__, .globl + label
  * under each row's walk name.
  *

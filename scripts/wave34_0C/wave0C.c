@@ -1,9 +1,10 @@
 /* wave0C - the x8 own-row wave at size 0xC (the eighteenth return's phase F
- * item; the census sha b5f14db96e53). Seven own-row members, one per game
- * target except mainmenu_jp (whose member is the parent-bound interior at
- * func_8007FFAC +0x1BC): slps func_80037BF4, sces func_800377A8,
- * mainmenu_eu func_80074100, g3_jp func_8005E648, g3_eu func_8005ED98,
- * g3org_jp func_8005BAE4, g3org_eu func_8005C1EC.
+ * item; the census sha b5f14db96e53). One src unit per row under the row's
+ * own walk name; seven byte-identical own-row members, one per game target
+ * except mainmenu_jp (whose member is a parent-bound interior, not carvable
+ * alone - the census's classification; cross-target identities live in the
+ * yaml, the symbols file and the landing commit, not repeated here: the
+ * headers name no siblings).
  *
  * Decode (twenty-second window, offline): a halfword-load thunk - reads the
  * u16 at (a0) zero-extended into $v0 and returns it. lhu $v0,0($a0); jr $ra;

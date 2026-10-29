@@ -20,9 +20,8 @@ precedent).
 Landing order and gates live in scripts/land_wave88.sh (the wave-104
 surgery shape: per-target flip + listing delete + make verify, slps LAST,
 revert on any failure). Run this gen BEFORE that script; ratchets move
-664 -> 673 in the landing commit IF the 10C wave did not land first (its
-own note moves 664 -> 669; run the two landings in either order and
-recompute the second raise from the tree - the twentieth-return NEXT 1
+691 -> 695 in the landing commit when it follows the 10C wave (recompute
+the raise from the tree in landing order - the twentieth-return NEXT 1
 arithmetic note). THE LANDING COMMIT WAITS FOR THE WITNESS per the INPUT
 GATES (the eighteenth return's NEXT 3 law) - this gen + the offline
 screens are the Law Zero offline half.
@@ -50,9 +49,10 @@ def unit_text(tmpl_text: str, fn: str) -> str:
     body = body.replace(f"{TMPL_LABEL}:", f"{fn}:")
     marker = " */\n"
     idx = body.index(marker)
-    provenance = (f" * This unit: row {fn}, one member of the 0x90 memmove wave\n"
-                  f" * (row-name==unit-name, one-src-unit-per-row).\n")
-    return body[:idx] + provenance + body[idx:]
+    # No per-unit provenance injection: the wave104 law holds - the only
+    # placeholder mention a unit carries is its own definition (headers name
+    # no siblings; identities live in the yaml + the landing commit).
+    return body
 
 
 def main() -> int:
