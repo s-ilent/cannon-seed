@@ -122,7 +122,7 @@ segments:
       - [0x29520, asm, func_80048D20]   # 0x198
       - [0x296B8, data, data_80048EB8]   # 0x8
       - [0x296C0, c,   func_80048EC0]   # 0x160 sdk
-      - [0x29820, asm, func_80049020]   # 0x10c sdk
+      - [0x29820, c,   func_80049020]   # 0x10c sdk
       - [0x2992C, asm, func_8004912C]   # 0xe4 sdk
       - [0x29A10, asm, func_80049210]   # 0xe8 sdk
       - [0x29AF8, c,   func_800492F8]   # 0x110 sdk
