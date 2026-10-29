@@ -1,8 +1,10 @@
 /* MulRotMatrix0 - LIBGTE member, x7 byte-identical own-row wave (0xE4).
- * Identities: slps func_80034244, sces func_80033D0C, mainmenu_eu func_8005D608,
- * g3_jp func_80049714, g3_eu func_8004912C, g3org_jp func_80046BB0,
- * g3org_eu func_80046580. Immediately precedes MulRotMatrix (0xE8) in every
- * target - the SDK's own GTE matrix cluster.
+ * One src unit per row under the row's own walk name; the seven members are
+ * byte-identical 0xE4 rows, one per game target except mainmenu_jp. Each
+ * unit immediately precedes its target's MulRotMatrix (0xE8) row - the
+ * SDK's own GTE matrix cluster (cross-target identities live in the yaml,
+ * the symbols file and the landing commit, not repeated here: the headers
+ * name no siblings).
  *
  * Decode (eighteenth-return NEXT 1, offline window cron-202610291025): the
  * two-argument sibling of MulRotMatrix - reads the source matrix through

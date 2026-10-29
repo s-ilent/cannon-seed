@@ -165,8 +165,8 @@ segments:
       - [0x3DB94, data, data_8005D394]   # 0x8
       - [0x3DB9C, c,   func_80048EC0]   # 0x160 sdk
       - [0x3DCFC, c,   func_8005D4FC]   # 0x10c sdk
-      - [0x3DE08, asm, func_8005D608]   # 0xe4 sdk
-      - [0x3DEEC, asm, func_8005D6EC]   # 0xe8 sdk
+      - [0x3DE08, c,   func_8005D608]   # 0xe4 sdk
+      - [0x3DEEC, c,   func_8005D6EC]   # 0xe8 sdk
       - [0x3DFD4, c,   func_800492F8]   # 0x110 sdk
       - [0x3E0E4, asm, func_8005D8E4]   # 0x160 sdk
       - [0x3E244, c, func_8005E064]   # 0x30 sdk

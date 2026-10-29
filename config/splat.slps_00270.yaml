@@ -303,8 +303,8 @@ segments:
       - [0x147D0, data, data_80033FD0]   # 0x8
       - [0x147D8, c,   func_80048EC0]   # 0x160 sdk
       - [0x14938, c,   func_80034138]   # 0x10c sdk
-      - [0x14A44, asm, func_80034244]   # 0xe4 sdk
-      - [0x14B28, asm, func_80034328]   # 0xe8 sdk
+      - [0x14A44, c,   func_80034244]   # 0xe4 sdk
+      - [0x14B28, c,   func_80034328]   # 0xe8 sdk
       - [0x14C10, c,   func_800492F8]   # 0x110 sdk
       - [0x14D20, asm, func_80034520]   # 0x160 sdk
       - [0x14E80, asm, func_80034680]   # 0x30 sdk

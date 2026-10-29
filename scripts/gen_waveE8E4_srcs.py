@@ -56,11 +56,10 @@ def unit_text(tmpl_name: str, tmpl_text: str, target: str, fn: str, sz: str) -> 
     body, n = pat.subn(rf"\g<1>{fn}(", tmpl_text)
     if n != 1:
         raise SystemExit(f"{tmpl_name}: definition rename hit {n} times, want 1")
-    marker = " */\n"
-    idx = body.index(marker)
-    provenance = (f" * This unit: {target} row {fn}, the {sz} member of its wave\n"
-                  f" * (row-name==unit-name, one-src-unit-per-row).\n")
-    return body[:idx] + provenance + body[idx:]
+    # No per-unit provenance injection: the wave104 law holds - the only
+    # placeholder mention a unit carries is its own definition (headers name
+    # no siblings; identities live in the yaml + the landing commit).
+    return body
 
 
 def main() -> int:
