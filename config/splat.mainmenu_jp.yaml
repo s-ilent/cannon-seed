@@ -349,7 +349,7 @@ segments:
       - [0x3D000, asm, func_800658C8]   # 0xbf4
       - [0x3DBF4, data, data_80066604]   # 0x8
       - [0x3DBFC, asm, func_8006660C]   # 0x10 sdk
-      - [0x3DC0C, asm, func_8006661C]   # 0x90 sdk
+      - [0x3DC0C, c,   func_8006661C]   # 0x90 sdk
       - [0x3DC9C, asm, func_800666AC]   # 0x10 sdk
       - [0x3DCAC, asm, func_800666BC]   # 0x10 sdk
       - [0x3DCBC, asm, func_800666CC]   # 0x10 sdk

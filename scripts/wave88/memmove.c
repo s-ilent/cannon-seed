@@ -35,7 +35,11 @@
  * to the target's `.r_<rom>` section, so one template serves all four
  * carriers - and carries `.globl` + label under the row's own walk name
  * (the row-name==unit-name law; the curated memmove pins carry the
- * identity, zero symbols edits).
+ * identity, zero symbols edits). The retail row is 0x90 = the 0x88
+ * function + 2 zero tail words, so the unit emits the tail explicitly
+ * (`.word 0` x2) - byte-identical to the ROW, the judge's extent bar;
+ * in the whole-image build the tail replaces what was linker zero-slack,
+ * image bytes unchanged.
  */
 __asm__(
     ".text\n\t"
@@ -82,4 +86,6 @@ __asm__(
     ".Lret:\n\t"
         "jr $ra\n\t"
         "addiu $sp,$sp,0x8\n\t"
-    ".set\treorder\n\t");
+    ".set\treorder\n\t"
+        ".word 0\n\t"
+        ".word 0\n\t");

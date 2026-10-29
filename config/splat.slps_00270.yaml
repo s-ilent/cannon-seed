@@ -100,7 +100,7 @@ segments:
       - [0xE460, asm, func_8002DC60]   # 0xd78
       - [0xF1D8, data, data_8002E9D8]   # 0x8
       - [0xF1E0, asm, func_80030D80]   # 0x10 sdk
-      - [0xF1F0, asm, func_80030D90]   # 0x90 sdk
+      - [0xF1F0, c,   func_80030D90]   # 0x90 sdk
       - [0xF280, asm, func_80030E20]   # 0x10 sdk
       - [0xF290, asm, func_80030E30]   # 0x10 sdk
       - [0xF2A0, asm, func_80030E40]   # 0x10 sdk
