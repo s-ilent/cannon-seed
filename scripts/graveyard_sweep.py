@@ -18,8 +18,14 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-EXE_HDR = 0x800
-ROW = re.compile(r"^\s*- \[(0x[0-9A-Fa-f]+), (asm|c|data), ([A-Za-z_][\w.]*)\]")
+EXE_HDR = 0x800  # historical: the fifteenth-return +0x800 needle bug (fixed; see below)
+# 2026-10-29 (cron-202610290525): \s* after each comma - the yaml writer emits
+# aligned rows like "[0xF9B8, c,   func_80031688]" (extra spaces before the
+# name); the old ", " pattern silently DROPPED those rows, so every landed c
+# row formatted that way went invisible and its span was re-attributed to the
+# preceding asm row - all nine "0x2c tail flip candidates" of the
+# cron-202610291209 inventory were these already-landed rows (phantom flips).
+ROW = re.compile(r"^\s*- \[(0x[0-9A-Fa-f]+),\s*(asm|c|data),\s*([A-Za-z_][\w.]*)\]")
 MIN_EXTENT = 0x20  # skip degenerate slivers (8-B code snippets recur trivially)
 
 
