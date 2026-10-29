@@ -360,8 +360,10 @@ segments:
       - [0x3E008, asm, func_80066B48]   # 0xc
       - [0x3E014, data, data_80066B54]   # 0x94
       - [0x3E0A8, asm, func_80066BE8]   # 0x10c
-      - [0x3E1B4, data, data_80066CF4]   # 0x520
-      - [0x3E6D4, c, func_8005DED4]      # 0x30
+      - [0x3E1B4, data, data_80066CF4]   # 0x8
+      - [0x3E1BC, c,   func_80048EC0]   # 0x160 sdk
+      - [0x3E31C, data, data_8005DB1C]  # 0x2d8
+      - [0x3E5F4, c,   func_800492F8]   # 0x110 sdk
       - [0x3E704, data, data_8005DF04]   # 0x160
       - [0x3E864, c, func_8005E064]      # 0x30
       - [0x3E894, c, ScaleMatrixL]      # 0x124 sdk
