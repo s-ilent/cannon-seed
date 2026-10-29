@@ -62,6 +62,40 @@ def word_diffs(a, b):
             if a[i:i + 4] != b[i:i + 4]]
 
 
+def is_standalone(b):
+    """True when the body is a complete function: own prologue
+    (addiu sp,sp,-N paired with sw ra,N(sp) in the first two words,
+    either order) and its own jr ra inside the extent. Members WITHOUT
+    this shape are parent-frame-bound interior blocks - the 0x28 wave's
+    lw v1,0x14(sp) counters read the ENCLOSING row's stack slots and can
+    only land with their parent (cron-202610290640 finding: all 392
+    byte-identical waves' members are parent-bound; the carvable
+    interior class is the quartet's prologue+epilogue shape)."""
+    if len(b) < 8:
+        return False
+    w0, w1 = struct.unpack("<II", b[:8])
+    addiu_sp = (w0 >> 16) == 0x27BD
+    sw_ra = (w0 >> 16) == 0xAFBF
+    addiu_sp2 = (w1 >> 16) == 0x27BD
+    sw_ra2 = (w1 >> 16) == 0xAFBF
+    if not ((addiu_sp and sw_ra2) or (sw_ra and addiu_sp2)):
+        return False
+    n4 = len(b) // 4
+    words = struct.unpack(f"<{n4}I", b[:n4 * 4])
+    return 0x03E00008 in words
+
+
+def member_class(target, va, size, b):
+    """'own-row' = the VA starts a committed yaml row of the same extent
+    (one-flip landing, the x7 e3dc shape); 'standalone' = complete
+    function inside a bigger walk row (the quartet two-cut shape);
+    'parent' = parent-frame-bound interior block, NOT carvable alone."""
+    for lo, hi, _label, _kind in pr.fam_rows(target):
+        if lo == va and hi - lo == size:
+            return "own-row"
+    return "standalone" if is_standalone(b) else "parent"
+
+
 def main():
     min_members = int(sys.argv[1]) if len(sys.argv) > 1 else 2
     allowed, refused = [], []
@@ -91,9 +125,35 @@ def main():
     waves.sort(key=lambda g: (-len(g), -sizes[g[0]]))
     print(f"\n== BYTE-IDENTICAL waves (>= {min_members} members, "
           f">= 2 targets): {len(waves)} ==")
+    tally = {"own-row": 0, "standalone": 0, "parent": 0}
+    best = {}
+    bytes_of = {}
     for g in waves:
+        cls = [member_class(t, va, sizes[(t, name, va)],
+                            next(r[4] for r in rows
+                                 if r[0] == t and r[1] == name
+                                 and r[2] == va))
+               for t, name, va in g]
+        cnt = {k: cls.count(k) for k in tally}
+        for k, v in cnt.items():
+            tally[k] += v
+        key = ("own-row" if cnt["own-row"] else
+               "standalone" if cnt["standalone"] else "parent")
+        best[key] = best.get(key, 0) + 1
+        bytes_of[key] = bytes_of.get(key, 0) + len(g) * sizes[g[0]]
         members = " ".join(f"{t}:{name}@{va:08X}" for t, name, va in g)
-        print(f"  x{len(g)} size=0x{sizes[g[0]]:X}  {members}")
+        tag = (f"own-row={cnt['own-row']}"
+               f" standalone={cnt['standalone']}"
+               f" parent={cnt['parent']}")
+        print(f"  x{len(g)} size=0x{sizes[g[0]]:X} [{tag}]  {members}")
+    print(f"\n== carvable tally: "
+          f"waves by best class {best}; "
+          f"members own-row={tally['own-row']} "
+          f"standalone={tally['standalone']} "
+          f"parent-bound={tally['parent']} "
+          f"(bytes {bytes_of.get('own-row', 0)}/"
+          f"{bytes_of.get('standalone', 0)}/"
+          f"{bytes_of.get('parent', 0)}) ==")
 
     # ---- near groups (same name+size across targets, >=95% words) ----
     byname = {}
