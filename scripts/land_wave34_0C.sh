@@ -26,9 +26,9 @@
 # Run from the repo root:  sh scripts/land_wave34_0C.sh
 set -u
 
-declare -A W34_OFF=( [slps_00270]=0x1D0F8 [sces_00269]=0x1C6EC [mainmenu_eu]=0x592C0 [g3_jp]=0x4334C [g3_eu]=0x43CDC [g3org_jp]=0x407E8 [g3org_eu]=0x41130 )
+declare -A W34_OFF=( [slps_00270]=0x1D0F8 [sces_00269]=0x1CEEC [mainmenu_eu]=0x59AC0 [g3_jp]=0x43B4C [g3_eu]=0x444DC [g3org_jp]=0x40FE8 [g3org_eu]=0x41930 )
 declare -A W34_NAME=( [slps_00270]=func_8003C8F8 [sces_00269]=func_8003C6EC [mainmenu_eu]=func_800792C0 [g3_jp]=func_8006334C [g3_eu]=func_80063CDC [g3org_jp]=func_800607E8 [g3org_eu]=func_80061130 )
-declare -A W0C_OFF=( [slps_00270]=0x183F4 [sces_00269]=0x177A8 [mainmenu_eu]=0x54100 [g3_jp]=0x3E648 [g3_eu]=0x3ED98 [g3org_jp]=0x3BAE4 [g3org_eu]=0x3C1EC )
+declare -A W0C_OFF=( [slps_00270]=0x183F4 [sces_00269]=0x17FA8 [mainmenu_eu]=0x54900 [g3_jp]=0x3EE48 [g3_eu]=0x3F598 [g3org_jp]=0x3C2E4 [g3org_eu]=0x3C9EC )
 declare -A W0C_NAME=( [slps_00270]=func_80037BF4 [sces_00269]=func_800377A8 [mainmenu_eu]=func_80074100 [g3_jp]=func_8005E648 [g3_eu]=func_8005ED98 [g3org_jp]=func_8005BAE4 [g3org_eu]=func_8005C1EC )
 
 land_wave() {

@@ -537,7 +537,7 @@ segments:
       - [0x3C168, asm, func_8005B968]   # 0x50 sdk
       - [0x3C1B8, asm, func_80064838]   # 0xf4 sdk
       - [0x3C2AC, asm, func_8005BAAC]   # 0x38 sdk
-      - [0x3C2E4, asm, func_8005BAE4]   # 0xc sdk
+      - [0x3C2E4, c,   func_8005BAE4]   # 0xc sdk
       - [0x3C2F0, asm, func_8005BAF0]   # 0x20 sdk
       - [0x3C310, asm, func_8005BB10]   # 0x50 sdk
       - [0x3C360, asm, func_8005BB60]   # 0x7c sdk
@@ -612,7 +612,7 @@ segments:
       - [0x405D0, asm, func_8005FDD0]   # 0x6c sdk
       - [0x4063C, asm, func_8005FE3C]   # 0x34 sdk
       - [0x40670, asm, func_8005FE70]   # 0x978 sdk
-      - [0x40FE8, asm, func_800607E8]   # 0x34 sdk
+      - [0x40FE8, c,   func_800607E8]   # 0x34 sdk
       - [0x4101C, asm, func_8006081C]   # 0x18c sdk
       - [0x411A8, asm, func_8006A408]   # 0x40 sdk
       - [0x411E8, asm, func_8006A448]   # 0x20 sdk
