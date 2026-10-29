@@ -54,7 +54,15 @@ def sweep(target):
           f"({len(c_rows)} c rows >= {MIN_EXTENT} B)")
     findings = {}
     for off, kind, name, ext in c_rows:
-        needle = bin_[EXE_HDR + off : EXE_HDR + off + ext]
+        # yaml offsets are FILE offsets (the ld script places .r_<rom> at
+        # AT(<yaml offset>); the PS-X EXE header is prepended on top and
+        # is NOT part of the payload coordinate space). The fifteenth-return
+        # run of this sweep added EXE_HDR to the needle source - grabbing the
+        # bytes of the row 0x800 LATE while labelling them with the row at
+        # `off` - so every hit it reported was a copy of the WRONG source
+        # row's bytes at a 0x800-shifted position. Fixed 2026-10-29
+        # (cron-202610291209): needle and hits both in file coordinates.
+        needle = bin_[off : off + ext]
         if len(needle) != ext:
             continue
         pos, hits = 0, []
@@ -62,7 +70,7 @@ def sweep(target):
             pos = bin_.find(needle, pos)
             if pos < 0:
                 break
-            hits.append(pos - EXE_HDR)
+            hits.append(pos)
             pos += 1
         for h in hits:
             if h == off:
