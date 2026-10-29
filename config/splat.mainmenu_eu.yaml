@@ -383,7 +383,7 @@ segments:
       - [0x442E0, asm, func_8006DC60]   # 0x78 sdk
       - [0x44358, asm, func_80063B58]   # 0x3c8 sdk
       - [0x44720, asm, func_80063F20]   # 0xf0 sdk
-      - [0x44810, asm, func_80064010]   # 0xc8 sdk
+      - [0x44810, c,   func_80064010]   # 0xc8 sdk
       - [0x448D8, c, len_param]   # 0x1c
       - [0x448F4, asm, func_8006E3A4]   # 0x50 sdk
       - [0x44944, asm, func_80064144]   # 0x118
