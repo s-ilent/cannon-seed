@@ -300,8 +300,7 @@ segments:
       - [0x14400, asm, func_80033C00]   # 0x10c sdk
       - [0x1450C, asm, func_80033D0C]   # 0xe4 sdk
       - [0x145F0, asm, func_80033DF0]   # 0xe8 sdk
-      - [0x146D8, asm, func_80033ED8]   # 0xe0 sdk
-      - [0x147B8, c, func_8005DED4]     # 0x30 sdk
+      - [0x146D8, c,   func_800492F8]   # 0x110 sdk
       - [0x147E8, asm, func_80033FE8]   # 0x160 sdk
       - [0x14948, c, func_8005E064]   # 0x30 sdk
       - [0x14978, c, ScaleMatrixL]   # 0x124 sdk
