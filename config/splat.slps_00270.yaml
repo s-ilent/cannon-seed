@@ -429,7 +429,7 @@ segments:
       - [0x19978, asm, func_80039178]   # 0x20 sdk
       - [0x19998, asm, func_80039198]   # 0x20 sdk
       - [0x199B8, asm, func_800391B8]   # 0x80 sdk
-      - [0x19A38, asm, func_80039238]   # 0x104 sdk
+      - [0x19A38, c,   func_80039238]   # 0x104 sdk
       - [0x19B3C, asm, func_8003933C]   # 0x80 sdk
       - [0x19BBC, asm, func_800393BC]   # 0x53c sdk
       - [0x1A0F8, asm, func_800398F8]   # 0x274 sdk

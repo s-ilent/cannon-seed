@@ -564,7 +564,7 @@ segments:
       - [0x403CC, asm, func_8005FBCC]   # 0x20 sdk
       - [0x403EC, asm, func_8005FBEC]   # 0x20 sdk
       - [0x4040C, asm, func_8005FC0C]   # 0x80 sdk
-      - [0x4048C, asm, func_8005FC8C]   # 0x104 sdk
+      - [0x4048C, c,   func_8005FC8C]   # 0x104 sdk
       - [0x40590, asm, func_8005FD90]   # 0x80 sdk
       - [0x40610, asm, func_8005FE10]   # 0x53c sdk
       - [0x40B4C, asm, func_8006034C]   # 0x274 sdk

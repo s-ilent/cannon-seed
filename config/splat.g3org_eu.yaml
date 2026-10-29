@@ -573,7 +573,7 @@ segments:
       - [0x3DF70, asm, func_8005D770]   # 0x20 sdk
       - [0x3DF90, asm, func_8005D790]   # 0x20 sdk
       - [0x3DFB0, asm, func_8005D7B0]   # 0x80 sdk
-      - [0x3E030, asm, func_8005D830]   # 0x104 sdk
+      - [0x3E030, c,   func_8005D830]   # 0x104 sdk
       - [0x3E134, asm, func_8005D934]   # 0x80 sdk
       - [0x3E1B4, asm, func_8005D9B4]   # 0x1180
       - [0x3F334, asm, func_8005EB34]   # 0xf4 sdk

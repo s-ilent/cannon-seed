@@ -620,7 +620,7 @@ segments:
       - [0x55E84, asm, func_80075684]   # 0x20 sdk
       - [0x55EA4, asm, func_800756A4]   # 0x20 sdk
       - [0x55EC4, asm, func_800756C4]   # 0x80 sdk
-      - [0x55F44, asm, func_80075744]   # 0x104 sdk
+      - [0x55F44, c,   func_80075744]   # 0x104 sdk
       - [0x56048, asm, func_80075848]   # 0x80 sdk
       - [0x560C8, asm, func_800758C8]   # 0x1180
       - [0x57248, asm, func_80076A48]   # 0xf4 sdk
