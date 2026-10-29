@@ -21,7 +21,7 @@ precedent).
 Landing order and gates live in scripts/land_wave10C.sh (the wave-104
 surgery shape: per-target flip + listing delete + make verify, slps LAST,
 revert on any failure). Run this gen BEFORE that script; ratchets move
-664 -> 669 in the landing commit (5 definitions, one mention per file,
+686 -> 691 in the landing commit (5 definitions, one mention per file,
 headers name no siblings) with the provenance entry. THE LANDING COMMIT
 WAITS FOR THE WITNESS per the INPUT GATES (the eighteenth return's NEXT 3
 law) - this gen + the offline screens are the Law Zero offline half.
@@ -54,9 +54,10 @@ def unit_text(tmpl_text: str, fn: str, tmpl_name: str) -> str:
         raise SystemExit(f"{tmpl_name}: definition rename hit {n} times, want 1")
     marker = " */\n"
     idx = body.index(marker)
-    provenance = (f" * This unit: row {fn}, one member of the {SZ} wave\n"
-                  f" * (row-name==unit-name, one-src-unit-per-row).\n")
-    return body[:idx] + provenance + body[idx:]
+    # No per-unit provenance injection: the wave104 law holds - the only
+    # placeholder mention a unit carries is its own definition (headers name
+    # no siblings; identities live in the yaml + the landing commit).
+    return body
 
 
 def main() -> int:

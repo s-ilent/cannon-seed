@@ -133,8 +133,8 @@ segments:
       - [0x29FFC, asm, func_800497FC]   # 0x48 sdk
       - [0x2A044, asm, func_80049844]   # 0x48 sdk
       - [0x2A08C, asm, func_8004988C]   # 0x54 sdk
-      - [0x2A0E0, asm, func_8004FCA0]   # 0x10c sdk
-      - [0x2A1EC, asm, func_8004FDAC]   # 0x10c sdk
+      - [0x2A0E0, c,   func_8004FCA0]   # 0x10c sdk
+      - [0x2A1EC, c,   func_8004FDAC]   # 0x10c sdk
       - [0x2A2F8, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x2A348, c, ApplyMatrixSV]   # 0x5c sdk
       - [0x2A3A4, c, TransMatrix]   # 0x24 sdk

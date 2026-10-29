@@ -1,9 +1,11 @@
 /* MulMatrix - LIBGTE member, x3 byte-identical own-row wave (0x10C).
- * Identities: slps func_80037BD8 (@0x800349F8, curated pin), mainmenu_eu
- * func_8005DDBC (@0x8005DDBC - the member the census missed, the C8-wave
- * lesson third confirmation), g3_eu func_8004FCA0 (@0x800498E0, curated
- * pin). Immediately precedes MulMatrix2 (0x10C) and then the landed
- * ApplyMatrixLV c row in every carrier - the SDK's own GTE matrix cluster.
+ * One src unit per row under the row's own walk name; three members, two
+ * curated psyq pins (slps, g3_eu) + the census-missed member the C8-wave
+ * lesson confirmed (mainmenu_eu). Immediately precedes MulMatrix2 (0x10C)
+ * and then the landed ApplyMatrixLV c row in every carrier - the SDK's own
+ * GTE matrix cluster (cross-target identities live in the yaml, the
+ * symbols file and the landing commit, not repeated here: the headers name
+ * no siblings).
  *
  * Decode (20th-return NEXT 3, offline window cron-202610291255):
  * in-place GTE matrix product m0 = m0 * m1, returns m0. The five words of

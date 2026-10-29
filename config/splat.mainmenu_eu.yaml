@@ -175,7 +175,7 @@ segments:
       - [0x3E4D8, asm, func_8005DCD8]   # 0x48 sdk
       - [0x3E520, asm, func_8005DD20]   # 0x48 sdk
       - [0x3E568, asm, func_8005DD68]   # 0x54 sdk
-      - [0x3E5BC, asm, func_8005DDBC]   # 0x10c sdk
+      - [0x3E5BC, c,   func_8005DDBC]   # 0x10c sdk
       - [0x3E6C8, c, func_8005E4E8]   # 0x10c sdk
       - [0x3E7D4, c, ApplyMatrixLV]   # 0x50 sdk
       - [0x3E824, c, ApplyMatrixSV]   # 0x5c sdk

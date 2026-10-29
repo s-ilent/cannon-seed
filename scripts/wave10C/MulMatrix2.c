@@ -1,7 +1,9 @@
 /* MulMatrix2 - LIBGTE member, x2 byte-identical own-row wave (0x10C).
- * Identities: slps func_80037CE4 (@0x80034B04, curated pin), g3_eu
- * func_8004FDAC (@0x800499EC, curated pin). Sits between MulMatrix (0x10C)
- * and the landed ApplyMatrixLV c row in both carriers.
+ * One src unit per row under the row's own walk name; two members, both
+ * curated psyq pins (slps, g3_eu). Sits between MulMatrix (0x10C) and the
+ * landed ApplyMatrixLV c row in both carriers (cross-target identities
+ * live in the yaml, the symbols file and the landing commit, not repeated
+ * here: the headers name no siblings).
  *
  * Decode (20th-return NEXT 3, offline window cron-202610291255): the SAME
  * GTE body as MulMatrix - word-diff proves the pair differs in exactly six
