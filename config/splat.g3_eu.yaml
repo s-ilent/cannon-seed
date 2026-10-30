@@ -113,7 +113,7 @@ segments:
       - [0x290B4, c, PCopen]   # 0x20 sdk
       - [0x290D4, c, PClseek]   # 0x24 sdk
       - [0x290F8, c, PCclose]   # 0x10 sdk
-      - [0x29108, asm, func_80048908]   # 0xc0
+      - [0x29108, c, func_80048908]   # 0xc0
       - [0x291C8, c, _SN_write]   # 0x18 sdk
       - [0x291E0, asm, func_800489E0]   # 0x198
       - [0x29378, data, data_80048B78]   # 0x8
