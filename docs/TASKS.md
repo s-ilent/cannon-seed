@@ -12268,3 +12268,60 @@ residency without volatile; openpsyq's _spu_init source for the head's
 statement order). Suite 85/85; nothing landed this window beyond the
 disc return - the window's deliverable is the decode, the provenance,
 the three proven shapes and the parked draft.
+
+## Window 33 (cron-20261030-0842, 2026-10-30) - the LIBSPU init driver lands: the li-13 hoist opens with a barrier, the base-pointer register-var pins, the scalar-extern counter law, and the maspsx delay-slot patch
+
+Rollback #7 (same class: local main pinned at the 2026-10-14 era 7623cd2e,
+worklog.md lost all 195 windows) recovered per SOP: rehydrate 1s, reset to
+origin/main -> ffe39ee3, RESTORE NOTE appended (cron-20261030-0846-restore,
+195 lines + a 2-line second pass for the capture's tail), digest exit 0.
+WITNESS 0/8 at start (quarantined woven-era class) but the 2026-10-29
+15:21 CDN links were still live (~1h before the 09:53:54Z expiry), so the
+disc return ran foreground and WITNESS 8/8 STRICT - the twenty-ninth
+production return, oracle UP, no fresh links needed.
+
+The window's item was unparking window 32's func_800642A0 (g3_eu, 0x548,
+the twenty-piece LIBSPU _spu_init-family SPU reset/init driver). IT LANDED
+AS THE FOURTEENTH REAL-DECOMPILED-C GAME FUNCTION: judge EXACT 1352/1352
+bytes, g3_eu whole-image GREEN (129 C sources), suite 85/85, commit
+a5e32d0b. The li-13 hoist opened with three stacked levers, all
+probe-verified in-window (scripts/probe_li13.c, scripts/probe_cntcse.c):
+
+1. THE HEAD BARRIER: gcc 2.6.3 hoists the pure `li $2,13` above the three
+   volatile sh's; a zero-byte memory-clobber barrier asm between the sh's
+   and x = 13 pins it after them (the window-32 "what barrier did retail
+   have" question - answer: a register dependency was NOT it alone; the
+   barrier reproduces whatever ordering discipline the original had).
+2. THE PER-PIECE BASE REGISTER-VAR PINS: retail allocates the D_800AB0B8
+   base pointer to $2 (head + wait pieces), $3 (sweep, voice loop, both
+   RMW pairs), $4 (finish); unpinned gcc picks $6 everywhere. Block-scoped
+   register-var pins at each retail reload site (the func_80048908 idiom)
+   reproduce the allocation; the head pin also blocks the li hoist.
+3. THE POLL TEMP: `poll = vp[0xD7]` into a plain int before the
+   D_800AB0B0 store brackets the lhu/andi around the store as retail.
+
+THE COUNTER LAW (new): the 0x1389 retry counter's retail shape
+(bare-symbol fused-pair load + $at store, no re-read) requires SCALAR
+externs (`extern long D_800AB0B0;` + `(D_800AB0B0 += 1) >= 0x1389`).
+ARRAY externs CSE the element address into an la-form register shared
+across the entry store and the loop. Volatile on the counter is WRONG
+(gcc re-reads after the ++ store; retail does not).
+
+MASPSX DELAY-SLOT PATCH (in-repo: tools/maspsx_delay_slot.patch applied
+by rehydrate step 6b, idempotent): upstream maspsx materializes #nop only
+for load->load (nop_lw_lw, now defaulted ON) and address/data hazards;
+gcc 2.6.3 also treats "next insn rewrites the load's dest" as a hazard
+(the C4 RMW's lhu $2 -> ori $2,$zero,0xFFFF). The patch adds
+line_redefines_reg and the gated emit; the rehydrate path re-applies it
+and the judge stays EXACT. A finish-piece barrier attempt was REVERTED
+(the clobber scrambles the register var); the EC/F0 order lock comes from
+`extern volatile long` (volatile-to-volatile program order; long scalar
+volatile stores are byte-identical).
+
+RATCHETS 803/12 -> 807/57: the C file carries the psyq static
+placeholders the decode surfaces (D_800AB0B8/B0/B4/D0..F4, the printf
+strings, func_800647E8); the raise is the honest visible-debt path and
+the psyq-symbol curation pass is the queued follow-up that pays it back
+with evidence. Landing convention held: same-commit .s deletion, probes
+committed. mainmenu_eu whole-image verify re-run under the patched
+maspsx as the regression guard.

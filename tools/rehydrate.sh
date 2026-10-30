@@ -85,6 +85,23 @@ else
     say "maspsx clone intact"
 fi
 
+# --- 6b. maspsx delay-slot patch (in-repo, idempotent) ------------------------
+# The func_800642A0 landing (window 33) needs two nop-materialization classes
+# upstream maspsx does not emit: nop_lw_lw load-load padding and the
+# redefine-dest hazard. The clone is git-ignored, so the patch lives in-repo
+# and is re-applied after every (re)clone or rollback.
+MASPSX_PATCH="$(pwd)/tools/maspsx_delay_slot.patch"
+if [ -f "$MASPSX_PATCH" ]; then
+    if git -C tools-src/maspsx apply --check "$MASPSX_PATCH" 2>/dev/null; then
+        git -C tools-src/maspsx apply "$MASPSX_PATCH"
+        say "maspsx delay-slot patch applied"
+    elif grep -q "line_redefines_reg" tools-src/maspsx/maspsx/__init__.py 2>/dev/null; then
+        say "maspsx delay-slot patch already present"
+    else
+        say "WARN: maspsx delay-slot patch failed to apply - func_800642A0 will not build"
+    fi
+fi
+
 # --- 7. mipsel binutils (tools-local, git-ignored) ---------------------------
 TOOLROOT=/home/z/my-project/tools-local/mipsel-root
 AS="$TOOLROOT/usr/bin/mipsel-linux-gnu-as"

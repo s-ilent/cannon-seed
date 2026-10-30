@@ -1,0 +1,210 @@
+diff --git a/maspsx.py b/maspsx.py
+old mode 100644
+new mode 100755
+index 02f2587..5f0b6a3
+--- a/maspsx.py
++++ b/maspsx.py
+@@ -15,7 +15,7 @@ class AspsxVersionConfig:
+     div_uses_tge: bool = False
+     nop_at_expansion: bool = False
+     nop_mflo_mfhi: bool = True
+-    nop_lw_lw: bool = False
++    nop_lw_lw: bool = True
+     sltu_at: bool = True
+     expand_li: bool = True
+     gp_allow_offset: bool = False
+diff --git a/maspsx/__init__.py b/maspsx/__init__.py
+old mode 100644
+new mode 100755
+index 5ab6f94..86fd2ef
+--- a/maspsx/__init__.py
++++ b/maspsx/__init__.py
+@@ -78,6 +78,24 @@ def strip_comments(line: str) -> str:
+     return line.strip()
+ 
+ 
++def line_redefines_reg(line: str, r_dest: str) -> bool:
++    """True when the instruction WRITES r_dest as its destination register
++    (ALU/immediate/la/li/move forms - first operand = dest). Stores and
++    branches name sources, not dests, so they are excluded; loads are
++    handled by line_loads_from_reg's aligned-load rule."""
++    line = strip_comments(line)
++    match = re.match(r"^([A-z][A-z0-9]*)\s+(.*)$", line)
++    if not match:
++        return False
++    op, rest = match.group(1, 2)
++    if op in store_mnemonics or op in branch_mnemonics or op in jump_mnemonics:
++        return False
++    if op == "jal":
++        return False
++    first_operand = rest.split(",")[0].strip()
++    return first_operand == r_dest
++
++
+ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
+     """
+     NOTE: Returns True even if line might use $at expansion
+@@ -93,7 +111,7 @@ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
+         return False
+ 
+     if op in load_mnemonics:
+-        # lwl	$9,7($2)
++        # lwl   $9,7($2)
+         if re.match(rf"^.*\(\s*{r_source}\s*\)$", rest):
+             return True
+ 
+@@ -146,7 +164,7 @@ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
+             if re.match(rf"^{r_source},.*$", rest):
+                 return True
+         if op.startswith("div") or op.startswith("rem"):
+-            # e.g. div	$3,$3,$7
++            # e.g. div  $3,$3,$7
+             if re.match(rf"^.*,{r_source},.*$", rest):
+                 return True
+ 
+@@ -168,15 +186,15 @@ def is_number(value: str) -> bool:
+ def uses_at(line: str) -> bool:
+     line = strip_comments(line)
+ 
+-    # sw	$2,%lo(s_attr)($3)
++    # sw        $2,%lo(s_attr)($3)
+     if match := re.match(
+         r"^s(?:[wbh]|w[lr])\s+(\$[a-z0-9]+),\s*%lo\(([^(]+)\)\(([^)]+)\)", line
+     ):
+         return False
+ 
+-    # sw	$2,D_801813A4
+-    # sw	$3,g_CurrentRoom+40
+-    # sw	$2,D_us_8017863C.4
++    # sw        $2,D_801813A4
++    # sw        $3,g_CurrentRoom+40
++    # sw        $2,D_us_8017863C.4
+     if match := re.match(
+         r"^s(?:[wbh]|w[lr])\s+(\$[a-z0-9]+),\s*(-?[A-z0-9_.+]+)$", line
+     ):
+@@ -184,14 +202,14 @@ def uses_at(line: str) -> bool:
+         if not is_number(operand):
+             return True
+ 
+-    # sb	$2,g_InputSaveName($3)
+-    # sw	$2,-26($16)
++    # sb        $2,g_InputSaveName($3)
++    # sw        $2,-26($16)
+     elif match := re.match(
+         r"^s(?:[wbh]|w[lr])\s+(\$[a-z0-9]+),\s*([^(]+)\(([^)]+)\)", line
+     ):
+         operand = match.group(2)
+ 
+-    # lw	$2,-1000($16)
++    # lw        $2,-1000($16)
+     elif match := re.match(r"l[a-z]+\s+(\$[a-z0-9]+),\s*([^(]+)\(([^)]+)\)", line):
+         operand = match.group(2)
+ 
+@@ -538,7 +556,7 @@ class MaspsxProcessor:
+                 continue
+ 
+             if line.startswith(".comm") or line.startswith(".lcomm"):
+-                # e.g.	.comm	MENU_RadarScale_800AB480,4
++                # e.g.  .comm   MENU_RadarScale_800AB480,4
+                 in_sdata = False
+                 _, var = line.split()
+                 symbol, size_str, *_ = var.split(",")
+@@ -579,7 +597,7 @@ class MaspsxProcessor:
+                         elif line.startswith(".byte"):
+                             size = 1
+                         elif line.startswith(".ascii"):
+-                            # e.g. .ascii	"Map poly groups\000"
++                            # e.g. .ascii       "Map poly groups\000"
+                             # NOTE: len('.ascii\t""') == 9
+                             size = len(line) - 9
+                         else:
+@@ -744,6 +762,26 @@ class MaspsxProcessor:
+                     self.skip_instructions = skip
+ 
+                 res.append(f"nop # DEBUG: Reuse of '{r_dest}'. {reason}")
++        elif self.nop_lw_lw and line_redefines_reg(next_instruction, r_dest):
++            # gcc 2.6.3's delay-slot model also treats "next insn rewrites the
++            # load's dest" as a hazard (conservative) and emits #nop; ASPSX
++            # reorder-mode padding materializes it. func_800642A0's C4 RMW
++            # (lhu $2; ori $2,$zero,0xFFFF) needs it - banked window 33.
++            skip = 0
++            while True:
++                maybe_label = self.get_next_instruction(
++                    skip=skip, ignore_nop=True, ignore_set=True
++                )
++                if not is_label(maybe_label):
++                    break
++
++                res.append(maybe_label)
++                skip += 1
++                self.skip_instructions = skip
++
++            res.append(
++                f"nop # DEBUG: '{next_instruction}' redefines '{r_dest}'."
++            )
+         else:
+             res.append(
+                 f"#nop # DEBUG: '{next_instruction}' does not load from {r_dest}"
+@@ -994,7 +1032,7 @@ class MaspsxProcessor:
+                 res.extend(extra_nops)
+ 
+             elif is_addend and r_source is None:
+-                # e.g. lb	$s0,D_800E52E0
++                # e.g. lb       $s0,D_800E52E0
+                 if operand.count("+") == 1:
+                     symbol, offset = operand.split("+")
+                     gp_rel = f"%gp_rel({symbol}+{offset})($gp)"
+@@ -1017,7 +1055,7 @@ class MaspsxProcessor:
+                 res.extend(extra_nops)
+ 
+             elif is_addend and r_source:
+-                # e.g. lw	$2,test_sym($4)
++                # e.g. lw       $2,test_sym($4)
+                 if self.addiu_at:
+                     res.extend(
+                         [
+@@ -1051,7 +1089,7 @@ class MaspsxProcessor:
+ 
+             else:
+                 if r_source and (int(operand, 0) > 32767 or int(operand, 0) < -32768):
+-                    # e.g. lhu	$2,49344($2)
++                    # e.g. lhu  $2,49344($2)
+                     res.extend(
+                         [
+                             "# EXPAND_AT START",
+@@ -1064,7 +1102,7 @@ class MaspsxProcessor:
+                         ]
+                     )
+                 else:
+-                    # e.g. lhu	$2,528482304
++                    # e.g. lhu  $2,528482304
+                     res.append(line)
+ 
+                 # Naively handle scenario where *current* line is a macro
+@@ -1082,7 +1120,7 @@ class MaspsxProcessor:
+             )
+ 
+             if is_addend and r_source is None:
+-                # e.g. sw	$v0,D_800E52E0
++                # e.g. sw       $v0,D_800E52E0
+                 if operand.count("+") == 1:
+                     symbol, offset = operand.split("+")
+                     gp_rel = f"%gp_rel({symbol}+{offset})($gp)"
+@@ -1102,7 +1140,7 @@ class MaspsxProcessor:
+                 else:
+                     res.append(line)
+             elif is_addend and r_source:
+-                # e.g. sw	$a0,ctlbuf($v0)
++                # e.g. sw       $a0,ctlbuf($v0)
+                 if self.addiu_at and op != "la":
+                     res.extend(
+                         [
+@@ -1119,7 +1157,7 @@ class MaspsxProcessor:
+                 else:
+                     res.append(line)
+             elif r_source and (int(operand, 0) > 32767 or int(operand, 0) < -32768):
+-                # e.g. sw	$2,56200($4)
++                # e.g. sw       $2,56200($4)
+                 res.extend(
+                     [
+                         "# EXPAND_AT START",
