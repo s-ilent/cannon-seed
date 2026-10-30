@@ -12534,3 +12534,28 @@ set is expected safe - the verify proves it). (2) if the flip breaks any
 landed unit, revert to per-unit maspsx configs via the staging step.
 (3) then func_8006AF70 (window-35 draft + the 2de48b6d spin law) on the
 same live oracle.
+
+WINDOW 36 ADDENDUM - THE WITNESS CAME UP AND THE V2 JUDGE RAN: disc_return
+early-exited 8/8 STRICT at 23:01Z (the background probe's curl had in fact
+completed the extraction before the sandbox reaped it). The v2 draft was
+staged (yaml flip + src/func_80052038.c) and judged LIVE:
+func_80052038 SIZE built 2228 vs row 2032, DIFF 444/508 - A REGRESSION vs
+the round-4 baseline (1988, DIFF 405/497). Post-mortem from the staged
+build/judge/func_80052038.gcc.s: the dispatch region is retail-exact (the
+lbu/andi $5/addu $3/sltiu $2/beqz+sll $2/lw $2,jtbl_80021B10($2)/j $2
+chain), but the CASE BODIES regressed - v2 dropped the round-3 tbl-pin
+workarounds assuming addiu_at would replace them, and that is only true
+for the SINGLE-INDEX forms (the flag paths and the eight AltFn cases,
+which now emit the retail la-in-$at at-split natively). The eight no-flag
+StdFn cases are TWO-index ((char *)D + t0 + s6) and retail carries the
+5-insn la-in-$v0 form there - the round-3 base-pointer local pinned to $2
+is still REQUIRED for exactly those (register long tbl asm("$2") +
+tbl = D_xxx + the barrier for the flag paths). STAGING REVERTED per the
+gates (verify was RED, no landing); the landing state for the next window
+is: v2 dispatch + round-4 case bodies (tbl-pin restored for the no-flag
+StdFn cases, barrier restored for the flag paths) + addiu_at patch, then
+re-judge - the stub-merge/jal-vs-tail-j delta remains the deep item after
+that. The addiu_at flip itself needs the whole-image verify as its gate
+(this build's RED was the case-body regression, not the flip; the flip
+affects only sym($reg) expansions, which the landed bare-symbol set does
+not ride).

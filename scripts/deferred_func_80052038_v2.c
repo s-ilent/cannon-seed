@@ -43,6 +43,16 @@
  *   LIVE judge - next window on the witnessed oracle: stage v2 into
  *   src/func_80052038.c, flip the yaml row, build g3_eu, judge.
  *
+ * LANDING ATTEMPT (cron-20261030-2151, live oracle 8/8): staged + judged ->
+ * SIZE 2228 vs 2032, DIFF 444/508 - REGRESSION vs round-4 (1988, 405/497).
+ * Cause: this draft DROPPED the round-3 tbl-pin workarounds wholesale, but
+ * addiu_at only replaces them for the SINGLE-INDEX forms (flag paths +
+ * AltFn cases = now retail-correct natively). The eight TWO-INDEX no-flag
+ * StdFn cases still need `register long tbl asm("$2")` + tbl = D_xxx (the
+ * 5-insn la-in-$v0 retail form) and the flag paths still need the
+ * statement barrier. NEXT WINDOW: v2 dispatch + round-4 case bodies
+ * (tbl-pin/barrier restored where listed) + addiu_at -> re-judge.
+ */
  * cc-post: keep-epilogue
  */
 typedef long (*StdFn)(long *, long, long, long, long, long, long, long *);
