@@ -101,10 +101,11 @@ void func_8006AF70(long a0)
 }
 
 /* ---- func_8006B0F0: the installer (frame 0x20: ra/s1/s0) ----
- * TWO dead-result countdown spins (0x3E7-1 = 998; probe PROVEN: the
- * `while (i-- >= 0)` post-decrement form puts the decrement in the bgez
- * BRANCH DELAY SLOT, exactly retail 8006B108/2D8/2E8 - make i dead so gcc
- * keeps the single-register form).
+ * TWO dead-result countdown spins (0x3E7 and 0x7CF inits; probe PROVEN:
+ * the `i = N; while (i >= 0) i--;` form rotates the first decrement into
+ * the init and puts the loop decrement in the bgez BRANCH DELAY SLOT on
+ * the same register, exactly retail 8006B108/2D8/2E8 - the plan's item 1
+ * records the probe rounds).
  * Dispatch on D_800ABA50 (reload): 0 -> plain return; 1 -> B1C0 timer;
  * 2 -> s0 = 0x44E8; 3 -> s0 = 0x89D0; 4 -> B1C0; 5 -> a0 picks between
  * D_800ABA38++ (VSync path) and the 0xF2000003/slot-0/s0=1 arm; v1 >= 6
@@ -135,9 +136,8 @@ void func_8006B0F0(long a0)
     register long s1;
 
     i = 0x3E7;
-    i = i - 1;
-    while (i-- >= 0)
-        ;
+    while (i >= 0)
+        i = i - 1;
     v1 = D_800ABA50[0];
     if (v1 == 0)
         return;
@@ -187,13 +187,11 @@ install:
     func_8006B648(s1);
     func_8006B500(s1, s0 & 0xFFFF, 0x1000);
     i = 0x7CF;
-    i = i - 1;
-    while (i-- >= 0)
-        ;
+    while (i >= 0)
+        i = i - 1;
     i = 0x7CF;
-    i = i - 1;
-    while (i-- >= 0)
-        ;
+    while (i >= 0)
+        i = i - 1;
     func_8006B5D8(s1);
     if (D_800ABA3C[0] == 0) {
         D_800ABA48[0] = InterruptCallback(0, 0);
@@ -287,20 +285,28 @@ void func_8006B4B8(void)
 }
 
 /* ---- THE SIX-STEP MATCHING PLAN (landing window, witnessed oracle) ----
- * 1. SPIN MATRIX: probe `while (i-- >= 0)` with a DEAD loop var for the
- *    single-register form (bgez + delay-slot addiu) vs the probe's live-var
- *    addu copy; the two 0x7CF spins and the 0x3E7 one share the shape.
- *    Probe the addiu-vs-addu decrement choice (probe emitted addu $5,$5,-1;
- *    retail has addiu $v0,$v0,-1 - likely the `i = i - 1` init typing).
+ * 1. SPIN MATRIX - RESOLVED by probe round 2 (scripts/probe_8006AF70_2.c
+ *    + the /tmp probe_spin_predec run): the source form is
+ *    `i = 0x3E7; while (i >= 0) i--;` - cc1 rotates the first decrement
+ *    into the init (ori 0x3E7; addiu -1) and puts the loop decrement in
+ *    the bgez DELAY SLOT on the same register, exactly retail
+ *    8006B108/2D8/2E8. The post-decrement `while (i-- >= 0)` form is
+ *    WRONG (emits the old-value copy register). addu-vs-addiu is a
+ *    spimdisasm display artifact - both assemble to the addiu opcode.
  * 2. EXTERN FORMS per site (counter law): D_800ABA40's RMW must be a
  *    SCALAR extern (array CSEs into an la-form reg; retail emits two
  *    separate lui/%lo pairs around the mflo); the single-store sites take
  *    array-declared externs (fused lui/%lo). D_80171E08 carries the
  *    curated alias - the curation pass renames it AFTER the landing.
- * 3. TERNARY SHAPES: cases 0/5 select into a register then ONE store
- *    (branchy, not if-converted bit math - values 0x32/0x3C defeat the
- *    srl/xori fold); probe `?:` vs if/else-into-temp for each body; the
- *    case-4 `? 5 : a0` and case-1 `? 0x3C : 5` pair with them.
+ * 3. TERNARY SHAPES - probe round 2: the plain `(state == 1) ? 0x32 :
+ *    0x3C` ternary emits a TWO-test chain (bne state,1; delay ori 0x3C;
+ *    fall ori 0x32; single merged store), but retail case 0/5 carry a
+ *    THREE-path chain (beqz state -> 0x3C via B0CC, bne state,1 -> 0x3C
+ *    via B0D0, fall -> 0x32 via B0BC; store tail-merged at B0D0 for the
+ *    else arms). The source distinguished state == 0: probe the 3-arm
+ *    if/else-if (`== 0 -> 0x3C; == 1 -> 0x32; else -> 0x3C`) and the
+ *    switch-on-state form; case 4's `? 5 : a0` and case 1's
+ *    `? 0x3C : 5` pair with whichever wins.
  * 4. THE B1C0 DELAY-SLOT PAIR: s1 = 0xF2000002 before the A54 check, with
  *    the lui in the first bnez delay and the |= 2 in the range-branch
  *    delay; the probe (early use) sank the lui instead - re-probe with the
