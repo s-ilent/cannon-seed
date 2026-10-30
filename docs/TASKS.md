@@ -12194,3 +12194,77 @@ Game-code real-C count: 9 -> 13 functions. Next queue: the re-ranked
 real-C reading list (func_80052038, func_8006AF70, func_80027B00,
 func_800642A0), the second-compiler discriminator census as its own
 screen, and the standing lane-owned items.
+
+## Window 32 (cron-20261030-0458, 2026-10-30) - the LIBSPU init driver decoded, the volatile-timeout idiom proven, and the func_800642A0 landing parked on the head's scheduler tie-break
+
+Rollback #6 (same class: local main pinned at the 2026-10-14 era 7623cd2e,
+worklog.md lost all 195 windows, worklog_digest.py missing from the stale
+tools/) recovered per SOP: rehydrate 1s (venv rebuilt offline), reset to
+origin/main -> 672d282d, RESTORE NOTE appended (cron-20261030-0500-restore,
+196 lines), digest exit 0. WITNESS 0/8 at start (the woven-era baselines
+survived the roll and failed the config/sha1 gate, quarantined class) but
+the 2026-10-29 15:21 CDN links were still live (ex=0x6ae46932 is
+09:53:54Z, ~4.9h left), so the disc return ran foreground: sha256+size
+gates passed, per-sector baselines regenerated, WITNESS 8/8 STRICT in
+~5 minutes - the twenty-eighth production return, oracle UP with fresh
+baselines. No fresh links needed this window.
+
+The window's item was the reading-list head func_800642A0 (g3_eu, 0x548,
+twenty spimdisasm pieces that are ONE function). Decoded end to end: the
+game-side SPU reset/init driver (LIBSPU _spu_init family) - OR 0xB0000
+into the flag word behind D_800AB0C8, SPUCNT=0 through the
+_spu_RXX-style base pointer D_800AB0B8 (0x1F801C00+0x180..; 0x1AA=SPUCNT,
+0x1AE=SPUSTAT), NINE identical x3-multiplier software-timeout spins on
+volatile locals i@0x10(sp)/x@0x14(sp), the SPUSTAT-&0x7FF wait with the
+0x1389-count retry that printf's D_800221C4 on overflow, the register
+sweep (D_800AB0D8..E4=2/3/8/7, 0x1AC=4, 0x18C/8E=0xFFFF), the arg-gated
+full init (24-voice 0x10-stride table sweep with vol 0 / pitch 0x3FFF /
+addr 0x200 pairs, jal func_800647E8, four more spins, 0x188|=0xFFFF +
+0x18A|=0xFF, four final spins), both arms converging on the finish
+(_spu_inTransfer=1, SPUCNT=0xC000, D_800AB0EC/F0=0, return 0 with v0=0
+riding the incoming branch delay slots).
+
+PROVENANCE BANKED: psyq 3.3 LIBSPU.LIB carries the SAME x3-timeout loop
+idiom WITH the same doubled load (member near file offset 0xf10; symbol
+table names _spu_init/_spu_RXX/_spu_inTransfer/_spu_addrMode; debug
+strings "wait (wrdy H -> L)" / "wait (dmaf clear/W)") - but is NOT
+byte-identical (different frame), so the game copy was compiled from
+source by the game's own cc1 2.6.3-PSX. scripts/libspu_probe.py banks the
+archive scan; the psyq LIB format ("LIB\x01SPU " + length-prefixed symbol
+names) parsed far enough to locate the member.
+
+THREE SHAPES PROVEN BY PROBE (scripts/probe_looptime.c, cc.sh -S):
+1. THE DOUBLED LOAD is the cc1 2.6.3-PSX volatile-while idiom:
+   `while (i < 240) { x *= 3; i++; }` with VOLATILE i/x emits
+   [lw x][sll][addu][sw x][lw i][addiu][sw i][lw i][lw i][slt][bne] - the
+   redundant body-end load before the loop-head test load, exactly
+   retail's 0x64338/0x64340 pair. Address-taken (non-volatile) locals
+   register-cache x inside the loop instead (p1/p3/p8) - retail does not,
+   so the timeout locals ARE volatile.
+2. `v[0xC4] |= 0xFFFF` on a volatile unsigned short lvalue FOLDS to
+   lhu (dead value kept) + ori $zero,0xFFFF + sh, while `|= 0xFF` keeps
+   the loaded value (ori v0,v0,0xFF) - matching retail 0x644D4/0x6464C
+   exactly; the lhu survives because the pointee is volatile.
+3. Bare-symbol loads (scalar externs under -G8) assemble through -G0 GNU
+   as into the FUSED dest-reg pair (lui reg,%hi; lw reg,%lo(reg)) - proven
+   by re-judging the landed _spu_getInTransfer stub EXACT; no $at staged.
+
+THE LANDING IS PARKED (scripts/deferred_func_800642A0.c + parking state
+block): the best build (v-local + scalar `extern volatile unsigned short
+*volatile D_800AB0B8` externs) reproduces the retail frame EXACTLY
+(.frame $sp,32, regs 2/0, i@0x10/x@0x14, arg->s0) and every code section
+from 0x64314 on is shape-correct - but gcc hoists the `li $2,13` (x=13)
+ABOVE the three volatile sh's where retail emits it after them; the base
+pointer consequently lands in $6 instead of $2 and the whole stream
+shifts one slot (DIFF 276/332 words, all downstream of 0x642D8). Variants
+that made it worse: array extern + volatile element (gcc `la`-caches the
+array base into s0, frame 40), array extern + non-volatile element
+(frame 40, arg->s1), direct indexing D_800AB0B8[0][i] (no CSE across
+pointee-volatile stores - one fused reload per store, built 1596 B).
+The tree is back to asm for the row (yaml reverted, nonmatchings .s
+restored); the parked draft carries the full variant matrix and the next
+probe list (split access paths plain-store/volatile-RMW; address-escape
+residency without volatile; openpsyq's _spu_init source for the head's
+statement order). Suite 85/85; nothing landed this window beyond the
+disc return - the window's deliverable is the decode, the provenance,
+the three proven shapes and the parked draft.
