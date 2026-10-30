@@ -90,16 +90,27 @@ fi
 # upstream maspsx does not emit: nop_lw_lw load-load padding and the
 # redefine-dest hazard. The clone is git-ignored, so the patch lives in-repo
 # and is re-applied after every (re)clone or rollback.
+# TWO clone locations exist and BOTH must be patched (cron-20261030-2336
+# lesson: cc.sh/build.sh default to the OUT-OF-REPO absolute path
+# /home/z/my-project/tools-src/maspsx while step 6 clones in-repo; the
+# rollback ate the out-of-repo patch state and func_800642A0 silently
+# dropped its load-load nops - g3_eu verify failed with a 953-byte diff
+# until the out-of-repo clone was patched too).
 MASPSX_PATCH="$(pwd)/tools/maspsx_delay_slot.patch"
 if [ -f "$MASPSX_PATCH" ]; then
-    if git -C tools-src/maspsx apply --check "$MASPSX_PATCH" 2>/dev/null; then
-        git -C tools-src/maspsx apply "$MASPSX_PATCH"
-        say "maspsx delay-slot patch applied"
-    elif grep -q "line_redefines_reg" tools-src/maspsx/maspsx/__init__.py 2>/dev/null; then
-        say "maspsx delay-slot patch already present"
-    else
-        say "WARN: maspsx delay-slot patch failed to apply - func_800642A0 will not build"
-    fi
+    for MASPSX_DIR in tools-src/maspsx /home/z/my-project/tools-src/maspsx; do
+        if [ ! -d "$MASPSX_DIR" ]; then
+            continue
+        fi
+        if git -C "$MASPSX_DIR" apply --check "$MASPSX_PATCH" 2>/dev/null; then
+            git -C "$MASPSX_DIR" apply "$MASPSX_PATCH" 2>/dev/null
+            say "maspsx delay-slot patch applied ($MASPSX_DIR)"
+        elif grep -q "line_redefines_reg" "$MASPSX_DIR/maspsx/__init__.py" 2>/dev/null; then
+            say "maspsx delay-slot patch already present ($MASPSX_DIR)"
+        else
+            say "WARN: maspsx delay-slot patch failed to apply in $MASPSX_DIR - func_800642A0 will not build"
+        fi
+    done
 fi
 
 # --- 7. mipsel binutils (tools-local, git-ignored) ---------------------------
