@@ -12325,3 +12325,61 @@ the psyq-symbol curation pass is the queued follow-up that pays it back
 with evidence. Landing convention held: same-commit .s deletion, probes
 committed. mainmenu_eu whole-image verify re-run under the patched
 maspsx as the regression guard.
+
+## Window 34 (cron-20261030-0958, 2026-10-30) - the TMD opacket executor decodes offline: func_80052038 is the GsSortObject4J class, the eight TMD polygon codes map to [a2][mode] handler grids over the GsTMDdiv/fast family, and the parked draft banks the case map
+
+Rollback #8 (same class: local main pinned at the 2026-10-14 era 7623cd2e;
+worklog.md lost all 195 windows again) recovered per SOP: rehydrate 1s (venv
+rebuilt offline), reset to origin/main -> 8ff08f1c, RESTORE NOTE appended
+(cron-20261030-1000-restore, 196 lines), digest exit 0. WITNESS 0/8 (the
+rollback quarantined the baselines again) and the 2026-10-29 15:21 CDN links
+are DEAD (curl 404 at ~09:59Z - window 33's ex=0x6ae46932 expiry 09:53:54Z
+called it); fresh links requested in the report. Per LAW ZERO the window is
+a full offline work window, not a hold.
+
+The window's item is the reading-list head func_80052038 (g3_eu, 0x7f0,
+twenty-two spimdisasm pieces, one caller func_8002A2CC at 0x8002EA10),
+decoded end to end from the committed asm alone: THE TMD OPACKET EXECUTOR,
+the game's own source-compiled copy of the psyq LIBGS GsSortObject4J class.
+Provenance: config/sdk_members.txt already reports LIBGS OBJT2=GsSortObject4
+and OBJT3=GsSortObject4J claiming 0x800526d4 ambiguous - a byte-match INSIDE
+this row's range (near-identical member, not the same frame; the LIBSPU
+func_800642A0 precedent). The eight live opcodes are the eight TMD polygon
+primitive classes (0x20/0x21 .. 0x3C/0x3D, bit1 masked by `& 0xFD`; gcc
+lowers the switch to the exact sltiu/jtbl retail form with 14 default-filled
+dead slots in jtbl_80021B10), and the handler tables are [a2][mode] grids
+over the GsTMDdiv*/GsTMDfast* families the sdk report places uniquely at
+0x80052de4+ (LIBGTE): the 6-entry grids index [a2v*12 + mode*4], the 2-entry
+[a2v*4], and cases 0x20/0x30 split on bit 2 of s0[2] between a 3-entry
+[mode] grid (D_80098A98/D_80098AA4) and their 6-entry grid.
+
+The full decode banks in scripts/deferred_func_80052038.c (window-32 parking
+convention): head law (bltz exit on ctrl[0]; FIVE per-field reloads of
+ctrl[0] feeding D_80147E24/D_80164268/D_80147E20/D_801727D4/D_80171E04), the
+a2v = (a1v != 0) delay-slot pair with the {a1v, D_8016AF90, D_8016AFA4}
+12-byte out-record (matching the a2v*12 table-row stride), the
+delay-slot-carrying mode selector (v1 = 2 / D_80164268==1&&D_80147E24==1 /
+GsSetLightMode_lmode==1, else 0; s6 = v1<<2), packet state from ctrl[2]
+(s0 cursor at +0x10, s1 remaining at +0x14, s2/s7 at +0x0/+0x8), the
+seven-arg case call law (a0 = s0, a1 = s2, a2 = s7, a3 = D_8016AB6C, stack
+0x10 = len / 0x14 = s5 / 0x18 = s4 / 0x1C = s3; the 0x21-class re-orders a2
+= D_8016AB6C, a3 = len), the return committed to D_8016AB6C, and the
+ADVANCE LAW - len * UNIT with UNIT x16 (stub 80052594), x24 (stub 800525EC),
+x32 (stub 8005274C), x28 (j 800527CC delay <<3 -> -len -> <<2), x20 (j
+800527D0 delay <<2+), x36 (j 800527D0 delay <<3+, cases 0x28/0x35/0x3C) and
+the case-0x3D x44 FALL-THROUGH chain (27CC->27D0 with <<1+ <<2 -len <<2) -
+with the per-case map for all 16 live opcodes and the loop back edge
+(800527EC bnez s1) + the print-and-continue default (printf D_80021AF0 falls
+into the loop condition). The parked draft carries the skeleton (head +
+loop scaffold) and the six-step matching plan (the ctrl[0] reload probe
+matrix, the tail-merge conditions for the three shared stubs, the
+delay-slot-carry selector forms, the register-var pins for the s0/s1 loop
+state). Nothing landed in src/ this window - the decode, the provenance and
+the case map are the deliverable; the byte-exact landing waits for a
+witnessed oracle per the INPUT GATES (judge is live-only).
+
+Ratchets 807/57 = tree (untouched), suite 85/85, clean_stale_asm nothing
+stale. The psyq-symbol curation pass (window 33's queued follow-up) stays
+queued: renaming the func_800642A0 placeholder externs through the curated
+data-symbol path is a landing-class change (yaml labels + committed asm
+glabels + src externs move together) and waits for the witness with it.
