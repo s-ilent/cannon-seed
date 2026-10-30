@@ -1,14 +1,71 @@
-/* Real-decompiled-C game function #15 candidate (window 34 decode; round-1
- * landing attempt 2026-10-30, this window, witness 8/8 restored at 13:20Z on
- * Silent's fresh 11:42 UTC CDN links).
+/* Real-decompiled-C game function #15 candidate (window 34 decode; round-2
+ * landing attempt 2026-10-30, cron-20261030-2336 window, witness 8/8 restored
+ * 15:45Z on Silent's 11:42 UTC CDN links after the maspsx-patch-location fix).
  *
- * ROUND-1 STATUS: judge reached SIZE built 1932 vs row 2032 (84 B / 21 insns
- * short) with the head + prologue + save-slot layout EXACT; the case bodies
- * compile and the stub-merge shape is close but not yet byte-exact. The full
- * C below compiles clean and is the resume point - iterate judge_unit from
- * here, do NOT restart the decode.
+ * ROUND-2 STATUS: judge SIZE built 1944 vs row 2032 (88 B / 22 insns short;
+ * round-1 was 1932/-25) - head + prologue + save slots + the full five-load
+ * interleave + a1v/a2v branch shape EXACT through row+0x3C..row+0xA0; the
+ * remaining gap is the mode-chain register choices and the case-body table
+ * form (details below). The C below compiles clean and is the resume point -
+ * iterate judge_unit, do NOT restart the decode. The staged shape that
+ * produced 1944: copy this file to src/func_80052038.c and flip the g3_eu
+ * yaml row to [0x32838, c, func_80052038].
  *
- * ROUND-1 FINDINGS (all judge-proven against the live oracle):
+ * ROUND-2 FINDINGS (all judge/probe-proven against the live oracle this
+ * window; probe files probe_52038_pin_*.c):
+ * - VOLATILE READ-F2 LAW: the five head reads are five SEPARATE loads in
+ *   retail; gcc CSEs read-f2 into read-f1's value (no store separates the
+ *   statements). read f2 MUST be *(volatile unsigned long *)ctrl - the
+ *   volatile kills the CSE without disturbing the scheduler slide; the
+ *   other four reads stay plain. This single change reproduces retail's
+ *   L0..L4 interleave exactly (load slides between srl(N-1) and andi(N-1)).
+ * - CTRL PIN + SPLIT-LIFE LAW: retail reads ALL SIX loads through $a0.
+ *   `register long *ctrl asm("$4"); ctrl = ctrlp;` pins the head reads -
+ *   BUT the state load `state = (long *)ctrl[2]` sits in a LATER basic
+ *   block (after the rec-fill join) and gcc 2.6.3 SPLITS the pinned var's
+ *   life per region: head reads got a COPY ($5/$8), only the state load
+ *   kept $4 (probe_52038_pin_i/j/k: inline head + state loads => copy;
+ *   helper-head or no-state-loads => no copy). FIX: read the state pointer
+ *   through the RAW PARAM `state = (long *)ctrlp[2]` - the param pseudo
+ *   stays $4 everywhere, the pinned local's life stays single-region, and
+ *   ALL loads ride $a0 with NO copy (probe_52038_pin_n: 6/6 loads via $4).
+ * - A1V PIN LAW: retail computes a1v as lw $v1,srl $v1,9,andi $a1,v1,7 -
+ *   load+shift ride $v1, only the ANDI lands in $a1 ($5). Pin a1v to $5.
+ *   OPEN NIT: with the pin, gcc loads DIRECTLY into $5 (lw $5,srl $5,9)
+ *   - the t9 temp split coalesces (single-use) and a volatile t9 breaks
+ *   the scheduler slide (barrier => early a2v move). 2 insns differ, same
+ *   count - resume here.
+ * - A2V BRANCH LAW: retail = beqz $a1 with ORI a2,1 in the BRANCH DELAY
+ *   SLOT and move a2,zero at the join. The if/else form
+ *   (a2v=1+fill / else a2v=0) gives beqz+delay-ori exactly; the preset
+ *   form (a2v=0 before the if) emits the move EARLY (wrong); unpinned a2v
+ *   emits it early too. OPEN NIT: gcc forwards the known-zero a1v into
+ *   the else's a2v=0 => move a2,a1 instead of move a2,zero (1 insn, same
+ *   count). The volatile-pin trick breaks the frame; the gcc2 "+r" asm
+ *   clobber is unsupported (matching-constraint form added 2 insns).
+ * - MODE SHARED-CHAIN LAW: the lmode test is NOT private to the tmp==0
+ *   path - retail SHARES the mode=1 (j+delay-ori) and mode=0 blocks across
+ *   the tmp==0/lmode!=1 and tmp!=0 paths. The C must write the lmode arm
+ *   as an explicit if/else (mode=1/mode=0), NOT `mode = (lmode == 1)`.
+ * - CASE-BODY TABLE LAW: retail's StdFn (t0+s6-indexed) tables are FUSED
+ *   la-form: lui v0,%hi; addiu v0,v0,%lo; addu v0,$t0,$v0; addu v0,$s6,$v0;
+ *   lw v0,0(v0) = 5 insns. The draft's (char *)D + t0 + s6 gives the split
+ *   at-form (addu,lui $at,addu $at,lw %lo($at)) = 4 insns - one insn SHORT
+ *   per case (x8 StdFn cases = 8 of the 22 missing insns). Banked law
+ *   applies: force the la with a base-pointer local
+ *   `tbl = D_80098xxx; *(long **)((char *)tbl + t0 + s6)` - the array-
+ *   symbol assignment is the fused la, the byte-arithmetic on the LOCAL is
+ *   pure addus. OPEN: exact addu operand order (retail: addu v0,$t0,$v0
+ *   then addu v0,$s6,$v0) + the AltFn cases index by $s6 in at least one
+ *   retail block (jalr + addu $at,$at,$s6) - re-derive the fpv-vs-s6 case
+ *   map from the committed asm before the case pass.
+ * - ARG-STORE ORDER in the case bodies matches the draft already
+ *   (sw $s5,0x14; sw $s4,0x18; sw $s3,0x1c; sw $v0,0x10) and the lead-in
+ *   order (lhu v0,(s0); lw t0,0x20(sp); lui/lw a3 = D_8016AB6C; move a1,s2)
+ *   matches too - the case pass is ONLY the table form + the stub-merge
+ *   distances.
+ *
+ * ROUND-1 FINDINGS (still standing):
  * - HEAD CONDITION: the 80052074 branch is bltz $v0 -> the epilogue, i.e.
  *   the body runs when ctrl[0] >= 0 - the if (*ctrl >= 0) form is correct.
  * - THE FIVE HEAD RELOADS INTERLEAVE (retail: load(N) slides up between
@@ -88,8 +145,9 @@ extern long D_80098AA4[];
 extern char D_80021AF0[];
 extern int printf();
 
-void func_80052038(long *ctrl, long a1p, long a2p, long *recp)
+void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
 {
+    register long *ctrl asm("$4");
     register unsigned char *s0 asm("$16");
     register long s1 asm("$17");
     register long s2 asm("$18");
@@ -100,14 +158,16 @@ void func_80052038(long *ctrl, long a1p, long a2p, long *recp)
     register long s7 asm("$23");
     long fpv;
     long t0;
-    long a1v;
+    register long a1v asm("$5");
     long a2v;
+    long t9;
     long mode;
     long *state;
 
     a1 = a1p;
     a2 = a2p;
     rec = recp;
+    ctrl = ctrlp;
 
     if (*ctrl >= 0) {
         long f1;
@@ -115,20 +175,24 @@ void func_80052038(long *ctrl, long a1p, long a2p, long *recp)
         long f3;
         long f5;
         f1 = (long)((*(unsigned long *)ctrl >> 3) & 3);
-        f2 = (long)((*(unsigned long *)ctrl >> 5) & 1);
+        f2 = (long)((*(volatile unsigned long *)ctrl >> 5) & 1);
         D_80147E24 = f1;
         f3 = (long)((*(unsigned long *)ctrl >> 6) & 1);
         D_80164268 = f2;
-        a1v = (*(unsigned long *)ctrl >> 9) & 7;
+        t9 = *(unsigned long *)ctrl >> 9;
         D_80147E20 = f3;
         f5 = (long)((*(unsigned long *)ctrl >> 30) & 1);
-        D_801727D4 = a1v;
+        D_801727D4 = t9 & 7;
+        a1v = t9 & 7;
         D_80171E04 = f5;
-        a2v = (a1v != 0);
         if (a1v != 0) {
+            a2v = 1;
             rec[0] = a1v;
             rec[1] = D_8016AF90;
             rec[2] = D_8016AFA4;
+        } else {
+            __asm__ volatile("" : "=r"(a1v) : "0"(a1v));
+            a2v = 0;
         }
         if (D_80147E20 == 1) {
             mode = 2;
@@ -141,10 +205,14 @@ void func_80052038(long *ctrl, long a1p, long a2p, long *recp)
                     mode = 0;
                 }
             } else {
-                mode = (GsSetLightMode_lmode == 1);
+                if (GsSetLightMode_lmode == 1) {
+                    mode = 1;
+                } else {
+                    mode = 0;
+                }
             }
         }
-        state = (long *)ctrl[2];
+        state = (long *)ctrlp[2];
         s0 = (unsigned char *)state[4];
         s1 = state[5];
         s2 = state[0];
