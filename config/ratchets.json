@@ -5,11 +5,11 @@
     "regression, lower means the baseline goes down in the same PR. A raise",
     "is a policy change and needs explicit review.",
     "Add your own patterns (e.g. raw-address debt, magic numbers) the day",
-    "you introduce them — ratchets go up the day the first placeholder appears.",
+    "you introduce them \u2014 ratchets go up the day the first placeholder appears.",
     "unknown_function 0->1 (2026-10-10): first C match, src/func_80036CFC.c,",
     "matched but the original symbol name is still unidentified.",
     "unknown_function 1->3 (2026-10-10): two more C matches through the",
-    "round-trip oracle (slps_00270 gp-store leaves), auto names retained —",
+    "round-trip oracle (slps_00270 gp-store leaves), auto names retained \u2014",
     "one mention per file per the counting rule.",
     "unknown_data 0->4 (2026-10-10): extern declarations + uses of the two",
     "small-data globals those matches write (2 mentions per file: extern",
@@ -69,7 +69,19 @@
     "unknown_function 686->691 (2026-10-29): the MulMatrix (x3) / MulMatrix2 (x2) 0x10C own-row wave lands five per-row src units (slps/mainmenu_eu/g3_eu carry psyq's in-place GTE matrix product pair - two curated pins + the census-missed mainmenu_eu member the C8-wave lesson confirmed; the decode is the ctc2 control-load + column-wise m1 feeds + three .word-banked mvmva 1,0,0,3,0 = 0x4A486012 passes, the whole-body-one-asm-block class - MulMatrix stores into m0 and returns it, MulMatrix2 commits into m1 and returns it, six store/return words differ): 5 mentions - 1 definition per file, headers name no siblings (the wave104 header law applied to the 10C/88/34-0C bank BEFORE landing per the twentieth-return NEXT 1 lesson - the five templates' cross-target identity indexes stripped at the source + all three gen scripts' This-unit injections removed + screens re-run bytes=EXACT post-edit). verify 3/3 landed targets GREEN first shot (mainmenu_eu, g3_eu, slps_00270 - the wave touches only these three carriers), judge_unit 5/5 EXACT (268 bytes each) both regimes on the live oracle.",
     "unknown_function 691->699 (2026-10-29): psyq's memmove lands four hand-asm per-row src units (slps/mainmenu_jp/g3_jp/g3org_jp, all curated pins; the 0x90 row = 0x88 function + 2 zero tail words; the hand-written asm member - sltu in $at, dead o32 home stores, the ASPSX frame-release-in-delay-slot return): 8 mentions - 691 + 4 units x 2 (the bare-asm two-mention definition form, the 374->386 precedent: .globl + label per file), headers name no siblings (the twentieth-return NEXT expectation of +4 assumed the C one-mention form; the raise recomputes from the tree in landing order) (the wave104 header law applied at the source with the 10C fix). The units emit the retail row's 2 zero tail words explicitly (.word 0 x2 - byte-identical to the ROW, the judge's extent bar; in the whole-image build the tail replaces what was linker zero-slack, image bytes unchanged - the SIZE-note lesson: judge_unit wants the unit to tile the retail row extent, the first landing with a retail tail-slack row). verify 4/4 landed targets GREEN, judge_unit 4/4 EXACT (144 bytes each) both regimes on the live oracle.",
     "unknown_function 699->713 (2026-10-29): the two fresh x8 own-row waves land fourteen per-row src units - the 0x34 word-copy loop x7 (slps func_8003C8F8, sces func_8003C6EC, mainmenu_eu func_800792C0, g3_jp func_8006334C, g3_eu func_80063CDC, g3org_jp func_800607E8, g3org_eu func_80061130) and the 0xC halfword-load thunk x7 (slps func_80037BF4, sces func_800377A8, mainmenu_eu func_80074100, g3_jp func_8005E648, g3_eu func_8005ED98, g3org_jp func_8005BAE4, g3org_eu func_8005C1EC; mainmenu_jp carries neither - both members are parent-bound interiors landing with their parents): 14 mentions - 1 definition per file, headers name no siblings (the wave104 header law applied at the source with the 10C fix). The dead 8-byte frame closed as gcc's OWN first-shot output (no hand-asm fallback needed); the thunk is the lhu zero-extended return class. LAND LESSON: the banked land script's offsets were stale by exactly +0x800 on the six non-slps targets (a pre-re-scan basis; slps's two rows unaffected) - offsets recomputed from the committed yamls (the sweep-correction offset class again); a ghost land_wave34_0C.sh from a timed-out call raced build staging and its per-target whole-yaml revert undid already-GREEN sibling-wave flips (the fail path reverts the whole file, not the wave's rows - two targets landed only after the ghost kill + pristine restore + per-row foreground re-flips). verify 8/8 GREEN (fourteen flips + untouched mainmenu_jp re-verified), judge_unit 14/14 EXACT both regimes on the live oracle.",
-    "unknown_function 713->753 (2026-10-29): the 0x1CC recursive triangle-subdivision x20 own-row wave lands twenty bare file-scope __asm__ per-row src units (mainmenu_eu/g3_jp/g3_eu/g3org_jp/g3org_eu x4 each; sha1 28494af42860, 456-byte rows byte-identical across all twenty; the 26th window's decode - six-chunk depth/band culls + the midpoint quad-split recursive tail; NO absolute relocations, five interior chunk labels row-local): 40 mentions - 20 units x 2 (the bare-asm .globl+label two-mention definition form, the 374->386 and 691->699 precedents; the banked NEXT expectation of +20 assumed the C one-mention form - recomputed from the tree in landing order, the wave88 lesson again). CROSS-TARGET WALK-NAME COLLISIONS handled: two members' walk names are already tracked flat src units of OTHER targets' landed rows (src/func_8006F34C.c = g3_jp's 0x10 sdk row, src/func_8005AE70.c = mainmenu_eu's 0x30 row), so they land PER-TARGET at src/<target>/<fn>.c and tools/build.sh + tools/judge_unit.py prefer src/$TARGET/$name.c when present (byte-inert where unused: mainmenu_jp verified GREEN + suite 85/85 on the patched pipeline BEFORE any flip). The template's decode comment sibling mentions (the 0x4c packet shim, the ctc2 seed path) stripped at the source per the wave104 one-mention law - comments never reach codegen, judge_unit 20/20 EXACT re-proven post-edit, verify 8/8 GREEN."
+    "unknown_function 713->753 (2026-10-29): the 0x1CC recursive triangle-subdivision x20 own-row wave lands twenty bare file-scope __asm__ per-row src units (mainmenu_eu/g3_jp/g3_eu/g3org_jp/g3org_eu x4 each; sha1 28494af42860, 456-byte rows byte-identical across all twenty; the 26th window's decode - six-chunk depth/band culls + the midpoint quad-split recursive tail; NO absolute relocations, five interior chunk labels row-local): 40 mentions - 20 units x 2 (the bare-asm .globl+label two-mention definition form, the 374->386 and 691->699 precedents; the banked NEXT expectation of +20 assumed the C one-mention form - recomputed from the tree in landing order, the wave88 lesson again). CROSS-TARGET WALK-NAME COLLISIONS handled: two members' walk names are already tracked flat src units of OTHER targets' landed rows (src/func_8006F34C.c = g3_jp's 0x10 sdk row, src/func_8005AE70.c = mainmenu_eu's 0x30 row), so they land PER-TARGET at src/<target>/<fn>.c and tools/build.sh + tools/judge_unit.py prefer src/$TARGET/$name.c when present (byte-inert where unused: mainmenu_jp verified GREEN + suite 85/85 on the patched pipeline BEFORE any flip). The template's decode comment sibling mentions (the 0x4c packet shim, the ctc2 seed path) stripped at the source per the wave104 one-mention law - comments never reach codegen, judge_unit 20/20 EXACT re-proven post-edit, verify 8/8 GREEN.",
+    "unknown_function 753->803 + unknown_data 0->12 (2026-10-30, the ratchet",
+    "audit window cron-20261030-0343): the real-C pivot's first five landings",
+    "(windows 29-30: func_8004E29C.c, func_8006AD50.c, func_8006B648.c,",
+    "func_80048908.c, func_80062840.c) went in without a baseline raise - the",
+    "tree debt grew silently while the audit note said 'pending'. Recounted",
+    "from the tree at this window's two-setter landing; the delta attributes",
+    "token-exact to the seven files: +2/+0 func_8004E29C.c, +8/+0",
+    "func_8006AD50.c, +17/+3 func_8006B648.c, +2/+0 func_80048908.c, +15/+3",
+    "func_80062840.c, +2/+3 func_8005E16C.c, +4/+3 func_8005E244.c = +50 func",
+    "+12 data. Every token is a placeholder name in a landed real-C unit (the",
+    "count includes decode-comment mentions - the counting rule reads text,",
+    "not codegen); no placeholder appears outside these seven files' totals."
   ],
   "patterns": [
     {
@@ -82,7 +94,7 @@
     }
   ],
   "baselines": {
-    "unknown_function": 753,
-    "unknown_data": 0
+    "unknown_function": 803,
+    "unknown_data": 12
   }
 }

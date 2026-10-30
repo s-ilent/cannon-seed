@@ -515,9 +515,9 @@ segments:
       - [0x3E360, asm, func_8005DB60]   # 0x18c sdk
       - [0x3E4EC, asm, func_8005DCEC]   # 0x248 sdk
       - [0x3E734, asm, func_8005DF34]   # 0x238 sdk
-      - [0x3E96C, asm, func_8005E16C]   # 0x10
+      - [0x3E96C, c, func_8005E16C]     # 0x10
       - [0x3E97C, asm, func_800675EC]   # 0xc8 sdk
-      - [0x3EA44, asm, func_8005E244]   # 0x10
+      - [0x3EA44, c, func_8005E244]     # 0x10
       - [0x3EA54, asm, func_8005E254]   # 0x24 sdk
       - [0x3EA78, asm, func_800676E8]   # 0x4c sdk
       - [0x3EAC4, asm, func_8005E2C4]   # 0xe8
