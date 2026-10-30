@@ -1,10 +1,10 @@
 diff --git a/maspsx.py b/maspsx.py
 old mode 100644
 new mode 100755
-index 02f2587..5f0b6a3
+index 02f2587..7310c2f
 --- a/maspsx.py
 +++ b/maspsx.py
-@@ -15,7 +15,7 @@ class AspsxVersionConfig:
+@@ -15,12 +15,12 @@ class AspsxVersionConfig:
      div_uses_tge: bool = False
      nop_at_expansion: bool = False
      nop_mflo_mfhi: bool = True
@@ -13,6 +13,12 @@ index 02f2587..5f0b6a3
      sltu_at: bool = True
      expand_li: bool = True
      gp_allow_offset: bool = False
+     gp_allow_la: bool = False
+-    addiu_at: bool = False
++    addiu_at: bool = True
+ 
+ 
+ def config_for_aspsx_version(aspsx_version_arg: str | None) -> AspsxVersionConfig:
 diff --git a/maspsx/__init__.py b/maspsx/__init__.py
 old mode 100644
 new mode 100755

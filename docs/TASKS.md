@@ -12465,3 +12465,72 @@ the witnessed-window landing order is func_80052038 (window-34 draft) then
 func_8006AF70 (this draft); the psyq-symbol curation pass stays queued
 behind the witness; the five new second-compiler rows join the parked
 2.7.x-cc1 class (no decode windows to be spent on them).
+
+## Window 36 (cron-20261030-2151, 2026-10-30) - the dispatch structure closes offline: cc1's sym($reg) macro belongs to the assembler, maspsx's addiu_at IS the retail at-split, and the computed-goto over the committed jtbl row removes the orphan table; the zero-cost "i"-asm label law keeps the case labels alive
+
+Rollback #10 (same class: local main pinned at the 2026-10-14 era 7623cd2e,
+525 commits behind) recovered per SOP: rehydrate 1s, reset to origin/main
+-> 3b662a6d, restore note appended (digest exit 1 with 195 missing windows
+after the rollback; exit 0 after). The 11:42Z disc links were probed twice
+this window (the first detached run died silently - setsid relaunch at
+21:57Z still downloading at commit time); no landing this window, per the
+INPUT GATES the judge stays live-only.
+
+ITEM 1 - THE ROUND-4 STRUCTURAL ITEM (the switch dispatch) CLOSED OFFLINE.
+Root cause chain, all probe-proven (cc.sh -S is unaffected by the witness):
+- cc1 emits the sym($reg) addressing MACRO and leaves the expansion to the
+  assembler (`lw $2,$L39($2)` raw at every -O level; -O0 additionally
+  spills the switch temp but shows the same macro).
+- maspsx's DEFAULT expansion is the FOLD: lui $at,%hi; addu $at,$at,$idx;
+  lw $dest,%lo(sym)($at) - 3 insns. The ORIGINAL aspsx (< 2.30) expanded
+  the SAME macro as the AT-SPLIT: lui $at,%hi; addiu $at,$at,%lo; addu
+  $at,$at,$idx; lw $dest,0x0($at) - 4 insns - which is EXACTLY the retail
+  dispatch (verified identical in func_80052038 0x800521BC, func_80022B5C
+  0x8002453C, func_80050898 0x80050AEC; the at-split is universal across
+  the retail jtbl dispatches sampled).
+- maspsx already carried the knob: addiu_at=True for aspsx < 2.30. The
+  version flag flips THREE other knobs with it (nop_at_expansion,
+  nop_mflo_mfhi, nop_lw_lw) which we do NOT want, so the patch flips
+  addiu_at ALONE in the base config: tools/maspsx_delay_slot.patch
+  regrown (nop_lw_lw + line_redefines_reg + addiu_at), and rehydrate 6b
+  now RESETS the clone before applying so regrown patches never skip
+  hunks on already-patched clones (the old grep-marker idempotency check
+  would have silently skipped the new hunk). Suite 85/85 after.
+- THE DISPATCH FORM: the switch is replaced by a computed-goto over the
+  COMMITTED extern row (removing the C-unit .rodata orphan entirely):
+      ix = (long)code - 0x20;
+      if ((unsigned long)ix < 0x1E)
+          goto *((void **)jtbl_80021B10)[ix];
+  Under addiu_at this emits the retail 4-insn at-split THROUGH $at with
+  the register roles intact (andi $5/$a1 code; addu $3/$v1 ix; sltiu+sll
+  $2/$v0; la $at; lw $2,0x0($at); j $2) - probe_52038_goto3 vs retail:
+  FORM IDENTICAL. Two traps banked on the way: `goto *(elem_address)`
+  (no deref) emits NO load at all (jumps at the table itself) - the deref
+  form is the retail semantics; and gcc 2.6.3 DCEs EVERY case label only
+  reached via the extern table (dead `keep = &&L_x` assignments do NOT
+  preserve them - LABEL_PRESERVE never fires at -O2 in 2.6.3).
+- THE ZERO-COST LABEL LAW: two 8-input input-only asms with "i"
+  constraints (`__asm__ ("" : : "i"(&&L_0x20), ...)` x2 - gcc 2.6.3 caps
+  asm at 10 operands) keep the labels alive as immediate operands: no
+  register moves, no emitted insns, labels preserved. The "r" form would
+  emit 2 insns per label (32 total) - dead end measured, not needed.
+- CASE BODIES under addiu_at: the round-3 flag-path tbl-pin + statement-
+  barrier workarounds are now WRONG (they pin the la into $2 where retail
+  uses $at; the plain sym($reg) form expands through $at natively) -
+  dropped; the no-flag two-index forms dropped the tbl-assign too. The
+  round-2/3 laws derived under the FOLD regime must be REPROBED under
+  addiu_at before the landing judge - that is the next window's work.
+- NEW TOOL: scripts/word_diff.py - assemble the .mas.s with the pinned
+  as, objdump, byteswap each word (the retail dump is BE words of LE
+  bytes), difflib against the retail word stream: the offline judge
+  proxy for any unit without the witness.
+
+NEXT: (1) witness up -> reprobe the case-body forms under addiu_at
+(probe matrix over the flag/no-flag/AltFn shapes), stage v2 into
+src/func_80052038.c + yaml flip, build g3_eu, judge; the whole-image
+verify also gates the addiu_at flip against the 807 landed functions
+(bare-symbol loads/stores do not ride the sym($reg) path, so the landed
+set is expected safe - the verify proves it). (2) if the flip breaks any
+landed unit, revert to per-unit maspsx configs via the staging step.
+(3) then func_8006AF70 (window-35 draft + the 2de48b6d spin law) on the
+same live oracle.
