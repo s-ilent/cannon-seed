@@ -12559,3 +12559,81 @@ that. The addiu_at flip itself needs the whole-image verify as its gate
 (this build's RED was the case-body regression, not the flip; the flip
 affects only sym($reg) expansions, which the landed bare-symbol set does
 not ride).
+
+## Window 37 (cron-20261030-2306, 2026-10-30) - the v3/v4 judge rounds: the banked landing combination is disproven, the plain-form + printf-last shape closes the size gap to -4 and gcc's cross-jumping fires, and the addiu_at whole-image gate runs (6/8 GREEN, mainmenu_jp/eu RED)
+
+Rollback #11 (outer worklog pinned at the 2026-10-14 era again; repo fine)
+recovered per SOP: rehydrate, reset --hard to origin/main -> 74370849 (527
+commits ahead of the stale local main - window 36's own push included),
+rehydrate RE-RUN after the reset (the banked round-4 trap: the first
+rehydrate of a rolled-back sandbox runs the OLD in-tree script and skips
+the tools-src maspsx patch). Oracle was DOWN on arrival (0/8: the rollback
+wiped disk/ + baselines) - disc_return re-run on Silent's 11:42Z links:
+both sha256 gates PASS, witness 8/8 STRICT restored at 23:07Z. No builds
+running at start (window 36's session had ended; last commit 22:41Z).
+
+ITEM 1 - THE WINDOW-36 LANDING COMBINATION IS DISPROVEN (round 6). Staged
+v3 = v2 dispatch + round-4 case bodies (tbl=$2 pin restored on the no-flag
+StdFn cases + barrier on the flag paths) exactly as the window-36 addendum
+banked: judge SIZE 2236/2032 DIFF 450/508 - WORSE than v2 (2228, 444/508).
+Root cause: the tbl=$2 pin CONFLICTS with the computed-goto dispatch, which
+itself occupies $2 (sltiu+sll $2 / lw $2 / j $2). The flag-path pin forces
+the la into $v0 where the single-index retail form is la-in-$at (plus a
+duplicate move a0,s0 scheduling artifact); the round-5 post-mortem's
+"restore the pins" instruction was derived under the switch dispatch where
+gcc's own dispatch did not contend for $2. The round-5 plain forms were
+already correct for every case class under addiu_at.
+
+ITEM 2 - THE BREAKTHROUGH (round 7 / v4): the default printf block's
+SOURCE POSITION controls cross-jumping. v4 = plain bodies everywhere +
+the default path moved from before the case labels to AFTER the last case
+label (goto L_default; ... L_default: printf; goto L_next; L_next:).
+Judge: SIZE built 2016 vs row 2032 (-16 B / -4 insns; v2 +196, v3 +204,
+round-4 switch -44) - with the printf block placed last, gcc 2.6.3's
+CROSS-JUMPING (jump.c tail-merge) FIRES: the shared stubs exist in the
+built image (the x16/x24/x32 stride stubs + the 27CC/27D0-style call
+chains retail has) and every case tail-jumps into them. THE STUB-MERGE
+ITEM IS CLOSED as a source-shape law: the merged-tail structure was
+present all along in the case bodies; the early printf block sat between
+the case ends and the loop-back and blocked the merge. REMAINING deltas
+(mapped via the new mini-linked side-diff, aligned-match 428/508):
+(1) the no-flag two-index la chain: built decomposes addu v0,s6,t0;
+    la-in-$at; addu at,at,v0; lw v0,0(at) vs retail la-in-$v0 then addu
+    $v0,$t0,$v0 then addu $v0,$s6,$v0 - SAME 5-insn count, different
+    operand decomposition (~5 words x 8 cases; the V2/V3 levers stay
+    dead, the pin is now also dead under the goto dispatch);
+(2) the stub merge-POINT offsets: every built tail-j lands 0x10 (4 insns)
+    earlier into its stub than retail's equivalent (gcc shares 4 more
+    leading insns than the original compiler did);
+(3) the mode chain: still +6 words (gcc if-converts with xori/sltiu,
+    retail keeps the branch form with the shared mode=1/0 blocks);
+(4) the known register nits (a1v lw/srl into $5 vs retail $3+$5, rec[0]
+    base $7 vs $s3, a2v move a2,a1 vs move a2,zero, mode-temp $v0 vs
+    $v1). EXACT needs items 1+2 (source-shape levers) - next window.
+
+ITEM 3 - THE ADDIU_AT WHOLE-IMAGE GATE FINALLY RAN (it sat unverified
+since 13eb6e80): with staging reverted, make verify TARGET=<t> x8:
+g3_eu, g3_jp, g3org_jp, g3org_eu, slps_00270, sces_00269 = OK (GREEN);
+mainmenu_jp + mainmenu_eu = RED. mainmenu_jp: image sha1 a0a72a5a... vs
+retail d637286a...; first differing byte file 0xB2BC -> VRAM 0x8002AABC
+(t_addr 0x80020000, pc0 0x8005C530); ONE contiguous diff cluster
+0x8002AABC..0x8006F92F (237396 B, 282KB run) - the shift/rewrite region
+spans the mid-image code and stops at the func_8006F940.rowdef area;
+mainmenu_eu RED too (image 7837fe72... vs retail f9f29eeb...). The flip
+DOES break landed units in the mainmenu pair - per the runbook the fix is
+per-unit maspsx configs via the staging step (or a flip-scope fix), which
+is the gate item for the next window BEFORE any func_80052038 landing
+(the landing needs the flip for its dispatch). Suite 85/85 after.
+
+NEW TOOLS: scripts/linked_diff.py + scripts/linked_sidediff.py - difflib
+the MINI-LINKED judge .elf (objdump -d, byteswapped into the retail dump
+convention) against the retail row; word_diff.py's standalone-as proxy
+misaligns on relocations/branch offsets, the mini-linked .elf is what the
+verdict counts. linked_sidediff.py prints the full mnemonic side-by-side
+per diff block (the round-7 map came from it, dump in /tmp/v4_sidediff.txt).
+
+NEXT: (1) per-unit maspsx config split so addiu_at applies to g3_eu (and
+any unit that needs it) without flipping the mainmenu pair - then re-run
+the 8-target verify gate; (2) v4 source-shape levers for the no-flag la
+chain (items 1+2 above) + the mode-chain goto-form probes, re-judge;
+(3) staging stays REVERTED per the gates (verify RED, no landing).

@@ -52,7 +52,9 @@
  * 5-insn la-in-$v0 retail form) and the flag paths still need the
  * statement barrier. NEXT WINDOW: v2 dispatch + round-4 case bodies
  * (tbl-pin/barrier restored where listed) + addiu_at -> re-judge.
- */
+ * (NOTE: the window-36 landing attempt of this exact shape ran BEFORE these
+ * closing notes were appended; the append broke the comment block - the
+ * dangling " * cc-post" line below the close is fixed in the round-7 commit.
  * cc-post: keep-epilogue
  */
 typedef long (*StdFn)(long *, long, long, long, long, long, long, long *);
