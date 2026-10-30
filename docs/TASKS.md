@@ -12091,3 +12091,44 @@ deframe/gp_value mechanism lands; (2) the sdk-tagged-but-uncurated gray zone
 game-code rows only until then. The real-C playbook (keep-epilogue,
 early-guard branch forms, array-declared externs for fused lui/%lo, volatile
 tail stores, post-decrement test idioms) is byte-verified in the worklog.
+
+## Window 30 (cron-202610300229, 2026-10-30) - the real-C pivot doubles
+
+Rollback #4 (local main pinned 506 commits back at the 2026-10-14 era
+7623cd2e; worklog.md lost all 195 windows; scripts/ lost the window-29
+ranker and the parked func_800487F4 body) recovered per SOP: reset to
+origin/main, append_restore_note for the full digest, queue truth taken
+from this Log. The CDN link math was re-derived instead of trusted:
+ex=0x6ae46932 is 2026-10-30 09:53:54Z, so the links had ~7h left and the
+disc-return ran foreground - witness 8/8 STRICT, the twenty-sixth
+production return, oracle UP with ~55 minutes of window remaining.
+
+tools/pick_game_candidates.py is banked IN-REPO now (the scripts/ copy
+dies with every rollback): untagged rows x outside sdk_windows x
+non-curated, split-row and BIOS-thunk screening, game-vs-sdk caller
+evidence, score = extent + 8*branches + 16*jals. Its first ranking
+retires a fantasy: the three top-scoring "functions" (4480/3836/1676
+bytes, zero branches, zero jals, no ra store) are data tables mis-typed
+as code; the real-C sweet spot is small rows with game callers.
+
+Two more game functions landed as hand-written C, both g3_eu, both judge
+EXACT and whole-image GREEN on the first oracle pass after source-form
+iterations: func_80048908 (97053a84) - the six-piece 0xc0 write-all loop
+over _SN_write that func_80022B5C calls: unsigned sltu chunk guard at
+0x8000, signed slt short-write stop, -1 host-failure bail, shared
+return-total tail - and func_80062840 (400f6795) - the 0x94 CD-host
+command pair from func_8002A2CC: 0xE command with a one-byte stack
+argument, the flags & 0x100 gated callback registration, the ? 0 : 1
+flag store, and the 0x1B command as the SHARED continuation.
+
+New source laws banked: (1) a single `return total` with the loop wrapped
+in `if (len != 0)` is what makes GCC branch to the shared tail - a
+second return point constant-folds into a private v0=0 j-glue block;
+(2) GCC's allocator ties the accumulator with a two-read pointer param
+and hands the tie to the param - one register-asm pin (the banked
+_SN_write idiom) re-seats the whole allocation; (3) `x ? 0 : 1` stores
+must be if/else with the stores in the arms - value-selects get
+if-converted into srl/xori/andi bit math, memory stores cannot; (4)
+keep-epilogue closes the lw-ra/jr ordering on both landings.
+
+Game-code real-C count: 6 -> 8 functions (8th and 9th). Suite 85/85.
