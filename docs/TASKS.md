@@ -12383,3 +12383,85 @@ stale. The psyq-symbol curation pass (window 33's queued follow-up) stays
 queued: renaming the func_800642A0 placeholder externs through the curated
 data-symbol path is a landing-class change (yaml labels + committed asm
 glabels + src externs move together) and waits for the witness with it.
+
+## Window 35 (cron-20261030-1113, 2026-10-30) - the second-compiler census ships as its own screen and the tick-mode installer row decodes offline: the func_8006AF70 row is the LIBSND SSCALL tick plumbing (mode/tempo switch, timer-vs-VSync install, chaining and half-rate callbacks) with the spin and division shapes probe-proven
+
+Rollback #9 (same class: local main pinned at the 2026-10-14 era 7623cd2e;
+worklog.md's restore-note coverage survived, digest exit 0, no new note
+needed) recovered per SOP: rehydrate 1s, reset to origin/main -> df1ff6a5.
+The 2026-10-29 15:21 CDN links are DEAD (EU/JP curl 404 at 11:14Z, one
+window after window 34's confirmation); no fresh links arrived, so the
+window is again a full offline work window per LAW ZERO.
+
+ITEM 1 - the window-31 queue line "the second-compiler discriminator
+census as its own screen" ships as tools/second_compiler_census.py: two
+backward walks over the committed asm for the probe-proven cc1 2.6.3-PSX
+nevers - `sltu $at` on single compares (classified range-idiom when an
+`addiu $at` sits within 4 insns upstream; range hits are NOT verdicts) and
+`multu` on provably sign-extended operands (first-def-decides walk:
+sra/lh/lb = sext hit, lhu/srl/andi/slt/sltu = clean stop, anything else =
+unknown; piece markers transparent across exact VA fall-through only,
+branches and unknown GPR writers stop). The GPR-writer completeness law
+makes every non-DEF_MINOR/CONTROL insn transparent - stopping at a previous
+multu or a nop had killed the calibration recall (2/14). Calibration is
+HARD (exit 2): func_800487F4 must surface sltu-at single, func_80049DA0
+must surface multu-sext (12 mechanical hits vs 14 banked - 2 conservative
+barrier misses). Census verdicts: the window-29 chain corroborates exactly
+(func_8005BB94/5B270/5A714/59EF0 x4 each), func_80047844 carries sltu-at
+x1 (park it, rank 8), and FIVE NEW second-compiler rows surface:
+func_800489E0/48B80/48D20 x12 each and func_80051C74 x13 (multu-sext,
+the sra16/lh-product class). Cross-target mirrors are consistent (g3_eu/
+g3org_eu/mainmenu_eu 18 single sltu-at + 5 multu-sext funcs; the jp
+mirrors 17; mainmenu_jp also carries 2 range-idiom hits, provenance
+unprobed, not verdicts). THE READING-LIST HEADS ARE ALL CLEAN:
+func_80052038/func_8006AF70/func_80027B00/func_8006923C/func_8007068C -
+decode-eligible; the pool's next decode targets are confirmed matchable.
+
+ITEM 2 - the next reading-list head func_8006AF70 (g3_eu, 0x590, the row
+covering 0x8006AF70..0x8006B500 with seven function definitions plus the
+un-glabel'd func_8006B3A0 thunk) decoded end to end from the committed asm
+plus the EU jtbl_8002220C (6 words binding cases 0-5) and the curated
+anchors: THE TICK-MODE INSTALLER FAMILY, the game's own source-compiled
+copy of the psyq LIBSND SSCALL tick plumbing around the LANDED
+SsSeqCalledTbyT (curated LIBSND SSCALL member; the landed func_8006B648
+slot-clear documents this row as its caller; D_80171E08 is the curated
+SsSeqCalledTbyT_ntracks alias). The decode: func_8006AF70 packs
+(a0 & 0x1000) ? (a0 & 0xFFF) : a0 into D_800ABA50 with the flag bit in
+D_800ABA54, then the switch - an explicit `v1 >= 6` pre-check (store v1
+through) in front of a 6-case switch whose default (negatives) stores
+0x3C; cases 0 and 5 have identical C semantics in two structurally
+different bodies (retail gcc did not tail-merge them); case 1/4 REWRITE
+D_800ABA50 (the dual range: mode code OR tempo). func_8006B0F0 is the
+installer: two 998-countdown spins, dispatch 0->return/1,4,6+->timer/2->
+0x44E8/3->0x89D0/5->a0 splits VSync-count vs the 0xF2000003 slot-0 arm;
+the timer arm sets s1 = 0xF2000002 (materialized across two delay slots),
+slot = 6, and computes the reload by PLAIN division (0x204CC0 under 0x46,
+else 0x409980), D_800ABA40 counting timer users; install = the
+D_800ABA38 flag picking VSyncCallback(SsSeqCalledTbyT) vs the
+intr_stop_begin + func_8006B648(s1) + func_8006B500(s1, s0 & 0xFFFF,
+0x1000) + two 0x7CF spins + func_8006B5D8(s1) + the InterruptCallback
+swap (slot 0 saves the old vblank handler and registers the CHAINING
+wrapper func_8006B484; timer slot registers SsSeqCalledTbyT on the FIRST
+install and the HALF-RATE divider func_8006B4B8 after) + func_8004AE64
+(intr lane, not ours). func_8006B3C0 uninstalls (slot -1 skip, slot 0
+restores the saved handler, other slots unregister, D_800ABA3C = -1);
+func_8006B380/func_8006B3A0 are the delay-slot-arg thunks (1/0, the
+proven func_8006B680 shape); func_8006B464 is the SpuQuit thunk.
+TWO SHAPES PROVEN BY PROBE THIS WINDOW (scripts/probe_8006AF70.c, cc.sh
+-S, offline - no witness needed): (1) the DEAD-VAR `while (i-- >= 0)`
+spin puts the decrement in the bgez BRANCH DELAY SLOT, exactly retail's
+8006B108/2D8/2E8 (the probe's live-var form emitted the addu copy - the
+addiu-vs-addu choice is plan item 1); (2) a plain `0x204CC0 / v1` long
+division reproduces the ENTIRE retail EXPAND_DIV guard structure (div;
+bnez v1; nop; break 7; addiu at,-1; bne v1,at [delay: lui at,0x8000];
+bne v0,at; nop; break 6; mflo). Nothing landed in src/ this window - the
+decode, the case map and the parked six-step matching plan are the
+deliverable; the byte-exact landing waits for a witnessed oracle per the
+INPUT GATES (judge is live-only). Draft banked at
+scripts/deferred_func_8006AF70.c.
+
+Ratchets 807/57 = tree (untouched), suite 85/85, clean tree. Queued next:
+the witnessed-window landing order is func_80052038 (window-34 draft) then
+func_8006AF70 (this draft); the psyq-symbol curation pass stays queued
+behind the witness; the five new second-compiler rows join the parked
+2.7.x-cc1 class (no decode windows to be spent on them).
