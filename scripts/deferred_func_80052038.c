@@ -2,14 +2,54 @@
  * landing attempt 2026-10-30, cron-20261030-2336 window, witness 8/8 restored
  * 15:45Z on Silent's 11:42 UTC CDN links after the maspsx-patch-location fix).
  *
- * ROUND-2 STATUS: judge SIZE built 1944 vs row 2032 (88 B / 22 insns short;
- * round-1 was 1932/-25) - head + prologue + save slots + the full five-load
- * interleave + a1v/a2v branch shape EXACT through row+0x3C..row+0xA0; the
- * remaining gap is the mode-chain register choices and the case-body table
- * form (details below). The C below compiles clean and is the resume point -
- * iterate judge_unit, do NOT restart the decode. The staged shape that
- * produced 1944: copy this file to src/func_80052038.c and flip the g3_eu
- * yaml row to [0x32838, c, func_80052038].
+ * ROUND-3 STATUS (cron-20261030-1806 window): judge SIZE built 1988 vs row
+ * 2032 (44 B / 11 insns short; round-2 was 1944/-22, round-1 1932/-25),
+ * DIFF 405/497 words (round-2: 436/486). The C below compiles clean and is
+ * the resume point - iterate judge_unit, do NOT restart the decode. The
+ * staged shape that produced 1988: copy this file to src/func_80052038.c
+ * and flip the g3_eu yaml row to [0x32838, c, func_80052038].
+ *
+ * ROUND-3 FINDINGS (all judge-proven against the live oracle 2026-10-30
+ * ~18:20-19:10Z, witness 8/8 on Silent's 11:42Z links; probe files
+ * probe_52038_tbl_la.c / probe_52038_tbl_barrier.c + the m-series matrix):
+ * - REC-STORE PIPELINED ORDER: retail is lw AF90, lw AFA4, sw a1,0(rec),
+ *   sw v0,4(rec), j merge, delay-sw v1,8(rec) - the two loads land BEFORE
+ *   any store and the LAST store rides the jump's delay slot. Writing
+ *   rec[0]/rec[1]/rec[2] in text order hoists sw0 above the loads; writing
+ *   rec[1];rec[2];rec[0] sinks sw0 into the j delay. FIX: pre-load into
+ *   locals (r1 = D_8016AF90; r2 = D_8016AFA4;) THEN rec[0]=a1v; rec[1]=r1;
+ *   rec[2]=r2 - the r1/r2 locals reproduce retail's store order exactly
+ *   (head now byte-exact 0x800520E4..0x800520F0).
+ * - T9 TIE: the non-volatile asm tie on t9 (__asm__ ("" : "=r"(t9) :
+ *   "0"(t9))) does NOT break the a1v coalescing (still lw $5/srl $5 at
+ *   0x800520A8/BC/C0, 3 words) but is harmless; kept in the probe shape.
+ * - CASE-BODY TABLE LA-FORM CONFIRMED + THE TWO FORCES: retail's inline
+ *   StdFn cases are lui $v0,%hi; addiu $v0,$v0,%lo; addu $v0,$t0,$v0;
+ *   addu $v0,$s6,$v0; lw $v0,0($v0) (la IN $v0, addus destructive). The
+ *   (char *)D + t0 + s6 form gives the 4-insn at-split; the base-pointer
+ *   local tbl = D_xxx forces the 5-insn la-form, but gcc allocates tbl to
+ *   $3 and SWAPS the second addu (acc-first instead of retail's s6-first).
+ *   PIN IT: register long tbl asm("$2") forces the la into $v0 (round-3
+ *   state). REMAINING per no-flag case: the second addu order (built
+ *   addu $2,$t0,$2; addu $2,$2,$22 = acc-first; retail addu $v0,$s6,$v0
+ *   = s6-first destructive) - ~3 words x8 cases. Pointer-type tree
+ *   canonicalization is the mirror mechanism (ptr must be op1); pure-long
+ *   sources did not survive the at-refold - the m-series matrix
+ *   (m1..m6: source order x barrier placement) is banked in the probe.
+ * - FLAG-PATH AT-FORM: retail 0x20/0x30 flag = lui $at,%hi; addiu
+ *   $at,$at,%lo; addu $at,$at,$s6; lw $v0,0($at) (4 insns, la completed
+ *   BEFORE the index addu). gcc FOLDS %lo into the lw (3 insns) unless
+ *   the la is forced to complete: the barrier asm __asm__ ("" : :
+ *   "r"(tbl)) between tbl = D_xxx and the indexed load reproduces the
+ *   4-insn form (barrier in the round-3 state). gcc 2.6.3 rejects
+ *   statement-asm inside expressions (comma-operator form = parse error);
+ *   the barrier MUST be statement-position. Remaining flag deltas: the
+ *   la rides $v0 (pin) where retail uses $at (its own scratch - not
+ *   allocatable from C), and the addu order mirrors.
+ * - ALT-FN MAP STILL OPEN: the 8 AltFn cases remain in the fpv at-form;
+ *   the retail blocks index by $s6 in at least one case (jalr + addu
+ *   $at,$at,$s6) - the fpv-vs-s6 case map must be re-derived from the
+ *   committed asm before the AltFn pass (queued round-4 item).
  *
  * ROUND-2 FINDINGS (all judge/probe-proven against the live oracle this
  * window; probe files probe_52038_pin_*.c):
@@ -104,11 +144,19 @@
  * - gcc lowers `switch (code)` (16 cases 0x20..0x3D, step-4 pattern) to
  *   the exact sltiu/jtbl form with the 14 default-filled dead slots.
  *
- * REMAINING ROUND-2 WORK: (1) case-body pass - the judge diff after the
- * pipelined head lands; expected deltas are the table-address addu operand
- * order and the per-case arg-store order; (2) the stub merge - if gcc
- * merges the x20/x28 groups retail left inline, differentiate the advance
- * text; (3) the loop-head t0/fpv/s6 emission order.
+ * REMAINING ROUND-3 WORK (re-ranked): (1) the second-addu operand order on
+ * the 8 no-flag cases (s6-first destructive vs gcc's acc-first swap) -
+ * candidate levers: mid-pointer barrier between the addus (probe m3/m6),
+ * source-order variants, or accepting the at-form for these cases too;
+ * (2) the AltFn fpv-vs-s6 map re-derivation off the committed asm, then
+ * the AltFn table pass; (3) the mode chain (~30-word run: branch-form
+ * skeleton proven reproducible in isolation by the goto-form probe v5/v6
+ * - goto L_state/L_mode_shared/L_mode_one with f1-vs-tmp register
+ * compare - but gcc delay-fills the mode=1/0 arms in the full function;
+ * the sltu if-conversion of the round-2 form is byte-closer overall);
+ * (4) the a1v 3-word nit + the else a2v forward (move $6,$5 vs $6,$0)
+ * + the rec[0] store base ($7 vs $19); (5) the stub-merge distances and
+ * the branch-offset cascade (resolves when the above land).
  *
  * cc-post: keep-epilogue
  */
@@ -158,6 +206,8 @@ void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
     register long s7 asm("$23");
     long fpv;
     long t0;
+    register long tbl asm("$2");
+    long mid;
     register long a1v asm("$5");
     long a2v;
     long t9;
@@ -180,18 +230,22 @@ void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
         f3 = (long)((*(unsigned long *)ctrl >> 6) & 1);
         D_80164268 = f2;
         t9 = *(unsigned long *)ctrl >> 9;
+        __asm__ ("" : "=r"(t9) : "0"(t9));
         D_80147E20 = f3;
         f5 = (long)((*(unsigned long *)ctrl >> 30) & 1);
         D_801727D4 = t9 & 7;
         a1v = t9 & 7;
         D_80171E04 = f5;
         if (a1v != 0) {
+            long r1;
+            long r2;
             a2v = 1;
+            r1 = D_8016AF90;
+            r2 = D_8016AFA4;
             rec[0] = a1v;
-            rec[1] = D_8016AF90;
-            rec[2] = D_8016AFA4;
+            rec[1] = r1;
+            rec[2] = r2;
         } else {
-            __asm__ volatile("" : "=r"(a1v) : "0"(a1v));
             a2v = 0;
         }
         if (D_80147E20 == 1) {
@@ -228,13 +282,15 @@ void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
             switch (code) {
             case 0x20:
                 if (*(unsigned short *)(s0 + 2) & 4) {
-                    D_8016AB6C = ((StdFn) * (long **)((char *)D_80098A98 + s6v))(
+                    tbl = D_80098A98;
+                __asm__ ("" : : "r"(tbl));
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (char *)tbl))(
                         (long *)s0, s2, s7, D_8016AB6C,
                         *(unsigned short *)s0, a2, a1, rec);
                     s1 -= *(unsigned short *)s0;
                     s0 += *(unsigned short *)s0 * 24;
                 } else {
-                    D_8016AB6C = ((StdFn) * (long **)((char *)D_80098998 + t0 + s6v))(
+                    D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_80098998))))(
                         (long *)s0, s2, s7, D_8016AB6C,
                         *(unsigned short *)s0, a2, a1, rec);
                     s1 -= *(unsigned short *)s0;
@@ -242,7 +298,7 @@ void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
                 }
                 break;
             case 0x24:
-                D_8016AB6C = ((StdFn) * (long **)((char *)D_800989D8 + t0 + s6v))(
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_800989D8))))(
                     (long *)s0, s2, s7, D_8016AB6C,
                     *(unsigned short *)s0, a2, a1, rec);
                 s1 -= *(unsigned short *)s0;
@@ -250,13 +306,15 @@ void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
                 break;
             case 0x30:
                 if (*(unsigned short *)(s0 + 2) & 4) {
-                    D_8016AB6C = ((StdFn) * (long **)((char *)D_80098AA4 + s6v))(
+                    tbl = D_80098AA4;
+                __asm__ ("" : : "r"(tbl));
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (char *)tbl))(
                         (long *)s0, s2, s7, D_8016AB6C,
                         *(unsigned short *)s0, a2, a1, rec);
                     s1 -= *(unsigned short *)s0;
                     s0 += *(unsigned short *)s0 * 28;
                 } else {
-                    D_8016AB6C = ((StdFn) * (long **)((char *)D_800989B8 + t0 + s6v))(
+                    D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_800989B8))))(
                         (long *)s0, s2, s7, D_8016AB6C,
                         *(unsigned short *)s0, a2, a1, rec);
                     s1 -= *(unsigned short *)s0;
@@ -264,35 +322,35 @@ void func_80052038(long *ctrlp, long a1p, long a2p, long *recp)
                 }
                 break;
             case 0x34:
-                D_8016AB6C = ((StdFn) * (long **)((char *)D_800989F8 + t0 + s6v))(
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_800989F8))))(
                     (long *)s0, s2, s7, D_8016AB6C,
                     *(unsigned short *)s0, a2, a1, rec);
                 s1 -= *(unsigned short *)s0;
                 s0 += *(unsigned short *)s0 * 28;
                 break;
             case 0x28:
-                D_8016AB6C = ((StdFn) * (long **)((char *)D_80098A18 + t0 + s6v))(
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_80098A18))))(
                     (long *)s0, s2, s7, D_8016AB6C,
                     *(unsigned short *)s0, a2, a1, rec);
                 s1 -= *(unsigned short *)s0;
                 s0 += *(unsigned short *)s0 * 20;
                 break;
             case 0x2C:
-                D_8016AB6C = ((StdFn) * (long **)((char *)D_80098A58 + t0 + s6v))(
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_80098A58))))(
                     (long *)s0, s2, s7, D_8016AB6C,
                     *(unsigned short *)s0, a2, a1, rec);
                 s1 -= *(unsigned short *)s0;
                 s0 += *(unsigned short *)s0 * 32;
                 break;
             case 0x38:
-                D_8016AB6C = ((StdFn) * (long **)((char *)D_80098A38 + t0 + s6v))(
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_80098A38))))(
                     (long *)s0, s2, s7, D_8016AB6C,
                     *(unsigned short *)s0, a2, a1, rec);
                 s1 -= *(unsigned short *)s0;
                 s0 += *(unsigned short *)s0 * 24;
                 break;
             case 0x3C:
-                D_8016AB6C = ((StdFn) * (long **)((char *)D_80098A78 + t0 + s6v))(
+                D_8016AB6C = ((StdFn) * (long *)(s6v + (t0 + (char *)(tbl = D_80098A78))))(
                     (long *)s0, s2, s7, D_8016AB6C,
                     *(unsigned short *)s0, a2, a1, rec);
                 s1 -= *(unsigned short *)s0;
