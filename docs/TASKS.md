@@ -12062,3 +12062,32 @@ Net: no standalone compiler-class unit this round; the matching lane's real item
 * CONSEQUENCE (the coordination question WIDENS, nothing grabbed): the intr lane's grab-or-green-light question now spans BOTH sibling waves - x6 a0=1 + x7 a0=2 = 13 own-row members, the LAST independent own-row material in the pool. The landing shape is the banked dd0d973b one (handwritten 4-insn units under their names), but the six placeholder members need the lane's intr_restart_commit name adoption FIRST: with adoption the ratchet moves ZERO (the dd0d973b precedent - curated names, no placeholder tokens); landing under the placeholders would raise the ratchet +14 (7 x 2, the bare-asm .globl+label two-mention definition form) and leave wrong names in the tree - NOT taken. Whether 331b7beccc4d was already own-row at the 25th window's rerun or surfaced with the 0x1cc landing's twenty-listing removal is NOT adjudicated here (the re-rank runs on the current tree; the parent search's interior-hit set changed when those listings left); either way the CURRENT pool truth is two independent own-row waves and both sit in the intr family's namespace.
 * Everything else in the pool stays parent-bound EXT-MISMATCH as banked (the 0x34 f3e0fb2d x6 + the 0x10/0x8 sliver classes; the 0x8 x15 wave's 3928 interior hits remain the noise floor).
 * NEXT (Law Zero): 1. the intr lane's question now spans both sibling waves (grab-or-green-light; the recipe is the dd0d973b banked shape + the six-name intr_restart_commit adoption); 2. the parent-bound interiors wait for their parents (de-frame transition downstream); 3. the BIG de-frame transition stays the top coordination target; 4. GSD round-5 adopt/reject still owed by its lane owner; 5. the per-target src override stays available machinery for future cross-target name collisions.
+
+## Window 29 (cron-202610300053, 2026-10-30) - the real-C pivot
+
+Silent's mid-window directive ended scaffold work outright: no more raw-asm .c
+units, no more SDK-member placements as headline progress. The honest census
+first: 146 of 323 src files are raw __asm__ bodies; every real-logic func_
+unit was an SDK member copy; game code with real C bodies was ZERO. Six game
+functions now exist as hand-decompiled C, all in g3_eu's verified game zone
+(caller edges into func_80022B5C / func_80028140 / func_80047CA4 /
+func_8006AF70 / func_8006AC04), all judge EXACT, g3_eu whole-image GREEN on
+every landing, witness 8/8 STRICT (25th production return, fresh baselines
+after sandbox rollback #3 ate the woven-era ones - disc_return.sh re-ran
+foreground with 18 minutes of CDN link life to spare).
+
+Landed: func_8004E29C (7fcbe240), func_8006AD50 row x2 (0f548985),
+func_8006B648 row x3 (b22554e2). Deferred: func_800487F4 at 112/116 - the
+scc-into-$at and walk-in-$a0 diffs are compiler-version artifacts (cc1 2.6.3
+never emits sltu $at for single compares; retail's func_8005BB94/5B270/5A714/
+59EF0/80047844 chain/loop compares prove a second psyq gcc built those
+objects); parked at scripts/deferred_func_800487F4.c pending a 2.7.x cc1 in
+tools-local.
+
+New mechanism items: (1) mainmenu_jp gp_value unset while retail uses
+$gp-relative data - every small untagged row there is gp-entangled until the
+deframe/gp_value mechanism lands; (2) the sdk-tagged-but-uncurated gray zone
+(stray members outside the windows report) needs a census before touching -
+game-code rows only until then. The real-C playbook (keep-epilogue,
+early-guard branch forms, array-declared externs for fused lui/%lo, volatile
+tail stores, post-decrement test idioms) is byte-verified in the worklog.
