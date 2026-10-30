@@ -620,7 +620,7 @@ segments:
       - [0x449F0, asm, func_8006E4A0]   # 0x10 sdk
       - [0x44A00, asm, func_8006E4B0]   # 0x10 sdk
       - [0x44A10, data, data_80064210]   # 0x90
-      - [0x44AA0, asm, func_800642A0]   # 0x548
+      - [0x44AA0, c, func_800642A0]      # 0x548
       - [0x44FE8, asm, func_800647E8]   # 0x344 sdk
       - [0x4532C, asm, func_80064B2C]   # 0x1ac sdk
       - [0x454D8, asm, func_80064CD8]   # 0x1f0 sdk
