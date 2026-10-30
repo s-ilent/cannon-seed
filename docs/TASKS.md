@@ -12132,3 +12132,65 @@ if-converted into srl/xori/andi bit math, memory stores cannot; (4)
 keep-epilogue closes the lw-ra/jr ordering on both landings.
 
 Game-code real-C count: 6 -> 8 functions (8th and 9th). Suite 85/85.
+
+## Window 31 (cron-20261030-0343, 2026-10-30) - the ranker wakes up, the ratchet audit, and the twelfth/thirteenth real-C functions
+
+Rollback #5 (same failure class as #4: local main pinned at the 2026-10-14
+era 7623cd2e; worklog.md lost all 195 windows again) recovered per SOP:
+reset to origin/main, append_restore_note for the full digest, queue truth
+from this Log. The window-30 CDN re-derivation held - ex=0x6ae46932 is
+09:53:54Z - so the links had ~6h left and the disc return ran foreground:
+witness 8/8 STRICT in ~4 minutes, the twenty-seventh production return,
+oracle UP with fresh baselines.
+
+The banked candidate ranker's shape screen turns out to have been INERT
+since its banking: every spimdisasm instruction line arrives as
+"/* 8300 80027B00 FFFF0824 */  addiu ...", so mnem() always extracted the
+literal "/*" token - n_br, n_jal, sw_ra, the split screen and the BIOS-thunk
+screen all reported zeros and the score was extent alone (the window-30
+data-table mirage call was right by luck: those rows are .word dumps whose
+screens are zeros for the same broken reason). 32df699a fixes the parse
+(strips the /* addr */ column first, adds beqz/bnez - 196+142 hits per
+listing vs 44+125 for beq/bne - widens the br/jal columns past three
+digits, and excludes rows whose .s carries more than 48 nonmatching blocks,
+which also catches every mirage row). Re-ranked g3_eu: 47 candidates,
+branch- and call-weighted, top of the game-caller list func_80052038 /
+func_8006AF70 / func_80027B00 / func_800642A0.
+
+The window's big attempt, func_80049DA0 (0x28c, ten scanner pieces that are
+one function, reached from func_8002A2CC), decoded clean - a 3x3
+rotation-matrix builder from three angle halfwords through the 4096-entry
+packed sin/cos table D_80092C04 (word = signed hi16/lo16), |a| & 0xFFF
+indexing, the lo16 copy carrying the angle's sign, nine s16 outputs at
+(a1)+0..0x10, products multu with an arithmetic >>12 - but is DEFERRED to
+the second-compiler class: retail carries 14 multu on provably
+sign-extended operands, and seven source shapes through cc1 2.6.3-PSX (the
+cast form, the unsigned-declared form, the volatile-load form that does fix
+the word-load-to-lh fold, the ternary-corrected form) all fold the unsigned
+multiply into mult. Same artifact class as the parked func_800487F4
+sltu-$at finding; body + gcc.s bank at scripts/deferred_func_80049DA0.c
+pending a 2.7.x cc1 in tools-local. multu-on-sext now joins sltu-$at as a
+second-compiler discriminator.
+
+The landing (6d34956a): func_8005E16C and func_8005E244 (0x10 each, the
+fixed-slot long store pair - caller hands the value, the row commits it to
+D_80171EA0 / D_8016AB6C through the fused lui/%lo pair and returns; reached
+from func_80022B5C and func_8002A2CC respectively) land as hand-written C,
+judge EXACT 16/16 bytes both first shot, g3_eu whole-image GREEN on the
+live witness. func_8004AE64 screened out: the a0=2 syscall sibling shape -
+the intr lane's coordination-gated family, not ours to grab.
+
+The ratchet audit finally ran (the pivot's first five landings had gone in
+without the raise, the tree debt grew silently under the 'pending' note):
+753/0 -> 803/12, token-exact attribution to the seven real-C landing files
+since the window-27 baseline (+2/+0 func_8004E29C.c, +8/+0 func_8006AD50.c,
++17/+3 func_8006B648.c, +2/+0 func_80048908.c, +15/+3 func_80062840.c,
++2/+3 func_8005E16C.c, +4/+3 func_8005E244.c) - every token accounted for,
+no placeholder outside those totals; the counting rule reads text, so
+decode-comment mentions count. Suite 85/85, clean_stale_asm nothing stale,
+ratchets 803/12 = tree.
+
+Game-code real-C count: 9 -> 13 functions. Next queue: the re-ranked
+real-C reading list (func_80052038, func_8006AF70, func_80027B00,
+func_800642A0), the second-compiler discriminator census as its own
+screen, and the standing lane-owned items.
