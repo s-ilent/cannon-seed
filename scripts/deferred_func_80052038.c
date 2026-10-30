@@ -51,6 +51,46 @@
  *   $at,$at,$s6) - the fpv-vs-s6 case map must be re-derived from the
  *   committed asm before the AltFn pass (queued round-4 item).
  *
+ * ROUND-4 FINDINGS (cron-20261030-1921 window, oracle restored 19:27Z via
+ * disc_return on Silent's 11:42Z links + the 7d1a0bdb rehydrate maspsx fix
+ * re-proven: the FIRST rehydrate of a rolled-back sandbox runs the OLD
+ * in-tree script and silently skips the tools-src patch - run rehydrate
+ * AGAIN after reset --hard before any build, else g3_eu reproduces the
+ * exact banked 953-byte unpatched-maspsx diff inside GsTMDdivTNG4):
+ * - ALTFN MAP CLOSED: the fpv-vs-s6 question resolves to fpv EVERYWHERE.
+ *   All eight AltFn case blocks in the committed asm are la-in-$at + addu
+ *   $at,$at,$fp + lw $v0,0($at) (D_800989B0/A30/D0/F0/A10/50/70/A90) - the
+ *   earlier "at least one case indexes by $s6" note was wrong (misread of
+ *   the StdFn s6 chain). The draft's fpv form is already correct; the
+ *   remaining AltFn deltas are the stub-merge cascade only.
+ * - RETAIL CASE-BODY GROUND TRUTH (committed asm, case 0x20/0x24/0x30):
+ *   arg setup runs BEFORE the la chain: lhu len; lw t0,0x20($sp); lui/lw
+ *   a3 = D_8016AB6C; addu a1,s2; sw s5/s4/s3/v0 stack args; THEN la; addu;
+ *   addu; lw; tail-j into the shared stub (j, not jalr) with the a0 move
+ *   riding the case's beqz delay slot (flag paths) or the next block head
+ *   (no-flag paths). No-flag la-form: addu $v0,$t0,$v0 THEN addu $v0,$s6,
+ *   $v0 - BOTH reg-first (rs=$t0, rs=$s6); built has the first addu right
+ *   and the second acc-first (rs=$v0).
+ * - LEVER V2 (mid long + statement barrier between the addus): reproduces
+ *   BOTH reg-first addu orders and recovers all 8 la-form insns (SIZE
+ *   2020 vs 2032, 3 insns short) - but the scheduler floats the la chain
+ *   above the arg stores (DIFF 420/505 vs the 405/497 baseline): net
+ *   worse, banked as a dead end at this lever.
+ * - LEVER V3 ((char *)s6v outer cast + (long) inner): compiles to the
+ *   exact baseline bytes (405/497 unchanged) - the (long) cast erases the
+ *   pointer-ness and gcc's canonicalization is untouched. Dead lever.
+ * - NEW STRUCTURAL (next window's dispatch item): gcc lowers the switch
+ *   table into a separate .rodata section (stage_c.py renames only
+ *   .text); retail's table is the COMMITTED data row jtbl_80021B10
+ *   (dlabel in asm/g3_eu/nonmatchings/data/data_80020000.data.s, 14
+ *   default-filled dead slots). The judge's dispatch diff (built lui+lw
+ *   %lo-folded 3-insn form vs retail lui+addiu+addu+lw 4-insn at-split)
+ *   is a mini-link artifact of the adjacent orphan placement - in the
+ *   full build the C unit's .rodata table cannot coexist with the
+ *   committed data row. Landing the dispatch needs either a computed-
+ *   goto over extern jtbl_80021B10[] (gcc 2.6.3 supports &&labels/goto *)
+ *   or a pipeline decision for C-unit .rodata; unresolved.
+ *
  * ROUND-2 FINDINGS (all judge/probe-proven against the live oracle this
  * window; probe files probe_52038_pin_*.c):
  * - VOLATILE READ-F2 LAW: the five head reads are five SEPARATE loads in
@@ -144,19 +184,22 @@
  * - gcc lowers `switch (code)` (16 cases 0x20..0x3D, step-4 pattern) to
  *   the exact sltiu/jtbl form with the 14 default-filled dead slots.
  *
- * REMAINING ROUND-3 WORK (re-ranked): (1) the second-addu operand order on
- * the 8 no-flag cases (s6-first destructive vs gcc's acc-first swap) -
- * candidate levers: mid-pointer barrier between the addus (probe m3/m6),
- * source-order variants, or accepting the at-form for these cases too;
- * (2) the AltFn fpv-vs-s6 map re-derivation off the committed asm, then
- * the AltFn table pass; (3) the mode chain (~30-word run: branch-form
- * skeleton proven reproducible in isolation by the goto-form probe v5/v6
- * - goto L_state/L_mode_shared/L_mode_one with f1-vs-tmp register
- * compare - but gcc delay-fills the mode=1/0 arms in the full function;
- * the sltu if-conversion of the round-2 form is byte-closer overall);
- * (4) the a1v 3-word nit + the else a2v forward (move $6,$5 vs $6,$0)
- * + the rec[0] store base ($7 vs $19); (5) the stub-merge distances and
- * the branch-offset cascade (resolves when the above land).
+ * REMAINING WORK (re-ranked after round 4): (1) the switch dispatch
+ * structure (see the round-4 NEW STRUCTURAL item: computed-goto over the
+ * committed jtbl_80021B10 vs a C-unit .rodata pipeline decision - the
+ * dispatch region + the default printf path ride this); (2) the second-
+ * addu operand order on the 8 no-flag cases - V2/V3 are banked dead
+ * ends, remaining candidates are a scheduling-safe variant of the
+ * mid-barrier form (the la chain must stay BELOW the arg stores) or
+ * accepting the at-form for these cases; (3) the mode chain (~30-word
+ * run: branch-form skeleton proven reproducible in isolation by the
+ * goto-form probe v5/v6 - goto L_state/L_mode_shared/L_mode_one with
+ * f1-vs-tmp register compare - but gcc delay-fills the mode=1/0 arms in
+ * the full function; the sltu if-conversion of the round-2 form is
+ * byte-closer overall); (4) the a1v 3-word nit + the else a2v forward
+ * (move $6,$5 vs $6,$0) + the rec[0] store base ($7 vs $19); (5) the
+ * stub-merge distances and the branch-offset cascade (resolves when the
+ * above land; the AltFn map item is CLOSED - fpv everywhere).
  *
  * cc-post: keep-epilogue
  */
