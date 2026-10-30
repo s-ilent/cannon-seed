@@ -32,7 +32,8 @@ SPAN_RE = re.compile(r"^0x([0-9a-fA-F]+)\s+0x([0-9a-fA-F]+)\s+(verbatim|fixed)\b
 TARGET_RE = re.compile(r"^//\s*target:\s*(\S+)")
 CURATED_NAME_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*=")
 
-BRANCH_MN = ("beq", "bne", "blez", "bgtz", "bltz", "bgez", "bltzal", "bgezal")
+BRANCH_MN = ("beq", "bne", "blez", "bgtz", "bltz", "bgez", "bltzal", "bgezal",
+             "beqz", "bnez")  # spimdisasm emits beqz/bnez for the zero-form
 WRITER_MN = ("li", "la", "lw", "lbu", "lhu", "move", "addiu", "addi", "addu",
              "ori", "lui", "sll", "srl", "sra", "andi", "sltiu", "slti", "lhu")
 
@@ -114,12 +115,25 @@ def read_s(target, name):
     return p.read_text().splitlines()
 
 
+LEAD_COMMENT_RE = re.compile(r"^\s*/\*.*?\*/\s*")
+
+
 def ins_lines(lines):
-    """code lines: not labels, not directives, not comments."""
+    """code lines: not labels, not directives, not comments.
+
+    spimdisasm prefixes every instruction with an ``/* addr */`` column;
+    strip it BEFORE mnemonic extraction or every line's first token is
+    ``/*`` and the whole shape screen degenerates to all-zeros (the
+    cron-20261030-0343 lesson: the banked screen ran inert for one
+    window because of this).
+    """
     out = []
     for ln in lines:
         s = ln.strip()
         if not s or s.startswith(("#", "//", ".")) or s.endswith(":"):
+            continue
+        s = LEAD_COMMENT_RE.sub("", s)
+        if not s:
             continue
         out.append(s)
     return out
@@ -164,9 +178,13 @@ def shape(target, name):
     init_t = any(mnem(c) in WRITER_MN and ops(c) and ops(c)[0].strip().replace("$", "") in t_regs
                  for c in code)
     split = uses_t and not init_t and not has_sw_ra
+    # region row: the .s carries MORE THAN ONE `nonmatching` block -> the yaml
+    # row is an aggregate region, not a single function; real-C landing is a
+    # carve decision, not a decode task. Flag it so the reading list stays honest.
+    n_blocks = sum(1 for ln in lines if ln.strip().startswith("nonmatching"))
     return {"n_br": n_br, "n_jal": n_jal, "n_jalr": n_jalr, "sw_ra": has_sw_ra,
             "gte": has_gte, "float": has_float, "thunk": thunk, "split": split,
-            "n_ins": len(code)}
+            "n_ins": len(code), "n_blocks": n_blocks}
 
 
 def callers_of(target, name, kind_map):
@@ -200,6 +218,7 @@ def main():
     kind_map = row_kind_map(target, rows)
 
     cands = []
+    n_region = 0
     for r in rows:
         if r["kind"] != "asm" or r["sdk"] or not r["size"]:
             continue
@@ -211,21 +230,28 @@ def main():
         sh = shape(target, r["name"])
         if sh is None or sh["thunk"] or sh["split"]:
             continue
+        if sh["n_blocks"] > 48:
+            # more hand-writable functions than a window lands; and every
+            # data-typed-as-code mirage row (the window-30 three) hides here
+            # too - its .s swallows the real functions that follow it
+            n_region += 1
+            continue
         game, sdk = callers_of(target, r["name"], kind_map)
         score = r["size"] + 8 * sh["n_br"] + 16 * sh["n_jal"]
         cands.append({"name": r["name"], "va": r["va"], "size": r["size"],
                       "score": score, "game_callers": game, "sdk_callers": sdk, **sh})
 
     cands.sort(key=lambda c: -c["score"])
-    print(f"target {target}: {len(rows)} rows, {len(cands)} candidates after filters\n")
-    hdr = f"{'name':<18}{'va':>10}{'sz':>6}{'score':>7}{'br':>4}{'jal':>4} {'gte':<4}{'flt':<4}{'ra':<3} callers(game) / (sdk)"
+    print(f"target {target}: {len(rows)} rows, {len(cands)} candidates after filters"
+          f" ({n_region} oversized/aggregate rows excluded)")
+    hdr = f"{'name':<18}{'va':>10}{'sz':>6}{'blk':>4}{'score':>7}{'br':>6}{'jal':>6} {'gte':<4}{'flt':<4}{'ra':<3} callers(game) / (sdk)"
     print(hdr)
     print("-" * len(hdr))
     for c in cands[:top]:
         gc = ",".join(c["game_callers"][:4]) or "-"
         sc = ",".join(c["sdk_callers"][:3]) or "-"
-        print(f"{c['name']:<18}0x{c['va']:08x}{c['size']:>6}{c['score']:>7}"
-              f"{c['n_br']:>4}{c['n_jal']:>4} {'Y' if c['gte'] else '-':<4}"
+        print(f"{c['name']:<18}0x{c['va']:08x}{c['size']:>6}{c['n_blocks']:>4}{c['score']:>7}"
+              f"{c['n_br']:>6}{c['n_jal']:>6} {'Y' if c['gte'] else '-':<4}"
               f"{'Y' if c['float'] else '-':<4}{'Y' if c['sw_ra'] else '-':<3} {gc} / {sc}")
 
 
