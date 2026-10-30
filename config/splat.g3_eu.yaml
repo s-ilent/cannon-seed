@@ -299,7 +299,7 @@ segments:
       - [0x2E850, data, data_8004E050]   # 0x20
       - [0x2E870, asm, func_8004E070]   # 0x180 sdk
       - [0x2E9F0, asm, func_8004E1F0]   # 0xac sdk
-      - [0x2EA9C, asm, func_8004E29C]   # 0x20
+      - [0x2EA9C, c, func_8004E29C]   # 0x20
       - [0x2EABC, c, SetVertex0]   # 0x10 sdk
       - [0x2EACC, c, SetVertex1]   # 0x10 sdk
       - [0x2EADC, c, SetVertex2]   # 0x10 sdk
