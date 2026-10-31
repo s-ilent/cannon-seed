@@ -498,6 +498,77 @@ spu_timeout_wait_reset = 0x800221D4; // LIBSPU string literal (timeout suffix); 
 // Game bytes "wait (wrdy H -> L)" (row 0x800221E4).
 spu_timeout_wait_wrdy = 0x800221E4; // LIBSPU string literal (timeout suffix); evidence under target: g3_eu
 
+// ---- LIBSND SSINIT curation pass, window cron-20261031-1406 (oracle DOWN,
+// links 404 at ~26.4h): the func_8006AF70 row = the game's own copy of the
+// psyq 3.3 LIBSND SSINIT member. SSINIT publics (omf_pubsyms.py): SsSetTickMode,
+// SsStart, SsStart2, SsEnd, SsQuit, SsInit, SsInitHot, SsSetTableSize,
+// _snd_seq_tick_mode, _snd_seq_t_max, _snd_seq_no_tick, _snd_openflag,
+// _snd_ev_flag, _ss_score, _ss_MarkCallback, VBLANK_MINUS - the row's exact
+// function family plus the static block, one source unit. Evidence: LIBSND.H
+// prototypes + SS_* constants; psyq 3.3 SND FUNCTION.TXT spec (the SS_NOTICK
+// packing, the 60-240 arbitrary-rate clause, the RCntCNT2/RCntCNT3 per-video-
+// mode install table); the retail decode (probe rounds 1-7). Entries INERT
+// until the witnessed window (same composition as the libspu block above).
+// SsSetTickMode (func_8006AF70): prototype verbatim in LIBSND.H; the decode
+// IS the spec - head splits a0 on SS_NOTICK (0x1000) storing the low 12 bits,
+// the switch covers 0..5 with the >= 6 arbitrary-rate passthrough (spec
+// clauses 7/8: Tick = 1/tick_mode seconds via RCntCNT2), case rates
+// 0x32/0x3C/0x78/0xF0 = 50/60/120/240.
+SsSetTickMode = 0x8006af70; // LIBSND SSINIT member; evidence under target: g3_eu
+// SsStart/SsStart2 (func_8006B380/func_8006B3A0): the two one-arg thunks over
+// the shared installer body (constants 1/0 riding the jal delay slots). The
+// game calls func_8006B380 at init immediately after
+// SsSetTickMode(SS_TICK60=1) and before SsSetMVol(0x7F,0x7F) - the documented
+// start order (func_80029E1C); FUNCTION.TXT: SsStart2 = the VSyncCallback
+// variant, and the a0==0 arm is the one that bumps the VSync-path flag under
+// SS_TICKVSYNC. func_8006B3A0 has no caller anywhere in the g3_eu tree
+// (kept-but-unused sibling). Polarity: 1 = SsStart, 0 = SsStart2.
+SsStart = 0x8006b380; // LIBSND SSINIT member (the called start thunk); evidence under target: g3_eu
+SsStart2 = 0x8006b3a0; // LIBSND SSINIT member (the uncalled VSyncCallback-variant thunk); evidence under target: g3_eu
+// SsEnd (func_8006B3C0): FUNCTION.TXT - stops the per-tick auto-call of
+// SsSeqCalledTbyT; the decode unregisters the tick callback (slot unregister
+// / saved-vblank restore), zeroes the timer-users count, gates on the
+// no-tick flag.
+SsEnd = 0x8006b3c0; // LIBSND SSINIT member (the uninstaller); evidence under target: g3_eu
+// SsQuit (func_8006B464): FUNCTION.TXT - ends the sound system (sound-buffer
+// transfers fail until SsInit; SsEnd must precede); the body is the single
+// SpuQuit() call, the LIBSPU-side teardown.
+SsQuit = 0x8006b464; // LIBSND SSINIT member (the SpuQuit veneer); evidence under target: g3_eu
+// _snd_seq_t_max (D_80171E08): SSINIT public, referenced 0x0e by psyq's own
+// SSCALL TbyT. Role: the ticks-per-second constant - SsSetTickMode writes the
+// case rates 50/60/120/240 (or the raw arbitrary rate) here, the init row
+// (func_8006AC04) defaults it to 0x3C, and the game's per-tick audio math
+// divides by resolution*60 (func_8006CEBC: (x<<4 - x) << 2 = *60). NOT the
+// track-count slot: g3_eu's SsSeqCalledTbyT_ntracks alias is 0x80172728 (the
+// shared-alias block); the parked draft's "D_80171E08 = SsSeqCalledTbyT_ntracks
+// (curated alias!)" note was a mis-mapping, corrected this window.
+_snd_seq_t_max = 0x80171e08; // LIBSND SSINIT static (tick-rate constant); evidence under target: g3_eu
+// _snd_seq_tick_mode (D_800ABA50): SSINIT public. Role: the effective tick-
+// install mode - SsSetTickMode stores (a0 & 0xFFF) when SS_NOTICK else a0,
+// the PAL/NTSC arms rewrite it to 0x3C (timer with division) or 5 (the
+// VSYNC/RCntCNT3 machinery); the installer dispatches on it and B1C0 divides
+// 0x409980 / 0x204CC0 (sysclock/8, sysclock/16 prescale) by it.
+_snd_seq_tick_mode = 0x800aba50; // LIBSND SSINIT static (effective install mode); evidence under target: g3_eu
+// _snd_seq_no_tick (D_800ABA54): SSINIT public. Role: the SS_NOTICK (0x1000)
+// bit flag - set by the SsSetTickMode head; gates the installer (bnez ->
+// plain return at B1C0/B368) and the uninstaller (plain return with nothing
+// undone) - the "SsSeqCalledTbyT is NOT auto-called" state the FUNCTION.TXT
+// SS_NOTICK clause describes.
+_snd_seq_no_tick = 0x800aba54; // LIBSND SSINIT static (SS_NOTICK flag); evidence under target: g3_eu
+// HELD (no verbatim psyq name maps onto them by role): D_800ABA38 (VSync-path
+// flag), D_800ABA3C (interrupt slot: 6 = RCntCNT2-class timer, 0 = vblank,
+// -1 = unregistered), D_800ABA40 (timer users count), D_800ABA44 (PAL/NTSC
+// selector: reads == 1 -> the PAL rate 0x32 in cases 0/5 and the RCntCNT3
+// rewrite in cases 1/4; MODE_PAL = 1 per LIBETC.H; single reader in the
+// tree, no in-tree writer found - value comes from .data; the video-mode-
+// cache reading is favored but unproven), D_800ABA48 (saved vblank
+// callback), D_800ABA4C (half-rate toggle). Unclaimed SSINIT publics:
+// _snd_openflag, _snd_ev_flag, _ss_score, _ss_MarkCallback, VBLANK_MINUS.
+// Cross-target identities flagged for the lane owner, NOT renamed this
+// window: _ss_score likely = SsSeqCalledTbyT_tab and _snd_seq_s_max likely
+// = SsSeqCalledTbyT_nslots (psyq's own SSCALL TbyT references both, the
+// landed TbyT reads tab/nslots in the same roles).
+
 // target: g3_jp
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;

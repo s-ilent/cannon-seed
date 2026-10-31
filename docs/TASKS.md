@@ -12874,3 +12874,97 @@ offline continuation: extend the curation pass to the LIBSND Snd_*/
 _snd_* slots (evidence-solid candidates from SSCALL/SEQINIT tables),
 and/or wave-pool re-rank; (4) fresh disc links needed before any judge
 work (the 2026-10-30 set is dead at ~25.3h).
+
+## 2026-10-31 (window cron-20261031-1406): the LIBSND SSINIT curation pass - the func_8006AF70 row is the game's copy of psyq's SSINIT member, eight names banked inert (five functions + three tick statics), the draft's ntracks mis-mapping corrected
+
+Rollback #16 (worklog to the 2026-10-14 era, repo to 7623cd2): recovered
+per SOP - reset --hard to origin/main 33086c4e (last window's own push),
+rehydrate re-run, digest exit 1 (199 missing incl. this lane's own
+cron-20261031-1021/1136/1251 mirrors) -> append_restore_note
+cron-20261031-1409-restore, re-run exit 0. Disc links STILL 404 (~26.4h
+age) - oracle DOWN, Law Zero offline. /home/z/psyq re-provisioned per the
+banked sparse-clone recipe (this time WITH 3.3/PSX/INCLUDE - the headers
+turned out to be the pass's strongest evidence source; the window-1136
+note "no INC dir in that repo" was wrong - sparse-checkout had simply
+never been asked for INCLUDE).
+
+ITEM 1 - THE ROW'S PSYQ IDENTITY (the pass's biggest single win): the
+func_8006AF70 row = the game's own copy of the psyq 3.3 LIBSND **SSINIT**
+member. omf_pubsyms.py on LIBSND.LIB: SSINIT's publics are SsSetTickMode,
+SsStart, SsStart2, SsEnd, SsQuit, SsInit, SsInitHot, SsSetTableSize,
+_snd_seq_tick_mode, _snd_seq_t_max, _snd_seq_no_tick, _snd_openflag,
+_snd_ev_flag, _ss_score, _ss_MarkCallback, VBLANK_MINUS - the row's exact
+seven-function family (SsSetTickMode/SsStart/SsStart2/SsEnd/SsQuit + two
+game-internal callbacks) plus the static block, one source unit. (SsInit/
+SsInitHot/SsSetTableSize live in the game's neighboring init row -
+func_8006AC04-class, its decode is the pass's next step, not banked.)
+SsSetTickMode itself has NO symbol row in any psyq 3.3 archive - it is a
+public of SSINIT only, which is why the window-1251 SSCALL-ref scan could
+not see it; the module-publics dump (not just the symbol-table rows) is
+the required depth for member-identity work.
+
+ITEM 2 - THE DOCUMENTARY EVIDENCE (3.3/PSX/INCLUDE/LIBSND.H +
+3.3/PSX/DOC/JP/SND/FUNCTION.TXT, Shift-JIS): LIBSND.H carries the SS_*
+tick constants - SS_NOTICK 0x1000, SS_NOTICK0 0, SS_TICK60 1, SS_TICK240
+2, SS_TICK120 3, SS_TICK50 4, SS_TICKVSYNC 5, SS_TICKMODE_MAX 6 - and
+FUNCTION.TXT's SsSetTickMode spec states the exact packing the retail
+decode implements: mode | SS_NOTICK = the rate with auto-call disabled,
+"任意の分解能" 60-240 = Tick = 1/tick_mode seconds via RCntCNT2, and the
+per-video-mode install table (TICK50: PAL->RCntCNT3/NTSC->RCntCNT2;
+TICK60: NTSC->RCntCNT3/PAL->RCntCNT2; TICKVSYNC: always RCntCNT3). The
+retail division constants are exact: 0x409980 = sysclock/8 = 4233600,
+0x204CC0 = sysclock/16 = 2116800 (the prescale for rates < 0x46 = 70 -
+the exact 16-bit-reload fit boundary), fixed reloads 0x44E8 =
+clock/8/240, 0x89D0 = clock/8/120. SsStart2's spec = "the VSyncCallback
+variant"; SsEnd = stops the per-tick auto-call; SsQuit = ends the system
+(sound-buffer transfers fail until SsInit; SsEnd must precede).
+
+ITEM 3 - EIGHT NAMES BANKED INERT (config commit, g3_eu section, same
+composition as the five libspu entries - src adoption + scan + verify in
+ONE witnessed window): SsSetTickMode = 0x8006af70 (the caller
+func_80029E1C passes SS_TICK60=1 then calls the start thunk then
+SsSetMVol - the documented init order); SsStart = 0x8006b380 (the called
+thunk, constant 1 in the jal delay slot); SsStart2 = 0x8006b3a0 (the
+UNCALLED sibling, constant 0 - its a0==0 arm is the one that bumps the
+VSync-path flag under SS_TICKVSYNC, matching the VSyncCallback-variant
+spec); SsEnd = 0x8006b3c0 (the uninstaller); SsQuit = 0x8006b464 (the
+SpuQuit veneer); _snd_seq_t_max = 0x80171e08 (the ticks-per-second
+constant: the switch writes 50/60/120/240 or the raw rate, func_8006AC04
+defaults 0x3C, func_8006CEBC's per-tick math divides by resolution*60);
+_snd_seq_tick_mode = 0x800aba50 (the effective install mode: PAL/NTSC
+arms rewrite it to 0x3C or 5, B1C0 divides by it);
+_snd_seq_no_tick = 0x800aba54 (the SS_NOTICK flag gating installer and
+uninstaller plain-returns). HELD: D_800ABA38/3C/40/44/48/4C - no verbatim
+psyq name maps by role (_snd_openflag/_snd_ev_flag/_ss_score/
+_ss_MarkCallback/VBLANK_MINUS stay unclaimed). D_800ABA44's favored
+reading UPGRADED to the PAL/NTSC selector (reads == 1 -> the PAL rate
+0x32 in cases 0/5 and the RCntCNT3 rewrite in cases 1/4; MODE_PAL = 1
+per LIBETC.H; every documented case leaf then agrees with the spec
+except the game-never-used NTSC+TICK50 leaf) - the draft's old "play
+state" reading is retired; still no name banked (single reader in the
+tree, no in-code writer found).
+
+ITEM 4 - THE DRAFT'S ntracks MIS-MAPPING CORRECTED: the parked draft's
+DATA MAP said "D_80171E08 = SsSeqCalledTbyT_ntracks (curated alias!)" -
+WRONG: g3_eu's shared-alias block curates ntracks = 0x80172728 (nslots
+0x80172724); the 0x80171e04/e08 pair belongs to the g3_jp alias block
+(g3_jp's TbyT = 0x8006bf8c). D_80171E08 is g3_eu's _snd_seq_t_max and
+was uncurated - now banked. The draft header is corrected in place; the
+cross-target identities flagged for the lane owner (NOT renamed):
+psyq's SSCALL TbyT references _ss_score and _snd_seq_s_max in the same
+roles the landed TbyT reads SsSeqCalledTbyT_tab/nslots.
+
+GATES: no build attempted (oracle DOWN, witness 0/8); config-only
+commit, ratchets untouched (809/150 = tree); suite re-run GREEN.
+
+NEXT: (1) witnessed window unchanged: five-label libspu adoption +
+func_800642A0.c rename + verify GREEN + ratchet refund 150 -> 143, now
+composing WITH the eight SSINIT entries when the func_8006AF70 row
+lands (the row's C file adopts SsSetTickMode/SsStart/SsStart2/SsEnd/
+SsQuit + the three static names); (2) offline continuation: the
+func_8006AC04 init row decode (SsInit/SsInitHot/SsSetTableSize - the
+SSINIT publics say they are in one member with the row this window
+named; the 0x20-row/0x40-stride zero loop and the 0x3C default are the
+anchors); (3) 8006AF70 lane-owner decision stays pending (r5 ceiling,
+two governance-gated routes); (4) fresh disc links needed before any
+judge work (the 2026-10-30 set is dead at ~26.4h).

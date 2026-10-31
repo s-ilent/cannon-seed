@@ -30,14 +30,31 @@
  * func_8006B3A0 thunk (the func_8006B648 landing convention: one C file,
  * multiple definitions, address-names for un-glabel'd entries).
  *
- * DATA MAP (curated identities where they exist):
- *   D_800ABA50  the tick-mode word: func_8006AF70 writes (a0 & 0x1000) ?
- *               (a0 & 0xFFF) : a0; switch values 0..5, later rewritten to
- *               5 / 0x3C by cases 1/4 (dual range: mode code OR tempo)
- *   D_800ABA54  the 0x1000 flag bit ("a0 high-bit mode")
- *   D_800ABA44  play state (0/1), read by switch cases 0/1/4/5
- *   D_80171E08  = SsSeqCalledTbyT_ntracks (curated alias!) - the switch
- *               writes 0x32/0x3C/0x78/0xF0/a0/v1 into it
+ * DATA MAP (curated identities where they exist; the psyq names were proven
+ * in window cron-20261031-1406 against the psyq 3.3 SSINIT member - its
+ * publics carry this row's exact function family plus the static block):
+ *   D_800ABA50  _snd_seq_tick_mode - the effective tick-install mode:
+ *               SsSetTickMode writes (a0 & 0x1000) ? (a0 & 0xFFF) : a0;
+ *               the PAL/NTSC arms rewrite it to 0x3C (timer with division)
+ *               or 5 (the VSYNC/RCntCNT3 machinery); the installer
+ *               dispatches on it and B1C0 divides 0x409980 / 0x204CC0
+ *               (sysclock/8, sysclock/16 prescale; 0x46 = 70 is the exact
+ *               16-bit-reload fit boundary) by it
+ *   D_800ABA54  _snd_seq_no_tick - the SS_NOTICK (0x1000) bit flag; gates
+ *               the installer and the uninstaller (plain returns)
+ *   D_800ABA44  HELD (no psyq name): PAL/NTSC selector - reads == 1 -> the
+ *               PAL rate 0x32 (cases 0/5) and the RCntCNT3 rewrite (cases
+ *               1/4); MODE_PAL = 1 per LIBETC.H; single reader in the tree,
+ *               no in-tree writer found (value from .data); the older
+ *               "play state" reading is retired - the SSPLAY constants do
+ *               not explain the 0x32/0x3C PAL/NTSC pattern
+ *   D_80171E08  _snd_seq_t_max - the ticks-per-second constant: the switch
+ *               writes 0x32/0x3C/0x78/0xF0 (50/60/120/240) or the raw rate
+ *               into it; the init row (func_8006AC04) defaults 0x3C; the
+ *               per-tick audio math divides by resolution*60 (func_8006CEBC).
+ *               NOT the track-count slot: g3_eu's SsSeqCalledTbyT_ntracks
+ *               alias is 0x80172728 - this file's earlier "ntracks (curated
+ *               alias!)" note was a mis-mapping, corrected cron-20261031-1406
  *   D_800ABA3C  interrupt slot: 6 = timer tick (RCnt2-class), 0 = vblank,
  *               -1 = unregistered
  *   D_800ABA48  the SAVED original vblank callback (chained by 8006B484)
@@ -50,7 +67,7 @@
 /* externs for the landing (scalar vs array per site is a landing probe):
  * extern long D_800ABA38[], D_800ABA3C[], D_800ABA40[], D_800ABA44[],
  *             D_800ABA48[], D_800ABA4C[], D_800ABA50[], D_800ABA54[],
- *             D_80171E08[];   // = SsSeqCalledTbyT_ntracks (curated)
+ *             D_80171E08[];   // = _snd_seq_t_max (curated cron-20261031-1406)
  * extern void intr_stop_begin(void);        // curated, INTR cluster entry 1
  * extern long func_8006B648(long);          // LANDED (b22554e2)
  * extern long func_8006B500(long, long, long);
