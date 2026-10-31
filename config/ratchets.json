@@ -81,7 +81,8 @@
     "func_80062840.c, +2/+3 func_8005E16C.c, +4/+3 func_8005E244.c = +50 func",
     "+12 data. Every token is a placeholder name in a landed real-C unit (the",
     "count includes decode-comment mentions - the counting rule reads text,",
-    "not codegen); no placeholder appears outside these seven files' totals."
+    "not codegen); no placeholder appears outside these seven files' totals.",
+    "unknown_function 807->809, unknown_data 57->150 (2026-10-31): the fifteenth real-decompiled-C game function lands - func_80052038 (g3_eu, 0x32838, 0x7f0, the TMD opacket executor / mode-chain state dispatcher feeding the GsTMD div-family) as hand-written C, judge EXACT 2032/2032 on the live oracle, whole-image 8/8 GREEN. 2 = 1 definition + 1 header-comment mention. 93 = 27 extern declarations (the 8 head statics + the no-flag/flag StdFn/AltFn table bases) + 65 code references (the case-body table loads and flag stores, 18 lines carrying two D_ operands) + 1 header-comment mention. The eleven-round probe ladder (v4..v14) banked the source-shape laws: computed-goto dispatch over the committed jtbl row under the per-target --addiu-at flip, printf-last cross-jumping (stub merge closed), $2-pinned two-index table loads with the s6v-then-t0 sum order, the fall-through lmode join + shared dead-a1v compare constant, the t9 liveness barrier vs the a1v coalesce, the else-arm a1v opaque redefinition, and the rec UNPIN (the bare-rec[0] address use is fwprop bait while pinned; unpinned, local-alloc assigns $19 naturally)."
   ],
   "patterns": [
     {
@@ -94,7 +95,7 @@
     }
   ],
   "baselines": {
-    "unknown_function": 807,
-    "unknown_data": 57
+    "unknown_function": 809,
+    "unknown_data": 150
   }
 }
