@@ -89,6 +89,30 @@ def disasm(words, va):
     return f"{line.mnemonic} {line.op_str}" if line else ""
 
 
+def maspsx_unit_flags(target: str, name: str) -> str:
+    """Mirror tools/build.sh's maspsx_flags_for: tools/maspsx_flags.txt
+    scopes maspsx flag overrides per retail target (target:<name>) or per
+    row/base name (unit:<name>, wins). The judge must compile the unit
+    exactly as the full build does - the ratchet law extends to the flags
+    (the --addiu-at knob the in-repo maspsx patch adds lives here)."""
+    path = os.path.join(REPO, "tools", "maspsx_flags.txt")
+    if not os.path.exists(path):
+        return ""
+    tgt_flags = unit_flags = ""
+    for ln in open(path):
+        ln = ln.strip()
+        if not ln or ln.startswith("#"):
+            continue
+        fields = ln.split(None, 1)
+        head = fields[0]
+        rest = fields[1] if len(fields) > 1 else ""
+        if head == f"target:{target}":
+            tgt_flags = rest
+        elif head == f"unit:{name}":
+            unit_flags = rest
+    return unit_flags or tgt_flags
+
+
 def judge(target, name, rom, extent, gp_flags, asflags):
     """-> (verdict, detail_lines)"""
     work = f"build/judge/{name}"
@@ -106,7 +130,11 @@ def judge(target, name, rom, extent, gp_flags, asflags):
     if not os.path.exists(os.path.join(REPO, csrc)):
         return "NO-SOURCE", []
     t0 = time.time()
-    r = run([f"{REPO}/tools/cc.sh", "-S", "-o", f"{work}.o", csrc])
+    env = dict(os.environ)
+    unit_flags = maspsx_unit_flags(target, name)
+    if unit_flags:
+        env["MASPSX_UNIT_FLAGS"] = unit_flags
+    r = run([f"{REPO}/tools/cc.sh", "-S", "-o", f"{work}.o", csrc], env=env)
     if r.returncode:
         return "COMPILE-FAIL", ["  " + ln for ln in r.stderr.strip().splitlines()[-5:]]
     gp_rewrite, gp_info = gp_flags
