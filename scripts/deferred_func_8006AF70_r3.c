@@ -103,10 +103,12 @@ L_c2:   /* 0x8006B064 */
     D_80171E08 = 0xF0;
     return;
 
-L_c5:   /* 0x8006B078 - three-path chain; the opaque asm keeps gcc from
-         * tail-merging this chain with case 0's (round-2 lost it) */
+L_c5:   /* 0x8006B078 - three-path chain; the volatile-memory barrier
+         * after the load keeps gcc from merging this chain with case
+         * 0's (rounds 2-3 lost it to tail-merge/label redirection -
+         * round 3's plain opaque asm did not block it) */
     v1 = D_800ABA44;
-    __asm__ ("" : "=r"(v1) : "0"(v1));
+    __asm__ __volatile__ ("" : : : "memory");
     if (v1 == 0)
         goto L_def;
     if (v1 == 1) {
