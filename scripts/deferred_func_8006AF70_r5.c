@@ -1,5 +1,5 @@
 /* ROUND-5 DRAFT - FINAL STATE, JUDGED ON THE LIVE ORACLE
- * (cron-20261031-0851 window): SIZE built 1424 = row 1424 (EXACT
+ * (cron-20261031-0751 window): SIZE built 1424 = row 1424 (EXACT
  * LENGTH), aligned 352/356, DIFF 4 words - the c5 reg fields ONLY.
  * Three lever applications on top of r4:
  *  1. The b20 pin (v5 asm("$5")) HOLDS in the full context: c5 emits its

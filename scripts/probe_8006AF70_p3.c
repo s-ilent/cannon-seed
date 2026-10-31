@@ -1,5 +1,5 @@
 /* PROBE P3 - P1 with v0 also UNPINNED. Result (offline cc.sh screen,
- * cron-20261031-0851 window): the spin init SCHEDULES FIRST (before the
+ * cron-20261031-0751 window): the spin init SCHEDULES FIRST (before the
  * ra save - the retail prologue order!) but local-alloc gives the plain
  * counter $5, not $2 (retail: ori $v0,0x3E7). The $2 pin and the
  * init-first schedule are mutually exclusive under the plain forms -

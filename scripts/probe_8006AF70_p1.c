@@ -1,5 +1,5 @@
 /* PROBE P1 - the r5 draft with s0/s1 UNPINNED (plain longs). Result
- * (offline cc.sh screen, cron-20261031-0851 window): local-alloc still
+ * (offline cc.sh screen, cron-20261031-0751 window): local-alloc still
  * assigns $17/$16 and the save order is unchanged [sw ra; sw $17;
  * sw $16]; the pinned-counter init still schedules AFTER the ra save.
  * Conclusion: the s0/s1 pins are unnecessary for the allocation - the
