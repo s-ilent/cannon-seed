@@ -13078,3 +13078,100 @@ D_8016B08C statics touch the TbyT cluster), or the omf_pubsyms publics-
 parser quirk pin (the SSCALL/TEMPO attribution shift - a small fixture
 first); (3) fresh disc links needed before any judge work (the
 2026-10-30 set is dead at ~51.7h).
+
+## 2026-11-01 (window cron-20261101-0151): the func_80067690 svm init decodes OFFLINE (oracle DOWN) end to end - the psyq VMANAGER-family voice-manager initializer behind SsInit, 0x438 bytes across ten spimdisasm fragments, with the SPU-register base D_800AB874 = 0x1F801C00 and the record-run fingerprint proving LIBSND VMANAGER membership
+
+Rollback #18 (worklog to the digest era, 200 missing): recovered per SOP -
+rehydrate, fetch, reset --hard origin/main 2c9bba8a, append_restore_note
+cron-20261031-1755-restore, digest exit 0. Disc probe: EU curl 404 at
+17:57Z (the 2026-10-30 11:42Z set, ~30.2h age), witness 0/8, oracle DOWN.
+Law Zero offline: the banked next item - the func_80067690 row decode.
+
+ITEM 1 - THE FUNCTION IS ONE 0x438-BYTE FLOW: g3_eu 0x80067690..0x80067AC8,
+the LAST 0x438 bytes of the walk row func_80066BC4 (0xf04), which
+spimdisasm fragments into ten symbols (alabel func_80067690 inside the
+nonmatching func_80067684 section, then func_800676D8/67700/67734/67778/
+67780/677A0 (0x1DC)/6797C/67988/67A44) - a continuous fallthrough chain
+with only the voice-count gate (beqz -> tail) and the clamp branch
+(bnez -> func_80067778) as edges. Single caller (g3_eu census): the SSINIT
+shared body func_8006AC04 at 0x8006ACB0, jal with delay ori $a0,0x18 - the
+call passes a0 = 0x18 = 24 voices only (a1 = 0 is set after return).
+FUNCTION.TXT: SsInit "clears the sound local memory etc. and initializes
+the sound system" - this function IS that svm-side init.
+
+ITEM 2 - THE DECODE (full body in scripts/deferred_func_80067690.c with
+the six-step landing plan): (1) _spu_setInTransfer(0) (curated LIBSPU S_IT
+0x800656B4) then SpuInitMalloc(0x20, &D_80147D64) - a1 hoisted before the
+static-zero pair, SPU_MALLOC_RECSIZ=8 so the table is 8x33 = 264 B at
+0x80147D64..0x80147E6C; D_8016B108 = 0, D_8016AC24 = 0 (D_8016B108 sits 4
+bytes before the curated SsSeqCalledTbyT_slotbits 0x8016B10C - the svm
+bookkeeping pair; the window-1525 "statics touch the TbyT cluster" claim
+verified as ADJACENCY + handoff, see (5)). (2) three zero sweeps with the
+u16 counter discipline (andi 0xFFFF before every use): D_801476A4[0xC0]
+halfwords (= 24 x 8 svm voice halfwords), D_80147824[0x18] bytes (24 voice
+flags) + D_8017278C = 0, D_801704A8[0x10] bytes (16 key slots). The data
+block is CONTIGUOUS: 0x801476A4 (0x180) + 0x80147824 (0x18) + 0x8014783C
+(the 24 x 0x34 svm records) ending EXACTLY at 0x80147D1C where
+SsSeqCalledTbyT_init's counter D_80147D1C sits - one svm cluster. (3)
+D_8016B08C = (u8)max_voices capped at 0x18 (sltiu/bnez/ori 0x18 shape);
+retail call -> 0x18. THE LOOP BOUND: the per-voice loop re-lbu's it at the
+bottom AND SsSeqCalledTbyT_init lbu's it as its THIRD instruction - the
+handoff static. (4) per-voice loop (0x800677A0..0x80067A44): the 0x34-byte
+svm record (rec = D_8014783C + v*0x34) initialized field-by-field (rec+02
+= 0x18, +0E = -1, +00 = 0xFF, +1B = 0, +04/06/10/12 = 0, +14 = 0xFF, +08
+= 0, +0A = 0x40 (sb), +1C..+30 even halfwords = 0 with +0x24 (D_80147860)
+written LAST; untouched +0C/+16/+18/+1A/+26/+32), then the SPU HARDWARE
+VOICE REGS through *D_800AB874 - D_800AB874 = 0x1F801C00 (the .data word,
+the SPU voice register base), stride 16 B/voice: vol L/R = 0, pitch =
+0x1000 (center), start addr = 0x200 (the mute address the landed
+func_800642A0 full-init sweep also writes), ADSR1 = 0x80FF, ADSR2 =
+0x4000. (5) the loop-tail re-zeroes rec+1B/04/00 - SAME addresses the
+head wrote: GCC keeps both because the intervening SPU stores dereference
+the global pointer *D_800AB874 (potential alias makes the head stores
+observable - the func_800642A0 pointer law again); mask bookkeeping
+D_8017281C/20 |= (v < 0x10 ? 1<<v : 0 / 1<<(v-0x10)), D_80147DF0/F4 &=
+~mask, loop while (u16)v < lbu D_8016B08C. (6) the tail: D_801652F8/FA =
+0x3FFF (the svm main-volume pair, matching the SSINIT control defaults
+mainvol 0x3FFF/0x3FFF), then the mask statics ZEROED (the loop's
+bookkeeping is observably dead in the init path but is the real bytes:
+D_80147DF0/F4/F8/FC = 0, D_8017281C = 0, D_801652F0/F4 = 0 (sw)),
+D_8017057C = 0 (sb), _svm_stereo_mono = 0 (CURATED), D_8016AD08 = 0x80
+(the SsSeqCalledTbyT_guard + 4), jal SsSeqCalledTbyT_init (0x80067FBC),
+epilogue mirroring the SSINIT body's frame. D_801704A2 = v (sh) + lhu
+reload round trip per voice - the svm "current voice" static (readers
+func_80067C24/func_80068380/func_80069B3C).
+
+ITEM 3 - THE FINGERPRINT (banked tools, the window's archive probe):
+scripts/probe_80067690_member.py searches every psyq 3.3 .LIB for two
+non-relocated-immediate runs of the function - the ten-instruction
+SPU-register default store run and the 4-word prologue. RESULT: the
+record-run appears VERBATIM in LIBSND.LIB inside the VMANAGER module,
+TWICE (file offsets 0x126d0 + 0x1533c); the game image carries it exactly
+once (0x80067928). scripts/compare_80067690_archive.py byte-compares the
+game's .s dump against the archive windows: the retail copy is NOT a
+byte-verbatim 3.3 VMANAGER build - verbatim runs (prologue 4 words, loop-A
+11, loop-B 7, loop-C 11, the 0x80067790 gate 7) match at a +0x2C-shifted
+anchor (archive twin prologue at LIBSND.LIB 0x12464, shape-exact), the
+layout diverging ~0x2C. SAME class as the landed func_800642A0 precedent:
+the game copy was compiled from source by the game's own cc1 2.6.3-PSX.
+IDENTITY: the psyq libsnd svm init, VMANAGER family (SpuVmInit the obvious
+candidate; sdk_members.py claims it ambiguous at 0x80066E5C - a different
+interior start in the same row). LANE-OWNER FLAG, no rename: a name claim
+needs the omf_pubsyms publics-parser pin first (the symbol-table walk
+stops early - only 2 of VMANAGER's 44 publics carry 0x0c offset rows
+today).
+
+GATES: no build/verify/judge (oracle DOWN, witness 0/8); tree change =
+scripts/deferred_func_80067690.c (the draft + six-step plan) + the two
+banked probe tools; suite untouched (95/95), ratchets untouched (809/150
+= tree).
+
+NEXT: (1) witnessed window: the parked drafts land IN ORDER - func_80052038
+(window-34), then func_8006AF70/SsSetTickMode (window-35, composing the
+AC04 split fix + the SSINIT names), then this svm init (its six steps are
+in the draft; step 1's yaml split touches the func_80066BC4 row - the
+glabel_collision_pass must handle its ~40 interior labels); (2) offline:
+the omf_pubsyms publics-parser quirk pin (the SSCALL/TEMPO attribution
+shift - the small fixture that also unblocks the VMANAGER public-offset
+map this decode needs for the name claim); (3) fresh disc links needed
+before any judge work - the 2026-10-30 set is dead (404 at ~30.2h).
