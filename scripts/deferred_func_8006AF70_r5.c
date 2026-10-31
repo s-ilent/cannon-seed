@@ -1,6 +1,7 @@
-/* ROUND-5 DRAFT - JUDGED ON THE LIVE ORACLE (cron-20261031-0851 window):
- * SIZE built 1424 = row 1424 (EXACT LENGTH), aligned 351/356, DIFF 6 words.
- * Two lever applications on top of r4:
+/* ROUND-5 DRAFT - FINAL STATE, JUDGED ON THE LIVE ORACLE
+ * (cron-20261031-0851 window): SIZE built 1424 = row 1424 (EXACT
+ * LENGTH), aligned 352/356, DIFF 4 words - the c5 reg fields ONLY.
+ * Three lever applications on top of r4:
  *  1. The b20 pin (v5 asm("$5")) HOLDS in the full context: c5 emits its
  *     full 9-word chain (lui/lw/nop/beqz/ori/beq/ori/j/ori), c0 stays
  *     retail-exact in $3, and the ~20 downstream j-target shifts of the
@@ -13,20 +14,24 @@
  *     instead - that ONE +1 word shifted every downstream j/jal target
  *     and both InterruptCallback %lo immediates by 4 (the r5 first
  *     judge: SIZE 1428, DIFF 336; after the move: SIZE 1424, DIFF 6).
- * The remaining 6 words:
- *  a. c5's four reg-field words - lui/lw/beqz/beq encode $5 where retail
- *     carries $v1 (the pin's structural cost; v5 pinned to $3 itself
- *     re-merges per b21, so 4 is the current floor).
- *  b. func_8006B0F0's prologue: retail schedules the pinned-counter init
- *     ori $v0,0x3E7 BEFORE the ra save (row 8006B0F4), the built after
- *     it (same encoding, one word later - judge counts it twice via an
- *     insert/delete pair). Probe bank: plain counter schedules FIRST
- *     (init before the saves) but local-alloc picks $5, not $2 (p3);
- *     s0/s1 need no pins - unpinned they still allocate $17/$16 and the
- *     save order is unchanged (p1); declaration order does not matter.
- * OPEN for the next window: a lever that yields the retail prologue
- * order with the $2 pin (or a cc-post prologue fixup class), and any
- * c5 anti-merge lever cheaper than the 4 reg-field words. Staging
+ *  3. NEW TOOL LAW - cc-post: keep-prologue. The B0F0 prologue diff was
+ *     NOT gcc: cc1 natively schedules the pinned-counter init FIRST
+ *     ([subu][ori $2,999][sw $31]... = retail's exact order at
+ *     8006B0F4); cc_post's rule 4 (func_80037A0C's sw-first counter-
+ *     case) fired on the shape and inverted it. Both orders exist in
+ *     retail, so rule 4 grew the opt-out source marker
+ *     `cc-post: keep-prologue` (cc.sh composes it with the primary
+ *     flags) - with it the prologue judges exact. Probe bank: plain
+ *     counter schedules init-first but local-alloc picks $5, not $2
+ *     (p3); s0/s1 need no pins - unpinned they still allocate $17/$16
+ *     with the same save order (p1); declaration order is inert.
+ * THE REMAINING 4 WORDS: c5's lui/lw/beqz/beq encode $5 where retail
+ * carries $v1 - the pin's structural cost (v5 pinned to $3 itself
+ * re-merges per b21; row arithmetic on the alternative - a private c5
+ * def/store tail to break the branch-target equality - costs +4 words
+ * on top of the same 4-word diff, strictly worse; not staged).
+ * OPEN for the next window: any c5
+ * anti-merge lever cheaper than the 4 reg-field words. Staging
  * (yaml 0x4B770 flip + src copy) REVERTED per the gates - DIFF != EXACT.
  * ROUND-4 header (the plain distinct-pseudo application): the c5 anti-merge
  * closes as a SOURCE-SHAPE LAW: gcc 2.6.3's cross-jumping matches RTL
@@ -60,7 +65,11 @@
  *     case-4 parameter reassignment carry over (all proven by
  *     round-2's aligned regions).
  */
-/* cc-post: keep-epilogue */
+/* cc-post: keep-epilogue
+ * cc-post: keep-prologue - func_8006B0F0's retail prologue keeps the
+ * pinned-counter init ori $v0,0x3E7 ABOVE the ra save (row 8006B0F4),
+ * so cc_post's rule-4 restore must not fire here. */
+
 
 extern long D_800ABA38;
 extern long D_800ABA3C;

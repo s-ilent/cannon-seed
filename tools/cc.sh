@@ -88,6 +88,9 @@ python3 "$MASPSX" --expand-div ${MASPSX_UNIT_FLAGS:-} < "$STEM.gcc.s" > "$STEM.m
 #   `cc-post: sdk-aspsx`     - full Sony/ASPSX library-unit convention
 #                              (keep-epilogue + the load-to-symbol-store
 #                              hazard nop, stopIntr finding 2026-10-13)
+#   `cc-post: keep-prologue` - keep GCC's own prologue order (skip the
+#                              rule-4 save restore; composes with the
+#                              primary flags above)
 POSTFLAGS=""
 if grep -q 'cc-post: sdk-aspsx' "$SRC" 2>/dev/null; then
     POSTFLAGS="--sdk-aspsx"
@@ -98,6 +101,13 @@ elif grep -q 'cc-post: keep-return-fill' "$SRC" 2>/dev/null; then
     # delay slot with the $v0 move (the getter class keeps it before
     # the jump) - skip cc_post's return-move un-fill for these units.
     POSTFLAGS="--keep-return-fill"
+fi
+# keep-prologue composes with any primary flag above (independent greps):
+# skips cc_post's rule-4 prologue-save restore for units whose retail
+# prologue keeps the constant materialization ABOVE the $ra save
+# (func_8006B0F0 2026-10-31; func_80037A0C is the sw-first counter-case).
+if grep -q 'cc-post: keep-prologue' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --keep-prologue"
 fi
 python3 "$REPO/tools/cc_post.py" $POSTFLAGS "$STEM.mas.s"
 

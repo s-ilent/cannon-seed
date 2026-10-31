@@ -104,6 +104,18 @@ temporaries):
    semantically a no-op. Keeps every other hoisted instruction
    (arguments, later loads) untouched.
 
+   OPPOSITE RETAIL BEHAVIOUR EXISTS (found 2026-10-31, g3_eu
+   func_8006B0F0, the LIBSND tick-mode installer's 999-spin entry,
+   landed-unit draft round 5): the pinned-counter init schedules
+   first natively ([subu][ori $2,999][sw $31]...) and that IS the
+   retail order there (row 8006B0F4 - ori BEFORE the ra save), while
+   func_80037A0C's retail carries the sw-first form. Retail is
+   per-unit evidence, so the source marker `cc-post: keep-prologue`
+   skips rule 4 for the units whose retail prologue keeps the
+   materialization above the $ra save (the marker only ever toggles
+   the order of two independent insns - semantics identical either
+   way).
+
 5. PROLOGUE CALL DELAY NORMALIZATION (found 2026-10-11, mainmenu_jp
    func_8003800C, the first unit member whose frame saves two
    registers). GCC hoists the first call's argument setup above the
@@ -215,6 +227,7 @@ def is_instruction(line: str) -> bool:
 KEEP_EPILOGUE = False
 KEEP_RETURN_FILL = False
 SDK_ASPSX = False
+KEEP_PROLOGUE = False
 
 
 def apply_rules(insns: list[str]) -> list[str]:
@@ -229,7 +242,8 @@ def apply_rules(insns: list[str]) -> list[str]:
     res = _rule2_extend_pair(res)
     if not KEEP_RETURN_FILL:
         res = _rule3_return_move(res)
-    res = _rule4_prologue_save(res)
+    if not KEEP_PROLOGUE:
+        res = _rule4_prologue_save(res)
     res = _rule5_prologue_call(res)
     res = _rule7_gp_load(res)
     return res
@@ -440,7 +454,7 @@ def _rule7_gp_load(res: list[str]) -> list[str]:
 
 
 def main() -> None:
-    global KEEP_EPILOGUE, SDK_ASPSX, KEEP_RETURN_FILL
+    global KEEP_EPILOGUE, SDK_ASPSX, KEEP_RETURN_FILL, KEEP_PROLOGUE
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -448,6 +462,9 @@ def main() -> None:
     if "--keep-return-fill" in args:
         KEEP_RETURN_FILL = True
         args.remove("--keep-return-fill")
+    if "--keep-prologue" in args:
+        KEEP_PROLOGUE = True
+        args.remove("--keep-prologue")
     if "--sdk-aspsx" in args:
         KEEP_EPILOGUE = True
         SDK_ASPSX = True
