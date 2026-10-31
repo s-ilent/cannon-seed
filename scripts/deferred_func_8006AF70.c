@@ -1,4 +1,21 @@
-/* PARKED DRAFT - window 35 (cron-20261030-1113), offline decode of the
+/* PARKED DRAFT - ROUND-1 LIVE VERDICT BANKED (cron-20261031-0251 window,
+ * judge on the live oracle with the staging decls materialized below):
+ * COMPILE-FAILS fixed to reach codegen: func_8006B4B8 / func_8006B484
+ * used prior to declaration (forward decls added), D_800ABA4C/ABA48
+ * undeclared (all nine D_ sites are [0]-subscripted -> the extern block
+ * is ARRAYS, not scalars - the old "scalar vs array per site" question
+ * resolves to arrays for every site this window checked), SsSeqCalledTbyT
+ * needs its own extern (used as a fn-pointer argument). VERDICT: SIZE
+ * built 1312 vs row 1424 (-112 B = -28 insns) DIFF 302/328 - the draft's
+ * decode semantics compile but the codegen is far from retail; the -112
+ * size gap says whole bodies/arms are missing or DCE'd, so the next
+ * window's ladder starts from byte-level block mapping, not micro-nits.
+ * Staging (yaml 0x4B770 flip + this file at src/) REVERTED per the gates
+ * after the judge run. The staging decls are IN THIS FILE now (uncommented
+ * block before func_8006AF70) - the next window stages by flipping the
+ * yaml row and copying this file to src/ as-is.
+ *
+ * PARKED DRAFT - window 35 (cron-20261030-1113), offline decode of the
  * func_8006AF70 row (g3_eu, 0x590 bytes, 0x8006AF70..0x8006B500, rank 4
  * on the re-ranked real-C reading list, caller func_80028140 - one of the
  * verified game-zone edges). Byte-exact landing WAITS for a witnessed
@@ -44,6 +61,25 @@
  * extern void SpuQuit(void);                // LIBSPU S_Q member
  * extern void SsSeqCalledTbyT(void);        // LANDED
  */
+
+/* ROUND-1 STAGING DECLS (cron-20261031-0251 window; the header extern
+ * block above is still commented spec - these materialize it with the
+ * use-derived shapes: every D_ site is [0]-subscripted, so all arrays.
+ * These get the draft through gcc 2.6.3 for the first live verdict). */
+extern long D_800ABA38[], D_800ABA3C[], D_800ABA40[], D_800ABA44[],
+            D_800ABA48[], D_800ABA4C[], D_800ABA50[], D_800ABA54[],
+            D_80171E08[];
+extern void intr_stop_begin(void);
+extern long func_8006B648(long);
+extern long func_8006B500(long, long, long);
+extern long func_8006B5D8(long);
+extern long func_8004AE64(void);
+extern void VSyncCallback(void (*fn)(void));
+extern long InterruptCallback(long, void (*fn)(void));
+extern void SpuQuit(void);
+extern void SsSeqCalledTbyT(void);
+void func_8006B4B8(void);
+void func_8006B484(void);
 
 /* ---- func_8006AF70: the mode/tempo switch (0x180 bytes incl. tail) ----
  * head: bit 0x1000 splits the arg packing; both arms fall into the switch
