@@ -1,10 +1,10 @@
 diff --git a/maspsx.py b/maspsx.py
 old mode 100644
 new mode 100755
-index 02f2587..7310c2f
+index 02f2587..c7f7a09
 --- a/maspsx.py
 +++ b/maspsx.py
-@@ -15,12 +15,12 @@ class AspsxVersionConfig:
+@@ -15,7 +15,7 @@ class AspsxVersionConfig:
      div_uses_tge: bool = False
      nop_at_expansion: bool = False
      nop_mflo_mfhi: bool = True
@@ -13,12 +13,26 @@ index 02f2587..7310c2f
      sltu_at: bool = True
      expand_li: bool = True
      gp_allow_offset: bool = False
-     gp_allow_la: bool = False
--    addiu_at: bool = False
-+    addiu_at: bool = True
+@@ -69,6 +69,9 @@ def main() -> None:
+     # deprecated
+     parser.add_argument("--no-macro-inc", action="store_true")
+     parser.add_argument("--expand-li", action="store_true")
++    # cannon-seed: per-unit config override (tools/maspsx_flags.txt); the
++    # version-derived default stays untouched when the flag is absent
++    parser.add_argument("--addiu-at", type=str, choices=("on", "off"), default=None)
  
+     args, as_args = parser.parse_known_args()
  
- def config_for_aspsx_version(aspsx_version_arg: str | None) -> AspsxVersionConfig:
+@@ -138,6 +141,9 @@ def main() -> None:
+         if args.dont_expand_li and version_config.expand_li:
+             version_config.expand_li = False
+ 
++        if args.addiu_at is not None:
++            version_config.addiu_at = args.addiu_at == "on"
++
+         processor = MaspsxProcessor(
+             in_lines,
+             sdata_limit=sdata_limit,
 diff --git a/maspsx/__init__.py b/maspsx/__init__.py
 old mode 100644
 new mode 100755

@@ -1,0 +1,26 @@
+# maspsx_flags.txt - per-target/per-unit maspsx flag overrides
+#
+# Scopes (matched by tools/build.sh's maspsx_flags_for; the unit scope wins):
+#   target:<name> <flags...>   every unit of that retail target - the historical
+#                              aspsx-version differences are per-BUILD, so a
+#                              whole target is the natural scope (the mainmenu
+#                              pair's retail build used the newer aspsx whose
+#                              la/%lo expansions are maspsx's defaults; the
+#                              game-module builds used aspsx < 2.30 whose
+#                              addend loads/stores take the 4-insn at-split
+#                              through $at - see window 36's dispatch law).
+#   unit:<name> <flags...>     one row/base name in any target (the per-target
+#                              src override philosophy: same walk name, per-
+#                              target body). Ignored when it carries no flags.
+#
+# Flag syntax is maspsx's own CLI (the in-repo patch adds the --addiu-at
+# on|off knob; absent flags keep maspsx's version-derived defaults). Probe
+# scripts that need the flip set MASPSX_UNIT_FLAGS="--addiu-at on" for cc.sh.
+#
+# GATE EVIDENCE (window 37, 22fc08df): addiu_at on globally = 6/8 whole-image
+# GREEN with mainmenu_jp + mainmenu_eu RED (282KB shift cluster); addiu_at off
+# = the pre-flip 8/8 GREEN state. g3_eu is GREEN under the flip and its
+# queued landings (func_80052038 dispatch, func_8006AF70 family) need it;
+# the mainmenu pair must never see it.
+
+target:g3_eu --addiu-at on

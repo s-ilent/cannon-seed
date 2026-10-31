@@ -46,6 +46,20 @@ ASFLAGS="-march=mips64 -mabi=32 -EL -G0 -I include -I asm/nonmatchings"
 
 fail() { echo "build: $*" >&2; exit 2; }
 
+# --- per-target/per-unit maspsx flag overrides -------------------------------
+# tools/maspsx_flags.txt scopes flag overrides to a retail target or a single
+# row/base name (unit wins). Flags pass to maspsx verbatim; unconfigured
+# units keep maspsx's own defaults. See the file header for the gate evidence.
+maspsx_flags_for() { # $1 = target, $2 = unit (row/base name, no extension)
+    [ -f tools/maspsx_flags.txt ] || return 0
+    awk -v t="$1" -v u="$2" '
+        /^[[:space:]]*(#|$)/ { next }
+        $1 == "target:" t { sub(/^target:[[:space:]]*[^[:space:]]+[[:space:]]*/, ""); tgt = $0 }
+        $1 == "unit:" u { sub(/^unit:[[:space:]]*[^[:space:]]+[[:space:]]*/, ""); unt = $0 }
+        END { if (unt != "") print unt; else if (tgt != "") print tgt }
+    ' tools/maspsx_flags.txt
+}
+
 [ -x "$AS" ] || fail "mipsel-as not found at $AS (see tools-local/ setup in docs/TOOLCHAIN.md)"
 [ -f "config/splat.${TARGET}.yaml" ] || fail "splat config missing - run the split pipeline first"
 
@@ -83,7 +97,8 @@ while IFS= read -r src; do
     staged="build/asm/$rel"
     obj="build/asm/${rel}.o"
     mkdir -p "$(dirname "$staged")"
-    if ! "$PY" "$MASPSX" < /dev/null "$src" > "$staged" 2> "$staged.err"; then
+    mpsx_flags=$(maspsx_flags_for "$TARGET" "$(basename "$src" .s)")
+    if ! "$PY" "$MASPSX" $mpsx_flags < /dev/null "$src" > "$staged" 2> "$staged.err"; then
         echo "maspsx FAILED: $src" >&2
         n_fail=$((n_fail + 1))
         continue
@@ -233,7 +248,8 @@ PYUNITS
         csrc="src/${TARGET}/${cname}.c"
         [ -f "$csrc" ] || csrc="src/${cname}.c"
         [ -f "$csrc" ] || fail "yaml wants C at ${cname} but $csrc is missing"
-        if ! "$REPO/tools/cc.sh" -S -o "build/src/${cname}.o" "$csrc"; then
+        if ! MASPSX_UNIT_FLAGS="$(maspsx_flags_for "$TARGET" "$cname")" \
+                "$REPO/tools/cc.sh" -S -o "build/src/${cname}.o" "$csrc"; then
             fail "C compile failed: $csrc"
         fi
         csec=$(printf '%08X' "0x${crom}")
@@ -267,7 +283,8 @@ PYUNITS
         csrc="src/${TARGET}/${base}.c"
         [ -f "$csrc" ] || csrc="src/${base}.c"
         [ -f "$csrc" ] || fail "yaml wants C at ${base} but $csrc is missing"
-        if ! "$REPO/tools/cc.sh" -S -o "build/src/${base}.o" "$csrc"; then
+        if ! MASPSX_UNIT_FLAGS="$(maspsx_flags_for "$TARGET" "$base")" \
+                "$REPO/tools/cc.sh" -S -o "build/src/${base}.o" "$csrc"; then
             fail "C compile failed: $csrc"
         fi
         rom_args=()

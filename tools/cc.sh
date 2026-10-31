@@ -21,7 +21,9 @@
 #   -funsigned-char  plain char is unsigned (lbu 184 vs lb 13)
 #   -fno-builtin     no libc call substitution (libgcc calls: zero)
 #
-# Env overrides: QEMU, GCCDIR, MASPSX, TOOLROOT (binutils root).
+# Env overrides: QEMU, GCCDIR, MASPSX, TOOLROOT (binutils root);
+# MASPSX_UNIT_FLAGS = extra maspsx CLI args from build.sh's per-target/per-unit
+# config (tools/maspsx_flags.txt) - empty for standalone/probe use.
 
 set -e
 
@@ -76,7 +78,7 @@ CC1FLAGS="$CC1FLAGS ${CC1FLAGS_EXTRA:-}"
 # reproduces the ASPSX assembler's div/divu macro expansion (break 7 /
 # break 6 trap guards) that the retail binaries contain; the retail
 # disassembly shows exactly this sequence (e.g. func_80028B8C.s).
-python3 "$MASPSX" --expand-div < "$STEM.gcc.s" > "$STEM.mas.s"
+python3 "$MASPSX" --expand-div ${MASPSX_UNIT_FLAGS:-} < "$STEM.gcc.s" > "$STEM.mas.s"
 
 # Instruction-order fixups so cc1 output matches retail scheduling
 # (epilogue delay swap, extend-pair unweave). C path only - see
