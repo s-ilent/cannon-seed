@@ -13037,6 +13037,31 @@ nslots (already flagged 1406) and psyq's _snd_seq_t_max = ntracks
 into); the SSCALL cross-ref reads both ways (TbyT walks tracks AND does
 per-tick math). Evidence banked for the lane owner.
 
+ITEM 4 - THE TENSION RESOLVED (same window, the omf_pubsyms SSCALL
+probe, table layer): the banked _snd_seq_t_max = 0x80171E08 STANDS -
+LIBSND.LIB's full symbol-table map shows SSCALL is the ONLY module with
+a 0x0e reference to _snd_seq_t_max (SSCLOSE carries a 0x0c thunk row;
+nothing else touches it), and SSCALL's own 0x0c definition row is
+Snd_tempo (code, off 0) - the tempo function. Tempo math needs
+ticks-per-second, never a SEP-count, so psyq's _snd_seq_t_max IS the
+tick-rate var and the game's banked slot is right. Consequences: (a)
+the game's ntracks (0x80172728, the SsSetTableSize t_max target) has NO
+psyq public name - all nine SSINIT data publics are accounted for
+(_ss_MarkCallback, _snd_openflag, _snd_seq_tick_mode, _snd_seq_no_tick,
+VBLANK_MINUS, _ss_score, _snd_seq_s_max, _snd_seq_t_max, _snd_ev_flag) -
+the SEP-count static is psyq module-local, the curated ntracks alias
+stands; (b) psyq's _snd_seq_s_max = the game's nslots CONFIRMED
+(SsSetTableSize writes it, SSCALL reads it as the slot bound); (c)
+SsSeqCalledTbyT has NO 0x0c definition row in ANY 3.3 SDK lib (only
+SSCALL's 0x0e ref) - the tick callback is linkage-provided, consistent
+with the game shipping its own compiled copy; (d) TOOL FINDING: the
+omf_pubsyms PUBLICS layer misattributes names across module boundaries
+(SSCALL publics printed as [SsSeqCalledTbyT] while its table defines
+Snd_tempo; TEMPO publics [Snd_tempo] with only 0x0e ref rows; tail-name
+mismatches: SSCALL tail 'SpuVmFlush', TEMPO tail '_ss_score') - the
+TABLE layer (kinds + offsets) is primary evidence; pin the publics
+parser quirk before the next publics-depth curation step.
+
 GATES: no build/verify/judge (oracle DOWN, witness 0/8); no config/tree
 change (draft scripts/deferred_func_8006AC04.c + the AF70 draft
 correction + this docs section only); suite 95/95 GREEN, ratchets
@@ -13045,10 +13070,11 @@ untouched (809/150 = tree).
 NEXT: (1) witnessed window: the AF70 lane decision + the five-label
 libspu adoption + eight SSINIT entries unchanged, now composing WITH this
 row's split fix (yaml 0x120 -> 0x14C, step 1 of the draft's six-step
-plan) and the SsInit/SsInitHot/SsSetTableSize public names; (2) offline
-continuation: the func_80067690 row decode (the SpuInitMalloc voice-state
-initializer this row calls - its D_8016B108/D_8016AC24/D_8016B08C statics
-touch the TbyT cluster), or the SSCALL _snd_seq_t_max role question via
-omf_pubsyms on LIBSND.LIB (which SSCALL routine references it - TbyT's
-track loop or the tempo math); (3) fresh disc links needed before any
-judge work (the 2026-10-30 set is dead at ~51.7h).
+plan) and the SsInit/SsInitHot/SsSetTableSize public names, with the
+tension resolved in favor of the banked _snd_seq_t_max (ITEM 4); (2)
+offline continuation: the func_80067690 row decode (the SpuInitMalloc
+voice-state initializer this row calls - its D_8016B108/D_8016AC24/
+D_8016B08C statics touch the TbyT cluster), or the omf_pubsyms publics-
+parser quirk pin (the SSCALL/TEMPO attribution shift - a small fixture
+first); (3) fresh disc links needed before any judge work (the
+2026-10-30 set is dead at ~51.7h).

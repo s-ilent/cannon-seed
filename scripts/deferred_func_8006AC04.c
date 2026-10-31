@@ -78,6 +78,32 @@
  * (TbyT references _snd_seq_t_max) reads BOTH ways (TbyT walks tracks AND
  * does the per-tick math). Kept as evidence for the lane owner; NO rename.
  *
+ * RESOLVED SAME WINDOW (the omf_pubsyms SSCALL probe, table layer): the
+ * TENSION reads the OTHER way - the banked _snd_seq_t_max = 0x80171E08
+ * STANDS. LIBSND.LIB's full symbol-table map: SSCALL is the ONLY module
+ * with a 0x0e reference to _snd_seq_t_max (SSCLOSE carries a 0x0c thunk
+ * row; nothing else touches it), and SSCALL's own 0x0c definition row is
+ * Snd_tempo (code, off 0) - the tempo function. Tempo math needs
+ * ticks-per-second, never a SEP-count, so psyq's _snd_seq_t_max IS the
+ * tick-rate var: the game's banked slot is right. Consequences: (a) the
+ * game's ntracks (0x80172728, the SsSetTableSize t_max target) has NO
+ * psyq public name - all nine SSINIT data publics are accounted for
+ * (_ss_MarkCallback, _snd_openflag, _snd_seq_tick_mode, _snd_seq_no_tick,
+ * VBLANK_MINUS, _ss_score, _snd_seq_s_max, _snd_seq_t_max, _snd_ev_flag)
+ * - so the SEP-count static is psyq module-local and the curated ntracks
+ * alias stands; (b) psyq's _snd_seq_s_max = the game's nslots CONFIRMED
+ * (SsSetTableSize writes it, SSCALL reads it as the slot bound);
+ * (c) SsSeqCalledTbyT has NO 0x0c definition row in ANY 3.3 SDK lib (only
+ * SSCALL's 0x0e ref) - in psyq 3.3 the tick callback is linkage-provided,
+ * consistent with the game shipping its own compiled copy.
+ * TOOL FINDING banked alongside: the omf_pubsyms PUBLICS layer
+ * misattributes names across module boundaries (SSCALL publics printed as
+ * [SsSeqCalledTbyT] while its table defines Snd_tempo; TEMPO publics
+ * [Snd_tempo] with only 0x0e ref rows; tail-name mismatches: SSCALL tail
+ * 'SpuVmFlush', TEMPO tail '_ss_score') - the TABLE layer (kinds +
+ * offsets) is primary evidence; pin the publics parser quirk before the
+ * next publics-depth curation step.
+ *
  * THE DECODE (semantically complete; codegen-shape notes inline):
  */
 
