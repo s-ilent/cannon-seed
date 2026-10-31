@@ -12779,3 +12779,98 @@ ratchet 150 -> 143 recomputed from the tree; (2) offline continues:
 omf_pubsyms.py (the PUBDEF extractor) unlocks the held statics; (3) the
 8006AF70 lane-owner decision (round-7 close, last window) stays pending;
 (4) fresh disc links needed before any judge work.
+
+## 2026-10-31 (window cron-20261031-1251): the psyq PSYLIB extractor ships and the held statics' HOLD upgrades to contra-evidenced - the archive's libspu data cluster cannot be the game's
+
+Rollback #15 (worklog to the 2026-10-14 era again, repo to 7623cd2):
+recovered per SOP - reset --hard to origin/main 4f03ebac (last window's
+own push), rehydrate re-run, digest exit 1 (197 missing) ->
+append_restore_note cron-20261031-1254-restore, re-run exit 0. Disc links
+STILL 404 (~25.3h age) - oracle DOWN, Law Zero offline.
+/home/z/psyq re-provisioned again per the banked sparse-clone recipe
+(sandbox reaped it; this is now the standard window-opening cost).
+
+ITEM 1 - tools/omf_pubsyms.py SHIPS (the banked "OMF symbol-table
+extractor" next step, scope-corrected on first contact with the bytes):
+the psyq .LIB is NOT the GNU ar shape and NOT raw OMF - it is Sony's
+PSYLIB container, and the offsets the pass needs live in a per-module
+symbol table inside it, not in OMF PUBDEF records. Grammar reverse-
+engineered off LIBSPU.LIB and pinned by tests:
+
+  magic "LIB\x01" + module chain starting at offset 4 (the first
+  module's name8 doubles as the lib name); each module: name8 (space
+  padded) + "XX 1f" (second byte constant, first is LIB-constant:
+  4c LIBSPU/LIBAPI, 51 LIBSND, 52 LIBGPU) + u8 + a1 + u32 hdr_x
+  (per-module, meaning unknown) + u32 size (= distance to the next
+  module name - verified chain-exact on all 66+ module libs);
+  publics list ([len][name] pairs, 0x00-terminated); "LNK" section
+  table ([len][name][0x10][u32 idx][0x08], first name is the raw pair
+  2e 07, last entry index-less with a 0x1c marker into the debug-path
+  region); section blobs (06 xx 00 / 02 yy 00 chunks - NOT parsed);
+  symbol table at the module end: [len][name][kind][payload], kinds
+  0x0c (u16 a, u16 b, u32 off), 0x0e (u16 = cross-module lib ref
+  index), 0x12 (u16 w, u32 v); tail [len][name] 0x00 reaching exactly
+  the next module (observed tail name = the module's last public).
+
+Walks 8/9 libs of the SDK clean (LIBSPU 67 modules/256 rows, LIBSND
+65/244, LIBGPU 12/143, LIBC2 44/58, LIBCD 19/117, LIBSN 53/73,
+LIBPRESS 5/31; LIBAPI walks 74/74 but is a genuine variant - kind-0x06
+symbol rows, no name tail, 0xf000-based section indices - and yields 0
+rows; documented limitation, veneer lib, irrelevant to the pass). 10
+new tests (hand-assembled fixture grammar pins + the live-archive
+anchor test, skipped when /home/z/psyq is absent); suite 95/95.
+
+ITEM 2 - THE NEGATIVE RESULT (the extractor's first verdict, and the
+point): the SPU module's b=3 data cluster places _spu_transMode
+BETWEEN _spu_tsa and _spu_RXX (cluster: mem_mode 0x04, IRQCallback
+0x08, five unnamed local slots 0x0c..0x1c, read 0x20, inTransfer 0x24,
+write 0x28, mem_mode_unit 0x2c, tsa 0x30, transMode 0x34, RXX 0x38,
+mem_mode_plus 0x3c, FsetRXXa 0x40; the eleven named rows carry the
+consecutive global indices a=10..20 - a compiler-ordered run, not
+linker noise), while the game's retail block has the tsa-role slot
+(0x800AB0B4) ADJACENT below the RXX-role slot (0x800AB0B8, delta 4 vs
+the archive's 8). No single base reconciles the two curated anchors:
+RXX-anchored base 0x800AB080 puts inTransfer at 0x800AB0A4 vs its
+mainmenu_jp sig-matched 0x800AB0E8; inTransfer-anchored base
+0x800AB0C4 puts RXX at 0x800AB0FC vs the retail reload sites. Under
+the RXX anchor the archive's tsa lands ON D_800AB0B0 (the retry-
+counter slot) and transMode lands ON 0x800AB0B4 (the curated
+_spu_tsa slot) - i.e. the archive would give the game's B0B4 slot the
+name _spu_transMode, contradicting the role-matched _spu_tsa. VERDICT:
+the game's libspu is NOT this archive's layout - independently
+consistent with the banked code-level finding (src/func_800642A0.c
+PROVENANCE: "NOT byte-identical (different frame)"). The numeric
+statics D_800AB0B0/C8/D0..F4 stay D_: contra-evidenced HOLD (was
+hold-for-lack-of-evidence). _spu_t/_spu_transMode are NOT adoptable
+from psyq 3.3. The five banked entries are unaffected (their evidence
+is name-verbatim + role, not placement) and stay banked inert - but
+the B0B4 tension above is flagged for the lane owner; no config change
+this window (wrong names are worse than placeholders, and the src
+adoption composes in a witnessed window regardless).
+
+ITEM 3 - CROSS-MODULE REF CLASS + THE LIBSND NAME MAP (bonus for the
+8006AF70 lane): kind 0x0e rows are references to symbols defined in
+ANOTHER module of the same lib - _spu_init and _spu_t are 0x0e in
+SPU's table while _spu_init is a 0x0c definition in S_INI (b=3,
+off=0x64) and S_I is the SpuInit -> _SpuInit veneer (its only table
+row is a 0x0c ref, b=2, off=0); S_ITC references _spu_inTransfer and
+_spu_trans_mode as externs - matching the mainmenu_jp sig evidence
+("S_INI defines the flag, S_ITC reads it") at the container level.
+On LIBSND: the func_8006AF70 row's own module exists - SSCALL
+(publics = SsSeqCalledTbyT) references Snd_tempo (its one 0x0c row),
+_snd_seq_t_max, _snd_ev_flag, _ss_score, _snd_seq_s_max,
+_snd_openflag and the Snd_play/pause/replay/stop/crescendo/decrescendo
+family; SsSeqCalledTbyT itself is a 0x0e ref in SEQINIT. The 8006AF70
+draft's extern names now have archive provenance - names for the
+Snd_*/_snd_* slots can proceed through the same curation standard
+(name-verbatim + role) WITHOUT the placement proof that libspu's
+numeric statics just lost.
+
+NEXT: (1) witnessed window unchanged: the five-label scan adoption +
+src/func_800642A0.c rename + verify GREEN + ratchet refund 150 -> 143
+(the contra-evidence changes NOTHING about the five - they were never
+placement-based); (2) 8006AF70 lane-owner decision stays pending; (3)
+offline continuation: extend the curation pass to the LIBSND Snd_*/
+_snd_* slots (evidence-solid candidates from SSCALL/SEQINIT tables),
+and/or wave-pool re-rank; (4) fresh disc links needed before any judge
+work (the 2026-10-30 set is dead at ~25.3h).
