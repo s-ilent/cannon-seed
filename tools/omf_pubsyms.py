@@ -19,16 +19,29 @@ NOT the GNU ar shape and NOT raw OMF - it is Sony's PSYLIB container):
           +20  publics: [u8 len][name] pairs, 0x00-terminated
                then "LNK" section-name table:
                  [u8 len][name][0x10][u32 index][0x08] entries; the last
-                 entry is followed by 0x1c (debug source-path region)
+                 entry is followed by 0x1c (debug source-path region;
+                 multi-file modules carry REPEATED 1c-path records:
+                 [0x1c][u8][0x00][u8 len][path] - VMANAGER has 17)
                then section blobs (06 xx 00 / 02 yy 00 chunk headers -
-               NOT parsed by this tool), then the symbol table:
+               NOT parsed by this tool; see the base-note below), then the
+               symbol ROW STREAM (one continuous run to the tail):
                  [u8 len][name][kind][payload] entries, kinds
-                   0x0c -> (u16 a, u16 b, u32 off)  # defined/thunk entry
-                   0x0e -> u16 index                # cross-module lib ref
+                   0x0c -> (u16 a, u16 b, u32 off)  # def (code class)
+                   0x0e -> u16 index                # lib-wide ref
                    0x12 -> (u16 w, u32 v)           # second ref class
-               (the table walk stops at any other kind byte)
+                   0x30 -> (u16 a, u16 b, u32 off)  # def (data class)
+               (the walk stops at any other kind byte)
           module tail: [u8 len][name] 0x00 ending exactly at the next
           module (observed tail name = the module's last public)
+
+GROUP MODEL (banked cron-20261101-0536, resolves the ALIAS? class): a
+module's publics are the COMPILATION GROUP's exports, not per-object
+defs - a public whose only row is a 0x0e/0x12 ref is defined in a
+SIBLING module of the same group (VMANAGER's SpuVmKeyOff ref idx=85
+defines in SEQREAD; SpuVmInit DOES def here at .text+0x314c). Def-row
+offsets are section-relative; VMANAGER's section base measured at file
+0x10668 (23/38 def starts on addiu-sp prologues + the _svm_damper
+def-boundary identity) - the general chunk grammar stays open.
 
 OBSERVED SEMANTICS (empirical, not spec-verified - raw fields are always
 reported so nothing is lost):
@@ -39,11 +52,22 @@ reported so nothing is lost):
     EnableEvent, ExitCriticalSection, DeliverEvent, TestEvent) also
     appear as 0x0c rows - psyq allocates call thunks for them, so an
     0x0c row is evidence of storage ONLY when the name is the module's
-    own public.
+    own public. The a field is a per-module SLOT counter (10, 11, 12...
+    in definition order: ADSR _SsUtBuildADSR a=10, _SsUtResolveADSR a=11).
+  - kind 0x30 (a, b, off): def rows in the DATA class (b=6 observed,
+    off=2 constant in LIBSND 3.3 - VM_G is all-0x30 for its 19 svm
+    statics). Adding this kind fixed the VMANAGER truncation: the old
+    3-kind walk broke at the first 0x30 row and the longest-chain law
+    fell back to the 2-row tail fragment (only _svm_okon2/SpuVmFlush
+    of 44 publics). 80 rows now parse, 22 public defs included.
   - kind 0x0e: reference to a symbol defined in ANOTHER module of the
     same lib (_spu_init is 0x0e in SPU's table and a 0x0c definition in
-    S_INI's; _spu_FsetRXX the reverse).
-  - kind 0x12: (2, value) pairs observed on printf (extern) and _spu_r_.
+    S_INI's; _spu_FsetRXX the reverse). The payload indexes a lib-wide
+    slot dictionary (VBLANK_MINUS=11 in TEMPO/SEPINIT/SEQINIT alike;
+    SsSeqOpen and SsSepOpen share slot 13 - header-alias pair).
+  - kind 0x12: (w, value) pairs - w=2 rows carry a code-class offset
+    (SpuVmNoiseOff v=0x27c, SpuVmSetSeqVol v=0x1380), w=6 rows a data-
+    class one (_svm_pg v=0x61c); printf stays the extern shape.
 
 CURATION VERDICT this extraction proves (banked in docs/TASKS.md): the
 SPU module's data cluster places _spu_transMode BETWEEN _spu_tsa (0x30)
@@ -68,7 +92,7 @@ import sys
 MAGIC = b"LIB\x01"
 MOD_MAGIC = b"\x4c\x1f"
 LNK_MAGIC = b"LNK"
-KIND_PAYLOAD = {0x0C: 8, 0x0E: 2, 0x12: 6}
+KIND_PAYLOAD = {0x0C: 8, 0x0E: 2, 0x12: 6, 0x30: 8}
 
 
 # --- row classification (the cron-20261101-0151 quirk pin) -----------------
@@ -78,28 +102,40 @@ KIND_PAYLOAD = {0x0C: 8, 0x0E: 2, 0x12: 6}
 # ([09]'Snd_tempo' 00): no cross-module name bleed there. The misattribution
 # class lives in the SYMBOL TABLE reading, three concrete shapes:
 #
-#   THUNK  kind 0x0c for a name that is NOT the module's public. psyq
-#          allocates call thunks for externs; the a=10 b=2 off=0 shape is
-#          the common single-thunk case (SSCALL 'Snd_tempo', SSADD
-#          '_ss_score', PAUSE 'SpuVmSeqKeyOff', SSCLOSE 'SpuVmSetSeqVol').
+#   THUNK  kind 0x0c for a name that is NOT the module's public AND carries
+#          off=0 - the extern/call-thunk shape (SSCALL 'Snd_tempo', SSADD
+#          '_ss_score', PAUSE 'SpuVmSeqKeyOff', SSCLOSE 'SpuVmSetSeqVol',
+#          LIBSPU's kernel externs). psyq allocates call thunks for externs;
+#          the storage resolves at link time, so off=0 is the tell.
 #          The banked cron-20261031-1525/ITEM-4 text read SSCALL's
 #          'Snd_tempo' 0x0c row as "SSCALL's own definition row" - WRONG
 #          under this law (Snd_tempo is TEMPO's public); SSCALL CALLS
 #          Snd_tempo. The _snd_seq_t_max verdict SURVIVES on stronger
 #          evidence: SSCALL's public IS SsSeqCalledTbyT (the per-tick
 #          callback) and SSCALL refs _snd_seq_t_max directly.
+#   LOCAL  kind 0x0c for a non-public with a REAL offset - the module's
+#          own static function/data (VMANAGER note2pitch a=49 b=2
+#          off=0x4684, SpuVmKeyOnNow a=11 off=0x1370 - both prologue-
+#          verified under the measured section base). The old 2-row
+#          parses never saw this class; the banked '0x0c non-public =
+#          thunk' law needs the off=0 qualifier from now on.
 #   TAIL   a public absent from the table entirely: the module tail's
 #          [len][name] 0x00 is the missing row (SSADD 'SsSetTempo', SSCLOSE
 #          'SsSeqClose' - both verified tail = the absent last public).
 #   ALIAS? an OWN public appearing as a 0x0e ref (TEMPO's 'Snd_tempo',
-#          SSADD's 'SsSetLoop'/'SsIsEos'). UNRESOLVED - candidate readings:
-#          def rows behind a kind the walk truncates on, or alias publics
-#          resolving to another module's def. Flag, never guess.
+#          SSADD's 'SsSetLoop'/'SsIsEos'). RESOLVED (cron-20261101-0536):
+#          the publics list is the COMPILATION GROUP's exports; a public
+#          with a ref-only row is defined in a sibling module of the same
+#          group (VMANAGER's SpuVmKeyOff ref idx=85 -> def in SEQREAD;
+#          SsSeqOpen/SsSepOpen share lib slot 13 as a header alias pair).
+#          The def-side map (--defs / xrefs) is authoritative for storage.
 
 VERDICT_DEF = "def"      # 0x0c, name is the module's own public
-VERDICT_THUNK = "thunk"  # 0x0c, name is NOT the module's public
+VERDICT_THUNK = "thunk"  # 0x0c, name is NOT the module's public, off=0
+VERDICT_LOCAL = "local"  # 0x0c, non-public with a real offset: own static
 VERDICT_REF = "ref"      # 0x0e
 VERDICT_REF2 = "ref2"    # 0x12
+VERDICT_DEF30 = "def30"  # 0x30 data-class def row (public or local)
 
 
 def classify(mod):
@@ -107,7 +143,14 @@ def classify(mod):
     out = {}
     for s in mod.symbols:
         if s.kind == 0x0C:
-            v = VERDICT_DEF if s.name in mod.publics else VERDICT_THUNK
+            if s.name in mod.publics:
+                v = VERDICT_DEF
+            elif s.offset == 0:
+                v = VERDICT_THUNK
+            else:
+                v = VERDICT_LOCAL
+        elif s.kind == 0x30:
+            v = VERDICT_DEF30
         elif s.kind == 0x0E:
             v = VERDICT_REF
         elif s.kind == 0x12:
@@ -118,11 +161,43 @@ def classify(mod):
     return out
 
 
+def def_map(mod):
+    """The module's def rows: [(name, kind, a, b, offset)] in stream order.
+
+    The storage-side map the curation pass uses (the publics list alone
+    is the GROUP's exports and may name symbols defined in sibling
+    modules)."""
+    return [(s.name, s.kind, s.a, s.b, s.offset) for s in mod.symbols
+            if s.kind in (0x0C, 0x30)]
+
+
+def lib_def_index(lib):
+    """{name: [(module, kind, b, offset)]} over every module's def rows."""
+    idx = {}
+    for m in lib.modules:
+        for name, kind, _a, b, off in def_map(m):
+            idx.setdefault(name, []).append((m.name, kind, b, off))
+    return idx
+
+
+def lib_xrefs(lib):
+    """Resolve every 0x0e ref against the lib-wide def index.
+
+    Returns [(module, name, idx, resolved-or-None)] for all ref rows."""
+    defs = lib_def_index(lib)
+    out = []
+    for m in lib.modules:
+        for s in m.symbols:
+            if s.kind == 0x0E:
+                out.append((m.name, s.name, s.a, defs.get(s.name)))
+    return out
+
+
 def check_module(mod):
     """Consistency findings for one module (the quirk classes above).
 
     Returns a list of human-readable strings; empty means the module's
-    publics and table agree under the three-row model."""
+    publics and table agree under the group model."""
     findings = []
     cls = classify(mod)
     table_names = set(cls)
@@ -131,14 +206,21 @@ def check_module(mod):
             role = "tail" if pub == mod.tail_name else "ABSENT"
             findings.append(
                 f"public {pub!r} has no table row ({role})")
-        elif VERDICT_REF in cls[pub]:
+        elif VERDICT_REF in cls[pub] and VERDICT_DEF not in cls[pub] \
+                and VERDICT_DEF30 not in cls[pub]:
             findings.append(
-                f"public {pub!r} appears as 0x0e ref (alias? class)")
+                f"public {pub!r} appears as 0x0e ref (group-internal "
+                f"cross-object ref - the def lives in a sibling module)")
     for s in mod.symbols:
         if s.kind == 0x0C and s.name not in mod.publics:
-            findings.append(
-                f"0x0c row for non-public {s.name!r} (thunk, a={s.a} "
-                f"b={s.b} off={s.offset:#x}) - NOT a definition")
+            if s.offset == 0:
+                findings.append(
+                    f"0x0c row for non-public {s.name!r} (thunk, a={s.a} "
+                    f"b={s.b} off={s.offset:#x}) - NOT a definition")
+            else:
+                findings.append(
+                    f"0x0c row for non-public {s.name!r} (local static, "
+                    f"a={s.a} b={s.b} off={s.offset:#x}) - own storage")
     return findings
 
 
@@ -149,7 +231,7 @@ class PsyqSymbol:
         self.name = name
         self.kind = kind
         self.raw = payload
-        if kind == 0x0C and len(payload) == 8:
+        if kind in (0x0C, 0x30) and len(payload) == 8:
             self.a, self.b, self.offset = struct.unpack("<HHI", payload)
         elif kind == 0x0E and len(payload) == 2:
             self.a = struct.unpack("<H", payload)[0]
@@ -161,7 +243,7 @@ class PsyqSymbol:
             self.a = self.b = self.offset = None
 
     def __repr__(self):
-        if self.kind == 0x0C:
+        if self.kind in (0x0C, 0x30):
             return f"{self.name!r} kind=0x{self.kind:02x} a={self.a} b={self.b} off={self.offset:#x}"
         if self.kind == 0x0E:
             return f"{self.name!r} kind=0x0e idx={self.a}"
@@ -339,6 +421,12 @@ def main(argv=None):
                     help="classify every row (def/thunk/ref) and print the "
                          "quirk findings per module (public-as-tail, "
                          "public-as-0x0e-ref, thunk rows for non-publics)")
+    ap.add_argument("--defs", action="store_true",
+                    help="print the storage-side def map (name, kind, a, b, "
+                         "offset) per module - the public-offset map")
+    ap.add_argument("--xref", action="store_true",
+                    help="resolve every 0x0e ref against the lib-wide def "
+                         "index and print the defining module")
     args = ap.parse_args(argv)
 
     try:
@@ -356,6 +444,26 @@ def main(argv=None):
                 print(f"{m.name}\t{s.name}\t{s.kind:#04x}\t"
                       f"{s.a if s.a is not None else ''}\t{s.b if s.b is not None else ''}\t"
                       f"{s.offset if s.offset is not None else ''}\t{s.raw.hex()}")
+    elif args.defs:
+        for m in mods:
+            print(f"module {m.name!r} @{m.offset:#x} size={m.size:#x} "
+                  f"publics={len(m.publics)}")
+            for name, kind, a, b, off in def_map(m):
+                tag = "pub" if name in m.publics else "loc"
+                print(f"  {name}\tkind={kind:#04x}\ta={a}\tb={b}\toff={off:#x}\t[{tag}]")
+    elif args.xref:
+        defs = lib_def_index(lib)
+        n_res = n_unres = 0
+        for mname, name, idx, where in lib_xrefs(lib):
+            if where:
+                n_res += 1
+                sites = ", ".join(f"{mn} kind={k:#04x} b={b} off={off:#x}"
+                                  for mn, k, b, off in where)
+                print(f"{mname}\t{name}\tidx={idx}\t-> {sites}")
+            else:
+                n_unres += 1
+                print(f"{mname}\t{name}\tidx={idx}\t-> UNRESOLVED")
+        print(f"# {n_res} resolved, {n_unres} unresolved 0x0e ref(s)")
     else:
         for m in mods:
             print(_fmt_table(m, verdicts=args.check))

@@ -12,8 +12,8 @@ format surprise fails loudly instead of silently reordering fields:
   * publics list with its 0x00 terminator;
   * the LNK section table including the raw first name (2e 07) and the
     index-less last entry (0x1c marker);
-  * the three symbol kinds (0x0c def, 0x0e cross-module ref, 0x12 second
-    ref class) and the chain stop at an unknown kind;
+  * the four symbol kinds (0x0c def, 0x0e cross-module ref, 0x12 second
+    ref class, 0x30 data-class def) and the chain stop at an unknown kind;
   * the [len][name] 0x00 tail reaching exactly the module end.
 
 Run: python3 -m unittest tests/test_omf_pubsyms.py -v
@@ -184,6 +184,44 @@ class TestRealArchive(unittest.TestCase):
         self.assertEqual((init.kind, init.b, init.offset), (0x0C, 3, 0x64))
         self.assertEqual(len(lib.modules), 67)
 
+    def test_s_sca_no_longer_truncated(self):
+        # the old 3-kind walk found 0 rows in S_SCA; the 0x30 kind
+        # recovers its 2-row stream (cron-20261101-0536 audit)
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSPU.LIB"))
+        sca = next(m for m in lib.modules if m.name == "S_SCA")
+        self.assertEqual(len(sca.symbols), 2)
+
+    def test_libsnd_vmanager_full_stream(self):
+        # the truncation witness: 44 publics now yield 80 rows incl. the
+        # SpuVmInit + _svm_damper def rows the svm-init identity needs
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        vm = next(m for m in lib.modules if m.name == "VMANAGER")
+        self.assertEqual(len(vm.publics), 44)
+        self.assertEqual(len(vm.symbols), 80)
+        init = vm.symbol("SpuVmInit")
+        self.assertEqual((init.kind, init.b, init.offset), (0x0C, 2, 0x314c))
+        damper = vm.symbol("_svm_damper")
+        self.assertEqual((damper.kind, damper.b, damper.offset),
+                         (0x0C, 2, 0x1dfc))
+        # the svm-init identity: _svm_damper's def bounds [0x1dfc, 0x21fc)
+        # = the game func_80067690 twin (prologue + store-run delta 0x26c)
+        kmax = vm.symbol("kMaxPrograms")
+        self.assertEqual((kmax.kind, kmax.b, kmax.offset), (0x0C, 2, 0x21fc))
+
+    def test_libsnd_group_xref(self):
+        # the ALIAS? resolution: VMANAGER's publics include names whose
+        # defs live in sibling modules of the same compilation group
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        idx = op.lib_def_index(lib)
+        self.assertIn("SpuVmKeyOff", idx)
+        self.assertTrue(any(mn == "SEQREAD" for mn, _k, _b, _o
+                            in idx["SpuVmKeyOff"]))
+        xrefs = op.lib_xrefs(lib)
+        keyoff = [(mn, where) for mn, nm, _i, where in xrefs
+                  if nm == "SpuVmKeyOff" and mn == "VMANAGER"]
+        self.assertTrue(keyoff and keyoff[0][1], "VMANAGER's SpuVmKeyOff "
+                        "ref must resolve to a defining module")
+
 
 def build_quirk_lib():
     """Hand-assembled one-module lib reproducing the LIBSND SSCALL/TEMPO
@@ -206,6 +244,33 @@ def build_quirk_lib():
     m += name_entry("helper") + b"\x00"   # tail, NOT in publics on purpose:
     # the SSCALL shape's tail is a FOREIGN name (SpuVmFlush), so the module's
     # public tick_cb is table-present (as ref) and the tail is foreign.
+    struct.pack_into("<I", m, 16, len(m))
+    out += m
+    return bytes(out)
+
+
+def build_group_lib():
+    """The VMANAGER truncation regression (cron-20261101-0536): a row
+    stream whose SECOND row is kind 0x30. The old 3-kind walk broke there
+    and the longest-chain law fell back to the 2-row tail fragment; the
+    0x30 kind must keep the whole stream parseable to the tail."""
+    out = bytearray(b"LIB\x01")
+    m = bytearray()
+    m += b"GRP     " + b"\x4c\x1f" + b"\x00\xa1"
+    m += struct.pack("<I", 0x20)
+    m += struct.pack("<I", 0)
+    m += name_entry("vm_init")
+    m += name_entry("key_off")
+    m += b"\x00"
+    m += b"LNK"
+    m += b"\x02.\x07" + b"\x10" + struct.pack("<I", 1) + b"\x08"
+    m += name_entry(".text") + b"\x10" + struct.pack("<I", 2) + b"\x08"
+    m += name_entry(".dtors") + b"\x1c"
+    m += b"\x00" * 8
+    m += name_entry("vm_init") + b"\x0c" + struct.pack("<HHI", 27, 2, 0x314c)
+    m += name_entry("stat_one") + b"\x30" + struct.pack("<HHI", 67, 6, 2)
+    m += name_entry("key_off") + b"\x0c" + struct.pack("<HHI", 21, 2, 0x25e0)
+    m += name_entry("key_off") + b"\x00"   # tail = the absent last public
     struct.pack_into("<I", m, 16, len(m))
     out += m
     return bytes(out)
@@ -267,6 +332,46 @@ class TestQuirkClassification(unittest.TestCase):
         self.assertIn("[thunk]", out)
         self.assertIn("[ref]", out)
         self.assertIn("CHECK:", out)
+
+
+class TestGroupModel(unittest.TestCase):
+    """The 0x30 kind + the group-internal ref law (cron-20261101-0536)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.path = "/tmp/omf_pubsyms_group_test.lib"
+        with open(cls.path, "wb") as f:
+            f.write(build_group_lib())
+        cls.lib = op.PsyqLib(cls.path)
+
+    def test_kind30_row_parses(self):
+        mod = self.lib.modules[0]
+        s = mod.symbol("stat_one")
+        self.assertIsNotNone(s)
+        self.assertEqual(s.kind, 0x30)
+        self.assertEqual((s.a, s.b, s.offset), (67, 6, 2))
+        self.assertEqual(op.classify(mod)["stat_one"], [op.VERDICT_DEF30])
+
+    def test_stream_survives_leading_30_kind(self):
+        # the VMANAGER law: a 0x30 row early in the stream must NOT
+        # truncate the walk - all three named rows parse to the tail
+        mod = self.lib.modules[0]
+        self.assertEqual([s.name for s in mod.symbols],
+                         ["vm_init", "stat_one", "key_off"])
+        self.assertEqual(mod.tail_name, "key_off")
+
+    def test_def_map_and_index(self):
+        mod = self.lib.modules[0]
+        dmap = op.def_map(mod)
+        self.assertIn(("vm_init", 0x0C, 27, 2, 0x314c), dmap)
+        self.assertIn(("stat_one", 0x30, 67, 6, 2), dmap)
+        idx = op.lib_def_index(self.lib)
+        self.assertEqual(idx["vm_init"], [("GRP", 0x0C, 2, 0x314c)])
+
+    def test_tail_public_needs_no_finding(self):
+        mod = self.lib.modules[0]
+        findings = op.check_module(mod)
+        self.assertFalse(any("key_off" in f for f in findings), findings)
 
 
 if __name__ == "__main__":

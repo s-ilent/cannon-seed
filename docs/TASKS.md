@@ -13236,3 +13236,105 @@ NEXT: (1) witnessed window: land the parked drafts in order (80052038 ->
 the section-blob parser (the 06/02 chunk layer) would resolve the ALIAS?
 class - the def rows for the own-public-0x0e publics should live there;
 (3) fresh disc links needed (the 2026-10-30 set 404s at ~30.2h).
+
+## 2026-11-01 (window cron-20261101-0536, oracle DOWN both links 404 at ~34.0h): the psyq row-stream kind 0x30 lands - the VMANAGER truncation was the 3-kind walk breaking at the first 0x30 row; 80/80 rows parse, the ALIAS? class RESOLVES as the compilation-group model, and the svm-init twin identity PROVES as _svm_damper (not SpuVmInit)
+
+ITEM 1 - THE KIND (tools/omf_pubsyms.py): KIND_PAYLOAD gains 0x30 -> 8
+bytes, same payload shape as 0x0c (u16 a, u16 b, u32 off) - the DATA-class
+def row (b=6 observed, off=2 constant in LIBSND 3.3). Root cause of the
+banked "only 2 of VMANAGER's 44 publics carry 0x0c rows": the walk's
+longest-chain law broke at the FIRST 0x30 row (SsUtPitchBend, stream row
+2) and fell back to the 2-row tail fragment. With the kind added, ALL 65
+LIBSND + 67 LIBSPU modules parse tail-exact (scripts/probe_psyq_rows.py
+earliest-start validator; the tool's longest-chain picks the same
+streams). Cross-lib old-vs-new audit (scripts banked): LIBSND +131 rows
+(SSINIT 7->40, VM_G 0->19, VMANAGER ->80), LIBGS +595, LIBCD +283,
+LIBGPU +42 (KPRINTF 12->29, SYS 44->69), LIBPRESS +13, LIBGTE +8,
+LIBETC +7 (PAD 2->9), LIBTAP +2, LIBSPU +1 (S_SCA 1->2) - ~1,079 rows
+recovered SDK-wide. LIBAPI/LIBC/LIBCARD/LIBCOMB still parse 0 rows (a
+separate sub-format class, unchanged by this fix). Suite 108/108 (was
+101; +4 TestGroupModel fixtures incl. the leading-0x30 truncation
+regression, +3 real-archive anchors: VMANAGER 80 rows with
+SpuVmInit/_svm_damper/kMaxPrograms def rows, S_SCA 2 rows, the
+SpuVmKeyOff->SEQREAD xref).
+
+ITEM 2 - THE ALIAS? CLASS RESOLVES (the group model): a module's publics
+are the COMPILATION GROUP's exports, not per-object defs - a public
+whose only row is a 0x0e/0x12 ref is defined in a SIBLING module of the
+same group. Witness: VMANAGER's SpuVmKeyOff (ref idx=85) defines in
+SEQREAD (0x0c a=13 b=2 off=1244); SsSeqOpen and SsSepOpen share lib slot
+13 as a header-alias pair (SEQINIT vs SEPINIT rows); the 0x0e payload
+indexes a LIB-WIDE slot dictionary (VBLANK_MINUS=11 in TEMPO/SEPINIT/
+SEQINIT alike). The a field of 0x0c/0x30 rows is a PER-MODULE slot
+counter assigned consecutively in stream order (SSINIT 10..26 with no
+gap; ADSR BuildADSR=10/ResolveADSR=11). Classification law refined:
+0x0c + own public = def; 0x0c + non-public + off=0 = thunk (ALL banked
+thunk witnesses have off=0); 0x0c + non-public + real offset = LOCAL
+static (VMANAGER note2pitch a=49 off=0x4684, SpuVmKeyOnNow a=11
+off=0x1370 - both prologue-verified under ITEM 3's base) - the banked
+"0x0c non-public = thunk" law needs the off=0 qualifier from now on.
+check_module's alias finding now says group-internal cross-object ref;
+new --defs (the storage-side def map) and --xref (every 0x0e resolved
+against the lib-wide def index) flags.
+
+ITEM 3 - THE VMANAGER DEF MAP + BASE: def-row offsets are section-
+relative; VMANAGER's code base measured at file 0x10668 (23/38 b=2 defs
+start on addiu $sp,-N prologues there; runner-up 0x1065c aligns
+EPILOGUES - addiu sp,+N; jr - the scorer's trap; +0x1dfc lands exactly
+on the twin prologue, see ITEM 4). The map: SpuVmInit .text+0x314c,
+_svm_damper +0x1dfc, _svm_okon2 +0x26d0, SpuVmFlush +0x486c,
+kMaxPrograms +0x21fc, _ss_score +0x345c (a VMANAGER LOCAL function -
+SSADD's off=0 row for the same name is the extern shape), SpuVmSeqKeyOff
++0x25e0, SsUtKeyOnV +0x4714, SpuVmGetSeqVol +0x3b98 ... plus locals
+vmNoiseOn/vmNoiseOn2/SetAutoPan/SetAutoVol/SeAutoVol/SePitchBend/
+KeyOnCheck/note2pitch/note2pitch2/SpuVmDoAllocate/SpuVmVSetUp/_svm_vcf/
+_svm_envx_hist/spuVmMaxVoice/spuVmMaxVoice-range. Kind-0x30 rows carry
+the svm statics: _svm_vh/_svm_okof1/_svm_okon1/SpuVmSeKeyOff(b=6 off=2)
+- the b=6/off=2 constant stays an open shape.
+
+ITEM 4 - THE SVM-INIT IDENTITY PROVES AS _svm_damper (correction in
+place of the cron-20261101-0151 guess): the game's func_80067690 svm
+init twin in psyq 3.3 LIBSND VMANAGER is _svm_damper (def .text+0x1dfc,
+archive file 0x12464 under the ITEM-3 base), NOT SpuVmInit. Evidence
+chain: (a) the game's 12-byte prologue (addiu sp,-0x18 / sw s0,0x10(sp)
+/ addu s0,a0,zero) hits the archive EXACTLY ONCE at 0x12464 = base +
+0x1dfc = a def-row boundary; (b) the banked store-run anchor 0x126d0 =
+_svm_damper + 0x26c, matching the game's run offset 0x298 minus the
+banked +0x2c layout shift exactly; (c) _svm_damper's def bounds
+[0x1dfc, 0x21fc) = the real function bounds [0x12464, 0x12864) - the
+next prologue sits at 0x12864 = kMaxPrograms's def; (d) full-body
+byte-compare of [0x80067690,+0x400) vs [0x12464,+0x400): 47 exact, 99
+reloc-class (gp-base imms/jal targets zeroed in the archive; the game
+jals _spu_setInTransfer 0x800656B4 where the archive keeps 0c000000),
+110 reordered-schedule words - the SAME game-compiled-psyq-member
+profile as the landed func_800642A0 precedent. The second archive
+store-run (0x1533c = +0x4cd4) sits in _svm_envx_hist [0x4bfc..), the
+sibling init. Consequence for the parked func_80067690 draft: the name
+claim candidate is _svm_damper (LANE-OWNER FLAG stands - the game-side
+curated decision is not mine), and sdk_members' "ambiguous interior
+start 0x80066E5C" likely marks the game's real SpuVmInit copy elsewhere
+in the same row.
+
+ITEM 5 - SSINIT RE-AUDIT under the full 40-row stream: the banked
+curation conclusions SURVIVE. SsSeqCalledTbyT still has NO 0x0c/0x30 def
+row in ANY 3.3 lib (sweep rerun; it appears in SSINIT as a 12 w=2 v=0
+ref2). _snd_seq_s_max gains a def30 storage row (a=23 b=6 off=2) -
+strengthens "s_max = nslots". _snd_seq_t_max = ref2 w=6 v=8 in SSINIT
+(the tick-rate var's storage referenced, not defined, there); SsQuit
+and _snd_seq_tick_mode have 0x0c def rows (a=12 off=0x194, a=17
+off=0x868); SsSetTickMode = SSINIT public with a ref2-only row (w=6
+v=0) and is defined NOWHERE in the 3.3 archives - consistent with the
+game carrying its own compiled copy (the func_8006AF70 lane).
+
+GATES: no build/verify/judge (oracle DOWN, EU+JP 404 at ~34.0h); tree
+change = tools/omf_pubsyms.py + tests + three probe scripts + this docs
+section; suite 108/108 GREEN; ratchets untouched (809/150 = tree, no
+build-adjacent file touched).
+
+NEXT: (1) witnessed window: land the parked drafts in order
+(8006AF70/SsSetTickMode with the AC04 split fix + SSINIT names, then
+the svm init - its name-claim evidence is now banked); (2) offline: the
+chunk-grammar pin (the 02-record size field does not bound VMANAGER's
+code data; the 0x9a6-byte pre-base region and the repeated 1c-path
+records are unparsed) would let the tool emit archive file offsets
+directly; (3) fresh disc links needed before any judge work.
