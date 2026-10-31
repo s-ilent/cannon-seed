@@ -467,6 +467,37 @@ SsSetStereo = 0x8006B6D4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x800ab0e8; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x80099058: scan-verified]
 
+// ---- LIBSPU bss/data curation pass, window cron-20261031-1136 (oracle DOWN,
+// evidence from the archive + the landed decode; entries are INERT until the
+// next witnessed scan - the src adoption + scan + verify compose there) ----
+// _spu_RXX: LIBSPU S_I/S_INI-family bss static, the volatile unsigned short*
+// SPU register-file base (0x1F801C00). Name VERBATIM in psyq 3.3
+// LIBSPU.LIB (with the _spu_FsetRXX setter symbol alongside). Role: every
+// hardware touch of the game-side _spu_init copy dereferences it at the
+// retail reload sites (head, wait entry/bottom, register sweep, voice loop,
+// RMWs, finish) - src/func_800642A0.c decode, judge EXACT.
+_spu_RXX = 0x800AB0B8; // LIBSPU bss static (register-file base); evidence under target: g3_eu
+// _spu_tsa: LIBSPU bss static, the SPU transfer start address. Name VERBATIM
+// in psyq 3.3 LIBSPU.LIB. Role: the game-side _spu_init copy zeroes it early
+// and sets 0x200 (the classic SPU-RAM transfer base) in the arg==0 arm;
+// retail stores it as a HALFWORD (sh - src/func_800642A0.c, judge EXACT
+// with the unsigned short extern). Same role as SpuSetTransferStartAddr's
+// backing static.
+_spu_tsa = 0x800AB0B4; // LIBSPU bss static (transfer start address, halfword-storage observation); evidence under target: g3_eu
+// spu_timeout_fmt: the SPU wait-timeout printf format. Game bytes
+// "SPU:T/O [%s]\n" (asm/g3_eu data_80020000 row 0x800221C4) match psyq 3.3
+// LIBSPU.LIB's string "SPU:T/O [%s]" verbatim; consumed by the retry
+// counter's overflow printf in src/func_800642A0.c. String literals carry
+// no psyq symbol - role-descriptive name with archive provenance.
+spu_timeout_fmt = 0x800221C4; // LIBSPU string literal (timeout printf fmt); evidence under target: g3_eu
+// spu_timeout_wait_reset: the %s argument for the reset-path wait message.
+// Game bytes "wait (reset)" (row 0x800221D4); psyq 3.3 LIBSPU.LIB carries
+// the sibling suffixes "SPU: time out: wait (IRQ/OFF)"/"(IRQ/ON)".
+spu_timeout_wait_reset = 0x800221D4; // LIBSPU string literal (timeout suffix); evidence under target: g3_eu
+// spu_timeout_wait_wrdy: the %s argument for the wrdy-path wait message.
+// Game bytes "wait (wrdy H -> L)" (row 0x800221E4).
+spu_timeout_wait_wrdy = 0x800221E4; // LIBSPU string literal (timeout suffix); evidence under target: g3_eu
+
 // target: g3_jp
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;
