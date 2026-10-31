@@ -374,5 +374,95 @@ class TestGroupModel(unittest.TestCase):
         self.assertFalse(any("key_off" in f for f in findings), findings)
 
 
+def build_base_lib():
+    """One-module lib carrying a code chunk with an epilogue trap.
+
+    Code layout (blob starts at first_chunk_data):
+      +0x00 27bd0010  prologue A            -> def pub_a off=0x00 (strict)
+      +0x10 27bd0020  epilogue restore A
+      +0x14 03e00008  jr $ra                -> the +0x10 word MUST be refused
+      +0x18 00000000  delay
+      +0x1c 27bdffd8  prologue B            -> def pub_b off=0x1c (strict)
+      +0x20..         nops, jr/nop tail
+
+    The LNK last entry's 0x1c doubles as the first debug-path record's kind
+    byte, exactly as measured on LIBSND VMANAGER (cron-20261101-0651)."""
+    out = bytearray(b"LIB\x01")
+    m = bytearray()
+    m += b"BASEMOD " + b"\x4c\x1f" + b"\x00\xa1"
+    m += struct.pack("<I", 0x20)
+    m += struct.pack("<I", 0)
+    m += name_entry("pub_a") + name_entry("pub_b") + b"\x00"
+    m += b"LNK"
+    m += b"\x02.\x07" + b"\x10" + struct.pack("<I", 1) + b"\x08"
+    m += name_entry(".text") + b"\x10" + struct.pack("<I", 2) + b"\x08"
+    m += name_entry(".dtors") + b"\x1c"          # doubles as path kind byte
+    m += b"\x40\x00" + bytes([0x0a]) + b"C:\\src\\a.c"
+    m += b"\x06\x02\x00"                          # section marker
+    code = (struct.pack("<I", 0x27BD0010) + b"\x00" * 12
+            + struct.pack("<I", 0x27BD0020)       # epilogue restore
+            + struct.pack("<I", 0x03E00008)       # jr $ra
+            + struct.pack("<I", 0x00000000)       # delay
+            + struct.pack("<I", 0x27BDFFD8)       # prologue B
+            + b"\x00" * 16
+            + struct.pack("<I", 0x03E00008) + struct.pack("<I", 0))
+    m += b"\x02" + struct.pack("<H", len(code)) + code
+    m += name_entry("pub_a") + b"\x0c" + struct.pack("<HHI", 10, 2, 0x00)
+    m += name_entry("pub_b") + b"\x0c" + struct.pack("<HHI", 11, 2, 0x1c)
+    m += name_entry("pub_b") + b"\x00"
+    struct.pack_into("<I", m, 16, len(m))
+    out += m
+    return bytes(out)
+
+
+class TestDefBase(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.path = "/tmp/omf_pubsyms_base_test.lib"
+        with open(cls.path, "wb") as f:
+            f.write(build_base_lib())
+        cls.lib = op.PsyqLib(cls.path)
+
+    def test_first_code_chunk_walks_paths_and_marker(self):
+        mod = self.lib.modules[0]
+        blob, paths_end, n_paths = op.first_code_chunk(self.lib.data, mod)
+        self.assertEqual(n_paths, 1)
+        self.assertIsNotNone(blob)
+        self.assertEqual(
+            self.lib.data[blob:blob + 4], struct.pack("<I", 0x27BD0010))
+
+    def test_epilogue_votes_are_refused(self):
+        mod = self.lib.modules[0]
+        sol = op.solve_def_base(self.lib.data, mod)
+        self.assertIsNotNone(sol)
+        base, hits, ndefs, _npros = sol
+        blob, _pe, _np = op.first_code_chunk(self.lib.data, mod)
+        self.assertEqual(base, blob)       # true base = blob start
+        self.assertEqual((hits, ndefs), (2, 2))
+        # the epilogue-implied ghost base (blob+0x10) must NOT win
+        self.assertNotEqual(base, blob + 0x10)
+
+
+@unittest.skipUnless(PSYQ_DIR, "psyq archive not provisioned")
+class TestDefBaseReal(unittest.TestCase):
+    def test_vmanager_base_and_banked_anchors(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        m = next(x for x in lib.modules if x.name == "VMANAGER")
+        base, hits, ndefs, _npros = op.solve_def_base(lib.data, m)
+        self.assertEqual(base, 0x10668)
+        self.assertEqual((hits, ndefs), (23, 38))
+        self.assertEqual(base + 0x1dfc, 0x12464)   # _svm_damper (banked)
+        self.assertEqual(base + 0x4cd4, 0x1533c)   # _svm_envx_hist (banked)
+
+    def test_single_object_modules_sit_at_delta_zero(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        for name in ("SSCLOSE", "SSPLAY"):
+            m = next(x for x in lib.modules if x.name == name)
+            base, _hits, _ndefs, _npros = op.solve_def_base(lib.data, m)
+            blob, _pe, _np = op.first_code_chunk(lib.data, m)
+            self.assertIsNotNone(blob)
+            self.assertEqual(base, blob, name)
+
+
 if __name__ == "__main__":
     unittest.main()

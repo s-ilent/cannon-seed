@@ -39,9 +39,55 @@ module's publics are the COMPILATION GROUP's exports, not per-object
 defs - a public whose only row is a 0x0e/0x12 ref is defined in a
 SIBLING module of the same group (VMANAGER's SpuVmKeyOff ref idx=85
 defines in SEQREAD; SpuVmInit DOES def here at .text+0x314c). Def-row
-offsets are section-relative; VMANAGER's section base measured at file
-0x10668 (23/38 def starts on addiu-sp prologues + the _svm_damper
-def-boundary identity) - the general chunk grammar stays open.
+offsets are base-relative; VMANAGER's base measured at file 0x10668
+(23/38 def starts on addiu-sp prologues + the _svm_damper def-boundary
+identity) - see the CHUNK-GRAMMAR note below for the banked laws.
+
+CHUNK GRAMMAR (banked cron-20261101-0651, the post-LNK region between
+the LNK table and the symbol row stream; probe =
+scripts/probe_psylib_chunks.py, scripts/probe_psylib_bases.py):
+
+  after the LNK table's index-less last entry, the 0x1c byte of that
+  entry DOUBLES as the kind byte of the first debug-path record:
+    [0x1c][u8 tag][0x00][u8 len][path]   (ascii, e.g.
+     1c 40 00 1f 'E:\\PS-X~~00\\SRC\\SND\\VM\\UT_AKO.C'; VMANAGER has 18
+     with DECREASING tags 0x40..0x09 - tag meaning open)
+  then the chunk zone, shapes observed:
+    [0x06][u8 seg][0x00]                 3-byte section marker
+    [0x02][u16 size][size bytes]         data chunk (code or data)
+    [0x0a][u8 t][u16 off]                4-byte record, offsets strictly
+                                         increasing across the run
+    [0x2c][0x00][u32 v]                  6-byte record
+    [0x2c][0x04][u16 w][u32 v]           9-byte record (w/v = the 0x12
+                                         payload shape: w=2 code, w=6
+                                         data class)
+  the 02-record's u16 size bounds its data EXACTLY (VMANAGER chunk 1:
+  size 0x0ffc, data 0xf6c2..0x106be, ends jr $ra + nop, next byte is a
+  0x0a record) - but the general inter-record law (what bounds a run
+  of 0a/2c records, when a 02-chunk starts without an 0x06 marker) is
+  NOT yet derived; the record zone between VMANAGER's two code blobs
+  (0x106be..0x11820) carries no addiu-sp/sw-ra word at either 4-byte
+  alignment, then code resumes mid-stream at 0x11820 WITHOUT a header.
+
+DEF-BASE LAW (empirical, cron-20261101-0651; the derivation stays
+open - LANE FLAG): every module's 0x0c b=2 def offsets are FLAT
+offsets from ONE per-module base; the base equals the first 02-chunk's
+data start for single-object modules (delta 0 on 20+ LIBSND/LIBSPU
+modules) and sits INSIDE/after the first code chunk for multi-object
+ones (VMANAGER +0xfa6, SEQREAD shows a SECOND cluster +0x10ea). Two
+def-head shapes under one base: strict addiu-sp (0x27bd....) and the
+gcc scheduled preamble (the head word is the function's first
+computation, frame setup follows in-body). The addiu-sp words that sit
+exactly 12 bytes before a head are the PREVIOUS function's epilogue
+restore ([restore][jr $ra][delay] tail) - they vote for base-12 and
+MUST be refused; solve_def_base refuses any 27bd word followed by
+jr $ra (0x03e00008), which is what separates VMANAGER's true base
+0x10668 (23 strict head votes) from the epilogue ghost 0x1065c (26
+ghost votes). --file-offsets solves the base and emits file offsets
+per def row; the vote counts are reported so nothing is hidden. Banked
+anchors: _svm_damper file 0x12464 = 0x10668+0x1dfc (full-body compare,
+cron-20261101-0536) and _svm_envx_hist store-run 0x1533c =
+0x10668+0x4cd4.
 
 OBSERVED SEMANTICS (empirical, not spec-verified - raw fields are always
 reported so nothing is lost):
@@ -178,6 +224,99 @@ def lib_def_index(lib):
         for name, kind, _a, b, off in def_map(m):
             idx.setdefault(name, []).append((m.name, kind, b, off))
     return idx
+
+
+def prologue_positions(data, lo, hi):
+    """File offsets of 0x27bd.... (addiu $sp) words in [lo, hi), step 2."""
+    out = []
+    if hi > len(data) - 4:
+        hi = len(data) - 4
+    for p in range(lo, hi, 2):
+        if (struct.unpack_from("<I", data, p)[0] >> 16) == 0x27BD:
+            out.append(p)
+    return out
+
+
+def first_code_chunk(data, mod):
+    """File offset of the first 02-chunk's DATA (the post-LNK blob start).
+
+    Walks publics -> LNK -> path records -> leading 06 xx 00 markers;
+    returns (first_chunk_data_offset, paths_end, n_paths) or (None, ...)."""
+    end = mod.offset + mod.size
+    d = data
+    o = mod.offset + 20
+    while o < end and d[o] != 0x00:
+        o += 1 + d[o]
+    if o >= end or d[o] != 0x00:
+        return None, None, 0
+    o += 1
+    if d[o:o + 3] != LNK_MAGIC:
+        return None, None, 0
+    o += 3
+    while o < end:
+        ln = d[o]
+        p = o + 1 + ln
+        if p >= end:
+            return None, None, 0
+        if d[p] == 0x1C:
+            o = p  # the 0x1c doubles as the first path record's kind byte
+            break
+        o = p + 6
+    else:
+        return None, None, 0
+    n_paths = 0
+    while o + 4 <= end and d[o] == 0x1C and d[o + 2] == 0x00 \
+            and 0x08 <= d[o + 3] <= 0x40:
+        ln = d[o + 3]
+        path = d[o + 4:o + 4 + ln]
+        if o + 4 + ln > end or not all(32 <= c < 127 for c in path):
+            break
+        n_paths += 1
+        o += 4 + ln
+    while o + 3 <= end and d[o] == 0x06 and d[o + 2] == 0x00 \
+            and d[o + 1] != 0x00:
+        o += 3
+    if o + 3 <= end and d[o] == 0x02:
+        size = struct.unpack_from("<H", d, o + 1)[0]
+        if size:
+            return o + 3, o, n_paths
+    return None, None, n_paths
+
+
+def solve_def_base(data, mod):
+    """Solve the module's def base by prologue-vote maximization.
+
+    Every addiu-sp word p in [first_code_chunk, table_start) votes for the
+    candidate base p - off of every b=2 0x0c def row; the top-voted base
+    wins. Votes from EPILOGUE words are refused: an addiu $sp immediately
+    followed by jr $ra (0x03e00008) is the previous function's frame
+    restore, not a head - refusing those is what separates VMANAGER's true
+    base 0x10668 (23 strict head votes) from the epilogue ghost 0x1065c
+    (26 votes, cron-20261101-0651). Returns
+    (base, strict_hits, defs, n_prologues) or None when the module has no
+    code def rows or no discoverable blob."""
+    blob, _pe, _np = first_code_chunk(data, mod)
+    if blob is None:
+        return None
+    defs = [(n, off) for n, k, a, b, off in def_map(mod)
+            if k == 0x0C and b == 2]
+    if not defs:
+        return None
+    ts = mod.table_start or (mod.offset + mod.size)
+    pros = prologue_positions(data, blob, ts)
+    votes = {}
+    for p in pros:
+        if p + 8 <= len(data) - 4 and \
+                struct.unpack_from("<I", data, p + 4)[0] == 0x03E00008:
+            continue  # epilogue addiu: [restore][jr $ra][delay]
+        for _n, off in defs:
+            c = p - off
+            if c >= blob:
+                votes[c] = votes.get(c, 0) + 1
+    if not votes:
+        return (blob, 0, len(defs), len(pros))
+    base = max(votes, key=lambda c: (votes[c], -c))
+    return (base, votes[base], len(defs), len(pros))
 
 
 def lib_xrefs(lib):
@@ -427,6 +566,13 @@ def main(argv=None):
     ap.add_argument("--xref", action="store_true",
                     help="resolve every 0x0e ref against the lib-wide def "
                          "index and print the defining module")
+    ap.add_argument("--file-offsets", action="store_true",
+                    help="emit the b=2 code def rows with ARCHIVE FILE "
+                         "offsets: solve the per-module base by prologue-"
+                         "vote maximization (banked cron-20261101-0651, "
+                         "empirical - see the DEF-BASE LAW note); strict "
+                         "addiu-sp hits and the -12 scheduled-preamble "
+                         "family are reported per module")
     args = ap.parse_args(argv)
 
     try:
@@ -451,6 +597,30 @@ def main(argv=None):
             for name, kind, a, b, off in def_map(m):
                 tag = "pub" if name in m.publics else "loc"
                 print(f"  {name}\tkind={kind:#04x}\ta={a}\tb={b}\toff={off:#x}\t[{tag}]")
+    elif args.file_offsets:
+        for m in mods:
+            sol = solve_def_base(lib.data, m)
+            if sol is None:
+                continue
+            base, hits, ndefs, npros = sol
+            nonpro = 0
+            for _n, _k, _a, _b, off in def_map(m):
+                if _k != 0x0C or _b != 2:
+                    continue
+                p = base + off
+                if p + 4 <= len(lib.data) and \
+                        (struct.unpack_from("<I", lib.data, p)[0] >> 16) != 0x27BD:
+                    nonpro += 1
+            print(f"module {m.name!r} base={base:#x} "
+                  f"blob_delta={base - (first_code_chunk(lib.data, m)[0] or base):+#x} "
+                  f"strict={hits}/{ndefs} nonprologue_heads={nonpro} "
+                  f"prologues={npros}")
+            for name, kind, a, b, off in def_map(m):
+                if kind != 0x0C or b != 2:
+                    continue
+                fo = base + off
+                tag = "pub" if name in m.publics else "loc"
+                print(f"  {name}\toff={off:#x}\tfile={fo:#x}\t[{tag}]")
     elif args.xref:
         defs = lib_def_index(lib)
         n_res = n_unres = 0
