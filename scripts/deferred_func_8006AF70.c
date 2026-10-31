@@ -44,10 +44,14 @@
  *               the installer and the uninstaller (plain returns)
  *   D_800ABA44  HELD (no psyq name): PAL/NTSC selector - reads == 1 -> the
  *               PAL rate 0x32 (cases 0/5) and the RCntCNT3 rewrite (cases
- *               1/4); MODE_PAL = 1 per LIBETC.H; single reader in the tree,
- *               no in-tree writer found (value from .data); the older
- *               "play state" reading is retired - the SSPLAY constants do
- *               not explain the 0x32/0x3C PAL/NTSC pattern
+ *               1/4); MODE_PAL = 1 per LIBETC.H; the older "play state"
+ *               reading is retired - the SSPLAY constants do not explain
+ *               the 0x32/0x3C PAL/NTSC pattern. WRITER FOUND
+ *               cron-20261031-1525 (supersedes the old "no in-tree writer,
+ *               value from .data" note): the func_8006AC04 tail that
+ *               spimdisasm misclassified as data_8006AD24 stores
+ *               D_800ABA44 = GetVideoMode() (curated LIBETC VMODE member)
+ *               at init - see scripts/deferred_func_8006AC04.c
  *   D_80171E08  _snd_seq_t_max - the ticks-per-second constant: the switch
  *               writes 0x32/0x3C/0x78/0xF0 (50/60/120/240) or the raw rate
  *               into it; the init row (func_8006AC04) defaults 0x3C; the

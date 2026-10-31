@@ -12968,3 +12968,87 @@ named; the 0x20-row/0x40-stride zero loop and the 0x3C default are the
 anchors); (3) 8006AF70 lane-owner decision stays pending (r5 ceiling,
 two governance-gated routes); (4) fresh disc links needed before any
 judge work (the 2026-10-30 set is dead at ~26.4h).
+
+## 2026-10-31 (window cron-20261031-1525): the func_8006AC04 init row decodes OFFLINE (oracle DOWN) as the psyq SSINIT SsInit/SsInitHot shared body - and its "data" tail is the function's own epilogue hiding a GetVideoMode writer for the held PAL/NTSC selector
+
+Rollback #17 (worklog to the Task-ID-1/2 era, digest 199 missing incl.
+this lane's 1021/1136/1251/1406 mirrors): recovered per SOP - rehydrate,
+fetch, reset --hard origin/main 00678319, append_restore_note
+cron-20261031-1525-restore, digest exit 0. Disc links STILL 404 (EU/JP
+probed 15:26Z, ~51.7h age - the 2026-10-30 11:42Z set), witness 0/8,
+oracle DOWN. Law Zero offline: /home/z/psyq re-provisioned per the banked
+sparse-clone recipe, this time with DOC included (FUNCTION.TXT is now a
+first-class evidence source alongside INCLUDE+LIB).
+
+ITEM 1 - THE TAIL FINDING (the window's discovery): the row's listed
+extent 0x120 is WRONG - spimdisasm misclassified the last 0x2C bytes as
+data_8006AD24. Word decode of the "data": jal 0x8004A048 (GetVideoMode,
+curated LIBETC VMODE member) + nop, lui $at,0x800B / sw $v0,-0x45BC($at)
+= the GCC %hi/%lo split of 0x800ABA44 (%lo 0xBA44 has bit15 set -> %hi
+0x800B, eff 0x800B0000-0x45BC), lui $at,0x8017 / sw $zero,-0x52FC($at) =
+sw to 0x8016AD04 = the CURATED SsSeqCalledTbyT_guard, then the EPILOGUE
+(lw ra 0x14 / lw s0 0x10 / addiu sp 0x18 / jr ra) mirroring the row's own
+prologue. The tell was the row ending bare (no epilogue, execution
+"falling into a data label"). D_8006AD24 is unreferenced anywhere in the
+tree, so re-classifying breaks nothing. Consequence: D_800ABA44 (held,
+the PAL/NTSC selector) HAS an in-tree writer - D_800ABA44 =
+GetVideoMode() at init - sealing the cron-20261031-1406 reading: the
+selector is written ONCE from the LIBETC video mode and read by
+SsSetTickMode's documented per-video-mode RCntCNT2/CNT3 install table.
+The AF70 draft's "no in-tree writer" note corrected in place.
+
+ITEM 2 - THE ROW'S IDENTITY: func_8006AC04 = the psyq 3.3 LIBSND SSINIT
+member's SsInit/SsInitHot SHARED BODY, completing the SSINIT
+function-public map 8/8 on the tree. Flag polarity through the landed
+func_800642A0 (`if (arg == 0)` gates the full 24-voice sweep): flag 0 ->
+B6A0 -> 653AC(0) -> 642A0(0) = FULL = SsInit = func_8006AD50; flag 1 ->
+B680 -> 653AC(1) -> 642A0(1) = light = SsInitHot = func_8006AD70 (the
+spec: SsInitHot initializes WITHOUT destroying the transferred
+sound-buffer data). Caller edges agree: func_80029C18 jal's AD50 (full)
+before its own SsSetTickMode(1); func_80029E1C jal's AD70 (hot) then
+SsSetTickMode(SS_TICK60) -> SsStart -> SsSetMVol(0x7F,0x7F) - the hot
+re-init + fresh tick install, the documented order. Body decode: the
+SAME 8-halfword voice default row (D_800ABA08 = 0,0,0x1000,0x3000,0x00BF,
+0,0,0 - vol 0/0, pitch 0x1000, addr 0x3000, ADSR1 0x00BF) replicated to
+all 24 voices (the source cursor re-derives from $a3 per outer row and
+$a3 NEVER advances - NOT a 0x180 table, no statics overlap), 16-halfword
+control defaults D_800ABA18 (mainvol 0x3FFF/0x3FFF first) to
+0x1F801D80..A0, func_80067690(0x18) (the SpuInitMalloc(0x20) voice-state
+initializer), the 32x0x40 descending zero loop over
+[SsSeqCalledTbyT_tab+0x80, SsSeqCalledTbyT_nslots) - tab itself is the
+32-entry (s_max cap) slot-pointer array, the records follow - then
+_snd_seq_t_max = 0x3C (the documented anchor), slotbits = 0,
+D_800ABA38 = 0 / ABA3C = -1 (interrupt slot unregistered) / ABA40 = 0 /
+ABA48 = 0, and the TAIL: D_800ABA44 = GetVideoMode();
+SsSeqCalledTbyT_guard = 0.
+
+ITEM 3 - THE TABLE-SIZE ROW (side finding): func_8006AD90 IS
+SsSetTableSize, documentary-exact - signature (char *table, short s_max,
+short t_max) per FUNCTION.TXT; body: sh a1 -> nslots, sh a2 -> ntracks,
+then tab[i] = table + i*t_max*172 (the sll/addu/sll/subu/sll/subu/sll
+chain is x172 = SS_SEQ_TABSIZ, libsnd.h #define 172; per-track init loop
+strides 0xAC = 172; FUNCTION.TXT caps s_max at 32 = the tab pointer
+array's 32 entries). UNCALLED in retail (no edge from any target - same
+class as SsStart2), so the game runs on the .data defaults. LANE-OWNER
+FLAG (no rename): SsSetTableSize's targets make psyq's _snd_seq_s_max =
+nslots (already flagged 1406) and psyq's _snd_seq_t_max = ntracks
+(0x80172728) - in TENSION with the banked _snd_seq_t_max = 0x80171E08
+(the ticks-per-second var the SsSetTickMode switch writes 50/60/120/240
+into); the SSCALL cross-ref reads both ways (TbyT walks tracks AND does
+per-tick math). Evidence banked for the lane owner.
+
+GATES: no build/verify/judge (oracle DOWN, witness 0/8); no config/tree
+change (draft scripts/deferred_func_8006AC04.c + the AF70 draft
+correction + this docs section only); suite 95/95 GREEN, ratchets
+untouched (809/150 = tree).
+
+NEXT: (1) witnessed window: the AF70 lane decision + the five-label
+libspu adoption + eight SSINIT entries unchanged, now composing WITH this
+row's split fix (yaml 0x120 -> 0x14C, step 1 of the draft's six-step
+plan) and the SsInit/SsInitHot/SsSetTableSize public names; (2) offline
+continuation: the func_80067690 row decode (the SpuInitMalloc voice-state
+initializer this row calls - its D_8016B108/D_8016AC24/D_8016B08C statics
+touch the TbyT cluster), or the SSCALL _snd_seq_t_max role question via
+omf_pubsyms on LIBSND.LIB (which SSCALL routine references it - TbyT's
+track loop or the tempo math); (3) fresh disc links needed before any
+judge work (the 2026-10-30 set is dead at ~51.7h).
