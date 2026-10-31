@@ -58,7 +58,7 @@ byte-identical (different frame)") - so the numeric statics stay D_
 (contra-evidenced HOLD; wrong names are worse than placeholders).
 
 Usage:
-  python3 tools/omf_pubsyms.py <lib> [--module REGEX] [--tsv] [--raw]
+  python3 tools/omf_pubsyms.py <lib> [--module REGEX] [--tsv] [--raw] [--check]
 """
 import argparse
 import re
@@ -69,6 +69,77 @@ MAGIC = b"LIB\x01"
 MOD_MAGIC = b"\x4c\x1f"
 LNK_MAGIC = b"LNK"
 KIND_PAYLOAD = {0x0C: 8, 0x0E: 2, 0x12: 6}
+
+
+# --- row classification (the cron-20261101-0151 quirk pin) -----------------
+#
+# The PUBLICS region ([len][name] pairs before LNK) is byte-clean - verified
+# raw on LIBSND.LIB SSCALL ([0f]'SsSeqCalledTbyT' 00) and TEMPO
+# ([09]'Snd_tempo' 00): no cross-module name bleed there. The misattribution
+# class lives in the SYMBOL TABLE reading, three concrete shapes:
+#
+#   THUNK  kind 0x0c for a name that is NOT the module's public. psyq
+#          allocates call thunks for externs; the a=10 b=2 off=0 shape is
+#          the common single-thunk case (SSCALL 'Snd_tempo', SSADD
+#          '_ss_score', PAUSE 'SpuVmSeqKeyOff', SSCLOSE 'SpuVmSetSeqVol').
+#          The banked cron-20261031-1525/ITEM-4 text read SSCALL's
+#          'Snd_tempo' 0x0c row as "SSCALL's own definition row" - WRONG
+#          under this law (Snd_tempo is TEMPO's public); SSCALL CALLS
+#          Snd_tempo. The _snd_seq_t_max verdict SURVIVES on stronger
+#          evidence: SSCALL's public IS SsSeqCalledTbyT (the per-tick
+#          callback) and SSCALL refs _snd_seq_t_max directly.
+#   TAIL   a public absent from the table entirely: the module tail's
+#          [len][name] 0x00 is the missing row (SSADD 'SsSetTempo', SSCLOSE
+#          'SsSeqClose' - both verified tail = the absent last public).
+#   ALIAS? an OWN public appearing as a 0x0e ref (TEMPO's 'Snd_tempo',
+#          SSADD's 'SsSetLoop'/'SsIsEos'). UNRESOLVED - candidate readings:
+#          def rows behind a kind the walk truncates on, or alias publics
+#          resolving to another module's def. Flag, never guess.
+
+VERDICT_DEF = "def"      # 0x0c, name is the module's own public
+VERDICT_THUNK = "thunk"  # 0x0c, name is NOT the module's public
+VERDICT_REF = "ref"      # 0x0e
+VERDICT_REF2 = "ref2"    # 0x12
+
+
+def classify(mod):
+    """Return {name: [verdicts]} for a module's symbol rows."""
+    out = {}
+    for s in mod.symbols:
+        if s.kind == 0x0C:
+            v = VERDICT_DEF if s.name in mod.publics else VERDICT_THUNK
+        elif s.kind == 0x0E:
+            v = VERDICT_REF
+        elif s.kind == 0x12:
+            v = VERDICT_REF2
+        else:
+            v = "unk"
+        out.setdefault(s.name, []).append(v)
+    return out
+
+
+def check_module(mod):
+    """Consistency findings for one module (the quirk classes above).
+
+    Returns a list of human-readable strings; empty means the module's
+    publics and table agree under the three-row model."""
+    findings = []
+    cls = classify(mod)
+    table_names = set(cls)
+    for pub in mod.publics:
+        if pub not in table_names:
+            role = "tail" if pub == mod.tail_name else "ABSENT"
+            findings.append(
+                f"public {pub!r} has no table row ({role})")
+        elif VERDICT_REF in cls[pub]:
+            findings.append(
+                f"public {pub!r} appears as 0x0e ref (alias? class)")
+    for s in mod.symbols:
+        if s.kind == 0x0C and s.name not in mod.publics:
+            findings.append(
+                f"0x0c row for non-public {s.name!r} (thunk, a={s.a} "
+                f"b={s.b} off={s.offset:#x}) - NOT a definition")
+    return findings
 
 
 class PsyqSymbol:
@@ -237,7 +308,7 @@ class PsyqLib:
         mod.symbols = [PsyqSymbol(nm, k, pl) for nm, k, pl in ents]
 
 
-def _fmt_table(mod):
+def _fmt_table(mod, verdicts=False):
     lines = []
     lines.append(f"module {mod.name!r} @{mod.offset:#x} size={mod.size:#x} hdr_x={mod.hdr_x} "
                  f"publics={len(mod.publics)} sections={len(mod.sections)}")
@@ -246,9 +317,15 @@ def _fmt_table(mod):
     if mod.sections:
         lines.append("  sections: " + ", ".join(f"{i}={nm!r}" for i, nm in sorted(mod.sections.items())))
     if mod.symbols:
+        cls = classify(mod) if verdicts else None
         lines.append(f"  symbols @{mod.table_start:#x} (tail {mod.tail_name!r}):")
         for s in mod.symbols:
-            lines.append(f"    {s!r}")
+            if cls is not None:
+                lines.append(f"    {s!r}  [{','.join(cls.get(s.name, ['?']))}]")
+            else:
+                lines.append(f"    {s!r}")
+    for f in check_module(mod):
+        lines.append(f"  CHECK: {f}")
     return "\n".join(lines)
 
 
@@ -258,6 +335,10 @@ def main(argv=None):
     ap.add_argument("--module", help="regex filter on module names")
     ap.add_argument("--tsv", action="store_true",
                     help="one row per symbol: module, name, kind, a, b, offset, raw")
+    ap.add_argument("--check", action="store_true",
+                    help="classify every row (def/thunk/ref) and print the "
+                         "quirk findings per module (public-as-tail, "
+                         "public-as-0x0e-ref, thunk rows for non-publics)")
     args = ap.parse_args(argv)
 
     try:
@@ -277,7 +358,7 @@ def main(argv=None):
                       f"{s.offset if s.offset is not None else ''}\t{s.raw.hex()}")
     else:
         for m in mods:
-            print(_fmt_table(m))
+            print(_fmt_table(m, verdicts=args.check))
     nsym = sum(len(m.symbols) for m in mods)
     print(f"# {len(mods)}/{len(lib.modules)} module(s), {nsym} symbol row(s), lib {lib.name!r}")
     return 0

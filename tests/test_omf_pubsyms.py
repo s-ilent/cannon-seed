@@ -155,10 +155,14 @@ class TestPsyqLib(unittest.TestCase):
         self.assertIn("pub_one", [r[1] for r in rows[1:]])
 
 
-PSYQ_DIR = "/home/z/psyq/3.3/PSX/LIB"
+PSYQ_DIRS = (
+    "/home/z/psyq/3.3/PSX/LIB",
+    "/home/z/my-project/psyq/3.3/PSX/LIB",
+)
+PSYQ_DIR = next((d for d in PSYQ_DIRS if os.path.isdir(d)), None)
 
 
-@unittest.skipUnless(os.path.isdir(PSYQ_DIR), "psyq archive not provisioned")
+@unittest.skipUnless(PSYQ_DIR, "psyq archive not provisioned")
 class TestRealArchive(unittest.TestCase):
     """Live-archive sanity: the grammar holds across the SDK's libs."""
 
@@ -179,6 +183,90 @@ class TestRealArchive(unittest.TestCase):
         init = s_ini.symbol("_spu_init")
         self.assertEqual((init.kind, init.b, init.offset), (0x0C, 3, 0x64))
         self.assertEqual(len(lib.modules), 67)
+
+
+def build_quirk_lib():
+    """Hand-assembled one-module lib reproducing the LIBSND SSCALL/TEMPO
+    row shapes (cron-20261101-0151): an own public as a 0x0e ref, a 0x0c
+    row for a non-public (thunk), and a public carried only by the tail."""
+    out = bytearray(b"LIB\x01")
+    m = bytearray()
+    m += b"QK      " + b"\x4c\x1f" + b"\x00\xa1"
+    m += struct.pack("<I", 0x20)
+    m += struct.pack("<I", 0)
+    m += name_entry("tick_cb")     # publics: one, shown below as a 0x0e ref
+    m += b"\x00"
+    m += b"LNK"
+    m += b"\x02.\x07" + b"\x10" + struct.pack("<I", 1) + b"\x08"
+    m += name_entry(".text") + b"\x10" + struct.pack("<I", 2) + b"\x08"
+    m += name_entry(".dtors") + b"\x1c"
+    m += b"\x00" * 8
+    m += name_entry("Snd_x") + b"\x0c" + struct.pack("<HHI", 10, 2, 0)  # thunk
+    m += name_entry("tick_cb") + b"\x0e" + struct.pack("<H", 14)        # alias?
+    m += name_entry("helper") + b"\x00"   # tail, NOT in publics on purpose:
+    # the SSCALL shape's tail is a FOREIGN name (SpuVmFlush), so the module's
+    # public tick_cb is table-present (as ref) and the tail is foreign.
+    struct.pack_into("<I", m, 16, len(m))
+    out += m
+    return bytes(out)
+
+
+class TestQuirkClassification(unittest.TestCase):
+    """The row-classification pin: defs vs thunks vs the alias class."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.path = "/tmp/omf_pubsyms_quirk_test.lib"
+        with open(cls.path, "wb") as f:
+            f.write(build_quirk_lib())
+        cls.lib = op.PsyqLib(cls.path)
+
+    def test_thunk_row_is_not_a_definition(self):
+        mod = self.lib.modules[0]
+        s = mod.symbol("Snd_x")
+        self.assertEqual(s.kind, 0x0C)
+        cls = op.classify(mod)
+        self.assertEqual(cls["Snd_x"], [op.VERDICT_THUNK])
+
+    def test_def_row_for_own_public(self):
+        mod = self.lib.modules[0]
+        # add a def row check via a second module built on the fly is
+        # overkill; assert the classification law with MOD2 of build_lib
+        lib2 = op.PsyqLib("/tmp/omf_pubsyms_test.lib")
+        m2 = lib2.modules[1]
+        self.assertEqual(op.classify(m2)["sibling"], [op.VERDICT_DEF])
+
+    def test_own_public_as_ref_is_flagged(self):
+        mod = self.lib.modules[0]
+        self.assertEqual(op.classify(mod)["tick_cb"], [op.VERDICT_REF])
+        findings = op.check_module(mod)
+        self.assertTrue(any("tick_cb" in f and "0x0e ref" in f
+                            for f in findings), findings)
+
+    def test_thunk_finding_names_the_law(self):
+        mod = self.lib.modules[0]
+        findings = op.check_module(mod)
+        self.assertTrue(any("NOT a definition" in f and "Snd_x" in f
+                            for f in findings), findings)
+
+    def test_foreign_tail_is_not_reported_as_public(self):
+        # the tail 'helper' is not a public - check_module must NOT invent
+        # a finding for it (findings only cover real publics)
+        mod = self.lib.modules[0]
+        findings = op.check_module(mod)
+        self.assertFalse(any("helper" in f for f in findings), findings)
+
+    def test_cli_check_prints_findings(self):
+        import io
+        from contextlib import redirect_stdout
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            rc = op.main([self.path, "--check"])
+        self.assertEqual(rc, 0)
+        out = buf.getvalue()
+        self.assertIn("[thunk]", out)
+        self.assertIn("[ref]", out)
+        self.assertIn("CHECK:", out)
 
 
 if __name__ == "__main__":

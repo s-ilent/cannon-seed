@@ -13175,3 +13175,64 @@ the omf_pubsyms publics-parser quirk pin (the SSCALL/TEMPO attribution
 shift - the small fixture that also unblocks the VMANAGER public-offset
 map this decode needs for the name claim); (3) fresh disc links needed
 before any judge work - the 2026-10-30 set is dead (404 at ~30.2h).
+
+## 2026-11-01 (window cron-20261101-0151, same session): the omf_pubsyms publics-parser quirk PINNED - the publics regions are byte-clean, the misattribution is in the ROW READING: 0x0c-for-non-public = THUNK never definition, own-public-as-0x0e = the unresolved alias class, public-only-in-tail = the TAIL class; the SSCALL evidence chain of the _snd_seq_t_max verdict corrected in place (verdict survives on stronger evidence)
+
+ITEM 1 - THE FIX (tools/omf_pubsyms.py + tests): classify(mod) gives every
+row a verdict (def = 0x0c with the name in the module's publics; thunk =
+0x0c otherwise; ref = 0x0e; ref2 = 0x12); check_module(mod) emits the
+quirk findings; --check prints verdicts + findings per module. Six new
+tests (hand-assembled SSCALL-shape fixture + the def law on the existing
+fixture); TestRealArchive now probes BOTH provision paths
+(/home/z/psyq and /home/z/my-project/psyq) so the live-anchor assertions
+run in every sandbox incarnation - suite 101/101 GREEN (was 95 + 1
+always-skipped).
+
+ITEM 2 - THE PIN (raw-byte evidence, LIBSND.LIB): the PUBLICS regions are
+CLEAN - SSCALL @0x75f6 reads [0f]'SsSeqCalledTbyT' 00 and TEMPO @0xa744
+reads [09]'Snd_tempo' 00, no cross-module name bleed in the publics layer
+itself. The banked "PUBLICS layer misattributes names" wording was
+imprecise: the misattribution lives in the ROW READING, three shapes:
+(a) THUNK - a 0x0c row for a name that is NOT the module's public is a
+call-thunk row, never a definition (SSCALL 'Snd_tempo' a=10 b=2 off=0;
+SSADD '_ss_score' a=10 off=0; PAUSE 'SpuVmSeqKeyOff'; SSCLOSE
+'SpuVmSetSeqVol' a=10 off=0; SSCLOSE '_snd_seq_t_max' a=12 off=0x1a0;
+SSADD '_ss_MarkCallback' a=13 off=0x1e8, 'VBLANK_MINUS' a=12 off=0x19c).
+(b) ALIAS? - an OWN public appearing as a 0x0e ref (TEMPO's 'Snd_tempo',
+SSADD's 'SsSetLoop'/'SsIsEos', SSCLOSE's 'seq_close', SSCALL's
+'SsSeqCalledTbyT', PAUSE's both publics) - UNRESOLVED: the def rows for
+these sit OUTSIDE the parsed kind-chain (the table layer is a SUBSET;
+the structural byte placements remain the stronger evidence - sdk_members
+placed SsSeqCalledTbyT's code at SSCALL's .text+0x0 by BYTES while
+SSCALL's table shows it as 0x0e). (c) TAIL - a public carried only by the
+module tail's [len][name] 00 (SSADD 'SsSetTempo', SSCLOSE 'SsSeqClose' -
+tail = the absent last public, as the docstring already observed); foreign
+tails (SSCALL 'SpuVmFlush', TEMPO/PAUSE '_ss_score', SSINIT
+'EnterCriticalSection') are real bytes too and carry NO public meaning.
+THE LAW going forward: 0x0c-own-public = primary storage evidence;
+0x0c-non-public = thunk (the module CALLS it); own-public-0x0e = flag,
+never silently a ref-or-def; structural placement > table when they
+conflict.
+
+ITEM 3 - THE CORRECTION IN PLACE: the banked cron-20261031-1525 ITEM 4
+chain "SSCALL's own 0x0c definition row is Snd_tempo (code, off 0)" was
+WRONG under law (a) - Snd_tempo is TEMPO's public, so SSCALL's row is a
+thunk: SSCALL CALLS Snd_tempo, it does not define it. The _snd_seq_t_max
+VERDICT SURVIVES on stronger evidence: SSCALL's public IS SsSeqCalledTbyT
+(the per-tick callback, "called T by T") and SSCALL refs _snd_seq_t_max
+DIRECTLY (0x0e idx 11) - the tick dispatcher reading the tick-rate var is
+exactly the tension-free reading, and TEMPO (the tempo function's own
+module) does NOT ref _snd_seq_t_max, so the t_max = tick-rate mapping does
+not depend on the tempo call at all. The banked consequences (a)-(d) of
+cron-20261031-1525 stand unchanged; only the one evidence sentence is
+corrected. No curated name changes.
+
+GATES: no build/verify/judge (oracle DOWN); tree change = the tool fixture
++ tests + this docs section; suite 101/101 GREEN; ratchets untouched
+(809/150 = tree).
+
+NEXT: (1) witnessed window: land the parked drafts in order (80052038 ->
+8006AF70/SsSetTickMode -> this window's 80067690 svm init); (2) offline:
+the section-blob parser (the 06/02 chunk layer) would resolve the ALIAS?
+class - the def rows for the own-public-0x0e publics should live there;
+(3) fresh disc links needed (the 2026-10-30 set 404s at ~30.2h).
