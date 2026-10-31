@@ -12722,3 +12722,60 @@ the same window (staging must be reverted per the gates otherwise);
 (3) offline queue continues: psyq-symbol curation pass, wave-pool
 re-rank; (4) disc_return on the next fresh link set restores witness
 8/8 before any judge work.
+
+## 2026-10-31 (window cron-20261031-1136): the psyq-symbol curation pass opens on the libspu block - five evidence-solid g3_eu entries banked inert, the numeric statics hold for the OMF-offsets step
+
+Rollback #14 (worklog to the 2026-10-14 era again, repo to 7623cd2;
+worklog_digest.py not yet in the rolled-back tree): recovered per SOP -
+reset --hard to origin/main dbead6d9 (last window's own push), rehydrate
+re-run, digest exit 1 (196 missing incl. this lane's own cron-20261031-1021
+mirror) -> append_restore_note cron-20261031-1138-restore, re-run exit 0.
+Disc links STILL 404 (~24.5h age) - oracle DOWN, Law Zero offline.
+
+ITEM 1 - THE CURATION PASS OPENS. The 150 unknown_data debt lives in six
+src files: func_80052038.c (27 unique / 93 tokens, the TMD executor's head
+statics + table bases), func_800642A0.c (15 / 45, the LIBSPU init driver's
+block), and four 3-token files. The window-33 note named the 642A0 set as
+the pass's first target. Evidence re-provisioned first: /home/z/psyq
+reaped by the rollback -> re-cloned per the banked sparse-clone recipe
+(sozud/psy-q, 3.3/PSX/LIB; LIBSPU.LIB + LIBSND.LIB present; no INC dir in
+that repo - the psyq headers are not part of it).
+
+ITEM 2 - FIVE ENTRIES BANKED (config commit 5289bbfc, g3_eu section,
+INERT until the next witnessed scan - the tree stays build-consistent:
+src still references the D_ names the current extracted asm defines; the
+src adoption + scan + verify + ratchet refund compose in ONE witnessed
+window per the state-map pass precedent):
+  _spu_RXX = 0x800AB0B8  - name VERBATIM in psyq 3.3 LIBSPU.LIB (with the
+    _spu_FsetRXX setter symbol); role = the volatile unsigned short* SPU
+    register-file base every hardware touch of the game-side _spu_init
+    copy dereferences at the retail reload sites (src/func_800642A0.c
+    decode, judge EXACT).
+  _spu_tsa = 0x800AB0B4  - name verbatim; role = the SPU transfer start
+    address (zeroed early, 0x200 in the arg==0 arm = the classic SPU-RAM
+    transfer base); retail stores it HALFWORD (the landed unsigned short
+    extern judged EXACT) - observation recorded.
+  spu_timeout_fmt = 0x800221C4   - game bytes "SPU:T/O [%s]\n" match the
+    archive string "SPU:T/O [%s]" verbatim; string literals carry no psyq
+    symbol, role-descriptive name with archive provenance.
+  spu_timeout_wait_reset = 0x800221D4 ("wait (reset)")
+  spu_timeout_wait_wrdy  = 0x800221E4 ("wait (wrdy H -> L)")
+    - the psyq lib carries the sibling suffixes "SPU: time out: wait
+    (IRQ/OFF)"/"(IRQ/ON)".
+
+ITEM 3 - THE NUMERIC STATICS DELIBERATELY HOLD: D_800AB0B0 (the 0x1389
+retry counter; candidate _spu_t - the name exists in the archive but the
+placement is unproven), D_800AB0C8 (|= 0xB0000; candidate _spu_transMode,
+same placement gap), D_800AB0D0..F4. Wrong names are worse than
+placeholders (the curated-file guard's own warning); the pass's next
+evidence step is a small psyq OMF symbol-table extractor
+(tools/omf_pubsyms.py class: the LIB\x01 container wraps OMF members whose
+PUBDEF records carry name+offset; the bss order of S_INI/S_I anchors the
+whole block via the curated _spu_inTransfer = 0x800AB0E8 placement).
+
+NEXT: (1) witnessed window: scan applies the five labels, src/func_800642A0.c
+adopts them (7 D_ tokens refund: 2 unique externs + refs), verify GREEN,
+ratchet 150 -> 143 recomputed from the tree; (2) offline continues:
+omf_pubsyms.py (the PUBDEF extractor) unlocks the held statics; (3) the
+8006AF70 lane-owner decision (round-7 close, last window) stays pending;
+(4) fresh disc links needed before any judge work.
