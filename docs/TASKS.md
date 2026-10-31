@@ -12637,3 +12637,88 @@ any unit that needs it) without flipping the mainmenu pair - then re-run
 the 8-target verify gate; (2) v4 source-shape levers for the no-flag la
 chain (items 1+2 above) + the mode-chain goto-form probes, re-judge;
 (3) staging stays REVERTED per the gates (verify RED, no landing).
+
+## 2026-10-31 (window cron-20261031-1021): the func_8006AF70 round-7 screen runs fully OFFLINE (oracle DOWN) and closes the source-shape ladder - the r5 state (DIFF 4) is its ceiling, the two byte-retail routes left are both governance-gated
+
+Rollback #13 (worklog pinned at the 2026-10-14 era again; repo stale at
+7623cd2): recovered per SOP - rehydrate, fetch, reset --hard to origin/main
+39efc6d9, rehydrate RE-RUN after the reset, then worklog_digest.py listed
+195 missing windows (2026-10-15 .. 2026-10-31) and append_restore_note.py
+banked them as the cron-20261031-1027-restore digest note (exit 0 after).
+Oracle DOWN on arrival: disc links (2026-10-30 11:42Z set) return 404 at
+~22.7h age and witness is 0/8 with woven-era baselines - judge refused.
+Law Zero held: no disc work was awaited; the round-7 screen runs on the
+LOCAL toolchain (cc.sh -S = the same cc1 2.6.3 + maspsx front end the
+probes screen) with the retail row asm/g3_eu/nonmatchings/func_8006AF70.s
+as the committed ground truth.
+
+CONTEXT at window start: func_80052038 already LANDED by the parallel
+sessions (55cadbd4, judge EXACT 2032/2032, ratchets 809/150) - the prompt's
+queue item 1 half is done; the lane sits at func_8006AF70 round 7 (b33
+reorder lever, 39efc6d9) with r5 (DIFF 4/356, SIZE 1424 = row length)
+as the best staged state. The remaining 4 words are c5's lui/lw/beqz/beq
+reg fields ($5 pin vs retail $v1).
+
+ITEM 1 - THE MERGE REPRODUCED OFFLINE (negative controls): r5 with v5
+plain AND r5 with v5 pinned asm("$3") both collapse c5's chain to a
+LABEL-ONLY stub ($L9: immediately followed by $L4:) - c5 and c0 are
+semantically identical triples (==0 -> 0x3C def, ==1 -> 0x32, else ->
+0x3C), so cross-jumping eats the shorter one wholesale once both loads
+share $3. Matches b21/b22; the wholesale form is now in the repo record
+as the reference merged shape.
+
+ITEM 2 - B33 CONFIRMED OFFLINE: the L_def/L_store3C-before-L_c5 reorder
+unmerges the chains (9+9, loads in $3, retail branch forms) AND fuses
+the two store blocks into one shared [sw;j] with j-conversions (L_def
+itself becomes `j shared | ori delay`), and the emission order leaves
+retail's physical layout (c4,c1,c3,c2,def,store3C,c5,c0,store32,big vs
+retail c4,c1,c3,c2,c5,c0,store32,def,store3C,big) - DOA for a byte
+judge regardless of the fusion. The b33 lever is real but
+order-breaking; retail's block order freezes the source order.
+
+ITEM 3 - NEW LEVER PROBED: BYTE-EMITTING OPAQUE LOAD (b34/b35). b34 =
+r5 with c5's load as `__asm__ ("lui %0,%%hi..; lw %0,%%lo..(%%0); nop"
+: "=r"(v5))` under the $5 pin: the merge is DEAD (both chains full
+9+8 words in retail order, store blocks separate, all retail
+fall-forms) - a real byte-emitting asm IS opaque to jump2's tail match
+(extends b29/b31: zero-byte asms are transparent, byte-emitting asms
+are not) - but "=r" binds to the DECLARED register, so the built is
+byte-identical to r5's chain region (maspsx expands the plain lw into
+the same [lui $5,%hi; lw $5,%lo($5)] pair) and the gain is ZERO: the
+4 reg-field words stay $5. b35 = same with asm("$3"): the load words
+become retail-exact ($v1) but the merge RE-FIRES DOWNSTREAM - the
+branch region is C on both sides in the same hard reg, so jump2's
+match starts there and c5 collapses to a 4-word [asm; j] stub into
+c0's branch region. LAW BANKED: with both chains' loads in $v1, every
+C-generated part of the shorter chain merges into the longer one;
+opacity must cover the whole chain.
+
+CONCLUSION (round 7 closes): within source-shape levers the r5 state is
+the ceiling - the $5/$6 pin is the only unmerge lever that keeps retail
+emission order and store separation, and its 4 reg-field words are
+structural. The two routes that reach byte-retail EXACT are both NEW
+POLICY TERRITORY, not landable unilaterally: (a) a full 9-word asm
+island for c5's chain (byte-retail by construction, but the 9 words are
+then not compiler-derived C - re-typed-asm territory); (b) a cc_post
+reg-field fixup class (marker-scoped $5->$3 rewrite of the four words,
+semantically safe because v5's chain-local live range replaces only the
+dead v1 value on c5's path - but heavier than every existing cc_post
+rule, which only reorders side-effect-free pairs). Both are documented
+in the b34/b35 headers for the lane owner's call.
+
+GATES: no build/verify/judge this window (oracle DOWN; nothing
+build-adjacent changed - two scripts/*.c probe files + this docs
+section only; 8/8 GREEN stands from 39efc6d9's tree, suite untouched).
+maspsx passthrough of the user asm verified offline (%hi/%lo left for
+gas with maspsx's "# DEBUG: leaving for assembler to expand" marker;
+whole-unit diff vs r5 outside the chain region is empty apart from
+label renumbering).
+
+NEXT: (1) lane-owner decision on the two byte-retail routes for the
+last 4 words (asm island vs cc_post reg-field class vs accept DIFF 4
+and land r5); (2) next live-oracle window (fresh disc links needed -
+the 2026-10-30 set is dead) stages r5 as-is ONLY if the decision lands
+the same window (staging must be reverted per the gates otherwise);
+(3) offline queue continues: psyq-symbol curation pass, wave-pool
+re-rank; (4) disc_return on the next fresh link set restores witness
+8/8 before any judge work.
