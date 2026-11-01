@@ -14158,3 +14158,81 @@ Next queue:
 5. The regen trio (sdk_members/sdk_anchors/sdk_curated) is unblocked by the
    8-MATCH baseline_audit table - re-run the multi-version regen and
    reproduce/refresh the committed reports in a witnessed window.
+
+## 2026-11-01 (window cron-20261101-1143, oracle UP - re-witnessed 8/8 STRICT from the 0859Z link set): the func_80067690 svm-init row LANDS as real C - the seventeenth real-decompiled-C game function, judge EXACT 1080/1080, whole-image 8/8 GREEN, ratchets 824/172 -> 828/278; the func_80066BC4 walk row splits (head 0xACC asm + the 0x438 c row)
+
+The window opened on rollback #19 (worklog to the cron-20261014-2112 era,
+201 window sections missing locally): reset forward FIRST this time
+(fcb2818c), THEN rehydrate - the banked recovery law applied correctly,
+and the 6b maspsx patch step applied to BOTH clones (the out-of-repo
+clone was unpatched from the rolled-back rehydrate; the first g3_eu
+verify failed with exactly the landed-C-rows diff class the cron-20261101-1028
+law predicted; re-running the post-reset rehydrate fixed it before any
+byte-scan). digest + append_restore_note: 201 lines, exit 0.
+
+The orphaned provisioner edit from the dead session was already RESOLVED
+upstream: 6dbfc277 committed the sparse-set enforcement + the 3.5/3.6/4.0
+LIB dirs; the regen trio stayed reverted (the 62839707 true-baseline gate
+stands). No action needed.
+
+ITEM 0 - WITNESS RESTORE: the rollback also ate baselines/ (witness 0/8,
+the woven-era hashes refused). disc_return.sh with the 0859Z links: EU
+sha256 gate OK, all eight per-sector baselines regenerated, witness 8/8
+STRICT. Phase B: verify 8/8 GREEN, suite 133/133, ratchets 824/172 = tree.
+
+ITEM 1 - THE LANDING (queue item 1, phase E; the AC04 row landed upstream
+in 16b1e80e so the svm init was next):
+- Step 1, the yaml split: [0x473C4, asm, func_80066BC4] 0xf04 -> head
+  0xACC + [0x47E90, c, func_80067690] 0x438 (the tail ends exactly at
+  the next row func_80067AC8). make extract; glabel_collision_pass
+  renamed ONE interior glabel (func_80052038 -> func_80052038_2 inside
+  the truncated head - the landed-C-symbol collision class; the runbook
+  predicted ~40 interior labels, the pass handled them).
+- Steps 2-5, the C: src/func_80067690.c from the banked decode draft
+  (scripts/deferred_func_80067690.c, cron-20261101-0151) + the ~25-round
+  probe ladder (the intermediate state parked mid-window at b2cccc64 as
+  scripts/deferred_func_80067690_ladder.c - the session-death insurance;
+  judge EXACT reached ~8 rounds after the bank). The ladder's banked laws
+  live in the file header + the match commit; the short list: per-field
+  dlabel pointer-sum indexing (array-index grows la pseudos retail never
+  hoists); the off=$2 pin + input barrier; the reversed-cap if/else with
+  the mv=$4 regvar (the ternary collapses to the memory min-idiom);
+  statics zero BEFORE the SpuInitMalloc call; u16 counter discipline with
+  both counters raw in $5; the spu_idx u16 VARIABLE (kills the (v*8)&fff8
+  range-fold); the volatile-cast read blocking the D_801704A2
+  store-forward; the tied-asm provenance kill on rv (gcc 2.6.3 has no
+  +r) so the mask andi materializes into rvn=$4; memory-clobber barriers
+  anchoring the spu schedule and the reload pair; mask_cur named loads
+  (retail lhu homes $3/$4); the RMW voiceon variables (the or goes
+  in-place and the keyon nor reads the STORED value); masks UNPINNED
+  (the $7/$6 homes are natural - the pins distorted the head
+  allocation); cc-post: keep-epilogue (retail keeps addiu-sp before
+  jr-ra; the default rule-1 swap fires the wrong way).
+- Step 6: judge EXACT 1080/1080; verify 8/8 GREEN; ratchets recomputed
+  824/172 -> 828/278 (the token accounting in config/ratchets.json; the
+  same raise pattern as every real-C landing - the row's own externs and
+  mentions are the tree); suite 133/133; commit eb874cc1 + push.
+
+Stage Summary:
+- 2 commits pushed: eb874cc1 (match: the svm-init row lands) + this docs
+  commit. HEAD == origin/main; tree clean.
+- Queue next:
+  1. The func_80084924 cluster steps 1+6 (mainmenu_jp; the runbook phase
+     F): step 1 = the data_8008433C spill audit on TRUE baselines, the
+     five parked drafts + the 0x20 match leaf + the memcpy_iso9660
+     rename riding step 6.
+  2. The psyq-symbol curation pass: the svm cluster names are now
+     adoptable IF the omf_pubsyms publics-parser pin lands first (the
+     banked quirk item - only 2 of VMANAGER's 44 publics carry 0x0c
+     offset rows today); the svm-init rename (_svm_damper) is the
+     first candidate.
+  3. The curation sieve's next family: witness-window-gated on the
+     fresh census (the 62839707 gate).
+  4. Lane-owned, do NOT grab: mainmenu_jp scope-law witness + census
+     realignment; graveyard C candidates; setIntr/startIntr/trapIntr;
+     GSD round-5; the 43 SIZE-wrong swarm; slps boot copies; the BIG
+     de-frame item (coordination-gated); SsSetTableSize + the omf
+     def-base derivation (psylib lane).
+  5. func_8006AF70 stays OWNER-GATED (round-7 ceiling DIFF 4; options
+     A/B banked in the cron-20261101-0507 decision brief) - SKIP unless
+     Silent calls it.

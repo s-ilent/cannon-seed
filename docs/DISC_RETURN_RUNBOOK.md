@@ -141,9 +141,20 @@ re-classifying breaks nothing (banked cron-20261031-1525).
 4. `make verify TARGET=g3_eu` GREEN -> judge live -> commit type: match;
    ratchets recomputed from the tree.
 
-## Phase E - the svm init func_80067690 (_svm_damper, g3_eu)
+## Phase E - the svm init func_80067690 (_svm_damper, g3_eu) - LANDED (cron-20261101-1143, eb874cc1)
 
-State: scripts/deferred_func_80067690.c carries the draft + six-step plan.
+LANDED: judge EXACT 1080/1080, whole-image 8/8 GREEN, ratchets 828/278.
+The walk row split (head 0xACC asm + the 0x438 c row); the head's
+interior func_80052038 -> func_80052038_2 (the collision pass). The
+~25-round probe ladder's source-shape laws are banked in the landed
+file header (src/func_80067690.c) and the match commit message; the
+intermediate ladder state is parked at scripts/deferred_func_80067690_ladder.c.
+REMAINING here: the rename claim (_svm_damper) - still lane-owner-gated
+on the omf_pubsyms publics-parser pin below. The cross-target twin
+census for this function is a follow-up decode (the g3_jp 0x80067640
+name collision is coincidental, not a twin).
+
+Historical state: scripts/deferred_func_80067690.c carries the draft + six-step plan.
 Identity PROVEN _svm_damper (not SpuVmInit) by the psyq row-stream
 kind-0x30 walk + the def-row offset math (cron-20261101-0536; the VMANAGER
 truncation was the 3-kind walk breaking at the first 0x30 row; 80/80 rows
