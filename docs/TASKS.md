@@ -13801,14 +13801,16 @@ step 1 and the split+judge step 6 stay witnessed-window work).
 - **THE TRUE HEADS (the spill row is real code, the intr-cluster
   precedent confirmed).** data_8008433C (0x4b8, yaml-typed data, listing
   head 0x8007736C) contains TWO function heads:
-  (a) TRUE HEAD #1 0x8007736C (0xB0 frame, a0->s5, a1->s3) - the
-  CD_newmedia path walker: prints "%s: path level (%d) error\n"
-  (D_80023550) and "%s: dir was not found\n" (D_8002356C) with %s = the
-  caller's path string; guarded by D_800D8028 != D_800C7CFC; calls
-  0x80077678 (its init) and drives the 8-slot component loop over fn2.
-  Six external callers jal it (func_8003D3DC, func_80025D9C,
-  func_800264B4, func_8003D59C, func_800262FC, data_8003B970 - the last
-  itself a drifted code row).
+  (a) TRUE HEAD #1 0x8007736C (0x50 frame - the first pass's "0xB0" was
+  an 0x27BDFFB0 sign-extension misread, corrected this window; a0->s5 =
+  the out record, a1->s3 = the path string) - CdSearchFile, FULLY DECODED
+  in the same window's second unit (see the next section): the component
+  walk over fn2 with empty-name sentinel hops at every separator, the
+  fn3 cache phase for the final component, and the strncmp-12 cache
+  search that copies the matched 0x18 record to the caller. Six external
+  callers jal it (func_8003D3DC, func_80025D9C, func_800264B4,
+  func_8003D59C, func_800262FC, data_8003B970 - the last itself a
+  drifted code row).
   (b) TRUE HEAD #2 0x80077678 (0x40 frame) - CD_newmedia, FULLY DECODED:
   stage sector 0x10 via func_80077CD4 (the PVD); strncmp(&D_80149484[1],
   "CD001", 5) != 0 -> "Disc format error in cd_read(PVD)" (strncmp =
@@ -13862,3 +13864,60 @@ step 1 and the split+judge step 6 stay witnessed-window work).
   plan is now DONE; (3) offline: the psylib lane's site-counter item
   stays theirs; the intr lane's 13 stay theirs; the BIG de-frame item
   gains two data points from the address-space note above.
+
+## 2026-11-01 (window cron-20261101-0621, same session, oracle DOWN): the CdSearchFile walker decodes end to end - the func_80084924 cluster's fifth and last unit: mount guard, the backslash-only component walk over fn2 with EMPTY-NAME SENTINEL HOPS at every separator, the fn3 cache phase for the final component, and the strncmp-12 cache search; the 0x80077654 leaf is strncmp(.., 0xC) == 0 (the ISO9660 8.3 matcher); the data row's full layout is three real functions and zero data; the fn3 gate's "disc error" branch is DEAD retail code
+
+- **SIGNATURE**: CdSearchFile(a0 = out record pointer -> s5, a1 = path ->
+  s3) -> the matched 0x18-byte cache record's pointer, or 0. The matched
+  record is copied to *out in six word-pairs (no call, inline lw/sw x6).
+- **MOUNT GUARD**: if (D_800D8028 != D_800C7CFC) { if (CD_newmedia()
+  (0x80077678) == 0) return 0; D_800D8028 = D_800C7CFC; } - the cached
+  mount state; CD_newmedia clears D_800C8024 on every rebuild, so the
+  fn3 cache invalidates with the mount.
+- **THE COMPONENT WALK** (head 0x800773FC, buf = sp+0x10, 8 bytes,
+  level cap 8): path[0] must be '\\' (else return 0 - absolute paths
+  only); id starts at 1 (the root); at each head, a '\\' skips the copy
+  and runs fn2(id, "") - the EMPTY-NAME SENTINEL HOP: every dir's table
+  must carry a name_len-0 marker entry whose id is the dir's own id
+  ("\FILE" resolves as fn2(1, "") -> the root's sentinel -> fn3(1) ->
+  search "FILE"; the sentinel's stream-side construction is loader-
+  family material, unbanked); a real component copies until '\\' or NUL,
+  terminates, and runs fn2(id, name) - the id CHAIN (each fn2's 1-based
+  slot+1 feeds the next lookup). fn2 == -1 forces buf[0] = 0 (the j
+  delay at 0x800773E8) and re-enters the final check -> a MISSING
+  INTERMEDIATE DIR prints "%s: dir was not found\n" (D_8002356C, %s =
+  the whole path) and returns 0.
+- **THE FINAL CHECK** (0x8007747C): level >= 8 -> "%s: path level (%d)
+  error\n" (D_80023550) -> 0; empty component -> "dir was not found" ->
+  0; else fn3(id) with id = the LAST successful fn2's return (the
+  containing dir), then the cache phase. **THE fn3 GATE IS A PLAIN
+  bnez** - the C tested `if (!CD_cachefile(id))`, but CD_cachefile
+  returns -1 (never 0) on failure, so a failed cache takes the SUCCESS
+  path and "CdSearchFile: disc error\n" (D_80023584) is UNREACHABLE dead
+  retail code; the failed cache degrades into a search over the stale/
+  zeroed cache and ends "%s: not found" (or a stale false positive).
+  The C draft must preserve the `== 0` test exactly.
+- **THE CACHE SEARCH** (head 0x80077560; "CdSearchFile: searching
+  %s...\n" D_800235A0 first, >= 2): walk the 0x40 x 0x18 cache records
+  (s0 = rec cursor, s3 = rec+8 name cursor, s1 = i*0x18 byte index -
+  three forms of one index again); rec name[0] == 0 -> end of used
+  slots -> "%s: not found\n" (D_800235CC, > 0) -> 0; match through the
+  **0x80077654 leaf (0x18 frame): jal strncmp; ori a2, 0xC; sltiu v0, 1
+  - strncmp(rec_name, needle, 12) == 0**, the ISO9660 8.3 filename
+  bound, version-suffix tolerant (the cache names come from fn3's RAW
+  ISO9660 parse; fn2's table names are the repacked ones - two matchers
+  for two name spaces); "%s:  found\n" (D_800235C0, TWO spaces, retail)
+  -> copy the record to *out -> return the record pointer.
+- **THE DATA ROW'S FULL LAYOUT** (0x4b8 yaml-typed data, listing head
+  0x8007736C): [CdSearchFile 0x8007736C..0x80077650 (0x2E4)][match leaf
+  0x80077654..0x80077674 (0x20)][CD_newmedia 0x80077678..row end,
+  continuing into the asm row's fragment] - THREE real functions, ZERO
+  data; the first pass's "0xB0 frame" was an 0x27BDFFB0 sign-extension
+  misread, corrected to 0x50. The spill audit (step 1) still owns the
+  carve boundaries on TRUE baselines; the decode half of the parked
+  plan is now complete for all five units plus both true heads.
+- DRAFT: scripts/deferred_func_8007736C.c (fifth parked draft; the
+  cluster's witnessed-window landing set is now fn2, the staged loader,
+  memcpy_iso9660, CD_cachefile, CdSearchFile, CD_newmedia + the match
+  leaf). GATES: decode + drafts + docs only (read-only over committed
+  listings); ratchets 809/150 = tree; suite 133/133.
