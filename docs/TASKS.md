@@ -14088,3 +14088,73 @@ banked; (2) offline (no baseline dependency): the psyq curation pass can
 still bank hand-evidence families whose proof does not flow through the
 slide (FUNCTION.TXT/INCLUDE reading, the omf_pubsyms table layer);
 (3) the psylib/omf lane flags stay theirs.
+
+## 2026-11-01 (window cron-20261101-1028, oracle UP - re-witnessed 8/8 STRICT from the 0859Z link set): the func_8006AC04 init row LANDS as real C - the sixteenth real-decompiled-C game function, judge EXACT 332/332, whole-image 8/8 GREEN, ratchets 809/150 -> 824/172
+
+The window opened on a rolled-back sandbox (/home/z/my-project reverted to the
+2026-10-15 era: local repo tip 7623cd2, worklog tail cron-20261014-2112 - two
+weeks of worklog sections lost locally, the durable record is the git history
+and these TASKS.md sections). Recovery order matters and is the window's
+first banked lesson: reset the repo forward FIRST, then run rehydrate again -
+the rolled-back rehydrate.sh predates the maspsx delay-slot patch step (6b,
+added 8ff08f1c), so the first run silently skipped the patch apply and the
+out-of-repo maspsx clone (/home/z/my-project/tools-src/maspsx, the one cc.sh
+defaults to) built UNPATCHED. The 0852 window's pushed commits (6dbfc277,
+492149fe, 62839707) resolved the STATE NOTE's orphaned provisioner edit: the
+3.5/3.6/4.0 LIB dirs + sparse-set enforcement landed with the regen trio
+declared TRUE-BASELINE-GATED, the 402->357 woven-census regression already
+reverted.
+
+Oracle: disc_return with the fresh 0859Z links re-extracted the eight
+baselines (sha256+sector gates passed; witness 8/8 STRICT; baseline_audit
+flipped 0 MATCH / 8 MISMATCH -> 8 MATCH). Phase B: make verify 8/8 GREEN -
+with ONE incident: g3_eu verify failed with a 2444-byte diff in exactly the
+two landed-C rows (func_80052038: bltz target 11 words short; func_800642A0:
+beq target 1 word short; the second cron-20261030-2336-class strike, this
+time BOTH clone locations unpatched because the rehydrate that ran was the
+rolled-back one). Re-running rehydrate AFTER the reset-forward applied the
+patch to both clones; g3_eu went GREEN. Lesson banked: after any sandbox
+rollback, rehydrate is a TWO-STEP (reset forward, then rehydrate) - and a
+rehydrate that does not print the 6b line is the old script.
+
+Phase D, the func_8006AC04 landing (SsInit/SsInitHot shared body, the psyq
+3.3 LIBSND SSINIT member's body behind the two landed wrappers): the split
+fix folded the misclassified data_8006AD24 epilogue tail back into the row
+(yaml extent 0x120 -> 0x14C, the data .s deleted; the row now ends jr $ra
+with the curated GetVideoMode / SsSeqCalledTbyT_guard names in the tail);
+asm-state verified GREEN before the flip. The C landed from the parked
+cron-20261031-1525 decode through a seven-round probe ladder (201 -> 55 ->
+44 -> 12 -> 12 -> 12 -> 0 bytes): round 2 (loop-invariant base local) killed
+the voice-loop rematerialization; round 3 (register-var pins) fixed the
+counter allocations; round 4 (counter inits in program order before the base
+materialization; comma-init counter-then-cursor inner head) fixed the zero
+loop and the statics block; rounds 5-6 (scheduling barrier, bare-constant
+comma base) FAILED to move the last 12 bytes - the plain constant's
+lui/addiu pair CSE-hoists to the preheader HEAD above the counter init;
+round 7 closed with the OPAQUE ASM DEFINITION of the base
+(__asm__("" : "=r"(vsrc) : "0"(D_800ABA08))) - the pair materializes at the
+asm point after move $a0 and the base holds $a3 with the cursor re-derived
+per outer row (retail addu $v1,$a3,$zero). Judge EXACT 332/332 live; suite
+133/133; ratchets recomputed 809/150 -> 824/172 (all 37 tokens in the new
+src/func_8006AC04.c: 15 func = 1 definition + 4 externs + 5 call sites +
+5 header mentions; 22 data = 8 externs + 11 code refs + 3 header mentions).
+Landed as 16b1e80e. SsSetTableSize stays HELD; the AF70 row stays
+owner-gated (no call given; not staged).
+
+Next queue:
+1. Next witnessed window: the svm init func_80067690 (_svm_damper) - step 1
+   splits the func_80066BC4 walk row (~40 interior labels,
+   glabel_collision_pass first), the rename claim needs the omf_pubsyms
+   publics-parser pin first.
+2. The func_80084924 cluster steps 1+6 (TRUE baselines NOW on disk - step
+   1's data_8008433C spill audit is unblocked), the two undrafted units
+   (0x20 match leaf 0x80077654, memcpy_iso9660 interior rename rider).
+3. The psyq curation pass resumes witnessed-window-gated: the five libspu
+   labels + three tick statics + func_800642A0.c rename still ride the AF70
+   row (150 -> 143 expected); the next curation family waits on the fresh
+   census.
+4. func_8006AF70 stays parked at the round-7 ceiling (options A/B banked);
+   the call is Silent's.
+5. The regen trio (sdk_members/sdk_anchors/sdk_curated) is unblocked by the
+   8-MATCH baseline_audit table - re-run the multi-version regen and
+   reproduce/refresh the committed reports in a witnessed window.
