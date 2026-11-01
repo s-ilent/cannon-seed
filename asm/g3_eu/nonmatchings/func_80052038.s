@@ -9,7 +9,7 @@
 
 nonmatching func_80052038, 0xCC
 
-glabel func_80052038
+glabel func_80052038_2
     /* 32838 80052038 B0FFBD27 */  addiu      $sp, $sp, -0x50
     /* 3283C 8005203C 3800B4AF */  sw         $s4, 0x38($sp)
     /* 32840 80052040 21A0A000 */  addu       $s4, $a1, $zero
@@ -61,7 +61,7 @@ glabel func_80052038
     /* 328F8 800520F8 040062AE */  sw         $v0, 0x4($s3)
     /* 328FC 800520FC 42480108 */  j          func_80052108
     /* 32900 80052100 080063AE */   sw        $v1, 0x8($s3)
-endlabel func_80052038
+endlabel func_80052038_2
 
 nonmatching func_80052104, 0x4
 
