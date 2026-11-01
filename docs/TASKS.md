@@ -13742,3 +13742,123 @@ last (needs the spill-row tail decode); (6) yaml split into per-function
 rows + C drafts + judge on the live oracle, memcpy_iso9660 rename riding
 step 6. GATES: listing-read only this window; no decode claims beyond
 the structure; oracle DOWN; ratchets 809/150 = tree; suite 133/133.
+
+## 2026-11-01 (window cron-20261101-0621, oracle DOWN both links 404 at ~42.7h): the func_80084924 parent-row decode CLOSES its offline steps 2-5 - fn2, the staged loader, the memcpy_iso9660 interior and fn3 decode end to end, and the row's two TRUE HEADS are found and one of them decodes fully: 0x80077678 is CD_newmedia (PVD reader + root-dir indexer, its tail IS the head fragment), the format strings name the whole cluster, and the "." / ".." constants prove fn3 synthesizes the ISO9660 self/parent entries
+
+Session start: rehydrate OK (2s); sandbox had rolled the worklog back to
+its 2026-10-15 tail again - RESTORE NOTE re-appended from the digest (201
+windows, exit 0); origin had moved to 03752318 (the cron-20261101-0507
+session's three commits), fast-forward, tree clean. Disc probe: both
+2026-10-30 11:42Z links HEAD-404 at ~42.7h; Law Zero offline. This window
+continues the 0507 session's scoped item: the func_80084924 parent-row
+unit, steps 2-5 of the parked six-step plan (decode only; the spill audit
+step 1 and the split+judge step 6 stay witnessed-window work).
+
+- **fn2 0x8007796C (0x28 frame) - the cached-directory lookup leaf.**
+  Walks the 0x80-entry x 0x2C table (ids at D_80147E88 + i*0x2C, names at
+  D_80147E90 + i*0x2C): id == 0 -> return -1 (end-of-table); id match +
+  strcmp(needle, name) == 0 -> return i + 1 (1-BASED); exhausted -> -1.
+  gcc keeps two advancing cursors (s1 over ids, s2 over names, both
+  +0x2C/iteration, the name increment riding both mismatch paths' delay
+  slots) and loads the id once per iteration. Exactly ONE call site in
+  the target (jal 0x0C01DE5B sweep): the walker's 8-slot component loop
+  at 0x80077454, a1 = &sp[0x10] (the staged component name). Draft:
+  scripts/deferred_func_8007796C.c.
+- **alabel func_80077CD4 (0x28) - the staged directory-stream loader.**
+  buf = sp+0x10 (8 bytes); func_8007502C(a1, buf); func_80074B28(2, buf,
+  0); func_80074FAC(a0, a2, 0x80); return func_80074F8C(0, 0) == 0
+  (sltiu v0, 1). Three call sites (jal 0x0C01DF35 sweep), all staging
+  &D_80149484, all with a0 = 1, a1 = a SECTOR SELECTOR never a pointer:
+  0x10 = the ISO9660 PVD (func_80077678), *(u32*)&D_80159510 = the
+  root-dir LBA from the descriptor buffer (func_80077678 second call),
+  D_80147E60[id*0x2C] = the dir id's LBA (fn3). The four callees are
+  unbanked; roles structural. Draft: scripts/deferred_func_80077CD4.c.
+- **alabel func_80077D40 (0x8) - the memcpy_iso9660 interior.**
+  Byte-for-byte the family shape (g3_eu func_80063330 et al): t = len-1,
+  do { *dst++ = *src++; } while (--t != -1), len == 0 early-out, frame
+  0x8 leaf. The row's interior copy is the family's mainmenu_jp member
+  (the curated bank is correctly empty for this target - 7059420f).
+- **fn3 0x80077A18 (0x40, s0-s6) - CD_cachefile, FULLY DECODED.**
+  Identity from the format strings (D_800236BC/DC/700/71C in
+  data_80020000.data.s): "CD_cachefile: dir not found\n" (staged-load
+  failure, gate D_800C7CF0 > 0), "CD_cachefile: searching...\n" (>= 2),
+  "\t(%02x:%02x:%02x) %8d %s\n" (per record), "CD_cachefile: %d files
+  found\n" (exit). THE ARM CONSTANTS ARE "." AND "..": D_800236F8 =
+  halfword 0x002E, D_800236FC/FE = 0x2E2E + 0x00 - slots 0/1 of the
+  D_80147884 cache (0x40 records x 0x18) are the ISO9660 self/parent
+  entries, SYNTHESIZED from the constants, never copied; slots 2+ get
+  memcpy_iso9660 name copies. The arms dispatch on the RECORD INDEX i
+  and gcc folds the i==0/i==1 store addresses to s5+8/s5+0x20 (induction
+  re-materialization). Stream = RAW ISO9660 directory records: u8 rec_len
+  @0 (0 = terminator, cursor advances by it), u32 extent @2 (misaligned,
+  -> func_8007502C arg, called for ALL slots incl. 0/1), u32 size @0xA
+  (misaligned -> rec+4, the "%8d" arg), u8 name_len @0x20, name @0x21.
+  Loop shape = the ori-1/beqz never-taken do-while idiom; breaks: len ==
+  0, i >= 0x40, src >= &D_80149C84. Tail: D_800C8024 = id (the cache
+  guard); if (i < 0x40) *(u8*)(&D_8014788C + i*0x18) = 0 (next slot's
+  name byte zeroed). Guard: D_800C8024 == id -> return 1; a1 =
+  D_80147E60[id*0x2C]. Draft: scripts/deferred_func_80077A18.c.
+- **THE TRUE HEADS (the spill row is real code, the intr-cluster
+  precedent confirmed).** data_8008433C (0x4b8, yaml-typed data, listing
+  head 0x8007736C) contains TWO function heads:
+  (a) TRUE HEAD #1 0x8007736C (0xB0 frame, a0->s5, a1->s3) - the
+  CD_newmedia path walker: prints "%s: path level (%d) error\n"
+  (D_80023550) and "%s: dir was not found\n" (D_8002356C) with %s = the
+  caller's path string; guarded by D_800D8028 != D_800C7CFC; calls
+  0x80077678 (its init) and drives the 8-slot component loop over fn2.
+  Six external callers jal it (func_8003D3DC, func_80025D9C,
+  func_800264B4, func_8003D59C, func_800262FC, data_8003B970 - the last
+  itself a drifted code row).
+  (b) TRUE HEAD #2 0x80077678 (0x40 frame) - CD_newmedia, FULLY DECODED:
+  stage sector 0x10 via func_80077CD4 (the PVD); strncmp(&D_80149484[1],
+  "CD001", 5) != 0 -> "Disc format error in cd_read(PVD)" (strncmp =
+  0x8005D49C, pinned/curated LIBC); LBA = *(u32*)&D_80159510 (misaligned
+  lwl 3/lwr 0); stage it (the root dir); "sarching dir..\n" [sic - the
+  typo is retail]; then the entry loop whose HEAD (0x800777D4) lives in
+  the data row and whose BODY is the asm row's head fragment - the
+  back-edge bnez 0x800778E0 jumps into the fragment and the shared
+  exit/epilogue (0x80077914..0x80077968) sits there: REAL CODE
+  CONTINUITY across the row boundary, the spill is structural. Per entry
+  (REPACKED stream: u8 name_len@0, u32@2 misaligned, u8 id@6, name@8
+  even-padded, advance len + (len&1) + 8): table[0x2C] = {ordinal
+  (1-based) @D_80147E84, id = src[6] @D_80147E88, u32 from src+2
+  @D_80147E8C, name copy @D_80147E90, NUL-terminated}; dump
+  "\t%08x,%04x,%04x,%s\n"; terminator id = 0 at the count'th slot;
+  D_800C8024 = 0 (invalidates fn3's cache - the two functions are a
+  writer/consumer pair); "%d dir entries found"; return 1 (failures
+  return 0). Draft: scripts/deferred_func_80077678.c. The walker's own
+  full decode stays with the spill audit (step 1).
+- **NEW TOOL: scripts/decode_84924_row.py** - capstone decode of any VA
+  range across the row pair's committed listings (the .data.s rows have
+  no mnemonics; hand-decoding hex words was the error source this
+  window's first pass hit). Display-order byte handling and bare/runtime
+  VA forms both accepted.
+- **ADDRESS-SPACE EVIDENCE for the de-frame lane.** All seven encoded
+  call targets in and around the row agree with the LISTING space (fn2/
+  fn3/77CD4/77D40 jals, the walker's six external callers, printf/
+  strncmp) while the yaml row names sit 0xCFD0/0xD100 ABOVE the listing
+  heads - and the delta grows EXACTLY 0x130 = 304 B (one sector's
+  framing) over the single 0x58000 sector boundary the row pair spans
+  (runtime span 0x5E8 = carve 0x4B8 + 0x130): a clean second
+  Witness-A-class corroboration of the per-sector framing law. But
+  mainmenu_eu's twin region showed the encoded space -0x9210 vs carve -
+  the two regions disagree on the skew's sign and size, so the drift is
+  NOT one linear law; reconciling the scan's address law vs the
+  encoded-call space stays de-frame-lane material (coordination-gated).
+- CROSS-TARGET: the CD_cachefile/CD_newmedia string family appears in 7
+  of 8 targets (g3_eu/g3_jp 1 file each, g3org pair 3, mainmenu_eu 1,
+  mainmenu_jp 1, sces 2; slps_00270 0 - the boot carries no such
+  utility). The mainmenu_jp row is the only unit decoded to this depth.
+- GATES: decode + drafts + docs + one decode tool (read-only over
+  committed listings; no build/verify/judge - oracle DOWN, the
+  baseline-oracle disagreement stands); ratchets 809/150 = tree; suite
+  untouched.
+- NEXT: (1) witnessed window: fresh links FIRST, disc_return re-provision
+  + witness, then the parked drafts land in order (8006AF70 first - the
+  round-7 ceiling stands; then the svm init with _svm_damper); (2) the
+  func_80084924 unit's step 1 (data-row spill audit on TRUE baselines)
+  + step 6 (yaml split into per-function rows, C rows from these drafts,
+  judge live, memcpy_iso9660 rename riding) - the decode half of the
+  plan is now DONE; (3) offline: the psylib lane's site-counter item
+  stays theirs; the intr lane's 13 stay theirs; the BIG de-frame item
+  gains two data points from the address-space note above.
