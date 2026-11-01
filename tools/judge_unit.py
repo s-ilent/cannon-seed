@@ -161,8 +161,24 @@ def judge(target, name, rom, extent, gp_flags, asflags):
     # suffix-shaped ones at their suffix (state_block_0 -> 0x0) instead of
     # the retail placement. Script assignments cannot override object
     # definitions, so this only fills genuinely external references.
+    # Judged alone ALSO lacks the landed-C objects a unit calls into (the
+    # first live case: func_80077678 -> memcpy_iso9660, whose curated name
+    # carries no 8-hex address and whose object is absent from the solo
+    # link) - the curated DB's per-target sections carry their retail
+    # placements, so they feed the prelude after the per-target file.
     with open(os.path.join(REPO, f"{work}.pre.ld"), "w") as f:
         for ln in open(os.path.join(REPO, f"config/symbols.{target}.txt")):
+            m = re.match(r"^(\w+) = 0x([0-9A-Fa-f]+);", ln)
+            if m:
+                f.write(f"{m.group(1)} = 0x{m.group(2)};\n")
+        cur_target = None
+        for ln in open(os.path.join(REPO, "config/symbols.curated.txt")):
+            h = re.match(r"^// target: (\S+)", ln)
+            if h:
+                cur_target = h.group(1)
+                continue
+            if cur_target != target:
+                continue
             m = re.match(r"^(\w+) = 0x([0-9A-Fa-f]+);", ln)
             if m:
                 f.write(f"{m.group(1)} = 0x{m.group(2)};\n")

@@ -228,6 +228,76 @@ KEEP_EPILOGUE = False
 KEEP_RETURN_FILL = False
 SDK_ASPSX = False
 KEEP_PROLOGUE = False
+REMANT_JOIN = None
+REMANT_EXIT = None
+REMANT_MODE = None
+
+
+def _rule10_remnant_prepass(lines: list[str]) -> list[str]:
+    """Rule 10 pre-pass (--remnant-ori1 JOIN EXIT absorb|nop): re-insert the
+    loop-entry guard that retail's cc1 pipeline keeps and GCC 2.6.3 folds
+    away. Retail shape (witnessed on the LIBCD ISO9660 family, mainmenu_jp
+    func_80077678 CD_newmedia 2026-11-01 + the parked func_80077A18
+    CD_cachefile ladder, b08bd228): between the trace-gate join and the
+    loop-invariant init block the retail stream carries
+        ori  $2,$0,1
+        beqz $2,<loop-exit>
+        <delay: the count init, or a nop>
+    - a never-taken branch on the constant-folded loop guard
+    (count = 0 < 0x80) whose branch gcc's jump cleanup deletes in every
+    source shape probed (11 banked loop shapes x pinned flags +
+    -funroll-loops + -O3, then 6 more this window: do-while, while(1),
+    while(A&&B), for-forms, -O1 - all delete or rotate the guard). The
+    pair is DEAD CODE: $2 is loaded with 1, so beqz never fires, and $2's
+    next definition is the loop head's own load - the delay-slot init
+    executes unconditionally as before (MIPS delay slots run regardless
+    of taken/untaken), so semantics are unchanged byte-for-byte.
+    Marker: `cc-post: remnant-ori1 <join-label> <exit-label> absorb|nop` in
+    the .c header; JOIN = the gcc label at the insertion point, EXIT = the
+    loop-exit join the retail branch targets. absorb moves the join's
+    first instruction (a $zero-based register init) into the branch's
+    delay slot; nop emits a plain nop delay. Anchor mismatches FAIL the
+    build loudly (exit 3) - the labels are gcc-deterministic for the
+    frozen source, and any source edit that moves them must re-pin the
+    marker. Only ever fires on marker-carrying units."""
+    join_i = exit_i = None
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if s == f"{REMANT_JOIN}:":
+            join_i = i
+        if s == f"{REMANT_EXIT}:":
+            exit_i = i
+    if join_i is None:
+        sys.stderr.write(
+            f"cc_post: remnant-ori1 join label {REMANT_JOIN}: not found\n"
+        )
+        sys.exit(3)
+    if exit_i is None:
+        sys.stderr.write(
+            f"cc_post: remnant-ori1 exit label {REMANT_EXIT}: not found\n"
+        )
+        sys.exit(3)
+    j = join_i + 1
+    while j < len(lines) and not lines[j].strip():
+        j += 1
+    if j >= len(lines):
+        sys.stderr.write("cc_post: remnant-ori1 join at end of file\n")
+        sys.exit(3)
+    ins = lines[j].strip()
+    if REMANT_MODE == "absorb":
+        if not re.match(r"^addu\t\$(\w+),\$0,\$zero$", ins):
+            sys.stderr.write(
+                f"cc_post: remnant-ori1 absorb anchor mismatch at "
+                f"{REMANT_JOIN}: '{ins}'\n"
+            )
+            sys.exit(3)
+        pair = ["\tori\t$2,$0,1", f"\tbeqz\t$2,{REMANT_EXIT}"]
+    elif REMANT_MODE == "nop":
+        pair = ["\tori\t$2,$0,1", f"\tbeqz\t$2,{REMANT_EXIT}", "\tnop"]
+    else:
+        sys.stderr.write(f"cc_post: remnant-ori1 bad mode '{REMANT_MODE}'\n")
+        sys.exit(2)
+    return lines[:j] + pair + lines[j:]
 
 
 def apply_rules(insns: list[str]) -> list[str]:
@@ -455,6 +525,7 @@ def _rule7_gp_load(res: list[str]) -> list[str]:
 
 def main() -> None:
     global KEEP_EPILOGUE, SDK_ASPSX, KEEP_RETURN_FILL, KEEP_PROLOGUE
+    global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -469,11 +540,24 @@ def main() -> None:
         KEEP_EPILOGUE = True
         SDK_ASPSX = True
         args.remove("--sdk-aspsx")
+    if "--remnant-ori1" in args:
+        k = args.index("--remnant-ori1")
+        if len(args) < k + 4:
+            sys.stderr.write(
+                "usage: cc_post.py --remnant-ori1 <join> <exit> <absorb|nop> ...\n"
+            )
+            sys.exit(2)
+        REMANT_JOIN, REMANT_EXIT, REMANT_MODE = args[k + 1 : k + 4]
+        del args[k : k + 4]
     if len(args) != 1:
-        sys.stderr.write("usage: cc_post.py [--keep-epilogue|--sdk-aspsx] <file.mas.s>\n")
+        sys.stderr.write(
+            "usage: cc_post.py [--keep-epilogue|--sdk-aspsx] <file.mas.s>\n"
+        )
         sys.exit(2)
     path = args[0]
     lines = open(path).read().splitlines()
+    if REMANT_JOIN is not None:
+        lines = _rule10_remnant_prepass(lines)
 
     out: list[str] = []
     run: list[int] = []  # indices into out of consecutive instructions

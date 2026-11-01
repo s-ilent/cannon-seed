@@ -109,6 +109,16 @@ fi
 if grep -q 'cc-post: keep-prologue' "$SRC" 2>/dev/null; then
     POSTFLAGS="$POSTFLAGS --keep-prologue"
 fi
+# Rule 10 composes with any primary flag above: re-inserts the loop-entry
+# guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
+# ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).
+# Marker args: <join-label> <exit-label> absorb|nop - the labels are
+# gcc-deterministic for the frozen source; anchor mismatch = loud build
+# failure (cc_post exit 3), never a silent skip.
+REMANT=$(grep -o 'cc-post: remnant-ori1.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4, $5}')
+if [ -n "$REMANT" ]; then
+    POSTFLAGS="$POSTFLAGS --remnant-ori1 $REMANT"
+fi
 python3 "$REPO/tools/cc_post.py" $POSTFLAGS "$STEM.mas.s"
 
 if [ "$STOP_AT_ASM" = 1 ]; then
