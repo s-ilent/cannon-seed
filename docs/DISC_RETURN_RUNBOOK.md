@@ -246,6 +246,17 @@ Landing-critical facts (banked, preserve them in the C):
   before landing.
 - Wave landings: the wave104 header shape (one placeholder mention per
   file) applies at template + gen source before landing.
+- The sdk_members / sdk_anchors / sdk_curated regen trio is
+  TRUE-BASELINE-GATED: the member slide consumes baselines/<t>.bin (the
+  splat yaml's own target_path), so running it against the woven-era
+  local dumps produces a false census (measured cron-20261101-0953:
+  g3_eu 402 -> 357 placements, 110 -> 51 named symbols) whose
+  "adoptions" would be woven-baseline evidence. sdk_curated's
+  refuse-guard (hand-authored content inside the generated block) is the
+  last line of defense - regenerate ONLY after Phase A witness 8/8 flips
+  the baseline_audit table to 8 MATCH, and hand facts live ABOVE the
+  marker (load_curated applies by `// target:` header, so a moved entry
+  must land inside its own target's section, never in a shared pile).
 - Single-session rule: one agent per sandbox; builds foreground, one
   target per call; never two at once.
 - worklog digest gate + RESTORE NOTE SOP every session (`python3
