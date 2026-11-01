@@ -133,6 +133,13 @@ VMANAGER O=0x11664=0x10668+0xffc, 206/240 hits (61 at +0x10);
 single-object modules peak AT the base (VS_VTBP 7/7, UT_GVA 6/6);
 SPU peaks at vote_base+0x100 (32/97); LIBGPU SYS 86/196.
 base = O_peak - size1 reproduces base_valid on VMANAGER (MATCH).
+ALL-LIBS VERDICT (0921 addendum): the PEAK is universal and dense
+(16 modules hit base == O_peak exactly, TAP 111/122, PRESET4 96/128,
+PMD 16/17 - all at/near their valid bases) but the O->base mapping is
+NOT a law: 16 ATBASE / 1 MATCH / 11 DIFF (TAP base-O = 0xd4e!) /
+16 EMPTY-valid-with-peak. The site counter roots at a per-module
+cluster boundary still to derive - the peak LOCATES the code, the
+decomposition stays open.
 DATA-CLASS ADDRESS LAW (VMANAGER): the composed %hi/%lo address
 A = (hi<<16)+sext(lo) at a %hi site satisfies A = v - 0x198 on 97/123
 lui hits - the 2c4 w=6 v is the PRE-LINK data address (data offset +
