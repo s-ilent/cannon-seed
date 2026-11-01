@@ -1374,6 +1374,24 @@ SsSeqCalledTbyT_tab = 0x80171ea4; // // ignore:true (shared-alias SsSeqCalledTby
 Snd_crescendo = 0x8007069c; // // type:func (pinned member row)
 Snd_decrescendo = 0x8006d09c; // // type:func (pinned member row)
 
+// memcpy_iso9660: the psyq 3.3 LIBCD ISO9660 member's own copy of
+// memcpy - the 0x34 13-insn byte-copy leaf (addiu sp,-8 / beqz n /
+// addiu v1,n,-1 / addiu n,-1 / lbu-addiu-addiu-sb loop / bne v1,n /
+// addiu a0,1 / addiu sp,8 / jr ra), the count-offset branch trick
+// (bne v1,n == n != 0). sdk_members.py UNIQUE placement of the LIBCD
+// ISO9660 member in ALL EIGHT targets: seven own-row copies
+// (0x34 asm rows tagged sdk) + one interior alabel inside
+// mainmenu_jp's five-function row func_80084924 (listing name
+// func_80077D40, the row's tail +0x51C; its rename composes with
+// that row's future split fix, NOT with this pass). The plain
+// `memcpy` name is taken per target by the LIBC 0x10 stub (the
+// sdk report marks the ISO9660 placements non-adoptable for exactly
+// this collision) - hence the qualified name. Byte-identical across
+// all seven rows (census sha f3e0fb2d, x7 after the dotted-row
+// universe fix). Entries INERT until the witnessed window (the
+// yaml row + listing label renames compose there).
+memcpy_iso9660 = 0x80063330; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: g3_eu
+
 // target: g3_jp  (220 sdk-member adoptions)
 GsSetOrign = 0x80027A60; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x80028090; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
@@ -1610,6 +1628,8 @@ Snd_stop = 0x8006fe5c; // // type:func (pinned member row)
 SetColorMatrix = 0x8004a334; // // type:func (pinned member row)
 SetTransMatrix = 0x8004a364; // // type:func (pinned member row)
 
+memcpy_iso9660 = 0x800629A0; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement; the scan's duplicate-name row func_800629A0.2); evidence under target: g3_jp
+
 // target: g3org_eu  (198 sdk-member adoptions)
 GsSetOrign = 0x800286BC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x80028CEC; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
@@ -1825,6 +1845,8 @@ SsSeqCalledTbyT_tab = 0x8017fb1c; // // ignore:true (shared-alias SsSeqCalledTby
 Snd_crescendo = 0x8006daf0; // // type:func (pinned member row)
 Snd_decrescendo = 0x8006a4f0; // // type:func (pinned member row)
 Snd_stop = 0x8006deb0; // // type:func (pinned member row)
+
+memcpy_iso9660 = 0x80060784; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: g3org_eu
 
 // target: g3org_jp  (220 sdk-member adoptions)
 GsSetOrign = 0x80028708; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -2061,6 +2083,8 @@ SsSeqCalledTbyT_ntracks = 0x8017fabc; // // ignore:true (shared-alias SsSeqCalle
 SsSeqCalledTbyT_slotbits = 0x80178c9c; // // ignore:true (shared-alias SsSeqCalledTbyT slotbits static)
 SsSeqCalledTbyT_tab = 0x8017fa38; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
 
+memcpy_iso9660 = 0x8005FE3C; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: g3org_jp
+
 // target: mainmenu_eu  (174 sdk-member adoptions)
 GsSetOrign = 0x800396CC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8003B158; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
@@ -2252,6 +2276,8 @@ Snd_crescendo = 0x80085c80; // // type:func (pinned member row)
 Snd_decrescendo = 0x80082680; // // type:func (pinned member row)
 SetColorMatrix = 0x8005e228; // // type:func (pinned member row)
 SetTransMatrix = 0x8005e258; // // type:func (pinned member row)
+
+memcpy_iso9660 = 0x80078698; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: mainmenu_eu
 
 // target: mainmenu_jp  (204 sdk-member adoptions)
 GsSetOrign = 0x80039734; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -2649,6 +2675,8 @@ Snd_stop = 0x8004946c; // // type:func (pinned member row)
 Snd_crescendo = 0x800490ac; // // type:func (pinned member row)
 Snd_decrescendo = 0x80045aac; // // type:func (pinned member row)
 
+memcpy_iso9660 = 0x8003BD40; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: sces_00269
+
 // target: slps_00270  (185 sdk-member adoptions)
 GsSetOrign = 0x80026C14; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x80027244; // LIBSND VM_DON member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees
@@ -2847,3 +2875,5 @@ SsSeqCalledTbyT_slotbits = 0x80115518; // // ignore:true (shared-alias SsSeqCall
 SsSeqCalledTbyT_tab = 0x8011c274; // // ignore:true (shared-alias SsSeqCalledTbyT track table)
 _svm_stereo_mono = 0x80114ff8; // // type:s32 (LIBSND VS_MONO bss static beyond the payload; SsSetMono/SsSetStereo sh %lo(0x4FF8)($at) with lui 0x8011)
 intr_vb_cb_slots = 0x8004e360; // // type:s32 (LIBETC INTR_VB member .data+0 in a no-row gap; setIntrVSync lui/addiu pair; retail bytes at the address: eight zero slots then 0x1F801114/0x1F801814/0x1F801110)
+memcpy_iso9660 = 0x8003BF4C; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: slps_00270
+

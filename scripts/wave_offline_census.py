@@ -40,7 +40,7 @@ TARGETS = [
 ]
 BASE_VA = 0x80020000
 HDR = 0x800
-ROW_RE = re.compile(r"^\s*- \[0x([0-9A-Fa-f]+), (\w+), (\w+)\]")
+ROW_RE = re.compile(r"^\s*- \[0x([0-9A-Fa-f]+), (\w+), ([\w.]+)\]")
 HEXCOL = re.compile(r"/\*\s*[0-9A-Fa-f]+\s+[0-9A-Fa-f]+\s+([0-9A-Fa-f]{8})\s*\*/")
 
 

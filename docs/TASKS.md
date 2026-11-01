@@ -13594,3 +13594,56 @@ the map's remaining three split two ways on the lane flags:
 - NEXT: unchanged - the intr lane's 13, the witnessed-window landing
   order (8006AF70 ladder first, then the svm init), the psylib lane's
   site-counter item, fresh disc links required before any judge.
+
+## 2026-11-01 (window cron-20261101-0507, oracle DOWN both links 404 at ~41.4h): the census dotted-row universe gap closes - 14 asm rows named func_XXXXXXXX.2 fell out of the wave census (ROW_RE's \\w+ stopped at the dot), the f3e0fb2d 0x34 wave corrects 6 -> 7 members, and the whole LIBCD ISO9660 memcpy family adopts its qualified name memcpy_iso9660 (7 own-row entries + the mainmenu_jp interior documented); suite 133/133
+
+Discovery chain: rehydrate OK; sandbox had rolled the repo back to 7623cd2e
+again (origin/main = dd7be9e2, this lineage's own head - no lane pushes
+since); fast-forward, worklog RESTORE NOTE re-appended (201 windows, digest
+exit 0), single-session check clean. Disc probe: both 2026-10-30 11:42Z
+links HEAD-404 at ~41.4h; Law Zero offline.
+
+- **THE UNIVERSE GAP.** The re-rank window's frontier walk pulled the
+  mainmenu_jp row func_80084924 (0x550, five functions in one row, the
+  head a mid-body fragment spilling from the preceding 0x4b8 "data" row)
+  whose tail alabel at +0x51C is the census's lone 0x34 interior hit -
+  and the six-member f3e0fb2d wave it belongs to was missing a seventh
+  member the tree plainly carries: g3_jp's row func_800629A0.2
+  (0x431A0, byte-identical to the other six). `ROW_RE`'s name group
+  `\\w+` stops at the scan's duplicate-name dot, so all 14 dotted asm
+  rows across the eight configs silently left the witness-free census
+  universe. Fix: name group `[\w.]+`; +4 regex-level tests including a
+  read-only real-repo pin that every dotted row has its committed
+  listing. Suite 133/133 (was 129). Re-run diff is EXACTLY two waves:
+  f3e0fb2d 0x34 6 -> 7 members and 76785405 0x8 15 -> 16; pool count
+  unchanged at 150; the intr-family 13 stay the only independent
+  own-row set (both new members EXT-MISMATCH-tagged), so the re-rank's
+  lane-boundary conclusion stands unchanged.
+- **THE ADOPTION.** sdk_members.txt places the LIBCD ISO9660 member's
+  memcpy UNIQUELY in all eight targets: the seven own-row copies above
+  plus mainmenu_jp's interior alabel (listing func_80077D40, runtime
+  0x80077D40 - the row is drifted; its rename composes with the parent
+  row's future split fix, not with this pass). The plain `memcpy` name
+  is taken per target by the LIBC 0x10 stub - the sdk report itself
+  marks the ISO9660 placements non-adoptable for exactly that collision
+  - so the family adopts the QUALIFIED name `memcpy_iso9660`: 7 entries
+  banked one per target section (0x80063330 g3_eu, 0x800629A0 g3_jp,
+  0x80060784 g3org_eu, 0x8005FE3C g3org_jp, 0x80078698 mainmenu_eu,
+  0x8003BD40 sces_00269, 0x8003BF4C slps_00270), full evidence comment
+  in the g3_eu block, INERT until the witnessed window (yaml + listing
+  label renames compose there). Verified non-invasively:
+  load_curated() parses exactly one memcpy_iso9660 per scoped target
+  (7/7, mainmenu_jp correctly empty), suite 133/133 GREEN.
+- GATES: census + curation + docs only (read-only tools, no
+  build/verify/judge - oracle DOWN, baseline-oracle disagreement
+  stands); ratchets 809/150 = tree; suite 133/133; tree change = the
+  census regex + its test file + the curated entries + this section.
+- NEXT: (1) witnessed window: fresh links FIRST, disc_return re-provision
+  + witness, then the parked drafts land in order (8006AF70 first - the
+  round-7 ceiling stands: DIFF 4, the two byte-retail routes await the
+  lane owner's call; then the svm init with _svm_damper); (2) offline:
+  the psylib lane's site-counter item stays theirs; the intr lane's 13
+  stay theirs; (3) offline (this lineage): the mainmenu_jp five-function
+  row func_80084924 (0x550 + the 0x4b8 data-row spill) is now scoped as
+  the next parent-function decode - the memcpy_iso9660 interior tail is
+  its anchor.
