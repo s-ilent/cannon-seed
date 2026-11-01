@@ -13647,3 +13647,48 @@ links HEAD-404 at ~41.4h; Law Zero offline.
   row func_80084924 (0x550 + the 0x4b8 data-row spill) is now scoped as
   the next parent-function decode - the memcpy_iso9660 interior tail is
   its anchor.
+
+## 2026-11-01 (window cron-20261101-0507, same session, oracle DOWN): the 8006AF70 LAST-4-WORDS DECISION BRIEF - the round-7 governance question consolidated for the lane owner (one section, three options, mechanics banked; the call stays the owner's)
+
+Everything below cites banked rounds only (r5 judge cron-20261031-0751;
+round-7 screen dbead6d9 + its b34/b35 headers). The question: the row
+sits at SIZE 1424 = row, DIFF 4 - c5's lui/lw/beqz/beq reg fields carry
+the $5 pin where retail carries $v1 - and no source-shape lever beats
+that ceiling (round 7 closed the ladder: plain v5 and pin-$3 merge
+wholesale; b33's reorder breaks retail block order; b34's opaque load
+binds $5 = zero gain; b35's $3-bound load re-merges downstream - with
+both loads in $v1 every C-generated part of the shorter chain merges;
+opacity must cover the whole chain).
+
+- **OPTION A - the full 9-word asm island.** Replace c5's chain body
+  with one byte-emitting asm covering the WHOLE chain (the round-7
+  banked law makes partial opacity impossible). Byte-retail by
+  construction; one judge run expected EXACT. Cost: the 9 words are no
+  longer compiler-derived C - the b35 header's words: "covering the
+  whole chain is an asm island, not real C". Precedent: handwritten
+  units under real names are an accepted class for ASM ROWS
+  (dd0d973b's 4-insn intr units); an asm island INSIDE a judged C row
+  is the new variant - visible, honest, per-file reversible. Permanence:
+  none - the chain is frozen retail (psyq SSINIT), no maintenance.
+- **OPTION B - the cc_post reg-field fixup class.** A marker-scoped
+  post-pass rule rewriting ONLY the four reg fields in the built asm.
+  The whole function stays compiler-derived; the 4 words become
+  post-processed. Cost: a byte-REWRITE class is heavier than every
+  existing cc_post rule (all current rules only reorder side-effect-free
+  pairs) - permanent tooling whose barrier, once built, lowers for
+  future cases (the governance concern). Semantically safe HERE (v5's
+  chain-local live range replaces only the dead v1 value on c5's path,
+  banked round-7), and the judge still witnesses the rewrite by diff.
+- **OPTION C - "accept DIFF 4 and land r5" is NOT a landing.** Under
+  the whole-image oracle a C row differing by 4 words makes g3_eu verify
+  exit 1 (the gate refuses the build) - the landing is mechanically
+  impossible without a gate waiver, which is itself new policy
+  territory. C's real content is: leave the row PARKED (asm) until the
+  owner picks A or B - the queue item stalls on this row either way.
+- LOGISTICS for either route: staging (yaml 0x4B770 flip + src copy)
+  must land in the SAME window it is staged in, or be reverted per the
+  gates (round-7 NEXT (2)); fresh disc links are the prerequisite for
+  any judge.
+- THE CALL: the owner's. This window offers only the consolidation -
+  no option was staged, no tooling was built, the r5 draft and the
+  b34/b35 probe headers are untouched.
