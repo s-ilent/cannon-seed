@@ -13392,3 +13392,73 @@ GATES: no build/verify/judge (oracle DOWN, EU+JP 404 at ~37.7h); tree change = t
 NEXT: (1) offline: run fixup_site_origin over ALL libs' modules and test base = O_peak - size1 against the delta-0 law + the valid law where they exist - the discriminator modules (SEQREAD/GEO/PRESET4/PRIM) are the proof ground for the per-cluster claim; (2) offline: the t=0x10 form shape (SEQREAD 156x - dominant there) and the small-v (below-first-def) t=0x4a target frame; (3) offline: the +0x198 bias - is it the module's .sdata size? (VMANAGER's data cluster... cross-module check is one sweep); (4) witnessed window: land the parked drafts in order (8006AF70/SsSetTickMode with the AC04 split fix, then the svm init with _svm_damper); (5) fresh disc links needed before any judge work.
 
 ADDENDUM (same window, the all-libs sweep - NEXT item 1 executed): probe_psylib_fixbase_all.py ran fixup_site_origin over every module of all 9 libs with b=2 defs and >=4 hi sites. Verdict counts: 16 ATBASE (base_valid == O_peak exactly - the single-object class), 1 MATCH (VMANAGER, base = O_peak - size1), 11 DIFF (the O->base mapping is NOT uniformly base or base+size1: TAP peaks 111/122 at O=0x118 with base 0xe66 - delta 0xd4e; PAD INTR 19/32; 2D_BG0 PMD 16/17), 16 EMPTY-valid modules WITH a sharp peak (the per-cluster proof ground: PRESET4 96/128 at O=0x1b0ec, EXT/SYS 86/196, CDROM/BIOS 25/104). CONCLUSION: the lui-peak is a universal, dense, independent LOCATOR of each module's code (every peak lands inside the module's own span), but the site-counter root decomposition is still open - banked as the updated SITE-ORIGIN LAW in tools/omf_pubsyms.py. No test changes (the 4 VMANAGER assertions hold; the route was never claimed beyond VMANAGER's MATCH). Suite 122/122, ratchets 809/150 = tree, oracle DOWN.
+
+## 2026-11-01 (window cron-20261101-0237 UTC, oracle DOWN EU 404 at ~39.0h): the SANDBOX BASELINE AUDIT - all 8 local `baselines/*.bin` are the retired woven-era dumps whose SHA-1s contradict the committed oracles (verify exit 1 by design on every target), the `--framing-rows` false-positive trap that implies is measured end to end, and a rehydrate guard is proposed
+
+Discovery chain (probe 404 first, then the offline queue walk): rehydrate OK
+(2s), origin fast-forward 7623cd2e -> 7744bd9b (the psylib site-origin lane,
+11 commits since the task-sheet Facts), worklog RESTORE NOTE re-appended (201
+windows, digest exit 0), single-session check clean. The carve-batch queue
+item pointed at `make verify` as its gate, so the gate's offline runnability
+was audited FIRST - and the audit found the sandbox state, not the queue.
+
+- **ALL 8 LOCAL BASELINES ARE WRONG-ERA DUMPS.** `sha1sum baselines/<t>.bin`
+  vs `config/sha1/<t>.sha1` (the committed oracle): slps_00270 f2a13b52 vs
+  fa9474b4; sces_00269 19698984 vs 06b4bda6; mainmenu_jp ec26c696 vs
+  d637286a; mainmenu_eu cbad60dc vs f9f29eee; g3_jp 6ab446ff vs 994a680c;
+  g3_eu 80acb6d1 vs 39030a75; g3org_jp 5923d4eb vs 2b2a4225; g3org_eu
+  c83138e2 vs 01b37b4e. `verify.sh` exits 1 on every target BEFORE building
+  (the gate working as designed: "a different hash is a different build").
+  The files on disk are the pre-witness-era "corrupted extraction
+  (contiguous raw read)" dumps - raw MODE2/2352 sector reads with the 304
+  framing gaps woven in (sync measured at 0x918 + 2352k, perfectly
+  periodic) - NOT the true retail the oracles pin. The true baselines the
+  witnessed windows provisioned were eaten by a sandbox rollback; these
+  older artifacts survived in their place.
+- **CONSEQUENCE: every build/judge/carve-landing queue item is BLOCKED
+  offline** - not by Law Zero's disc wait (that is fine, work continues) but
+  by the gate itself refusing to judge against the wrong dump. The python
+  suite (122/122) stays the only live gate; the psylib decode lane's
+  "suite GREEN, oracle DOWN" commit trail is exactly consistent with this.
+- **THE `--framing-rows` TRAP, MEASURED.** With these wrong dumps at
+  `baselines/`, `python3 tools/deframe.py --framing-rows` recomputes
+  "confidently" and emits a 338-row re-type list ({data: 19, c: 57, asm:
+  262}) - including 57 `c` rows: LANDED, JUDGE-EXACT C FUNCTIONS such as
+  ScaleMatrixL (g3_eu, 292 B @ 0x29D98) and SetRotMatrix (mainmenu_eu, 48 B
+  @ 0x3E9C8). Following the queued MODE2-retirement prescription on this
+  output would re-type real matched code to data. Proof the flags are
+  artifacts of the wrong dumps: (a) the dumps' woven gaps at 0x918+2352k
+  make the tool's >90% overlap test fire on rows that merely sit at
+  gap-shaped numeric positions; (b) in the g3_eu dump the 292 bytes at
+  ScaleMatrixL's row offset are high-entropy ECC (165/256 distinct) while
+  its REAL compiled bytes (bgez/addiu/jr head, 75/256 distinct) sit at the
+  woven-position mapping 0x29D98+0x800 = 0x2A598; (c) SetRotMatrix's exact
+  compiled body (5x lw + 5x ctc2 + jr/nop, 20 distinct bytes) is found at
+  the computed woven position 0x47E38 in the mainmenu_eu dump, while the
+  row's own numeric offset holds ECC. On TRUE baselines the tool
+  self-disables (layout() raises "not a framed image" - the true file has
+  no gaps), so the trap exists ONLY while the wrong-era dumps are present.
+- **QUEUE-STATE RECONCILIATION.** The MODE2-retirement item stays CLOSED
+  (87f84d15 ran it 8/8 GREEN in the woven era, before the deframe_migrate
+  rebase); the carve-batch campaign is 7/8 with mainmenu_jp scope-law
+  parked (lane-owned); func_80052038 LANDED on the live oracle (55cadbd4,
+  judge EXACT 2032/2032, ratchets 807/57 -> 809/150) - the task-sheet Queue
+  1 head item is already done by another window; build-relevant inputs are
+  unchanged since 55cadbd4 (only symbols.curated.txt +102 lines), so the
+  last 8/8 whole-image claim stands for the committed tree.
+- **PROPOSED GUARD (next offline window, small):** `tools/baseline_audit.py`
+  - read-only, prints the 8-row expected/actual/MATCH table, always exit 0,
+  called from `tools/rehydrate.sh` after the identity step with `|| true`.
+  This window's 40 minutes of archaeology would have been a 10-second
+  warning at SESSION START. Do NOT make it fail the session (a blocked
+  baseline is a Law Zero work-around-it state, not a crash).
+- GATES: no build/verify/judge run (baseline-oracle disagreement, oracle
+  DOWN EU 404 at ~39.0h; JP link not separately probed after the EU 404 -
+  both issued together at 2026-10-30 11:42Z); tree change = this docs
+  section only; suite untouched (122/122), ratchets 809/150 = tree.
+- NEXT: (1) offline: land the baseline_audit.py guard per the shape above;
+  (2) offline: the psylib lane's open items stand (site-counter root
+  decomposition is theirs); (3) witnessed window: fresh links FIRST, then
+  disc_return.sh re-provisions + witnesses the true baselines (the runbook
+  path), THEN the parked drafts land in order (8006AF70/SsSetTickMode with
+  the AC04 split fix, then the svm init with _svm_damper).
