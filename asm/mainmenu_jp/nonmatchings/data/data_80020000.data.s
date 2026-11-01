@@ -4262,51 +4262,106 @@ dlabel D_80023524
     /* 3D24 80023524 */ .asciz "waring:old type streaming mode in CdRead2\n"
     /* 776172696E673A6F6C6420747970652073747265616D696E67206D6F646520696E20436452656164320A0000 */
 .align 2
+enddlabel D_80023524
+
 .align 2
+nonmatching D_80023550
+
+dlabel D_80023550
     /* 3D50 80023550 */ .asciz "%s: path level (%d) error\n"
     /* 25733A2070617468206C6576656C2028256429206572726F720A0000 */
 .align 2
+enddlabel D_80023550
+
 .align 2
+nonmatching D_8002356C
+
+dlabel D_8002356C
     /* 3D6C 8002356C */ .asciz "%s: dir was not found\n"
     /* 25733A2064697220776173206E6F7420666F756E640A0000 */
 .align 2
+enddlabel D_8002356C
+
 .align 2
+nonmatching D_80023584
+
+dlabel D_80023584
     /* 3D84 80023584 */ .asciz "CdSearchFile: disc error\n"
     /* 436453656172636846696C653A2064697363206572726F720A000000 */
 .align 2
+enddlabel D_80023584
+
 .align 2
+nonmatching D_800235A0
+
+dlabel D_800235A0
     /* 3DA0 800235A0 */ .asciz "CdSearchFile: searching %s...\n"
     /* 436453656172636846696C653A20736561726368696E672025732E2E2E0A0000 */
 .align 2
+enddlabel D_800235A0
+
 .align 2
+nonmatching D_800235C0
+
+dlabel D_800235C0
     /* 3DC0 800235C0 */ .asciz "%s:  found\n"
     /* 25733A2020666F756E640A00 */
 .align 2
+enddlabel D_800235C0
+
 .align 2
+nonmatching D_800235CC
+
+dlabel D_800235CC
     /* 3DCC 800235CC */ .asciz "%s: not found\n"
     /* 25733A206E6F7420666F756E640A0000 */
 .align 2
+enddlabel D_800235CC
+
 .align 2
+nonmatching D_800235DC
+
+dlabel D_800235DC
     /* 3DDC 800235DC */ .asciz "CD_newmedia: Read error in cd_read(PVD)\n"
     /* 43445F6E65776D656469613A2052656164206572726F7220696E2063645F7265616428505644290A00000000 */
 .align 2
+enddlabel D_800235DC
+
 .align 2
+nonmatching D_80023608
+
+dlabel D_80023608
     /* 3E08 80023608 */ .asciz "CD001"
     /* 4344303031000000 */
 .align 2
+enddlabel D_80023608
+
 .align 2
+nonmatching D_80023610
+
+dlabel D_80023610
     /* 3E10 80023610 */ .asciz "CD_newmedia: Disc format error in cd_read(PVD)\n"
     /* 43445F6E65776D656469613A204469736320666F726D6174206572726F7220696E2063645F7265616428505644290A00 */
 .align 2
+enddlabel D_80023610
+
 .align 2
+nonmatching D_80023640
+
+dlabel D_80023640
     /* 3E40 80023640 */ .asciz "CD_newmedia: Read error (PT:%08x)\n"
     /* 43445F6E65776D656469613A2052656164206572726F72202850543A25303878290A0000 */
 .align 2
+enddlabel D_80023640
+
 .align 2
+nonmatching D_80023664
+
+dlabel D_80023664
     /* 3E64 80023664 */ .asciz "CD_newmedia: sarching dir..\n"
     /* 43445F6E65776D656469613A207361726368696E67206469722E2E0A00000000 */
 .align 2
-enddlabel D_80023524
+enddlabel D_80023664
 
 .align 2
 nonmatching D_80023684
