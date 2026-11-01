@@ -114,6 +114,30 @@ fi
 # dropped its load-load nops - g3_eu verify failed with a 953-byte diff
 # until the out-of-repo clone was patched too).
 MASPSX_PATCH="$(pwd)/tools/maspsx_delay_slot.patch"
+if [ ! -f "$MASPSX_PATCH" ]; then
+    # Stale-HEAD guard (cron-20261101-1414 incident): rehydrate runs BEFORE
+    # the session's origin sync, so a tree parked on a HEAD that predates
+    # 8ff08f1c has no patch file and 6b used to skip SILENTLY - the clones
+    # stayed unpatched and every later build of the patch-dependent C rows
+    # (func_80052038/func_800642A0/func_80067690, then the sdk-body set)
+    # drifted until a verify caught it 3273 bytes in. The clones are
+    # git-ignored but the patch is in-repo, so patch from the origin/main
+    # blob when the local checkout does not carry the file yet; the next
+    # rehydrate after the reset re-applies from the identical working-tree
+    # copy (idempotent by the checkout-first loop below).
+    git fetch -q origin main 2>/dev/null || true
+    if git cat-file -e origin/main:tools/maspsx_delay_slot.patch 2>/dev/null; then
+        MASPSX_TMP="$(pwd)/build/maspsx_delay_slot.origin.patch"
+        mkdir -p "$(pwd)/build"
+        git show origin/main:tools/maspsx_delay_slot.patch > "$MASPSX_TMP" 2>/dev/null
+        if [ -s "$MASPSX_TMP" ]; then
+            MASPSX_PATCH="$MASPSX_TMP"
+            say "patch file absent at HEAD ($(git rev-parse --short HEAD 2>/dev/null || echo '?')) - using origin/main's copy (stale-HEAD guard)"
+        fi
+    else
+        say "WARN: tools/maspsx_delay_slot.patch absent at HEAD and origin/main - skipping 6b (pre-patch tree)"
+    fi
+fi
 if [ -f "$MASPSX_PATCH" ]; then
     for MASPSX_DIR in tools-src/maspsx /home/z/my-project/tools-src/maspsx; do
         if [ ! -d "$MASPSX_DIR" ]; then
@@ -128,7 +152,7 @@ if [ -f "$MASPSX_PATCH" ]; then
         elif grep -q "line_redefines_reg" "$MASPSX_DIR/maspsx/__init__.py" 2>/dev/null && grep -q "args.addiu_at is not None" "$MASPSX_DIR/maspsx.py" 2>/dev/null; then
             say "maspsx delay-slot patch already present ($MASPSX_DIR)"
         else
-            say "WARN: maspsx delay-slot patch failed to apply in $MASPSX_DIR - func_800642A0 will not build"
+            say "WARN: maspsx delay-slot patch failed to apply in $MASPSX_DIR - the landed load-load-nop C rows will not build"
         fi
     done
 fi
