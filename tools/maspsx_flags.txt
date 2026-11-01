@@ -34,3 +34,10 @@ target:g3_eu --addiu-at on
 # family's future flips (CdSearchFile/CD_newmedia/CD_cachefile) when they
 # land.
 unit:func_8007796C --addiu-at on
+
+# Window cron-20261101-2033: the CD_newmedia landing is the family's
+# second sdk-body C row on the mainmenu pair - same at-split class as the
+# func_8007796C lookup leaf (E84/E88 stores, the three trace-dump word
+# loads and the terminator store all re-materialize the symbol through
+# $at; the E8C store and the name cursor stay prologue-cursor form).
+unit:func_80077678 --addiu-at on
