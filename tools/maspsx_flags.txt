@@ -24,3 +24,13 @@
 # the mainmenu pair must never see it.
 
 target:g3_eu --addiu-at on
+
+# The LIBCD ISO9660 units inside the mainmenu pair are PSYQ SDK bodies -
+# retail compiled them with the SDK's own aspsx (< 2.30), not the game
+# modules' newer aspsx, so their sym+IV loads/stores take the 4-insn
+# at-split (lui/addiu %lo into $at/addu/access 0) like g3_eu's game code.
+# Window cron-20261101-1415: the func_8007796C lookup-leaf flip is the
+# first sdk-body C row on the mainmenu pair; the same flip applies to the
+# family's future flips (CdSearchFile/CD_newmedia/CD_cachefile) when they
+# land.
+unit:func_8007796C --addiu-at on
