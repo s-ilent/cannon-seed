@@ -13921,3 +13921,95 @@ step 1 and the split+judge step 6 stay witnessed-window work).
   memcpy_iso9660, CD_cachefile, CdSearchFile, CD_newmedia + the match
   leaf). GATES: decode + drafts + docs only (read-only over committed
   listings); ratchets 809/150 = tree; suite 133/133.
+
+## 2026-11-01 (window cron-20261101-0736, oracle DOWN both links 404 at ~44h): the disc-return runbook's landing queue REWRITTEN for the current parked-draft set (the task sheet's judge-prep item) and the psyq re-provision becomes a one-command tool - plus the stale-queue correction (func_80052038 already landed; the true order is AF70 owner-gated -> AC04 -> svm init -> the 84924 cluster)
+
+Recovery first: the worklog had rolled back to the cron-20261014 era (69
+sections; digest listed 201 missing) - rehydrate, fetch + reset --hard to
+origin/main ef78240a (five commits this lane had not seen: the census
+dotted-row fix 7059420f, the AF70 decision brief 12728cad, the 84924
+decode trilogy 03752318/6ddcfba3/ef78240a), append_restore_note
+cron-20261101-0740-restore, digest exit 0. baseline_audit (rehydrate step
+4b's tool, run by hand here since the rollback had also reverted the
+repo checkout): 0 MATCH / 8 MISMATCH - the retired woven-era dumps, the
+expected pre-witness state. Disc links EU/JP 404 probed 07:38Z (~44.0h
+age on the 2026-10-30 11:42Z set) - oracle DOWN, Law Zero offline.
+
+STALE-QUEUE CORRECTION (the task sheet's Facts are from 2026-10-30): Queue
+1's "land func_80052038 then func_8006AF70" is half-stale - func_80052038
+LANDED (55cadbd4, judge EXACT 2032/2032, whole-image 8/8 GREEN, the
+ratchets 807/57 -> 809/150 landing; its v4..v14 probe ladder is history).
+The AF70 "untracked probe_8006AF70_2.c" note is stale too (committed).
+The TRUE landing queue, now codified in the runbook: func_8006AF70
+(OWNER-GATED, options A/B/C; skip entirely without the call) ->
+func_8006AC04 (split fix + the banked-inert SsInit/SsInitHot apply) ->
+func_80067690 svm init (_svm_damper) -> the func_80084924 cluster's
+remaining steps 1 (TRUE-baseline spill audit) + 6 (yaml split + C rows +
+judge + the memcpy_iso9660 rename).
+
+ITEM 1 - docs/DISC_RETURN_RUNBOOK.md phases C-G REWRITTEN (fb4833cf). The
+2026-10-27/28 phase payloads landed with the oracle returns (rule-1
+n-load live in tools/cc_post.py, GsMapModelingData as c rows in all six
+game yamls; the slps/sces block-move twin pair stays parked at its banked
+ceilings, stability-only), so per this file's own rewrite convention the
+stale phases were replaced: Phase C = the AF70 row (r5 at SIZE 1424 =
+row / DIFF 4, options A/B/C restated, the same-window staging law, the
+full rider composition - the five libspu labels + the three tick statics
++ the func_800642A0.c rename + the expected 150 -> 143 refund), Phase D =
+the AC04 row (extent 0x120 -> 0x14C, the D_8006AD24 epilogue
+reclassification, SsSetTableSize stays held), Phase E = the svm init (the
+66BC4 row split's ~40 interior labels, the omf_pubsyms publics-parser
+pin prerequisite for any rename), Phase F = the 84924 cluster (the five
+parked drafts + the 0x20 match leaf + memcpy_iso9660, with the
+landing-critical decode facts: the plain-bnez fn3 gate whose "disc
+error" branch is dead retail code, the sentinel hops, the strncmp-12
+matcher, the row drift as coordination-gated de-frame material), Phase G
+= the post-landing loop (verify/ratchets/census/wave re-rank/commit
+conventions). Phases A/B refreshed in place: the 133-case suite, the
+809/150 ratchet baselines, the baseline_audit 8-MISMATCH pre-witness
+expectation + the post-provision re-audit step, the one-command
+disc_return path with the probe-first/404-down law.
+
+ITEM 2 - tools/provision_psyq.sh SHIPS. The recurring hand re-clone
+("this is now the standard window-opening cost", cron-20261031-1251)
+becomes one command: sozud/psy-q sparse clone with
+3.3/PSX/LIB+INCLUDE+DOC into /home/z/psyq + lab313ru/psx_psyq_signatures
+sparse 330 into /home/z/psyq-sigs (both recipes were banked prose -
+docs/MATCHING.md:90 and the TASKS windows 6715/12740/12886/12980; the
+script cites them). Idempotent (existing trees kept without --force),
+--psyq-only/--sigs-only scoping, depth-1 blob-filtered sparse (the
+2026-10-12 full-clone stall trap). Smoke-proven end to end THIS window:
+16 LIBs + INCLUDE + DOC land, the sigs 330 checkout lands, the
+idempotent re-run exits 0 in under a minute.
+
+REFERENCE AUDIT (the docs item's quality pass): all 20 files the
+rewritten runbook cites exist on the tree; the splat.g3_eu.yaml 0x4B770
+flip row exists; wave_offline_census --parents parses (raw-argv scan,
+hence invisible to --help); suite 133/133 OK and ratchets 809/150 = tree
+re-run on this window's tree before pushing.
+
+OMF FRONTIER CHECK (no duplicate work done): the publics-parser quirk
+was already PINNED (cron-20261101-0151 - the misattribution is in the ROW
+READING: 0x0c-for-non-public = THUNK never definition, own-public-as-0x0e
+= the unresolved alias class, public-only-in-tail = the TAIL class;
+tests test_thunk_row_is_not_a_definition et al. cover it), so the 1525-era
+NEXT (2) is closed; the def-base derivation stays a LANE FLAG; the
+BIOS-thunk extra at data_80065F50 is CONFIRMED CLOSED (do-not-re-chase
+stands). The psyq curation pass's next family is NEXT-window work over
+the freshly provisioned /home/z/psyq (the sdk_members --sigs corroborated
+adoptable list is the sieve) - not started here to keep this window's
+items complete instead of half-open.
+
+GATES: docs + tools only (no build/verify/judge - oracle DOWN, witness
+0/8); ratchets 809/150 = tree; suite 133/133; tree change = the runbook
+rewrite + tools/provision_psyq.sh + this section.
+
+NEXT: (1) witnessed window: fresh links FIRST, disc_return re-provision +
+witness, then the runbook phases C-F in order (AF70 first - the owner
+call is REQUIRED, skip the phase entirely if absent); (2) offline: the
+psyq curation pass's next family over the provisioned /home/z/psyq
+(sdk_members.py --sigs /home/z/psyq-sigs/330 is the corroborated sieve;
+the held numeric statics' contra-evidence stands until the OMF-offsets
+step); (3) the psylib/omf lane flags stay theirs (SsSetTableSize, the
+def-base derivation, the site-counter item); (4) fresh disc links needed
+before any judge work (the 2026-10-30 set is dead at ~44h).
