@@ -13692,3 +13692,53 @@ opacity must cover the whole chain).
 - THE CALL: the owner's. This window offers only the consolidation -
   no option was staged, no tooling was built, the r5 draft and the
   b34/b35 probe headers are untouched.
+
+## 2026-11-01 (window cron-20261101-0507, same session, oracle DOWN): the func_80084924 parent-row decode OPENS with its structure map - the mainmenu_jp 0x550 row is FIVE functions (one head fragment + three bodies + the memcpy_iso9660 interior alabel), the real unit includes the preceding 0x4b8 "data" row, six-step plan banked
+
+Structure read off asm/mainmenu_jp/nonmatchings/func_80084924.s (runtime
+VAs; the row is drifted - yaml name 0x80084924 vs listing head 0x80077824,
+the banked carve-vs-runtime skew):
+
+1. HEAD FRAGMENT 0x80077824..0x80077968 - a mid-body continuation (the
+   first instruction is `addu $at,$at,$s0; sw $s3,0($at)`, no prologue):
+   the real head lives in the PRECEDING yaml row data_8008433C (0x4b8,
+   "real code mis-typed data" class, the intr-cluster precedent). Visible:
+   stores through the D_80147E88 + idx*44 record table (the 44-byte
+   stride: ((i*2+i)<<2 - i)<<2), a func_80077D40 call copying the record
+   name, a `sb $zero` terminator store, the D_800C7CF0 verbosity gate
+   (slti 2 -> printf D_80023684 with three table loads + s2 on the stack),
+   the a3 < 0x80 guards and the D_80147E88[a3] zero store, epilogue
+   (0x40 frame: ra + s0..s5).
+2. fn2 0x8007796C..0x80077A14 (0x28 frame) - the name-lookup leaf: 0x80
+   records at D_80147E88 stride 0x2C, strcmp($s4, name at D_80147E90
+   stride 0x2C), returns index+1 on hit or -1 after 0x80.
+3. fn3 0x80077A18..0x80077CD0 (0x40 frame, s6) - the big loader: the
+   D_800C8024 current-id guard (s6 == id -> return 1), fn2-shaped record
+   addressing at D_80147E60 (a1 = record[s6], 44-byte stride), the
+   staged loader call func_80077CD4, then the 0x40-iteration parse loop
+   over the D_80149484 records (lbu length head, lwl/lwr unaligned name
+   at +5/+2 through 0x18(sp) into func_8007502C, the +0xD/+0xA 4-byte
+   copy into tab+4+s1*4? (s1 stride 0x18), the per-type arms reading
+   D_800236F8/FC/FE (lhu/lh/lb constants into the 0x18-byte records),
+   the func_80077D40 copy of the +0x21 payload of length lbu(s0+0x20),
+   the D_80023700 verbosity printf, s2 counts to 0x40), the id store
+   back to D_800C8024, the D_8014788C zero sweep ((s2*2+s2)<<3 = 24*s2),
+   exit printf D_8002371C, return 1.
+4. alabel func_80077CD4 (0x28 frame) - the staged loader: func_8007502C,
+   func_80074B28(2, buf, 0), func_80074FAC(s1, s0, 0x80),
+   func_80074F8C(0, 0) with sltiu v0,1 bool return.
+5. alabel func_80077D40 (0x34) - the LIBCD ISO9660 memcpy interior,
+   identity banked as memcpy_iso9660 this window; its rename composes
+   HERE (with the split fix), the only interior copy in the eight
+   targets.
+
+SIX-STEP PLAN (parked; witnessed-window work): (1) split-fix scope
+includes the data_8008433C spill audit FIRST (deframe/retype on TRUE
+baselines only - the --framing-rows trap is banked); (2) decode fn2
+(smallest, self-contained); (3) decode the two alabels; (4) decode fn3
+(anchors: the D_800C8024 id guard, the 44/24-byte record systems, the
+func_8007502C/74B28/74FAC/74F8C loader family); (5) the head fragment
+last (needs the spill-row tail decode); (6) yaml split into per-function
+rows + C drafts + judge on the live oracle, memcpy_iso9660 rename riding
+step 6. GATES: listing-read only this window; no decode claims beyond
+the structure; oracle DOWN; ratchets 809/150 = tree; suite 133/133.
