@@ -47,26 +47,32 @@ clone_sparse() {
         say "removing $dest (--force)"
         rm -rf "$dest"
     fi
-    if [ -d "$dest/.git" ]; then
+    if [ ! -d "$dest/.git" ]; then
+        say "cloning $url -> $dest"
+        git clone --depth 1 --filter=blob:none --sparse "$url" "$dest"
+    else
         say "kept existing $dest (no --force)"
-        return 0
     fi
-    say "cloning $url -> $dest"
-    git clone --depth 1 --filter=blob:none --sparse "$url" "$dest"
+    # the sparse set is enforced on EVERY run (idempotent), so trees
+    # provisioned by an older script revision gain the newer dirs too
     git -C "$dest" sparse-checkout set "$@"
 }
 
-# 1. the psyq 3.3 SDK (LIB + INCLUDE + DOC - DOC added cron-20261031-1525)
+# 1. the psyq SDK (LIB + INCLUDE + DOC - DOC added cron-20261031-1525;
+#    the 3.5/3.6/4.0 LIB dirs feed sdk_members.py's repeated --libs
+#    multi-version index, the a65eabed invocation)
 if [ "$DO_PSYQ" = 1 ]; then
     clone_sparse https://github.com/sozud/psy-q /home/z/psyq \
-        3.3/PSX/LIB 3.3/PSX/INCLUDE 3.3/PSX/DOC
+        3.3/PSX/LIB 3.3/PSX/INCLUDE 3.3/PSX/DOC \
+        3.5/PSX/LIB 3.6/PSX/LIB 4.0/PSX/LIB
     for d in /home/z/psyq/3.3/PSX/LIB /home/z/psyq/3.3/PSX/INCLUDE \
-             /home/z/psyq/3.3/PSX/DOC; do
+             /home/z/psyq/3.3/PSX/DOC /home/z/psyq/3.5/PSX/LIB \
+             /home/z/psyq/3.6/PSX/LIB /home/z/psyq/4.0/PSX/LIB; do
         if [ ! -d "$d" ]; then
-            say "MISSING $d after checkout - inspect $dest manually"; exit 1
+            say "MISSING $d after checkout - inspect /home/z/psyq manually"; exit 1
         fi
     done
-    say "psyq 3.3 ok: $(ls /home/z/psyq/3.3/PSX/LIB/*.LIB 2>/dev/null | wc -l) LIBs, INCLUDE+DOC present"
+    say "psyq ok: $(ls /home/z/psyq/3.3/PSX/LIB/*.LIB 2>/dev/null | wc -l) 3.3 LIBs, INCLUDE+DOC present, 3.5/3.6/4.0 LIB dirs present"
 fi
 
 # 2. the signature-DB corroboration dir (sdk_members.py --sigs)
