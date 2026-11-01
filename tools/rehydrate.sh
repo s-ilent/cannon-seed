@@ -12,6 +12,9 @@
 #   2. re-marks executable entry points explicitly
 #   3. restores the 3 /home/z PAT locations from the surviving .secrets copies
 #   4. re-asserts git identity (Super Z / bot email)
+#   4b. audits the baseline oracles (tools/baseline_audit.py, read-only,
+#       always exit 0) - catches the retired-woven-dump rollback state
+#       before a window burns minutes on verify's by-design exit 1
 #   5. rebuilds the persistent venv at /home/z/my-project/.venv from the
 #      offline wheelhouse if the toolchain is missing (no network needed)
 #   6. verifies splat/spimdisasm/capstone import; re-clones maspsx if lost
@@ -57,6 +60,20 @@ git config user.name  "Super Z"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git config credential.helper store
 say "git identity + credential helper asserted"
+
+# --- 4b. baseline oracle audit (read-only guard, NEVER fails the session) ----
+# cron-20261101-0237: a rollback can park the retired woven-era dumps at
+# baselines/ while the committed oracles pin the true de-framed retail -
+# verify then exits 1 by design on EVERY target and the window burns its
+# minutes proving the sandbox state instead of working. The audit prints the
+# expected/actual table in seconds. `|| true` by design: a blocked baseline
+# is a Law Zero work-around-it state, not a crash. Runs on the system python
+# (stdlib-only) because the persistent venv may not exist yet at this point.
+if [ -f tools/baseline_audit.py ]; then
+    /usr/bin/python3 tools/baseline_audit.py || true
+else
+    say "baseline audit skipped (tools/baseline_audit.py missing)"
+fi
 
 # --- 5. persistent venv (offline first, network fallback) --------------------
 if [ ! -x "$PYBIN" ] || ! "$PYBIN" -c "import splat, spimdisasm, capstone" >/dev/null 2>&1; then

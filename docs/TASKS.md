@@ -13462,3 +13462,56 @@ was audited FIRST - and the audit found the sandbox state, not the queue.
   disc_return.sh re-provisions + witnesses the true baselines (the runbook
   path), THEN the parked drafts land in order (8006AF70/SsSetTickMode with
   the AC04 split fix, then the svm init with _svm_damper).
+
+## 2026-11-01 (window cron-20261101-0355, oracle DOWN both links 404 at ~40.2h): the rehydrate baseline_audit guard lands - the audit window's 40-minute archaeology becomes a 10-second SESSION START warning (tools/baseline_audit.py, read-only, always exit 0, wired into rehydrate.sh after the identity step with || true), suite 129/129
+
+Discovery chain: rehydrate OK (1s), origin fast-forward 7623cd2e -> 50f63c5a
+(the baseline-audit docs + the psylib site-origin lane), worklog RESTORE NOTE
+re-appended (201 windows missing from the rolled-back local copy, digest
+exit 0), single-session check clean. Disc probe: both links HEAD-404 at
+~40.2h age (issued 2026-10-30 11:42Z), consistent with every window since
+~34h; Law Zero offline straight into queue item (1) of the audit window's
+NEXT list.
+
+- **THE GUARD LANDS AS PROPOSED.** `tools/baseline_audit.py`: stdlib-only,
+  read-only; for each `config/sha1/<t>.sha1` it parses the expected hash
+  exactly the way verify.sh does (the awk mirror: first non-comment
+  non-blank line, field 1, lowercased), sha1s `baselines/<t>.bin` when
+  present, and prints the per-target EXPECTED/ACTUAL
+  MATCH|MISMATCH|MISSING|NO-ORACLE table plus a summary footer. main()
+  returns 0 UNCONDITIONALLY - a blocked baseline is a Law Zero
+  work-around-it state, not a crash. `tools/rehydrate.sh` gains step 4b:
+  the audit runs right after the git-identity step, on the SYSTEM python
+  (stdlib-only, the persistent venv may not exist yet at that point), with
+  `|| true`, and says "skipped" gracefully if the file is missing. The
+  script header's step list documents 4b.
+- **LIVE PROOF.** The guard's first real run reproduces the audit window's
+  table exactly - 0 MATCH / 8 MISMATCH, every hash pair identical
+  (slps_00270 f2a13b52 vs fa9474b4, mainmenu_eu cbad60dc vs f9f29eee,
+  mainmenu_jp ec26c696 vs d637286a, g3_jp 6ab446ff vs 994a680c, g3_eu
+  80acb6d1 vs 39030a75, g3org_jp 5923d4eb vs 2b2a4225, g3org_eu c83138e2 vs
+  01b37b4e, sces_00269 19698984 vs 06b4bda6) - confirming baselines/ still
+  holds the retired woven-era dumps and `make verify` remains
+  exit-1-by-design on all eight targets until a witnessed window
+  re-provisions via disc_return.sh. The footer carries the two banked
+  warnings: the --framing-rows trap (do NOT re-type rows from deframe
+  output computed against wrong-era dumps) and the Law Zero consequence
+  line (work-around-it, offline queue continues).
+- **TESTS.** tests/test_baseline_audit.py: 7 tests, synthetic temp-dir
+  fixtures, fully offline - the MATCH row (oracle = the blob's true sha),
+  the MISMATCH row reporting both 40-hex hashes, MISSING is not MISMATCH,
+  an unparseable oracle is NO-ORACLE, the awk-mirror parse (comment/blank
+  skipping, field 1, case folding), exit 0 with the worst possible table
+  (main() under an argv patch), and a read-only real-repo pin that
+  config/sha1/ holds exactly the eight known targets (KNOWN_TARGETS set).
+  Suite 129/129 GREEN (was 122).
+- GATES: no build/verify/judge run (baseline-oracle disagreement stands on
+  all eight targets, oracle DOWN EU+JP 404 at ~40.2h); ratchets untouched
+  809/150 = tree; tree change = the two new files + the rehydrate.sh 4b
+  step + this section only.
+- NEXT: (1) offline: the psylib lane's open items stand (site-counter root
+  decomposition is theirs - lane-owned, not grabbed); (2) offline:
+  Queue 2 judge-prep/docs per the task sheet; (3) witnessed window: fresh
+  links FIRST, disc_return.sh re-provision + witness, THEN the parked
+  drafts land in order (8006AF70/SsSetTickMode with the AC04 split fix,
+  then the svm init with _svm_damper).
