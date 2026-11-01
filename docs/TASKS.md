@@ -14236,3 +14236,72 @@ Stage Summary:
   5. func_8006AF70 stays OWNER-GATED (round-7 ceiling DIFF 4; options
      A/B banked in the cron-20261101-0507 decision brief) - SKIP unless
      Silent calls it.
+
+## 2026-11-01 (window cron-20261101-1258, oracle UP - witnessed 8/8 from rehydrate, no rollback): the func_80084924 parent-row SPLIT lands (seven true-VA rows, the drift-era collided row renamed) and THREE of the seven units land as real C (func_80077654 the _cmp match leaf, memcpy_iso9660 with the curated rename riding, func_80077CD4 the staged loader) - judge EXACT per unit, whole-image 8/8 GREEN, ratchets 828/278 -> 844/280; runbook phase F steps 1+6 open, four units remain (the lookup leaf ladder parked, the three big bodies unstarted)
+
+Session start: rehydrate OK (1s), baselines 8/8 MATCH (the witness
+survived - no disc_return needed), worklog digest exit 0, origin at
+07fea3be = HEAD (the queue had ADVANCED past the task prompt's STATE
+NOTE: windows 1028/1143 landed func_8006AC04 + func_80067690 upstream;
+the orphaned provisioner edit resolved upstream in 6dbfc277). Phase B:
+verify 8/8 GREEN one target per call, foreground.
+
+- **The split (7b443156)**: the drifted pair - data row data_80043 3C
+  (0x4b8, "real code mis-typed data", the intr-cluster precedent) +
+  parent asm row func_80084924 (0x550, five functions) - becomes SEVEN
+  true-VA rows with ZERO pad rows (every trailing nop is a delay slot:
+  jr at 77A10/77CCC/77670/77964): func_8007736C (CdSearchFile, 0x2e8),
+  func_80077654 (the LIBCD _cmp strncmp-12 match leaf, 0x24),
+  func_80077678 (CD_newmedia, 0x2f4, ONE row crossing the old 0x58024
+  carve boundary - the segment vram math was always linear, VA = offset
+  + 0x8001F800, the drifted names were LABELS not addresses; the
+  +0xCFD0/+0xD100 per-sector delta is real but lives in the scan's
+  address law, de-frame-lane material), func_8007796C (the cached-dir
+  lookup leaf, 0xac), func_80077A18 (CD_cachefile, 0x2bc), func_80077CD4
+  (the staged loader, 0x6c), func_80077D40 (memcpy_iso9660's member,
+  0x34, address-named for the asm interim). MECHANICS BANKED: (1) splat
+  names row glabels from the SYMBOLS DB first (config/symbols.<t>.txt by
+  true VA), the yaml name is the fallback - the symbols file's drift-era
+  entry `func_8007796C = 0x8006C3BC` (name digits disagree with the
+  pinned address, self-inconsistent) forced a three-way collision; fixed
+  by renaming the OLD drifted row to its true VA func_8006C3BC in BOTH
+  the yaml and the symbols entry. (2) build.sh decodes asm-row rom
+  offsets from the FILENAME before the yaml map lookup - asm rows must
+  carry address-shaped names (symbolic names = `0xmemcpy_iso9660`
+  arithmetic crash); the curated rename rides the row's C flip. Both
+  are tools-hardening items for the tools queue. (3) make extract with
+  no TARGET is a no-op for the edited target - always TARGET=<t>.
+- **Three C landings (d7b34e73)**: func_80077654 EXACT 9 words
+  (keep-epilogue - the same retail addiu-sp-before-jr class 67690
+  banked); memcpy_iso9660 EXACT 13 words (TWO laws banked for the six
+  sibling asm rows: the retail 8-byte leaf frame needs an address-used
+  pad local - plain C elides the frame 48 vs 52 - and the counter pins
+  to $3 with the -1 cap in n's dead a2); func_80077CD4 EXACT 27 words
+  (the four unbanked cd_read-family callees externed, auto names
+  sdk-lane-gated; keep-epilogue). The curated mainmenu_jp entry
+  memcpy_iso9660 = 0x80077D40 rides in symbols.curated.txt. Ratchets
+  828/278 -> 844/280 (func +16 = 77654.c 2 + 77CD4.c 14 = 1 def + 4
+  externs + 4 call sites + 5 header mentions; D_ +2 = the loader
+  header's D_80159510/D_80147E60 mentions). Suite 133 OK.
+- **Parked**: func_8007796C's C needs the register ladder - the retail
+  shape is ASYMMETRIC (id side = symbol + offset IV re-materialized
+  through $at EVERY iteration; name side = hoisted walking pointer in a
+  saved reg; gcc wants to spill the IVs into a 0xd0 frame or CSE the
+  pair) - two ladder rounds banked in scripts/deferred_func_8007796C_l
+  adder.c. CdSearchFile/CD_newmedia/CD_cachefile (0x2e8/0x2f4/0x2bc) are
+  UNSTARTED as C - their drafts ride in scripts/deferred_func_8007736C.c
+  / _80077678.c / _80077A18.c from the 0507/0621 decode windows.
+- NEXT (in order): (1) the func_8007796C ladder (register-asm pins i->$s0
+  / idoff->$s1 / np->$s2 per the retail allocation; ~3-5 rounds); (2) the
+  three big bodies one per window (drafts + the banked laws; CD_cachefile
+  first - its arms/dispatch decode is the most complete); (3) after the
+  seven: the memcpy_iso9660 sibling flips (the two banked laws apply
+  verbatim, six rows one per target); (4) the tools queue: build.sh
+  asm-row name hardening (map lookup BEFORE the filename decode) + the
+  symbols-file/yaml naming precedence note; (5) the 0x4CBBC-region
+  drift-era row names (func_80077230/77610/779F4/77CA8 at true VAs
+  0x8006C2xx-0x8006CExx) - the same rename class as func_8006C3BC, scan-
+  lane coordination courtesy heads-up in the commit text.
+- GATES: verify 8/8 GREEN before AND after both landings; judge live-only
+  (judge_unit screens, whole-image acceptance); ratchets = tree; suite
+  133 OK; no PAT/disc/baseline/asset commits; tree clean, pushed.
