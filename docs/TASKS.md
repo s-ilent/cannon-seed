@@ -204,6 +204,10 @@ independent, self-checking.
 
 ### Retire the `asm` rows that are MODE2 sector framing
 
+**DONE 2026-10-14** — 87f84d1 re-typed the 100 rows 8/8 GREEN; the
+post-retirement tree-wide re-scan followed as 2935540 (scan fixes
+0211cde, 8be9998). Background kept below.
+
 The framed-file layout (see the de-frame item below) puts 304 bytes of MODE2
 framing — 280 bytes of EDC/ECC plus the next sector's 24-byte
 sync/address/mode/subheader — between every pair of 2048-byte data areas. 341
@@ -276,7 +280,8 @@ head hunt, first fully-worked example of the pathology):
   conclusion deeper than the first sector inherits this skew.
 * The carve row `data_80065F50` (0x490) is, in order: 4 BIOS-call thunks
   (`addiu $t2,0xa0/0xb0; jr $t2; addiu $t1,N` — the $t1/$t2 call
-  convention, address-independent shape), island 1 = a real leaf transform
+  convention, address-independent shape; named in the thunk
+  identification addendum below), island 1 = a real leaf transform
   helper (runtime `0x8005CEBC..0x8005D054`, 0x198: `move $t7,$a0` head,
   bgez/negu abs-handling, a `lui 0x800b/lw 0x470($t9)` sign table, six
   `multu/mflo/subu|addu/sra/sh N($a1)` blocks, `jr $ra`), then a framing
@@ -345,7 +350,13 @@ head hunt, first fully-worked example of the pathology):
   `free` and `exit` — slps_00270 `0x80030E20..0x80030E60`, sces_00269
   `0x80030894..0x800308D4`. The members are zero-relocation pure
   immediates, so the identification is address-independent and survives
-  the de-frame transition unchanged.
+  the de-frame transition unchanged. Fourth source (independent
+  convergence): the same cores byte-match the 2.6.0-vintage sig set,
+  named identically in that vintage's `LIBAPI.LIB.json` (C24/C26/C52/
+  A56.OBJ); `LIBC2.LIB` labels its A0:#0x34 member `realloc` (variant
+  naming, same ordinal); psyq 3.3 `STRINGS.H` declares the string pair
+  `int strncmp(char *, char *, int)` / `char *strncpy(char *, char *,
+  int)` — int lengths, not size_t.
 
 * Witness B — the j-target rescue victim `func_80061780` (mainmenu_eu,
   2026-10-15, found reviewing the sdk-landing screens): the 8a66466
