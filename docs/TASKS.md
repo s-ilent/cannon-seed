@@ -13560,3 +13560,37 @@ committed artifacts only - the tool's whole point), first re-rank since the
   shape cheaper than the 4 reg-field words; then the svm init with
   _svm_damper); (3) offline: psyq-symbol curation pass continues per the
   task sheet.
+
+## 2026-11-01 (window cron-20261101-0355, same session, oracle DOWN): the SSINIT curation pass COMPLETES its unflagged remainder - SsInit (func_8006AD50) and SsInitHot (func_8006AD70) bank into symbols.curated.txt from the e8b42810 polarity chain; SsSetTableSize stays HELD for the psylib lane owner; suite 129/129, ratchets untouched
+
+The cron-20261031-1406 pass curated 5 of the SSINIT function-public map's 8
+members (SsSetTickMode/SsStart/SsStart2/SsEnd/SsQuit + the three statics);
+the map's remaining three split two ways on the lane flags:
+
+- **CURATED NOW (unflagged):** SsInit = 0x8006AD50 and SsInitHot =
+  0x8006AD70 under the g3_eu scope, evidence = the banked e8b42810 chain:
+  the pair are the two one-call wrappers over func_8006AC04 (the SSINIT
+  shared body) materializing 0/1 in the jal delay slots - BOTH ALREADY
+  LANDED as real C (one yaml row 0x40, two glabels, judge-EXACT,
+  cron-202610300053) - and the polarity proof runs through the landed
+  func_800642A0 arg==0 full-init gate: 0 = SsInit (boot 29C18 full init),
+  1 = SsInitHot (boot 29E1C hot init, then SsSetTickMode/SsStart/SsSetMVol,
+  the documented order). Entries INERT until the witnessed window (the
+  scanner applies the row-start name on re-scan; the second glabel rides
+  the shared-alias path; the src/yaml/C-source rename composes there).
+  Verified non-invasively: suite 129/129 GREEN with the additions, and
+  tools/scan_functions.py load_curated('g3_eu') parses both names
+  (305 curated entries for the target, was 303).
+- **STAYS HELD (flagged):** SsSetTableSize = func_8006AD90 - the e8b42810
+  lane-owner flag (the psyq _snd_seq_t_max maps-on-ntracks tension). The
+  later psylib windows (2c9bba8a, 00678319) arguably dissolved the
+  tension's subject (ntracks 0x80172728 has NO psyq public name; the
+  _snd_seq_t_max = 0x80171E08 verdict strengthened), but dissolving
+  another lane's flag is not this window's call - the row keeps its
+  placeholder and the flag stands until its owner rules.
+- GATES: curation + docs only (no build/verify/judge - oracle DOWN,
+  baseline-oracle disagreement stands); ratchets 809/150 = tree; suite
+  129/129; tree change = the two curated entries + this section.
+- NEXT: unchanged - the intr lane's 13, the witnessed-window landing
+  order (8006AF70 ladder first, then the svm init), the psylib lane's
+  site-counter item, fresh disc links required before any judge.

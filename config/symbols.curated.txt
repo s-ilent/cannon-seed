@@ -534,6 +534,20 @@ SsEnd = 0x8006b3c0; // LIBSND SSINIT member (the uninstaller); evidence under ta
 // transfers fail until SsInit; SsEnd must precede); the body is the single
 // SpuQuit() call, the LIBSPU-side teardown.
 SsQuit = 0x8006b464; // LIBSND SSINIT member (the SpuQuit veneer); evidence under target: g3_eu
+// SsInit/SsInitHot (func_8006AD50/func_8006AD70): the pair of one-call
+// wrappers over func_8006AC04 (the SSINIT shared body, one yaml row 0x40,
+// TWO glabels - both LANDED as real C, judge-EXACT, window cron-202610300053)
+// materializing the constants 0 and 1 in the jal delay slots. Polarity is
+// the banked e8b42810 chain: through the landed func_800642A0 arg==0
+// full-init gate, 0 = the full init (boot 29C18 calls this wrapper) =
+// psyq's SsInit, 1 = the hot init (boot 29E1C calls it, then SsSetTickMode/
+// SsStart/SsSetMVol - the documented start order) = psyq's SsInitHot. The
+// rename itself (src + yaml row + the second glabel in the C source)
+// composes at the witnessed window; this entry is INERT until then (the
+// scanner applies the row-start name on re-scan; the second glabel rides
+// the shared-alias path).
+SsInit = 0x8006ad50; // LIBSND SSINIT member (full-init wrapper, feeds 0 to the shared body); evidence under target: g3_eu
+SsInitHot = 0x8006ad70; // LIBSND SSINIT member (hot-init wrapper, feeds 1 to the shared body; the row's second glabel); evidence under target: g3_eu
 // _snd_seq_t_max (D_80171E08): SSINIT public, referenced 0x0e by psyq's own
 // SSCALL TbyT. Role: the ticks-per-second constant - SsSetTickMode writes the
 // case rates 50/60/120/240 (or the raw arbitrary rate) here, the init row
