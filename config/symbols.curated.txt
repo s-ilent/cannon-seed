@@ -173,6 +173,7 @@ _SpuDataCallback = 0x8006208C; // LIBSPU S_DCB member; tools/sdk_members.py, uni
 // target: mainmenu_jp
 gte_init = 0x80072A44; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
 GsClearOt = 0x80072BC0; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
+memcpy_iso9660 = 0x80077D40; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); adopted from the interior alabel at the cron-20261101-1258 parent-row split (own row [0x58540, c, memcpy_iso9660], landed as real C same window)
 //
 // State-map words (docs/FABRIC.md + src/func_8002C478.c usage sites).
 // Names are role-descriptive, not original symbols (no Psy-Q headers cover

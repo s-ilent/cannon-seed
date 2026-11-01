@@ -666,12 +666,12 @@ segments:
       - [0x57A40, asm, func_80084210]   # 0xa4 sdk
       - [0x57AE4, asm, func_800842B4]   # 0x88 sdk
       - [0x57B6C, asm, func_8007736C]   # 0x2e8
-      - [0x57E54, asm, func_80077654]   # 0x24
+      - [0x57E54, c, func_80077654]     # 0x24
       - [0x57E78, asm, func_80077678]   # 0x2f4
       - [0x5816C, asm, func_8007796C]   # 0xac
       - [0x58218, asm, func_80077A18]   # 0x2bc
-      - [0x584D4, asm, func_80077CD4]   # 0x6c
-      - [0x58540, asm, func_80077D40]   # 0x34
+      - [0x584D4, c, func_80077CD4]     # 0x6c
+      - [0x58540, c, memcpy_iso9660]    # 0x34
       - [0x58574, asm, func_80084E74]   # 0x34 sdk
       - [0x585A8, asm, func_80084EA8]   # 0x24 sdk
       - [0x585CC, asm, func_80084ECC]   # 0x224 sdk
