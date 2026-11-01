@@ -14013,3 +14013,78 @@ the held numeric statics' contra-evidence stands until the OMF-offsets
 step); (3) the psylib/omf lane flags stay theirs (SsSetTableSize, the
 def-base derivation, the site-counter item); (4) fresh disc links needed
 before any judge work (the 2026-10-30 set is dead at ~44h).
+
+## 2026-11-01 (window cron-20261101-0852, oracle DOWN both links 404 at ~45.2h): the curation sieve discovers the regen trio's TRUE-BASELINE GATE - the member slide consumes baselines/<t>.bin and the local dumps are the woven 0237 set, so the regens are witnessed-window work; the memcpy_iso9660 family moves above the sdk_curated marker with exact scope discipline; provision_psyq.sh gains the multi-version index
+
+Recovery: worklog rolled back to the cron-20261014 snapshot again (201
+missing) -> rehydrate, reset --hard origin/main 1bb09813, append_restore_note
+cron-20261101-0853-restore, digest exit 0. EU/JP both 404 probed 08:53Z
+(~45.2h on the 2026-10-30 11:42Z set) - oracle DOWN, Law Zero offline.
+The rollback had also reaped /home/z/psyq + /home/z/psyq-sigs:
+tools/provision_psyq.sh re-provisioned both in under a minute (its first
+real-world test since banking).
+
+ITEM 1 - provision_psyq.sh gains the 3.5/3.6/4.0 LIB dirs (the multi-
+version member index, the a65eabed invocation's inputs, all verified to
+exist in the sozud tree) and now enforces the sparse set on EVERY run
+(idempotent; trees provisioned by the older revision gain the new dirs
+without a --force re-clone - exercised live this window).
+
+ITEM 2 - THE CURATION SIEVE RUNS INTO THE INPUT GATE. The plan was the
+banked regen chain (sdk_members -> sdk_anchors -> sdk_curated) as the
+curation pass's sieve. Measured chain of evidence:
+  (a) the sdk_members regen (all four versions + sigs 330) produced a
+      DIVERGENT census: g3_eu 402 -> 357 placements, 110 -> 51 named
+      symbols (every target shrank; the LIBC/LIBSN named runs vanished);
+  (b) sdk_curated's refuse-guard fired: "1742 line(s) below the marker
+      would be lost" - the guard treating the whole a65eabed-era
+      generated block as hand-authored because the new run cannot
+      reproduce it;
+  (c) ROOT CAUSE: the member slide consumes baselines/<t>.bin (the splat
+      yaml's own target_path), and the local dumps are the RETIRED
+      WOVEN-ERA 0237 set (baseline_audit's 8 MISMATCH column, g3_eu
+      sha1 80acb6d1 vs expected 39030a75). The committed report is a
+      TRUE-baseline census (the a65eabed window ran against the witness
+      era's disc dumps); my regen was a woven-baseline census. The 16
+      "adoptions" the woven regen offered (incl. a GsGetTimInfo the
+      tree already carries as landed C) are woven-baseline evidence and
+      were REJECTED.
+  All regens REVERTED (git checkout; sdk_members.txt + sdk_anchors.txt
+  back to committed; the fresh 16-adoption block deleted). The
+  committed a65eabed-era reports stand as the curation evidence base.
+  CONSEQUENCE for the curation lane: the "next family" pass is
+  TRUE-BASELINE-GATED - the witnessed window runs the regen trio (after
+  witness 8/8 flips baseline_audit to 8 MATCH) and only then curates
+  from the fresh census. Banked as a standing gotcha in
+  docs/DISC_RETURN_RUNBOOK.md (492149fe).
+
+ITEM 3 - the memcpy_iso9660 family moves above the marker, properly
+scoped (6dbfc277). The seven hand-authored entries sat below the
+sdk_curated generated marker (the refuse-guard's exact refusal class).
+The first move attempt put them in one pile above the marker -
+WRONG: tools/curated_collisions.py flagged a false NAME-DUP and the
+load_curated audit showed the danger directly (the scanner applies by
+`// target:` header with BASE-relative addresses, so a shared pile
+misapplies every address to one target). Corrected: each entry relocated
+into the HAND HEAD's own per-target section (the second-generation
+headers host all eight targets). Validation: 0 duplicate(s) across 8
+scopes; load_curated(t) re-verified applying memcpy_iso9660 for ALL
+seven own-row targets at their own addresses; pure relocation (line
+count unchanged); suite 133/133; ratchets 809/150 = tree. A future
+true-baseline regen now truncates safely and records the ISO9660
+placements as alias rows (name-curated rule).
+
+GATES: config + tools + docs only (no build/verify/judge - oracle DOWN,
+witness 0/8); ratchets 809/150 = tree; suite 133/133; tree change =
+the curated relocation + the provisioner upgrade + the runbook gotcha +
+this section.
+
+NEXT: (1) witnessed window: fresh links FIRST, disc_return re-provision
++ witness, verify 8/8, THEN the regen trio on the true baselines
+(sdk_members -> sdk_anchors -> sdk_curated; commit the fresh census
+separately from any adoptions) and only then the curation pass's next
+family from the FRESH adoptable list - then the runbook phases C-F as
+banked; (2) offline (no baseline dependency): the psyq curation pass can
+still bank hand-evidence families whose proof does not flow through the
+slide (FUNCTION.TXT/INCLUDE reading, the omf_pubsyms table layer);
+(3) the psylib/omf lane flags stay theirs.
