@@ -14328,3 +14328,95 @@ verify 8/8 GREEN one target per call, foreground.
 - **Tools queue CLOSED (d32498c8)**: build.sh's asm-row rom decode is yaml-map-FIRST now - the filename `0x<name>` arithmetic no longer runs unconditionally before the map lookup (a symbolic row name like memcpy_iso9660 crashed the arithmetic before the map was consulted, the split-window incident); unlisted rows without an 8-hex filename fail with an explicit name-it-or-list-it message (unit-tested both paths: symbolic -> clean fail, func_800447B4 -> 0x24fb4), mainmenu_jp whole-image re-verified GREEN through the hardened path. The splat naming-precedence note (per-target symbols DB wins, yaml name is the fallback; rename both together, the self-inconsistent symbols entry is the failure shape) lands in docs/TOOLCHAIN.md.
 - **Gates**: judge live-only (EXACT on the witnessed oracle); verify 8/8 GREEN before AND after the landing; ratchets = tree (make ratchets ok 851/287); suite 133/133; CI green on push expected (no new rule paths).
 - **NEXT (in order)**: (1) CD_cachefile func_80077A18 (0x2bc) - the most complete decode draft (scripts/deferred_func_80077A18.c), rides the unit:addiu-at flag from the first probe; expect the two banked 80077654-class laws (address-used pad local, counter pin to $3) to apply verbatim where the shape recurs. (2) CD_newmedia func_80077678 (0x2f4) - the sentinel-hop component walk (fn2(id,"") at every backslash) is the load-bearing behavior; the `== 0` test on CD_cachefile's -1 return stays exact (the dead retail branch preserved). (3) CdSearchFile func_8007736C (0x2e8) - the 8-slot component loop calls the landed leaf at 0x80077454. (4) after the seven: the memcpy_iso9660 sibling flips (six rows one per target, the two banked laws verbatim) - each rides its own unit:addiu-at flag if its ID-side reads are sym+IV. (5) the 0x4CBBC-region drift-era row names (func_80077230/77610/779F4/77CA8 at true VAs, the same rename class as func_8006C3BC, scan-lane courtesy heads-up in the commit text). (6) func_8006AF70 stays OWNER-GATED - no landing without Silent's call. (7) rehydrate hardening candidate for a future tools window: run section 6b AFTER the origin sync (or tolerate a missing patch file when origin/main carries it) so a stale-HEAD start can not silently skip the apply again.
+
+## 2026-11-01 (window cron-202611012028, oracle UP - re-witnessed 8/8 STRICT from the 0859Z link set after the sandbox rollback ate the baselines): the func_80077678 CD_newmedia row LANDS as real C - the FIFTH unit of the func_80084924 split and the SECOND sdk-body C row on the mainmenu pair (judge EXACT 756 bytes, 8/8 GREEN, ratchets 851/287 -> 863/339); the CD_cachefile park's two open laws close (the W4 struct-copy misaligned mechanism, the cc_post rule-10 remnant back-port)
+
+Session start: rehydrate OK; the sandbox had rolled /home/z/my-project back to
+its 2026-10-15 tail - RESTORE NOTE re-appended from the digest (202 windows,
+exit 0); the repo checkout itself was stale at 7623cd2, 586 behind origin/main
+- reset --hard to ff107d86, tree clean. The task sheet's STATE NOTE was stale
+against upstream: the provisioner orphaned edit was already landed (6dbfc277,
+TRUE-BASELINE-GATED regens reverted, committed a65eabed-era reports stand),
+and the sheet's queue (AC04, svm init, 84924 steps 1+6) was all landed by the
+cron-20261101-1028/1143/1258/1414 windows - the repo record put CD_newmedia
+(func_80077678) as the next queue item per the b08bd228 park note.
+
+- **Witness restore**: witness_check 0/8 (the Oct-10 woven-era baselines were
+  back on disk); both 0859Z links probed 200 at ~20:33 UTC; disc_return
+  completed - witness 8/8 STRICT, the eight SHA-1s identical to the 09:06
+  witness. Phase B: verify 8/8 one-per-call - slps/sces GREEN, mainmenu_jp
+  FAILED with 87 drifted bytes at 0x800679A4..0x80067A13 - the stale-HEAD
+  rehydrate had left the out-of-repo maspsx clone unpatched (the 1414
+  incident shape again); re-running rehydrate AT the synced HEAD re-applied
+  the patch to both clones and mainmenu_jp went GREEN; the other seven
+  targets GREEN; suite 133/133; ratchets 851/287 = tree. LESSON RE-BANKED:
+  after any sandbox rollback, re-run rehydrate AFTER the origin sync and
+  check both clone markers (line_redefines_reg + args.addiu_at) before
+  deeper diagnosis - the first rehydrate (pre-sync) does not reliably leave
+  a working clone.
+- **THE LANDING (94a5b60f)**: func_80077678 CD_newmedia as real C - ONE
+  retail function spanning TWO yaml rows (the 0x1ac head row func_80077678 +
+  the 0x148 continuation row func_80084924; the loop body 0x80077824.. and
+  the shared exit/epilogue live in the continuation, the back-edge bnez
+  0x800778E0 crosses back). yaml row 670 asm -> c; the interior symbols-DB
+  label func_80084924 = 0x80077824 turns inert (the AC04 tail class); the
+  unit rides `unit:func_80077678 --addiu-at on` (the 7796C family law).
+- **LAW 1 CLOSED - the misaligned-access mechanism** (the CD_cachefile
+  park's open question): the PSX cc1 emits lwl/lwr + swl/swr ONLY for
+  4-byte STRUCT COPIES of a char[4]-typed aggregate. Probed negative for
+  everything else: `*(int*)&char_array`, `*(int*)(charptr+2)`, variable
+  offset forms - ALL compile ALIGNED (lw/sw); memcpy(,4) is NOT inlined
+  (real call). The working shape: `typedef struct { unsigned char b[4]; }
+  W4;` + `W4 lba_w; lba_w = *(W4 *)D_80149510;` (lwl 3/lwr 0 load, swl/swr
+  into the 0x18(sp) frame home, lw reload at every use) and `*(W4 *)(off +
+  e8c) = *(W4 *)(src + 2);` (lwl 5/lwr 2 source, swl 3/swr 0 dest). The
+  parked CD_cachefile draft's "s4-struct-copy mechanism" law is exactly
+  this, now with the positive recipe.
+- **LAW 2 CLOSED - the entry remnant back-port**: the CD_cachefile park's
+  remnant (ori v0,1 / beqz v0,exit / delay) is NOT reproducible from source
+  - this window's hunt added do-while (rotates the len test into the
+  back-edge), while(1) (no entry guard), while(A&&B) (reorders + no guard),
+  for-forms, -O1 (still deletes) to the banked 11-shape negative; retail
+  keeps BOTH a materialized entry guard AND a clean back-edge, which no
+  source shape produces. cc_post rule 10 (`--remnant-ori1 <join> <exit>
+  absorb|nop`) re-inserts the dead pair after maspsx, marker-gated via
+  `cc-post: remnant-ori1 $L8 $L10 absorb` in the .c header (cc.sh detects,
+  passes the pins; anchor mismatch exits 3 = loud build failure, never a
+  silent skip). Semantics: $2 = 1 so beqz never fires, $2's next def is the
+  loop head's own load, the delay-slot init executes unconditionally either
+  way - byte-exact dead code, the same class as the maspsx patch's
+  gcc-doesn't-emit nops. CD_cachefile can RE-OPEN on this rule when its
+  ladder resumes.
+- **New small laws** (all in the landed file header): (a) gcc 2.6.3 commutes
+  pointer+index sums to POINTER-first but keeps int+int sums off-first -
+  the E8C/E90 cursors must be INT locals (`e8c = (int)D_80147E8C`,
+  `e90 = e8c + 4` the literal addiu derivation) or the addu operand order
+  flips; (b) gcc reassociates `adv + ((adv & 1) + 8)` unless the inner sum
+  goes through its own int local; (c) the first func_80077CD4 call's return
+  value is REUSED as the second call's expected value ($s1 - the second
+  gate compares against the variable, not a literal); (d) the lba operand
+  of the error printf re-reads the frame home (lw a1,0x18(sp)); (e) the
+  decode erratum D_80159510 -> D_80149510 corrected from the listing (the
+  parked draft carried the wrong symbol).
+- **Tools enablers (92e12a8a)**: judge_unit's solo mini-link now feeds the
+  curated DB's per-target sections into the prelude (the first live case:
+  this unit calls memcpy_iso9660, a curated name with no 8-hex encoding
+  whose object is absent from the solo link); the maspsx patch's
+  line_redefines_reg excludes LOAD mnemonics - lwr re-writing lwl's dest is
+  the unaligned pair itself, not a reuse hazard (the pair stays adjacent,
+  the aspsx pad lands between lwr and its first USE; the 800642A0 RMW class
+  untouched; no landed row carries lwl, 8/8 re-verified after the patch
+  regen).
+- **Gates**: judge EXACT 756/756 live; verify 8/8 GREEN before AND after;
+  suite 133/133; ratchets 851/287 -> 863/339 recomputed (func +12 = 1
+  definition + func_80077CD4 x4 + func_80084924 x3 + func_8007796C x2
+  header mentions; D_ +52 enumerated in config/ratchets.json); CI green on
+  push expected.
+- **NEXT (in order)**: (1) CD_cachefile func_80077A18 RE-OPENS - the two
+  park blockers are now solved laws (W4 struct copy + rule-10 remnant with
+  the nop-delay variant); its ladder should converge fast. (2) CdSearchFile
+  func_8007736C (0x2e8) - the component walk calls the landed leaf; expect
+  the same unit flag + W4 + remnant class. (3) the memcpy_iso9660 sibling
+  flips (six rows one per target). (4) func_8006AF70 stays OWNER-GATED - no
+  landing without Silent's call. (5) the wave-pool re-rank after the cluster
+  closes.
