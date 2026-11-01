@@ -112,16 +112,29 @@ while IFS= read -r src; do
     # becomes .r_<rom> with uniform flags, so text/data interleave inside
     # the file survives into one contiguous chunk the gen_ld script can
     # place at the subsegment's exact address.
-    case "$staged" in
-        */data_*) rom_hex=$(basename "$staged" | sed -E 's/^data_([0-9A-Fa-f]{8}).*/\1/') ;;
-        *)        rom_hex=$(basename "$staged" | sed -E 's/^func_([0-9A-Fa-f]{8}).*/\1/') ;;
-    esac
-    # look the row's rom up BY NAME in the yaml map (filename addresses are
-    # historical); fall back to the filename decode only if unlisted.
+    # look the row's rom up BY NAME in the yaml map FIRST (filename
+    # addresses are historical); the filename decode is only the FALLBACK
+    # and must never run unconditionally - symbolic row names (e.g. the
+    # curated memcpy_iso9660) carry no 8-hex address, and the
+    # 0x<name> arithmetic crashed the build before the map was even
+    # consulted (the d7b34e73 split-window incident).
     row_name=$(basename "$staged" | sed -E 's/(\.data)?\.s$//')
     rom_map=$(awk -v n="$row_name" '$1 == n { print "0x" $2; exit }' "build/${TARGET}.asm_roms")
-    rom=$(( 0x800 + (0x${rom_hex} - 0x80020000) ))   # filename fallback (decimal)
-    [ -n "$rom_map" ] && rom=$(( rom_map ))
+    if [ -n "$rom_map" ]; then
+        rom=$(( rom_map ))
+    else
+        case "$staged" in
+            */data_*) rom_hex=$(basename "$staged" | sed -E 's/^data_([0-9A-Fa-f]{8}).*/\1/') ;;
+            *)        rom_hex=$(basename "$staged" | sed -E 's/^func_([0-9A-Fa-f]{8}).*/\1/') ;;
+        esac
+        case "$rom_hex" in
+            [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])
+                rom=$(( 0x800 + (0x${rom_hex} - 0x80020000) )) ;;
+            *)
+                fail "asm row '$row_name' is unlisted in build/${TARGET}.asm_roms and its filename carries no 8-hex rom address to decode - give the row an address-shaped filename or list it in the yaml map"
+                ;;
+        esac
+    fi
     python3 - "$staged" "$rom" <<'PYSEC'
 import re, sys
 path, rom = sys.argv[1], int(sys.argv[2])

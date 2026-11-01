@@ -123,3 +123,23 @@ carves) must use these facts - getting them wrong costs a full detour:
   `intr_stop_begin` class), so legality alone does not settle rows -
   byte-matched member claims (config/sdk_members.txt) and image-wide
   XRef scans decide boundaries.
+
+## Row-name resolution precedence (banked 2026-11-01, the 84924 split lessons)
+
+- Splat assigns an asm row's `glabel` from the FIRST source that names the
+  address: the per-target symbols DB (`config/symbols.<target>.txt`, the
+  scan lane's curated spelling) wins; the yaml segment/subsegment name is
+  only the fallback. When renaming a row, rename BOTH places together and
+  remember the symbols entry carries its own name digits (the drifted
+  self-inconsistent `func_8007796C`-at-`0x8006C3BC` class entry is the
+  failure shape); asm-row renames are pure relabeling - the row-pair bytes
+  are untouched and the data-listing diffs around them are label-boundary
+  fallout, never byte regressions.
+- `build.sh` resolves an asm row's rom offset from the yaml map
+  (`build/<target>.asm_roms`) FIRST; the filename decode is only the
+  fallback. Address-shaped filenames (`func_800447B4.s`,
+  `data_80047B84.data.s`) decode there; symbolic names
+  (`memcpy_iso9660.s`) must never hit the `0x<name>` arithmetic - an
+  unlisted symbolic row now fails with an explicit message instead of an
+  arithmetic crash. The curated rename rides the row's C flip, not the
+  asm build (an asm row keeps its address-shaped name until then).
