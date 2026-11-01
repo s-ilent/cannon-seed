@@ -14420,3 +14420,78 @@ cron-20261101-1028/1143/1258/1414 windows - the repo record put CD_newmedia
   flips (six rows one per target). (4) func_8006AF70 stays OWNER-GATED - no
   landing without Silent's call. (5) the wave-pool re-rank after the cluster
   closes.
+
+## 2026-11-01 (window cron-202611012058, oracle DOWN - witness 0/8 after the sandbox rollback restored the woven-era baselines, and BOTH 0859Z disc links 404 at only ~14h old): the func_80077A18 CD_cachefile draft goes through the offline compile-diff ladder - the closed park laws applied at source level, the --addiu-at flag confirmed required, the register web isolated as the remaining work; no landing (Law Zero offline path, judge-prep only)
+
+Session start: rehydrate OK; git log showed the task sheet's STATE NOTE
+stale against upstream - the intermediate window cron-202611012028 had
+landed func_80077678 (94a5b60f, ratchets 851/287 -> 863/339) and written
+its docs record; reset --hard 7623cd2 -> 843640ee, tree clean. The
+provisioner orphan from the dead session was already landed (6dbfc277 -
+the TRUE-BASELINE-GATED regens stay reverted). worklog_digest.py no
+longer exists; the window-record protocol lives here in docs/TASKS.md
+(the /home/z/my-project/worklog.md medium is still at its 2026-10-15
+tail). Single-session check clear.
+
+- **Oracle**: witness_check 0/8 - the eight baselines on disk are the
+  Oct-10 woven-era set again (the cron-202611012028 re-witness was
+  eaten by the same rollback that ate its worklog tail). disc_return
+  probed the EU link first: curl 404; formal probe of both 0859Z links:
+  404/404 at ~14h after issuance - the FASTEST link death yet (the
+  sheet's ~24-35h estimate no longer bounds). No re-witness possible;
+  Phase B verify 8/8 and any landing stay gated on fresh links.
+- **The ladder** (tools/lm_probe_diff.py: cc.sh full pipeline ->
+  objdump -> slot-by-slot against the committed listing's hex encodings,
+  relocated fields masked): the probe needs `MASPSX_UNIT_FLAGS=
+  "--addiu-at on"` AND a PATCHED maspsx clone - the session started
+  with the clone unpatched (the pre-sync rehydrate applied nothing;
+  re-running rehydrate AFTER the origin sync applied both clones) - the
+  re-banked lesson held: check args.addiu-at and line_redefines_reg
+  before deeper diagnosis.
+- **Verified matching against the listing**: prologue (the D_800C8024
+  load before the frame setup, id -> s6, s0..s6, frame 0x40, the guard
+  beq's delay carries the s0 store); the failure path (gate > 0 /
+  printf / j + addiu v0,-1 delay); the searching gate's zero-init in
+  the branch delay; the 0x2C descriptor read (multiply chain + 4-insn
+  at-split); the extent W4 frame home (lwl 5/lwr 2 -> swl 0x1B/swr
+  0x18(sp) -> lw reload); the dump's four per-symbol remats
+  (D_80147884/85/86/88 + off, encoding-identical).
+- **Source laws applied**: the two closed CD_cachefile park blockers
+  (the extent W4 home; the size copy as a direct W4-to-W4); no len
+  local (the tail re-reads src[0] - a local survives the calls in a
+  callee-saved reg and kills the re-read); rec8 = rec + 8 (one symbol
+  materialization - two symbol operands emit two lui/addiu pairs);
+  arm stores as symbol+CONSTANT forms (gcc IV-substitutes symbol+off
+  forms into a walking cursor; retail has sh 8(s5) / sh 0x20(s5) /
+  sb 0x22(s5) fixed disps); the ".." constants ride INT LOCALS -
+  direct flows canon lh/lb to lhu/lbu, the int-local sign-extension
+  survives (v4 evidence); the size store as (base+4)+off.
+- **THE REGISTER WEB (open)**: retail recomputes (s5+4)+s1 fresh per
+  iteration; gcc strength-reduces (D_80147884+4+off) into an ADDRESS
+  giv (seed base+4, step 0x18) - frame 0x48 + s7. v7 (no rec local,
+  the call arg IS the expression D_80147884 + off) blocked the giv
+  through the rec8-derived base chain (a two-giv trace gcc won't
+  reduce) and hit the exact retail store form, but lost the s4 walker
+  (retail passes a walking-pointer reg seeded s5-copy; the expr form
+  recomputes base+off per call) and shrank the file to six saved regs.
+  v8 (rec walker restored) re-created the giv. Also inverted: gcc
+  delays the off=0 init into the searching-gate branch slot and puts
+  i=0 at the prehead regardless of C init order - retail has i=0 in
+  the delay and off=0 at the prehead. Eight ladder iterations banked;
+  the full analysis is in the draft header (be319132).
+- **Gates**: no landing attempted (unwitnessed inputs refused; judge
+  verdicts live-only); ratchets 863/339 = tree unchanged (scripts/ is
+  not ratchet-counted); suite 133/133; CI green on push expected (no
+  build-path change).
+- **NEXT (in order)**: (1) fresh disc links from Silent -> disc_return
+  re-witness -> Phase B verify 8/8 -> the func_80077A18 landing window:
+  finish the register web (the header carries the candidate attacks),
+  add `unit:func_80077A18 --addiu-at on` to tools/maspsx_flags.txt,
+  set the rule-10 remnant marker from the clean compile's labels
+  (expected `nop` variant - this row's delay slot is empty, unlike
+  77678's absorbed count = 0), yaml row 672 asm -> c, judge live,
+  verify, ratchets. (2) CdSearchFile func_8007736C (0x2e8) - the draft
+  exists, the same ladder applies. (3) the memcpy_iso9660 sibling
+  flips (six rows one per target). (4) func_8006AF70 stays OWNER-GATED
+  - no landing without Silent's call. (5) the wave-pool re-rank after
+  the cluster closes.
