@@ -69,25 +69,46 @@ scripts/probe_psylib_chunks.py, scripts/probe_psylib_bases.py):
   (0x106be..0x11820) carries no addiu-sp/sw-ra word at either 4-byte
   alignment, then code resumes mid-stream at 0x11820 WITHOUT a header.
 
-DEF-BASE LAW (empirical, cron-20261101-0651; the derivation stays
-open - LANE FLAG): every module's 0x0c b=2 def offsets are FLAT
-offsets from ONE per-module base; the base equals the first 02-chunk's
-data start for single-object modules (delta 0 on 20+ LIBSND/LIBSPU
-modules) and sits INSIDE/after the first code chunk for multi-object
-ones (VMANAGER +0xfa6, SEQREAD shows a SECOND cluster +0x10ea). Two
-def-head shapes under one base: strict addiu-sp (0x27bd....) and the
-gcc scheduled preamble (the head word is the function's first
-computation, frame setup follows in-body). The addiu-sp words that sit
-exactly 12 bytes before a head are the PREVIOUS function's epilogue
-restore ([restore][jr $ra][delay] tail) - they vote for base-12 and
-MUST be refused; solve_def_base refuses any 27bd word followed by
-jr $ra (0x03e00008), which is what separates VMANAGER's true base
-0x10668 (23 strict head votes) from the epilogue ghost 0x1065c (26
-ghost votes). --file-offsets solves the base and emits file offsets
-per def row; the vote counts are reported so nothing is hidden. Banked
-anchors: _svm_damper file 0x12464 = 0x10668+0x1dfc (full-body compare,
-cron-20261101-0536) and _svm_envx_hist store-run 0x1533c =
-0x10668+0x4cd4.
+DEF-BASE LAW (empirical, cron-20261101-0651 + 0806; the base DERIVATION
+from the record structure stays open - LANE FLAG): every module's 0x0c
+b=2 def offsets are FLAT ARCHIVE-FILE offsets from ONE per-module base
+(VMANAGER: all 38 land on valid MIPS heads under base 0x10668 - 21
+addiu-sp prologues, 3 jr-veneers, the rest lui/andi/ori/addu
+first-compute heads; the offsets map THROUGH the record zone
+0x106be..0x11820 as if its bytes counted in the image). The base equals
+the first 02-chunk's data start for single-object modules (delta 0 on
+20+ LIBSND/LIBSPU modules) and sits INSIDE the first code chunk for
+multi-cluster ones (VMANAGER chunk1_data+0xfa6). TWO base solvers:
+solve_def_base = prologue-vote maximization with the epilogue refusal
+(0x27bd followed by jr $ra is the PREVIOUS function's frame restore,
+not a head - VMANAGER ghost 0x1065c had 26 such votes vs the true 23);
+solve_def_base_valid = the ALL-LANDINGS-VALID constraint (0806): every
+candidate base must land EVERY def on a valid head word (head_ok),
+which kills the epilogue ghost MECHANICALLY (it lands prologue-first
+defs 12 bytes early, inside the previous tail's delay nop) and makes
+VMANAGER's base UNIQUE (0x10668, 23/38 strict). An empty valid set is
+the MULTI-CLUSTER DISCRIMINATOR: no single flat base exists and the
+def offsets are per-cluster (SEQREAD/GEO/PRESET4/PRIM/SPU/...; the
+0651 anchor is SEQREAD's second cluster +0x10ea) - the per-cluster
+derivation is the OPEN item. Banked anchors: _svm_damper file 0x12464
+= 0x10668+0x1dfc (full-body compare, cron-20261101-0536) and
+_svm_envx_hist store-run 0x1533c = 0x10668+0x4cd4.
+
+A-ORDINAL LAW (0806, corrects the SPU slot-counter reading): every row's
+a field is a per-row UNIQUE ordinal, not a definition-order counter
+(SPU's a=10..20 run is the consecutive case, not the law; VMANAGER's
+38 b=2 defs carry 38 DISTINCT a values in row order 49,17,11,48,...).
+The record-zone fixup stream references this namespace: the 2c0 u32
+payload values (6/2/14/23/26/... small ordinals) and the short
+[02][u8][00] 3-byte forms (0x47/0x48 next to 0x46..0x4a data rows) are
+row-ordinal targets for the 0a [t][u16 site] fixup records; the 2c4
+[u16 w][u32 v] form carries the CLASS w (2 code / 6 data, the same b
+classes as the def rows) + a class-relative v - the def offsets and
+the 2c4 targets share one per-class address space rooted at the base.
+Real 06 [seg] 00 markers sit at grammar positions (pre-chunk
+0xf6af/0xf6b2/0xf6bc, mid-zone re-selections 0x114d6 seg3/0x1165e
+seg2, pre-table 0x18cef seg6/0x18cf7 seg2 on VMANAGER); 06 bytes
+inside code words are coincidence, not markers.
 
 OBSERVED SEMANTICS (empirical, not spec-verified - raw fields are always
 reported so nothing is lost):
@@ -317,6 +338,85 @@ def solve_def_base(data, mod):
         return (blob, 0, len(defs), len(pros))
     base = max(votes, key=lambda c: (votes[c], -c))
     return (base, votes[base], len(defs), len(pros))
+
+
+# --- the all-landings-valid base law (cron-20261101-0806) ----------------
+HEAD_SPECIAL_FUNCTS = frozenset((0x08, 0x09, 0x10, 0x12, 0x21, 0x23, 0x25,
+                                 0x27, 0x2a, 0x2b, 0x04, 0x06, 0x07))
+HEAD_OPS = frozenset((0x02, 0x03, 0x09, 0x0c, 0x0d, 0x0f, 0x20, 0x21, 0x23,
+                      0x24, 0x25, 0x28, 0x29, 0x2b))
+
+
+def head_ok(word):
+    """Def-landing head-word validity predicate (cron-20261101-0806).
+
+    A gcc 2.8.x function head is one of: the addiu-sp prologue (op 0x09,
+    rs=29), a jr $ra veneer (funct 0x08), jal/j, a lui/ori/andi
+    scheduled-preamble first compute, a SPECIAL arithmetic/move first
+    compute (addu/subu/or/nor/slt/sltu/sllv/srlv/srav/mfhi/mflo), or a
+    load/store first word (lw/lb/lbu/lhu/sb/sh/sw). A nop (0x00000000)
+    is NEVER a head - it is a delay-slot or alignment pad."""
+    if word == 0x00000000:
+        return False
+    opc = word >> 26
+    if opc == 0x00:
+        return (word & 0x3f) in HEAD_SPECIAL_FUNCTS
+    return opc in HEAD_OPS
+
+
+def solve_def_base_valid(data, mod):
+    """The ALL-LANDINGS-VALID base constraint (cron-20261101-0806).
+
+    Enumerates candidate bases c = p - off (every non-epilogue prologue
+    p x every b=2 0x0c def off, c in [first_blob, span)) and keeps ONLY
+    those landing EVERY def row on a head_ok word. Kills the epilogue
+    ghost mechanically (the ghost lands prologue-first defs 12 bytes
+    early, inside the previous function's [restore][jr][delay] tail -
+    on the delay nop or a mid-tail word) and makes VMANAGER's base a
+    UNIQUE solution (0x10668, 23/38 strict). Returns [(base,
+    strict_hits, ndefs)] sorted by strict_hits desc; [] = no base
+    satisfies the constraint - the MULTI-CLUSTER DISCRIMINATOR (the
+    def offsets are per-cluster, base law OPEN, SEQREAD second cluster
+    +0x10ea the 0651 anchor); None = no code def rows or no blob."""
+    blob, _pe, _np = first_code_chunk(data, mod)
+    if blob is None:
+        return None
+    defs = [(n, off) for n, k, a, b, off in def_map(mod)
+            if k == 0x0C and b == 2]
+    if not defs:
+        return None
+    ts = mod.table_start or (mod.offset + mod.size)
+    lim = min(ts, len(data) - 4)
+    if lim - blob > 0x40000:
+        lim = blob + 0x40000
+    cands = set()
+    for p in prologue_positions(data, blob, lim):
+        if p + 8 <= len(data) - 4 and \
+                struct.unpack_from("<I", data, p + 4)[0] == 0x03E00008:
+            continue
+        for _n, off in defs:
+            c = p - off
+            if blob <= c < lim:
+                cands.add(c)
+    out = []
+    for c in sorted(cands):
+        strict = 0
+        ok = True
+        for _n, off in defs:
+            p = c + off
+            if p < 0 or p > len(data) - 4:
+                ok = False
+                break
+            w = struct.unpack_from("<I", data, p)[0]
+            if not head_ok(w):
+                ok = False
+                break
+            if (w >> 16) == 0x27BD:
+                strict += 1
+        if ok:
+            out.append((c, strict, len(defs)))
+    out.sort(key=lambda t: (-t[1], t[0]))
+    return out
 
 
 def lib_xrefs(lib):
@@ -603,6 +703,13 @@ def main(argv=None):
             if sol is None:
                 continue
             base, hits, ndefs, npros = sol
+            val = solve_def_base_valid(lib.data, m)
+            if val:
+                base, hits, _n = val[0]
+                law = ("valid-unique" if len(val) == 1
+                       else f"valid-ambiguous x{len(val)}")
+            else:
+                law = "vote-max (no all-valid base: multi-cluster)"
             nonpro = 0
             for _n, _k, _a, _b, off in def_map(m):
                 if _k != 0x0C or _b != 2:
@@ -611,7 +718,7 @@ def main(argv=None):
                 if p + 4 <= len(lib.data) and \
                         (struct.unpack_from("<I", lib.data, p)[0] >> 16) != 0x27BD:
                     nonpro += 1
-            print(f"module {m.name!r} base={base:#x} "
+            print(f"module {m.name!r} base={base:#x} law={law} "
                   f"blob_delta={base - (first_code_chunk(lib.data, m)[0] or base):+#x} "
                   f"strict={hits}/{ndefs} nonprologue_heads={nonpro} "
                   f"prologues={npros}")

@@ -443,8 +443,67 @@ class TestDefBase(unittest.TestCase):
         self.assertNotEqual(base, blob + 0x10)
 
 
+class TestHeadOk(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.path = "/tmp/omf_pubsyms_base_test.lib"
+        with open(cls.path, "wb") as f:
+            f.write(build_base_lib())
+        cls.lib = op.PsyqLib(cls.path)
+
+    def test_heads_and_non_heads(self):
+        self.assertTrue(op.head_ok(0x27BDFFD8))     # addiu $sp (op 0x09)
+        self.assertTrue(op.head_ok(0x03E00008))     # jr $ra veneer
+        self.assertTrue(op.head_ok(0x3C020000))     # lui preamble
+        self.assertTrue(op.head_ok(0x3082FFFF))     # andi preamble
+        self.assertTrue(op.head_ok(0x34090001))     # ori preamble
+        self.assertTrue(op.head_ok(0x00A03821))     # addu first compute
+        self.assertTrue(op.head_ok(0x8FA30004))     # lw first word
+        self.assertFalse(op.head_ok(0x00000000))    # delay/align pad
+        self.assertFalse(op.head_ok(0x001C520A))    # record bytes, not code
+
+    def test_base_fixture_valid_unique_at_blob(self):
+        mod = self.lib.modules[0]
+        blob, _pe, _np = op.first_code_chunk(self.lib.data, mod)
+        val = op.solve_def_base_valid(self.lib.data, mod)
+        self.assertIsNotNone(val)
+        # UNIQUE: the only all-valid candidate is the blob itself; the
+        # shifted candidate lands def B past the code end and is rejected
+        self.assertEqual(val, [(blob, 2, 2)])
+
+
 @unittest.skipUnless(PSYQ_DIR, "psyq archive not provisioned")
 class TestDefBaseReal(unittest.TestCase):
+    def test_vmanager_valid_unique_base(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        m = next(x for x in lib.modules if x.name == "VMANAGER")
+        val = op.solve_def_base_valid(lib.data, m)
+        self.assertEqual(len(val), 1)               # UNIQUE solution
+        base, strict, ndefs = val[0]
+        self.assertEqual((base, strict, ndefs), (0x10668, 23, 38))
+
+    def test_epilogue_ghost_dies_mechanically(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        m = next(x for x in lib.modules if x.name == "VMANAGER")
+        val = op.solve_def_base_valid(lib.data, m)
+        bases = [b for b, _s, _n in val]
+        self.assertNotIn(0x1065C, bases)            # the 0651 ghost base
+
+    def test_multicluster_discriminator(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        m = next(x for x in lib.modules if x.name == "SEQREAD")
+        self.assertEqual(op.solve_def_base_valid(lib.data, m), [])
+        lib2 = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBGTE.LIB"))
+        m = next(x for x in lib2.modules if x.name == "GEO")
+        self.assertEqual(op.solve_def_base_valid(lib2.data, m), [])
+
+    def test_vmanager_a_ordinals_are_unique(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        m = next(x for x in lib.modules if x.name == "VMANAGER")
+        avals = [a for n, k, a, b, off in op.def_map(m) if k == 0x0C and b == 2]
+        self.assertEqual(len(avals), len(set(avals)))   # 38 distinct
+        self.assertEqual(len(avals), 38)
+
     def test_vmanager_base_and_banked_anchors(self):
         lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
         m = next(x for x in lib.modules if x.name == "VMANAGER")
