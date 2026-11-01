@@ -98,17 +98,46 @@ A-ORDINAL LAW (0806, corrects the SPU slot-counter reading): every row's
 a field is a per-row UNIQUE ordinal, not a definition-order counter
 (SPU's a=10..20 run is the consecutive case, not the law; VMANAGER's
 38 b=2 defs carry 38 DISTINCT a values in row order 49,17,11,48,...).
-The record-zone fixup stream references this namespace: the 2c0 u32
-payload values (6/2/14/23/26/... small ordinals) and the short
-[02][u8][00] 3-byte forms (0x47/0x48 next to 0x46..0x4a data rows) are
-row-ordinal targets for the 0a [t][u16 site] fixup records; the 2c4
-[u16 w][u32 v] form carries the CLASS w (2 code / 6 data, the same b
-classes as the def rows) + a class-relative v - the def offsets and
-the 2c4 targets share one per-class address space rooted at the base.
+FIXUP-TARGET LAW (0921, corrects the 0806 mechanism reading): the
+record-zone fixup stream's [2c0][u32 v] targets are SYMBOL-TABLE ROW
+INDICES, not this a-ordinal namespace (VMANAGER fixup ords 2/6/20/23
+resolve to table rows 2/6/20/23 = _svm_orev1, SsUtVibrateOn (a 0x0e
+REF - fixups reference refs too), _svm_vcf, SpuVmSetVol; those rows'
+a values 70/-/55/60 differ from the ords). See the FIXUP-STREAM LAW
+note below for the full grammar.
 Real 06 [seg] 00 markers sit at grammar positions (pre-chunk
 0xf6af/0xf6b2/0xf6bc, mid-zone re-selections 0x114d6 seg3/0x1165e
 seg2, pre-table 0x18cef seg6/0x18cf7 seg2 on VMANAGER); 06 bytes
 inside code words are coincidence, not markers.
+
+FIXUP-STREAM LAW (cron-20261101-0921; probes = scripts/probe_psylib_fixsite.py,
+_hilo, _fixroot, _fixbase): the record zone between the code blobs is a
+[0a]-led fixup stream:
+  [0a][u8 t][u16 site]  the SITE (where to patch)
+  [2c0][u32 v]          target = symbol-TABLE ROW index (see above)
+  [2c4][u16 w][u32 raw] class-relative value v=(raw>>8)&0xffff, w = the
+                        def-row b class (2 code / 6 data / 3 LIBSPU data)
+  [02][u8 a][00]        short row-index target form
+t TYPE LAW (VMANAGER): t=0x4a = code-class reference (2c4 w=2 ONLY,
+never a 2c0; 36 on VMANAGER); t=0x52/0x54 = the %hi/%lo pair (sites 4
+bytes apart, SAME row ordinal, 2c4 w=6 v trailing). t VALUES SHIFT PER
+LIB: LIBSPU/LIBGPU use 0x82/0x84 for the hi/lo roles; LIBSND's SEQREAD
+and LIBGPU SYS carry a third form t=0x10 (shape open). 06 [seg] markers
+RE-ROOT the site counter (VMANAGER's 3 site decreases coincide with
+seg2@0x1165e and seg0@0x1777e x2).
+SITE-ORIGIN LAW (the mechanical base route the 0806 NEXT asked for):
+sweeping an origin O and counting t=0x52 sites landing on [lui][mem]
+words at O+site gives a SHARP peak exactly at a known base or
+base + size1 (size1 = the leading code 02-chunk's payload size):
+VMANAGER O=0x11664=0x10668+0xffc, 206/240 hits (61 at +0x10);
+single-object modules peak AT the base (VS_VTBP 7/7, UT_GVA 6/6);
+SPU peaks at vote_base+0x100 (32/97); LIBGPU SYS 86/196.
+base = O_peak - size1 reproduces base_valid on VMANAGER (MATCH).
+DATA-CLASS ADDRESS LAW (VMANAGER): the composed %hi/%lo address
+A = (hi<<16)+sext(lo) at a %hi site satisfies A = v - 0x198 on 97/123
+lui hits - the 2c4 w=6 v is the PRE-LINK data address (data offset +
+0x198 bias); the 0x12-row values live in the same space. Both the
++size1 split and the +0x198 bias universality are OPEN.
 
 OBSERVED SEMANTICS (empirical, not spec-verified - raw fields are always
 reported so nothing is lost):
@@ -430,6 +459,137 @@ def lib_xrefs(lib):
             if s.kind == 0x0E:
                 out.append((m.name, s.name, s.a, defs.get(s.name)))
     return out
+
+
+# --- the fixup-stream grammar (cron-20261101-0921) ------------------------
+
+def parse_fixups(data, o, end):
+    """Walk [o, end) as the record-zone fixup stream.
+
+    Returns events: ("06", seg, pos) / ("02", size, pos) /
+    ("0a", (t, site), pos) / ("2c0", v, pos) / ("2c4", (w, v, raw), pos) /
+    ("?", None, pos). The 2c4 v applies the banked
+    (raw >> 8) & 0xffff unpacking. Every byte is consumed."""
+    evs = []
+    while o < end:
+        b = data[o]
+        if b == 0x06 and o + 3 <= end and data[o + 2] == 0x00:
+            evs.append(("06", data[o + 1], o))
+            o += 3
+        elif b == 0x02 and o + 3 <= end:
+            size = struct.unpack_from("<H", data, o + 1)[0]
+            evs.append(("02", size, o))
+            o += 3 + size
+        elif b == 0x0A and o + 4 <= end:
+            t = data[o + 1]
+            site = struct.unpack_from("<H", data, o + 2)[0]
+            evs.append(("0a", (t, site), o))
+            o += 4
+        elif b == 0x2C and o + 6 <= end and data[o + 1] == 0x00:
+            evs.append(("2c0", struct.unpack_from("<I", data, o + 2)[0], o))
+            o += 6
+        elif b == 0x2C and o + 9 <= end and data[o + 1] == 0x04:
+            w = struct.unpack_from("<H", data, o + 2)[0]
+            raw = struct.unpack_from("<I", data, o + 4)[0]
+            evs.append(("2c4", (w, (raw >> 8) & 0xFFFF, raw), o))
+            o += 9
+        else:
+            evs.append(("?", None, o))
+            o += 1
+    return evs
+
+
+def fixup_pairs(evs):
+    """Group fixup events into per-site records.
+
+    The banked association convention: a target record (2c0/2c4) attaches
+    to the MOST RECENT 0a in the same run; a 02-chunk or 06 marker ends
+    the fixup. Returns dicts {"t", "site", "pos", "ords": [int],
+    "cls": [(w, v)]} in stream order (one per 0a)."""
+    out = []
+    cur = None
+    for e in evs:
+        if e[0] == "0a":
+            if cur is not None:
+                out.append(cur)
+            cur = {"t": e[1][0], "site": e[1][1], "pos": e[2],
+                   "ords": [], "cls": []}
+        elif cur is not None:
+            if e[0] == "2c0":
+                cur["ords"].append(e[1])
+            elif e[0] == "2c4":
+                cur["cls"].append((e[1][0], e[1][1]))
+            elif e[0] in ("02", "06"):
+                out.append(cur)
+                cur = None
+    if cur is not None:
+        out.append(cur)
+    return out
+
+
+def leading_code_chunk_size(data, mod):
+    """The dominant leading 02-chunk's payload size (the code chunk).
+
+    The leading run can carry tiny 02 fragments (VMANAGER: 4 bytes);
+    the CODE chunk is the max-size 02 before the first non-02/06 record.
+    Returns (size, data_start) or (None, None)."""
+    blob, pe, _np = first_code_chunk(data, mod)
+    if blob is None:
+        return None, None
+    o = pe
+    best = (0, None)
+    end = mod.offset + mod.size
+    while o + 3 <= min(end, len(data)):
+        b = data[o]
+        if b == 0x06 and data[o + 2] == 0x00:
+            o += 3
+        elif b == 0x02:
+            size = struct.unpack_from("<H", data, o + 1)[0]
+            if size == 0:
+                break
+            if size > best[0]:
+                best = (size, o + 3)
+            o += 3 + size
+        else:
+            break
+    return best if best[0] else (None, None)
+
+
+MEM_OPS = frozenset((0x20, 0x21, 0x23, 0x24, 0x25, 0x28, 0x29, 0x2b,
+                     0x04, 0x05, 0x06, 0x07, 0x09, 0x0c, 0x0d))
+
+
+def fixup_site_origin(data, mod, span=0x3800, hi_op=0x52):
+    """The SITE-ORIGIN route to the base (cron-20261101-0921).
+
+    Sweeps an origin O over [blob1 - 0x800, blob1 + span) and counts the
+    module's t=hi_op fixup sites landing on [lui][mem] word pairs at
+    O+site. The peak is SHARP and sits at the module's base (single-
+    object modules) or base + leading-code-chunk size (multi-cluster).
+    Returns (O_peak, hits, n_sites, size1) or None."""
+    blob, pe, _np = first_code_chunk(data, mod)
+    if blob is None:
+        return None
+    ts = mod.table_start or (mod.offset + mod.size)
+    evs = parse_fixups(data, pe, ts)
+    sites = [e[1][1] for e in evs if e[0] == "0a" and e[1][0] == hi_op]
+    if not sites:
+        return None
+    lo = max(0, blob - 0x800)
+    hi = min(len(data) - 8, blob + span)
+    best = (0, None)
+    for O in range(lo, hi, 2):
+        h = 0
+        for s in sites:
+            pos = O + s
+            if 0 <= pos <= len(data) - 8 \
+                    and struct.unpack_from("<I", data, pos)[0] >> 26 == 0x0F \
+                    and struct.unpack_from("<I", data, pos + 4)[0] >> 26 in MEM_OPS:
+                h += 1
+        if h > best[0]:
+            best = (h, O)
+    size1, _ds = leading_code_chunk_size(data, mod)
+    return best[1], best[0], len(sites), size1
 
 
 def check_module(mod):

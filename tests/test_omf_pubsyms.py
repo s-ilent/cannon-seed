@@ -523,5 +523,107 @@ class TestDefBaseReal(unittest.TestCase):
             self.assertEqual(base, blob, name)
 
 
+@unittest.skipUnless(PSYQ_DIR, "psyq archive not provisioned")
+class TestFixupStream(unittest.TestCase):
+    """The record-zone fixup grammar (cron-20261101-0921)."""
+
+    def _vmanager(self):
+        lib = op.PsyqLib(os.path.join(PSYQ_DIR, "LIBSND.LIB"))
+        m = next(x for x in lib.modules if x.name == "VMANAGER")
+        return lib, m
+
+    def test_2c0_targets_are_row_indices(self):
+        # VMANAGER fixup ordinals 2/6/20/23 resolve to TABLE rows, not
+        # a-ordinals: row 2 = _svm_orev1 (0x30), row 6 = SsUtVibrateOn
+        # (a 0x0e REF), row 20 = _svm_vcf (def 0x4958), row 23 =
+        # SpuVmSetVol (def 0x4b54)
+        lib, m = self._vmanager()
+        evs = op.parse_fixups(lib.data, op.first_code_chunk(lib.data, m)[1],
+                              m.table_start)
+        ords = set()
+        expect_0a = False
+        for e in evs:
+            if e[0] == "0a":
+                expect_0a = e[1][0] in (0x52, 0x54)
+            elif expect_0a and e[0] == "2c0":
+                ords.add(e[1])
+        self.assertIn(2, ords)
+        self.assertIn(6, ords)
+        self.assertIn(20, ords)
+        self.assertIn(23, ords)
+        self.assertTrue(all(o < len(m.symbols) for o in ords))
+        self.assertEqual(m.symbols[6].name, "SsUtVibrateOn")
+        self.assertEqual(m.symbols[6].kind, 0x0E)      # fixups reference refs
+        self.assertEqual(m.symbols[20].name, "_svm_vcf")
+        self.assertEqual(m.symbols[20].offset, 0x4958)
+        self.assertEqual(m.symbols[23].name, "SpuVmSetVol")
+
+    def test_t_type_separation(self):
+        # t=0x4a carries 2c4 w=2 targets only (never a 2c0); t=0x52/0x54
+        # with a 2c0 carry a trailing 2c4 w=6
+        lib, m = self._vmanager()
+        evs = op.parse_fixups(lib.data, op.first_code_chunk(lib.data, m)[1],
+                              m.table_start)
+        pairs = op.fixup_pairs(evs)
+        n4a = n52 = 0
+        for p in pairs:
+            if p["t"] == 0x4A:
+                self.assertEqual(p["ords"], [],
+                                 "t=0x4a fixup carried a 2c0 row target")
+                for w, _v in p["cls"]:
+                    self.assertEqual(w, 2)
+                if p["cls"]:
+                    n4a += 1
+            elif p["t"] in (0x52, 0x54) and p["ords"]:
+                for w, _v in p["cls"]:
+                    self.assertEqual(w, 6)
+                if p["cls"]:
+                    n52 += 1
+        self.assertGreater(n4a, 20)     # 36 measured
+        self.assertGreater(n52, 100)
+
+    def test_site_origin_route_reproduces_base(self):
+        # the sharp lui-hit peak sits at base + size1 (0xffc); the banked
+        # all-landings-valid base is 0x10668
+        lib, m = self._vmanager()
+        O, hits, n_sites, size1 = op.fixup_site_origin(lib.data, m)
+        self.assertEqual(n_sites, 240)
+        self.assertEqual(size1, 0xFFC)
+        self.assertEqual(O, 0x11664)                 # 0x10668 + 0xffc
+        self.assertGreater(hits, 200)                # 206 measured
+        self.assertEqual(O - size1, 0x10668)
+        val = op.solve_def_base_valid(lib.data, m)
+        self.assertEqual(val[0][0], O - size1)       # MATCH
+
+    def test_data_class_address_law(self):
+        # composed %hi/%lo A = v - 0x198: the word AFTER the lui at a
+        # %hi site is the %lo mem op; A composes from that word pair
+        lib, m = self._vmanager()
+        d = lib.data
+        evs = op.parse_fixups(d, op.first_code_chunk(d, m)[1], m.table_start)
+        pairs = op.fixup_pairs(evs)
+        O = 0x11664
+        hif = [p for p in pairs if p["t"] == 0x52 and p["ords"]]
+        n_ok = n_hit = 0
+        for hf in hif:
+            pos = O + hf["site"]
+            if pos + 8 > len(d):
+                continue
+            w1 = struct.unpack_from("<I", d, pos)[0]
+            if w1 >> 26 != 0x0F:
+                continue
+            w2 = struct.unpack_from("<I", d, pos + 4)[0]
+            if w2 >> 26 not in op.MEM_OPS:
+                continue
+            n_hit += 1
+            A = ((w1 & 0xFFFF) << 16) + (w2 & 0xFFFF) \
+                - (0x10000 if w2 & 0x8000 else 0)
+            v6 = [v for w, v in hf["cls"] if w == 6]
+            if v6 and A == v6[0] - 0x198:
+                n_ok += 1
+        self.assertGreater(n_hit, 100)   # 123 measured
+        self.assertGreater(n_ok, 90)     # 97 measured
+
+
 if __name__ == "__main__":
     unittest.main()
