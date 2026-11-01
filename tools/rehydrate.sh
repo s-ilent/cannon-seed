@@ -125,7 +125,7 @@ if [ -f "$MASPSX_PATCH" ]; then
         if git -C "$MASPSX_DIR" apply --check "$MASPSX_PATCH" 2>/dev/null; then
             git -C "$MASPSX_DIR" apply "$MASPSX_PATCH" 2>/dev/null
             say "maspsx delay-slot patch applied ($MASPSX_DIR)"
-        elif grep -q "line_redefines_reg" "$MASPSX_DIR/maspsx/__init__.py" 2>/dev/null && grep -q "addiu_at: bool = True" "$MASPSX_DIR/maspsx.py" 2>/dev/null; then
+        elif grep -q "line_redefines_reg" "$MASPSX_DIR/maspsx/__init__.py" 2>/dev/null && grep -q "args.addiu_at is not None" "$MASPSX_DIR/maspsx.py" 2>/dev/null; then
             say "maspsx delay-slot patch already present ($MASPSX_DIR)"
         else
             say "WARN: maspsx delay-slot patch failed to apply in $MASPSX_DIR - func_800642A0 will not build"
