@@ -13515,3 +13515,48 @@ NEXT list.
   links FIRST, disc_return.sh re-provision + witness, THEN the parked
   drafts land in order (8006AF70/SsSetTickMode with the AC04 split fix,
   then the svm init with _svm_damper).
+
+## 2026-11-01 (window cron-20261101-0355, same session, oracle DOWN): the WAVE-POOL RE-RANK runs on the current tree - 150 waves (was 159 pre-0x1CC-landing), and the pool's entire independent own-row set is EXACTLY the intr-family 13: the wave-script lane has zero grabbable material outside the intr lane's pending call, the decode frontier is parent-owned material
+
+`scripts/wave_offline_census.py --parents` over the current tree (witness-free,
+committed artifacts only - the tool's whole point), first re-rank since the
+0x1CC x20 wave and the other recent landings:
+
+- **POOL SIZE 150** (was 159 at the eighteenth-window census): the landings
+  consumed their rows and dissolved 9 waves below the >=2-member threshold.
+  Member-count distribution is thin: one x15 (the trivial 0x8 two-insn
+  shape), the rest x6-x8; nothing large remains anywhere in the pool.
+- **THE INDEPENDENT OWN-ROW SET IS EXACTLY 13 ROWS IN EXACTLY 2 WAVES** -
+  331b7beccc4d x7 (the a0=2 sibling) + dd0d973bed01 x6 (the a0=1 sibling),
+  both the intr-family install thunks whose landing shape and placeholder
+  name adoption belong to the intr lane (the x6 a0=1 wave's own-row rows
+  re-derive on six targets; mainmenu_jp/g3org_jp absent from both - the
+  per-region presence pattern is unchanged). **NOT GRABBED**: this re-rank
+  CONFIRMS the lane boundary rather than moving it - with the intr lane's
+  13 landed (either spelling), the pool's own-row count reaches ZERO and
+  the wave-script lane is exhausted of independent first-class material.
+- **EVERYTHING ELSE IS PARENT-BOUND.** The remaining pool mass carries
+  EXT-MISMATCH extents (parent-bound interiors or partial rows); the
+  interior search re-derives the banked classifications (the 0x34
+  f3e0fb2d six-member wave keeps exactly 1 interior parent hit; the 0x8
+  x15 wave's 3917 hits are the known trivial-shape noise). Consequence for
+  scheduling: the next decode frontier is PARENT functions (real-C work
+  landing their interiors with them), not wave scripts - the parked drafts
+  (8006AF70/SsSetTickMode 4-words-from-EXACT, the svm init/_svm_damper)
+  and the psyq curation lane stay the highest-value offline targets, and
+  new wave decodes only pay off as by-products of parent work.
+- **SECOND-COMPILER CENSUS RE-RUN (same session): still calibrated.** Both
+  banked discriminator rows surface on the current tree (func_800487F4
+  sltu-at single-compare, func_80049DA0 multu-on-sext 12/14); per-target
+  hit counts unchanged (61/61/61/61/61/12/13, mainmenu_jp still the
+  range=2 outlier). The tool needs no re-baseline after the landings.
+- GATES: census + docs only (read-only tools, no build/verify/judge -
+  oracle DOWN, baseline-oracle disagreement stands); ratchets 809/150 =
+  tree; suite 129/129; tree change = this section only.
+- NEXT: (1) the intr lane's grab-or-adopt call on its 13 (theirs); (2)
+  witnessed window: fresh links FIRST, then disc_return re-provision +
+  witness, then the parked drafts land in order (8006AF70 first: judge
+  ladder is SIZE-exact already, the open lever is a c5 anti-merge source
+  shape cheaper than the 4 reg-field words; then the svm init with
+  _svm_damper); (3) offline: psyq-symbol curation pass continues per the
+  task sheet.
