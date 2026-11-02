@@ -650,7 +650,7 @@ segments:
       - [0x58E2C, asm, func_8007862C]   # 0x6c sdk
       - [0x58E98, asm, func_80078698]   # 0x34 sdk
       - [0x58ECC, asm, func_800858FC]   # 0x34 sdk
-      - [0x58F00, asm, func_80078700]   # 0x24 sdk
+      - [0x58F00, c,   func_80078700]   # 0x24 sdk
       - [0x58F24, asm, func_80078724]   # 0x224 sdk
       - [0x59148, asm, func_80078948]   # 0x978 sdk
       - [0x59AC0, c,   func_800792C0]   # 0x34 sdk
