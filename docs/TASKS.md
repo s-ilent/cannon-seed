@@ -14644,3 +14644,39 @@ the 2026-10-15-era tail. Single-session check clear; window start
   ROLLED-BACK SANDBOXES: rehydrate AFTER the origin sync, rm -rf
   build/src before the first build, restore the baseline cache from
   hash-proven builds when the links are dead (this window's sequence).
+
+## 2026-11-02 (window cron-202611021158, oracle UP disc-free via the hash-proven baseline restore - both 0859Z links still 404 at ~19h): the func_80077A18 CD_cachefile row LANDS as real C - the eighteenth real-decompiled-C game function, the ISO9660 family's sixth unit, judge EXACT 700/700, whole-image verify GREEN, ratchets 863/339 -> 870/379
+
+Session start: the rollback had eaten the baselines again (witness 0/8,
+links 404/404 probed) - restored the mainmenu_jp baseline from the
+hash-proven build (the banked disc-free procedure; only the landing
+target was needed this window). Single-session clear; window start
+1793591975.
+
+- **The arm-layout pass closed** (the 0013 residue item 2): the goto
+  form lays the slot 0/1 arms out-of-line exactly as retail (beqz i,
+  arm0 with the ori v0,1 delay feeding the beq i,v0,arm1 whose delay
+  preloads a0=rec8 for the name arm's memcpy; name arm falls into the
+  join) - probe 169 -> 171 words.
+- **The arm temps**: gcc hands arm0's temp the live-in $2 only as an
+  ANONYMOUS expression (named locals get $3 first); arm1's lh/lb sign
+  forms need int locals (the banked law) whose temps resist both
+  orderings - block-scoped register pins $2/$3 reproduce retail's exact
+  regs AND forms (the established landed-C pin class).
+- **The cc_post fixup trio** (new, marker-scoped, loud-fail):
+  swap-regs $20 $21 (the anchor/walker pair - three source permutations
+  did not flip it; frame save/restore lines excluded), addu-commute 2
+  (occurrence-indexed so the matching id-chain form stays d-first),
+  delay-sb-out (arm1's sb inline before the join-j; arm0's sh-in-delay
+  is retail's own packing and stays). remnant-ori1 $L5 $L7 nop pinned
+  from the clean compile's labels (the rule-10 remnant, +3 words).
+- **Gates**: probe 175/175 slots exact; make build GATE GREEN
+  (d637286a); make verify GREEN; judge EXACT 700/700 live; ratchets
+  870/379 = tree (+7 = 1 definition + 2 unknown-callee externs with
+  call sites; +40 = 17 D_ externs + 23 uses); suite 133/133; committed
+  e2fd89c0 + pushed.
+- **NEXT (in order)**: (1) CdSearchFile func_8007736C (0x2e8) - the
+  draft inherits the WHOLE closed web (goto arms + the fixup trio + the
+  pin class apply from the first probe). (2) the memcpy_iso9660 sibling
+  flips (six rows one per target). (3) func_8006AF70 stays OWNER-GATED.
+  (4) the wave-pool re-rank after the cluster closes.
