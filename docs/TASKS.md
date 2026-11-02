@@ -14495,3 +14495,74 @@ tail). Single-session check clear.
   flips (six rows one per target). (4) func_8006AF70 stays OWNER-GATED
   - no landing without Silent's call. (5) the wave-pool re-rank after
   the cluster closes.
+
+## 2026-11-02 (window cron-202611020013, oracle DOWN - both 0859Z links re-probed 404/404 at ~15.5h, no fresh links available): the func_80077A18 register web SOLVES at source level after an 11-variant offline ladder, the 6-word residue localizes to three named items, and the 1533-era parked body is re-attributed as non-exact; no landing (Law Zero offline path, judge-prep only)
+
+Session start: rehydrate OK; the task sheet's STATE NOTE was stale
+against upstream (the tree had moved to f18ef7c9 - the intermediate
+windows landed func_80077678 at ratchets 863/339 and banked the
+func_80077A18/8007736C ladder records; the provisioner orphan was
+already landed as 6dbfc277). fetch + reset --hard, tree clean. The
+sandbox rollback had eaten /home/z/my-project/worklog.md down to 0
+covered windows: worklog_digest.py listed 201 missing - two restore
+notes appended (the first capture truncated at 60 s, second pass exit
+0, 201 digest-level). Single-session check clear.
+
+- **The web** (11 lm_probe_diff variants, MASPSX_UNIT_FLAGS=
+  "--addiu-at on", patched maspsx): the winning shape is anchor local
+  + rec walker for the call arg + an IN-LOOP `sp = anchor + 4;`
+  staging local feeding the size store as *(W4 *)(sp + off). The
+  in-loop staging keeps the (anchor+4) partial sum a TWO-REG in-loop
+  sum whose add_val is not loop-invariant, so loop.c rejects the
+  address giv and gcc emits retail's exact addiu v0,s5,4 / addu
+  v0,s1,v0 / swl 3 / swr 0 recompute. With retail's init order i=0
+  then off=0 the picks flip correct (i=0 in the searching-gate delay,
+  off=0 at the prehead) and the prehead seed order lands rec8, off,
+  rec-last - prologue exact (frame 0x40, seven s-regs, the s0 save in
+  the guard-beq delay), tail exact (rec8 step at the join, off step in
+  the beqz delay, the fresh i*0x18 tail-NUL multiply).
+- **Banked negative**: the mult-form (off as i*0x18) re-enables the
+  reduction - the reduced giv acts biv-like for giv-of-giv and the
+  s5=s4+4 seed returns (172-word shape); the symbol-form store hoists
+  (symbol+4) to the prehead and reduces (v8 reproduced); the walkerless
+  expr call arg keeps the store exact (p_v7, the rec8-derived base
+  chain real: addiu s4,s3,-8) but loses the a1 walker copy and drops
+  to six saved regs; the anchor-local store without sp folds +4 into
+  the swl/swr disps via a loop-head (anchor+off) recomputed reg
+  (v7a: swl 7/swr 4 - semantically right, shape wrong).
+- **The 1533 parked body is NOT exact**: fold-backed compile shows the
+  folded store (addu + swl 7/swr 4), lhu for the ".." pair where
+  retail has lh, and the s4/s5 swap - its judge-684 "displacement
+  noise only" read was an artifact of the 4-word hole shifting
+  everything downstream. The cron-202611012058 web-open finding stands.
+- **The residue localizes** (difflib word alignment): 169 vs 175 = 3
+  (the rule-10 remnant; every branch displacement is shift-consistent,
+  R140 ffae vs P134 ffb1 = exactly 3) + the arm region (retail lays
+  the slot 0/1 arms OUT-OF-LINE after the name arm's j with beqz/beq
+  forward tests; gcc keeps them inline with inverted bnez/bne polarity
+  and packs arm1's sb into the j delay - a dedicated arm-layout pass
+  owed, switch form the leading candidate) + the size store's addu
+  operand order (retail v0,s1,v0 vs our v0,v0,s1 - both C orders
+  canonicalize v0-first: a 1-word cc_post/maspsx-class fix, not
+  source). The s4/s5 reg-name swap remains the only global cosmetic.
+- **Tool lesson (banked in the draft header)**: cc.sh's remnant-marker
+  grep reads `cc-post: remnant-ori1...` verbatim out of the source's
+  COMMENTS - the old header prose carried the marker shape with its
+  prefix and the probe builds died on "join label <join>: not found"
+  (exit 3). Prose must never spell the marker with its prefix.
+- **Gates**: no landing attempted (unwitnessed inputs refused; judge
+  verdicts live-only); ratchets 863/339 = tree unchanged (scripts/ is
+  not ratchet-counted); suite 133/133; two commits pushed (6a09debe
+  decode, 0c6db165 residue localization).
+- **NEXT (in order)**: (1) fresh disc links from Silent -> disc_return
+  re-witness -> Phase B verify 8/8 -> the func_80077A18 landing window:
+  the arm-layout pass first (switch form), the cc_post operand-order
+  item, then `unit:func_80077A18 --addiu-at on` into
+  tools/maspsx_flags.txt, the rule-10 remnant marker from the clean
+  compile's labels (expected `nop` variant), yaml row 672 asm -> c,
+  judge live, verify, ratchets. (2) CdSearchFile func_8007736C (0x2e8)
+  - the draft exists and now inherits the WHOLE closed web (anchor +
+  walker + in-loop staging + init order apply from the first probe).
+  (3) the memcpy_iso9660 sibling flips (six rows one per target).
+  (4) func_8006AF70 stays OWNER-GATED - no landing without Silent's
+  call. (5) the wave-pool re-rank after the cluster closes.
