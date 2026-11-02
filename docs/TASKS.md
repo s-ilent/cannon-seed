@@ -15190,3 +15190,85 @@ target was needed this window). Single-session clear; window start
   done, the LIBSPU SPU-member rows in g3_jp (_spu_init 0x294,
   _spu_FiDMA, _spu_t 0x290...).  (3) AF70 untouched by standing
   policy; the BIG de-frame item stays coordination-gated.
+
+## 2026-11-02 (window cron-202611021244, oracle UP disc-free via the hash-proven baseline restore - the rollback had re-woven the baselines again; TWO landings): the twentieth and twenty-first real-decompiled-C game functions land - func_80069740 SsUtGetVagAtr (g3org_eu, the psyq libsnd UT_GVA VAG attribute reader, judge EXACT 576/576) and func_80068030 SsVabFakeHead (g3org_jp, the VS_VH fake-head registrar piece, judge EXACT 52/52), both whole-image verify GREEN first build
+
+- **Recovery first**: sandbox rolled /home/z/my-project back to the
+  2026-10-14 era AGAIN (worklog 201 windows missing -> restore note
+  cron-20261102-1248-restore, digest exit 0), the local repo to 7623cd2e
+  while origin held 671b11b9 (the 1129 window's SsVabTransBodyPartly
+  landing); reset forward, re-rehydrate AFTER the sync per the banked
+  law, tree clean.  Single-session check clear; window start
+  1793623448.  The task sheet's planned opener (the sdk_curated block
+  replacement) was already consumed by the 0745 window
+  (d3c09abd/c32d807d) - pivoted to the 1129 window's NEXT (2), the
+  per-function curation road with the banked cross-reference picker.
+- **The witness restore** (the banked procedure, sixth rehearsal, all
+  eight FIRST PASS again): witness 0/8 at session start; rm -rf
+  build/src, 8x make build one target per call foreground - all eight
+  images byte-exact against the committed TRUE oracles, cp x8,
+  witness_check 8/8, oracle UP disc-free.
+- **LANDING 1 - func_80069740 SsUtGetVagAtr** (g3org_eu, 0x80069740,
+  0x240, the psyq libsnd UT_GVA member = the VAG attribute reader; the
+  picker's first-listed hand-evidence candidate, UNIQUE+SIGDB): guard
+  on the per-vab status byte D_8017E120[(short)vabid] == 1 (the 79758
+  guard's sibling table); func_80067F84 (the unbanked 0xd4 sdk asm row)
+  called for side effects only, return never read, the (short)prog
+  extend rides the jal delay; the prog*16+tone record offset =
+  (short)(tone + (D_8017E107 << 4)) * 32 fused sll16/sra11 (the
+  0x20-byte VAG attribute record stride); the 0x20-byte record copied
+  FIELD BY FIELD into attr - 14 single bytes 0x00..0x0D (gcc reads
+  byte 7 BEFORE byte 6), then four halfwords 0x10..0x16, the 0x0E/0x0F
+  hole never read on either side; D_80178A00 (the VAG attribute table
+  base pointer word) RELOADED before every byte copy (14 reloads - the
+  char stores may alias the word), one final reload folds the base
+  into the offset register for the lhu/sh group (u16 stores do not
+  clobber the u32 word); return 0 materializes between the last lhu
+  and its sh.
+- **THE NEW REGISTER-PICK LAW** (probe 144/144,
+  scripts/probe697_diff.py, two ladder iterations): the record-offset
+  addition MUST read `off + D_80178A00`, never `D_80178A00 + off` -
+  the operand order is gcc 2.6.3's register-pick law for the chain
+  (`off + base` allocates the byte-load chain in v1 with the final
+  addu in (off, base) order - retail; `base + off` puts it in a0 with
+  addu (base, off) - a whole-image byte diff).  Also re-proven: the
+  positive-guard form (if == 1 { body; return 0; } return -1;) keeps
+  the retail branch polarity (beq to the body, the fail path as the
+  out-of-line j + v0 = -1 delay pair); the bne/early-return form
+  inverts BOTH the branch and the fail tail.  unit:func_80069740
+  --addiu-at on in maspsx_flags (the indexed D_8017E120 guard load
+  takes the aspsx < 2.30 4-insn at-split; the plain symbol accesses
+  keep the direct lui/%lo form).
+- **LANDING 2 - func_80068030 SsVabFakeHead** (g3org_jp, 0x80068030,
+  0x34, the psyq libsnd VS_VH member's fake-head registrar piece,
+  UNIQUE+SIGDB; the member's big .text+0x90 piece SsVabOpenHeadWithMode
+  = 0x80068064 stays the unbanked 0x448 sdk asm row): a pure
+  argument-shuffle wrapper - a3 = a2 (the fake count rides as the
+  fourth argument), the mode constant 1 materializes in the jal DELAY
+  slot (ori a2,zero,1), a1 takes the sll16/sra16 extend-in-place
+  (short vabid), a0 passes through as the VAB header address, and the
+  return is the callee's short result sign-extended on the way out
+  (sll16/sra16 on v0, the SsVabTransCompleted short-return law).
+  Probe 13/13 FIRST PASS, no ladder iterations - the sdk-aspsx
+  keep-epilogue keeps gcc's own single-load epilogue order matching
+  retail; no maspsx flag needed (no symbol loads, no at-split).
+- **GATES**: both landings judge EXACT on the live oracle, whole-image
+  byte-exact FIRST BUILD each (01b37b4e g3org_eu / 2b2a4225 g3org_jp ==
+  the committed TRUE oracles), make verify formal GREEN per target;
+  ratchets 874/410 -> 880/443 -> 885/443 recomputed from the tree
+  (landing 1: +6 = func_80069740 x2 + func_80067F84 x4, +33 =
+  D_8017E120 x4 + D_8017E107 x5 + D_80178A00 x24; landing 2: +5 =
+  func_80068030 x2 + func_80068064 x3), check_ratchets green; suite
+  133/133.  The stale nonmatching listings stay on disk per the
+  e2fd89c0 convention (retire at the next make extract).
+- **NEXT (in order)**: (1) the per-function curation road continues -
+  the picker's remaining hand-evidence-first candidates: mainmenu_eu
+  CdGetToc/CdGetToc2 (LIBCD TOC, UNIQUE+SIGDB), the VM_PROG family
+  (SpuVmSetProgVol/GetProgVol/SetProgPan/GetProgPan in g3_eu +
+  g3org_eu, UNIQUE), the LIBSPU SPU-member rows in g3_jp (_spu_init
+  0x294, _spu_FiDMA, _spu_t 0x290...), g3org_jp SsVabOpenHeadWithMode
+  (VS_VH .text+0x90, 0x3dc - the big sibling, now unblocked once its
+  own window opens).  (2) The cluster lane's 7736C cache-loop rewrite
+  -> landing and the memcpy_iso9660 sibling flips stay THEIRS.  (3)
+  AF70 untouched by standing policy (owner call required); the BIG
+  de-frame item stays coordination-gated.
