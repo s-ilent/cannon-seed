@@ -92,23 +92,71 @@
  * baselines; this draft + deferred_func_80077678.c carry the semantics.
  *
  * STAGING: step 6 of the parked plan (yaml split + C rows + judge live).
+ *
+ * LADDER PROGRESS (cron-202611021158, continues the 0621 decode; probe
+ * vs the committed listing under --addiu-at on):
+ *  - THE MOUNT GUARD READS D_800C8028 (not D_800D8028 - the 0621 draft's
+ *    symbol was a pre-decode guess; D_800C8028 is the CD_cachefile guard
+ *    word's neighbour).
+ *  - buf IS 0x20 BYTES, not 8 (retail frame 0x50; the component buffer's
+ *    declared extent - gcc sizes the frame from the array).
+ *  - CLOSED at probe 180/186: the prologue (swap-regs $19 $20 +
+ *    save-swap $19 $20 - path allocates s4-first in gcc but retail saves
+ *    s3 first, a NEW save-order law, cc_post save-swap pass added) and
+ *    the mount-guard store (pad-lw 3: retail pads the pre-store reload's
+ *    lw because gcc's #nop was decided against the far-store use TWO
+ *    slots ahead while maspsx's re-derivation looks only ONE ahead (the
+ *    at-expansion prefix) - the upstream-class fix is a maspsx one-ahead
+ *    hazard look, BANKED as the next tools item with the 8/8 re-verify
+ *    ritual; pad-lw 3 = the mas.s occurrence of the pre-store reload).
+ *  - REMAINING (3 words + shapes): (1) the component loop's ROTATION -
+ *    retail enters via the separator path (j into the empty-hop region,
+ *    id=1 materialized in A0 as the pure call-arg chain, the copy path
+ *    out-of-line); the draft's if/else keeps the copy path inline - the
+ *    77A18 goto-form class applies; (2) the rule-10 remnant (+3, marker
+ *    pending the clean compile's labels); (3) the level/j cursor reg
+ *    names settle with the rotation.
+ *  - The fixup quartet markers pinned so far (all deterministic,
+ *    loud-fail): swap-regs $19 $20, save-swap $19 $20, pad-lw 3.
+ *  - tools landed this window: cc_post save-swap + pad-lw passes +
+ *    cc.sh marker plumbing (with the 77A18 swap-regs/addu-commute/
+ *    delay-sb-out trio from the landing).
  */
+extern int D_800C8028;               /* mount guard: cached state */
+extern int D_800C7CFC;               /* mount guard: expected state */
+extern int D_800C7CF0;               /* trace level */
+extern unsigned char D_80147884[];   /* the 0x40-entry cache table */
+extern char D_80023550[];
+extern char D_8002356C[];
+extern char D_80023584[];
+extern char D_800235A0[];
+extern char D_800235C0[];
+extern char D_800235CC[];
+extern int func_80077678();
+extern int func_8007796C();
+extern int func_80077A18();
+extern int func_80077654();
+extern int printf();
 
-u8* func_8007736C(u8* out, const char* path) {
-    u8 buf[8];     /* sp+0x10 */
-    const char* src;
-    u8* rec;
-    s32 id;
-    s32 r;
-    s32 level;
-    s32 i;
-    s32 j;
+/* cc-post: swap-regs $19 $20
+ * cc-post: save-swap $19 $20
+ * cc-post: pad-lw 3 */
 
-    if (D_800D8028 != D_800C7CFC) {
+unsigned char *func_8007736C(unsigned char *out, const char *path) {
+    unsigned char buf[0x20];     /* sp+0x10 */
+    const char *src;
+    unsigned char *rec;
+    int id;
+    int r;
+    int level;
+    int i;
+    int j;
+
+    if (D_800C8028 != D_800C7CFC) {
         if (func_80077678() == 0) {
             return 0;
         }
-        D_800D8028 = D_800C7CFC;
+        D_800C8028 = D_800C7CFC;
     }
     if (path[0] != '\\') {
         return 0;
@@ -164,7 +212,7 @@ final_check:
         printf(&D_800235A0, buf);
     }
     for (i = 0; i < 0x40; i++) {
-        rec = (u8*)&D_80147884 + i * 0x18;
+        rec = (unsigned char *)&D_80147884 + i * 0x18;
         if (rec[8] == 0) {
             break;
         }
@@ -173,7 +221,7 @@ final_check:
                 printf(&D_800235C0, buf);
             }
             for (j = 0; j < 0x18; j += 4) {
-                *(s32*)(out + j) = *(s32*)(rec + j);
+                *(int*)(out + j) = *(int*)(rec + j);
             }
             return rec;
         }

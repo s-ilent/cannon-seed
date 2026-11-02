@@ -234,6 +234,12 @@ REMANT_MODE = None
 SWAP_REGS = None        # (a, b) numeric reg tokens, e.g. ("$20", "$21")
 ADDU_COMMUTE_N = None   # 1-based occurrence index of `addu $d,$d,$s` to commute
 DELAY_SB_OUT = False    # move an sb out of a j's delay slot, restore the nop
+SAVE_SWAP = None        # (a, b): exchange the ORDER of the pair's frame-save lines
+PAD_LW = None           # 1-based occurrence index of an lw to pad (retail's
+                        # load-use nop maspsx's one-ahead re-derivation misses
+                        # when gcc's #nop was decided against a far-store use
+                        # two slots ahead - the honest upstream fix is the
+                        # maspsx one-ahead hazard look, banked cron-202611021158)
 
 
 def _prepass_swap_regs(lines: list[str]) -> list[str]:
@@ -323,6 +329,61 @@ def _prepass_delay_sb_out(lines: list[str]) -> list[str]:
                 continue
         res.append(ln)
         i += 1
+    return res
+
+
+def _prepass_save_swap(lines: list[str]) -> list[str]:
+    """Marker save-swap (cc-post: save-swap $A $B): exchange the ORDER of
+    the two callee-saved frame-save lines for a swap-regs pair. gcc emits
+    the saves in its allocation order; retail's pipeline emitted the
+    lower-reg save first (func_8007736C cron-202611021158: s3's save
+    precedes s4's). The stores are independent (distinct frame slots),
+    so the exchange is semantics-free. Restore lines are NOT touched
+    (gcc's descending restore order already matches retail)."""
+    a, b = SAVE_SWAP
+    pat_a = re.compile(r"^sw\t\$" + a[1:] + r",\d+\(\$sp\)$")
+    pat_b = re.compile(r"^sw\t\$" + b[1:] + r",\d+\(\$sp\)$")
+    ia = ib = None
+    for i, ln in enumerate(lines):
+        if ia is None and pat_a.match(ln):
+            ia = i
+        if ib is None and pat_b.match(ln):
+            ib = i
+    if ia is None or ib is None:
+        sys.stderr.write("cc_post: save-swap save lines not found\n")
+        sys.exit(3)
+    if ia > ib:
+        lines[ia], lines[ib] = lines[ib], lines[ia]
+    return lines
+
+
+
+def _prepass_pad_lw(lines: list[str]) -> list[str]:
+    """Marker pad-lw (cc-post: pad-lw <n>): insert a plain nop AFTER the n-th
+    `lw` line. Retail's cc1 emits #nop after a load whose value's next use
+    reads it as store data (func_8007736C's mount-guard copy: lw $2,D_800C7CFC;
+    nop; lui $at; sw $2,D_800C8028($at) - cron-202611021158). maspsx's
+    re-derivation checks only the IMMEDIATELY following instruction, which
+    is the at-expansion prefix the far-store split injected - the hazard one
+    slot deeper goes unseen. The upstream-class fix (look one more insn
+    ahead when the next is an at prefix) needs the full 8/8 re-verify ritual;
+    this marker unblocks the unit in the meantime. Occurrence-indexed for
+    the frozen source; loud-fail on a count miss."""
+    pat = re.compile(r"^lw\t(\$\d+),")
+    seen = 0
+    res = []
+    for ln in lines:
+        res.append(ln)
+        m = pat.match(ln)
+        if m:
+            seen += 1
+            if seen == PAD_LW:
+                res.append("\tnop")
+    if seen < PAD_LW:
+        sys.stderr.write(
+            f"cc_post: pad-lw occurrence {PAD_LW} not found (only {seen})\n"
+        )
+        sys.exit(3)
     return res
 
 
@@ -619,7 +680,7 @@ def _rule7_gp_load(res: list[str]) -> list[str]:
 def main() -> None:
     global KEEP_EPILOGUE, SDK_ASPSX, KEEP_RETURN_FILL, KEEP_PROLOGUE
     global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
-    global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT
+    global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -650,6 +711,20 @@ def main() -> None:
             sys.exit(2)
         SWAP_REGS = (args[k + 1], args[k + 2])
         del args[k : k + 3]
+    if "--save-swap" in args:
+        k = args.index("--save-swap")
+        if len(args) < k + 3:
+            sys.stderr.write("usage: cc_post.py --save-swap <regA> <regB> ...\n")
+            sys.exit(2)
+        SAVE_SWAP = (args[k + 1], args[k + 2])
+        del args[k : k + 3]
+    if "--pad-lw" in args:
+        k = args.index("--pad-lw")
+        if len(args) < k + 2:
+            sys.stderr.write("usage: cc_post.py --pad-lw <n> ...\n")
+            sys.exit(2)
+        PAD_LW = int(args[k + 1])
+        del args[k : k + 2]
     if "--addu-commute" in args:
         k = args.index("--addu-commute")
         if len(args) < k + 2:
@@ -671,6 +746,10 @@ def main() -> None:
         lines = _rule10_remnant_prepass(lines)
     if SWAP_REGS is not None:
         lines = _prepass_swap_regs(lines)
+    if SAVE_SWAP is not None:
+        lines = _prepass_save_swap(lines)
+    if PAD_LW is not None:
+        lines = _prepass_pad_lw(lines)
     if ADDU_COMMUTE_N is not None:
         lines = _prepass_addu_commute(lines)
     if DELAY_SB_OUT:

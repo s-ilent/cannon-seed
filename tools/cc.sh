@@ -128,6 +128,14 @@ SWAPR=$(grep -o 'cc-post: swap-regs.*' "$SRC" 2>/dev/null | head -1 | awk '{prin
 if [ -n "$SWAPR" ]; then
     POSTFLAGS="$POSTFLAGS --swap-regs $SWAPR"
 fi
+SSWAP=$(grep -o 'cc-post: save-swap.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4}')
+if [ -n "$SSWAP" ]; then
+    POSTFLAGS="$POSTFLAGS --save-swap $SSWAP"
+fi
+PLW=$(grep -o 'cc-post: pad-lw.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
+if [ -n "$PLW" ]; then
+    POSTFLAGS="$POSTFLAGS --pad-lw $PLW"
+fi
 ACOMM=$(grep -o 'cc-post: addu-commute.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
 if [ -n "$ACOMM" ]; then
     POSTFLAGS="$POSTFLAGS --addu-commute $ACOMM"
