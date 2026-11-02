@@ -41,3 +41,8 @@ unit:func_8007796C --addiu-at on
 # loads and the terminator store all re-materialize the symbol through
 # $at; the E8C store and the name cursor stay prologue-cursor form).
 unit:func_80077678 --addiu-at on
+# func_80077A18 CD_cachefile (the four trace-dump loads and the 0x2C
+# descriptor read re-materialize the D_8014788x/D_80147E60 symbols through
+# $at - the aspsx < 2.30 4-insn at-split; probe-confirmed required,
+# cron-202611021158).
+unit:func_80077A18 --addiu-at on

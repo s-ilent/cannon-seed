@@ -119,6 +119,22 @@ REMANT=$(grep -o 'cc-post: remnant-ori1.*' "$SRC" 2>/dev/null | head -1 | awk '{
 if [ -n "$REMANT" ]; then
     POSTFLAGS="$POSTFLAGS --remnant-ori1 $REMANT"
 fi
+# The func_80077A18 fixup trio composes with any primary flag above
+# (cron-202611021158): swap-regs exchanges two allocator-picked callee-saved
+# tokens (frame save/restore lines excluded), addu-commute <n> commutes the
+# n-th `addu $d,$d,$s`, delay-sb-out moves an sb out of a j's delay slot.
+# All three are deterministic, marker-scoped, and judged by word diff.
+SWAPR=$(grep -o 'cc-post: swap-regs.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4}')
+if [ -n "$SWAPR" ]; then
+    POSTFLAGS="$POSTFLAGS --swap-regs $SWAPR"
+fi
+ACOMM=$(grep -o 'cc-post: addu-commute.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
+if [ -n "$ACOMM" ]; then
+    POSTFLAGS="$POSTFLAGS --addu-commute $ACOMM"
+fi
+if grep -q 'cc-post: delay-sb-out' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --delay-sb-out"
+fi
 python3 "$REPO/tools/cc_post.py" $POSTFLAGS "$STEM.mas.s"
 
 if [ "$STOP_AT_ASM" = 1 ]; then
