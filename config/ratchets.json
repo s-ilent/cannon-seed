@@ -5,11 +5,11 @@
     "regression, lower means the baseline goes down in the same PR. A raise",
     "is a policy change and needs explicit review.",
     "Add your own patterns (e.g. raw-address debt, magic numbers) the day",
-    "you introduce them \u2014 ratchets go up the day the first placeholder appears.",
+    "you introduce them — ratchets go up the day the first placeholder appears.",
     "unknown_function 0->1 (2026-10-10): first C match, src/func_80036CFC.c,",
     "matched but the original symbol name is still unidentified.",
     "unknown_function 1->3 (2026-10-10): two more C matches through the",
-    "round-trip oracle (slps_00270 gp-store leaves), auto names retained \u2014",
+    "round-trip oracle (slps_00270 gp-store leaves), auto names retained —",
     "one mention per file per the counting rule.",
     "unknown_data 0->4 (2026-10-10): extern declarations + uses of the two",
     "small-data globals those matches write (2 mentions per file: extern",
@@ -89,7 +89,8 @@
     "unknown_function 844->851, unknown_data 280->287 (2026-11-01): the func_8007796C cached-directory lookup leaf lands as the FOURTH real-decompiled-C unit of the func_80084924 split (mainmenu_jp, 0xac; the parked ladder draft retired) - the FIRST sdk-body C row on the mainmenu pair, judge EXACT 172 bytes on the live oracle, whole-image 8/8 GREEN, suite 133/133. func +7 = 1 definition + 6 header mentions (the row x2 incl. the unit-flag line, the parent split, the keep-epilogue trio func_80077654/func_80077CD4/func_80067690). D_ +7 = D_80147E88 x4 (the header table line + the gcc-emission quote + the extern + the one code use) + D_80147E90 x3 (the header table line + the extern + the one code use). The landing's lever law: the ID side's lui/addiu-%lo-into-$at/addu/lw-0 4-insn at-split is the SDK's own aspsx < 2.30 behavior - gcc 2.6.3 always emits the symbol-displacement lw and maspsx folds %lo into the lw unless flipped, so the lever is the unit-scope maspsx flag unit:func_8007796C --addiu-at on in tools/maspsx_flags.txt (the target:g3_eu flip stays game-modules-only; the mainmenu pair's game code must never see it - the 22fc08df gate evidence stands). The family's future flips (CdSearchFile/CD_newmedia/CD_cachefile) ride the same unit flag. Source-shape laws banked in the file header: init order i=0 -> np -> idoff (retail prologue zeroes s0, materializes s2, zeroes s1); np += 0x2C is the LAST body statement (rides both mismatch paths' delay slots), idoff += 0x2C is the for-increment (rides the loop-back bnez delay); cc-post: keep-epilogue. Ratchets recomputed from the tree after the 8/8 GREEN landing.",
     "unknown_function 851->863, unknown_data 287->339 (2026-11-01): the func_80077678 CD_newmedia row lands as the FIFTH real-decompiled-C unit of the func_80084924 split (mainmenu_jp, 0x2f4 = the 0x1ac head row + the 0x148 func_80084924 continuation row - ONE retail function spanning both yaml rows; judge EXACT 756 bytes on the live oracle, whole-image 8/8 GREEN, suite 133/133). func +12 = 1 definition + func_80077CD4 x4 (extern + 2 calls + header) + func_80084924 x3 (header) + func_8007796C x2 (header). D_ +52 = D_800C7CF0 x7, D_80147E8C x5, D_80147E88 x5, D_80149510 x4, D_80147E84 x4, D_800235DC/80149484/80023608/80149C84/800C8024 x3 each, D_80147E90/80023610/80023640/80023664/80023684/80023698 x2 each. The landing closes the CD_cachefile park's open misaligned-access law: the PSX cc1 emits lwl/lwr + swl/swr ONLY for 4-byte struct copies of a char[4]-typed aggregate (plain int derefs compile aligned, memcpy(,4) is not inlined) - and the park's remnant (ori v0,1 / beqz v0,exit / delay) is re-inserted by the new cc_post rule 10, marker-gated `cc-post: remnant-ori1 <join> <exit> absorb` with loud-fail anchors, after the source-shape hunt went negative across do-while/while(1)/while(A&&B)/for/-O1 (the 11 banked CD_cachefile shapes stand). Ratchets recomputed from the tree after the 8/8 GREEN landing.",
     "unknown_function 863->870 (2026-11-02): func_80077A18 CD_cachefile lands as real C (mainmenu_jp, the ISO9660 family's sixth unit) - 1 auto-named definition + 2 unknown-callee externs (func_80077CD4 the staged loader, func_8007502C the record-setter) with their call-site mentions; memcpy_iso9660 is curated and printf is known, not counted.",
-    "unknown_data 339->379 (2026-11-02): the landed func_80077A18 C adds 17 D_ externs (the staging buffer, the cache table symbols, the descriptor table, the trace-level/guard words, the format strings, the dot constants) + 23 in-body uses."
+    "unknown_data 339->379 (2026-11-02): the landed func_80077A18 C adds 17 D_ externs (the staging buffer, the cache table symbols, the descriptor table, the trace-level/guard words, the format strings, the dot constants) + 23 in-body uses.",
+    "unknown_function 892->901, unknown_data 446->456 (2026-11-02): the twenty-third ladder rung's family completes - the VM_PROG trio lands as real C in g3_eu, all judge EXACT FIRST PASS (zero ladder iterations, the #23 decode-family playbook), whole-image verify GREEN first build. func +9 = func_800691E8.c 3 (1 definition + 1 header self-mention + 1 func_80069120 cross-ref) + func_800690AC.c 3 (1 definition + 1 header self-mention + 1 func_80069740 cross-ref) + func_80069174.c 3 (1 definition + 1 header self-mention + 1 func_800690AC cross-ref). data +10 = the D_8016AD38 record-table base: 3 externs (one per file) + 4 uses (2 in each setter: store + reload-read-back, 1 in the getter) + 3 header mentions. SpuVmVSetUp is curated-known, not counted."
   ],
   "patterns": [
     {
@@ -102,7 +103,7 @@
     }
   ],
   "baselines": {
-    "unknown_function": 892,
-    "unknown_data": 446
+    "unknown_function": 901,
+    "unknown_data": 456
   }
 }
