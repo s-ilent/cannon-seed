@@ -15084,3 +15084,109 @@ target was needed this window). Single-session clear; window start
   internal; no curation value while the byte verdict stands).  (4)
   AF70 untouched by standing policy; the BIG de-frame item stays
   coordination-gated.
+
+## 2026-11-02 (window cron-20261102-1129, oracle UP disc-free via the hash-proven baseline restore - the rollback had re-woven the baselines again AND reaped /home/z/psyq): the wave-pool re-ranks at 150 UNCHANGED for the third consecutive check, and the nineteenth real-decompiled-C game function lands - func_80079758 SsVabTransBodyPartly (mainmenu_eu, 0x170, the psyq libsnd VS_VTBP VAB body partial-transfer stager), judge EXACT 368/368 on the live oracle, whole-image verify GREEN
+
+- **Recovery first**: sandbox rolled /home/z/my-project back to the
+  2026-10-14 era AGAIN (worklog 201 windows missing -> restore note
+  cron-20261102-1131-restore, digest exit 0), the local repo to 7623cd2e
+  while origin held be2b63e8 (the 1013 window's LIBSN law + three further
+  curation commits; reset forward, re-rehydrate AFTER the sync per the
+  banked law), and /home/z/psyq + psyq-sigs reaped ->
+  provision_psyq.sh re-provisioned.  Single-session check clear; window
+  start 1793618950.  The task sheet's landing queue (AF70 skip -> AC04 ->
+  67690 -> cluster) was already consumed; the sheet's planned opener (the
+  sdk_curated block replacement) had landed as d3c09abd/c32d807d in the
+  0745 window - the opener pivoted to the queue's next live item, the
+  wave-pool re-rank, then the per-function curation road (the 1013
+  NEXT (1)).
+- **ITEM 1 - the wave-pool re-rank** (Phase G.3, offline, witness-free):
+  scripts/wave_offline_census.py --parents -> pool **150 UNCHANGED**
+  (third consecutive: 0355, 0243, 1129) even after the #18 CD_cachefile
+  landing, the four further cluster C rows (func_80077654/77678/7796C/
+  77CD4, read off the synced tree) and the 2,287-name curated block
+  (scan-time input only, no row moves); the independent own-row set
+  remains EXACTLY the intr-family 13 (sha1 331b7beccc4d x7 +
+  dd0d973bed01 x6, lane-owned, not grabbed); zero mixed waves; the
+  0x8/16-member wave's interior hits stand at 3918 - the decode frontier
+  stays parent functions.
+- **ITEM 2 - the hash-proven witness restore** (the banked procedure,
+  fifth rehearsal): rm -rf build/src, 8x `make build` one target per
+  call foreground - **all eight images byte-exact against the committed
+  TRUE oracles FIRST PASS** (39030a75 g3_eu / 994a680c g3_jp /
+  01b37b4e g3org_eu / 2b2a4225 g3org_jp / f9f29eeb mainmenu_eu /
+  d637286a mainmenu_jp / 06b4bda6 sces_00269 / fa9474b4 slps_00270),
+  cp x8, `bash tools/witness_check.sh` = **8/8, oracle UP**,
+  `make verify TARGET=g3_eu` formal GREEN - judge/baseline_audit gates
+  re-armed disc-free, no disc links needed.
+- **ITEM 3 - the sdk_curated idempotency gate-check on the fresh
+  provision**: the four-flag regen over the re-provisioned psyq set
+  exits 0 with 2,287 adoptions and `git diff` on
+  config/symbols.curated.txt EMPTY - the committed block reproduces
+  byte-identically from a brand-new sandbox provision (the 0745/0859
+  idempotency finding holds; the 3.3-only trap stands documented).
+- **ITEM 4 - the census+classifier re-derive under the restored
+  witness** (Phase G.2): invariant_census 543 func-row + 20 DATA-ROW +
+  6 sibling-asm candidates; split_classifier 20 = 4 B-HEAD-SPLIT
+  (func_80034138/TransposeMatrix/SetRotMatrix/the AC04 sibling body)
+  + 16 D-MID-ROW (the slps func_80034244/34328 family, Square12/Square0,
+  func_80039238, the five memcpy_iso9660 siblings at votes 4) - the
+  same class structure as the 0243 re-derive, ALL classes lane-owned
+  (the graveyard heads + the cluster lane's memcpy siblings) -
+  derived, not grabbed.
+- **ITEM 5 - THE LANDING (the window's payoff)**: the per-function
+  curation road got a concrete picker: cross-reference the curated
+  placements sitting on UNMATCHED func rows across all eight targets,
+  minus the lane exclusions (INTR family, SsSetTickMode/AF70
+  owner-gated, the memcpy/ISO9660 + CD_cachefile + CD_newmedia cluster
+  drafts, PClseek's LIBSN-cloud name).  The pick: **func_80079758
+  (mainmenu_eu, 0x170) = SsVabTransBodyPartly** - the sdk_members.py
+  UNIQUE VS_VTBP placement + sig-db agrees, and the ONLY target of the
+  eight that gives the copy its own yaml row (the other seven pin it as
+  an interior label of their composite sdk rows; the archive extent is
+  0x160, the game row 0x170).  Decode: the per-vab status byte
+  D_8019344C must read 2 (head loaded, body pending) and
+  (vabid & 0xFFFF) < 0x11 unsigned; the two adjacent 17-word per-vab
+  tables D_80195760/D_801957A4 (0x44 apart) hold the body transfer
+  size and the SPU-RAM destination; the arm block fires only when the
+  remaining-word D_800C8930 is idle (pending halfword D_800C8934 =
+  vabid, remaining = table read, SpuSetTransferMode(0) +
+  SpuSetTransferStartAddr(table)); the re-read pending halfword must
+  equal the sign-extended vab again (beq s2,s1 forward to the transfer
+  block, the delay carries chunk = size, mismatch falls into the
+  shared fail tail); chunk = min(size, remaining) by the UNSIGNED sltu
+  clamp; SpuWritePartly per call, remaining updated in place
+  (lw/subu/sw/bnez share one register); -2 while parts remain;
+  completion: pending = -1, remaining = 0, status byte = 1, return the
+  vab id.  Source-shape laws (probe 92/92 after three ladder
+  iterations): v is the raw-param copy PINNED to a1 (gcc 2.6.3
+  coalesces an unpinned local into the param web - both ANSI and K&R
+  tries; retail kept two webs, the sll/sra reads the incoming a2 while
+  the guard-1 andi and the arm-block sh read the a1 home); the
+  sequential goto-fail form keeps the sll/sra between the two guard
+  branches and the shared fail tail mid-function with the pending beq
+  falling into it (if/else and K&R parm-home forms put the tail
+  out-of-line at the function end); the compound assignment
+  (D_800C8930 -= chunk) reproduces the register-sharing subtract; the
+  clamp compares unsigned long against long.  unit:func_80079758
+  --addiu-at on pinned in maspsx_flags (the indexed guard load, both
+  table reads and the completion sb take the aspsx < 2.30 4-insn
+  at-split - the established mainmenu-pair sdk-body law).
+- **GATES**: judge EXACT 368/368 live; whole-image f9f29eeb byte-exact
+  (first build after the row flip); `make verify TARGET=mainmenu_eu`
+  formal GREEN; ratchets 870/379 -> 874/410 recomputed from the tree
+  (+4 = 1 definition + 3 comment references; +31 = 5 D_ externs +
+  26 uses); suite 133/133.  The stale nonmatching listing stays on disk
+  per the e2fd89c0 convention (retires at the next make extract).
+- **NEXT (in order)**: (1) the cluster lane's 7736C cache-loop rewrite
+  -> landing and the memcpy_iso9660 sibling flips stay THEIRS.  (2) The
+  psyq curation pass continues per-function with the cross-reference
+  picker banked - the sibling candidates, hand-evidence-first:
+  g3org_eu SsUtGetVagAtr (UT_GVA, 0x23c, UNIQUE+SIGDB), g3org_jp
+  SsVabOpenHeadWithMode + SsVabFakeHead (VS_VH, UNIQUE+SIGDB),
+  mainmenu_eu CdGetToc/CdGetToc2 (LIBCD TOC, UNIQUE+SIGDB), the
+  VM_PROG family (SpuVmSetProgVol/GetProgVol/SetProgPan/GetProgPan in
+  g3_eu + g3org_eu, UNIQUE), mainmenu_eu SsVabTransBodyPartly already
+  done, the LIBSPU SPU-member rows in g3_jp (_spu_init 0x294,
+  _spu_FiDMA, _spu_t 0x290...).  (3) AF70 untouched by standing
+  policy; the BIG de-frame item stays coordination-gated.
