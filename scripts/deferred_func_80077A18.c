@@ -115,12 +115,22 @@
  *    lhu for the ".." pair where retail has lh, s4/s5 swap) - its
  *    judge-684 "displacement noise only" read was masked by the hole
  *    shift. REMAINING DELTAS vs the listing (probe 169 vs retail 175
- *    words): the 4-word rule-10 remnant (pending the marker at
- *    landing), the s4/s5 anchor/walker REG-NAME swap (gcc gives the
- *    first local the lower reg; retail's s5 is the materialization
- *    temp - the swap is landing-cosmetic only if the judge agrees),
- *    and a 2-word residue not yet localized (alignment pass owed at
- *    the next ladder run).
+ *    words, difflib-aligned cron-20261102-0057): (1) the 3-word
+ *    rule-10 remnant (pending the marker at landing - all back-edge
+ *    displacements are shift-consistent with it, R140 ffae vs P134
+ *    ffb1 = exactly 3); (2) THE ARM REGION: retail lays the slot 0/1
+ *    arms OUT-OF-LINE after the name arm's j (beqz s2 -> arm0, beq
+ *    s2,v0 -> arm1, j name, then arm0, arm1) while gcc keeps them
+ *    INLINE in the fall-through chain with inverted test polarity
+ *    (bnez/bne skipping) and packs arm1's sb into the j delay where
+ *    retail keeps it inline - a dedicated arm-layout ladder pass is
+ *    owed (candidates: switch form, arm statement reshaping); (3) the
+ *    size store's addu OPERAND ORDER: retail addu v0,s1,v0 vs our
+ *    addu v0,v0,s1 - both C orders (sp+off / off+sp) canonicalize
+ *    v0-first, so this is a 1-word cc_post/maspsx-class fix, not a
+ *    source fix; (4) the s4/s5 anchor/walker REG-NAME swap (gcc gives
+ *    the first local the lower reg; retail's s5 is the materialization
+ *    temp - the swap is landing-cosmetic only if the judge agrees).
  *  - the remnant marker stays PENDING the first clean compile's label
  *    numbering; this row's delay slot is a plain nop, so the expected
  *    variant is remnant-ori1 <join> <exit> nop with the cc-post prefix
