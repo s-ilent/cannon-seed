@@ -92,27 +92,42 @@
  *    the extent W4 home (lwl 5/lwr 2 -> swl 0x1B/swr 0x18(sp) -> lw
  *    reload as the call arg); the dump's four per-symbol remats
  *    (encoding-identical: D_80147884/85/86/88 + the off giv each).
- *  - OPEN - THE REGISTER WEB (the ladder's remaining work): retail's
- *    size store recomputes (s5+4)+s1 fresh per iteration (addiu s5,4;
- *    addu s1,v0; swl 3/swr 0) while gcc prefers to strength-reduce
- *    (D_80147884+4+off) into an ADDRESS giv (seed base+4, step 0x18) -
- *    two extra registers, frame 0x48 + s7. v7 (no rec local; the call
- *    arg IS the expression D_80147884 + off) blocked the giv via the
- *    rec8-derived base chain and hit the exact retail store form, but
- *    lost the s4 walker (retail passes a walking-pointer reg seeded
- *    s5-copy; the expr form recomputes base+off per call). v8 (rec
- *    walker restored) re-created the giv. Also inverted: gcc puts the
- *    off=0 init in the searching-gate delay slot and i=0 at the loop
- *    prehead regardless of C order - retail has i=0 in the delay and
- *    off=0 at the prehead. NEXT: init/decl-order experiments, the
- *    two-giv trace (base derived through a walking pointer without the
- *    semantic double-advance), or the arms/store base as a re-derived
- *    symbol form; the tail-NUL and terminator shapes are unverified
- *    past the web (they follow the dump in the listing).
+ *  - THE REGISTER WEB - SOLVED AT SOURCE LEVEL (cron-20261102-0013
+ *    offline ladder, 11 variants, lm_probe_diff vs the committed
+ *    listing): the winning shape is (a) an `anchor` LOCAL holding the
+ *    table base, (b) the call arg = `rec` (a real walker seeded from
+ *    the anchor, stepping in the dump-gate shadow), (c) the size store
+ *    staged through an IN-LOOP `sp = anchor + 4;` local with the store
+ *    written *(W4 *)(sp + off) - the in-loop staging keeps the
+ *    (anchor+4) partial sum inside the loop as a TWO-REG sum, whose
+ *    add_val is not loop-invariant, so loop.c's giv machinery rejects
+ *    it and gcc emits retail's exact addiu v0,s5,4 / addu v0,s1,v0 /
+ *    swl 3/swr 0 recompute; (d) retail's init order i=0 then off=0 -
+ *    gcc then puts i=0 in the searching-gate delay and off=0 at the
+ *    prehead (the "regardless of C order" claim was an artifact of the
+ *    old shape); (e) the prehead seed order rec8, off, rec-last.
+ *    NEGATIVE results banked the hard way: the mult-form (off expressed
+ *    as i*0x18) re-enables the reduction - the reduced giv acts biv-like
+ *    for giv-of-giv (s5 = s4+4 seed returns); the symbol-form store
+ *    hoists (symbol+4) to the prehead and reduces; dropping the walker
+ *    (expr call arg) keeps the store exact but loses the a1 copy;
+ *    the 1533-era parked body is NOT exact (folded store addu+swl 7/4,
+ *    lhu for the ".." pair where retail has lh, s4/s5 swap) - its
+ *    judge-684 "displacement noise only" read was masked by the hole
+ *    shift. REMAINING DELTAS vs the listing (probe 169 vs retail 175
+ *    words): the 4-word rule-10 remnant (pending the marker at
+ *    landing), the s4/s5 anchor/walker REG-NAME swap (gcc gives the
+ *    first local the lower reg; retail's s5 is the materialization
+ *    temp - the swap is landing-cosmetic only if the judge agrees),
+ *    and a 2-word residue not yet localized (alignment pass owed at
+ *    the next ladder run).
  *  - the remnant marker stays PENDING the first clean compile's label
  *    numbering; this row's delay slot is a plain nop, so the expected
- *    variant is `cc-post: remnant-ori1 <join> <exit> nop` (77678 rode
- *    absorb - its delay carried count = 0).
+ *    variant is remnant-ori1 <join> <exit> nop with the cc-post prefix
+ *    (77678 rode absorb - its delay carried count = 0). Do NOT write
+ *    the marker shape with its prefix inside this prose - cc.sh's
+ *    marker grep reads it verbatim out of the comments (hit
+ *    cron-20261102-0013: "join label <join>: not found", exit 3).
  *
  * STAGING: yaml row 672 asm -> c + src/func_80077A18.c + judge live +
  * verify 8/8 + ratchets, at the next witnessed window; the
@@ -145,12 +160,13 @@ extern int printf();
 typedef struct {
     unsigned char b[4];
 } W4;
-
 int func_80077A18(int id)
 {
     unsigned char *src;
+    unsigned char *anchor;
     unsigned char *rec;
     unsigned char *rec8;
+    unsigned char *sp;
     W4 ext_w;
     int off;
     int i;
@@ -170,25 +186,27 @@ int func_80077A18(int id)
         printf(D_800236DC);
     }
     src = D_80149484;
-    rec = D_80147884;
-    rec8 = rec + 8;
-    off = 0;
+    anchor = D_80147884;
+    rec8 = anchor + 8;
     i = 0;
+    off = 0;
+    rec = anchor;
     while (1) {
         if (src[0] == 0) {
             break;
         }
         ext_w = *(W4 *)(src + 2);
         func_8007502C(*(int *)&ext_w, rec);
-        *(W4 *)(D_80147884 + 4 + off) = *(W4 *)(src + 0xA);
+        sp = anchor + 4;
+        *(W4 *)(off + sp) = *(W4 *)(src + 0xA);
         if (i == 0) {
-            t = *(unsigned short *)&D_800236F8;  /* "." */
-            *(unsigned short *)(D_80147884 + 8) = t;
+            t = *(unsigned short *)&D_800236F8;
+            *(unsigned short *)(anchor + 8) = t;
         } else if (i == 1) {
-            t = *(short *)&D_800236FC;  /* ".." */
+            t = *(short *)&D_800236FC;
             u = *(signed char *)&D_800236FE;
-            *(unsigned short *)(D_80147884 + 0x20) = t;
-            *(unsigned char *)(D_80147884 + 0x22) = u;
+            *(unsigned short *)(anchor + 0x20) = t;
+            *(unsigned char *)(anchor + 0x22) = u;
         } else {
             memcpy_iso9660(rec8, src + 0x21, src[0x20]);
             rec8[src[0x20]] = 0;
