@@ -36,10 +36,10 @@ index 02f2587..c7f7a09
 diff --git a/maspsx/__init__.py b/maspsx/__init__.py
 old mode 100644
 new mode 100755
-index 5ab6f94..6ccb12b
+index 5ab6f94..fe6aab3
 --- a/maspsx/__init__.py
 +++ b/maspsx/__init__.py
-@@ -78,6 +78,29 @@ def strip_comments(line: str) -> str:
+@@ -78,6 +78,52 @@ def strip_comments(line: str) -> str:
      return line.strip()
  
  
@@ -66,10 +66,33 @@ index 5ab6f94..6ccb12b
 +    return first_operand == r_dest
 +
 +
++def is_far_store_of_reg(line: str, r_source: str) -> bool:
++    """True when line stores r_source's value to a bare-symbol address (the
++    far-store class: `sw $2,D_800C8028` - no base register, no %lo). The
++    assembler at-expands it into `lui $at,%hi(sym)` + `sw ...,%lo(sym)($at)`,
++    so the data use lands at prefix+1. ASPSX's pipeline keeps cc1's hazard
++    nop for this pair even though the prefix pushes the use past the single
++    load-delay slot (func_8007736C's mount-guard copy `lw $2,D_800C7CFC;
++    nop; sw $2,D_800C8028`, cron-202611021158/202611021204) - the numeric
++    big-offset base form (`sw $2,56200($4)`) is a different expansion path
++    and is NOT covered here (no empirical instance)."""
++    line = strip_comments(line)
++    r_source = r_source.replace("$", r"\$")
++    # e.g. sw  $2,D_800C8028   /  sw  $2,g_CurrentRoom+40  /  sb $2,D_x.4
++    match = re.match(
++        r"^s(?:[wbh]|w[lr])\s+(" + r_source + r"),\s*(-?[A-Za-z0-9_.+]+)$", line
++    )
++    if match:
++        operand = match.group(2)
++        if not is_number(operand):
++            return True
++    return False
++
++
  def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
      """
      NOTE: Returns True even if line might use $at expansion
-@@ -93,7 +116,7 @@ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
+@@ -93,7 +139,7 @@ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
          return False
  
      if op in load_mnemonics:
@@ -78,7 +101,7 @@ index 5ab6f94..6ccb12b
          if re.match(rf"^.*\(\s*{r_source}\s*\)$", rest):
              return True
  
-@@ -146,7 +169,7 @@ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
+@@ -146,7 +192,7 @@ def line_loads_from_reg(line: str, r_source: str, loads_to_reg=False) -> bool:
              if re.match(rf"^{r_source},.*$", rest):
                  return True
          if op.startswith("div") or op.startswith("rem"):
@@ -87,7 +110,7 @@ index 5ab6f94..6ccb12b
              if re.match(rf"^.*,{r_source},.*$", rest):
                  return True
  
-@@ -168,15 +191,15 @@ def is_number(value: str) -> bool:
+@@ -168,15 +214,15 @@ def is_number(value: str) -> bool:
  def uses_at(line: str) -> bool:
      line = strip_comments(line)
  
@@ -107,7 +130,7 @@ index 5ab6f94..6ccb12b
      if match := re.match(
          r"^s(?:[wbh]|w[lr])\s+(\$[a-z0-9]+),\s*(-?[A-z0-9_.+]+)$", line
      ):
-@@ -184,14 +207,14 @@ def uses_at(line: str) -> bool:
+@@ -184,14 +230,14 @@ def uses_at(line: str) -> bool:
          if not is_number(operand):
              return True
  
@@ -125,7 +148,7 @@ index 5ab6f94..6ccb12b
      elif match := re.match(r"l[a-z]+\s+(\$[a-z0-9]+),\s*([^(]+)\(([^)]+)\)", line):
          operand = match.group(2)
  
-@@ -538,7 +561,7 @@ class MaspsxProcessor:
+@@ -538,7 +584,7 @@ class MaspsxProcessor:
                  continue
  
              if line.startswith(".comm") or line.startswith(".lcomm"):
@@ -134,7 +157,7 @@ index 5ab6f94..6ccb12b
                  in_sdata = False
                  _, var = line.split()
                  symbol, size_str, *_ = var.split(",")
-@@ -579,7 +602,7 @@ class MaspsxProcessor:
+@@ -579,7 +625,7 @@ class MaspsxProcessor:
                          elif line.startswith(".byte"):
                              size = 1
                          elif line.startswith(".ascii"):
@@ -143,7 +166,30 @@ index 5ab6f94..6ccb12b
                              # NOTE: len('.ascii\t""') == 9
                              size = len(line) - 9
                          else:
-@@ -744,6 +767,26 @@ class MaspsxProcessor:
+@@ -729,6 +775,22 @@ class MaspsxProcessor:
+                     f"'{next_instruction}' inject nop beween {r_dest} and $at expansion"
+                 )
+                 nop_required = True
++            if (
++                uses_at(next_instruction)
++                and not self.nop_at_expansion
++                and is_far_store_of_reg(next_instruction, r_dest)
++            ):
++                # cannon-seed far-store hazard law (cron-202611021204): the
++                # one-ahead re-derivation treats the at-expansion prefix as
++                # pushing the data use past the single load-delay slot, but
++                # ASPSX's pipeline keeps cc1's hazard nop when the loaded
++                # value feeds a far-store's data payload (the use lands at
++                # prefix+1 and is treated as live). Without this look-past
++                # the nop drops and the image drifts by exactly one word
++                # (func_8007736C's mount-guard copy lw $2,D_800C7CFC;
++                # nop; sw $2,D_800C8028).
++                reason = f"'{next_instruction}' far-store use keeps cc1's nop"
++                nop_required = True
+ 
+             if nop_required:
+                 skip = 0
+@@ -744,6 +806,26 @@ class MaspsxProcessor:
                      self.skip_instructions = skip
  
                  res.append(f"nop # DEBUG: Reuse of '{r_dest}'. {reason}")
@@ -170,7 +216,7 @@ index 5ab6f94..6ccb12b
          else:
              res.append(
                  f"#nop # DEBUG: '{next_instruction}' does not load from {r_dest}"
-@@ -994,7 +1037,7 @@ class MaspsxProcessor:
+@@ -994,7 +1076,7 @@ class MaspsxProcessor:
                  res.extend(extra_nops)
  
              elif is_addend and r_source is None:
@@ -179,7 +225,7 @@ index 5ab6f94..6ccb12b
                  if operand.count("+") == 1:
                      symbol, offset = operand.split("+")
                      gp_rel = f"%gp_rel({symbol}+{offset})($gp)"
-@@ -1017,7 +1060,7 @@ class MaspsxProcessor:
+@@ -1017,7 +1099,7 @@ class MaspsxProcessor:
                  res.extend(extra_nops)
  
              elif is_addend and r_source:
@@ -188,7 +234,7 @@ index 5ab6f94..6ccb12b
                  if self.addiu_at:
                      res.extend(
                          [
-@@ -1051,7 +1094,7 @@ class MaspsxProcessor:
+@@ -1051,7 +1133,7 @@ class MaspsxProcessor:
  
              else:
                  if r_source and (int(operand, 0) > 32767 or int(operand, 0) < -32768):
@@ -197,7 +243,7 @@ index 5ab6f94..6ccb12b
                      res.extend(
                          [
                              "# EXPAND_AT START",
-@@ -1064,7 +1107,7 @@ class MaspsxProcessor:
+@@ -1064,7 +1146,7 @@ class MaspsxProcessor:
                          ]
                      )
                  else:
@@ -206,7 +252,7 @@ index 5ab6f94..6ccb12b
                      res.append(line)
  
                  # Naively handle scenario where *current* line is a macro
-@@ -1082,7 +1125,7 @@ class MaspsxProcessor:
+@@ -1082,7 +1164,7 @@ class MaspsxProcessor:
              )
  
              if is_addend and r_source is None:
@@ -215,7 +261,7 @@ index 5ab6f94..6ccb12b
                  if operand.count("+") == 1:
                      symbol, offset = operand.split("+")
                      gp_rel = f"%gp_rel({symbol}+{offset})($gp)"
-@@ -1102,7 +1145,7 @@ class MaspsxProcessor:
+@@ -1102,7 +1184,7 @@ class MaspsxProcessor:
                  else:
                      res.append(line)
              elif is_addend and r_source:
@@ -224,7 +270,7 @@ index 5ab6f94..6ccb12b
                  if self.addiu_at and op != "la":
                      res.extend(
                          [
-@@ -1119,7 +1162,7 @@ class MaspsxProcessor:
+@@ -1119,7 +1201,7 @@ class MaspsxProcessor:
                  else:
                      res.append(line)
              elif r_source and (int(operand, 0) > 32767 or int(operand, 0) < -32768):
