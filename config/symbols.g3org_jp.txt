@@ -249,6 +249,7 @@ SpuSetNoiseVoice = 0x800672F0; // type:func (pinned member row)
 SpuInitMalloc = 0x80067314; // type:func (pinned member row)
 _SpuSetAnyVoice = 0x80067368; // type:func (pinned member row)
 SpuVmVSetUp = 0x8006741C; // type:func (pinned member row)
+SsVabFakeHead = 0x80068030; // type:func (pinned member row)
 SsSetMono = 0x80067FA4; // type:func
 SsSetStereo = 0x80067FB8; // type:func
 SpuMalloc = 0x800684AC; // type:func (pinned member row)
