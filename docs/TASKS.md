@@ -14846,3 +14846,60 @@ target was needed this window). Single-session clear; window start
   cache-loop rewrite -> landing, memcpy_iso9660 sibling flips - judge
   is LIVE again after this window's restore. AF70 untouched by standing
   policy.
+
+## 2026-11-02 (window cron-20261102-0745, oracle UP disc-free - the rollback had re-woven the baselines again and the banked restore ran mid-window): the sdk_curated block replacement LANDS - the stale a65eabed-era block retires, 2,287 fresh adoptions regenerate from the synced census, the psylib lane hold is enforced with a new lane-held skip class, and the trio is proven IDEMPOTENT
+
+- **Recovery first**: sandbox rolled back /home/z/my-project again - the
+  worklog lost 201 windows (restore note cron-20261102-0746-restore,
+  digest exit 0) and the local repo fell back to 7623cd2e while origin
+  held this lane's 85f8f1c9; reset forward, post-sync rehydrate. Both
+  0859Z disc links probed 404 (~23h).
+- **ITEM 1 - the block replacement (the scoped opener from 0629)**:
+  - d3c09abd retires the stale block: 1753 lines below the marker whose
+    evidence base (an annotated sdk_members.txt variant) was NEVER
+    committed, so no regen can reproduce it. Tool-owned verified (the
+    7 non-generated lines below the marker are the tool's own
+    preamble); hand facts were already relocated above by 6e557c7 +
+    6dbfc277 (memcpy_iso9660 is the hand head's last row).
+  - The unpatched first regen EXPOSED A LANE BOUNDARY: it adopted
+    SsSetTableSize at 7 addresses INCLUDING 0x8006AD90 in g3_eu - the
+    psylib-lane-HELD func_8006AD90 row (the old block had ZERO
+    SsSetTableSize rows; the refreshed adoptable set moved with the
+    tree's re-scan + landings). The hold wins: the row lands with the
+    lane owner's own omf def-base derivation, generated names do not
+    pre-apply.
+  - Tool patch (c32d807d): HELD_NAMES = {SsSetTableSize} + the lane-held
+    skip class (loud per-row stderr line, counted in the per-target
+    summary; the rationale sits at the constant). All 10 occurrences
+    now skip - the placement stays banked census evidence FOR the
+    psylib lane; only the curated NAME is withheld.
+  - The fresh block: 2,287 adoptions + alias rows across all eight
+    targets (g3_eu 287 / g3_jp 372 / g3org_eu 282 / g3org_jp 369 /
+    mainmenu_eu 283 / mainmenu_jp 205 / sces_00269 197 / slps_00270
+    292), 0 bad-name and 0 addr-dup everywhere; PURE insertion (the
+    1127-line hand head untouched); curated_collisions 0 duplicate(s)
+    across 8 scopes.
+  - **IDEMPOTENCE PROVEN**: a second regen run is BYTE-IDENTICAL (the
+    trio's acceptance gate - members -> anchors -> curated all
+    reproduce from committed inputs now).
+- **ITEM 2 - the witness restore (the rollback re-wove the baselines)**:
+  baseline_audit 0 MATCH / 8 MISMATCH mid-window -> the banked
+  disc-free procedure again: rm -rf build/src + clean rebuild, one
+  target per call - all eight byte-exact vs the committed TRUE oracles
+  first pass -> hash-proven cp x8 -> witness 8/8, audit 8 MATCH /
+  0 MISMATCH, make verify TARGET=g3_eu formal GREEN. Judge live for
+  the cluster lane.
+- **GATES**: suite 133/133; ratchets 870/379 = tree (curated names are
+  scan-time symbols-file input; no yaml/asm row moves until a lane
+  runs a scan - the applying lane recomputes ratchets then);
+  commits d3c09abd (retire) + c32d807d (tool + fresh block) + this
+  docs commit, pushed.
+- **NEXT (in order)**: (1) the curation pass's next family from the
+  fresh adoptable list (the ~2160 adoptable-but-unadopted marks:
+  name-dup second copies, ambiguous-without-agree, non-adoptable
+  placements - hand-evidence families first per the 0852 discipline).
+  (2) The cluster lane stays theirs: 7736C cache-loop rewrite ->
+  landing, memcpy_iso9660 sibling flips - the judge is LIVE. (3) The
+  first scan after this landing applies the new names into the
+  per-target symbols files (progress moves at that scan, not now).
+  (4) AF70 untouched by standing policy.
