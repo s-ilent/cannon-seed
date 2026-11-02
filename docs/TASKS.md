@@ -15272,3 +15272,123 @@ target was needed this window). Single-session clear; window start
   -> landing and the memcpy_iso9660 sibling flips stay THEIRS.  (3)
   AF70 untouched by standing policy (owner call required); the BIG
   de-frame item stays coordination-gated.
+
+## 2026-11-02 (window cron-202611021358, oracle UP disc-free via the hash-proven baseline restore - the rollback had re-woven the baselines AND reaped /home/z/psyq again; the worklog lost 202 windows to a rollback to the Oct-14 snapshot, restore note cron-20261102-1402-restore): the twenty-second real-decompiled-C game function lands - func_80078700 CdGetToc (mainmenu_eu, the psyq libcd TOC member's .text+0x0 wrapper, judge EXACT first pass, whole-image verify GREEN first build) - and the -O1 SDK-BODY FLAG CLASS BANKS (cc1-O1 marker + cc_post rules 11-14)
+
+- **Recovery first**: witness 0/8 at session start (the woven-set trap,
+  eighth rehearsal); rm -rf build/src, 8x make build one target per call
+  foreground - all eight FIRST PASS byte-exact, cp x8, witness 8/8.
+  /home/z/psyq + psyq-sigs reaped -> provision_psyq.sh re-provisioned.
+  Local repo was 614 commits behind origin (the parallel lanes landed
+  real-C functions #19/#20/#21 + the sdk_curated block replacement
+  d3c09abd/c32d807d + the curation sieve negative + the LIBSN path-record
+  law while this chain was dark); reset forward to 8490f2a9, re-rehydrate
+  AFTER the sync.  Worklog rolled back to Oct 14 (202 windows missing) ->
+  worklog_digest capture + append_restore_note -> digest exit 0.
+  Single-session check clear; window start 1793627937.
+- **LANDING #22 - func_80078700 CdGetToc** (mainmenu_eu, 0x80078700,
+  0x24, the libcd TOC member's .text+0x0 piece, UNIQUE+SIGDB; the 1244
+  window's NEXT(1) first-listed candidate): a pure argument-shuffle
+  wrapper, the twin of landed #21 (SsVabFakeHead) - a1 = a0 (the toc
+  buffer pointer rides as the callee's SECOND argument; the callee's own
+  prologue confirms it, addu s4,a1,zero, the toc store base), the
+  constant 1 materializes in the jal DELAY slot (ori a0,zero,0x1); the
+  callee never reads its incoming a0 (zeroed in its prologue), so the 1
+  is the vestigial count argument of the psyq CdGetToc(toc) =
+  CdGetToc2(1, toc) law; the return passes through v0 unmodified (word
+  return, not the short law of #21).  Judge EXACT FIRST PASS, no ladder
+  iterations, no maspsx flag needed (no symbol loads, no at-split).
+  Whole-image byte-exact FIRST BUILD (f9f29eeb == the committed TRUE
+  oracle), make verify formal GREEN, ratchets 885/443 -> 890/443
+  recomputed from the tree (+5 = func_80078700 x2 definition+comment +
+  func_80078724 x3 extern+call+comment), suite 133/133.  Commit de8a73c2.
+- **THE -O1 FINDING (the window's toolchain bank)**: the CdGetToc2
+  follow-up (func_80078724, 0x224 - the ladder's stated next rung) would
+  not match at -O2: SIZE +24, DIFF 131/137, the loop-carried toc-walk
+  pointer strength-reducing into a TWO-register {min,max} basis (gcc
+  2.6.3's loop.c creates a reduced register for the first- and the
+  last-referenced offset and folds the middle one; the basis's second
+  element tracks the source's last-touched offset: draft order 0,2,1 ->
+  {p,p+1}, 0,1,2 -> {p,p+2}; probes scripts/iv_probe1.c v1-v3 - param-
+  based stores fold into one register at EITHER level, the loop-carried
+  pointer is the discriminator).  At -O1 the same pointer reduces to ONE
+  address register with the 0/2/1 sb offsets folded - EXACTLY retail -
+  and the store sequences keep -O1's un-scheduled program order (the -O2
+  scheduler moves the independent zero store into the FIRST load's delay;
+  retail keeps it in the SECOND's).  Conclusion: the psyq sdk library
+  bodies carry their own build's flag set = -O1 (gcc's final delay-slot
+  filling still runs at -O1 and explains every filled slot in the
+  listing).  cc.sh takes the source marker `cc-post: cc1-O1` (appended
+  after the pinned set, so it overrides -O2; judge_unit and make build
+  inherit through cc.sh).
+- **cc_post rules 11-14** (all marker-scoped, loud-fail exit 3 on anchor
+  mismatch, deterministic, judged by word diff - the 77A18 trio's
+  convention): rule 11 `prologue-param-first` - gcc -O1 emits [frame]
+  [sw ra][descending s-reg saves][param copy][consts][jal][arg-ALU
+  delay] while retail hoists the first param copy's save+copy and the
+  constant block ABOVE the ra save and sinks the param-byte sb into the
+  first call's delay slot (sound: the delay executes before the callee,
+  the stored v0 is still the pre-call constant); the SAME shape is
+  retail in func_80079758/func_80069740 whose -O2 builds reach it via
+  the scheduler.  Rule 12 `addiu-imm` - retail sdk bodies keep addu for
+  register-only sums; EVERY immediate-form sum is addiu (gcc emits addu
+  for the pointer sums; per-unit - the unit's retail has zero addu-imm
+  counter-examples, checked).  Rule 13 `v0-sink` - the post-call v0
+  consumer writing a callee-saved reg (handle = f(0)'s return) sinks
+  into the NEXT call's delay slot, swapping with that call's own
+  arg-setup delay insn, which hoists before the jal (retail 58F6C:
+  addu s5,v0,zero in the 0x13 call's delay).  Rule 14 `addr-pin-late` -
+  the stack-address pin (addiu s1,sp,0x18) moves from its statement
+  position into the consuming call's arg-setup sequence, right before
+  the insn that reads it (retail 58F58..58F64: ori / addu / addiu s1 /
+  addu a2).
+- **The CdGetToc2 decode is COMPLETE** (banked verbatim in the parked
+  draft scripts/deferred_func_80078724.c, now IN-REPO): CdGetToc2(1, toc)
+  - the count argument is vestigial (the prologue zeroes a0; the toc
+  pointer arrives as the SECOND argument).  Flow: param[0] = 1 (dead-ish
+  first store - the address escapes to the callee so it survives),
+  handle = func_800751F8(0) (the lock pair's enter half, released with
+  the saved handle at every exit); func_800754C4(0x13, 0, result) = the
+  track-number command - failure prints D_80023754 when D_800C8518 != 0
+  and returns 0; the result bytes [1]/[2] = first/last track in BCD,
+  each decoding (b>>4)*10 + (b&0xF) with the one-load-two-uses shape
+  (pinned locals); D_800C8518 >= 2 prints D_80023728 with (track, last);
+  func_800754C4(0x14, param, result) with param[0] = 0 fills toc[0..2] =
+  {result[1], result[2], 0} (the disc-start entry; each store re-loads
+  its byte - no cross-statement CSE at -O1); the per-track loop runs
+  track = first..last: param[0] = (track/10)*16 + track%10 (the BCD
+  encode, the 0x66666667 magic), the command re-issued per track (n++
+  counts attempts BEFORE the failure gate - it rides the beqz delay,
+  matching retail), the entry stores {result[1], b2, 0} with track++
+  riding the result[2] load's delay, t += 4 riding the back-edge beqz
+  delay; failure takes the shared fail tail; return = n - 1 (the track
+  count; toc[0] is the extra disc-start entry).  The verbose tail
+  (D_800C8518 >= 2 and i >= 0) dumps the entries two bytes at a time
+  through D_80023738 with t += 4 filling the second load's delay and j++
+  the printf call's.
+- **Ladder state**: the draft reached 63/137 with the PROLOGUE and the
+  CALL-BLOCK sequences EXACT (rule 11 does the prologue; rp = result
+  pinned for the two early calls; rules 12-14 do the immediate forms and
+  the two delay placements).  The remaining ladder is the DECODE-BLOCK
+  register assignment: retail hosts the pinned bcd bytes in a0/a1 and
+  runs the hi*10 chains in v0/v1 with each final addu targeting s0/s3
+  DIRECTLY (last's addu riding the verbose-guard bnez delay); gcc -O1
+  loads the pins into v1/a0 and FUSES the chains into s-regs ($17/$18),
+  which also kills the delay-ride.  Candidate levers for the next
+  window: declaration order of the pins, splitting the decode into
+  two statements, or a narrow register-swap pass over the decode block
+  (the swap-regs marker's class).  The row stays ASM; the tree is
+  byte-exact with the reversion (make verify mainmenu_eu GREEN, suite
+  133/133, ratchets 890/443).
+- **NEXT (in order)**: (1) close the CdGetToc2 ladder from the parked
+  draft - the decode-block register assignment is the only gap;
+  land + judge EXACT + verify + ratchets (the wheel is already built:
+  cc1-O1 + rules 11-14 all fire on the draft's markers).  (2) Then the
+  picker's remaining hand-evidence candidates per the 1244 window:
+  the VM_PROG family (SpuVmSetProgVol/GetProgVol/SetProgPan/GetProgPan
+  in g3_eu + g3org_eu, UNIQUE), the LIBSPU SPU-member rows in g3_jp
+  (_spu_init 0x294, _spu_FiDMA, _spu_t 0x290...), g3org_jp
+  SsVabOpenHeadWithMode (VS_VH .text+0x90, 0x3dc).  (3) The cluster
+  lane's 7736C cache-loop rewrite -> landing and the memcpy_iso9660
+  sibling flips stay THEIRS.  (4) AF70 untouched by standing policy;
+  the BIG de-frame item stays coordination-gated.
