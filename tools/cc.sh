@@ -118,7 +118,15 @@ fi
 if grep -q 'cc-post: addiu-imm' "$SRC" 2>/dev/null; then
     POSTFLAGS="$POSTFLAGS --addiu-imm"
 fi
-if grep -q 'cc-post: v0-sink' "$SRC" 2>/dev/null; then
+# v0-sink is an -O1-shape compensator and only fires for cc1-O1 units:
+# at -O2 gcc's own final delay filler already sinks the post-call v0
+# consumer into the next call's delay slot (CdGetToc2 measured
+# 2026-11-02: at -O2 -fno-strength-reduce the rule silently pulled the
+# gate branch INTO the jal delay slot - a v0-reading branch shape the
+# -O1 stream never has, DIFF 88 -> 87 when scoped off). The marker
+# composes; the rule does not.
+if grep -q 'cc-post: v0-sink' "$SRC" 2>/dev/null \
+        && grep -q 'cc-post: cc1-O1' "$SRC" 2>/dev/null; then
     POSTFLAGS="$POSTFLAGS --v0-sink"
 fi
 if grep -q 'cc-post: addr-pin-late' "$SRC" 2>/dev/null; then

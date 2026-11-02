@@ -38,14 +38,30 @@
  * come OFF at -O2 (its anchor is -O1-shaped, loud-fail otherwise). The loop
  * discriminator the 1358 window measured is the strength-reduction PASS, not
  * the -O level; the loop call block's hoisted arg setup (cmd/param/result
- * above the division) is likewise -O2 sched1 work. RESIDUAL at -O2-fnsr:
- * the rp/track s-reg pair swap (built rp=s0/track=s1 vs retail rp=s1/
- * track=s0), the lo2 andi destination (gcc reuses the dead b1 pin a0 where
- * retail overwrites the b2 pin a1), the toc-store block order (sched1
- * hoists the slt; retail keeps load/store program order), the handle sink
- * (built beqz delay vs retail jal delay) and the n=1 init placement. Next
- * window: chase the residual with source shape at -O2-fnsr (the -O1 lever
- * set no longer applies), then land + judge + verify.
+ * above the division) is likewise -O2 sched1 work. RESIDUAL MAP at -O2-fnsr (cron-202611021904, full word-diff; the rule-13
+ * misfire is FIXED by the cc1-O1 scoping in cc.sh, 88 -> 87 words): the
+ * 87-word diff is FOUR roots plus their branch-offset consequences:
+ *   root 1 - the rp/track/t s-reg pair swap: built {rp/t=s0, track=s1},
+ *     retail {rp/t=s1, track=s0}; last=s3/n=s2/handle=s5/toc=s4 agree.
+ *     DECLARATION ORDER is provably out at -O2-fnsr too (track/last
+ *     declared before rp: DIFF 87 unchanged) - no source-shape lever.
+ *   root 2 - the lo2 andi destination: built reuses the dead b1 pin a0
+ *     and pins the loop's b2 load in a1; retail overwrites the b2 pin a1
+ *     itself (early decode) and loads the loop's b2 into v0 with no pin.
+ *   root 3 - sched1 placements: built hoists the loop-gate slt INTO the
+ *     toc-store block and the n++/track++ above the division cluster;
+ *     retail keeps load/store program order (stores, slt, bnez with the
+ *     n=1 ori riding its delay; built's ori is a real insn above).
+ *   root 4 - the fail tail: retail carries ONE extra nop between the
+ *     release call's delay slot and the ra restore - the whole SIZE -4.
+ *   rule 13 (v0-sink) MISFIRED at -O2-fnsr: gcc's own filler already
+ *     sinks the handle (move s5,v0 in the first 754C4 jal's delay,
+ *     byte-retail in the raw cc1 stream); the rule then pulled the gate
+ *     branch INTO the jal slot (branches are not in its read-set). Now
+ *     scoped to cc1-O1 units in cc.sh. Rules 12/14 stay unscoped - the
+ *     ori immediate forms and the addr-pin arg positions MATCH retail at
+ *     -O2-fnsr. Next window: chase roots 1/2/4 (allocator modeling or a
+ *     narrow cc_post rule), then land + judge + verify.
  *
  * Decode (the listing is the only authority): CdGetToc2(1, toc) - the
  * count argument is vestigial (the prologue zeroes a0 before the first
