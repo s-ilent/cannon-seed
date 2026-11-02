@@ -66,6 +66,15 @@ STEM="${OUT%.o}"
 CC1FLAGS="-quiet -mips1 -O2 -G8 -funsigned-char -fno-builtin $INCS"
 # probe hook: extra cc1 flags without editing the pinned set (judge probes only)
 CC1FLAGS="$CC1FLAGS ${CC1FLAGS_EXTRA:-}"
+# `cc-post: cc1-O1` - the unit's retail compile ran at -O1 (the psyq sdk
+# library bodies' own build flag set; found 2026-11-02, mainmenu_eu
+# CdGetToc2: the loop-carried byte-walk pointer strength-reduces to ONE
+# address register at -O1 but splits into the {min,max} two-register basis
+# at -O2 - retail has one, and the store sequence keeps -O1's un-scheduled
+# program order). Appended AFTER the pinned set so it overrides -O2.
+if grep -q 'cc-post: cc1-O1' "$SRC" 2>/dev/null; then
+    CC1FLAGS="$CC1FLAGS -O1"
+fi
 
 # The Psy-Q cc1 wants preprocessed input (it rejects unstripped
 # comments), so run the bundled cpp first — same as the original
@@ -101,6 +110,27 @@ elif grep -q 'cc-post: keep-return-fill' "$SRC" 2>/dev/null; then
     # delay slot with the $v0 move (the getter class keeps it before
     # the jump) - skip cc_post's return-move un-fill for these units.
     POSTFLAGS="--keep-return-fill"
+fi
+# addiu-imm / v0-sink compose with any primary flag above (independent
+# greps): the -O1 sdk-unit immediate-form law (retail addu keeps register-
+# only sums, every immediate sum is addiu) and the post-call v0-consumer
+# sink into the next call's delay slot (CdGetToc2 2026-11-02).
+if grep -q 'cc-post: addiu-imm' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --addiu-imm"
+fi
+if grep -q 'cc-post: v0-sink' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --v0-sink"
+fi
+if grep -q 'cc-post: addr-pin-late' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --addr-pin-late"
+fi
+# prologue-param-first composes with any primary flag above (independent
+# greps): the -O1 sdk-unit prologue law - the first param copy's save+copy
+# and the constant block hoist above the $ra save, the param-byte sb sinks
+# into the first call's delay slot (rule 11; see cc_post.py header,
+# CdGetToc2 2026-11-02).
+if grep -q 'cc-post: prologue-param-first' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --prologue-param-first"
 fi
 # keep-prologue composes with any primary flag above (independent greps):
 # skips cc_post's rule-4 prologue-save restore for units whose retail

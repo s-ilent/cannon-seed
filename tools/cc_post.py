@@ -240,6 +240,34 @@ PAD_LW = None           # 1-based occurrence index of an lw to pad (retail's
                         # when gcc's #nop was decided against a far-store use
                         # two slots ahead - the honest upstream fix is the
                         # maspsx one-ahead hazard look, banked cron-202611021158)
+PROLOGUE_PARAM_FIRST = False
+ADDIU_IMM = False       # normalize `addu $r,$s,imm` -> `addiu $r,$s,imm` (the
+                        # sdk units' immediate-form law: retail addu keeps
+                        # register-only sums, every immediate sum is addiu)
+V0_SINK = False         # sink the first post-call v0 consumer (writing a
+                        # callee-saved reg) into the NEXT call's delay slot
+ADDR_PIN_LATE = False   # move a stack-address materialization (addiu $sX,$sp,imm)
+                        # from its statement position into the consuming call's
+                        # arg-setup sequence, right before the first insn that
+                        # reads $sX (retail keeps the pin adjacent to its
+                        # consumer; gcc -O1 emits it at the assignment)
+# -O1 sdk-unit prologue law (found 2026-11-02, mainmenu_eu CdGetToc2; the
+# same shape is retail in func_80079758/func_80069740 whose -O2 builds
+# reach it via the scheduler): gcc's -O1 prologue emits [frame][sw ra]
+# [descending s-reg saves][param copy][consts][jal][arg-ALU delay] while
+# retail hoists the FIRST param copy's save+copy and the constant block
+# ABOVE the $ra save and sinks the param-byte sb into the call's delay
+# slot (sound: the delay executes before the callee, so the stored v0 is
+# still the pre-call constant):
+#   subu sp,K        subu sp,K
+#   sw   ra,M        sw   $sA,N(sp)     <- the copy target's save hoists
+#   sw   sQ...       addu $sA,src,zero
+#   ...              <imm ALUs>
+#   sw   $sA,N(sp)   <arg ALUs>         <- hoisted from the jal delay
+#   addu $sA,src     sw   ra,M
+#   ...              sw   sQ...         <- remaining saves, order kept
+#   jal  T           jal  T
+#   <arg ALU> delay  sb   v0,N(sp)      <- the param store sinks (delay)
 
 
 def _prepass_swap_regs(lines: list[str]) -> list[str]:
@@ -677,10 +705,252 @@ def _rule7_gp_load(res: list[str]) -> list[str]:
     return res
 
 
+_FRAME_RE = re.compile(r"^(?:subu|addiu)\t\$sp,\$sp,(-?0x[0-9a-f]+|\d+)$")
+_SAVE_RE = re.compile(r"^sw\t\$(\w+),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
+_COPY_RE = re.compile(r"^addu\t\$(\w+),\$(\w+),\$zero$")
+_JAL_RE = re.compile(r"^jal\t(\S+)$")
+_ARG_ALU_RE = re.compile(
+    r"^(?:addu\t\$(\w+),\$0,(?:\$0|\$zero)$"
+    r"|ori\t\$(\w+),\$zero,[-0-9xa-f0-9]+)$")
+
+
+def _prepass_prologue_param_first(lines: list[str]) -> list[str]:
+    """Marker prologue-param-first: hoist the first param copy's save, the
+    copy and the constant block above the $ra save; sink the param-byte sb
+    into the first call's delay slot; hoist the call's arg ALU out of it.
+    Scans the whole file for the prologue run; loud failure (exit 3) when
+    no run matches - never a silent pass."""
+    # split into maximal instruction runs, find the one that matches
+    runs = []
+    cur = []
+    for ln in lines:
+        if is_instruction(ln) and ln.strip() and not ln.strip().startswith("."):
+            cur.append(ln.strip())
+        else:
+            if cur:
+                runs.append(cur)
+            cur = []
+    if cur:
+        runs.append(cur)
+    for res in runs:
+        fixed = _rule11_on_run(res)
+        if fixed is not None:
+            # splice: replace this run's lines in the file, preserving
+            # non-instruction lines around it
+            out = []
+            i = 0
+            matched = False
+            for ln in lines:
+                if (not matched and i < len(res) and ln.strip() == res[i]
+                        and is_instruction(ln)):
+                    out.append(ln)  # placeholder, rebuilt below
+                    i += 1
+                    if i == len(res):
+                        pass
+                else:
+                    out.append(ln)
+            # simpler: operate positionally
+            start = None
+            for pos in range(len(lines) - len(res) + 1):
+                window = [x.strip() for x in lines[pos:pos + len(res)]]
+                if window == res:
+                    start = pos
+                    break
+            if start is None:
+                continue
+            rebuilt = list(lines[:start])
+            j = 0
+            for k, ln in enumerate(lines[start:start + len(res)]):
+                rebuilt.append("\t" + fixed[k])
+            rebuilt += lines[start + len(res):]
+            return rebuilt
+    sys.stderr.write("cc_post rule 11: no run matches the prologue shape\n")
+    sys.exit(3)
+
+
+_ADDU_IMM_RE = re.compile(r"^addu\t\$(\w+),(\$\w+),(-?(?:0x[0-9a-f]+|\d+))$")
+
+
+def _prepass_addiu_imm(lines: list[str]) -> list[str]:
+    """Marker addiu-imm: retail's sdk bodies keep addu for register-only
+    sums; EVERY immediate-form sum is addiu (CdGetToc2 2026-11-02: the
+    sp-relative address materializations are addiu in retail, gcc emits
+    addu for the pointer sums). Pure rewrite, no reorder."""
+    out = []
+    for ln in lines:
+        m = _ADDU_IMM_RE.match(ln.strip())
+        if m:
+            out.append("\taddiu\t$%s,%s,%s" % (m.group(1), m.group(2), m.group(3)))
+        else:
+            out.append(ln)
+    return out
+
+
+_PIN_RE = re.compile(r"^addiu\t\$(\w+),\$sp,(-?(?:0x[0-9a-f]+|\d+))$")
+_PIN_READ_RE = re.compile(r"^addu\t\$(\w+),\$(\w+),\$zero$")
+
+
+def _prepass_addr_pin_late(lines: list[str]) -> list[str]:
+    """Marker addr-pin-late: retail positions the stack-address pin inside
+    the consuming call's argument sequence (CdGetToc2 58F58..58F64: ori /
+    addu / addiu s1,sp,0x18 / addu a2,s1), gcc -O1 emits it at the
+    assignment statement, before the whole arg block. Move the pin down to
+    just before the first insn that reads its register, provided every
+    insn in between is an arg-setup ALU that never reads the pin register.
+    Loud failure when no pin block matches."""
+    out = list(lines)
+    for i, ln in enumerate(out):
+        m = _PIN_RE.match(ln.strip())
+        if not m:
+            continue
+        pin = m.group(1)
+        j = i + 1
+        while j < len(out):
+            s2 = out[j].strip()
+            mr = _PIN_READ_RE.match(s2)
+            if mr and mr.group(2) == pin:
+                break  # the consumer
+            if s2.startswith("jal") or s2.endswith(":") or s2.startswith("."):
+                break
+            # in-between insns must be arg-setup ALUs not reading the pin
+            if pin in s2:
+                break
+            j += 1
+        else:
+            continue
+        if j >= len(out) or j == i + 1:
+            continue
+        pin_line = out[i]
+        del out[i]
+        j -= 1
+        out.insert(j, pin_line)
+        return out
+    sys.stderr.write("cc_post rule 14: no addr-pin block matched\n")
+    sys.exit(3)
+
+
+_V0_CONS_RE = re.compile(r"^addu\t\$(\w+),\$2,\$zero$")
+
+
+def _prepass_v0_sink(lines: list[str]) -> list[str]:
+    """Marker v0-sink: gcc's -O1 delay filler keeps the post-call v0
+    consumer (handle = f(0)'s return -> callee-saved) right after the
+    call; retail sinks it into the NEXT call's delay slot, swapping with
+    that call's own delay insn (an arg setup that hoists into the body).
+    Sound: the consumer still reads the FIRST call's v0 (nothing between
+    the two calls touches v0 - guarded), and the delay executes before
+    the second callee runs. Loud failure when no sink site matches."""
+    out = list(lines)
+    for i, ln in enumerate(out):
+        m = _V0_CONS_RE.match(ln.strip())
+        if not m:
+            continue
+        cons_reg = m.group(1)
+        # scan forward for the next jal within the same run
+        j = i + 1
+        body = []
+        while j < len(out):
+            s2 = out[j].strip()
+            if s2.startswith("jal\t") or s2.startswith("jal "):
+                break
+            if (s2.endswith(":") or s2.startswith(".") or not s2
+                    or s2.startswith("#")):
+                break
+            if _V0_CONS_RE.match(s2) or "$2" in s2 or "v0" in s2:
+                break  # another v0 touch - refuse
+            body.append(j)
+            j += 1
+        else:
+            continue
+        if j >= len(out):
+            return out
+        jal_line = out[j]
+        # the call's delay slot: the next instruction line
+        k = j + 1
+        if k >= len(out):
+            continue
+        old_delay = out[k].strip()
+        if old_delay.endswith(":") or not old_delay:
+            continue
+        # V sinks into the call's delay slot; the old delay insn (an arg
+        # setup) hoists to just before the jal, keeping the arg-setup group
+        # adjacent to the call (retail order, CdGetToc2 58F58..58F6C)
+        del out[i]
+        j -= 1
+        k -= 1
+        out.insert(j, out[k])
+        del out[k + 1]
+        out.insert(k + 1, "\taddu\t$%s,$2,$zero" % cons_reg)
+        return out
+    sys.stderr.write("cc_post rule 13: no v0-consumer sink site found\n")
+    sys.exit(3)
+
+
+def _rule11_on_run(res: list[str]):
+    """Return the transformed run, or None when the shape does not match."""
+    n = len(res)
+    if n < 8 or not _FRAME_RE.match(res[0]):
+        return None
+    # the save run: consecutive sw-to-frame lines, $ra's among them
+    saves = []  # (index, reg, offset)
+    i = 1
+    while i < n:
+        m = _SAVE_RE.match(res[i])
+        if not m:
+            break
+        saves.append((i, m.group(1), m.group(2)))
+        i += 1
+    regs = {r for _, r, _ in saves}
+    if "31" not in regs and "ra" not in regs:
+        return None
+    # the param copy: addu $sA, <arg>, $zero right after the run
+    m = _COPY_RE.match(res[i])
+    if not m or m.group(1) not in regs or m.group(2) not in (
+            "4", "5", "6", "7", "a0", "a1", "a2", "a3"):
+        return None
+    copy_reg = m.group(1)
+    copy_idx = i
+    i += 1
+    # the constant block up to the jal: ALUs plus at most one sb-to-frame
+    block = []
+    sb_idx = None
+    while i < n and not _JAL_RE.match(res[i]):
+        if _SAVE_RE.match(res[i]):
+            return None
+        if _ARG_ALU_RE.match(res[i]) or True:
+            if res[i].startswith("sb\t") and res[i].endswith("($sp)"):
+                if sb_idx is not None:
+                    return None
+                sb_idx = len(block)
+            block.append(res[i])
+        i += 1
+    if i >= n or sb_idx is None:
+        return None
+    jal_idx = i
+    m_jal = _JAL_RE.match(res[jal_idx])
+    delay_idx = jal_idx + 1
+    if delay_idx >= n or not _ARG_ALU_RE.match(res[delay_idx]):
+        return None
+    delay_alu = res[delay_idx]
+    # reassemble
+    save_sA = next((s for s in saves if s[1] == copy_reg), None)
+    if save_sA is None:
+        return None
+    rest_saves = [s for s in saves if s[1] != copy_reg]
+    out = [res[0], res[save_sA[0]], res[copy_idx]]
+    out += [b for j, b in enumerate(block) if j != sb_idx]
+    out.append(delay_alu)
+    out += [res[s[0]] for s in rest_saves]
+    out.append(res[jal_idx])
+    out.append(block[sb_idx])
+    return out
+
+
 def main() -> None:
     global KEEP_EPILOGUE, SDK_ASPSX, KEEP_RETURN_FILL, KEEP_PROLOGUE
     global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
+    global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -691,6 +961,18 @@ def main() -> None:
     if "--keep-prologue" in args:
         KEEP_PROLOGUE = True
         args.remove("--keep-prologue")
+    if "--prologue-param-first" in args:
+        PROLOGUE_PARAM_FIRST = True
+        args.remove("--prologue-param-first")
+    if "--addiu-imm" in args:
+        ADDIU_IMM = True
+        args.remove("--addiu-imm")
+    if "--v0-sink" in args:
+        V0_SINK = True
+        args.remove("--v0-sink")
+    if "--addr-pin-late" in args:
+        ADDR_PIN_LATE = True
+        args.remove("--addr-pin-late")
     if "--sdk-aspsx" in args:
         KEEP_EPILOGUE = True
         SDK_ASPSX = True
@@ -754,6 +1036,14 @@ def main() -> None:
         lines = _prepass_addu_commute(lines)
     if DELAY_SB_OUT:
         lines = _prepass_delay_sb_out(lines)
+    if PROLOGUE_PARAM_FIRST:
+        lines = _prepass_prologue_param_first(lines)
+    if ADDIU_IMM:
+        lines = _prepass_addiu_imm(lines)
+    if V0_SINK:
+        lines = _prepass_v0_sink(lines)
+    if ADDR_PIN_LATE:
+        lines = _prepass_addr_pin_late(lines)
 
     out: list[str] = []
     run: list[int] = []  # indices into out of consecutive instructions
