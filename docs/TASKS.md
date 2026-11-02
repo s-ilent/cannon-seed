@@ -14903,3 +14903,70 @@ target was needed this window). Single-session clear; window start
   first scan after this landing applies the new names into the
   per-target symbols files (progress moves at that scan, not now).
   (4) AF70 untouched by standing policy.
+
+## 2026-11-02 (window cron-20261102-0859, oracle DOWN - the 0859Z links were never re-issued after their ~21-23h deaths, no probe needed): the curation sieve CLOSES the "next family" question with a rigorous negative - the ~2160 unadopted marks fully reconcile, and the two biggest ambiguous families are PROVEN archive-layout projections (def-row drift), not adoptable placements
+
+- **Recovery first**: sandbox rolled /home/z/my-project back to the
+  2026-10-14 era AGAIN (worklog 201 windows missing -> restore note
+  cron-20261102-0903-restore, digest exit 0) and the local repo to
+  7623cd2e while origin held cdcb19bd (606 commits ahead - the 0745
+  window's block replacement INCLUDED; reset forward, re-rehydrate).
+  /home/z/psyq + psyq-sigs reaped again -> provision_psyq.sh re-provisioned
+  (under a minute, sparse set enforced).
+- **ITEM 1 - the planned opener was ALREADY LANDED**: origin/main carried
+  the 0745 window's d3c09abd (stale block retired) + c32d807d (fresh 2287
+  adoptions + the lane-held skip class) + cdcb19bd (docs). The queue's
+  item (1) became the 0745 NEXT item: the curation pass's next family.
+- **ITEM 2 - the sdk_curated regen provenance nuance (banked)**: the tool
+  is idempotent ONLY under `--libs /home/z/psyq/4.0/PSX/LIB` (the
+  four-flag invocation's argparse last-wins).  A 3.3-only regen trips the
+  refuse-guard on 1082 lines - the extent annotations in the generated
+  comment rows come from the 4.0 symbol tables, not the pinned 3.3
+  release the preamble text implies.  Measured both ways this window;
+  the committed block is untouched.
+- **ITEM 3 - the ~2160 fully reconcile** (scripts/census_survey.py, the
+  class sieve): adopted-at-addr 2557 (incl. the hand head's overlaps),
+  amb-no-agree 1854 = 1828 multiaddr + 26 stubclash, addr-curated 113,
+  name-dup 151, lane-held 10, name-curated-elsewhere 60, non-adoptable
+  814 (650 of them ambiguous).  The 10 anchored/unique/agree rows the
+  tool neither adopted nor printed are ALL SsSetTableSize - the
+  lane-held class working as designed (psylib lane).
+- **ITEM 4 - THE NEGATIVE RESULT (the window's payoff)**: the multiaddr
+  class is NOT wholesale-adoptable - the census rows are archive-layout
+  projections onto game-compiled copies, proven by the def-row
+  consistency check (scripts/sdk_family_drift_check.py): for each census
+  row, implied base = census_addr - archive_file_offset; ONE constant =
+  verbatim placement (trustworthy), a spread = the cron-20261101-0151
+  recompiled profile (untrustworthy).
+  - LIBSND VMANAGER: 25 def-mapped rows, 25 DISTINCT implied bases,
+    span 0x6194, on all four census-bearing targets (g3_jp/g3org_jp/
+    mainmenu_jp/slps_00270).  Matches the 0151 byte-proof: the game's
+    real _svm_damper sits at 0x80067690 (g3_eu) while the census
+    projects its slot elsewhere - drift -0x834.
+  - LIBCD SYS: 12 def-mapped rows per target, 12 distinct bases, spread
+    0x9b4 - IDENTICAL on all eight targets (the same recompiled libcd in
+    every image).  Its 161 sig-db-agree annotations corroborate the
+    member-level placement region, not each projected symbol row.
+  - CONSEQUENCE: the tool's ambiguous mark is vindicated BEYOND stubs -
+    it also masks big-member recompiled-copy projections.  No name from
+    these families may be curated from census rows; only per-function
+    byte-proof (the 1136/1406 discipline) reaches them.
+- **ITEM 5 - the member-name law (pinned)**: the census "member" column
+  is the SOURCE-FILE STEM from the OMF debug path (SCLIB.C -> "SCLIB"),
+  NOT the OMF module name omf_pubsyms --module filters on.  LIBSND
+  VMANAGER happens to coincide; LIBGS SCLIB / LIBSN LIBGCC2 / LIBGS
+  EMULIB (502 more rows) do not - their def maps need the
+  stem->module path-record mapping (the 0651 chunk-grammar walk), open.
+- **GATES**: no build/verify/judge (oracle DOWN, links dead ~24h+); NO
+  build-adjacent file touched - ratchets 870/379 = tree untouched,
+  curated file untouched, suite 133/133 GREEN.  Tree change =
+  scripts/census_survey.py + scripts/sdk_family_drift_check.py + this
+  docs section.
+- **NEXT (in order)**: (1) the stem->module path-record mapping
+  (omf_pubsyms or a probe over the banked chunk walk) -> re-run the
+  drift check on SCLIB/EMULIB/LIBGCC2 (502 rows; if any family is
+  verbatim-consistent, THAT is the positive next family).  (2) The
+  curation pass continues per-function: hand-evidence families only
+  (the 1136/1406 discipline stands).  (3) The cluster lane stays theirs:
+  7736C cache-loop rewrite -> landing, memcpy_iso9660 sibling flips.
+  (4) AF70 untouched by standing policy.
