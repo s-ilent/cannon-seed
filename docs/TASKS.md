@@ -14970,3 +14970,20 @@ target was needed this window). Single-session clear; window start
   (the 1136/1406 discipline stands).  (3) The cluster lane stays theirs:
   7736C cache-loop rewrite -> landing, memcpy_iso9660 sibling flips.
   (4) AF70 untouched by standing policy.
+
+- **ADDENDUM (same window, the stem->module mapping landed)**:
+  scripts/stem_module_map.py maps census stems to OMF modules via the
+  path records (the module's own source = the LAST path record) and
+  re-runs the drift check over the union of the stem's def maps.
+  EMULIB = GS_001..GS_013 (13 modules): 3 def-mapped rows per target,
+  SPREAD on all eight targets - the THIRD projection family.  SCLIB =
+  GS_101..GS_127 (27 single-function modules): 4 modules unsolved, and
+  none of the solved def names overlap the census SCLIB snames yet
+  (GsMapModelingData/GsGetTimInfo stay unmapped - their modules' bases
+  refuse or their def rows differ).  LIBGCC2: NO module in LIBSN.LIB
+  maps to that stem (its path records do not parse under the LNK walk -
+  the census's 156 LIBGCC2 rows remain unmapped evidence).  The
+  negative now covers VMANAGER + LIBCD SYS + EMULIB with the identical
+  verdict: census addresses for the ambiguous multiaddr class are
+  archive-layout projections, and the per-function byte-proof
+  discipline is the only road in.
