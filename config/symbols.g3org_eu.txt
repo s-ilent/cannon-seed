@@ -243,6 +243,7 @@ SpuMalloc = 0x8006901C; // type:func (pinned member row)
 _spu_gcSPU = 0x800692E4; // type:func (pinned member row)
 SsVabFakeBody = 0x800695E4; // type:func (pinned member row)
 SsUtGetVabHdr = 0x8006965C; // type:func (pinned member row)
+SsUtGetVagAtr = 0x80069740; // type:func (pinned member row)
 SsSetMVol = 0x80069980; // type:func
 SpuSetCommonAttr = 0x800699D0; // type:func (pinned member row)
 SsSetSerialVol = 0x80069D64; // type:func

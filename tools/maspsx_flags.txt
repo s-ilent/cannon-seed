@@ -51,3 +51,9 @@ unit:func_80077A18 --addiu-at on
 # both per-vab table reads and the completion status sb take the aspsx
 # < 2.30 4-insn at-split through $at (probe-confirmed, cron-20261102-1129).
 unit:func_80079758 --addiu-at on
+# func_80069740 SsUtGetVagAtr (g3org_eu) - the LIBSND sdk body's first
+# own-row C flip on the g3org pair: the indexed D_8017E120 guard load
+# takes the aspsx < 2.30 4-insn at-split through $at (probe-confirmed,
+# cron-202611021243); the plain D_8017E107/D_80178A00 accesses keep the
+# direct lui/%lo form.
+unit:func_80069740 --addiu-at on
