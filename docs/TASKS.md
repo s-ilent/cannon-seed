@@ -14783,3 +14783,66 @@ target was needed this window). Single-session clear; window start
   closes. The func_8006AF70 row is UNTOUCHED by standing policy (the
   owner has issued no instruction touching it; it stays out of the
   queue framing entirely).
+
+## 2026-11-02 (window cron-20261102-0629, oracle UP disc-free - the woven-set trap hit again at session start and the hash-proven build restore re-armed the witness; both 0859Z disc links probed 404 at ~21h): the sdk regen trio's TRUE-BASELINE GATE opens - the census core reproduces the committed a65eabed report byte-identical, the adoptable/sig-db annotations refresh, and the committed trio is found OUT OF SYNC with its own curated block
+
+- **Recovery first**: worklog rolled back to the 2026-10-15 snapshot again
+  (201 windows missing) -> rehydrate, reset --hard origin/main
+  94c39a07, append_restore_note cron-20261102-0635-restore, digest exit 0.
+  Both 0859Z links 404 on probe (~21h) - the disc-free path it is.
+- **The witness restore (disc-free, banked procedure)**: `rm -rf build/src`
+  + clean rebuild, all eight whole-image builds BYTE-EXACT vs the
+  committed TRUE oracles on the first pass (39030a75 / 994a680c /
+  01b37b4e / 2b2a4225 / d637286a / f9f29eeb / 06b4bda6 / fa9474b4) - the
+  post-sync rehydrate's maspsx patch + the src purge did their job;
+  hash-proven `cp build/<t>.bin baselines/<t>.bin` x8 -> witness **8/8**,
+  baseline_audit **8 MATCH / 0 MISMATCH**, `make verify TARGET=g3_eu`
+  formal GREEN ("OK: build matches retail"). Judge/live gates re-armed
+  for the cluster lane's next landing without a disc.
+- **The regen trio runs on the TRUE baselines** (the cron-20261101-0852
+  banked witnessed-window item): psyq re-provisioned first (the rollback
+  reaped /home/z/psyq + psyq-sigs again; provision_psyq.sh under a
+  minute, sparse set enforced). Invocation:
+  `python3 tools/sdk_members.py --libs ~/psyq/{3.3,3.5,3.6,4.0}/PSX/LIB
+  --sigs ~/psyq-sigs/330` then `sdk_anchors.py --libs ...` (same four).
+- **The gate-check PASSES**: the census CORE (placements, verdicts,
+  names) reproduces the committed a65eabed-era report BYTE-IDENTICAL
+  after annotation normalization (strip adoptable + the sig-db classes;
+  diff exit 0 across all 8 targets, 402 placements on g3_eu exactly).
+  The woven-baseline divergence (402 -> 357) is gone - the slide now
+  reads TRUE bytes.
+- **What legitimately changes** (7356 comment-row lines): the
+  `adoptable` marks refresh against the CURRENT tree (1984 -> 4447 -
+  the framing-retirement re-scan + the C landings re-typed the yaml
+  rows, so many more placements start an asm/c subsegment now) and the
+  sig-db corroboration classes appear (agree x2145 / no-hit x204 /
+  elsewhere x162) - the committed report was generated WITHOUT --sigs.
+- **sdk_anchors regen off the fresh report: BYTE-IDENTICAL** (4607 rows,
+  zero diff) - its row regex already tolerates the annotations; nothing
+  to commit.
+- **FINDING - the committed trio is out of sync**: the curated block
+  below the marker carries "+ sig-db agrees" note wording the committed
+  sdk_members.txt NEVER had, and sdk_curated's row regex parses exactly
+  that annotation class - the block was generated from an UNCOMMITTED
+  annotated members.txt variant. This commit re-syncs the census side;
+  the block side is next.
+- **sdk_curated regen**: the refuse-guard fired (867 lines below the
+  marker not reproducible from any committed input). Verified BEFORE
+  overwriting: ZERO hand-authored content below the marker (every
+  non-assignment, non-header line down there is the tool's own
+  evidence-base preamble; the 6e557c7 + 6dbfc277 relocations hold). The
+  block replacement is therefore SAFE but not done this window - it is
+  the next window's opener as its own reviewed commit (the fresh block
+  grows and re-picks some collision winners; the diff needs a real
+  read, not a tail-of-window skim).
+- **GATES**: suite 133/133; ratchets 870/379 = tree (the census is
+  scan-time input, nothing committed moves); commit 747a1c16 (config) +
+  this docs commit, pushed.
+- **NEXT (in order)**: (1) the sdk_curated block replacement (retire the
+  stale generated block, regen from the synced census, review the full
+  diff, suite + ratchets). (2) the curation pass's next family from the
+  FRESH adoptable list (4447 marks; hand-evidence families first per
+  the 0852 discipline). (3) the cluster lane stays ahead: 7736C
+  cache-loop rewrite -> landing, memcpy_iso9660 sibling flips - judge
+  is LIVE again after this window's restore. AF70 untouched by standing
+  policy.
