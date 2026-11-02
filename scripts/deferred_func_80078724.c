@@ -25,6 +25,28 @@
  * flag set; the wrapper #22 (func_80078700) is insensitive (9 insns, no
  * loop) and stays -O2-judged. cc.sh consumes the `cc-post: cc1-O1` marker.
  *
+ * FLAG-SET REFINEMENT (cron-202611030028, scripts/probe787_flags.sh): the
+ * decode block's allocation is NOT plain -O1 — it is -O2 -fno-strength-
+ * reduce. Measured on the unit: -O1 = 63/137 (pins v1/a0, hi fused into the
+ * destination s-regs, x10 chains in v0, no delay-ride); -O2 plain = 132/137
+ * SIZE +12 (the loop's {min,max} strength-reduced basis); -O2 -fno-strength-
+ * reduce = 88/136 SIZE -4 with the decode block's retail shape REPRODUCED:
+ * pins a0/a1 (the freed argument registers), hi1 in v1 / x10 in v0, hi2 in
+ * v0 / x10 in v1 (the v1/v0 role swap), lo into the pins, finals addu
+ * s-dest,v-chain,a-pin. The prologue's rule-11 hoist (param copy + consts
+ * above the ra save) is also -O2-native (sched1), which is why rule 11 must
+ * come OFF at -O2 (its anchor is -O1-shaped, loud-fail otherwise). The loop
+ * discriminator the 1358 window measured is the strength-reduction PASS, not
+ * the -O level; the loop call block's hoisted arg setup (cmd/param/result
+ * above the division) is likewise -O2 sched1 work. RESIDUAL at -O2-fnsr:
+ * the rp/track s-reg pair swap (built rp=s0/track=s1 vs retail rp=s1/
+ * track=s0), the lo2 andi destination (gcc reuses the dead b1 pin a0 where
+ * retail overwrites the b2 pin a1), the toc-store block order (sched1
+ * hoists the slt; retail keeps load/store program order), the handle sink
+ * (built beqz delay vs retail jal delay) and the n=1 init placement. Next
+ * window: chase the residual with source shape at -O2-fnsr (the -O1 lever
+ * set no longer applies), then land + judge + verify.
+ *
  * Decode (the listing is the only authority): CdGetToc2(1, toc) - the
  * count argument is vestigial (the prologue zeroes a0 before the first
  * call; the toc pointer arrives as the SECOND argument, addu s4,a1,zero,
