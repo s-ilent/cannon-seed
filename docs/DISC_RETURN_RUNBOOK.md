@@ -120,7 +120,14 @@ banked ladder history).
   recomputed from the tree - `make ratchets` is the arbiter, lower the
   baseline in the same commit.
 
-## Phase D - the func_8006AC04 init row (SsInit/SsInitHot shared body)
+## Phase D - the func_8006AC04 init row (SsInit/SsInitHot shared body) - LANDED (cron-20261101-1028, 16b1e80e)
+
+LANDED: judge EXACT 332/332, whole-image 8/8 GREEN, ratchets 809/150 ->
+824/172. The split fix preceded the C (yaml 0x120 -> 0x14C, the
+data_8006AD24 epilogue reclassification); the row landed as the sixteenth
+real-decompiled-C game function with the seven-round probe ladder's
+source-shape laws in the commit message; SsSetTableSize stays HELD for
+the psylib lane. Historical state:
 
 State: scripts/deferred_func_8006AC04.c carries the draft + the six-step
 matching plan (split fix = step 1). The row's real extent is 0x14C, not

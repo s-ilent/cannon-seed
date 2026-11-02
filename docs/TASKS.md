@@ -14566,3 +14566,81 @@ notes appended (the first capture truncated at 60 s, second pass exit
   (3) the memcpy_iso9660 sibling flips (six rows one per target).
   (4) func_8006AF70 stays OWNER-GATED - no landing without Silent's
   call. (5) the wave-pool re-rank after the cluster closes.
+
+## 2026-11-02 (window cron-202611020243, oracle restored DISC-FREE - the woven-set trap hit at session start, the whole-image build gate re-proved 8/8 GREEN against the committed TRUE oracles, and the hash-proven builds restored the baseline cache to witness 8/8): the wave-pool re-ranks at 150 unchanged with the intr-13 own-row boundary intact, and the census+classifier reports re-derive under the restored witness
+
+Session start: rehydrate OK; the task sheet's STATE NOTE was stale
+against upstream - the tree had moved 1bb09813 -> 3860adab through the
+MODE2-framing retirement carve (87f84d15), the post-retirement re-scan
+(2935540), the Witness A docs, and five landing windows; fetch + reset
+--hard, tree clean. The sheet's orphaned provisioner edit was ALREADY
+LANDED (6dbfc277) - its test-or-revert disposition is MOOT. The rollback
+had wiped the untracked ops tooling (disc_return.sh, worklog_digest.py,
+append_restore_note.py are gone repo-wide) and rolled worklog.md back to
+the 2026-10-15-era tail. Single-session check clear; window start
+1793587433.
+
+- **Oracle forensics**: witness_check (bash, not sh - dash dies on the
+  arrays) 0/8 - all eight baselines the woven-era set again, each
+  refusal correctly diagnosed against the pre-flip oracle. The 0859Z
+  links were probed 404/404 at ~15.5h by the previous window (6a09debe)
+  and were not re-probed at length here - no hold (Law Zero).
+- **THE DISC-FREE GATE RAN INSTEAD** (the 35299e37 banked class):
+  make build x8, one target per call, foreground; image sha1 vs
+  config/sha1. FIRST PASS 1/8 RED - g3_eu built 00d94afd != 39030a75:
+  the pre-sync rehydrate had left the maspsx clone UNPATCHED (the
+  load-bearing-patch lesson a third time; the post-sync rehydrate run
+  prints "[rehydrate] maspsx delay-slot patch applied") AND the
+  rollback snapshot's stale build/ objects were linking in. rm -rf
+  build/src + clean rebuild -> **8/8 GATE GREEN**: every built image
+  byte-exact against the committed TRUE per-sector oracles (39030a75
+  g3_eu / 994a680c g3_jp / 01b37b4e g3org_eu / 2b2a4225 g3org_jp /
+  d637286a mainmenu_jp / f9f29eeb mainmenu_eu / fa9474b4 slps_00270 /
+  06b4bda6 sces_00269 - the full witnessed set). Suite 133/133;
+  ratchets 863/339 = tree.
+- **THE WITNESS RESTORE (new banked procedure)**: the 8/8 hash-proven
+  builds ARE the witnessed content - config/sha1/<t>.sha1 is the
+  committed authority and sha1 equality is the witness (the same
+  content the Nov-1 disc-return yielded, hash-proven). cp
+  build/<t>.bin baselines/<t>.bin x8 -> witness_check **8/8 OK,
+  "oracle UP"**; make verify TARGET=g3_eu formal GREEN ("OK: build
+  matches retail"). The judge/baseline_audit gates re-arm disc-free;
+  fresh links are only needed on a from-scratch sandbox.
+- **The re-rank** (Phase G.3, offline, witness-free):
+  scripts/wave_offline_census.py --parents -> pool **150 UNCHANGED**
+  (was 150 at the 0355 re-rank - the AC04/67690 landings and the five
+  cluster-unit landings dissolved no wave below the >=2-member
+  x >=2-target threshold); the independent own-row set remains
+  EXACTLY the intr-family 13 (331b7bec x7 + dd0d973b x6, lane-owned,
+  not grabbed); zero mixed waves; every other wave parent-bound
+  (the census's EXT-MISMATCH label = the normal parent-bound-fragment
+  marker) - the decode frontier stays parent functions.
+- **Census+classifier re-derived under the restored witness** (Phase
+  G.2): invariant_census 542+ rows -> build/invariant_census.txt;
+  split_classifier **20 candidates** -> build/split_classifier.txt =
+  4 B-HEAD-SPLIT (8005DB1C mainmenu_jp <- slps func_80034138 eq 67/67
+  votes 13; TransposeMatrix 800647F0 eq 20/20 votes 17; SetRotMatrix
+  8005DF04 dw 2/12 eq 10/12 votes 7; 8007F5D4 mainmenu_jp <- g3_eu
+  func_8006AC04 eq 49/83 votes 5 - the AC04 sibling body inside
+  data_8008D8A4) + 16 D-MID-ROW (the slps func_80034244/34328 family
+  across data_8005DB1C, Square12/Square0, func_80039238, and the five
+  memcpy_iso9660 sibling rows at votes 4). ALL classifier classes are
+  lane-owned (the graveyard class + the cluster lane's memcpy
+  siblings) - derived, not grabbed.
+- **Runbook Phase D annotated LANDED** (16b1e80e, judge EXACT 332/332,
+  809/150 -> 824/172) - the section was stale vs this Log.
+- **Gates**: no build-path change (docs + local gates only); suite
+  133/133; ratchets 863/339 = tree unchanged; CI green on push
+  expected.
+- **NEXT (in order)**: (1) the cluster lane's queue stands (fresh
+  disc links -> disc_return re-witness -> Phase B verify 8/8 -> the
+  func_80077A18 landing window: arm-layout pass first, the cc_post
+  operand-order item, the maspsx_flags entry, the rule-10 remnant
+  marker, yaml row 672 asm -> c, judge live, verify, ratchets; then
+  CdSearchFile func_8007736C; then the memcpy_iso9660 sibling flips).
+  (2) func_8006AF70 stays OWNER-GATED - no landing without Silent's
+  call. (3) the wave-pool re-rank after the cluster closes (pool
+  confirmed stable at 150 this window). (4) FOR FRESH SESSIONS ON
+  ROLLED-BACK SANDBOXES: rehydrate AFTER the origin sync, rm -rf
+  build/src before the first build, restore the baseline cache from
+  hash-proven builds when the links are dead (this window's sequence).
