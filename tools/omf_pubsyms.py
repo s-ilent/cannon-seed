@@ -322,7 +322,13 @@ def first_code_chunk(data, mod):
     else:
         return None, None, 0
     n_paths = 0
-    while o + 4 <= end and d[o] == 0x1C and d[o + 2] == 0x00 \
+    # z-byte law (cron-20261102-1013, measured over all 16 psyq 3.3 libs):
+    # psyq-compiled modules carry [0x1c][tag][0x00][ln][path]; the GNU-
+    # compiled LIBSN.LIB members (the 40 LIBGCC2.C units + READ.C/WRITE.C)
+    # carry [0x1c][tag][0x36][ln][path] - z=0x36 occurs in NO other library
+    # (42/42 LIBSN records vs z=0x00 elsewhere), so accepting both shapes
+    # cannot perturb any other lib's parse.
+    while o + 4 <= end and d[o] == 0x1C and d[o + 2] in (0x00, 0x36) \
             and 0x08 <= d[o + 3] <= 0x40:
         ln = d[o + 3]
         path = d[o + 4:o + 4 + ln]
@@ -330,8 +336,11 @@ def first_code_chunk(data, mod):
             break
         n_paths += 1
         o += 4 + ln
-    while o + 3 <= end and d[o] == 0x06 and d[o + 2] == 0x00 \
-            and d[o + 1] != 0x00:
+    # the leading markers before the first 02-chunk: psyq = 06 xx 00,
+    # LIBSN GNU = 06 1b 36 (measured, same three-byte stride)
+    while o + 3 <= end and d[o] == 0x06 and (
+            (d[o + 2] == 0x00 and d[o + 1] != 0x00)
+            or (d[o + 1], d[o + 2]) == (0x1B, 0x36)):
         o += 3
     if o + 3 <= end and d[o] == 0x02:
         size = struct.unpack_from("<H", d, o + 1)[0]

@@ -14987,3 +14987,100 @@ target was needed this window). Single-session clear; window start
   verdict: census addresses for the ambiguous multiaddr class are
   archive-layout projections, and the per-function byte-proof
   discipline is the only road in.
+
+## 2026-11-02 (window cron-202611021013, oracle UP disc-free via the hash-proven baseline restore - the rollback had re-woven the baselines AND reaped /home/z/psyq again): the LIBSN path-record law lands and the LIBGCC2 question CLOSES at the byte level - the stem->module map completes (40 LIBGCC2.C members), and the direct byte-search proves the game does not carry ONE byte of LIBSN.LIB verbatim: the fourth projection family, the census-side negative now covers all four families
+
+- **Recovery first**: sandbox rolled /home/z/my-project back to the
+  2026-10-14 era AGAIN (worklog 201 windows missing -> restore note
+  cron-20261102-1016-restore, digest exit 0), the local repo to 7623cd2e
+  while origin held a200829f (the 0859 window's stem->module mapping;
+  reset forward, re-rehydrate AFTER the sync per the banked law), and
+  /home/z/psyq + psyq-sigs reaped -> provision_psyq.sh re-provisioned.
+  Baselines were the woven set again (witness 0/8) -> the banked
+  hash-proven restore: rm -rf build/src, 8x `make build` one target per
+  call, all eight images byte-exact on their committed TRUE oracles
+  FIRST PASS (39030a75/994a680c/01b37b4e/2b2a4225/f9f29eeb/d637286a/
+  06b4bda6/fa9474b4), cp x8, `bash tools/witness_check.sh` = 8/8,
+  `make verify TARGET=g3_eu` formal GREEN.  The task brief's landing
+  queue (AF70 skip -> func_8006AC04 -> func_80067690 -> cluster) proved
+  ALREADY CONSUMED: 16b1e80e (#16 AC04) and eb874cc1 (#17 67690) and the
+  1158 window's func_80077A18 (#18) predate this window; the opener
+  pivot went to the 0859 NEXT's one open edge instead.
+- **ITEM 1 - the LIBSN path-record law (the parser fix)**: the 0859
+  banked "LIBGCC2 maps to NO module in LIBSN.LIB (its path records do
+  not parse under the LNK walk)".  Measured root cause (scripts/
+  probe_libsn_paths.py): the psyq debug-path record is
+  [0x1c][tag][z=0x00][len][path]; LIBSN's GNU-compiled members carry
+  [0x1c][tag][z=0x36][len][path] - 42/42 LIBSN records z=0x36, and a
+  z-scan over ALL 16 psyq 3.3 libraries shows z=0x36 in NO other lib
+  (LIBC2/LIBCD/LIBETC/LIBGPU/LIBGS/LIBGTE/LIBMATH/LIBPRESS/LIBSND/
+  LIBSPU/LIBTAP are z=0x00-only; LIBAPI/LIBC/LIBCARD/LIBCOMB have no
+  path records).  The walk reached the path zone correctly all along -
+  only the z guard rejected every record.  Fix: tools/omf_pubsyms.py
+  first_code_chunk() accepts z in (0x00, 0x36) and the LIBSN GNU leading
+  marker 06 1b 36 beside psyq's 06 xx 00; scripts/stem_module_map.py
+  last_path() accepts the same two z shapes.  Regression profile
+  measured, not assumed: old-vs-new first_code_chunk over all 16 libs =
+  exactly 27 diffs, ALL in LIBSN (the 27 newly-opened GNU members),
+  zero on any psyq lib; suite 133/133; stem_module_map.py LIBGS verdicts
+  byte-identical (EMULIB SPREAD x8 spans 0xd862/0xcb3a/0xe17e/0xd456/
+  0x20b6 unchanged).
+- **ITEM 2 - the stem map completes**: LIBSN stem LIBGCC2 -> 40 modules
+  (_ASHLDI3..__GCC_BC, the GNU helper family; + READ.C/WRITE.C own
+  members; the 13 SN kernel members OPEN/CLOSE/LSEEK/... carry NO path
+  records at all - their census member is `?`, consistent).  The 0859
+  open edge (502-row question) is now mapped 3/3: EMULIB = SPREAD
+  (third projection family), SCLIB = 4 unsolved modules + no def-name
+  overlap, LIBGCC2 = 40 modules found (was: NONE).
+- **ITEM 3 - THE BYTE-PROOF VERDICT (the window's payoff)**: with the
+  chunks open, scripts/probe_libsn_byteproof.py extracts every LIBSN
+  member's code (first_code_chunk where it opens; a grammar-free
+  [02][u16 size][payload] candidate scan for the rest - the 13 GNU
+  members whose real code is a SECOND chunk after a zero-filled first,
+  e.g. _EH 0x0c zeros then 0x230 code, and the 10-byte empty stubs
+  _FXTFDI/_FXUSTFD/_FXUSXFD/_FXUSXFS/_FXXFDI/_FLTDITF/_FLTDIXF/
+  _TRAMPOL, the psyq 3.3 80/128-bit float formats compiled to nothing)
+  and searches all EIGHT witnessed baselines for verbatim byte
+  placements: **ZERO placements across all 53 modules x 8 targets**.
+  The game does not contain one byte of LIBSN.LIB verbatim - not the
+  GNU helpers (__ashldi3..__gcc_bcmp, __builtin_new/delete family), not
+  the SN kernel members (READ/WRITE/CREAT/SNMAIN/CACHE - the same
+  recompiled-kernel profile as the banked libcd law).  CONSEQUENCE: the
+  census's 156 LIBGCC2 rows (all one sname, `__builtin_vec_delete`,
+  span 0x5541c, sig-db matches of a 0x20-byte 8-instruction helper
+  shape) are sig-hits of code the archive copy of which is provably
+  ABSENT from every image - the archive-to-game name transfer is
+  impossible for the whole family, closing the fourth and last of the
+  multiaddr projection families by DIRECT byte-search (stronger than
+  the def-row drift verdicts: no base assumptions at all).  The
+  census-side negative is now COMPLETE: VMANAGER + LIBCD SYS + EMULIB
+  (def-row drift) + LIBSN (byte-search) - no name from any of the four
+  families may be curated from census rows; per-function byte-proof of
+  the GAME's own copies is the only road, and for LIBSN the game's
+  copies are its own recompilations, so even that road needs the
+  sig-db/recompile analysis, not the archive.
+- **The known-open edge (precisely characterized, parked)**: the GNU
+  members' SYMBOL TABLES still do not parse - the psyq kind-chain
+  grammar ([len][name][kind][payload]... + [len][name][00] tail) has no
+  valid chain in the GNU table zones (raw _ASHLDI3 table: 0a-fixups x2
+  + `0c 2d 36` + `1b 36 00 00 00 00` + bare [09]"__ashldi3"[00] tail);
+  def_map/solve_def_base return nothing, so the drift check cannot run
+  per-module - irrelevant now that the byte-search answered the
+  placement question directly, but the grammar decode stays open for
+  any future archive-internal work.
+- **GATES**: verify g3_eu formal GREEN + witness 8/8 at session start;
+  NO build-adjacent file touched this window - ratchets 870/379 = tree
+  (recomputed), curated file untouched, suite 133/133.  Tree change =
+  tools/omf_pubsyms.py (z/marker law, regression-measured) +
+  scripts/stem_module_map.py (same z law in last_path) +
+  scripts/probe_libsn_paths.py + scripts/probe_libsn_byteproof.py +
+  this docs section.
+- **NEXT (in order)**: (1) the curation pass continues per-function on
+  the GAME's recompiled SDK copies (sig-db discipline; hand-evidence
+  families only) - the census-side road is closed by this window's
+  four-family negative.  (2) The cluster lane stays theirs: 7736C
+  cache-loop rewrite -> landing, memcpy_iso9660 sibling flips.  (3)
+  The GNU OMF symbol-table grammar decode stays parked (archive-
+  internal; no curation value while the byte verdict stands).  (4)
+  AF70 untouched by standing policy; the BIG de-frame item stays
+  coordination-gated.

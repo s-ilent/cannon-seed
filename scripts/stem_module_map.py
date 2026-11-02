@@ -47,9 +47,12 @@ def last_path(data, mod):
             break
         o = p + 6
     last = None
+    # z-byte law (cron-20261102-1013): psyq = z 0x00, the GNU-compiled
+    # LIBSN.LIB members = z 0x36 (42/42 LIBSN records, no other lib)
     while o < end and data[o] == 0x1C and o + 4 <= end:
         tag, z, ln = data[o + 1], data[o + 2], data[o + 3]
-        if z != 0x00 or not (0x08 <= ln <= 0x40) or o + 4 + ln > end:
+        if z not in (0x00, 0x36) or not (0x08 <= ln <= 0x40) \
+                or o + 4 + ln > end:
             break
         pb = data[o + 4:o + 4 + ln]
         if not all(32 <= c < 127 for c in pb):
