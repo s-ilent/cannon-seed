@@ -46,3 +46,8 @@ unit:func_80077678 --addiu-at on
 # $at - the aspsx < 2.30 4-insn at-split; probe-confirmed required,
 # cron-202611021158).
 unit:func_80077A18 --addiu-at on
+# func_80079758 SsVabTransBodyPartly (mainmenu_eu) - the family's next
+# sdk-body C row on the mainmenu pair: the indexed D_8019344C guard load,
+# both per-vab table reads and the completion status sb take the aspsx
+# < 2.30 4-insn at-split through $at (probe-confirmed, cron-20261102-1129).
+unit:func_80079758 --addiu-at on
