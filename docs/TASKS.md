@@ -14680,3 +14680,33 @@ target was needed this window). Single-session clear; window start
   pin class apply from the first probe). (2) the memcpy_iso9660 sibling
   flips (six rows one per target). (3) func_8006AF70 stays OWNER-GATED.
   (4) the wave-pool re-rank after the cluster closes.
+
+## 2026-11-02 (window cron-202611021158 continuation, owner's "keep going"): the 7736C CdSearchFile ladder opens - the prologue and the mount-guard store CLOSE, the cc_post fixup family grows save-swap + pad-lw, two draft symbols correct; no landing (the component-loop rotation is the remaining shape)
+
+- **Draft corrections** (the 0621 decode's pre-decode guesses): the mount
+  guard reads **D_800C8028** (not D_800D8028 - the CD_cachefile guard
+  word's neighbour), and buf is **0x20 bytes** (retail frame 0x50; gcc
+  sizes the frame from the declared array).
+- **Two new cc_post passes** (marker-scoped, loud-fail, judged by diff):
+  **save-swap** - exchange the ORDER of a swap-regs pair's frame-save
+  lines (gcc saves path's s4 first, retail saves s3 first; restores
+  already match); **pad-lw <n>** - the retail load-use nop maspsx's
+  one-ahead re-derivation misses (gcc decided the #nop against the
+  far-store use TWO slots ahead; maspsx sees the at-expansion prefix).
+  The upstream-class fix (a maspsx one-ahead hazard look past the at
+  prefix) is BANKED for the next tools window with the 8/8 re-verify
+  ritual - pad-lw unblocks units until then.
+- **Closed at probe 180/186**: the full prologue (swap-regs $19 $20 +
+  save-swap $19 $20) and the mount-guard store (pad-lw 3).
+- **Remaining** (3 words + shapes): (1) the component loop's ROTATION -
+  retail enters via the separator path (j into the empty-hop region,
+  id=1 materialized in A0 as the pure call-arg chain, the copy path
+  out-of-line); the 77A18 goto-form class applies; (2) the rule-10
+  remnant (+3); (3) the cursor regs settle with the rotation.
+- **Gates**: no build-path change this commit (tools + draft only);
+  committed 58ba2315 + pushed.
+- **NEXT (in order)**: (1) the 7736C rotation ladder (goto form, then
+  the remnant labels, then the landing: yaml 668 asm->c + judge live +
+  verify + ratchets). (2) the maspsx one-ahead hazard fix + 8/8
+  re-verify. (3) the memcpy_iso9660 sibling flips. (4) AF70
+  OWNER-GATED. (5) the wave re-rank after the cluster closes.
