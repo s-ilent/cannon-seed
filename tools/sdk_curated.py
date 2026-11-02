@@ -65,6 +65,19 @@ CURATED = REPO / "config" / "symbols.curated.txt"
 MARKER = ("// ==== generated sdk-member adoptions below -- "
           "tools/sdk_curated.py; do not hand-edit below this line ====")
 
+# Names the owning lanes land THEMSELVES - the generated block must not
+# pre-apply the name ahead of the lane's own evidence, even when the
+# census places the member byte-exact (the placement stays banked
+# evidence FOR the lane in config/sdk_members.txt; only the curated NAME
+# is withheld).
+#   SsSetTableSize: the func_8006AD90 row (g3_eu) is HELD for the psylib
+#   lane (cron-20261101-1028; the queue carries it as lane-owned) - the
+#   row lands with the lane owner's own omf def-base derivation. The
+#   TRUE-baseline census places LIBSND SSTABLE exactly there (unique,
+#   extent 0x1d8), so without this set the generated block would name
+#   the held row - measured cron-20261102-0745.
+HELD_NAMES = {"SsSetTableSize"}
+
 # A curated address another curated row claims is skipped - but the skipped
 # name is recorded as a commented alias row inside the block, so a re-run
 # reproduces it (the write-time guard treats these as tool-owned content):
@@ -217,6 +230,12 @@ def main(argv):
             if not NAME_OK.match(sname):
                 skipped["bad-name"] += 1
                 continue
+            if sname in HELD_NAMES:
+                skipped["lane-held"] += 1
+                print(f"  {t}: {sname} @0x{addr:08X} skipped - lane-held "
+                      f"(the owning lane lands the row; see HELD_NAMES)",
+                      file=sys.stderr)
+                continue
             if addr in h_addr:
                 skipped["addr-curated"] += 1
                 aliases.append((addr, lib, member, mark, sname, sig, aglibs,
@@ -306,7 +325,8 @@ def main(argv):
               f"{s.get('bad-name', 0)} bad-name, {s.get('addr-curated', 0)} "
               f"addr-curated, {s.get('name-curated', 0)} name-curated, "
               f"{s.get('name-dup', 0)} name-dup, {s.get('addr-dup', 0)} "
-              f"addr-dup; {len(aliases)} alias rows)")
+              f"addr-dup, {s.get('lane-held', 0)} lane-held; "
+              f"{len(aliases)} alias rows)")
 
     if adopted:
         head = CURATED.read_text(errors="replace")
