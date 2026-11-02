@@ -52,16 +52,28 @@
  *     toc-store block and the n++/track++ above the division cluster;
  *     retail keeps load/store program order (stores, slt, bnez with the
  *     n=1 ori riding its delay; built's ori is a real insn above).
- *   root 4 - the fail tail: retail carries ONE extra nop between the
- *     release call's delay slot and the ra restore - the whole SIZE -4.
+ *   root 4 - RETRACTED (cron-202611021859): the offset-shifted word-diff
+ *     misread retail's 0x8007891C move v0,zero (00001021, the fail
+ *     path's return-0 materialization) as a nop - the fail tails MATCH.
+ *     The SIZE -1 word lives mid-function in the sched1/nop-fill
+ *     placements (built folds the n=1 ori into slot positions where
+ *     retail keeps a real nop + a real insn).
  *   rule 13 (v0-sink) MISFIRED at -O2-fnsr: gcc's own filler already
  *     sinks the handle (move s5,v0 in the first 754C4 jal's delay,
  *     byte-retail in the raw cc1 stream); the rule then pulled the gate
  *     branch INTO the jal slot (branches are not in its read-set). Now
  *     scoped to cc1-O1 units in cc.sh. Rules 12/14 stay unscoped - the
  *     ori immediate forms and the addr-pin arg positions MATCH retail at
- *     -O2-fnsr. Next window: chase roots 1/2/4 (allocator modeling or a
- *     narrow cc_post rule), then land + judge + verify.
+ *     -O2-fnsr. SOURCE-SHAPE LEVERS NOW EXHAUSTED (cron-202611021859):
+ *     E2 split-statement decodes (track=/track+=, last=/last+=) 87 -> 92;
+ *     E3 operand-order swap on the second decode 87 -> 95 - both dead,
+ *     on top of the E1 declaration-order no-op. The structural
+ *     alignment (scripts/align787.py, difflib on normalized streams)
+ *     confirms the loop/tail SHAPES match - the deltas are exactly the
+ *     register-choice and sched1-placement roots. Next window: a narrow
+ *     cc_post rule class (s-reg pair swap over the decode/loop block,
+ *     scoped + anchored) or gcc 2.6.3 allocator modeling, then land +
+ *     judge + verify.
  *
  * Decode (the listing is the only authority): CdGetToc2(1, toc) - the
  * count argument is vestigial (the prologue zeroes a0 before the first
