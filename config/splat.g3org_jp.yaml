@@ -764,7 +764,7 @@ segments:
       - [0x4C554, asm, func_8006BD54]   # 0x510 sdk
       - [0x4CA64, asm, func_8006C264]   # 0x4d0 sdk
       - [0x4CF34, c, _SpuIsInAllocateArea]   # 0x70 sdk
-      - [0x4CFA4, asm, func_8006C7A4]   # 0x78 sdk
+      - [0x4CFA4, c, _SpuIsInAllocateArea_]   # 0x78 sdk
       - [0x4D01C, asm, func_80077EFC]   # 0x1a0 sdk
       - [0x4D1BC, asm, func_8007809C]   # 0x10 sdk
       - [0x4D1CC, asm, func_800780AC]   # 0xd0 sdk
