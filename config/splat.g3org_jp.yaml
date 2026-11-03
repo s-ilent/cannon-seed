@@ -717,8 +717,8 @@ segments:
       - [0x48764, asm, func_80067F64]   # 0x40
       - [0x487A4, c, func_80072AA4]   # 0x14 sdk
       - [0x487B8, c, func_80072AB8]   # 0x10 sdk
-      - [0x487C8, asm, func_80067FC8]   # 0x34 sdk
-      - [0x487FC, asm, func_80067FFC]   # 0x34 sdk
+      - [0x487C8, c,   SsVabOpenHead]   # 0x34 sdk
+      - [0x487FC, c,   SsVabOpenHeadSticky]   # 0x34 sdk
       - [0x48830, c,   func_80068030]   # 0x34 sdk
       - [0x48864, asm, func_80068064]   # 0x448 sdk
       - [0x48CAC, asm, func_800730DC]   # 0x2c8 sdk

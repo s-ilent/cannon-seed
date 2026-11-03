@@ -7,8 +7,8 @@
  * row SsVabFakeHead = 0x80068030, the VS_VH member's .text+0x60 piece,
  * extent 0x30 - the game row carries 0x4 tail slack, the game's own
  * cc1 2.6.3-PSX compiled copy; the member's big .text+0x90 piece
- * SsVabOpenHeadWithMode = 0x80068064 stays the unbanked 0x448 sdk asm
- * row this wrapper forwards to).
+ * SsVabOpenHeadWithMode = 0x80068064 is the 0x448 sdk row this wrapper
+ * forwards to, landed as real C this window).
  *
  * Decode (the listing is the only authority): the wrapper shuffles the
  * raw argument registers around the single call - a3 = a2 (the fake
@@ -19,15 +19,16 @@
  * sign-extended on the way out (sll16/sra16 on v0 - the SsVabTrans-
  * Completed short-return law).
  *
- * Externs: func_80068064 is the unbanked 0x448 sdk asm row
- * (SsVabOpenHeadWithMode, VS_VH .text+0x90, unique placement); auto
- * names stay sdk-lane-gated. No D_ externs, no symbol loads - no
- * maspsx flag needed (no indexed access, no at-split).
+ * Externs: SsVabOpenHeadWithMode is the VS_VH .text+0x90 member
+ * (0x80068064, landed as real C this window; the row name
+ * SsVabOpenHeadWithMode replaced the func_80068064 auto name). No
+ * D_ externs, no symbol loads - no maspsx flag needed (no indexed
+ * access, no at-split).
  */
 
-extern long func_80068064();
+extern long SsVabOpenHeadWithMode();
 
 long func_80068030(long addr, short vabid, long fake_count)
 {
-    return (short)func_80068064(addr, vabid, 1, fake_count);
+    return (short)SsVabOpenHeadWithMode(addr, vabid, 1, fake_count);
 }
