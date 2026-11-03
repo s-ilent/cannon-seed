@@ -39,8 +39,20 @@ REPO = Path(__file__).resolve().parent.parent
 TASKS = REPO / "docs" / "TASKS.md"
 DEFAULT_WORKLOG = Path("/home/z/my-project/worklog.md")
 HDR_RE = re.compile(
-    r"^(?:## )?(\d{4}-\d{2}-\d{2})[^\n(]*\(window (cron-[^\s,):]+?)"
-    r"(?:, same session)?\)(.*)$")
+    r"^(?:## )?(\d{4}-\d{2}-\d{2})[^\n(]*\(window (cron-[^\s,):]+)"
+    r"[^)]*\)(.*)$")
+# The `[^)]*` before the closing paren (cron-202611040358 fix): the header
+# format drifted around cron-20261101-0736 from `## DATE (window ID): summary`
+# to `## DATE (window ID, oracle UP disc-free - ...): summary`, and the old
+# pattern - which tolerated ONLY the bare paren or the literal ", same
+# session" inside it - silently stopped matching every header from that day
+# on: the digest counted 201 windows (parse break at cron-20261101-0151) and
+# restore notes stayed blind to the Nov 01-04 windows entirely. `[^)]*` eats
+# any descriptor text and keeps the old format matching (empty descriptor);
+# the ID capture stays GREEDY - a non-greedy `+?` shrinks to `cron-<one
+# char>` and hands the rest of the ID to `[^)]*` (the first cut of this fix
+# parsed the whole log as ONE window "cron-2"). The ", same session" literal
+# is subsumed; dedupe is by norm(id) in header_windows regardless.
 SECT_RE = re.compile(r"^Task ID:\s*(cron-[^\s,]+)", re.M)
 BULLET_RE = re.compile(
     r"^- (cron-[^\s:]+) \((?:[0-9a-f]{8}(?:, [0-9a-f]{8})*(?:, \.\.\.)?|\?\?)\): ",
