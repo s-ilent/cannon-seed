@@ -1124,6 +1124,14 @@ PSDIDX = 0x8011C304; // LIBGS GS_002 member bss static; evidence under target: m
 // S_INI.OBJ defines the flag, S_ITC reads it as an extern, EXE
 // bss beyond the payload). Full evidence under target: mainmenu_jp.
 _spu_inTransfer = 0x80065de4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x8005CD04: scan-verified]
+// The SpuVmDamperOn store-leaf statics (the boot's two libsnd VM_DON
+// copies land as real C in the same window): retail loads BOTH with
+// the absolute lui+lo pair (baseline bytes 3C018006/A4226484 at
+// 0x80027244's sibling copy and 3C018011/A4224F88), so the gp_rel
+// rewrite must skip them - the first even sits inside the gp window
+// (0x158 above the base), the second is far beyond it.
+D_80066484 = 0x80066484; // the VM_DON copy at 0x80027244's damper-state halfword; gp:absolute (retail lui+lo baseline bytes, in gp range +0x158)
+D_80114F88 = 0x80114f88; // the VM_DON copy at 0x80048E78's damper-state halfword; gp:absolute (retail lui+lo baseline bytes, ~0xAE65C beyond the gp window)
 memcpy_iso9660 = 0x8003BF4C; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: slps_00270
 // ==== generated sdk-member adoptions below -- tools/sdk_curated.py; do not hand-edit below this line ====
 //
