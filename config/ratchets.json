@@ -94,7 +94,8 @@
     "unknown_function 901->910, unknown_data 456->467 (2026-11-02): the VM_DON member SpuVmDamperOn lands as real C in g3_eu - all THREE game-compiled copies (func_800294BC 0x8002808C -> D_800AC390, func_80049E50 0x800447A0 -> D_800AC6C4, func_8007C394 0x80070464 -> D_8016AC24), each judge EXACT FIRST PASS, whole-image verify GREEN first build. func +9 = func_800294BC.c 4 (1 definition + 1 header self-mention + 2 sibling cross-refs) + func_80049E50.c 3 (1 definition + 1 header self-mention + 1 sibling cross-ref) + func_8007C394.c 2 (1 definition + 1 header self-mention). data +11 = 3 D_ externs (one per copy) + 3 uses + 5 header mentions (3 own + 2 sibling cross-refs).",
     "unknown_function 910->922, unknown_data 467->485 (2026-11-03): the SpuVmDamperOn family lands in g3_jp/g3org_jp (six copies, six files) - auto row names retained per the trio precedent (869607c9); each file contributes 2 func mentions (comment + definition) and 3 data mentions (extern + store + comment).",
     "unknown_function 922->940, unknown_data 485->512 (2026-11-03): the SpuVmDamperOn family lands in g3org_eu/mainmenu_eu/mainmenu_jp (nine copies, nine files), same counting as the g3_jp/g3org_jp six.",
-    "unknown_function 940->948, unknown_data 512->524 (2026-11-03): the SpuVmDamperOn family completes in the boots (slps_00270 + sces_00269, four copies, four files), same counting."
+    "unknown_function 940->948, unknown_data 512->524 (2026-11-03): the SpuVmDamperOn family completes in the boots (slps_00270 + sces_00269, four copies, four files), same counting.",
+    "unknown_data 524->528 (2026-11-03): _SpuIsInAllocateArea lands in g3org_jp (the LIBSPU S_M_UTIL allocate-area walk, member-named row) - one new src file carrying 4 D_ mentions (2 comment + extern + load use)."
   ],
   "patterns": [
     {
@@ -108,6 +109,6 @@
   ],
   "baselines": {
     "unknown_function": 948,
-    "unknown_data": 524
+    "unknown_data": 528
   }
 }
