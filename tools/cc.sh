@@ -155,6 +155,14 @@ fi
 if grep -q 'cc-post: rule15' "$SRC" 2>/dev/null; then
     POSTFLAGS="$POSTFLAGS --rule15"
 fi
+# rule16 composes with any primary flag above (independent grep): the
+# verdict-polarity law - the early `if (f() == 1) return -1;` verdict
+# inverts to retail's bne-to-continue with the fail j+li pair inserted
+# inline (rule 16; SsVabOpenHeadWithMode 2026-11-04, see cc_post.py
+# _rule16_on_file).
+if grep -q 'cc-post: rule16' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --rule16"
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).

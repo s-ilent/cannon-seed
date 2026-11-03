@@ -244,6 +244,11 @@ PROLOGUE_PARAM_FIRST = False
 RULE15_INTERLEAVE = False   # rule 15: prologue-param-interleave (the fully
                             # interleaved save+import prologue the WithMode
                             # family's retail carries; see _prepass_rule15)
+RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
+                         # early `if (f() == K) return -1;` verdict: gcc
+                         # emits beq-to-tail with the dead -1 in the branch
+                         # delay, retail keeps bne-to-continue with the fail
+                         # j+li inline; see _prepass_rule16)
 ADDIU_IMM = False       # normalize `addu $r,$s,imm` -> `addiu $r,$s,imm` (the
                         # sdk units' immediate-form law: retail addu keeps
                         # register-only sums, every immediate sum is addiu)
@@ -696,6 +701,88 @@ def _prepass_rule15(lines: list[str]) -> list[str]:
     sys.exit(3)
 
 
+_R16_BEQ = re.compile(r"^beq\t\$(\w+),\$(\w+),(\S+)$")
+_R16_LI = re.compile(r"^(?:addiu|li)\t\$(\w+),(?:\$(?:0|zero),)?-(?:1|0x1)$")
+_R16_CLOBBERED = frozenset(
+    [str(n) for n in range(2, 16)] + ["24", "25", "v0", "v1",
+     "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5", "t6",
+     "t7", "t8", "t9"])
+
+
+def _rule16_on_file(lines: list[str]):
+    """Rule 16 (verdict-polarity; found 2026-11-04, g3org_jp
+    SsVabOpenHeadWithMode 0x80068064, the LIBSND VS_VH WithMode member -
+    window cron-202611040358). GCC 2.6.3 compiles the early verdict
+    `if (f() == 1) { return -1; }` as
+        beq $vX,$vY,<fail-tail-label>
+        addiu $vZ,$zero,-1     (delay: the fail value rides the branch
+                                delay - gcc knows vZ is dead on the
+                                continue path)
+        <continue body...>
+    while this retail family keeps the verdict inline with the OPPOSITE
+    polarity (retail 0x800680A4: `bne $v0,$v1,+3` into the body, the
+    fail tail as `j <tail>` with `li $v0,-1` in the JUMP's delay slot).
+    gcc's polarity is NOT source-shape reachable (window
+    cron-202611040243: the != 1 goto verdict re-inverts into beq-to-
+    return, the else-head copy form keeps beq v0,v1 -> the merged tail),
+    so the transform is a pure post-pass invert+reorder:
+        bne $vX,$vY,$Lr16c     (inverted; the +3 offset == retail's)
+        addiu $vZ,$zero,-1     (KEPT as the bne delay - branch delays run
+                                unconditionally, so vZ = -1 on BOTH paths
+                                exactly as built; no dataflow scan needed)
+        j <fail-tail-label>    (the equal path jumps where beq did)
+        addiu $vZ,$zero,-1     (the j delay: retail's fail materialize;
+                                idempotent duplicate of the delay li)
+        $Lr16c: <continue body...>
+    Semantics: identical to the built form - the delay li is preserved
+    verbatim, the equal path reaches the same tail with the same vZ.
+    Fires on the FIRST `beq` + `(addiu|li) $c,-1` run whose target label
+    is defined later in the file and whose $c is call-clobbered (the
+    fail value must not survive into a saved register); returns None
+    when no site matches."""
+    for i, ln in enumerate(lines):
+        m = _R16_BEQ.match(ln.strip())
+        if not m:
+            continue
+        target = m.group(3)
+        if i + 1 >= len(lines):
+            continue
+        d = lines[i + 1].strip()
+        md = _R16_LI.match(d)
+        if not md:
+            continue
+        if md.group(1) not in _R16_CLOBBERED:
+            continue
+        forward = False
+        for k in range(i + 2, len(lines)):
+            if lines[k].strip() == target + ":":
+                forward = True
+                break
+        if not forward:
+            continue
+        out = lines[:i]
+        out.append("\tbne\t$%s,$%s,$Lr16c" % (m.group(1), m.group(2)))
+        out.append("\t" + d)
+        out.append("\tj\t" + target)
+        out.append("\t" + d)
+        out.append("$Lr16c:")
+        out.extend(lines[i + 2:])
+        return out
+    return None
+
+
+def _prepass_rule16(lines: list[str]) -> list[str]:
+    """Marker rule16 (`cc-post: rule16`): invert the first matching
+    verdict (see _rule16_on_file); loud failure (exit 3) when nothing
+    matches - never a silent pass. Only ever fires on marker-carrying
+    units."""
+    fixed = _rule16_on_file(lines)
+    if fixed is not None:
+        return fixed
+    sys.stderr.write("cc_post rule 16: no inverting verdict (beq + li -1) found\n")
+    sys.exit(3)
+
+
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
     res = list(res)
 
@@ -1094,7 +1181,7 @@ def main() -> None:
     global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
-    global RULE15_INTERLEAVE
+    global RULE15_INTERLEAVE, RULE16_VERDICT
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1111,6 +1198,9 @@ def main() -> None:
     if "--rule15" in args:
         RULE15_INTERLEAVE = True
         args.remove("--rule15")
+    if "--rule16" in args:
+        RULE16_VERDICT = True
+        args.remove("--rule16")
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")
@@ -1187,6 +1277,8 @@ def main() -> None:
         lines = _prepass_prologue_param_first(lines)
     if RULE15_INTERLEAVE:
         lines = _prepass_rule15(lines)
+    if RULE16_VERDICT:
+        lines = _prepass_rule16(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:
