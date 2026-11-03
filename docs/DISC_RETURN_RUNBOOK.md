@@ -49,6 +49,15 @@ reset to origin/main, worklog tail read).
        python3 tools/iso9660_extract.py build/Galaxian3_Europe.bin build/iso_eu --per-sector 'SCES_002.69;1' 'MAINMENU.EXE;1' 'DRAGOON/G3.EXE;1' 'GOURB/G3ORG.EXE;1'
    Copy the eight files to baselines/: slps_00270, mainmenu_jp, g3_jp,
    g3org_jp (JP set) / sces_00269, mainmenu_eu, g3_eu, g3org_eu (EU set).
+   DISC-FREE REHEARSAL PATH (banked cron-202611040358, nineteenth
+   rehearsal): rm -rf build/src, 8x `make build TARGET=<t>` one target
+   per call foreground - all eight images byte-exact against the
+   committed TRUE oracles - then `cp build/<t>.bin baselines/<t>.bin`.
+   THE .bin EXTENSION IS MANDATORY: witness_check.sh reads
+   baselines/${t}.bin, and an extension-less cp leaves the rollback's
+   woven-era dumps in place while witness keeps reporting 0/8 (the
+   dump files are the same SIZE as the true images, only the bytes
+   differ).
 5. `bash tools/witness_check.sh` -> 8/8 STRICT, or STOP and report.
    Re-run `python3 tools/baseline_audit.py` after provisioning: the
    session-start table must flip from 0 MATCH / 8 MISMATCH (the retired
