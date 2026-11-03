@@ -238,28 +238,28 @@ segments:
       - [0x1314C, asm, func_8003294C]   # 0x18 sdk
       - [0x13164, asm, func_80032964]   # 0x28 sdk
       - [0x1318C, asm, func_8003298C]   # 0x28 sdk
-      - [0x131B4, asm, func_800329B4]   # 0x14 sdk
-      - [0x131C8, asm, func_800329C8]   # 0x14 sdk
-      - [0x131DC, asm, func_800329DC]   # 0x14 sdk
-      - [0x131F0, asm, func_800329F0]   # 0x14 sdk
-      - [0x13204, asm, func_80032A04]   # 0x14 sdk
-      - [0x13218, asm, func_80032A18]   # 0x14 sdk
-      - [0x1322C, asm, func_80032A2C]   # 0x14 sdk
-      - [0x13240, asm, func_80032A40]   # 0x14 sdk
-      - [0x13254, asm, func_80032A54]   # 0x14 sdk
-      - [0x13268, asm, func_80032A68]   # 0x14 sdk
-      - [0x1327C, asm, func_80032A7C]   # 0x14 sdk
-      - [0x13290, asm, func_80032A90]   # 0x14 sdk
-      - [0x132A4, asm, func_80032AA4]   # 0x14 sdk
-      - [0x132B8, asm, func_80032AB8]   # 0x14 sdk
-      - [0x132CC, asm, func_80032ACC]   # 0x14 sdk
-      - [0x132E0, asm, func_80032AE0]   # 0x14 sdk
-      - [0x132F4, asm, func_80032AF4]   # 0x14 sdk
+      - [0x131B4, c,   SetPolyF3]   # 0x14 sdk
+      - [0x131C8, c,   SetPolyFT3]   # 0x14 sdk
+      - [0x131DC, c,   SetPolyG3]   # 0x14 sdk
+      - [0x131F0, c,   SetPolyGT3]   # 0x14 sdk
+      - [0x13204, c,   SetPolyF4]   # 0x14 sdk
+      - [0x13218, c,   SetPolyFT4]   # 0x14 sdk
+      - [0x1322C, c,   SetPolyG4]   # 0x14 sdk
+      - [0x13240, c,   SetPolyGT4]   # 0x14 sdk
+      - [0x13254, c,   SetSprt8]   # 0x14 sdk
+      - [0x13268, c,   SetSprt16]   # 0x14 sdk
+      - [0x1327C, c,   SetSprt]   # 0x14 sdk
+      - [0x13290, c,   SetTile1]   # 0x14 sdk
+      - [0x132A4, c,   SetTile8]   # 0x14 sdk
+      - [0x132B8, c,   SetTile16]   # 0x14 sdk
+      - [0x132CC, c,   SetTile]   # 0x14 sdk
+      - [0x132E0, c,   SetLineF2]   # 0x14 sdk
+      - [0x132F4, c,   SetLineG2]   # 0x14 sdk
       - [0x13308, asm, func_80032B08]   # 0x20 sdk
       - [0x13328, asm, func_80032B28]   # 0x20 sdk
       - [0x13348, asm, func_80032B48]   # 0x20 sdk
       - [0x13368, asm, func_80032B68]   # 0x20 sdk
-      - [0x13388, asm, func_80032B88]   # 0x14 sdk
+      - [0x13388, c,   SetBlockFill]   # 0x14 sdk
       - [0x1339C, asm, func_80032B9C]   # 0x1c sdk
       - [0x133B8, asm, func_80032BB8]   # 0x34 sdk
       - [0x133EC, asm, func_80032BEC]   # 0x180 sdk
