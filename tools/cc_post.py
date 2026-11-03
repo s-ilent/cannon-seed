@@ -241,6 +241,9 @@ PAD_LW = None           # 1-based occurrence index of an lw to pad (retail's
                         # two slots ahead - the honest upstream fix is the
                         # maspsx one-ahead hazard look, banked cron-202611021158)
 PROLOGUE_PARAM_FIRST = False
+RULE15_INTERLEAVE = False   # rule 15: prologue-param-interleave (the fully
+                            # interleaved save+import prologue the WithMode
+                            # family's retail carries; see _prepass_rule15)
 ADDIU_IMM = False       # normalize `addu $r,$s,imm` -> `addiu $r,$s,imm` (the
                         # sdk units' immediate-form law: retail addu keeps
                         # register-only sums, every immediate sum is addiu)
@@ -551,6 +554,146 @@ def _rule9_param_copy_order(res: list[str]) -> list[str]:
                     continue
         i += 1
     return res
+
+
+_R15_SAVE = re.compile(r"^sw\t\$(\w+),(-?0x[0-9a-f]+|\d+)\(\$sp\)$")
+_R15_COPY = re.compile(r"^addu\t\$(\w+),\$(\w+),\$zero$")
+_R15_ORI = re.compile(r"^ori\t\$(\w+),\$zero,(-?(?:0x[0-9a-f]+|\d+))$")
+_R15_JAL = re.compile(r"^jal\t\S+$")
+
+
+def _rule15_on_run(res: list[str]):
+    """Rule 15 (prologue-param-interleave; found 2026-11-03, g3org_jp
+    SsVabOpenHeadWithMode 0x80068064, the LIBSND VS_VH WithMode member -
+    window cron-202611032143). GCC 2.6.3 emits the batch prologue
+        [frame][sw $ra][descending callee saves][import run][jal][delay]
+    while this retail family interleaves every param import with its own
+    save, keeps $ra LAST, then the leftover saves, and fills the first
+    call's delay slot with a leftover save:
+        [frame][sw $sN / import]{per import, in import order}[sw $ra]
+        [leftover saves][jal][sw $sK]   (the next leftover save)
+    The draft's pinned-local imports make gcc's import run ORDER already
+    equal the retail pair order (verified draft4, window
+    cron-202611032028), so the transform is a pure reorder:
+    every import's frame save is pulled from the batch to sit adjacent,
+    in import order (the jal-delay import folds in as the LAST import,
+    exactly its retail position); $ra follows; the remaining saves keep
+    their built order with the LAST of them sunk into the jal's delay
+    slot (a save before the first callee - semantics unchanged: delay
+    slots execute unconditionally and the slot is our own frame). All
+    moved instructions are mutually independent (imports read only
+    incoming-arg/zero registers; saves write only the frame); the reorder
+    is semantically a no-op. Returns the transformed run or None when the
+    shape does not match; the marker-scoped prepass loud-fails when NO run
+    matches."""
+    n = len(res)
+    if n < 4 or not _FRAME_RE.match(res[0]):
+        return None
+    saves: dict[str, str] = {}
+    save_order: list[str] = []
+    i = 1
+    while i < n:
+        m = _R15_SAVE.match(res[i])
+        if not m:
+            break
+        if m.group(1) in saves:
+            return None
+        saves[m.group(1)] = m.group(2)
+        save_order.append(m.group(1))
+        i += 1
+    if not saves or ("31" not in saves and "ra" not in saves):
+        return None
+    imports: list[tuple[str, str]] = []
+    while i < n:
+        mC = _R15_COPY.match(res[i])
+        mO = _R15_ORI.match(res[i]) if not mC else None
+        if mC:
+            imports.append((mC.group(1), res[i]))
+        elif mO:
+            imports.append((mO.group(1), res[i]))
+        else:
+            break
+        i += 1
+    if not imports:
+        return None
+    jal_idx = None
+    delay_is_import = False
+    if i < n and _R15_JAL.match(res[i]):
+        jal_idx = i
+        i += 1
+        if i < n:
+            mC = _R15_COPY.match(res[i])
+            mO = _R15_ORI.match(res[i]) if not mC else None
+            if mC:
+                imports.append((mC.group(1), res[i]))
+                delay_is_import = True
+                i += 1
+            elif mO:
+                imports.append((mO.group(1), res[i]))
+                delay_is_import = True
+                i += 1
+    for reg, _ in imports:
+        if reg not in saves:
+            return None  # an import whose save is not in the batch: not ours
+    out = [res[0]]
+    used: set[str] = set()
+    for reg, ins in imports:
+        out.append(f"sw\t${reg},{saves[reg]}($sp)")
+        out.append(ins)
+        used.add(reg)
+    ra_reg = "31" if "31" in saves else "ra"
+    out.append(f"sw\t${ra_reg},{saves[ra_reg]}($sp)")
+    used.add(ra_reg)
+    rest = [r for r in save_order if r not in used]
+    if jal_idx is not None:
+        if not rest:
+            out.append(res[jal_idx])
+            if not delay_is_import and jal_idx + 1 < n:
+                out.append(res[jal_idx + 1])
+                i = jal_idx + 2
+        elif delay_is_import:
+            for r in rest[:-1]:
+                out.append(f"sw\t${r},{saves[r]}($sp)")
+            out.append(res[jal_idx])
+            # the folded import freed the delay slot; the next leftover
+            # save takes it (the retail form; delay slots run regardless)
+            out.append(f"sw\t${rest[-1]},{saves[rest[-1]]}($sp)")
+        else:
+            # built delay is not an import: sinking a save into the slot
+            # would need to displace a real insn - not this rule's shape
+            return None
+    else:
+        for r in rest:
+            out.append(f"sw\t${r},{saves[r]}($sp)")
+    out.extend(res[i:])
+    return out
+
+
+def _prepass_rule15(lines: list[str]) -> list[str]:
+    """Marker rule15 (`cc-post: rule15`): apply _rule15_on_run to the first
+    matching instruction run; loud failure (exit 3) when none matches -
+    never a silent pass. Only ever fires on marker-carrying units."""
+    runs: list[tuple[int, list[str]]] = []
+    start = None
+    cur: list[str] = []
+    for idx, ln in enumerate(lines):
+        s = ln.strip()
+        if s and is_instruction(ln):
+            if start is None:
+                start = idx
+            cur.append(s)
+        else:
+            if cur:
+                runs.append((start, cur))
+            start, cur = None, []
+    if cur:
+        runs.append((start, cur))
+    for start, res in runs:
+        fixed = _rule15_on_run(res)
+        if fixed is not None:
+            return lines[:start] + fixed + lines[start + len(res):]
+    sys.stderr.write("cc_post rule 15: no interleavable prologue run found\n")
+    sys.exit(3)
 
 
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
@@ -951,6 +1094,7 @@ def main() -> None:
     global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
+    global RULE15_INTERLEAVE
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -964,6 +1108,9 @@ def main() -> None:
     if "--prologue-param-first" in args:
         PROLOGUE_PARAM_FIRST = True
         args.remove("--prologue-param-first")
+    if "--rule15" in args:
+        RULE15_INTERLEAVE = True
+        args.remove("--rule15")
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")
@@ -1038,6 +1185,8 @@ def main() -> None:
         lines = _prepass_delay_sb_out(lines)
     if PROLOGUE_PARAM_FIRST:
         lines = _prepass_prologue_param_first(lines)
+    if RULE15_INTERLEAVE:
+        lines = _prepass_rule15(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:

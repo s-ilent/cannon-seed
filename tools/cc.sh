@@ -147,6 +147,14 @@ fi
 if grep -q 'cc-post: keep-prologue' "$SRC" 2>/dev/null; then
     POSTFLAGS="$POSTFLAGS --keep-prologue"
 fi
+# rule15 composes with any primary flag above (independent grep): the
+# prologue-param-interleave law - every param import's frame save pulled
+# adjacent in import order, $ra LAST, leftover saves after, the last one
+# sunk into the first call's delay slot (rule 15; SsVabOpenHeadWithMode
+# 2026-11-03, see cc_post.py _rule15_on_run).
+if grep -q 'cc-post: rule15' "$SRC" 2>/dev/null; then
+    POSTFLAGS="$POSTFLAGS --rule15"
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).
