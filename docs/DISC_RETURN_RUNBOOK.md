@@ -317,6 +317,9 @@ judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
     draft33  264 w ( 0)       the pre-branch reorder (k=0/idx=0 delay-fill) - reg-neutral + SIZE-neutral (see H.3)
     draft34  264 w ( 0)       the ap reorder - SIZE-neutral (see H.3)
     draft35  265 w (+1 REAL, retail-backed)  the total=0 sink-barrier - live 276-predicted (+2 over the row with the copy; the conservative form is draft34 if the H.5 SIZE gate refuses) (see H.3)
+    draft36  260 w (-2 objdump, -3 insns)  the head-loop DO-WHILE RE-SHAPE - the for-form's rotated top guard (slt $2,$5,$8 / beq $2,$0,<exit> / dead-sll delay) dies; the entry test becomes retail's do-while shape (end= / slt v0,a3,a1 / bnez v0,+11 / nop); metric-neutral 169/274 (the removed words were all wrong), live-predicted 274 = THE ROW (the d35 +2 debt and the guard's -2 objdump cancel); frame UNCHANGED 1080/1032 (no ghost-reservation shift this time) (see H.3)
+    draft37  260 w ( 0)       the 787B0 SPLIT-TEMP EXTEND + the BOUND REMAT ORDER (the ninth $2 web) - 170/274 (+1: the bound word 1004a827 pairs at retail's 0x8006829C slot; the extend pair moves OUT of the store into its own pinned statement so the bound def's list position lands between extend and store) (see H.3)
+    draft38  260 w ( 0)       the END= OPERAND-ORDER FLIP (end = ap + nv*4 -> end = nv*4 + ap; gcc preserves source addition order in the commutative-plus encoding) - 171/274 (+1: the end= word 00453821 retail-exact; the whole entry-test group aligns inside the equal blocks). THE POST-LOOP POSITIONAL SET IS CLOSED (see H.3)
 
 Every one of these numbers reproduced on cron-202611042128 from the
 committed drafts; re-derive them if a draft header ever disagrees.
@@ -358,6 +361,23 @@ addu $5,$5,4 / addu $6,$6,2 text forms -> 0x24A50004/0x24C60002);
 word_diff (gas+objdump based) had already counted the sites equal.
 Zero words at stake; no flag, no shape change needed - do NOT
 re-open it.
+cron-202611050613: draft36 169/274 at 260 objdump words (NET 0,
+-3 insns - the head-loop DO-WHILE RE-SHAPE: the for-form's rotated
+top guard dies, the entry test becomes retail's end<ap bnez + nop
+form; live-predicted 274 = the row, the d35 +2 debt cancels against
+the guard's -2 objdump; frame unchanged 1080/1032), draft37 170/274
+(NET +1 - the 787B0 split-temp extend + the bound remat order: the
+extend pair moves out of the store into its own $2-pinned statement
+(slot4, the ninth disjoint web) so the bound def's list position
+lands between extend and store = retail's 0x8006829C slot; the bound
+word 1004a827 pairs), draft38 171/274 (NET +1 - the end= operand-
+order flip: end = nv*4 + ap puts the scaled temp FIRST in the
+commutative-plus encoding, 00453821 retail-exact; the whole entry-
+test group aligns inside the equal blocks). Outage ladder total:
+156 -> 171 (+15). THE POST-LOOP POSITIONAL SET IS CLOSED: total=0 /
+ap / sll16 / sra14 / BOUND / 787B0-store / reads / tp+= / end= /
+slt / bne / nop all retail-ordered; the only remaining store-group
+delta is the AT-CHAIN CLASS lever (banked below).
 
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
@@ -377,12 +397,14 @@ tree). Per run (the banked rehearsal pattern, draft6-10 precedent):
    judge artifacts). The tree stays probes-only between runs.
 
 Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 28 -> 29 -> 30 -> 31
--> 32 -> 33 -> 34 -> 35 is CUMULATIVE (each draft = the previous + one lever; 26 = 25
+-> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 is CUMULATIVE (each draft = the previous + one lever; 26 = 25
 with the end_addr revert; 28 = 26 + the condition-chain re-shape + the
 m re-home; 29 = 28 + the magic-check temp pin; 30 = 29 + the
 loop-bound copy form; 31 = 30 + the idx-home pin; 32 = 31 + the
 offset-temp pin; 33 = 32 + the pre-branch reorder; 34 = 33 + the ap
-reorder; 35 = 34 + the total=0 sink-barrier): a judge surprise at
+reorder; 35 = 34 + the total=0 sink-barrier; 36 = 35 + the head-loop
+do-while re-shape; 37 = 36 + the 787B0 split-temp extend + the bound
+remat order; 38 = 37 + the end= operand-order flip): a judge surprise at
 draft N re-opens N-1's region first. The row does NOT enter the tree
 until the H.5 landing gate.
 
@@ -589,6 +611,71 @@ judge reads remain only for the BUILT-form confirms):
   refilled with a DEAD sll duplicate of the 787B0 store prep (retail's
   is a nop; same slot count) - the draft23 pre-entry re-shape refills
   it when it lands.
+- **draft36 (the HEAD-LOOP DO-WHILE RE-SHAPE, authored + measured
+  cron-202611050613)**: the for-form `for (; ap < bound; ap += 4)`
+  made gcc emit a rotated TOP GUARD (addu $8,$sp,1040 late / slt
+  $2,$5,$8 / beq $2,$0,<exit> / dead-sll delay = the d35 side effect)
+  before the end<ap test, but RETAIL HAS NO TOP GUARD - the entry
+  falls straight from end= into .L800682C8 slt v0,a3,a1 / bnez v0 /
+  NOP, and ap<bound rides ONLY the back-edge (.L800682FC addiu a1,4 /
+  slt v0,a1,t0 / bnez v0 / addiu a2,2 delay). Source re-shaped to
+  `do { if (end >= ap) { body } tp += 2; ap += 4; } while (ap <
+  bound);` - semantically identical for this caller (ap = sp+0x10,
+  bound = ap+0x400, both frame-fixed: the top guard was dead runtime
+  code; retail's binary IS the source-shape truth). MEASURED 169/274
+  at 260 objdump words, NET 0, -3 insns (the guard's slt/beq/dead-sll,
+  all wrong words): live-predicted 260+14 = 274 = THE ROW (the d35
+  +2 debt cancels against the guard's -2 objdump; the H.5 SIZE
+  arbitration note). Frame UNCHANGED 1080/1032 - no ghost-reservation
+  shift from THIS do-while (the d30 frame-pad lesson did not bite).
+  The d35->d36 build delta is EXACTLY the guard removal + label
+  renumbering (diff verified).
+- **draft37 (the 787B0 SPLIT-TEMP EXTEND + THE BOUND REMAT ORDER,
+  authored + measured cron-202611050613)**: retail's post-exit order
+  is total=0 / ap / sll16 / sra14 / BOUND / 787B0-chain / sw - the
+  extend pair scheduled BEFORE the bound def (addiu t0,sp,0x410 at
+  0x8006829C, between the extend and the lui). The built emitted the
+  extend INSIDE the store's address computation (list position = the
+  store's), so NO source position of `bound = ap + 1024;` could land
+  the def inside the store group: before the store (pos a) AND after
+  the store (pos b) both hoist the independent $8 def above the
+  extend pair (pos a measured: total/ap/BOUND/sll16/sra14/sw - the
+  bound 2 slots early), and after the reads it sank to the entry test
+  (the d36 form). THE FIX = the banked split-temp law (draft17/25
+  class): register long slot4 asm("$2") (the NINTH disjoint web on
+  the $2 pin), slot4 = (long)slot << 16 >> 14 as its OWN statement,
+  the store reads it back (sw $6,D_801787B0($2), same embed form).
+  Source order ap= / slot4= / bound= / store => machine list order ap
+  / extend / BOUND / store = RETAIL'S ORDER. MEASURED 170/274, NET
+  +1: the bound word 1004a827 pairs at retail's slot.
+- **draft38 (the END= OPERAND-ORDER FLIP, authored + measured
+  cron-202611050613)**: the built's `end = ap + nv * 4` emitted addu
+  (a1 + v0) = 00a23821 (ap's home rs, the scaled temp rt) but
+  retail's is addu (v0 + a1) = 00453821 (the temp FIRST, the
+  draft23-open-3 banked form `addu $a3,$v0,$a1`). gcc 2.6.3 preserves
+  the SOURCE addition order in the commutative-plus encoding: `end =
+  nv * 4 + ap` flips the word retail-exact. MEASURED 171/274 at 252
+  built words, NET +1, SIZE-neutral; the d37->d38 delta is EXACTLY
+  the one-word operand flip (diff verified) and the whole entry-test
+  group (end= / slt v0,a3,a1 / bnez v0,+11 = 1440000b / nop) now
+  aligns INSIDE the equal blocks. THE POST-LOOP POSITIONAL SET (the
+  cron-202611050458 next-queue item) IS CLOSED end to end.
+- **THE AT-CHAIN CLASS LEVER (discovered cron-202611050613, the
+  next-window item)**: retail's SIX symbolic sw stores with a reg-reg
+  index - 7876C (0x800681A4..AC), 78704 (0x8006823C..48), 787B0
+  (0x800682A0..AC), FB6C (0x80068318..24), FB24 (0x800683C4..D0),
+  FAE0 (0x8006845C..68) - ALL use the 4-word form lui at,%hi /
+  addiu at,at,%lo / addu at,at,v0 / sw reg,0(at): the FULL symbol
+  address materialized, THEN the index added. The built's gcc emits
+  the 3-word embed (lui at,%hi / addu at,at,v0 / sw reg,%lo(at) via
+  gas) = -1 word per site, ~-6 of the built's remaining word deficit.
+  The E038/78894/FB20 sites (sb/sh with a plain reg index) use the
+  2-3-word forms the built already matches - the class is specific to
+  the unsigned-long-array sw stores. Source-shape hypothesis: the
+  original computed the store address through an explicit
+  pointer/intermediate (or a two-step at-chain the 2.6.3 scheduler
+  kept); needs one careful draft per the lever-isolation law, the
+  787B0 site first (its extend is already split out in d37+).
 - **THE OPCODE-CLASS ITEM CLOSES AS A FALSE ITEM (cron-202611050458,
   zero words at stake)**: the draft30 "REMAINING region wrongs" entry
   "the increments' OPCODE class (built addu $16,$16,1 / addu $5,$5,1 /
