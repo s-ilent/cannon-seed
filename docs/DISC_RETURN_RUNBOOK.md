@@ -310,6 +310,10 @@ judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
     draft26  260 w ( 0)       live 1096  (the end_addr revert, see H.3)
     draft27  260 w ( 0)       parked NEGATIVE (the m-web fifth-routing; the file builds machine-identical to draft26)
     draft28  260 w ( 0)       live 1096  (the condition-chain re-shape; POSITIVE, see H.3)
+    draft29  260 w ( 0)       live 1096  (the magic-check temp pin; region-positive, metric-neutral, see H.3)
+    draft30  264 w (+4 objdump, +1 REAL)  live 278-predicted (+1 word over the row; the +4 objdump delta is 16-byte section-align padding: 1044 real bytes round to 1056 - the word_diff counter says +1). THE +1 = the loop-bound copy (addu a3,v1,zero - retail HAS the word, the built never did). THE FUND: the built's standalone base def addu $19,$4,32 has NO retail counterpart (retail's base rides the a2-chain: s3 := a2 at the m-check delay) - the copy's SIZE debt rides the same judge-gated a2-chain lever that gates the 12/12 window closure; the SIZE verdict is LIVE-ONLY (H.5 arbitrates)
+    draft31  264 w ( 0)       the idx-home pin - reg-neutral (see H.3)
+    draft32  264 w ( 0)       the offset-temp pin - reg-neutral (see H.3)
 
 Every one of these numbers reproduced on cron-202611042128 from the
 committed drafts; re-derive them if a draft header ever disagrees.
@@ -320,6 +324,17 @@ draft28 156/274 - the condition-chain re-shape, NET +3 at the same
 built-word count (253 on the word_diff built-words counter for both
 d26 and d28; the ledger column above uses the H.1 rebuild counter -
 the DELTAS agree, the absolute bases differ by the count method).
+draft29 156/274 (metric-neutral, four magic-check words region-exact,
+see H.3). The cron-202611050228 outage ladder: draft30 161/274 at 254
+built words (+1 = the copy; NET +5 - the loop-bound copy form: the
+m2 copy, the p home into the freed v1, the lbu/sw bases, the compare
+and the p+=16 all ride the copy choreography), draft31 164/274 (NET
++3 - the idx-home pin: sw $16,8($3) and the idx=0/idx++ dsts flip
+retail-exact, total's free web KEPT $16 - no eviction), draft32
+166/274 (NET +2 - the offset-temp pin: sll dst v0 + addu src2 v0
+flip retail-exact). Ladder total this outage window: +10 words.
+REJECTED the same window: the w0 -> $5 home pin on the d30 landscape
+(160/274, NET -1 - the second consecutive negative, see H.3).
 
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
@@ -338,11 +353,13 @@ tree). Per run (the banked rehearsal pattern, draft6-10 precedent):
    rm src/SsVabOpenHeadWithMode.c` (never leave a non-exact c row; clean
    judge artifacts). The tree stays probes-only between runs.
 
-Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 28 is CUMULATIVE (each
-draft = the previous + one lever; 26 = 25 with the end_addr revert; 28
-= 26 + the condition-chain re-shape + the m re-home): a judge
-surprise at draft N re-opens N-1's region first. The row does NOT enter
-the tree until the H.5 landing gate.
+Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 28 -> 29 -> 30 -> 31
+-> 32 is CUMULATIVE (each draft = the previous + one lever; 26 = 25
+with the end_addr revert; 28 = 26 + the condition-chain re-shape + the
+m re-home; 29 = 28 + the magic-check temp pin; 30 = 29 + the
+loop-bound copy form; 31 = 30 + the idx-home pin; 32 = 31 + the
+offset-temp pin): a judge surprise at draft N re-opens N-1's region
+first. The row does NOT enter the tree until the H.5 landing gate.
 
 ### H.3 - the per-draft expected pairs and open judge items
 
@@ -443,6 +460,70 @@ judge reads remain only for the BUILT-form confirms):
   variable as a whole-function packing reservation for the other
   pseudos); twin-law: pin $5-class regs ONLY when the early traffic
   is already pinned away. H.2 order 21 -> 28 -> 29.
+- **draft30 (the LOOP-BOUND COPY FORM, authored + measured POSITIVE
+  cron-202611050228)**: the retail first-loop choreography the d28 cost
+  note predicted - after the tp def, k = 0 pre-blez, the guard STAYS on
+  m (retail blez v1 reads the reload), idx = 0 hoists toward the delay,
+  then addu a3,v1,zero (the m -> a3 LOOP-BOUND COPY at 0x80068260) and
+  addu v1,s3,zero (p = base into the FREED v1 at 0x80068264); the loop
+  compare rides the COPY (slt v0,a1,a3), NOT m. Authored as: the
+  do-while re-shape (if (m > 0) { idx = 0; m2 = m; p = base; do {...}
+  while (k < m2); }), m2 = a NEW register variable PINNED to $7 (an
+  unpinned m2 was COALESCED back into m - the copy died and the compare
+  re-read v1; a register var on a different hard reg cannot coalesce),
+  and p UNPINNED (a p pin deletes p's stack home: frame 1080 -> 1072,
+  flipping subu + all eight save offsets; free, p took the vacated v1 -
+  the disjoint-web free-packing precedent). MEASURED 161/274 at 254
+  built words, NET +5: the copy word + p's home flip + the lbu/sw bases
+  + the compare + the p+=16 base all retail-exact (the copy and p=base
+  words BYTE-EXACT, aligned one slot late by the k=0/idx delay-fill
+  order). ZERO collateral: end's free web KEPT $7 and spu's pin held -
+  the m2/end/spu three-web partition of $7 (the disjoint-web law).
+  THE FRAME-PAD: the do-while rewrite alone eliminated reload's 8-byte
+  ghost reservation (vars 1032 -> 1024, frame 1072 - no instruction
+  references the slot; the for-form's rotated entry created it); the
+  dead address-take (long frame_pad; if (0) { (void)&frame_pad; })
+  re-reserves the slot AT PARSE TIME with zero emitted code - measured:
+  the only build delta is the .file line + label renumbering. C89 note:
+  register decls must sit in the declaration block (gcc 2.6.3 parse
+  error mid-block). SIZE: +1 real word (the copy) - the fund is the
+  a2-chain's base-def elimination (see H.1 draft30 row). REMAINING
+  region wrongs (the next-lever menu): the increments' OPCODE class
+  (built addu $16,$16,1 / addu $5,$5,1 / addu $3,$3,16 vs retail addiu
+  x3 - gcc 2.6.3 emits addu PRE-maspsx, a flag-or-shape question, three
+  words), the k=0/idx=0 delay-fill order (built blez delay = k=0,
+  retail delay = idx=0 - one positional word), the 78704 sw value +
+  the p=base/addu $6 srcs ($19 vs retail s3/a2 - the judge-gated
+  a2-chain).
+- **draft31 (the IDX-HOME PIN, authored + measured POSITIVE
+  cron-202611050228)**: register long idx asm("$16") - retail idx home
+  = s0 (addu s0,zero,zero at 0x8006825C in the blez delay; sw s0,8(v1);
+  addiu s0,s0,1) and total re-rides s0 after (0x8006828C); the built's
+  free idx rode $8 (bound's dead pin). The pin rides vabid's dead $16
+  web. MEASURED 164/274, NET +3: sw $16,8($3) BYTE-EXACT, the idx=0 and
+  idx++ dsts flip s0; total's free web KEPT $16 (no eviction - the
+  idx/bound precedent held). The addu-vs-addiu increment opcodes stay
+  wrong (the opcode-class item above).
+- **draft32 (the OFFSET-TEMP PIN, authored + measured POSITIVE
+  cron-202611050228)**: register long tpose asm("$2"); tpose = m *
+  0x10; tp = base + tpose - retail's tp offset rides v0 (sll v0,v1,4 /
+  addu a2,s3,v0); the built's free temp rode tp's own home $6. MEASURED
+  166/274, NET +2: the sll dst and the addu src2 flip v0 retail-exact;
+  the addu src1 ($19 vs retail s3) stays judge-gated a2-chain
+  territory. The $2 web is freed by the m-check reads' death (the
+  eighth disjoint web on the $2 pin).
+- **THE W0-HOME ITEM CLOSES OFFLINE (measured-negative TWICE)**: the
+  w0 -> $5 pin re-measured on the d30 landscape (cron-202611050228):
+  160/274, NET -1 - the SECOND consecutive negative (the d29-window
+  attempt on the d28 landscape also measured NET -1). The eviction set
+  is now precise: the alloc-merge sra temp ($5 -> $6), the ext-slot
+  index sll ($5 -> $6), the magic-fail sb index ($5 -> $6) AND the
+  andi/bne pair's dst flip ($3 -> $5 - gcc reuses w0's $5 for the
+  dead-after mask result where retail keeps the mask in v1 with a1
+  still holding w0); gains only the lw dst + the srl src. w0's home is
+  UNREACHABLE by direct pin; the item rides the a2-chain's a0 steering
+  (the load src a0 part) and upstream home pressure - judge-gated
+  follow-up territory.
 - **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
   region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
   through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
