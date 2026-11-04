@@ -314,6 +314,9 @@ judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
     draft30  264 w (+4 objdump, +1 REAL)  live 278-predicted (+1 word over the row; the +4 objdump delta is 16-byte section-align padding: 1044 real bytes round to 1056 - the word_diff counter says +1). THE +1 = the loop-bound copy (addu a3,v1,zero - retail HAS the word, the built never did). THE FUND: the built's standalone base def addu $19,$4,32 has NO retail counterpart (retail's base rides the a2-chain: s3 := a2 at the m-check delay) - the copy's SIZE debt rides the same judge-gated a2-chain lever that gates the 12/12 window closure; the SIZE verdict is LIVE-ONLY (H.5 arbitrates)
     draft31  264 w ( 0)       the idx-home pin - reg-neutral (see H.3)
     draft32  264 w ( 0)       the offset-temp pin - reg-neutral (see H.3)
+    draft33  264 w ( 0)       the pre-branch reorder (k=0/idx=0 delay-fill) - reg-neutral + SIZE-neutral (see H.3)
+    draft34  264 w ( 0)       the ap reorder - SIZE-neutral (see H.3)
+    draft35  265 w (+1 REAL, retail-backed)  the total=0 sink-barrier - live 276-predicted (+2 over the row with the copy; the conservative form is draft34 if the H.5 SIZE gate refuses) (see H.3)
 
 Every one of these numbers reproduced on cron-202611042128 from the
 committed drafts; re-derive them if a draft header ever disagrees.
@@ -332,9 +335,29 @@ and the p+=16 all ride the copy choreography), draft31 164/274 (NET
 +3 - the idx-home pin: sw $16,8($3) and the idx=0/idx++ dsts flip
 retail-exact, total's free web KEPT $16 - no eviction), draft32
 166/274 (NET +2 - the offset-temp pin: sll dst v0 + addu src2 v0
-flip retail-exact). Ladder total this outage window: +10 words.
+flip retail-exact). Ladder total that outage window: +10 words.
 REJECTED the same window: the w0 -> $5 home pin on the d30 landscape
 (160/274, NET -1 - the second consecutive negative, see H.3).
+cron-202611050458: draft33 167/274 at 254 built words (NET +1,
+SIZE-neutral - the pre-branch reorder: k=0 straight-line before the
+blez, idx=0 IN the delay, the blez offset word 0x1860000C retail-
+exact; the ENTIRE 16-word loop window 0x8006824C..0x80068288 is one
+binary equal block, see H.3), draft34 168/274 (NET +1, SIZE-neutral -
+the ap reorder: the ap word 0x27A50010 was already retail-exact via
+the gas law, only its position was wrong), draft35 169/274 at 262
+objdump words (NET +1, +1 REAL retail-backed - the total=0
+sink-barrier holds the post-exit zeroing; live 276-predicted = +2
+over the row with the copy). Outage ladder total: 156 -> 169 (+13).
+THE OPCODE-CLASS ITEM CLOSED AS A FALSE ITEM the same window: the
+"built addu $16,$16,1 / addu $5,$5,1 / addu $3,$3,16 vs retail addiu
+x3" residual was a MNEMONIC-TEXT artifact - gcc 2.6.3 emits the
+addu-with-immediate TEXT form pre-maspsx, gas assembles it as the
+I-type addiu ENCODING (the built .o words 0x26100001/0x24A50001/
+0x24630010 are byte-identical to retail; same for the backfill-loop
+addu $5,$5,4 / addu $6,$6,2 text forms -> 0x24A50004/0x24C60002);
+word_diff (gas+objdump based) had already counted the sites equal.
+Zero words at stake; no flag, no shape change needed - do NOT
+re-open it.
 
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
@@ -354,12 +377,14 @@ tree). Per run (the banked rehearsal pattern, draft6-10 precedent):
    judge artifacts). The tree stays probes-only between runs.
 
 Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 28 -> 29 -> 30 -> 31
--> 32 is CUMULATIVE (each draft = the previous + one lever; 26 = 25
+-> 32 -> 33 -> 34 -> 35 is CUMULATIVE (each draft = the previous + one lever; 26 = 25
 with the end_addr revert; 28 = 26 + the condition-chain re-shape + the
 m re-home; 29 = 28 + the magic-check temp pin; 30 = 29 + the
 loop-bound copy form; 31 = 30 + the idx-home pin; 32 = 31 + the
-offset-temp pin): a judge surprise at draft N re-opens N-1's region
-first. The row does NOT enter the tree until the H.5 landing gate.
+offset-temp pin; 33 = 32 + the pre-branch reorder; 34 = 33 + the ap
+reorder; 35 = 34 + the total=0 sink-barrier): a judge surprise at
+draft N re-opens N-1's region first. The row does NOT enter the tree
+until the H.5 landing gate.
 
 ### H.3 - the per-draft expected pairs and open judge items
 
@@ -524,6 +549,62 @@ judge reads remain only for the BUILT-form confirms):
   UNREACHABLE by direct pin; the item rides the a2-chain's a0 steering
   (the load src a0 part) and upstream home pressure - judge-gated
   follow-up territory.
+- **draft33 (the PRE-BRANCH REORDER, authored + measured POSITIVE
+  cron-202611050458)**: the k=0/idx=0 delay-fill item - idx = 0 moved
+  from the first statement inside the if to immediately before it
+  (semantically identical: the delay slot executes unconditionally and
+  idx dies at loop exit). The d32 form had idx=0 first INSIDE the if
+  and the delay-fill scheduler took k=0 (the immediately-preceding
+  independent set) for the slot, leaving idx=0 post-branch; the built's
+  blez offset word was 0x1860000D vs retail 0x1860000C and the slot
+  word was a1=0 vs retail s0=0. MEASURED 167/274 at 254 built words,
+  NET +1, SIZE-neutral: the ENTIRE 16-word loop window
+  retail[122..137] (0x8006824C..0x80068288) is now ONE binary equal
+  block - k=0 pre-branch, the blez word retail-exact, idx=0 in the
+  delay, the copy, p=base and the full body byte-identical. The d32 ->
+  d33 build delta is EXACTLY the .file line + the reorder (diff
+  verified).
+- **draft34 (the AP REORDER, authored + measured POSITIVE
+  cron-202611050458)**: ap = (long)arr; moved to immediately after
+  total = 0, before the D_801787B0 store - retail's post-exit order is
+  total=0, ap, 787B0-store-prep; the d33 form had ap after the
+  reads+tp+=. The ap word was ALREADY retail-exact (0x27A50010 via the
+  gas addu-with-imm law) - only its position was wrong. MEASURED
+  168/274 at 261 objdump words, NET +1, SIZE-neutral. Remaining
+  post-loop positionals after this: the bound remat (retail addiu
+  t0,sp,0x410 sits between the sra14 and the 787B0 lui at 0x8006829C;
+  the built keeps it with the end group) and the total=0 float (d35).
+- **draft35 (the TOTAL=0 SINK-BARRIER, authored + measured POSITIVE
+  cron-202611050458)**: an empty volatile asm (memory clobber) placed
+  immediately AFTER the first total = 0 - retail's first total=0 sits
+  at the loop exit (0x8006828C) but gcc floats the independent set ~40
+  words down to the backfill pre-entry; the barrier (the banked
+  m-reload precedent, emits nothing) stops the sink. MEASURED 169/274
+  at 262 objdump words, NET +1, +1 REAL retail-backed word (retail HAS
+  the post-exit zeroing; the second source total=0 already rode the
+  end_addr beqz delay retail-exact per draft25 open 3). LIVE
+  prediction 276 = +2 over the row (the copy + this word); the
+  conservative SIZE-neutral form is draft34 if the H.5 gate refuses.
+  Delay-fill side effect (banked): the pre-entry beq's delay got
+  refilled with a DEAD sll duplicate of the 787B0 store prep (retail's
+  is a nop; same slot count) - the draft23 pre-entry re-shape refills
+  it when it lands.
+- **THE OPCODE-CLASS ITEM CLOSES AS A FALSE ITEM (cron-202611050458,
+  zero words at stake)**: the draft30 "REMAINING region wrongs" entry
+  "the increments' OPCODE class (built addu $16,$16,1 / addu $5,$5,1 /
+  addu $3,$3,16 vs retail addiu x3)" was a MNEMONIC-TEXT artifact,
+  never a binary diff. Chain verified end to end: gcc 2.6.3 emits the
+  addu-with-immediate TEXT form pre-maspsx (the .gcc.s intermediate),
+  maspsx passes it through unchanged, and gas (mipsel-linux-gnu-as
+  2.31.1) assembles "addu reg,reg,imm" as the I-type addiu ENCODING -
+  the built .o words at the three first-loop sites are 0x26100001 /
+  0x24A50001 / 0x24630010, byte-identical to retail's addiu words (the
+  retail dump prints "addiu" because that IS the encoding). The same
+  conversion covers the backfill-loop "addu $5,$5,4 / addu $6,$6,2"
+  text forms (the .o shows 0x24A50004 / 0x24C60002). word_diff.py
+  (gas+objdump based) had already counted all these sites equal - the
+  item existed only in text-level reads. No flag, no shape change
+  needed; banked so no future window re-opens it.
 - **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
   region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
   through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
