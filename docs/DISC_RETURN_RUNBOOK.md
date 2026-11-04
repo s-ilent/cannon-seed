@@ -385,6 +385,14 @@ judge reads remain only for the BUILT-form confirms):
   steering target: merge delay -> a2=s3, a0 copy -> post-join, vh
   reads -> a0. Still judge-gated (gcc 2.6.3 must be steered to
   re-import a0 post-join), but the map is complete.
+- draft27 (authored + measured + parked NEGATIVE the same window): the
+  fifth-web routing of the m constants through the pinned `shifted`/$2
+  EVICTS the compare webs (the retail-exact andi $3/ori $2/bne pair
+  broke to $5/$3, the reload fell $3 -> $8); the parked file builds
+  machine-identical to draft26 (pure record). The all-v0 window needs
+  the full condition-chain re-shape (the 0x70 constant + m + the ver
+  reads through one variable) - parked as the next form, touches the
+  a2/base-chain territory (H.4).
 - **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
   region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
   through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
