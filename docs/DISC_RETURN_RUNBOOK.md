@@ -293,13 +293,57 @@ no baselines and no oracle:
       python3 scripts/word_diff.py /tmp/dN.mas.s \
       asm/g3org_jp/nonmatchings/func_80068064.s 0x80068064 0x800684AC
 
-THE SCALE LAW (banked cron-202611042128, measured): the offline .text
-counts the UNLINKED .o - every bare-symbol data access (the D_ statics,
-the _spu_/SpuMalloc calls) is one word + relocs; the live judge's
-mini-link expands the HI16/LO16 pairs, so LIVE SIZE = offline words x 4 +
-14 on this unit (draft20: offline 260 w / 1040 B, live 274 w / 1096 B =
-the exact 0x448 row). NEVER compare an offline absolute SIZE to a live
-judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
+THE SCALE LAW (banked cron-202611042128; ROOT-CAUSED AND REWRITTEN
+cron-202611050728): the banked "+14 = the live judge's mini-link expands
+the HI16/LO16 pairs" was a MISDIAGNOSIS - the mini-link expands NOTHING.
+The +14 words are the maspsx `--addiu-at` KNOB DELTA: the in-repo
+maspsx_delay_slot.patch's addiu-at expansion materializes every bare-symbol
+load AND store through $at (loads 3->4 words: lui/addiu %lo/addu/access-0;
+stores bare->4 words: lui/addiu/addu/sw 0($at) = retail's exact form), and
++14 words is that delta on THIS unit's site count. The judged windows ran
+knob-ALIVE; a stale-HEAD rehydrate (pre-6b, cron-202611050728 failure
+mode: rehydrate.sh at 7623cd2e had no step 6b, the clones kept the old
+patch, and maspsx's parse_known_args SILENTLY DROPS the --addiu-at flag)
+leaves the same commands measuring knob-DEAD = -14 words. maspsx_flags.txt
+already carries `unit:SsVabOpenHeadWithMode --addiu-at on` (judge-confirmed
+cron-202611041013), so the flags were always right - only the PATCH STATE
+flips. RE-RUN rehydrate after every reset --hard origin/main (idempotent);
+verify the knob with `grep -c addiu-at /home/z/my-project/tools-src/maspsx/maspsx.py`
+(need >= 1 in BOTH clone locations).
+
+THE TRUE LIVE-SIZE LAW (measured cron-202611050728, validated twice): the
+judge's SIZE = the mini-linked .r_<rom> section bytes, and the WHOLE judge
+pipeline minus the retail-bytes comparison reproduces OFFLINE with zero
+oracle:
+
+    MASPSX_UNIT_FLAGS="--addiu-at on" tools/cc.sh -S -o build/judge/wN.o probes/gcc263/SsVabOpenHeadWithMode_draftN.c
+    python3 tools/stage_c.py build/judge/wN.mas.s build/judge/wN.r.s 48864 0 ""
+    $TOOLROOT/usr/bin/mipsel-linux-gnu-as -march=mips64 -mabi=32 -EL -G0 \
+      -I include -I asm/nonmatchings -I asm/g3org_jp -o build/judge/wN.o build/judge/wN.r.s
+    # then mini-link exactly as judge_unit.py does (SECTIONS { . = 0x<va>;
+    # .r_48864 : { *(.r_48864) } } + the symbols.<t>.txt/curated prelude +
+    # the two-pass undef_syms.py fallback), objcopy -O binary --only-section
+    # .r_48864, stat the .bin. Validation: draft1 904 = judged 904 EXACT;
+    # draft20 knob-alive 1096 = judged 1096 = THE ROW EXACT.
+
+The knob-ALIVE recalibration of the ladder anchors (one pipeline, one
+counter - the gas word_diff words; the historical w-counts below were
+knob-dead or objdump-based and do NOT compare):
+
+    draft20  268 w   147/274   linked 1096 = THE ROW (validates the 1243 live anchor)
+    draft38  266 w   175/274   linked 1092 (-4 B = ONE word short of the row)
+
+THE AT-CHAIN CLASS ITEM IS CLOSED AS A TOOLING ITEM (cron-202611050728):
+retail's six 4-word $at store forms are maspsx's addiu-at STORE expansion
+(the patch's store branch emits exactly lui at,%hi / addiu at,at,%lo /
+addu at,at,<idx> / sw <reg>,0x0($at)) - NO source-shape change exists or
+is needed; the "explicit pointer/intermediate" hypothesis is moot. With
+the knob alive the six sites (7876C/78704/787B0/FB6C/FB24/FAE0) already
+emit retail's form through the judge pipeline; the offline proxy only
+undercounts them when the knob is dead. The historical ledger below is
+KEPT UNCHANGED as the knob-dead-era record of the source-shape levers
+(their DELTAS were measured within one knob state and remain internally
+consistent); its live-size predictions are superseded by the recipe above.
 
     draft20  260 w (1040 B)   live 1096  (the judged anchor, cron-202611041243)
     draft21  262 w (+2)       live 1098 expected (the rule17 trampoline)
@@ -784,6 +828,27 @@ judge reads remain only for the BUILT-form confirms):
    merge delay -> a2=s3, a0 copy -> post-join straight-line, vh reads
    -> a0.
 3. LAND (H.5) only when the judge verdict is EXACT.
+
+### H.4b - the knob-alive structural map of draft38 (cron-202611050728, offline)
+
+The knob-alive word_diff of draft38 (266 w / 175/274 / linked 1092) leaves
+six structural blocks - the NEXT lever map, all offline-derivable, no
+oracle needed (VA = 0x80068064 + offset):
+
+- retail +9 w @0x0130 (0x80068194, the rule17 verdict/err-trampoline
+  region: retail carries the inline fail j+li pair the built folds)
+- built +7 w @0x018c (0x800681F0, built-only spill/shuffle words)
+- retail +1 w @0x01cc (0x80068230, the m-check delay copy addu s3,a2,zero
+  - the KNOWN a2/base chain lever, item 2 above)
+- retail +1 w @0x0314 (0x80068378)
+- retail +9 w @0x0338 (0x8006839C)
+- built +9 w @0x041c (0x80068480, the built-only tail)
+
+Net retail +20 / built +16 words by the gas counter; the linked SIZE gap
+is -4 B (one word). The two +1 retail sites are the cheapest SIZE-closing
+candidates; the 9-word blocks are the next content waves. Every block is
+visible in the knob-alive word_diff output banked in the window's TASKS
+section - re-derive with the H.1 recipe before steering any draft39+.
 
 ### H.5 - the landing gate (all of it, or nothing)
 

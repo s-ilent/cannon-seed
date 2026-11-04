@@ -21,7 +21,7 @@ If the sandbox resets, restore configuration with this command:
 sh tools/rehydrate.sh        # add --smoke for a full oracle check
 ```
 
-This script restores git configuration, credentials, the virtual environment (`tools/make_wheelhouse.sh`), maspsx, and mipsel binutils. If the tree lags origin, run `git fetch origin && git reset --hard origin/main`. Push completed work regularly.
+This script restores git configuration, credentials, the virtual environment (`tools/make_wheelhouse.sh`), maspsx, and mipsel binutils. If the tree lags origin, run `git fetch origin && git reset --hard origin/main`, then **RE-RUN `sh tools/rehydrate.sh`** — a stale-HEAD rehydrate predates the current step-6b patch state (cron-202611050728: the clones kept an old patch without the `--addiu-at` knob and every build silently mis-expanded its bare-symbol accesses; the rerun is idempotent and re-applies `tools/maspsx_delay_slot.patch` to BOTH maspsx clone locations). Push completed work regularly.
 
 ## The loop
 
