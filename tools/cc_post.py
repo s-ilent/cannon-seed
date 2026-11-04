@@ -244,6 +244,10 @@ PROLOGUE_PARAM_FIRST = False
 RULE15_INTERLEAVE = False   # rule 15: prologue-param-interleave (the fully
                             # interleaved save+import prologue the WithMode
                             # family's retail carries; see _prepass_rule15)
+RULE17_MERGE = None      # rule 17: merge-polarity invert+trampoline, as
+                         # (anchor_label, jdelay_spec) from the marker
+                         # (`cc-post: rule17 <$Lerr> jdelay <op> <reg> <imm>`;
+                         # see _rule17_on_file)
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -717,6 +721,16 @@ _R16_CLOBBERED = frozenset(
     [str(n) for n in range(2, 16)] + ["24", "25", "v0", "v1",
      "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5", "t6",
      "t7", "t8", "t9"])
+# rule 17 (merge-polarity): gcc 2.6.3 compiles the alloc-merge verdict
+# `if (slot >= 16) goto err;` as `beq $rX,$0,<far-err>` (fail branches
+# FAR, body falls through); this retail family keeps the OPPOSITE
+# polarity - `bne $rX,$0,<join>` (+3, success branches past) with the
+# inline 2-word err trampoline `j <far-err>` + the err-path delay insn
+# (g3org_jp SsVabOpenHeadWithMode 0x80068188-class, window
+# cron-202611041358; see _rule17_on_file).
+_R17_BEQZ = re.compile(r"^beq\t\$(\w+),\$(0|zero),(\S+)$")
+_R17_BEQZ_SPELL = re.compile(r"^beqz\t\$(\w+),(\S+)$")
+_R17_JDELAY_OPS = frozenset(("li", "addiu", "addu", "nop"))
 
 
 def _r16_jdelay_line(spec: tuple[str, str, str]) -> str:
@@ -822,6 +836,108 @@ def _prepass_rule16(lines: list[str]) -> list[str]:
     if fixed is not None:
         return fixed
     sys.stderr.write("cc_post rule 16: no inverting verdict (beq + li -1) found\n")
+    sys.exit(3)
+
+
+def _r17_jdelay_line(spec: tuple[str, str, str]) -> str:
+    """Materialize the rule17 trampoline j-delay insn from marker args
+    (`jdelay <op> <reg> <imm>`; the rule16 arg precedent - bare reg
+    names, no $, so the shell never expands them). Ops: li/addiu (the
+    rule16 materializers), addu (reg-copy: `addu $reg,$imm,$zero` -
+    gcc 2.6.3's own zero-arg spelling, the WithMode trampoline's
+    a0=0-class delay), nop (an empty delay slot)."""
+    op, reg, imm = spec
+    if op == "nop":
+        return "\tnop"
+    if op == "addu":
+        return "\taddu\t$%s,$%s,$zero" % (reg, imm)
+    return _r16_jdelay_line(spec)
+
+
+def _rule17_on_file(lines: list[str], anchor: str, jdelay=None):
+    """Rule 17 (merge-polarity; parked as the cc_post candidate since
+    draft16, window cron-202611041128; shipped cron-202611041358).
+    GCC 2.6.3 compiles the alloc-merge verdict as
+        beq $rX,$0,<far-err-label>   (fail branches FAR to the shared
+                                      err tail; body falls through)
+        <delay insn>
+        <continue body...>
+    while this retail family keeps the OPPOSITE polarity with the err
+    trampoline INLINE (retail g3org_jp 0x80068188-class: `bne
+    $rX,$0,+3` - success branches past - followed by the 2-word pair
+    `j <far-err-label>` + the err-path delay insn, then the join):
+        bne $rX,$0,$Lr17c      (inverted; the +3 offset == retail's -
+                                the join sits exactly past the pair)
+        <delay insn>           (KEPT verbatim - branch delays run
+                                unconditionally, so the built's own
+                                delay still executes on BOTH paths)
+        j <far-err-label>      (the fail path jumps where beq did)
+        <jdelay insn>          (the err-path delay from the marker -
+                                WithMode: a0=0, the err tail's
+                                setInTransfer(0) arg riding the
+                                trampoline's j delay)
+        $Lr17c:
+        <continue body...>
+    Semantics: identical to the built form - the success path skips
+    the pair, the fail path reaches the same tail through it.
+
+    The site is ANCHORED on the far-err label (marker arg; the rule-10
+    precedent - gcc-deterministic for the frozen source, anchor
+    mismatch = loud exit 3, never a silent skip): the file carries
+    many other `beq $r,$0,<label>` tests (loop back-edges, local
+    joins) that must NOT invert; only the verdict whose target is the
+    shared far err tail gets the trampoline. The j-delay content is
+    NOT derivable from the built site (it is the err tail's own first
+    call-arg setup hoisted into the trampoline) so it is REQUIRED from
+    the marker (`jdelay <op> <reg> <imm>`, op li|addiu|addu|nop) -
+    loud exit 3 without it.
+    Returns None when no site matches."""
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        m = _R17_BEQZ.match(s)
+        if m:
+            reg, zeroop, target = m.group(1), m.group(2), m.group(3)
+        else:
+            mz = _R17_BEQZ_SPELL.match(s)
+            if not mz:
+                continue
+            reg, zeroop, target = mz.group(1), "0", mz.group(2)
+        if target != anchor:
+            continue
+        if i + 1 >= len(lines):
+            continue
+        d = lines[i + 1].strip()
+        if not is_instruction(d):
+            continue  # empty delay slot / malformed site - no match
+        forward = False
+        for k in range(i + 2, len(lines)):
+            if lines[k].strip() == anchor + ":":
+                forward = True
+                break
+        if not forward:
+            continue
+        out = lines[:i]
+        out.append("\tbne\t$%s,$%s,$Lr17c" % (reg, zeroop))
+        out.append("\t" + d)
+        out.append("\tj\t" + anchor)
+        out.append(_r17_jdelay_line(jdelay))
+        out.append("$Lr17c:")
+        out.extend(lines[i + 2:])
+        return out
+    return None
+
+
+def _prepass_rule17(lines: list[str]) -> list[str]:
+    """Marker rule17 (`cc-post: rule17 <$Lerr> jdelay <op> <reg> <imm>`):
+    invert the anchored merge verdict + insert the err trampoline (see
+    _rule17_on_file); loud failure (exit 3) when nothing matches -
+    never a silent pass. Only ever fires on marker-carrying units."""
+    anchor, jdelay = RULE17_MERGE
+    fixed = _rule17_on_file(lines, anchor, jdelay=jdelay)
+    if fixed is not None:
+        return fixed
+    sys.stderr.write("cc_post rule 17: no merge site (beq $r,$0,%s with a "
+                     "filled forward delay) found\n" % anchor)
     sys.exit(3)
 
 
@@ -1223,7 +1339,7 @@ def main() -> None:
     global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
-    global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY
+    global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1253,6 +1369,23 @@ def main() -> None:
                 sys.exit(2)
             R16_JDELAY = (args[k + 1], args[k + 2], args[k + 3])
             del args[k : k + 4]
+    if "--rule17" in args:
+        k = args.index("--rule17")
+        # required payload: `<anchor> jdelay <op> <reg> <imm>` immediately
+        # after the flag (cc.sh passes the marker args verbatim, in
+        # position; a bare marker never reaches here - cc.sh loud-fails
+        # on it first)
+        if len(args) < k + 6 or args[k + 2] != "jdelay":
+            sys.stderr.write(
+                "usage: cc_post.py --rule17 <anchor> jdelay <op> <reg> <imm> ...\n")
+            sys.exit(2)
+        RULE17_MERGE = (args[k + 1], (args[k + 3], args[k + 4], args[k + 5]))
+        if RULE17_MERGE[1][0] not in _R17_JDELAY_OPS:
+            sys.stderr.write(
+                "cc_post rule 17: jdelay op must be li|addiu|addu|nop, got %s\n"
+                % RULE17_MERGE[1][0])
+            sys.exit(2)
+        del args[k : k + 6]
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")
@@ -1331,6 +1464,8 @@ def main() -> None:
         lines = _prepass_rule15(lines)
     if RULE16_VERDICT:
         lines = _prepass_rule16(lines)
+    if RULE17_MERGE is not None:
+        lines = _prepass_rule17(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:

@@ -171,6 +171,26 @@ if grep -q 'cc-post: rule16' "$SRC" 2>/dev/null; then
         POSTFLAGS="$POSTFLAGS --rule16"
     fi
 fi
+# rule17 composes with any primary flag above (independent grep): the
+# merge-polarity law - the alloc-merge `if (slot >= 16) goto err;`
+# verdict inverts to retail's bne-to-continue with the inline 2-word err
+# trampoline (j <err> + the err-path delay) inserted (rule 17;
+# SsVabOpenHeadWithMode 2026-11-04, see cc_post.py _rule17_on_file).
+# Required payload: `<$err-label> jdelay <op> <reg> <imm>` - the anchor
+# is the gcc-deterministic shared far-err label (rule-10 precedent,
+# $-spelled like the .mas.s label line), the jdelay is the trampoline's
+# err-path delay insn (op li|addiu|addu|nop; bare reg names - nothing
+# for the shell to expand). A bare marker LOUD-FAILS the build - a
+# silent pass here would be the r16-CLI-regression slip class again.
+if grep -q 'cc-post: rule17' "$SRC" 2>/dev/null; then
+    R17ARGS=$(grep -o 'cc-post: rule17.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4, $5, $6, $7, $8}')
+    if [ -n "$R17ARGS" ]; then
+        POSTFLAGS="$POSTFLAGS --rule17 $R17ARGS"
+    else
+        echo "cc.sh: cc-post: rule17 marker present without args (<\$err-label> jdelay <op> <reg> <imm>)" >&2
+        exit 3
+    fi
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).
