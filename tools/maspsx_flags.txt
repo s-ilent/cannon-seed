@@ -57,3 +57,11 @@ unit:func_80079758 --addiu-at on
 # cron-202611021243); the plain D_8017E107/D_80178A00 accesses keep the
 # direct lui/%lo form.
 unit:func_80069740 --addiu-at on
+
+# SsVabOpenHeadWithMode (g3org_jp, the VS_VH member body, 0x48864/0x448) -
+# same LIBSND sdk-body class as func_80069740: the D_8017E038[k] scan walk
+# (lui/addiu %lo into $at/addu/lbu 0) and the else-block D_8017E038[vb]
+# accesses take the aspsx < 2.30 4-insn at-split (judge-confirmed
+# cron-202611041013: addiu-at off folds %lo into the lbu immediate and the
+# loop loses its addiu word, skewing the verdict-2 bne offset one word).
+unit:SsVabOpenHeadWithMode --addiu-at on
