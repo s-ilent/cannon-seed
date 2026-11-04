@@ -308,12 +308,18 @@ judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
     draft24  260 w ( 0)       live 1096
     draft25  260 w ( 0)       live 1096  (".text 0x410 = 1040 unchanged")
     draft26  260 w ( 0)       live 1096  (the end_addr revert, see H.3)
+    draft27  260 w ( 0)       parked NEGATIVE (the m-web fifth-routing; the file builds machine-identical to draft26)
+    draft28  260 w ( 0)       live 1096  (the condition-chain re-shape; POSITIVE, see H.3)
 
 Every one of these numbers reproduced on cron-202611042128 from the
 committed drafts; re-derive them if a draft header ever disagrees.
 Offline aligned-match vs the row column (scripts/word_diff.py, the
 standalone-as config - cross-config numbers do NOT compare): draft25
-152/274, draft26 153/274 (the end_addr check's sltu now retail-class).
+152/274, draft26 153/274 (the end_addr check's sltu now retail-class),
+draft28 156/274 - the condition-chain re-shape, NET +3 at the same
+built-word count (253 on the word_diff built-words counter for both
+d26 and d28; the ledger column above uses the H.1 rebuild counter -
+the DELTAS agree, the absolute bases differ by the count method).
 
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
@@ -332,8 +338,9 @@ tree). Per run (the banked rehearsal pattern, draft6-10 precedent):
    rm src/SsVabOpenHeadWithMode.c` (never leave a non-exact c row; clean
    judge artifacts). The tree stays probes-only between runs.
 
-Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 is CUMULATIVE (each draft =
-the previous + one lever; 26 = 25 with the end_addr revert): a judge
+Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 28 is CUMULATIVE (each
+draft = the previous + one lever; 26 = 25 with the end_addr revert; 28
+= 26 + the condition-chain re-shape + the m re-home): a judge
 surprise at draft N re-opens N-1's region first. The row does NOT enter
 the tree until the H.5 landing gate.
 
@@ -392,7 +399,37 @@ judge reads remain only for the BUILT-form confirms):
   machine-identical to draft26 (pure record). The all-v0 window needs
   the full condition-chain re-shape (the 0x70 constant + m + the ver
   reads through one variable) - parked as the next form, touches the
-  a2/base-chain territory (H.4).
+  a2/base-chain territory (H.4). AUTHORED AND MEASURED as draft28 on
+  cron-202611042243 - see the draft28 bullet below.
+- **draft28 (authored + measured POSITIVE cron-202611042243, THE PARKED
+  NEXT FORM)**: the full-window condition-chain re-shape through the
+  $2 pin with explicit gotos (shifted = 0x70; if ((w0 & 0xFF) !=
+  shifted) goto m40; shifted = *(long *)(hv + 4); if (shifted < 5)
+  goto m40; shifted = 0x80; goto m_store; m40: shifted = 0x40;
+  m_store: D_80178894 = shifted) + the m RE-HOME (m = D_80178894 fresh
+  after the barrier, PINNED $3 - m's later uses ride the m-check
+  RELOAD exactly as retail: v1 feeds slt AND sll v0,v1,4 AND blez v1)
+  + the base def moved POST-WINDOW (its first use is the 78704 store;
+  pre-window it becomes the bne delay candidate and steals the slot
+  from the m40 fold - the measured v1 collateral). MEASURED:
+  word_diff 156/274 (d26 153) at the same 253 built words. CLOSED
+  OFFLINE: the 9-word m40 core - both branch delays carry the folded
+  ori $2,0x40 (the merged 1-insn fail block duplicated into both
+  delays and retargeted past), the fork falls through with NO j, the
+  standalone fail block gone, sh src = $2 (d26 had 4 wrong words
+  there) - AND the m-check compare lh $3 / slt $2,$3,$2 / bne $2,$0,
+  which CLOSES THE BANKED OPEN SLT-DST ITEM (the "slt/branch regs land
+  $3 as gcc's first-operand habit" open judge item from
+  cron-202611041628) OFFLINE. THE COUPLING, NOW MEASURED: the chain's
+  first def (ori $2,0x70) floats into the MAGIC-BEQ DELAY - the slot
+  retail fills with the a2-chain's addiu $a2,$a2,0x20 (judge-gated
+  draft25 open 4) - so the full 12/12 window closure stays CHAINED TO
+  THE A2-CHAIN LANDING exactly as the draft27 header predicted; the
+  d26 delay word was also wrong there (the base def), the slot count
+  is NEUTRAL. COST (recorded): the loop's p := base lost its v1 home
+  (m's pin holds $3 through the loop compare; the retail form needs
+  the loop-bound COPY choreography - draft23-bucket territory); idx
+  moved $7 -> $8 (wrong -> wrong); NET still +3.
 - **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
   region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
   through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
@@ -455,7 +492,10 @@ judge reads remain only for the BUILT-form confirms):
   should be the sll (tail+0) - when the a2-chain lever lands, the
   m-check site's pin re-reads (the delay-sll disappears, the target
   returns to tail+0, the tail keeps the full 5-word temp form); (2) the
-  bne src $3 vs retail $2 (the draft24 slt-dst open item, unchanged);
+  bne src $3 vs retail $2 (the draft24 slt-dst open item - RESOLVED
+  OFFLINE by draft28 cron-202611042243: the m re-home puts the compare
+  dst and the branch src in v0; the item stays open for the 21->26
+  ladder runs and closes when 28 judges);
   (3) the retail end_addr-check delay (built move s0,zero) is unbanked -
   one diff read; (4) THE A2/BASE CHAIN (the draft16 map's move a2,s3 ->
   addiu a2,a2,0x20 in the magic-beq delay -> move s3,a2 in the m-check
