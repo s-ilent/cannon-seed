@@ -1,12 +1,15 @@
-# DISC RETURN RUNBOOK (banked cron-20261026-2119; Phases C-G rewritten cron-20261101-0736)
+# DISC RETURN RUNBOOK (banked cron-20261026-2119; Phases C-G rewritten cron-20261101-0736; Phase H added cron-202611042128)
 
 The oracle-return window's exact sequence. Phases A/B are the standing
-mechanics; Phases C-F are the CURRENT parked-draft landing queue (the
+mechanics; Phases C-F are the OWNER-GATED/parked landing queue (the
 2026-10-27/28 phases landed with the oracle returns - the rule-1 n-load
 generalization is in tools/cc_post.py, GsMapModelingData sits as c rows in
 all six game yaml files - and the block-move twin pair stays parked at its
 banked ceilings, so the stale payloads were rewritten out per this file's
-own convention). Sources: docs/TASKS.md Log, the parked drafts' headers,
+own convention). Phase H is the CURRENT judge-prep queue: the five parked
+SsVabOpenHeadWithMode drafts (21-25) with the exact judge sequence, the
+per-draft expected pairs, and the landing gate. Sources: docs/TASKS.md
+Log, the parked drafts' headers (THE AUTHORITATIVE per-draft records),
 scripts/bm_unit_decode/STATE.md. Assumes the standard session start already
 ran (probe-first, rehydrate incl. the baseline_audit table, digest gate,
 reset to origin/main, worklog tail read).
@@ -256,6 +259,189 @@ Landing-critical facts (banked, preserve them in the C):
    yyyyMMdd-HHMM>) + the docs/TASKS.md window section in the same push;
    Discord report with `window <t:UNIX:f> -> <t:UNIX:f>` stamps.
 
+## Phase H - the SsVabOpenHeadWithMode landing (g3org_jp row 0x48864, extent 0x448; the five parked drafts 21-25; added cron-202611042128)
+
+The LIBSND VS_VH .text+0x90 member body: vab slot allocator + VH head
+parser + SPU placer. Identity PROVEN (sdk_members.py unique placement +
+sig-db agree x8); the full decode + shape-law ladder is banked in
+docs/TASKS.md (cron-202611031258 -> cron-202611042013) and in each draft
+header - the headers are the authoritative records, this phase carries the
+SEQUENCE. Ladder state: draft1 216/226 @ 904 -> draft20 151/274 @ 1096
+(SIZE-exact vs the row, judged live at cron-202611041243); drafts 21-25
+attacked the remaining levers offline through the outage and are parked
+JUDGE-DEFERRED (oracle down since 2026-11-04 ~05:59 UTC). Row facts: the
+g3org_jp yaml row [0x48864, asm, func_80068064] (config/splat.g3org_jp.yaml
+line 723); the pinned-member entry `SsVabOpenHeadWithMode = 0x80068064; //
+type:func (pinned member row)` in config/symbols.g3org_jp.txt (line 255)
+and the registrar src/g3org_jp/func_80068030.c call re-point are ALREADY
+committed (453fa4ed) - the landing changes ONLY the yaml row + the src
+addition (the landed siblings SsVabOpenHead/SsVabOpenHeadSticky kept their
+pins; this one keeps its too).
+
+### H.1 - the offline lever ledger (validated cron-202611042128, all six drafts rebuild)
+
+The outage-window measurement method, reproducible on any clean tree with
+no baselines and no oracle:
+
+    STOP_AT_ASM=1 MASPSX_UNIT_FLAGS="--addiu-at on" \
+      tools/cc.sh -o /tmp/dN.o probes/gcc263/SsVabOpenHeadWithMode_draftN.c
+    # -> /tmp/dN.mas.s; then either:
+    #  (a) draft-vs-draft lever isolation:
+    diff /tmp/dN-1.mas.s /tmp/dN.mas.s          # delta must be EXACTLY the lever
+    #  (b) region word compare vs the retail row column:
+    LD_LIBRARY_PATH=$TOOLROOT/usr/lib/x86_64-linux-gnu \
+      python3 scripts/word_diff.py /tmp/dN.mas.s \
+      asm/g3org_jp/nonmatchings/func_80068064.s 0x80068064 0x800684AC
+
+THE SCALE LAW (banked cron-202611042128, measured): the offline .text
+counts the UNLINKED .o - every bare-symbol data access (the D_ statics,
+the _spu_/SpuMalloc calls) is one word + relocs; the live judge's
+mini-link expands the HI16/LO16 pairs, so LIVE SIZE = offline words x 4 +
+14 on this unit (draft20: offline 260 w / 1040 B, live 274 w / 1096 B =
+the exact 0x448 row). NEVER compare an offline absolute SIZE to a live
+judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
+
+    draft20  260 w (1040 B)   live 1096  (the judged anchor, cron-202611041243)
+    draft21  262 w (+2)       live 1098 expected (the rule17 trampoline)
+    draft22  262 w ( 0)       live 1098 held   (the slt re-shape is reg-neutral)
+    draft23  260 w (-2)       live 1096 again  (the de-share funds the trampoline)
+    draft24  260 w ( 0)       live 1096
+    draft25  260 w ( 0)       live 1096  (".text 0x410 = 1040 unchanged")
+
+Every one of these numbers reproduced on cron-202611042128 from the
+committed drafts; re-derive them if a draft header ever disagrees.
+
+### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
+
+Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
+ratchets 948/538 at the cron-202611042013 rewrite - recompute from the
+tree). Per run (the banked rehearsal pattern, draft6-10 precedent):
+
+1. `cp probes/gcc263/SsVabOpenHeadWithMode_draftN.c src/SsVabOpenHeadWithMode.c`
+2. yaml line 723: `- [0x48864, asm, func_80068064]` ->
+   `- [0x48864, c, SsVabOpenHeadWithMode]`
+3. `python3 tools/judge_unit.py g3org_jp SsVabOpenHeadWithMode` (~2 s,
+   live-only; verdict EXACT / DIFF n/total words / SIZE built vs row)
+4. Read the first-diff region against the draft's expected pairs (H.3);
+   bank the verdict + the new byte facts in the draft header.
+5. REVERT: `git checkout -- config/splat.g3org_jp.yaml &&
+   rm src/SsVabOpenHeadWithMode.c` (never leave a non-exact c row; clean
+   judge artifacts). The tree stays probes-only between runs.
+
+Run order 21 -> 22 -> 23 -> 24 -> 25 is CUMULATIVE (each draft = the
+previous + one lever): a judge surprise at draft N re-opens N-1's region
+first. The row does NOT enter the tree until the H.5 landing gate.
+
+### H.3 - the per-draft expected pairs and open judge items
+
+- **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
+  region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
+  through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
+  bnez-near), the built delay `addu $4,$19,$zero` KEPT verbatim, the
+  2-word err trampoline `j $L19` + the marker jdelay inserted before the
+  join. OPEN: (1) the jdelay op spelling - the marker says `addu 4 0`
+  (gcc 2.6.3's zero-arg spelling, 0x00801025) but retail's actual word may
+  be li (0x24040000) - one diff read decides, the marker arg re-spells;
+  (2) SIZE 1098 = +2 until a tail lever sheds 2 (draft23 does); (3) the
+  err-tail companion - if retail hoisted the a0=0 INTO the trampoline,
+  retail's err-tail jal delay may be a nop (separate one-site follow-up).
+- **draft22 (the slt signed re-shape, the draft17 byte facts)**: the
+  backfill-loop address holders move from `long *` to signed `long` -
+  expect slt at the loop compares (retail `slt v0,a3,a1` / `slt v0,a1,t0`)
+  and at the 0x80000 check, ALL FOUR sltu->slt with zero collateral; the
+  draft18-closed store->reload window stays byte-identical. Reg SELECTION
+  still differs (built $5/$8/$7 vs retail a3/a1/t0) - NOT a draft22 item,
+  the reg-home chain is later. OPEN: the rule17 anchor $L19 may renumber
+  with the source edit (re-pin the marker if gcc's err label moved - the
+  rule-10 precedent; cc_post loud-fails exit 3 on anchor mismatch).
+- **draft23 (the pre-loop dst-reg/sharing form, the 29-word
+  0x80068258..0x800682C8 bucket)**: three sub-levers - (a) the nprogs
+  pre-loop load dst rides the $2 pin's third web (`lhu $2,18($4)` feeding
+  `tp += shifted << 9`), (b) the end/ap de-share materializes ap DIRECTLY
+  (`addiu a1,sp,0x10`), (c) the t0 bound pins the single pre-loop home
+  (`addiu $8,$sp,1040`; end falls to a3). Expected built pre-loop word
+  forms: lhu $2,18($4) / lbu $20,22($4) / sll $2,$2,9 / addu $6,$6,$2 /
+  addu $5,$sp,16 / sll $2,$20,2 / addu $7,$5,$2 / addu $8,$sp,1040 /
+  slt $2,$5,$8 / beq $2,$0,<exit> / addu $16,$0,$zero (delay) ... slt
+  $2,$7,$5 / bne $2,$0,<skip> / nop ... slt $2,$5,$8 / bne $2,$0,<head> /
+  addu $6,$6,2 (delay). OPEN: (1) the nv load dst s4 home is UNBANKED
+  retail-side (one diff read; if it differs, one more pin); (2) the bound
+  remat COUNT - the pin forces the home, not the count: a second addiu
+  $8,$sp,1040 at the entry test = +1 word (SIZE 1097-class, accounting
+  shifts); (3) end's a3 home is gcc's free choice - one diff read decides
+  the next pin. The rule17 anchor + the rule16 verdict are UPSTREAM of
+  every edit (loud-fail sentinels).
+- **draft24 (the m-check nprogs FIRST-READ home flip)**: the second
+  nprogs read rides the $2 pin too - expected pair against the built
+  lhu $3,18($4) / lh $2,D_80178894 / nop / slt $2,$2,$3:
+  `lhu $2,18($4) / lh $3,D_80178894 / nop / slt $2,$3,$2`. OPEN:
+  (1) whether the m reload lands $3 unpinned or needs the pin - RESOLVED
+  OFFLINE in the draft25 build: it lands $3 UNPINNED, matching the
+  banked retail v1 home (one judge diff read confirms); (2) the 0x70/ver
+  window upstream is NOT fully banked - if the ver/slti window moves,
+  the cascade is the next lever, NOT a regression; (3) four disjoint
+  webs now share the $2 pin (vb extend, both nprogs reads, mode test) -
+  all dead-at each next def, the draft17/23 reuse precedent.
+- **draft25 (the LAST in-place err-path extend -> the TEMP form, the
+  shared fail tail at built 0x2ec = retail 0x8006834C)**: the tail
+  machine stream must read sll v0,s2,16 / sra v0,v0,16 / lui at / addu
+  at,at,v0 / sb EXACTLY (the draft16 map class fact); the gcc label $L53
+  sits between the tail's sll and sra - the end_addr path falls through
+  the tail's own sll, the m-check bne targets $L53 (the sra) and feeds
+  $2=slot<<16 from its OWN delay slot (the pre-existing hoisted OK-path
+  sll16). Region residual: 2 wrong words (the delay word + the bne word).
+  OPEN (the residual singles + the chain): (1) the bne target offset +1 -
+  built lands at the sra (tail+1) using the delay-sll; retail's banked
+  delay = the a2-chain `move s3,a2` (NOT an sll) so retail's target
+  should be the sll (tail+0) - when the a2-chain lever lands, the
+  m-check site's pin re-reads (the delay-sll disappears, the target
+  returns to tail+0, the tail keeps the full 5-word temp form); (2) the
+  bne src $3 vs retail $2 (the draft24 slt-dst open item, unchanged);
+  (3) the retail end_addr-check delay (built move s0,zero) is unbanked -
+  one diff read; (4) THE A2/BASE CHAIN (the draft16 map's move a2,s3 ->
+  addiu a2,a2,0x20 in the magic-beq delay -> move s3,a2 in the m-check
+  bnez delay -> the 78704 sw a2) is JUDGE-GATED on the a0
+  re-materialization question: retail must copy vh back to a0 after the
+  setInTransfer calls clobber it (the banked lhu 0x12(a0)/lbu
+  0x16(a0)/lw 0x4(a0) read homes demand it) but NO banked slot holds
+  that copy, and the built's copy occupies the merge delay the chain's
+  move a2,s3 needs - any offline authoring must delete-or-relocate the
+  a0 copy, a semantic gamble the judge diff must arbitrate. The map is
+  banked in the draft25 header (open judge item 4) - the judge window
+  reads it directly.
+
+### H.4 - after draft25 (the same window, oracle up)
+
+1. The tail-loop levers (the 66-word 0x80068160-class region): the live
+   judge dump is the prerequisite - `build/judge/*.mas.s` from the
+   draft25 run + the row .s give the retail-form map. DO NOT author
+   blind (the count-masking lesson, cron-202611041128: VA-to-VA diffs
+   cannot see content wins behind a skew).
+2. The a2/base chain per H.3 draft25 item 4 - judge diff open, one run.
+3. LAND (H.5) only when the judge verdict is EXACT.
+
+### H.5 - the landing gate (all of it, or nothing)
+
+- Judge EXACT on the staged row (H.2 step 3) - a DIFF verdict never
+  lands; the yaml flip and the src addition land in the SAME commit.
+- `make verify TARGET=g3org_jp` GREEN (whole-image; the row's 0x448 must
+  not overlap the next row 0x48CAC - SIZE 1096 exact, which is why the
+  trampoline +2 must stay funded by the de-share -2, H.1).
+- The registrar needs NO edit (453fa4ed already re-pointed it); the
+  pinned-member entry STAYS (the landed-sibling precedent).
+- `python3 -m unittest discover -s tests` GREEN; ratchets recomputed from
+  the tree (`make ratchets` - the arbiter; refunds lower the baseline in
+  the SAME commit); commit type: match; then the docs/TASKS.md window
+  section in the same push.
+- The seven region twins AFTER the g3org_jp landing, one per window
+  minimum: g3org_eu 0x493D4, g3_jp 0x4B3C8, g3_eu 0x4BF80, sces_00269
+  0x24990, slps_00270 0x24974, mainmenu_eu 0x61564, mainmenu_jp 0x609E4 -
+  all extent 0x448; rules 15+16 + the three wave pins carry IF the
+  families match; each twin's addiu-at class checks against its own
+  flags scope; per-target D_ extern names from each target's own asm
+  (g3_jp's set: D_8016AA50/D_8016AAB8/D_8016AAFC/D_8016ABE0/D_80170384/
+  D_80171E2C/D_80171E6C/D_80171E70/D_80171EB8).
+
 ## Standing gotchas
 
 - Never commit: PAT, disc images, baselines, extracted assets. The
@@ -271,6 +457,21 @@ Landing-critical facts (banked, preserve them in the C):
 - Terminal display eats literal "[m" bytes - byte-scan before any
   'repair'; never casual `splat split`; kill stray verify/build loops
   before landing.
+- **Commit messages with `$` tokens (banked cron-202611042013, hit
+  live)**: unescaped `$2` in a commit message expands to EMPTY at the
+  shell layer (the draft25 "double  pin" log artifact). Escape `\$` in
+  message text, or spell registers without the `$`. Byte-scan any pushed
+  message that carried a `$` (`git log --format=%B -1 | grep -c '\$2'`);
+  the fix is re-escaping in the FOLLOWING commit, never a force-push to
+  main.
+- **Offline vs live SIZE scales (banked cron-202611042128)**: a
+  compile-only `.mas.s` assembles to fewer words than the live judge
+  reports for the SAME source - the unlinked .o keeps each bare-symbol
+  data access as one word + relocs, and the judge's mini-link expands
+  the HI16/LO16 pairs. On the SsVabOpenHeadWithMode unit the constant
+  is +14 words (offline 260 w / 1040 B vs live 1096 B). Only same-path
+  numbers compare: offline deltas vs offline deltas, live SIZE vs the
+  row extent (Phase H.1 carries the ledger).
 - Wave landings: the wave104 header shape (one placeholder mention per
   file) applies at template + gen source before landing.
 - The sdk_members / sdk_anchors / sdk_curated regen trio is
