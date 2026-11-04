@@ -292,3 +292,21 @@ Landing-critical facts (banked, preserve them in the C):
   + Discord report with <t:UNIX:f> window stamps. The exec-bit dance is
   dead: cc.sh / witness_check.sh / rehydrate.sh carry the executable bit
   IN the index.
+- **Media mortality (banked cron-202611041358, hit live)**: ALL THREE
+  baseline recovery media live in the same rolled-back layer - the repo's
+  gitignored `baselines/`, the `disc_*_true/` extractions ("the third
+  recovery medium", cron-202611041128), and the `disk/` CHDs. The
+  2026-11-04 05:59 UTC rollback took ALL of them at once while the
+  2026-11-01 disc links were past their ~24-35h life (both HEAD 404) -
+  the first full oracle outage. Consequences: (1) a window that arrives
+  to a full-loss state must NOT attempt baseline reconstruction from
+  anything local - the oracle is DOWN until Silent issues fresh links,
+  and that window's Discord report MUST carry the fresh-link request
+  alongside its offline work (Law Zero: the request is not a hold);
+  (2) judge-deferred work is the productive offline lane - author the
+  draft + prove the shape through the compile-only cc.sh path (no yaml
+  flip, no baseline), bank the open judge items in the draft header,
+  and park it; (3) `config/sha1/<t>.sha1` + the banked per-file hashes
+  in the worklog are the ONLY durable oracle identity - they survive
+  in-repo and let the next window's witness check detect the woven set
+  instantly (judge_unit's baseline_gate refuses the wrong build loudly).
