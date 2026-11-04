@@ -249,6 +249,15 @@ RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # emits beq-to-tail with the dead -1 in the branch
                          # delay, retail keeps bne-to-continue with the fail
                          # j+li inline; see _prepass_rule16)
+R16_JDELAY = None        # rule 16 j-delay override (`jdelay <op> <reg> <imm>`
+                         # marker args): the fail-materialize insn emitted in
+                         # the inserted j's delay slot. Default None = the
+                         # built branch delay line verbatim (idempotent when
+                         # the built delay IS the fail li); the copy-delay
+                         # class (a saved-reg copy rides the verdict delay,
+                         # e.g. WithMode's addu $17,$16,$zero) REQUIRES it -
+                         # the copy must stay in the bne delay, the li is
+                         # new.
 ADDIU_IMM = False       # normalize `addu $r,$s,imm` -> `addiu $r,$s,imm` (the
                         # sdk units' immediate-form law: retail addu keeps
                         # register-only sums, every immediate sum is addiu)
@@ -702,6 +711,7 @@ def _prepass_rule15(lines: list[str]) -> list[str]:
 
 
 _R16_BEQ = re.compile(r"^beq\t\$(\w+),\$(\w+),(\S+)$")
+_R16_COPY = re.compile(r"^addu\t\$(\w+),\$(\w+),\$(?:0|zero)$")
 _R16_LI = re.compile(r"^(?:addiu|li)\t\$(\w+),(?:\$(?:0|zero),)?-(?:1|0x1)$")
 _R16_CLOBBERED = frozenset(
     [str(n) for n in range(2, 16)] + ["24", "25", "v0", "v1",
@@ -709,7 +719,20 @@ _R16_CLOBBERED = frozenset(
      "t7", "t8", "t9"])
 
 
-def _rule16_on_file(lines: list[str]):
+def _r16_jdelay_line(spec: tuple[str, str, str]) -> str:
+    """Materialize the rule16 j-delay insn from marker args
+    (`jdelay <op> <reg> <imm>`; the remnant-ori1 arg precedent - bare
+    reg names, no $, so the shell never expands them)."""
+    op, reg, imm = spec
+    if op == "li":
+        return "\tli\t$%s,%s" % (reg, imm)
+    if op == "addiu":
+        return "\taddiu\t$%s,$zero,%s" % (reg, imm)
+    sys.stderr.write("cc_post rule 16: jdelay op must be li|addiu, got %s\n" % op)
+    sys.exit(3)
+
+
+def _rule16_on_file(lines: list[str], jdelay=None):
     """Rule 16 (verdict-polarity; found 2026-11-04, g3org_jp
     SsVabOpenHeadWithMode 0x80068064, the LIBSND VS_VH WithMode member -
     window cron-202611040358). GCC 2.6.3 compiles the early verdict
@@ -736,10 +759,19 @@ def _rule16_on_file(lines: list[str]):
         $Lr16c: <continue body...>
     Semantics: identical to the built form - the delay li is preserved
     verbatim, the equal path reaches the same tail with the same vZ.
-    Fires on the FIRST `beq` + `(addiu|li) $c,-1` run whose target label
-    is defined later in the file and whose $c is call-clobbered (the
-    fail value must not survive into a saved register); returns None
-    when no site matches."""
+    Fires on the FIRST `beq` + delay run whose target label is defined
+    later in the file, in TWO delay classes:
+      A. `(addiu|li) $c,-1` with $c call-clobbered (the fail value rides
+         the delay dead on the continue path) - the j delay duplicates
+         the built delay line verbatim (idempotent: the fail tail
+         re-materializes it), or the R16_JDELAY marker insn when given.
+      B. `addu $rD,$rS,$zero` with $rD NOT call-clobbered (a saved-reg
+         copy rides the delay - WithMode draft7b form: s1 = the vabid
+         copy the slot assign reads downstream) - the j delay MUST come
+         from R16_JDELAY (loud exit 3 without it): the copy stays in the
+         bne delay verbatim and the fail li is new, so duplicating the
+         copy into the j delay would diverge from retail.
+    Returns None when no site matches."""
     for i, ln in enumerate(lines):
         m = _R16_BEQ.match(ln.strip())
         if not m:
@@ -749,9 +781,19 @@ def _rule16_on_file(lines: list[str]):
             continue
         d = lines[i + 1].strip()
         md = _R16_LI.match(d)
-        if not md:
-            continue
-        if md.group(1) not in _R16_CLOBBERED:
+        mc = _R16_COPY.match(d)
+        if md and md.group(1) in _R16_CLOBBERED:
+            jd = "\t" + d
+            if jdelay is not None:
+                jd = _r16_jdelay_line(jdelay)
+        elif mc and mc.group(1) not in _R16_CLOBBERED:
+            if jdelay is None:
+                sys.stderr.write(
+                    "cc_post rule 16: copy-delay verdict needs jdelay args "
+                    "(`jdelay <op> <reg> <imm>`)\n")
+                sys.exit(3)
+            jd = _r16_jdelay_line(jdelay)
+        else:
             continue
         forward = False
         for k in range(i + 2, len(lines)):
@@ -764,7 +806,7 @@ def _rule16_on_file(lines: list[str]):
         out.append("\tbne\t$%s,$%s,$Lr16c" % (m.group(1), m.group(2)))
         out.append("\t" + d)
         out.append("\tj\t" + target)
-        out.append("\t" + d)
+        out.append(jd)
         out.append("$Lr16c:")
         out.extend(lines[i + 2:])
         return out
@@ -776,7 +818,7 @@ def _prepass_rule16(lines: list[str]) -> list[str]:
     verdict (see _rule16_on_file); loud failure (exit 3) when nothing
     matches - never a silent pass. Only ever fires on marker-carrying
     units."""
-    fixed = _rule16_on_file(lines)
+    fixed = _rule16_on_file(lines, jdelay=R16_JDELAY)
     if fixed is not None:
         return fixed
     sys.stderr.write("cc_post rule 16: no inverting verdict (beq + li -1) found\n")
@@ -1181,7 +1223,7 @@ def main() -> None:
     global REMANT_JOIN, REMANT_EXIT, REMANT_MODE
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
-    global RULE15_INTERLEAVE, RULE16_VERDICT
+    global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1200,7 +1242,17 @@ def main() -> None:
         args.remove("--rule15")
     if "--rule16" in args:
         RULE16_VERDICT = True
-        args.remove("--rule16")
+        k = args.index("--rule16")
+        args.pop(k)
+        # optional `jdelay <op> <reg> <imm>` payload immediately after the
+        # flag (cc.sh passes the marker args verbatim, in position)
+        if len(args) > k and args[k] == "jdelay":
+            if len(args) < k + 4:
+                sys.stderr.write(
+                    "usage: cc_post.py --rule16 jdelay <op> <reg> <imm> ...\n")
+                sys.exit(2)
+            R16_JDELAY = (args[k + 1], args[k + 2], args[k + 3])
+            del args[k : k + 4]
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")

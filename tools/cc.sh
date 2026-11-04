@@ -161,7 +161,15 @@ fi
 # inline (rule 16; SsVabOpenHeadWithMode 2026-11-04, see cc_post.py
 # _rule16_on_file).
 if grep -q 'cc-post: rule16' "$SRC" 2>/dev/null; then
-    POSTFLAGS="$POSTFLAGS --rule16"
+    # optional payload: `jdelay <op> <reg> <imm>` - the fail li emitted in
+    # the inserted j's delay slot (copy-delay class; the remnant-ori1 arg
+    # precedent - bare reg names, no $, nothing for the shell to expand)
+    R16ARGS=$(grep -o 'cc-post: rule16.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4, $5, $6}')
+    if [ -n "$R16ARGS" ]; then
+        POSTFLAGS="$POSTFLAGS --rule16 $R16ARGS"
+    else
+        POSTFLAGS="$POSTFLAGS --rule16"
+    fi
 fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
