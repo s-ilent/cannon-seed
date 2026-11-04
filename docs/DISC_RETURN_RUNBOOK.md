@@ -430,6 +430,19 @@ judge reads remain only for the BUILT-form confirms):
   (m's pin holds $3 through the loop compare; the retail form needs
   the loop-bound COPY choreography - draft23-bucket territory); idx
   moved $7 -> $8 (wrong -> wrong); NET still +3.
+- **draft29 (authored + measured cron-202611042243, same window)**: ONE
+  pin - the w0>>8 temp through $2 (w0hi = w0 >> 8; if (w0hi !=
+  0x564142)). FOUR magic-check words flip retail-exact (srl dst v0,
+  the constant lui/ori in v1, the beq v0,v1 pair) - the diff vs d28 is
+  EXACTLY those four words - but the aligned-match metric STAYS
+  156/274 (the wins absorb into difflib's alignment: the
+  count-masking class; region-exactness is the real goal, the metric
+  is a lower bound). The w0 -> $5 pin was authored, measured 155/274
+  and REJECTED: the pin evicts the early split-temp webs from $5
+  (five words lost vs four gained - gcc treats an explicit register
+  variable as a whole-function packing reservation for the other
+  pseudos); twin-law: pin $5-class regs ONLY when the early traffic
+  is already pinned away. H.2 order 21 -> 28 -> 29.
 - **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
   region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
   through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
