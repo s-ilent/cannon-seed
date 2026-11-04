@@ -307,9 +307,13 @@ judge SIZE; the offline DELTAS are the lever ledger and are scale-exact:
     draft23  260 w (-2)       live 1096 again  (the de-share funds the trampoline)
     draft24  260 w ( 0)       live 1096
     draft25  260 w ( 0)       live 1096  (".text 0x410 = 1040 unchanged")
+    draft26  260 w ( 0)       live 1096  (the end_addr revert, see H.3)
 
 Every one of these numbers reproduced on cron-202611042128 from the
 committed drafts; re-derive them if a draft header ever disagrees.
+Offline aligned-match vs the row column (scripts/word_diff.py, the
+standalone-as config - cross-config numbers do NOT compare): draft25
+152/274, draft26 153/274 (the end_addr check's sltu now retail-class).
 
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
@@ -328,12 +332,59 @@ tree). Per run (the banked rehearsal pattern, draft6-10 precedent):
    rm src/SsVabOpenHeadWithMode.c` (never leave a non-exact c row; clean
    judge artifacts). The tree stays probes-only between runs.
 
-Run order 21 -> 22 -> 23 -> 24 -> 25 is CUMULATIVE (each draft = the
-previous + one lever): a judge surprise at draft N re-opens N-1's region
-first. The row does NOT enter the tree until the H.5 landing gate.
+Run order 21 -> 22 -> 23 -> 24 -> 25 -> 26 is CUMULATIVE (each draft =
+the previous + one lever; 26 = 25 with the end_addr revert): a judge
+surprise at draft N re-opens N-1's region first. The row does NOT enter
+the tree until the H.5 landing gate.
 
 ### H.3 - the per-draft expected pairs and open judge items
 
+THE CRON-202611042128 OFFLINE AUDIT (the committed retail row dump
+asm/g3org_jp/nonmatchings/func_80068064.s is the retail truth - every
+RETAIL-form question below was answerable without the oracle; the live
+judge reads remain only for the BUILT-form confirms):
+- draft21 open 1 RESOLVED: retail's rule17 trampoline jdelay =
+  `addu $a0,$zero,$zero` (0x8006819C) - the marker's `addu 4 0` form,
+  NOT li; no re-spell needed.
+- draft22 open set RESOLVED + ONE REGRESSION FOUND: retail's loop
+  compares are slt (0x800682C8 pre-check/guard, 0x80068300 back-edge -
+  the re-shape's real wins) but the 0x80000 SPU-bound check at
+  0x8006836C is retail SLTU (`lui $v0,0x0008 / sltu $v0,$v0,$v1`); the
+  draft22 header mis-cited 0x80068300 for that check. end_addr reverts
+  to unsigned in draft26 (the offline delta is EXACTLY the one-word
+  slt->sltu flip, nothing else moved).
+- draft23 open 1 RESOLVED: retail nv home = s4 (`lbu $s4,0x16($a0)` at
+  0x800682B4); the built's $20 IS s4 - already retail-exact. Open 3
+  RESOLVED retail-side: retail end home = a3 (`addu $a3,$v0,$a1` at
+  0x800682C4, end = (nv<<2) + ap); the built draft23 lands $7 = a3.
+  Open 2 (the bound remat count): retail materializes the bound ONCE
+  (`addiu $t0,$sp,0x410` at 0x8006829C only).
+- draft24 open 1 CONFIRMED: retail m-check pair = `lhu $v0,0x12($a0)` /
+  `lh $v1,D_80178894` / nop / `slt $v0,$v1,$v0` (0x80068218..28) -
+  exactly the draft24 expected pair. Open 2 (the 0x70/ver window)
+  retail map banked: andi $v1,$a1,0xFF / ori $v0,0x70 / bne with the
+  ori-0x40 delay / lw $v0,4($a0) / nop / slti $v0,$v0,5 / bnez with the
+  ori-0x40 delay / ori $v0,0x80 fork / sh $v0,D_80178894.
+- draft25 open 3 RESOLVED: retail's end_addr-check beqz delay =
+  `addu $s0,$zero,$zero` (0x80068374); the built already emits
+  `addu $16,$0,$zero` = the same word. Open 1 SHARPENED: retail's
+  m-check bnez (0x8006822C) targets .L80068378 whose FIRST word is
+  `addu $a0,$zero,$zero` (the a0=0 pre-zero) BEFORE the tail's
+  sll $v0,$s2,16 / sra $v0,$v0,16 - the built's merged tail starts at
+  the sll (its a0=0 rides the jdelays). Open 4 (the a2/base chain)
+  FULLY RETAIL-CONFIRMED: addu $a2,$s3,$zero @ 0x80068194 (the
+  ALLOC-merge bnez delay, the rule17 site) / addiu $a2,$a2,0x20 @
+  0x800681CC (the magic-beq delay) / addu $s3,$a2,$zero @ 0x80068230
+  (the m-check bnez delay) / sw $a2 at 0x80068248 (D_80178704),
+  0x800682AC (D_801787B0), 0x80068324 (D_8017FB6C) - AND THE A0
+  RE-MATERIALIZATION SLOT IS FOUND: retail `addu $a0,$s3,$zero` @
+  0x800681B8, POST-JOIN STRAIGHT-LINE (after the D_8017876C store,
+  before the magic lw $a1,0($a0)), NOT a delay slot; the built's a0
+  copy rides the merge delay and its vh reads go through $19/s3 (lw
+  $6,0($19)) where retail reads through a0 - the chain lever's
+  steering target: merge delay -> a2=s3, a0 copy -> post-join, vh
+  reads -> a0. Still judge-gated (gcc 2.6.3 must be steered to
+  re-import a0 post-join), but the map is complete.
 - **draft21 (rule17 merge-polarity, the 51-word 0x80068188..0x80068250
   region)**: the alloc-merge `beq $2,$0,$L19` (fail far, body falls
   through) inverts to `bne $2,$0,$Lr17c` (+3 by construction = retail's
@@ -417,7 +468,11 @@ first. The row does NOT enter the tree until the H.5 landing gate.
    draft25 run + the row .s give the retail-form map. DO NOT author
    blind (the count-masking lesson, cron-202611041128: VA-to-VA diffs
    cannot see content wins behind a skew).
-2. The a2/base chain per H.3 draft25 item 4 - judge diff open, one run.
+2. The a2/base chain per H.3 draft25 item 4 - judge diff open, one run;
+   the retail map is complete (the chain steps + the a0 post-join slot,
+   cron-202611042128 audit) and the steering target is concrete:
+   merge delay -> a2=s3, a0 copy -> post-join straight-line, vh reads
+   -> a0.
 3. LAND (H.5) only when the judge verdict is EXACT.
 
 ### H.5 - the landing gate (all of it, or nothing)

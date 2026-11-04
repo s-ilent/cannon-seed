@@ -17,6 +17,11 @@
  * window survives byte-identical; the exact count resolves at the
  * judge. The rule17 anchor ($L19) may renumber with the source edit -
  * re-pin the marker if gcc's err label moves (the rule-10 precedent).
+ * CORRECTION (cron-202611042128 audit, see draft26): the end_addr
+ * HALF of this lever is a REGRESSION - the header mis-cited 0x80068300
+ * (the loop back-edge, correctly slt) for the 0x80000 check; the real
+ * check at 0x8006836C is retail SLTU. The loop-holder conversions
+ * STAND; end_addr reverts to unsigned in draft26.
  *
  * DRAFT 21 (cron-202611041358): THIS FILE = draft20 + `cc-post: rule17
  * $L19 jdelay addu 4 0` - the banked NEXT(1), the rule-17
