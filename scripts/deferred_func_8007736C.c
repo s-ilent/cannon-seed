@@ -68,6 +68,30 @@
  *        order does not drive it. Next: try an early dead use of outp
  *        before the pathv[0] read, or gcc 2.6.3 K&R register-param
  *        declarations (register ... asm() in the param list).
+ *    (5b) K&R REGISTER-PARAM PROBE kr1 MEASURED NEGATIVE (cron-202611060731,
+ *         live judge): gcc 2.6.3 DROPS the asm() register bindings on K&R
+ *         param declarations - the params reallocate (a0 landed s2 = level's
+ *         reg, import order a0-first = retail-INVERTED) and the whole
+ *         prologue re-lays (sw ra,0x4c vs retail 0x48). K&R is not the
+ *         import-order lever. Remaining candidates: a cc_post rule-15-family
+ *         extension matching THIS prologue family (no jal - the guard branch
+ *         leads), or an early real use of out before the path[0] read that
+ *         gcc cannot fold. The import-order block parks unless one of those
+ *         opens.
+ *    (5c) THE FRESH WORD-DIFF MAP (same window, live judge 117/186
+ *         REPRODUCED, offline 99/186): the residue decomposes as (i) the
+ *         prologue import order 0x00..0x70 (the parked (5)); (ii) the
+ *         component-loop/final_check insert-delete blocks 0x14..0xb8
+ *         (the built runs 189 vs 186 - the +3 SIZE lives here); (iii)
+ *         @0xc8 the -1-constant REGISTER CLASS (built bne $2,$22 vs retail
+ *         bne $2,$3 - the id==-1 test's constant home: s6 vs v1); (iv) the
+ *         branch DISPLACEMENT cascades (@0xf8 beq -8 vs -9 etc.) riding the
+ *         +3 size skew - NOT independent words; (v) @0xe8 the jal-0 vs
+ *         jal-leaf word is an OFFLINE ARTIFACT (extern reloc vs the
+ *         committed listing's resolved encoding - the live judge resolves
+ *         it). Next lever order: (iii) the -1 home (a source shape that
+ *         pins the -1 materialization to v1), then (ii) the component-loop
+ *         size, then (5) last (cosmetic count only if (ii)/(iii) land).
  *    (6) the s2 counter: the cache loop's i must reuse level's s2 (it
  *        does naturally) but built still holds +3 words (189 vs 186)
  *        - re-measure after (5): the residue sits in the loop head
