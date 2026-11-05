@@ -1337,3 +1337,60 @@ section - re-derive with the H.1 recipe before steering any draft39+.
   in the worklog are the ONLY durable oracle identity - they survive
   in-repo and let the next window's witness check detect the woven set
   instantly (judge_unit's baseline_gate refuses the wrong build loudly).
+
+THE SPURIOUS RULE16 FIRE + THE EDGE-FORM WAVE (cron-202611052113, oracle
+DOWN): the cron-202611051843 next-shape (the sltu-fail edge's branch form)
+OPENED AND CLOSED AS A CC_POST BUG, NOT A GCC SHAPE. The built region's
+[bne $2,$0,$Lr16c][delay total=0][j $L43][li $v0,-1][$Lr16c: tail] form -
+the "2-word skip pair the retail layout does not have" - is RULE16'S OWN
+OUTPUT SHAPE ($Lr16c is cc_post's label), fired spuriously on the sltu
+check. Ground truth: the early verdict's built region [bne $2,$3,$L2]
+[addu $17,$16 delay][j $L53][li -1 delay] carries NO $Lr16c label = rule16
+never touched it - the d53 else+goto trans_ok spelling already makes gcc
+emit the retail polarity NATIVELY (retail 0x800680A4 = bne $v0,$v1 /
+addu $s1,$s0 / j .L80068480 / addiu $v0,-1, structurally identical). The
+rule16 marker stayed in the header from the OLD spelling, so the prepass's
+first beq+class-B-delay match = THE SLTU CHECK, and gcc's native
+[beq $2,$0 -> $L43 (OK edge = retail's beqz form)][delay total=0][fail
+body falls through] got inverted into the skip-pair form.
+
+    draft56  1096 / 177   the source-spelling inversion attempt (if (ok)
+                          goto fb24_ok; with the fail body as fall-through)
+                          measured the IDENTICAL d53 region - the
+                          re-normalization was cc_post's, not gcc's; the
+                          experiment is the control that convicts rule16
+    draft57  1088 / 178*  d53 MINUS the rule16 marker: the check region
+                          returns to gcc's native [beq -> $L43][delay
+                          total=0][sll][sra][a0=0][clear][jal err] = THE
+                          FIRST RETAIL-SHAPED FORM; *the 178 = the
+                          word_diff artifact count (see the .extern
+                          finding); TRUE 181/274, linked 1088 = row - 2
+    draft58  1088 / 181   the array-form decl probe (extern ushort
+                          D_8017FB20[] + [0] derefs): the classification
+                          is NOT source-size-driven - the refs became
+                          `la $3,sym` = STILL 1-word gp-class in
+                          word_diff's view; NEGATIVE as a gp fix, but it
+                          strips the .extern size lines (see below)
+    draft59  1088 / 181   d57 + the new `cc-post: cc1-G0` marker (cc.sh):
+                          suppresses cc1's `.extern SYM,size` lines
+
+THE .EXTERN-SIZE / WORD_DIFF ARTIFACT (the wave's second finding, the
+instrument law): cc1 -G8 emits `.extern D_8017FB20, 2` size declarations
+(the psx small-data extern convention). The REAL build assembles at -G0
+(build.sh ASFLAGS + minilink ASFLAGS_BASE) and gas -G0 NEVER relaxes -
+threshold 0 - it expands bare-operand refs to the absolute lui/$at pair
+(draft59 .o hex proof: err dec = lui $2,%hi / lhu $2,%lo($2) / nop /
+addiu / lui $at / sh = retail's exact form). But WORD_DIFF-class
+instruments that assemble at gas's DEFAULT -G8 relax the size-declared
+symbols into 1-word gp-relative words the real build never emits: the
+"gp class" residuals (the FB20 dec class, the m-store/m-reload bare
+forms) banked in earlier H.1 rows are INSTRUMENT ARTIFACTS, not built
+words - draft57 178 vs draft59 181 measured on WORD-IDENTICAL .o files
+(the only text delta = the three .extern lines). LAW: word_diff.py must
+assemble with -G0 (the build's own ASFLAGS law) and the H.1 rows whose
+drafts carry .extern size lines need re-baselining before the counts are
+trusted to the word. NEXT WINDOW: the word_diff -G0 fix + the H.1
+re-baseline; then the TRUE -2 deficit (d57 = 1088 = row - 2 words with
+the check region clean - the words live in the m40/store region's big
+hunks, NOT the gp class); then the head-first position lever (the
+scheduler priority, [sll][sra][a0=0] vs retail [a0=0][sll][sra]).

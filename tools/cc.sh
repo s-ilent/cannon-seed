@@ -75,6 +75,20 @@ CC1FLAGS="$CC1FLAGS ${CC1FLAGS_EXTRA:-}"
 if grep -q 'cc-post: cc1-O1' "$SRC" 2>/dev/null; then
     CC1FLAGS="$CC1FLAGS -O1"
 fi
+# `cc-post: cc1-G0` - suppress cc1's `.extern SYM,size` declarations for
+# this unit (the psx small-data extern convention). Found 2026-11-05,
+# g3org_jp SsVabOpenHeadWithMode: cc1 -G8 emits `.extern D_8017FB20, 2`
+# size lines; gas -G0 never relaxes (threshold 0 -> it expands bare
+# operand refs to the absolute lui/$at pair retail shows), so the BUILD
+# words are identical with or without the lines - but WORD_DIFF-class
+# instruments that assemble at gas's default -G8 relax the size-declared
+# symbols into 1-word gp-relative forms the real build never emits
+# (draft57 178 vs draft59 181 on WORD-IDENTICAL .o files). The marker
+# keeps the .mas.s text honest for those instruments; the build-level
+# proof lives in the draft59 .o hex (err dec = lui/lhu materialized).
+if grep -q 'cc-post: cc1-G0' "$SRC" 2>/dev/null; then
+    CC1FLAGS="$CC1FLAGS -G0"
+fi
 
 # The Psy-Q cc1 wants preprocessed input (it rejects unstripped
 # comments), so run the bundled cpp first — same as the original
