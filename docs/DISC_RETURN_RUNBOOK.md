@@ -722,6 +722,48 @@ a fresh sandbox; a uniform -56 B across drafts = the knob, never the source):
   (the SIZE gate is already satisfied OFFLINE - 1096 = the row; the EXACT
   verdict stays live-only).
 
+THE HEAD-WORD GEOMETRY RE-READ (cron-202611051843, oracle DOWN - the
+queued "one-slot-late fix" opened and CLOSED as mis-stated; the word_diff
+decode of d53's merged region shows the true layout, and the fix needs a
+different shape than "reorder two statements"). The built (B) vs retail
+(R), sltu-check + merged region, running offset +6 (retail is +6 words
+from the upstream residuals by here):
+- BUILT: [sltu 0x2f0][bne $2,$0,+3 0x2f4][addu s0,a0,zero 0x2f8 = the
+  bne's DELAY, retail's word ALREADY PRESENT (the diff aligns B 0x2f8 ==
+  R 0x310)][j trampoline 0x2fc][li -1 0x300 (the m-fail entry's tail
+  jump + return value, laid out AFTER the sltu check)][sll 0x304][sra
+  0x308][a0=0 0x30c][lui/addiu/addu/sb 0x310-0x31c][jal 0x320][nop
+  0x324]. THE SLTU-FAIL BNE TARGETS +3 = THE SLL - the branch SKIPS the
+  head word entirely; the head a0=0 sits after the extend pair, reachable
+  only by fall-through from... nothing (the bne jumps PAST it to the
+  sll).
+- RETAIL: [sltu 0x308][beqz +0x12 0x30c (the sltu-FALSE edge branches
+  OVER the merged block to the FB24 path)][addu s0,a0,zero 0x310 = the
+  beqz's DELAY][a0=0 0x314 THE MERGED HEAD][sll 0x318][sra 0x31c][lui/
+  addiu/addu/sb 0x320-0x32c][jal 0x330][nop 0x334].
+- DELTAS vs the runbook's "one slot late" summary: (1) the built's
+  sltu-fail branch POLARITY+TARGET differ - built bne+3 lands at the sll
+  (the head word is BRANCH-SKIPPED, not merely reordered); (2) retail's
+  beqz-delay word (addu s0,a0,zero) EXISTS in the built too (the bne's
+  delay) - the diff aligns them - so the delay word is NOT a delta;
+  (3) the built's [j trampoline][li -1] pair sits between the delay word
+  and the extend pair, laid out after the sltu check - retail's
+  trampolines live elsewhere (the j-target words differ by the layout
+  shift, hunk @0x2f8/0x30c). ANALYTICAL CLOSES this window: the dead-def
+  route (total = (long)hv to reproduce the delay word) is DEAD - gcc
+  deletes dead defs before the scheduler ever sees them, so a source
+  statement can never materialize that word on demand; the d55 barrier
+  (+2 w/block) stays negative. NEXT SHAPES (the real geometry): the
+  sltu-fail edge must TARGET the head word (built bne+3 -> the a0=0,
+  i.e. the fail edge needs the same shape retail has - the beqz's taken
+  edge falling INTO the merged block head) AND the head word must emit
+  BEFORE the extend pair (the scheduler hoists the pair because its
+  chain sll->sra->addu->sb outranks a0=0->jal; the d49/d55 laws bound the
+  barrier options). The two residuals are now ONE coupled shape: the
+  sltu-fail edge's branch form + the merged head's first-insn priority.
+  d56 was forked, never measured (the dead-def close pre-empted it), and
+  removed - fork fresh from d53 with THIS map.
+
 THE REGION-TWIN DECODE PREP, STEP 1 (cron-202611051458, same window - the
 item queued since cron-202611050728): the eight copies of
 SsVabOpenHeadWithMode mapped and the twin-transfer law measured. The map
