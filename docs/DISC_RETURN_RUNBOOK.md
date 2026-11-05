@@ -722,6 +722,33 @@ a fresh sandbox; a uniform -56 B across drafts = the knob, never the source):
   (the SIZE gate is already satisfied OFFLINE - 1096 = the row; the EXACT
   verdict stays live-only).
 
+THE REGION-TWIN DECODE PREP, STEP 1 (cron-202611051458, same window - the
+item queued since cron-202611050728): the eight copies of
+SsVabOpenHeadWithMode mapped and the twin-transfer law measured. The map
+(curated + symbols; VA / rom / row file):
+g3org_jp 0x80068064/0x48864 (THE WORKED ROW, dedicated yaml row);
+g3org_eu 0x80068BD4/0x493D4, g3_jp 0x8006ABC8, g3_eu 0x8006B780,
+mainmenu_eu 0x80080D64, mainmenu_jp 0x800801E4/0x609E4 (interior of
+func_8008E714.s), sces_00269 0x80044190/0x24990 (interior of
+func_80049840.s), slps_00270 0x80044174/0x24974 (dedicated-label file
+asm/nonmatchings/func_80049824.s); extent 0x448 = 1096 B = the row, all
+eight. MEASURED: g3_jp/g3_eu/g3org_eu/mainmenu_eu are BYTE-IDENTICAL insn
+streams to g3org_jp (scripts/twin_words.py extraction, 0 word diffs) - the
+d53 form transfers 1:1, minilink-ready per VA. mainmenu_jp/sces/slps carry
+112 raw word diffs = per-target relocations (j/jal/branch displacements +
+lui/addiu %hi/%lo symbol pairs; scripts/twin_norm.py after j/jal/branch
+masking still shows 56/35 = the symbol-address words, no opcode-class
+delta visible). THE TRANSFER PROOF: minilink+word_diff of the d53 build
+against a twin's own symbols and row = mainmenu_jp 177/274 linked 1096,
+slps_00270 177/274 linked 1096 - the SAME verdict as the worked row. LAW:
+all eight copies are the same code up to relocation; d53's judge-prep
+extends to seven twins for free (one minilink run each with the target's
+rom override; the word_diff range = VA..VA+0x448); the remaining prep work
+is mechanical (the four identical twins' runs + sces), then the per-twin
+H.2 sequence when the oracle returns. TOOLS: scripts/twin_words.py (the
+insn-word extractor, any comment shape) + scripts/twin_norm.py (the
+relocation masker) committed alongside.
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
