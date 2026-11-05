@@ -45,6 +45,17 @@
  * the region is live for the head force ($4-pinned asm-def variant) and
  * the skip fusion (the d47 nesting without the duplication risk).
  *
+ * LIVE VERDICT (cron-202611052343, the disc_return re-witness window; H.2
+ * judge live, tree reverted probes-only after): SIZE-EXACT (1096 = row;
+ * no SIZE line in the verdict), DIFF 150/274 words - THE LIVE RECORD
+ * (draft20's live 151/274 beaten by one word; first diff 0x80068188
+ * built 032C0200 vs retail 033C0200, then the 0x80068194-0x81AC
+ * address-pair run). The offline -G0 instrument reads this file 179/274:
+ * the offline->live delta here = -29 (live BETTER; the draft20 class was
+ * +2) - the instrument gap is draft-shape-dependent and TWO-SIDED;
+ * H.4's judge-gated law extends to the instrument itself: only live
+ * counts for verdicts, the offline numbers stay the SELECTION metric.
+ *
  * DRAFT 38 (cron-202611050613, same window): THIS FILE = draft37 + THE
  * END= OPERAND-ORDER FLIP (end = ap + nv * 4 -> end = nv * 4 + ap): the
  * built's addu emitted (a1 + v0) - ap's home as rs, the scaled-nv temp

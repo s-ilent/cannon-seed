@@ -960,6 +960,13 @@
  * vs retail's [slti $v0,$v1,0x0][bnez $v0] - same 3-word shape, same polarity,
  * the middle op differs; the srl->slti refinement is the follow-up
  * micro-lever (the a2-chain pair of the -2 stays judge-gated per H.4).
+ * LIVE VERDICT (cron-202611052343, the disc_return re-witness window; H.2
+ * judge live, tree reverted probes-only after): SIZE built 1092 vs row
+ * 1096, DIFF 189/273 words, first diff 0x800680AC (built 1FA10108 vs
+ * retail 20A10108 - the addi $at,$a1,0x108 address-pair region). The
+ * offline->live delta class widened: offline 181 vs live 189 = +8 (the
+ * draft20 class was +2) - the instrument gap is draft-shape-dependent;
+ * only live counts (H.2 step 3 law).
  */
 
 extern unsigned char D_8017E038[];
