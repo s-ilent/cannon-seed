@@ -423,6 +423,56 @@ ap / sll16 / sra14 / BOUND / 787B0-store / reads / tp+= / end= /
 slt / bne / nop all retail-ordered; the only remaining store-group
 delta is the AT-CHAIN CLASS lever (banked below).
 
+THE A2/BASE CHAIN WAVE (cron-202611050959, oracle DOWN - drafts 39-41
+measured on the knob-alive recipe; the draft38 anchors 266 w / 175/274 /
+linked 1092 reproduced first-pass in this sandbox through the H.1 recipe
+plus a mini-link script; all three drafts measured NET-NEGATIVE and are
+BANKED AS MAPS, not candidates):
+
+    draft39  268 w   169/274   linked 1100 (+2 over the row)
+    draft40  269 w   170/274   linked 1104 (+3 over the row)
+    draft41  269 w   170/274   linked 1104 (+3 over the row)
+
+- d39 (one-variable chain: base = vh pre-verdict, += 0x20 at the magic
+  join, raw-slot magic-fail index): gcc picked s1 (vabid_s1's freed reg,
+  the long-web callee-saved pick) for base's WHOLE web - no split; the
+  w0 read rode s1 (hv coalesced into the equal-valued base); the addiu
+  landed in the m40-bne delay.
+- d40 (two variables: b0 = the a2-episode, base = the explicit copy;
+  tp's $6 pin RELEASED): THREE STRUCTURAL SITES PROVEN LANDABLE -
+  `move a2,s3` rides the verdict-1 bnez delay (retail 0x80068194 EXACT),
+  the 7876C store's value reads a2 (retail sw $a2 EXACT), the +0x20
+  emits IN-PLACE `addiu a2,a2,0x20` (retail's word). The short web took
+  the caller-saved a2 exactly as designed. FOUR blockers remain:
+  (1) the w0 read rides b0's home (lw a3,0(a2)) - hv coalesced into the
+  equal-valued b0 pre-mutation, so the a0 copy sank to the magic-beq
+  delay (move a0,a2) instead of retail's post-join addu a0,s3 - and the
+  magic delay went to the a0 copy instead of the addiu (the addiu then
+  rode the m40-bne delay); (2) the m-check bnez's delay STILL went to
+  the speculative sll16 (the store's index prep) - the explicit copy
+  emitted as a real word AFTER the delay: the d33 immediately-preceding
+  law does NOT beat a speculative store-component candidate (the sll16's
+  critical path outranks the copy); (3) base's long web took s1 AGAIN
+  (vabid_s1's freed reg) not retail's s3 - retail s1 was NOT free at the
+  def (the slot web lived there post-rehome); the built's slot-home
+  entanglement decides base's pick; (4) d41's first cut forgot the
+  (char *) cast on the 78704 store and emitted sra 12 (double scale) -
+  fixed, word-count unchanged.
+- NET read: the chain trades the read-home words (d38's reads were
+  retail-exact via the hv pin because base had a DIFFERENT value there;
+  the chain makes them EQUAL and gcc merges the webs) against the three
+  structural sites. The lever needs the read-home decoupled from the
+  7876C value web (retail keeps three copies of vh alive: s3 staging, a2
+  the 7876C/base episode, a0 the read home - the original source had a
+  shape gcc 2.6.3 would not coalesce; find it or pin the read address
+  web against the merge) before the delay-race and the base-home pick
+  can even matter. NEXT-WINDOW SHAPE IDEAS: the 7876C store value as a
+  dedicated temp that dies at the store with base's def re-using a2 by
+  recycling (not by web equality); or the err-label mid-function
+  restructure first (site 0x0314's fall-through mechanic - the a0=0
+  block head needs the trampoline ADJACENT, which the end-of-source err
+  label can never give).
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
