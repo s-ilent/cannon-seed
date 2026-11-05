@@ -543,6 +543,48 @@ but NOT exported to cc.sh, and the symbols prelude must strip the
   the err-label mid-function restructure (site 0x0314) is INDEPENDENT of
   the chain - run it first next window.
 
+THE ERR-LABEL MID-FUNCTION RESTRUCTURE (cron-202611051113, same window -
+drafts 46-47 on the d41 chain landscape; the FIRST POSITIVE of the chain
+work):
+
+    draft46  269 w   171/274   linked 1104   NET +1 (the built-only tail GONE)
+    draft47  278 w   177/274   linked 1140   record alignment, +11 SIZE (a MAP)
+
+- d46 (the err body moves from the function END to right after the
+  0x80000-check fail block, guarded by if(0)): THE TAIL IS MID-FUNCTION -
+  [the merged m-check/sltu fail block: sll16/sra16/at-chain/sb][the tail:
+  jal setInTransfer / FB20 dec / j epilogue with li -1 IN THE DELAY][the
+  FB24 path continues] = retail's arrangement; the sltu check's delay
+  carries total=0 (retail's beqz-delay addu s0,zero,zero); the m-check and
+  sltu fail blocks TAIL-MERGE into one shared E038-clear block exactly as
+  retail; the H.4b built-only +9 @0x041c block VANISHES. Residual wrongs:
+  the a0=0 still merges into the tail's jal DELAY (retail: per-entry
+  a0=0s + a nop delay - the block-head word at 0x0314 is still missing)
+  and the success path carries an EXTRA skip branch (j + li -1 delay = +2
+  words) because gcc 2.6.3 does not thread the check's false edge through
+  the unreachable err block.
+- d47 (the err block NESTED INSIDE the 0x80000-check's true branch, so the
+  check's false edge IS the skip): the alignment jumps to 177/274 - THE
+  RECORD (d38's 175 was the old best) - the m-check region 0x01d4-0x01ec
+  aligns with the fail sequence inline - but gcc DUPLICATED the fail
+  sequence (the m-check fail got its own [sra/at-chain/sb/j] copy instead
+  of sharing the merged block, the polarity inverted to beq) = +9 words =
+  SIZE 1140, +11 over the row. A landing needs SIZE = the row exactly, so
+  d47 is a MAP, not a candidate: it proves the 0x01d4-0x0338 region's
+  retail arrangement is REACHABLE in gcc 2.6.3 - the open problem is the
+  SHARED-block form with the inline arrangement (d46's merge + d47's
+  positions).
+- NEXT shape ideas (from the pair): (a) d46 + force the a0=0 into the
+  merged fail block's HEAD (retail's 0x0314 word) - the arg is
+  path-invariant so gcc merges it into the jal delay; making it per-entry
+  needs a variable arg (frame risk - the 0x438 frame is retail-exact) or
+  an unmergeable tail; (b) d46 + kill the extra skip branch: the check's
+  false edge must branch DIRECTLY to the FB24 path - try the err block
+  nested but the m-check fail's goto targeting the MERGED block explicitly
+  (a second label on the clear block), or accept the +2 and recover in the
+  0x018c block; (c) the d47 record says the region can fully align - the
+  target shape is d46's word count with d47's positions.
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
