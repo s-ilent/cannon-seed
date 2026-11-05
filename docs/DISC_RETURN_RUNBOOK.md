@@ -473,6 +473,76 @@ BANKED AS MAPS, not candidates):
   block head needs the trampoline ADJACENT, which the end-of-source err
   label can never give).
 
+THE DYING-TEMP RECYCLING WAVE (cron-202611051113, oracle DOWN - drafts
+42-45 measured on the knob-alive recipe; the d41 anchors 269 w / 170/274 /
+linked 1104 reproduced first-pass through the rebuilt session-local
+minilink.sh - the cron-202611050959 copy was lost to the fourteenth
+rollback; reconstruction notes: build/judge/ must exist before cc.sh, the
+binutils root is tools-local/mipsel-root for as/ld/objcopy LD_LIBRARY_PATH
+but NOT exported to cc.sh, and the symbols prelude must strip the
+`// type:func` tails judge_unit.py's regex strips):
+
+    draft42  269 w   168/274   linked 1104   NET -2 (the episode pair took A1 wholesale)
+    draft43  269 w   164/274   linked 1104   NET -6 (b0 coalesced into hv)
+    draft44  268 w   167/274   linked 1100   NET -3 (zero-copy asm, SEMANTICALLY BROKEN)
+    draft45  269 w   167/274   linked 1104   NET -3 (the tied-asm form, reads fixed)
+
+- d42 (the route as written: b0's web dies AT the 7876C store, e0 = b0 +
+  0x20 the recycle def, base = e0 the m-check copy): the RECYCLE MECHANISM
+  WORKS - the in-place addiu appeared (addu $5,$5,32 = the addiu encoding,
+  dst=src in-place) - but gcc packed the b0/e0 pair into A1 (the extended
+  slot's vacated reg) instead of a2: the verdict-delay copy became a1 := s3,
+  the store sw a1, the reads still rode the episode reg. The verdict-delay
+  copy's dst FOLLOWS the episode's home.
+- d43 (the order flip: hv = vh BEFORE b0 = vh): the READS FLIP RETAIL-EXACT
+  (addu a0,s3,zero rides the verdict delay, the w0 read rides a0, the
+  post-join reads ride a0) - blocker 1 is FIXABLE - but the UNPINNED b0 was
+  ELIMINATED (its def copy vanished, the store reads a0) and gcc emitted an
+  extra staging copy (a3 := a0 at the magic-beq delay) to feed e0's def.
+- d44 (the free-input asm decoupler: asm("" : "=r"(hv) : "r"(vh))): gcc
+  2.6.3 emits NO copy for an empty-template asm's output - the w0 read
+  would read the _spu_setInTransfer call's leftover in $4 at runtime =
+  SEMANTICALLY BROKEN, banked as a shape-law only (the reads ride $4 with
+  ZERO copy words - the shape gcc produces when the value is already in
+  the pinned reg).
+- d45 (the tied form: "0"(vh) - the match constraint forces the input into
+  $4): the copy MATERIALIZES at retail's post-store position (addu
+  a0,a3,zero - the cascade src, one wrong word) and the reads ride $4 - the
+  read-home decoupling is ACHIEVED at zero extra words - but the asm's
+  presence re-packed the episode into a3 (the verdict copy a3 := s3, the
+  store sw a3, the +0x20 addu a3,a3,32) and the magic-beq delay went to the
+  ori-0x70 (the +0x20 became a real word post-join).
+- THE THREE-WAY LAW (measured four ways, BANKED): (1) gcc 2.6.3 canonizes
+  each VALUE to ONE register - the FIRST pseudo to carry it in source order
+  - and substitutes every later same-value pseudo's def AND uses with that
+  reg; web liveness is IRRELEVANT (d42's dying web did not stop it), and
+  the substitution cascade re-sources each new copy from the previous
+  copy's reg. (2) Register pins hold HOMES but not USES: the $4 pin did not
+  keep the reads off the episode's reg in d41/d42 (cse substitutes the
+  uses' rtx before allocation); the pin only forces the COPY's existence
+  (d43's unpinned b0 lost its copy, d41's pinned hv kept it). (3) An empty
+  volatile asm with an output operand is opaque to cse (the reads after it
+  ride the output's home) but an empty template emits NO copy (the "0" tie
+  is REQUIRED for the dataflow) and its presence perturbs the packing
+  around it (the episode's home floated a2 -> a3).
+- NET read: the read-home decoupling is ACHIEVABLE (d43 and d45 both put
+  the reads on a0) but every shape that does it costs more words elsewhere
+  than the ~3 read-region words it gains: d43 kills the episode's copy
+  (-4 sites), d45 floats the episode off a2 (-2 sites + the delay
+  competition). The retail triple-copy shape (s3 staging + a2 episode + a0
+  read home, all three alive, NO coalescing) needs the a0 copy to be born
+  BETWEEN the episode's def and its mutation WITHOUT becoming the value's
+  canon - the asm decoupler gets the uses right but still re-sources the
+  copy through the cascade (a3, not s3). NEXT shape ideas (from the law):
+  (a) the episode's def copy is the canon-stealer - make IT the opaque one
+  (the tied asm on B0: asm("" : "=r"(b0) : "0"(vh)) as the episode's def -
+  the copy a2 := s3 materializes through the tie, b0's uses stay on b0's
+  home, and hv's plain copy reads... the recent reaching copy = the asm's
+  output = b0's home a2 - the cascade persists); (b) accept the a2 reads
+  and recover the words elsewhere (the H.4b built +7 @0x018c block); (c)
+  the err-label mid-function restructure (site 0x0314) is INDEPENDENT of
+  the chain - run it first next window.
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
