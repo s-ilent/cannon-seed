@@ -948,7 +948,7 @@
  * prologue at -O2, not the verdict). The vb/(short) extend + the
  * vabid==-1 second verdict (NEW byte fact this window) ride into
  * whichever form lands.
- * DRAFT 60 (cron-202611052213): THIS FILE = draft57 + THE N-CHECK COMPARISON
+ * DRAFT 60 (cron-202611052228; the committing message mislabels it 2213): THIS FILE = draft57 + THE N-CHECK COMPARISON
  * MATERIALIZATION (the -2 deficit's third retail-only word, the source-spelling
  * lever). n = nv & 0xFF; if (n >= 0) folded to [andi $a2][bltz $a2] (2 words);
  * retail = [andi $v1][slti $v0,$v1,0][bnez $v0] (3 words, the comparison as a

@@ -329,7 +329,7 @@ oracle:
 The knob-ALIVE recalibration of the ladder anchors (one pipeline, one
 counter - the gas word_diff words; the historical w-counts below were
 knob-dead or objdump-based and do NOT compare; SUPERSEDED for the current
-anchor set by the -G0 instrument re-baseline, cron-202611052213 - the
+anchor set by the -G0 instrument re-baseline, cron-202611052228 - the
 canonical -G0 table lives at the end of this file):
 
     draft20  268 w   147/274   linked 1096 = THE ROW (validates the 1243 live anchor)
@@ -1397,7 +1397,7 @@ the check region clean - the words live in the m40/store region's big
 hunks, NOT the gp class); then the head-first position lever (the
 scheduler priority, [sll][sra][a0=0] vs retail [a0=0][sll][sra]).
 
-## THE WORD_DIFF -G0 FIX + THE H.1 RE-BASELINE (cron-202611052213, oracle DOWN)
+## THE WORD_DIFF -G0 FIX + THE H.1 RE-BASELINE (cron-202611052228, oracle DOWN)
 
 Head item executed: scripts/word_diff.py now assembles with the build's OWN
 as flags (-march=mips64 -mabi=32 -EL -G0, mirroring cc.sh's as step and
@@ -1430,7 +1430,7 @@ twin wave re-run (scripts/twin_transfer.sh + the two step-1 twins by hand)
 274 w built / 179/274 aligned / linked 1096 (the uniform +2 shift from the
 old 177/274; zero per-twin divergence, the relocation-only law holds).
 
-## THE TRUE -2 DEFICIT ANATOMY (cron-202611052213)
+## THE TRUE -2 DEFICIT ANATOMY (cron-202611052228)
 
 The deficit hunt ran through two new instruments (committed alongside):
 scripts/sbs.py (per-offset side-by-side mnemonic dump + a normalized
