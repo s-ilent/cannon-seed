@@ -74,9 +74,26 @@ say "pre-flight space OK (${avail_kb}KB free, need >= 2500000KB)"
 mkdir -p disk build
 
 # --- 1. download both discs, FOREGROUND ---------------------------------------
-say "downloading EU + JP CHDs (foreground, sequential)"
-curl -fsSL --retry 2 -o "$EU_CHD" "$EU_URL"
-curl -fsSL --retry 2 -o "$JP_CHD" "$JP_URL"
+# cron-202611060616: the nohup'd run died silently mid-JP (sandbox reaps
+# background jobs unpredictably; the log ended between two say lines with no
+# error). Hardening: resume partial downloads (-C -) and SKIP a file that
+# already passes its full gate (size + sha256) - the sha256 gate below stays
+# the authority, a resumed corrupt file cannot sneak through.
+gated_ok() {  # gated_ok <path> <size> <sha256>
+    [ -f "$1" ] || return 1
+    [ "$(wc -c < "$1" | tr -d ' ')" = "$2" ] || return 1
+    echo "$3  $1" | sha256sum -c - >/dev/null 2>&1
+}
+fetch_or_skip() {  # fetch_or_skip <url> <path> <size> <sha256> <label>
+    if gated_ok "$2" "$3" "$4"; then
+        say "$5 already gated OK - skipping download"
+        return 0
+    fi
+    say "downloading $5 (resume-capable)"
+    curl -fsSL --retry 2 -C - -o "$2" "$1" || curl -fsSL --retry 2 -o "$2" "$1"
+}
+fetch_or_skip "$EU_URL" "$EU_CHD" 382613010 98ccd87749918a3ac2e072f1ab9c7649eae567627c3edd62f8154c4b98cf165c "$EU_CHD"
+fetch_or_skip "$JP_URL" "$JP_CHD" 382607234 a6025267f57392e178a2feace611a28e5ffd8ee2819358596f0879130fc73d08 "$JP_CHD"
 
 # --- 2. retail-provenance gate -------------------------------------------------
 say "sha256 + byte-size gate"
