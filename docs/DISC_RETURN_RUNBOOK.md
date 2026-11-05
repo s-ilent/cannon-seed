@@ -328,7 +328,9 @@ oracle:
 
 The knob-ALIVE recalibration of the ladder anchors (one pipeline, one
 counter - the gas word_diff words; the historical w-counts below were
-knob-dead or objdump-based and do NOT compare):
+knob-dead or objdump-based and do NOT compare; SUPERSEDED for the current
+anchor set by the -G0 instrument re-baseline, cron-202611052213 - the
+canonical -G0 table lives at the end of this file):
 
     draft20  268 w   147/274   linked 1096 = THE ROW (validates the 1243 live anchor)
     draft38  266 w   175/274   linked 1092 (-4 B = ONE word short of the row)
@@ -1394,3 +1396,74 @@ re-baseline; then the TRUE -2 deficit (d57 = 1088 = row - 2 words with
 the check region clean - the words live in the m40/store region's big
 hunks, NOT the gp class); then the head-first position lever (the
 scheduler priority, [sll][sra][a0=0] vs retail [a0=0][sll][sra]).
+
+## THE WORD_DIFF -G0 FIX + THE H.1 RE-BASELINE (cron-202611052213, oracle DOWN)
+
+Head item executed: scripts/word_diff.py now assembles with the build's OWN
+as flags (-march=mips64 -mabi=32 -EL -G0, mirroring cc.sh's as step and
+minilink ASFLAGS_BASE) instead of bare -mips1 (gas default -G8). The
+re-baseline ran through scripts/rebaseline_h1.sh (per anchor: STOP_AT_ASM
+cc.sh -S rebuild, word_diff, minilink SIZE) - ALL SEVEN ANCHORS FIRST-PASS:
+
+    draft20  274 w   149/274   linked 1096 = THE ROW SIZE (the 1243 live anchor)
+    draft38  273 w   177/274   linked 1092 (-4 B = ONE word short of the row)
+    draft46  276 w   173/274   linked 1104
+    draft47  285 w   179/274   linked 1140   (the +11 SIZE map, never landable)
+    draft53  274 w   179/274   linked 1096 = THE ROW SIZE   *** the parked best ***
+    draft57  272 w   181/274   linked 1088   (row - 2 words, the retail check region)
+    draft59  272 w   181/274   linked 1088   (word-identical .o to d57)
+
+THE FIX'S PROOF PAIR: d57 and d59 assemble word-identical .o files and NOW
+measure IDENTICALLY (272 w / 181/274 / 1088) - under the old instrument the
+same files read 178 vs 181 (the .extern relaxation). Every draft whose
+.mas.s carries cc1's .extern size lines was undercounted: built words
++6/+7 (the relaxed gp words re-expand to the lui/$at pairs the real chain
+emits) and aligned +2/+3. THE SIZES NEVER MOVED - minilink already
+assembled at -G0, so the linked-bytes law was always the true one. The
+H.1 historical ledger rows KEEP their old-instrument numbers (the
+knob-dead-era convention: deltas within one instrument state stay
+internally consistent); THIS table is the canonical -G0 instrument state.
+
+THE SEVEN-TWIN TRANSFER RE-VERIFIED UNDER THE FIXED INSTRUMENT: the full
+twin wave re-run (scripts/twin_transfer.sh + the two step-1 twins by hand)
+- g3org_eu/g3_jp/g3_eu/mainmenu_eu/sces_00269/mainmenu_jp/slps_00270 ALL
+274 w built / 179/274 aligned / linked 1096 (the uniform +2 shift from the
+old 177/274; zero per-twin divergence, the relocation-only law holds).
+
+## THE TRUE -2 DEFICIT ANATOMY (cron-202611052213)
+
+The deficit hunt ran through two new instruments (committed alongside):
+scripts/sbs.py (per-offset side-by-side mnemonic dump + a normalized
+mnemonic-sequence diff mode) and scripts/shift_track.py (the per-index
+retail-shift profile - which retail word each built word aligns to at
+shifts 0..4). The shift profile over d57 is DEFINITIVE:
+
+    shift 0  through built word ~0x3e (the head; the m-check fold later)
+    shift 1  by built word 0x61 (byte 0x184)  <- retail-only word #1
+    shift 0  again at built 0x70-0x73         <- one BUILT-only word re-syncs
+    shift 1  from built 0x79 (byte 0x1e4)     <- retail-only word #2
+    shift 2  from built 0xe7 (byte 0x39c)     <- retail-only word #3, to the tail
+    (net 3 retail-only - 1 built-only = the -2)
+
+THE THREE RETAIL-ONLY WORDS, identified:
+1. The m-check mask operand: retail's `andi $v1,$a1,0xff` @0x184 is a REAL
+   word (the beq delay @0x168 carries the a2-chain `addiu $a2,$a2,0x20`);
+   the built folds the andi into the beq delay @0x168 and carries NO
+   +0x20 advance - the a2-chain lever territory (H.4, judge-gated).
+2. `addu $s3,$a2,$zero` @0x1cc RIDING THE BNEZ DELAY (the 78704-store
+   region): retail re-homes s3 := the a2-chain value in the delay slot,
+   then the loop cursor rides it (addu $v1,$s3,$zero @0x1fc) and the 78704
+   store writes a2; the built keeps s3 = the a0 param and stores s3 - the
+   a2-chain/base-def lever again (draft30's parked item).
+3. The n-check two-word form: retail = [andi $v1,$s4,0xff][slti
+   $v0,$v1,0x0][bnez $v0] (3 words) where the built = [andi $a2,$s4,0xff]
+   [bltz $a2] (2 words) - gcc folded (n >= 0) into bltz. The slti+bnez
+   form is a SOURCE-SPELLING lever (the d56 polarity class), offline
+   actionable. The built-only word is the sll the built floats into the
+   freed slot (the scheduler priority item, next window's lever).
+
+READ: the -2 decomposes into (a) two a2-chain/base-def copy words - the
+BANKED judge-gated H.4 lever (draft25 open 4 + draft30's parked base-def),
+NOT independently landable, and (b) ONE source-spelling word (the
+slti+bnez check form) - the next draft's target, with the head-first
+scheduler position lever behind it.

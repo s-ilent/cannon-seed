@@ -12,7 +12,15 @@ OD = "/home/z/my-project/tools-local/mipsel-root/usr/bin/mipsel-linux-gnu-objdum
 
 def built_words(mas_path):
     o = Path("/tmp/wd_out.o")
-    r = subprocess.run([AS, "-mips1", "-o", str(o), mas_path],
+    # Mirror cc.sh's as step EXACTLY (-march=mips64 -mabi=32 -EL -G0):
+    # gas's default -G8 relaxes cc1's `.extern SYM,size` lines into gp words
+    # the real -G0 chain never emits - the instrument artifact that inflated
+    # the banked gp-class residuals (d57 178 vs d59 181 aligned on
+    # word-identical .o files, retired cron-202611052113). At -G0 the size
+    # lines are inert and bare refs expand to the lui/$at pair, matching the
+    # build's own .o word stream.
+    r = subprocess.run([AS, "-march=mips64", "-mabi=32", "-EL", "-G0",
+                        "-o", str(o), mas_path],
                        capture_output=True, text=True)
     if r.returncode != 0:
         print("AS FAILED:", r.stderr[:800])
