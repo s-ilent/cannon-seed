@@ -821,6 +821,27 @@ in the window's first pass - the knob measured DEAD, tools-local/maspsx
 absent entirely; re-run rehydrate at the CURRENT head, both clones grep
 addiu-at = 1, d38 1092 + d53 1096 reproduced first-pass).
 
+THE SEVEN-TWIN D69 TRANSFER (cron-202611060731, oracle UP): the d69 shape
+(d66 minus the three redundant magic/magic_hi/ihalf pins, judged LIVE
+4/274 at the worked row) minilinked against ALL SEVEN twins - the wave
+runner now carries all seven entries:
+
+    g3org_eu    0x493D4  linked 1096   214/274
+    g3_jp       0x4B3C8  linked 1096   214/274
+    g3_eu       0x4BF80  linked 1096   214/274
+    mainmenu_eu 0x61564  linked 1096   214/274
+    sces_00269  0x24990  linked 1096   214/274
+    mainmenu_jp 0x609E4  linked 1096   214/274
+    slps_00270  0x24974  linked 1096   214/274
+
+ZERO per-twin divergence at the d69 shape (up from the d62-era 192/274
+and the d53-era 177/274 - the record transfers intact). mainmenu_jp +
+slps_00270 JOINED the runner this window (their VAs/rows were measured in
+the step-1/2 windows; the script's tail note retired). The per-twin H.2
+live judges (one staged judge run per twin target) remain the only
+twin work - each is a per-target yaml sed + judge_unit.py run, gated on
+the oracle which is UP as of this window.
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,

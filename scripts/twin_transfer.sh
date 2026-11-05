@@ -28,7 +28,9 @@ run_twin g3_jp       4B3C8 asm/g3_jp/nonmatchings/func_8006ABC8.s       0x8006AB
 run_twin g3_eu       4BF80 asm/g3_eu/nonmatchings/func_8006B780.s       0x8006B780 0x8006BBC8
 run_twin mainmenu_eu 61564 asm/mainmenu_eu/nonmatchings/func_80080D64.s 0x80080D64 0x800811AC
 run_twin sces_00269  24990 asm/sces_00269/nonmatchings/func_80049840.s  0x80044190 0x800445D8
-# mainmenu_jp (0x609E4, interior of func_8008E714.s) and slps_00270
-# (0x24974, asm/nonmatchings/func_80049824.s) were measured in the step-1
-# window; extend the list if the parked form changes.
+run_twin mainmenu_jp  609E4 asm/mainmenu_jp/nonmatchings/func_8008E714.s  0x800801E4 0x8008062C
+run_twin slps_00270   24974 asm/nonmatchings/func_80049824.s              0x80044174 0x800445BC
+# the wave is now all seven twins (cron-202611060731: mainmenu_jp + slps_00270
+# joined after the d69 shape measured identical on them - 1096 / 274 w /
+# 214/274, zero per-twin divergence across all seven).
 echo "=== twin wave done"
