@@ -1409,9 +1409,13 @@ cc.sh -S rebuild, word_diff, minilink SIZE) - ALL SEVEN ANCHORS FIRST-PASS:
     draft38  273 w   177/274   linked 1092 (-4 B = ONE word short of the row)
     draft46  276 w   173/274   linked 1104
     draft47  285 w   179/274   linked 1140   (the +11 SIZE map, never landable)
-    draft53  274 w   179/274   linked 1096 = THE ROW SIZE   *** the parked best ***
+    draft53  274 w   179/274   linked 1096 = THE ROW SIZE   (old parked best)
     draft57  272 w   181/274   linked 1088   (row - 2 words, the retail check region)
     draft59  272 w   181/274   linked 1088   (word-identical .o to d57)
+    draft60  273 w   181/274   linked 1092   (row - 1; the n-check materialized, srl middle op)
+    draft61  274 w   189/274   linked 1096 = THE ROW SIZE (the pins + the loop-bound copy)
+    draft62  274 w   192/274   linked 1096 = THE ROW SIZE   *** THE RECORD ***
+    draft63  276 w   191/274   linked 1100   (negative: the inline-mask middle-op probe)
 
 THE FIX'S PROOF PAIR: d57 and d59 assemble word-identical .o files and NOW
 measure IDENTICALLY (272 w / 181/274 / 1088) - under the old instrument the
@@ -1467,3 +1471,39 @@ BANKED judge-gated H.4 lever (draft25 open 4 + draft30's parked base-def),
 NOT independently landable, and (b) ONE source-spelling word (the
 slti+bnez check form) - the next draft's target, with the head-first
 scheduler position lever behind it.
+
+## THE TRANSPOSITION WAVE: d61-d63, THE ROW SIZE AT THE RECORD (cron-202611052343, oracle DOWN)
+
+The 2228 spelling lever opened into a REGION READ that found the real
+structure behind it: the built's second loop ran with ap2/cursor homes
+TRANSPOSED vs retail (built: n home a2 = tp's dead pin, cursor i a0 =
+hv's dead pin, ap2 a1 = k's dead pin; retail: n home v1, cursor a1,
+ap2 a0) and carried NO loop-bound copy (n's home was already stable).
+Retail COPIES n -> a2 (addu $a2,$v1,$zero) because v1 is the division
+scratch INSIDE the loop; n's own home dies at the copy.
+
+d61 pins n to $3 (v1, m's dead pin) and i to $5 (a1, k's dead pin) per
+the disjoint-web law, and routes the loop bound through an UNPINNED n2
+= n so the copy must materialize (the draft30 m2 law) while n's web
+dies at it - freeing $3 for the loop's division scratch EXACTLY as
+retail reuses v1. MEASURED: 274 w / 189/274 / linked 1096 = THE ROW
+SIZE - the copy word retail-exact, andi $3,$20,0xff retail-exact, the
+loop body aligned through the tail slt $2,$6,$5.
+
+d62 adds the i&1 BRANCH POLARITY SWAP (even arm first: source if ((i &
+1) == 0) {0xC} else {0xE}) - the built's beq-on-even became retail's
+bnez-on-odd (the d56 polarity class, source-reachable in the loop
+context). MEASURED: 274 w / 192/274 / linked 1096 - +13 aligned over
+the d53 parked best AT the row size. THE NEW OFFLINE RECORD.
+
+d63 probes the middle op one last way (the inline-mask compare
+n_neg = ((nv & 0xFF) < 0)): NEGATIVE - the mask re-materializes its own
+andi (+2 words, no CSE with n's def) and the srl-31 form survives. THE
+MIDDLE-OP LEVER CLOSES AS COMPILER-TERRITORY: this gcc 2.6.3
+canonicalizes every materialized (lt x 0) to (lshiftrt x 31); retail's
+slti $v0,$v1,0 is the un-canonicalized form - a retail-cse build
+difference, NOT source-reachable. The remaining region deltas after
+d62: the middle op (closed, compiler-territory), the bne delay fill
+(the floated sll vs retail's i-init - the scheduler pick), the div
+chain's first dst ($2 vs retail $3), and the a2-chain pair upstream
+(judge-gated H.4).
