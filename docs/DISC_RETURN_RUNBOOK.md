@@ -1507,3 +1507,49 @@ d62: the middle op (closed, compiler-territory), the bne delay fill
 (the floated sll vs retail's i-init - the scheduler pick), the div
 chain's first dst ($2 vs retail $3), and the a2-chain pair upstream
 (judge-gated H.4).
+
+## THE H.2 LIVE WAVE: d61/d62 JUDGED, THE LIVE RECORD 143/274 + THE 6B RE-TEACH (cron-202611060116, oracle UP)
+
+The fresh 15:57Z links re-witnessed FIRST TRY (the sandbox had rolled
+back to an Oct-15 filesystem snapshot: HEAD 7623cd2, the worklog minus
+264 windows, baselines/ the woven-era dumps, witness 0/8). Sequence:
+RESTORE NOTE SOP (digest exit 1 -> appended -> gate 0), reset --hard to
+7614b835 (690 commits), disc_return full run -> witness 8/8 STRICT.
+
+THE 6B RE-TEACH (the window's expensive lesson, general form): the
+session-start rehydrate ran BEFORE the reset --hard (at the October
+head) - the forward reset then clobbered the patched maspsx clone
+(tools-local/maspsx/maspsx.py gone; cc.sh's default MASPSX at
+tools-src/maspsx unpatched). The first d61 judge read SIZE 1040 vs row
+1096 / DIFF 228/260 = EXACTLY the uniform -56 B knob-dead signature
+(8eddfee5's law). Re-run rehydrate AT the current head (the patch
+regrows), the knob greps green (args.addiu_at is not None +
+line_redefines_reg), and the d38 anchor reproduced 1092 first-pass. LAW:
+the session-start ordering is reset --hard FIRST, rehydrate SECOND - or
+rehydrate again after ANY forward reset; NEVER measure before the d38
+anchor reproduces. (The judge-vs-minilink pipelines were proven
+byte-identical on the same staging while diagnosing: .mas.s diff empty,
+minilink 1040 == judge 1040 knob-dead; the divergence was NEVER the
+instruments, only the knob state. minilink's hard-coded stage_c gp args
+("0", "") are a real latent divergence from judge_unit's build-fed
+gp_flags, but it produced ZERO gp_rel words on this unit - noted, not
+the cause.)
+
+THE VERDICTS (H.2, one run per draft, staging reverted after each):
+    draft61  SIZE-EXACT (built = row 1096)  DIFF 146/274  (beat d53's 150)
+    draft62  SIZE-EXACT (built = row 1096)  DIFF 143/274  *** THE LIVE RECORD ***
+(the offline -G0 instrument overcounted DIFF by the two-sided gap: -43
+on d61, -49 on d62 - draft-shape-dependent as banked; d62 offline 192 ->
+live 143.)
+
+BOTH drafts share the identical first-diff map from 0x80068188 (the
+second-loop head): 0x188 the div-chain sra first-dst (built 0x00022C03
+vs retail 0x00023C03 - the $2-vs-$3 residual), 0x18C the slti base reg
+($a1 vs $a3), 0x194 built lui $v1,0x0056 where retail runs addu
+$a2,$s3,$zero - THE A2-CHAIN COPY SITE, live-confirmed. H.4 item 2's
+steering target (merge delay -> a2=s3, a0 copy -> post-join
+straight-line, vh reads -> a0) is the d64 lever, authorable from the
+run's build/judge dump per the no-blind law.
+
+verify g3org_jp GREEN post-judge (whole-image, the fixed pipeline);
+suite OK; ratchets 948/538 = tree; witness 8/8.
