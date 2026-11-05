@@ -585,6 +585,64 @@ work):
   0x018c block; (c) the d47 record says the region can fully align - the
   target shape is d46's word count with d47's positions.
 
+THE HEAD/SKIP WAVE (cron-202611051343, oracle DOWN - drafts 48-51 measured
+on the knob-alive recipe in a fresh sandbox; the d46/d47 anchors 1104 and
+1140 reproduced FIRST-PASS through the newly committed tools/minilink.py -
+the offline SIZE law is now a REPO TOOL after the fifteenth rollback ate
+the session-local minilink.sh twice; all four drafts measured NEGATIVE or
+NO-OP and are BANKED AS LAWS, not candidates):
+
+    draft48  276 w   167/274   linked 1128   NET -4, FRAME BROKE (regs 9/0)
+    draft49  269 w   171/274   linked 1104   ZERO DELTA (the barrier no-op)
+    draft50  269 w   171/274   linked 1104   ZERO DELTA (byte-identical to d46)
+    draft51  276 w   151/274   linked 1132   NET -20, FRAME BROKE (regs 10/0)
+
+- d48 (the per-path `err_arg = 0` head force + arg barriers): gcc 2.6.3
+  did NOT home the plain long in $4 even though b0's a2-episode (the $4
+  web) is dead at both fail sites - it allocated a NEW CALLEE-SAVED reg
+  (s7: the head word came out `addu $23,$zero,$zero`) + the prologue save
+  + a `move $4,$23` feed at the call. The runbook's variable-arg frame
+  risk, MEASURED: frame 1088/regs 9/0 breaks the subu word + every save
+  offset. LAW: a plain long defined in cold fail blocks and used at a
+  tail call takes a NEW callee-saved home, never the dead arg reg - the
+  arg regs are not reused for cross-block pseudos by this allocator.
+- d49 (the ARG BARRIER at the err-body top, literal 0 arg): ZERO delta -
+  the dbr delay-fill backward scan SKIPS volatile-asm insns (never
+  eligible candidates) but does NOT STOP at them; the a0=0 still reached
+  the jal delay past the barrier. LAW: empty volatile asms are
+  transparent to gcc 2.6.3's delay-slot filling (they block the
+  SCHEDULER's crossing but not the reorg scan).
+- d50 (the err block nested in the check's branch WITH the check's own
+  `goto err` kept): byte-identical to d46 except the .file line + one
+  label renumber. LAW: `goto err; if (0) { err: ... }` folds to the
+  sibling form's RTL - the goto is the POLARITY BLOCKER (it makes gcc
+  invert the check to bne fail->block and thread the SUCCESS edge
+  through the [j][li -1] skip pair); the nesting only matters when the
+  goto is ABSENT (the folded if(0) leaves the body adjacent, the true
+  edge falls into the tail, the false edge IS the skip = d47's working
+  half).
+- d51 (the goto dropped + the SECOND-LABEL sharing: the m-check fail
+  becomes a bare `goto merged_fail`, the slot_x pin a BARE register decl
+  with the value assigned after the label): GLOBAL CASCADE - regs 10/0
+  (two extra callee-saved) shifted every save offset from the prologue on
+  and re-broke the $2 disjoint-web partition (151/274, the ladder's worst
+  alignment). MECHANISM: the bare (uninitialized-at-decl) register
+  variable changes gcc's reg-var treatment vs the decl-with-init form.
+  The second-label idea itself is not dead - it needs the decl-with-init
+  form C89 cannot place after a label, so it waits for the d38 rebase.
+- NET read: BOTH residual levers of the err-label region (the head a0=0
+  word, the skip-branch pair) are REBASE-GATED on this landscape - the
+  d41 chain drafts' register pressure (s1/s7 thefts, the episode web)
+  owns exactly the homes the levers need. NEXT shape (next window): port
+  the d46 restructure onto the D38 LANDSCAPE (the pre-chain base, SIZE
+  1092 = one word short, alignment 175) - there $4 is the hv read-home's
+  natural home and the fail blocks are pressure-free; then re-apply the
+  head force (the $4-pinned asm-def variant is legal there IF the pin
+  costs nothing on that landscape - MEASURE) and the skip fusion (the
+  d47 nesting without the duplication risk, the m-check fail site
+  pressure-free). The d47 map (177/274 inline region) remains the region's
+  reachability proof.
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
