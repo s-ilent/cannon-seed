@@ -643,6 +643,85 @@ NO-OP and are BANKED AS LAWS, not candidates):
   pressure-free). The d47 map (177/274 inline region) remains the region's
   reachability proof.
 
+THE D38-LANDSCAPE PORT WAVE (cron-202611051458, oracle DOWN - the
+cron-202611051343 next-shape executed; the d46 restructure ported off the
+chain landscape onto the PRE-CHAIN d38 base; all measured on the knob-alive
+minilink pipeline. FIRST the pipeline scare: the sandbox rollback had eaten
+the maspsx delay-slot patch state (tools/maspsx_delay_slot.patch carries the
+--addiu-at CLI knob) and rehydrate 6b did not re-apply it in this window's
+first pass - d38/d46/d47 all measured uniformly -56 B (the knob-dead
+signature: six at-store sites x 2 words + 2) until the patch was re-applied
+by hand and BOTH anchors reproduced (d38 1092, d46 1104). LAW: run the
+knob-alive anchor check (d38 = 1092 via minilink) BEFORE any measurement in
+a fresh sandbox; a uniform -56 B across drafts = the knob, never the source):
+
+    draft52  266 w   175/274   linked 1092   THE PORT, metric-NEUTRAL vs d38
+    draft53  268 w   177/274   linked 1096 = THE ROW SIZE   *** THE NEW BEST ***
+    draft54  272 w   148/274   linked 1112   frame 1080->1088, CASCADE
+    draft55  272 w   177/274   linked 1112   the barrier costs +2 w/block
+
+- d52 (d38 + the d46 mid-function err move, NO chain): the port reproduces
+  d46's region SHAPE on the d38 landscape at ZERO metric delta (175/274/
+  1092 held): the fail block falls into the err tail, the li -1 rides the
+  epilogue jump's delay, the end-of-function err copy is gone - the moved
+  words exactly fund the added ones. The a2/base chain the d41 landscape
+  needed for the +1 alignment is NOT needed here; the err region's two
+  residuals persist in-kind (the a0=0 head, the OK-edge skip pair).
+- d53 (d52 + THE HEAD FORCE ON THE $4 PIN = the window's WIN): the d48
+  plain-long law (a fresh cross-block pseudo never takes the dead arg reg,
+  it took s7 and broke the frame) is BYPASSED by riding the pin that
+  already owns $4 - hv, the a0 read-home, dead before the sltu check: every
+  fail path assigns `hv = 0` on its dead edge and the tail call reads hv
+  instead of the literal. MEASURED: the three plain goto entries materialize
+  addu $4,$zero,$zero IN THEIR JUMP DELAYS (retail's entry delays - two by
+  the source force, the alloc verdict by rule17's own trampoline jdelay),
+  the two $2-tail fail blocks carry it BETWEEN the decl (emits nothing, the
+  d25 coalescing) and the clear = the MERGED BLOCK HEAD (retail addu
+  $a0,$zero,$zero @0x0314), the jal delay empties to nop (retail @0x0334),
+  and the tail-merge survives (identical [hv=0][extend][clear] prefixes).
+  177/274 TIES d47's alignment record AT THE ROW SIZE (1096) - the first
+  form ever at record alignment without the +44 B duplication debt.
+- d53 v1 (the alloc-check force) = the RULE17 ANCHOR LAW, loud exit 3: the
+  cc-post rule17 trampoline anchors on the alloc-merge verdict's
+  `beq $rX,$0,$L19` (fail-branches-far); a source assignment between the
+  verdict and the goto dissolves the pattern and rule17 exits 3 (the
+  designed loud failure). LAW: the alloc entry's a0=0 is the PIPELINE'S
+  job; never put source statements between the alloc verdict and its
+  goto err.
+- d54 (the second-label fusion, third form - the m-check fail becomes a
+  bare `goto merged_fail`, the sltu block grows the label between the
+  decl-with-init and the head force, the check's `goto err` dropped, the
+  err body nested): C89-legal (a label may precede a statement; the
+  skipped init emits nothing) and d47's duplication is bypassed (the
+  m-check entry shares the clear) - but the D51 CASCADE REPRODUCED:
+  frame 1080 -> 1088, regs +1 callee-saved, alignment 177 -> 148 (the
+  ladder's worst). GENERALIZED LAW: a LABEL between a $2-pinned decl and
+  its first use changes gcc's reg-var treatment whether or not the decl
+  has an initializer - the m-check goto entering the pinned block is the
+  trigger. The skip-fusion lever stays closed on every landscape tried
+  (d47 duplication, d51 bare-decl cascade, d54 label-after-decl cascade);
+  it needs a sharing mechanism that does not enter the pinned block.
+- d55 (the head-order barrier): the d53 head a0=0 sits ONE SLOT LATE
+  (built [sll][sra][a0=0][clear] vs retail [a0=0][sll][sra][clear] - the
+  extend pair is independent and the scheduler hoists it above). The
+  empty-volatile-asm clobber between hv=0 and the store pins the order
+  but COSTS +2 words per block (the clobber forces reload insns) for
+  ZERO alignment gain (177/274, +16 B). NEGATIVE - the head word is
+  present but its slot misalignment is cheaper than the barrier.
+- NET read: d53 = THE NEW BEST PARKED FORM (268 w / 177/274 / linked
+  1096 = the row size; the err region is retail-shaped except the head
+  word's one-slot-late position and the OK-edge skip pair; the residual
+  regions @0x0330-0x0448 are the err tail's FB20 dec class + the FB24
+  path + the backfill tail + the epilogue). NEXT window (oracle still
+  down): the a0=0 one-slot-late fix WITHOUT the barrier (a source-order
+  or decl-position variant - the extend's hoist is the enemy); then the
+  skip-pair polarity (the d50 law says the goto blocks it - every sharing
+  form so far cascades, so the remaining lever is the check's OWN edge
+  shape, not the err entry); the region-twin decode prep still queued
+  behind these. NEXT window (oracle up): the H.2 sequence runs d53 first
+  (the SIZE gate is already satisfied OFFLINE - 1096 = the row; the EXACT
+  verdict stays live-only).
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
