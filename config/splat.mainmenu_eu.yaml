@@ -757,7 +757,7 @@ segments:
       - [0x614C8, asm, func_80080CC8]   # 0x34 sdk
       - [0x614FC, asm, func_80080CFC]   # 0x34 sdk
       - [0x61530, asm, func_80080D30]   # 0x34 sdk
-      - [0x61564, asm, func_80080D64]   # 0x448 sdk
+      - [0x61564, c, func_80080D64]   # 0x448 sdk SsVabOpenHeadWithMode
       - [0x619AC, asm, func_8008F93C]   # 0x2c8 sdk
       - [0x61C74, asm, func_8008FC04]   # 0x300 sdk
       - [0x61F74, asm, func_8008FF04]   # 0x78 sdk
