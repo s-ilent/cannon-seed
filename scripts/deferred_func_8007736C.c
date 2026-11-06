@@ -162,6 +162,31 @@
  *         after the pins, block-scope before the pins). Retail's s2
  *         (level's dead reg) is unreachable by source steering; the
  *         class joins the cc_post reg-field-candidate family.
+ *    (9) THE PROLOGUE IMPORT ORDER: FULLY PARKED (cron-202611062231,
+ *         probe c6, judge 127/186 = +5 WORSE). The third and last
+ *         candidate - an input-only empty asm consuming outp before the
+ *         pathv[0] read - did NOT reorder the init copies (the order is
+ *         not first-use-driven either) and the barrier displaced the
+ *         guard loads into the import block and reshuffled the spill
+ *         batch. With declaration order and K&R register params already
+ *         refuted, the class is a cc_post rule-15-family extension or
+ *         nothing.
+ *   (10) THE WALK-HEAD ANCHOR CLASS (retail [120]-[124]: anchor into v0,
+ *         rec = addiu $s0,$v0,-8, name = move $s3,$v0 - a REAL copy from
+ *         the scratch): REFUTED from three source shapes
+ *         (cron-202611062231). (a) c3 form: the -8 folds into rec's own
+ *         materialization (lui/addiu 0x7884 into s0, name = s0+8). (b)
+ *         c7 transparent shared anchor: gcc homes the anchor in name's
+ *         own s3 (lui $s3 direct), rec = s3-8. (c) c7b opaque anchor
+ *         (the "=r"/"0" barrier, C89-clean statement order): the anchor
+ *         STILL homes in s3 - the barrier blocks value propagation but
+ *         not REGISTER coalescing, and the anchor->name copy becomes a
+ *         no-op instead of retail's real move. The v0-scratch route is
+ *         unreachable from the source; the class joins the cc_post
+ *         reg-field-candidate family. Side finding: the c7b restructure
+ *         moved i's init into the walk block head (move $s4,$zero at
+ *         [123]) without changing the count - the i-init position is
+ *         likewise not worth a source lever.
  */
 
 extern int D_800C8028;               /* mount guard: cached state */
