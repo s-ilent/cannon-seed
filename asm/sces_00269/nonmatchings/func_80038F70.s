@@ -605,7 +605,7 @@ nonmatching func_800395E4, 0x30
 glabel func_800395E4
     /* 19DE4 800395E4 49004014 */  bnez       $v0, func_8003970C
     /* 19DE8 800395E8 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 19DEC 800395EC FCB9000C */  jal        func_8002E7F0
+    /* 19DEC 800395EC FCB9000C */  jal        CheckCallback
     /* 19DF0 800395F0 00000000 */   nop
     /* 19DF4 800395F4 2B004010 */  beqz       $v0, func_800396A4
     /* 19DF8 800395F8 00000000 */   nop
@@ -843,7 +843,7 @@ nonmatching func_80039870, 0x30
 glabel func_80039870
     /* 1A070 80039870 59004014 */  bnez       $v0, func_800399D8
     /* 1A074 80039874 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 1A078 80039878 FCB9000C */  jal        func_8002E7F0
+    /* 1A078 80039878 FCB9000C */  jal        CheckCallback
     /* 1A07C 8003987C 00000000 */   nop
     /* 1A080 80039880 2B004010 */  beqz       $v0, func_80039930
     /* 1A084 80039884 00000000 */   nop
@@ -1244,7 +1244,7 @@ nonmatching func_80039CE8, 0x30
 glabel func_80039CE8
     /* 1A4E8 80039CE8 55004014 */  bnez       $v0, func_80039E40
     /* 1A4EC 80039CEC FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 1A4F0 80039CF0 FCB9000C */  jal        func_8002E7F0
+    /* 1A4F0 80039CF0 FCB9000C */  jal        CheckCallback
     /* 1A4F4 80039CF4 00000000 */   nop
     /* 1A4F8 80039CF8 2B004010 */  beqz       $v0, func_80039DA8
     /* 1A4FC 80039CFC 00000000 */   nop

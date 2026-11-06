@@ -102,7 +102,7 @@ nonmatching func_800251C8, 0x28
 
 glabel func_800251C8
     /* 59C8 800251C8 1800A427 */  addiu      $a0, $sp, 0x18
-    /* 59CC 800251CC 6C7F010C */  jal        func_8005FDB0
+    /* 59CC 800251CC 6C7F010C */  jal        CdSearchFile
     /* 59D0 800251D0 21280002 */   addu      $a1, $s0, $zero
     /* 59D4 800251D4 35004010 */  beqz       $v0, func_800252AC
     /* 59D8 800251D8 00000000 */   nop
@@ -310,7 +310,7 @@ glabel func_80025398
     /* 5BAC 800253AC 21808000 */   addu      $s0, $a0, $zero
     /* 5BB0 800253B0 1800A427 */  addiu      $a0, $sp, 0x18
     /* 5BB4 800253B4 21280002 */  addu       $a1, $s0, $zero
-    /* 5BB8 800253B8 6C7F010C */  jal        func_8005FDB0
+    /* 5BB8 800253B8 6C7F010C */  jal        CdSearchFile
     /* 5BBC 800253BC 21884000 */   addu      $s1, $v0, $zero
     /* 5BC0 800253C0 20004010 */  beqz       $v0, func_80025444
     /* 5BC4 800253C4 00000000 */   nop

@@ -25,7 +25,7 @@ glabel func_8005FC0C
     /* 4043C 8005FC3C 21204002 */  addu       $a0, $s2, $zero
   .L8005FC40:
     /* 40440 8005FC40 21282002 */  addu       $a1, $s1, $zero
-    /* 40444 8005FC44 5485010C */  jal        func_80061550
+    /* 40444 8005FC44 5485010C */  jal        CD_readm
     /* 40448 8005FC48 21306002 */   addu      $a2, $s3, $zero
     /* 4044C 8005FC4C 03004014 */  bnez       $v0, .L8005FC5C
     /* 40450 8005FC50 FFFF1026 */   addiu     $s0, $s0, -0x1

@@ -44,7 +44,7 @@ glabel func_8005F67C
     /* 3FEF4 8005F6F4 01000434 */   ori       $a0, $zero, 0x1
     /* 3FEF8 8005F6F8 02000434 */  ori        $a0, $zero, 0x2
     /* 3FEFC 8005F6FC 21280000 */  addu       $a1, $zero, $zero
-    /* 3FF00 8005F700 6579010C */  jal        func_8005E594
+    /* 3FF00 8005F700 6579010C */  jal        DMACallback
     /* 3FF04 8005F704 000030A2 */   sb        $s0, 0x0($s1)
     /* 3FF08 8005F708 21104002 */  addu       $v0, $s2, $zero
   .L8005F70C:

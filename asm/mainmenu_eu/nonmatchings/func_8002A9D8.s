@@ -201,7 +201,7 @@ glabel func_80029530
     /* 9DB0 800295B0 060002A6 */  sh         $v0, 0x6($s0)
   .L800295B4:
     /* 9DB4 800295B4 21282002 */  addu       $a1, $s1, $zero
-    /* 9DB8 800295B8 D596010C */  jal        func_80065B54
+    /* 9DB8 800295B8 D596010C */  jal        GsSortSprite
     /* 9DBC 800295BC 21300000 */   addu      $a2, $zero, $zero
     /* 9DC0 800295C0 060012A6 */  sh         $s2, 0x6($s0)
     /* 9DC4 800295C4 1C00BF8F */  lw         $ra, 0x1C($sp)

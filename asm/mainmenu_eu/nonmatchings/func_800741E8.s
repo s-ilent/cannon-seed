@@ -13,7 +13,7 @@ glabel func_800741E8
     /* 549E8 800741E8 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 549EC 800741EC 1000BFAF */  sw         $ra, 0x10($sp)
     /* 549F0 800741F0 21288000 */  addu       $a1, $a0, $zero
-    /* 549F4 800741F4 6579010C */  jal        func_8005E594
+    /* 549F4 800741F4 6579010C */  jal        DMACallback
     /* 549F8 800741F8 21200000 */   addu      $a0, $zero, $zero
     /* 549FC 800741FC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 54A00 80074200 1800BD27 */  addiu      $sp, $sp, 0x18

@@ -67,8 +67,8 @@ glabel SpuSetCommonAttr
   .L8006C644:
     /* 4CE44 8006C644 FF7FE230 */  andi       $v0, $a3, 0x7FFF
   .L8006C648:
-    /* 4CE48 8006C648 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4CE4C 8006C64C B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4CE48 8006C648 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4CE4C 8006C64C B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4CE50 8006C650 25104500 */  or         $v0, $v0, $a1
     /* 4CE54 8006C654 800162A4 */  sh         $v0, 0x180($v1)
   .L8006C658:
@@ -125,8 +125,8 @@ glabel SpuSetCommonAttr
   .L8006C710:
     /* 4CF10 8006C710 FF7F4231 */  andi       $v0, $t2, 0x7FFF
   .L8006C714:
-    /* 4CF14 8006C714 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4CF18 8006C718 B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4CF14 8006C714 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4CF18 8006C718 B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4CF1C 8006C71C 25104500 */  or         $v0, $v0, $a1
     /* 4CF20 8006C720 820162A4 */  sh         $v0, 0x182($v1)
   .L8006C724:
@@ -135,8 +135,8 @@ glabel SpuSetCommonAttr
     /* 4CF2C 8006C72C 06004010 */  beqz       $v0, .L8006C748
     /* 4CF30 8006C730 00000000 */   nop
   .L8006C734:
-    /* 4CF34 8006C734 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4CF38 8006C738 B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4CF34 8006C734 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4CF38 8006C738 B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4CF3C 8006C73C 10008294 */  lhu        $v0, 0x10($a0)
     /* 4CF40 8006C740 00000000 */  nop
     /* 4CF44 8006C744 B00162A4 */  sh         $v0, 0x1B0($v1)
@@ -146,8 +146,8 @@ glabel SpuSetCommonAttr
     /* 4CF50 8006C750 06004010 */  beqz       $v0, .L8006C76C
     /* 4CF54 8006C754 00000000 */   nop
   .L8006C758:
-    /* 4CF58 8006C758 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4CF5C 8006C75C B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4CF58 8006C758 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4CF5C 8006C75C B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4CF60 8006C760 12008294 */  lhu        $v0, 0x12($a0)
     /* 4CF64 8006C764 00000000 */  nop
     /* 4CF68 8006C768 B20162A4 */  sh         $v0, 0x1B2($v1)
@@ -161,15 +161,15 @@ glabel SpuSetCommonAttr
     /* 4CF80 8006C780 00000000 */  nop
     /* 4CF84 8006C784 07004014 */  bnez       $v0, .L8006C7A4
     /* 4CF88 8006C788 00000000 */   nop
-    /* 4CF8C 8006C78C 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4CF90 8006C790 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4CF8C 8006C78C 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4CF90 8006C790 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4CF94 8006C794 00000000 */  nop
     /* 4CF98 8006C798 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4CF9C 8006C79C EFB10108 */  j          .L8006C7BC
     /* 4CFA0 8006C7A0 FBFF6330 */   andi      $v1, $v1, 0xFFFB
   .L8006C7A4:
-    /* 4CFA4 8006C7A4 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4CFA8 8006C7A8 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4CFA4 8006C7A4 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4CFA8 8006C7A8 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4CFAC 8006C7AC 00000000 */  nop
     /* 4CFB0 8006C7B0 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4CFB4 8006C7B4 00000000 */  nop
@@ -186,15 +186,15 @@ glabel SpuSetCommonAttr
     /* 4CFD4 8006C7D4 00000000 */  nop
     /* 4CFD8 8006C7D8 07004014 */  bnez       $v0, .L8006C7F8
     /* 4CFDC 8006C7DC 00000000 */   nop
-    /* 4CFE0 8006C7E0 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4CFE4 8006C7E4 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4CFE0 8006C7E0 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4CFE4 8006C7E4 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4CFE8 8006C7E8 00000000 */  nop
     /* 4CFEC 8006C7EC AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4CFF0 8006C7F0 04B20108 */  j          .L8006C810
     /* 4CFF4 8006C7F4 FEFF6330 */   andi      $v1, $v1, 0xFFFE
   .L8006C7F8:
-    /* 4CFF8 8006C7F8 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4CFFC 8006C7FC B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4CFF8 8006C7F8 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4CFFC 8006C7FC B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4D000 8006C800 00000000 */  nop
     /* 4D004 8006C804 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4D008 8006C808 00000000 */  nop
@@ -207,8 +207,8 @@ glabel SpuSetCommonAttr
     /* 4D01C 8006C81C 06004010 */  beqz       $v0, .L8006C838
     /* 4D020 8006C820 00000000 */   nop
   .L8006C824:
-    /* 4D024 8006C824 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4D028 8006C828 B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4D024 8006C824 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4D028 8006C828 B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4D02C 8006C82C 1C008294 */  lhu        $v0, 0x1C($a0)
     /* 4D030 8006C830 00000000 */  nop
     /* 4D034 8006C834 B40162A4 */  sh         $v0, 0x1B4($v1)
@@ -218,8 +218,8 @@ glabel SpuSetCommonAttr
     /* 4D040 8006C840 06004010 */  beqz       $v0, .L8006C85C
     /* 4D044 8006C844 00000000 */   nop
   .L8006C848:
-    /* 4D048 8006C848 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4D04C 8006C84C B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4D048 8006C848 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4D04C 8006C84C B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4D050 8006C850 1E008294 */  lhu        $v0, 0x1E($a0)
     /* 4D054 8006C854 00000000 */  nop
     /* 4D058 8006C858 B60162A4 */  sh         $v0, 0x1B6($v1)
@@ -233,15 +233,15 @@ glabel SpuSetCommonAttr
     /* 4D070 8006C870 00000000 */  nop
     /* 4D074 8006C874 07004014 */  bnez       $v0, .L8006C894
     /* 4D078 8006C878 00000000 */   nop
-    /* 4D07C 8006C87C 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4D080 8006C880 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4D07C 8006C87C 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4D080 8006C880 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4D084 8006C884 00000000 */  nop
     /* 4D088 8006C888 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4D08C 8006C88C 2BB20108 */  j          .L8006C8AC
     /* 4D090 8006C890 F7FF6330 */   andi      $v1, $v1, 0xFFF7
   .L8006C894:
-    /* 4D094 8006C894 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4D098 8006C898 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4D094 8006C894 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4D098 8006C898 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4D09C 8006C89C 00000000 */  nop
     /* 4D0A0 8006C8A0 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4D0A4 8006C8A4 00000000 */  nop
@@ -258,15 +258,15 @@ glabel SpuSetCommonAttr
     /* 4D0C4 8006C8C4 00000000 */  nop
     /* 4D0C8 8006C8C8 07004014 */  bnez       $v0, .L8006C8E8
     /* 4D0CC 8006C8CC 00000000 */   nop
-    /* 4D0D0 8006C8D0 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4D0D4 8006C8D4 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4D0D0 8006C8D0 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4D0D4 8006C8D4 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4D0D8 8006C8D8 00000000 */  nop
     /* 4D0DC 8006C8DC AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4D0E0 8006C8E0 40B20108 */  j          .L8006C900
     /* 4D0E4 8006C8E4 FDFF6330 */   andi      $v1, $v1, 0xFFFD
   .L8006C8E8:
-    /* 4D0E8 8006C8E8 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 4D0EC 8006C8EC B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 4D0E8 8006C8E8 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 4D0EC 8006C8EC B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 4D0F0 8006C8F0 00000000 */  nop
     /* 4D0F4 8006C8F4 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 4D0F8 8006C8F8 00000000 */  nop

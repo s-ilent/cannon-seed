@@ -96,7 +96,7 @@ glabel func_8004AAE4
   .L8004AC20:
     /* 2B420 8004AC20 0580053C */  lui        $a1, %hi(func_8004ADE0)
     /* 2B424 8004AC24 E0ADA524 */  addiu      $a1, $a1, %lo(func_8004ADE0)
-    /* 2B428 8004AC28 C51E010C */  jal        func_80047B14
+    /* 2B428 8004AC28 C51E010C */  jal        DMACallback
     /* 2B42C 8004AC2C 02000434 */   ori       $a0, $zero, 0x2
     /* 2B430 8004AC30 2C002012 */  beqz       $s1, .L8004ACE4
     /* 2B434 8004AC34 21300000 */   addu      $a2, $zero, $zero

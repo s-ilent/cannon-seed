@@ -15,14 +15,14 @@ glabel func_800746E0
     /* 54EE8 800746E8 21808000 */  addu       $s0, $a0, $zero
     /* 54EEC 800746EC 1400B1AF */  sw         $s1, 0x14($sp)
     /* 54EF0 800746F0 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 54EF4 800746F4 D8D1010C */  jal        func_80074760
+    /* 54EF4 800746F4 D8D1010C */  jal        MDEC_vlc
     /* 54EF8 800746F8 2188A000 */   addu      $s1, $a1, $zero
     /* 54EFC 800746FC 21184000 */  addu       $v1, $v0, $zero
     /* 54F00 80074700 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 54F04 80074704 04006214 */  bne        $v1, $v0, .L80074718
     /* 54F08 80074708 21106000 */   addu      $v0, $v1, $zero
     /* 54F0C 8007470C 21200002 */  addu       $a0, $s0, $zero
-    /* 54F10 80074710 A5D2010C */  jal        func_80074A94
+    /* 54F10 80074710 A5D2010C */  jal        MDEC_vlc2
     /* 54F14 80074714 21282002 */   addu      $a1, $s1, $zero
   .L80074718:
     /* 54F18 80074718 1800BF8F */  lw         $ra, 0x18($sp)

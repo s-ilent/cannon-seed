@@ -22,7 +22,7 @@ glabel func_8005F41C
     /* 3FC40 8005F440 2400B3AF */  sw         $s3, 0x24($sp)
     /* 3FC44 8005F444 2000B2AF */  sw         $s2, 0x20($sp)
     /* 3FC48 8005F448 1C00B1AF */  sw         $s1, 0x1C($sp)
-    /* 3FC4C 8005F44C E91F010C */  jal        func_80047FA4
+    /* 3FC4C 8005F44C E91F010C */  jal        VSync
     /* 3FC50 8005F450 1800B0AF */   sw        $s0, 0x18($sp)
     /* 3FC54 8005F454 0B80143C */  lui        $s4, %hi(D_800B7A4C)
     /* 3FC58 8005F458 4C7A9426 */  addiu      $s4, $s4, %lo(D_800B7A4C)
@@ -40,7 +40,7 @@ glabel func_8005F41C
     /* 3FC88 8005F488 102F20AC */  sw         $zero, %lo(D_80152F10)($at)
     /* 3FC8C 8005F48C 1580013C */  lui        $at, %hi(D_80152F14)
     /* 3FC90 8005F490 142F22AC */  sw         $v0, %lo(D_80152F14)($at)
-    /* 3FC94 8005F494 E91F010C */  jal        func_80047FA4
+    /* 3FC94 8005F494 E91F010C */  jal        VSync
     /* 3FC98 8005F498 FFFF0424 */   addiu     $a0, $zero, -0x1
     /* 3FC9C 8005F49C 1580033C */  lui        $v1, %hi(D_80152F0C)
     /* 3FCA0 8005F4A0 0C2F638C */  lw         $v1, %lo(D_80152F0C)($v1)

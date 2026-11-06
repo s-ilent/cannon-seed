@@ -12,7 +12,7 @@ nonmatching func_8006A8BC, 0x20
 glabel func_8006A8BC
     /* 4B0BC 8006A8BC E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 4B0C0 8006A8C0 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 4B0C4 8006A8C4 F98D010C */  jal        func_800637E4
+    /* 4B0C4 8006A8C4 F98D010C */  jal        SpuQuit
     /* 4B0C8 8006A8C8 00000000 */   nop
     /* 4B0CC 8006A8CC 1000BF8F */  lw         $ra, 0x10($sp)
     /* 4B0D0 8006A8D0 1800BD27 */  addiu      $sp, $sp, 0x18

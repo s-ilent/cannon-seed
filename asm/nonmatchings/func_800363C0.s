@@ -96,7 +96,7 @@ glabel GsSortClear
     /* 13EB4 800336B4 04C3A584 */  lh         $a1, %lo(PSDIDX)($a1)
     /* 13EB8 800336B8 1000E48C */  lw         $a0, 0x10($a3)
     /* 13EBC 800336BC 00290500 */  sll        $a1, $a1, 4
-    /* 13EC0 800336C0 2CCA000C */  jal        func_800328B0
+    /* 13EC0 800336C0 2CCA000C */  jal        AddPrim
     /* 13EC4 800336C4 2128A200 */   addu      $a1, $a1, $v0
     /* 13EC8 800336C8 1000BF8F */  lw         $ra, 0x10($sp)
     /* 13ECC 800336CC 1800BD27 */  addiu      $sp, $sp, 0x18

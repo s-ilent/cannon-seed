@@ -17,7 +17,7 @@ glabel func_8005F6D4
     /* 3FEE4 8005F6E4 2800BFAF */  sw         $ra, 0x28($sp)
     /* 3FEE8 8005F6E8 2400B3AF */  sw         $s3, 0x24($sp)
     /* 3FEEC 8005F6EC 1C00B1AF */  sw         $s1, 0x1C($sp)
-    /* 3FEF0 8005F6F0 E91F010C */  jal        func_80047FA4
+    /* 3FEF0 8005F6F0 E91F010C */  jal        VSync
     /* 3FEF4 8005F6F4 1800B0AF */   sw        $s0, 0x18($sp)
     /* 3FEF8 8005F6F8 0B80133C */  lui        $s3, %hi(D_800B79CC)
     /* 3FEFC 8005F6FC CC797326 */  addiu      $s3, $s3, %lo(D_800B79CC)
@@ -39,7 +39,7 @@ endlabel func_8005F6D4
 nonmatching func_8005F734, 0x48
 
 glabel func_8005F734
-    /* 3FF34 8005F734 E91F010C */  jal        func_80047FA4
+    /* 3FF34 8005F734 E91F010C */  jal        VSync
     /* 3FF38 8005F738 FFFF0424 */   addiu     $a0, $zero, -0x1
     /* 3FF3C 8005F73C 1580033C */  lui        $v1, %hi(D_80152F0C)
     /* 3FF40 8005F740 0C2F638C */  lw         $v1, %lo(D_80152F0C)($v1)

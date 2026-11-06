@@ -15,8 +15,8 @@ glabel func_800651F8
     /* 45A00 80065200 21888000 */  addu       $s1, $a0, $zero
     /* 45A04 80065204 1000B0AF */  sw         $s0, 0x10($sp)
     /* 45A08 80065208 2180A000 */  addu       $s0, $a1, $zero
-    /* 45A0C 8006520C 0B80023C */  lui        $v0, %hi(D_800AB0B4)
-    /* 45A10 80065210 B4B04294 */  lhu        $v0, %lo(D_800AB0B4)($v0)
+    /* 45A0C 8006520C 0B80023C */  lui        $v0, %hi(_spu_tsa)
+    /* 45A10 80065210 B4B04294 */  lhu        $v0, %lo(_spu_tsa)($v0)
     /* 45A14 80065214 0B80053C */  lui        $a1, %hi(D_800AB0DC)
     /* 45A18 80065218 DCB0A58C */  lw         $a1, %lo(D_800AB0DC)($a1)
     /* 45A1C 8006521C 02000434 */  ori        $a0, $zero, 0x2

@@ -15,7 +15,7 @@ glabel func_8005C0C8
     /* 3C8D0 8005C0D0 21808000 */  addu       $s0, $a0, $zero
     /* 3C8D4 8005C0D4 03000016 */  bnez       $s0, .L8005C0E4
     /* 3C8D8 8005C0D8 1400BFAF */   sw        $ra, 0x14($sp)
-    /* 3C8DC 8005C0DC 2B1D010C */  jal        func_800474AC
+    /* 3C8DC 8005C0DC 2B1D010C */  jal        ResetCallback
     /* 3C8E0 8005C0E0 00000000 */   nop
   .L8005C0E4:
     /* 3C8E4 8005C0E4 C770010C */  jal        func_8005C31C

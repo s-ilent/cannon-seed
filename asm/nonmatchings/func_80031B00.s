@@ -96,7 +96,7 @@ glabel func_80031B00
   .L80031C3C:
     /* 1243C 80031C3C 0380053C */  lui        $a1, %hi(func_80031DFC)
     /* 12440 80031C40 FC1DA524 */  addiu      $a1, $a1, %lo(func_80031DFC)
-    /* 12444 80031C44 CCBA000C */  jal        func_8002EB30
+    /* 12444 80031C44 CCBA000C */  jal        DMACallback
     /* 12448 80031C48 02000434 */   ori       $a0, $zero, 0x2
     /* 1244C 80031C4C 2C002012 */  beqz       $s1, .L80031D00
     /* 12450 80031C50 21300000 */   addu      $a2, $zero, $zero

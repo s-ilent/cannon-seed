@@ -44,8 +44,8 @@ glabel func_80077BF8
     /* 583FC 80077BFC 34968424 */  addiu      $a0, $a0, %lo(data_ready_callback)
     /* 58400 80077C00 98D5010C */  jal        func_80075660
     /* 58404 80077C04 00000000 */   nop
-    /* 58408 80077C08 0880043C */  lui        $a0, %hi(func_80078948)
-    /* 5840C 80077C0C 48898424 */  addiu      $a0, $a0, %lo(func_80078948)
+    /* 58408 80077C08 0880043C */  lui        $a0, %hi(StCdInterrupt)
+    /* 5840C 80077C0C 48898424 */  addiu      $a0, $a0, %lo(StCdInterrupt)
     /* 58410 80077C10 84D4010C */  jal        func_80075210
     /* 58414 80077C14 00000000 */   nop
 endlabel func_80077BF8

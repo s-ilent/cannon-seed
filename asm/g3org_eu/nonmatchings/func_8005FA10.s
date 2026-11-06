@@ -50,7 +50,7 @@ glabel func_8005FA10
     /* 402A0 8005FAA0 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 402A4 8005FAA4 000062AC */  sw         $v0, 0x0($v1)
   .L8005FAA8:
-    /* 402A8 8005FAA8 E91F010C */  jal        func_80047FA4
+    /* 402A8 8005FAA8 E91F010C */  jal        VSync
     /* 402AC 8005FAAC FFFF0424 */   addiu     $a0, $zero, -0x1
     /* 402B0 8005FAB0 0B80033C */  lui        $v1, %hi(D_800B7CA4)
     /* 402B4 8005FAB4 A47C6324 */  addiu      $v1, $v1, %lo(D_800B7CA4)

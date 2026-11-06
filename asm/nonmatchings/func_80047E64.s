@@ -323,7 +323,7 @@ glabel func_80047E64
     /* 28AD0 800482D0 0300E012 */  beqz       $s7, .L800482E0
     /* 28AD4 800482D4 00000000 */   nop
   .L800482D8:
-    /* 28AD8 800482D8 DD20010C */  jal        func_80048374
+    /* 28AD8 800482D8 DD20010C */  jal        _spu_setReverbAttr
     /* 28ADC 800482DC 1000A427 */   addiu     $a0, $sp, 0x10
   .L800482E0:
     /* 28AE0 800482E0 0500C013 */  beqz       $fp, .L800482F8

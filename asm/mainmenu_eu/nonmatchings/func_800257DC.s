@@ -1474,7 +1474,7 @@ glabel func_800267F0
     /* 6FF8 800267F8 00000000 */   nop
     /* 6FFC 800267FC 5800258E */  lw         $a1, 0x58($s1)
     /* 7000 80026800 21804000 */  addu       $s0, $v0, $zero
-    /* 7004 80026804 D18B010C */  jal        func_80062F44
+    /* 7004 80026804 D18B010C */  jal        GsInitCoordinate2
     /* 7008 80026808 21200000 */   addu      $a0, $zero, $zero
     /* 700C 8002680C 5C0030AE */  sw         $s0, 0x5C($s1)
     /* 7010 80026810 04001026 */  addiu      $s0, $s0, 0x4
@@ -1593,7 +1593,7 @@ glabel func_800268F8
     /* 7134 80026934 0D80013C */  lui        $at, %hi(D_800CB0E6)
     /* 7138 80026938 E6B023A4 */  sh         $v1, %lo(D_800CB0E6)($at)
     /* 713C 8002693C F4FF8424 */  addiu      $a0, $a0, -0xC
-    /* 7140 80026940 D5C9010C */  jal        func_80072754
+    /* 7140 80026940 D5C9010C */  jal        GsSortBg
     /* 7144 80026944 0F000634 */   ori       $a2, $zero, 0xF
     /* 7148 80026948 1000BF8F */  lw         $ra, 0x10($sp)
     /* 714C 8002694C 00000000 */  nop
@@ -3234,7 +3234,7 @@ glabel func_80027C40
     /* 8448 80027C48 00000000 */   nop
     /* 844C 80027C4C 5800258E */  lw         $a1, 0x58($s1)
     /* 8450 80027C50 21804000 */  addu       $s0, $v0, $zero
-    /* 8454 80027C54 D18B010C */  jal        func_80062F44
+    /* 8454 80027C54 D18B010C */  jal        GsInitCoordinate2
     /* 8458 80027C58 21200000 */   addu      $a0, $zero, $zero
     /* 845C 80027C5C 5C0030AE */  sw         $s0, 0x5C($s1)
     /* 8460 80027C60 04001026 */  addiu      $s0, $s0, 0x4
@@ -3331,9 +3331,9 @@ glabel func_80027D04
     /* 85A4 80027DA4 0400448C */  lw         $a0, 0x4($v0)
     /* 85A8 80027DA8 488D010C */  jal        GsGetLs
     /* 85AC 80027DAC 801F053C */   lui       $a1, (0x1F800000 >> 16)
-    /* 85B0 80027DB0 078C010C */  jal        func_8006301C
+    /* 85B0 80027DB0 078C010C */  jal        GsSetLightMatrix
     /* 85B4 80027DB4 801F043C */   lui       $a0, (0x1F800000 >> 16)
-    /* 85B8 80027DB8 FB8B010C */  jal        func_80062FEC
+    /* 85B8 80027DB8 FB8B010C */  jal        GsSetLsMatrix
     /* 85BC 80027DBC 801F043C */   lui       $a0, (0x1F800000 >> 16)
     /* 85C0 80027DC0 21284002 */  addu       $a1, $s2, $zero
     /* 85C4 80027DC4 5400048E */  lw         $a0, 0x54($s0)

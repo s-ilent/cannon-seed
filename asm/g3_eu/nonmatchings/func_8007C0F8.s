@@ -21,8 +21,8 @@ glabel SpuSetReverb
     /* 509E8 800701E8 9FC00108 */  j          .L8007027C
     /* 509EC 800701EC 00000000 */   nop
   .L800701F0:
-    /* 509F0 800701F0 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 509F4 800701F4 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 509F0 800701F0 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 509F4 800701F4 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 509F8 800701F8 00000000 */  nop
     /* 509FC 800701FC AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 50A00 80070200 0B80013C */  lui        $at, %hi(D_800AB118)
@@ -37,12 +37,12 @@ glabel SpuSetReverb
     /* 50A20 80070220 00000000 */   nop
     /* 50A24 80070224 0B80043C */  lui        $a0, %hi(D_800AB134)
     /* 50A28 80070228 34B1848C */  lw         $a0, %lo(D_800AB134)($a0)
-    /* 50A2C 8007022C E8BF010C */  jal        func_8006FFA0
+    /* 50A2C 8007022C E8BF010C */  jal        _SpuIsInAllocateArea_
     /* 50A30 80070230 00000000 */   nop
     /* 50A34 80070234 09004010 */  beqz       $v0, .L8007025C
     /* 50A38 80070238 00000000 */   nop
-    /* 50A3C 8007023C 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 50A40 80070240 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 50A3C 8007023C 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 50A40 80070240 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 50A44 80070244 00000000 */  nop
     /* 50A48 80070248 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 50A4C 8007024C 0B80013C */  lui        $at, %hi(D_800AB118)
@@ -50,8 +50,8 @@ glabel SpuSetReverb
     /* 50A54 80070254 9EC00108 */  j          .L80070278
     /* 50A58 80070258 7FFF6330 */   andi      $v1, $v1, 0xFF7F
   .L8007025C:
-    /* 50A5C 8007025C 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 50A60 80070260 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 50A5C 8007025C 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 50A60 80070260 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 50A64 80070264 00000000 */  nop
     /* 50A68 80070268 AA014394 */  lhu        $v1, 0x1AA($v0)
     /* 50A6C 8007026C 0B80013C */  lui        $at, %hi(D_800AB118)

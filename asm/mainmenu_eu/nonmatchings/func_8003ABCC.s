@@ -458,7 +458,7 @@ glabel func_8003B078
     /* 1B890 8003B090 0D80013C */  lui        $at, %hi(D_800CA4B4)
     /* 1B894 8003B094 B4A428A4 */  sh         $t0, %lo(D_800CA4B4)($at)
     /* 1B898 8003B098 01000234 */  ori        $v0, $zero, 0x1
-    /* 1B89C 8003B09C 2F006214 */  bne        $v1, $v0, .L8003B15C
+    /* 1B89C 8003B09C 2F006214 */  bne        $v1, $v0, func_8003B15C
     /* 1B8A0 8003B0A0 02000234 */   ori       $v0, $zero, 0x2
     /* 1B8A4 8003B0A4 04000634 */  ori        $a2, $zero, 0x4
     /* 1B8A8 8003B0A8 0D80053C */  lui        $a1, %hi(D_800CA49C)

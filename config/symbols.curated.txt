@@ -36,9 +36,121 @@
 // target: g3_eu
 OpenEvent = 0x8004AE34; // SDK veneer: vector 0xb0, index 0x08
 
+SsSeqCalledTbyT_guard = 0x8016AD04; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x8016B10C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x80171EA4; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x80172724; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x80172728; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_lmode = 0x80171E9C; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_msg = 0x80021C14; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_crescendo = 0x8007069C; // Snd_crescendo callee entry (the SsSeqCalledTbyT landing's extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrix = 0x80049AF8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ApplyMatrixSV = 0x80049B48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+AverageSZ3 = 0x80059B58; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+AverageSZ4 = 0x80059B68; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ColorCol = 0x80059B00; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ColorDpq = 0x80059AD8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+DpqColor = 0x80059994; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x8004B7D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+LocalLight = 0x80059970; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+MulMatrix = 0x800498E0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+MulMatrix2 = 0x800499EC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalClip = 0x80059B24; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalClipS = 0x80059B48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColor = 0x800599B0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColor3 = 0x800599CC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorCol = 0x80059A74; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorCol3 = 0x80059A94; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorDpq = 0x80059A08; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorDpq3 = 0x80059A2C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x80051C48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x80051C68; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x80051C34; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x80051C20; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x80051BF4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x80051C08; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTrans = 0x80059948; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTransPers = 0x800598C8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTransPers3 = 0x800598F4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ScaleMatrix = 0x80049BC8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetBackColor = 0x8004E340; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x80049D4C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQA = 0x8004E418; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQB = 0x8004E424; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetData32 = 0x8004E3E8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetFarColor = 0x8004E360; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomOffset = 0x8004E3F4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomScreen = 0x8004E40C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR0 = 0x8004E334; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR123 = 0x8004E320; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetLightMatrix = 0x80049D1C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetMAC123 = 0x8004E3D4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRGBfifo = 0x8004E30C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRii = 0x8004E3C0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRotMatrix = 0x80049CEC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSXSYfifo = 0x8004E3AC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo3 = 0x8004E380; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo4 = 0x8004E394; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x80049D7C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex0 = 0x8004E2BC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex1 = 0x8004E2CC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex2 = 0x8004E2DC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertexTri = 0x8004E2EC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_decrescendo = 0x8006D09C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_nextpause = 0x8006CE58; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x8006CDB8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x80067FBC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+TransMatrix = 0x80049BA4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+gte_rotate_z_matrix = 0x8004FD88; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
 // target: g3_jp
 strcat = 0x80047FDC; // SDK veneer: vector 0xa0, index 0x15
 InitHeap = 0x8004B494; // SDK veneer: vector 0xa0, index 0x39
+
+SsSeqCalledTbyT_guard = 0x8016ABDC; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x8016AFE8; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x80171D84; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x80171E04; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x80171E08; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_lmode = 0x80171D7C; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_msg = 0x80021C34; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrixSV = 0x8004A130; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x8004BE60; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x800522E4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x80052304; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x800522D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x800522BC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x80052290; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x800522A4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotMatrixC = 0x8005067C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetBackColor = 0x8004EA04; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x8004A334; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQA = 0x8004EADC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQB = 0x8004EAE8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetData32 = 0x8004EAAC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetFarColor = 0x8004EA24; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomOffset = 0x8004EAB8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomScreen = 0x8004EAD0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR0 = 0x8004E9F8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR123 = 0x8004E9E4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetMAC123 = 0x8004EA98; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRGBfifo = 0x8004E9D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRii = 0x8004EA84; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSXSYfifo = 0x8004EA70; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo3 = 0x8004EA44; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo4 = 0x8004EA58; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x8004A364; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex0 = 0x8004E980; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex1 = 0x8004E990; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex2 = 0x8004E9A0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertexTri = 0x8004E9B0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_nextpause = 0x800701D8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x80070138; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_stop = 0x8006FE5C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x80067730; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+gte_rotate_z_matrix = 0x8005044C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
 
 // target: slps_00270
 startIntrDMA = 0x8002F1F4; // LIBETC INTR_DMA member; tools/sdk_members.py, unique placement + signature DB agrees; pinned member row
@@ -123,6 +235,54 @@ D_80115158 = 0x80115158; // save unit 0x30 name-record copy; gp:absolute
 D_801151F8 = 0x801151f8; // save frame 0x80 sub-block 2 (src6/src5 arm); gp:absolute
 D_80115278 = 0x80115278; // save frame 0x80 sub-block 3 (src7/src5 arm); gp:absolute
 
+SsSeqCalledTbyT_guard = 0x8011506C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x80115518; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x8011C274; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x8011C2F4; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x8011C2F8; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_svm_stereo_mono = 0x80114FF8; // SsSetMono backing static (the 6b304565 landing's extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+intr_vb_cb_slots = 0x8004E360; // INTR_VB member .data+0 (8 callback slots); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrix = 0x80034C10; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ApplyMatrixSV = 0x80034C60; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x80030318; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+MulMatrix = 0x800349F8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+MulMatrix2 = 0x80034B04; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x80037360; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x80037380; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x8003734C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x80037338; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x8003730C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x80037320; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ScaleMatrix = 0x80034CE0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetBackColor = 0x80032EBC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x80034E64; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQA = 0x80032F94; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQB = 0x80032FA0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetData32 = 0x80032F64; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetFarColor = 0x80032EDC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomOffset = 0x80032F70; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomScreen = 0x80032F88; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR0 = 0x80032EB0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR123 = 0x80032E9C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetLightMatrix = 0x80034E34; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetMAC123 = 0x80032F50; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRGBfifo = 0x80032E88; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRii = 0x80032F3C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRotMatrix = 0x80034E04; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSXSYfifo = 0x80032F28; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo3 = 0x80032EFC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo4 = 0x80032F10; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x80034E94; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex0 = 0x80032E38; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex1 = 0x80032E48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex2 = 0x80032E58; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertexTri = 0x80032E68; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_nextpause = 0x80049784; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x800496E4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x80040C40; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+TransMatrix = 0x80034CBC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
 // target: sces_00269
 // The memory-card save unit's gap-region buffers (sces_00269 twin unit
 // func_8002ABC8, VA 0x8002ABC8..0x8002B28C, decoded cron-202610260919,
@@ -166,9 +326,144 @@ print_matrix = 0x8003645C; // LIBGS MATRIX member .text+0x344; unique placement 
 print_vector = 0x800364CC; // LIBGS MATRIX member .text+0x3b4; unique placement + signature DB agrees
 
 // ResetEntryInt = 0x8002f458;  [alias of intr_stop_commit at the same address: one curated name per address, C-referenced wins]
+SsSeqCalledTbyT_guard = 0x801145EC; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x80114A94; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x8011B7EC; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x8011C06C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x8011C070; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_crescendo = 0x800490AC; // Snd_crescendo callee entry (the SsSeqCalledTbyT landing's extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrixSV = 0x80034728; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x8002FE14; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+InitCARD = 0x80049730; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+PAD_dr = 0x8004A9B0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x80036E28; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x80036E48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x80036E14; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x80036E00; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x80036DD4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x80036DE8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotMatrixC = 0x80034BB0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetBackColor = 0x80032984; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x8003492C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQA = 0x80032A5C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQB = 0x80032A68; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetData32 = 0x80032A2C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetFarColor = 0x800329A4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomOffset = 0x80032A38; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomScreen = 0x80032A50; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR0 = 0x80032978; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR123 = 0x80032964; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetMAC123 = 0x80032A18; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRGBfifo = 0x80032950; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRii = 0x80032A04; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSXSYfifo = 0x800329F0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo3 = 0x800329C4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo4 = 0x800329D8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x8003495C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex0 = 0x80032900; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex1 = 0x80032910; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex2 = 0x80032920; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertexTri = 0x80032930; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_decrescendo = 0x80045AAC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x800457C8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_play = 0x80045E3C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_replay = 0x80045DD4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_stop = 0x8004946C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_tempo = 0x800458CC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SpuClearReverbWorkArea = 0x80048A28; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SpuIsTransferCompleted = 0x800454AC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SpuSetCommonAttr = 0x80044F8C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SpuSetReverb = 0x80048BD8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT = 0x80045554; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x80040930; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSetMVol = 0x80044F3C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSetSerialAttr = 0x8004962C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSetSerialVol = 0x80045320; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsUtGetVabHdr = 0x80044C18; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsUtGetVagAtr = 0x80044CFC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsUtSetVagAtr = 0x80048CA8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsVabFakeBody = 0x80044BA0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsVabTransCompleted = 0x80045480; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+StartCARD = 0x80049740; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SysDeqIntRP = 0x8004A9C0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SysEnqIntRP = 0x8004A9D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+WaitEvent = 0x80048BC8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_SpuIsInAllocateArea = 0x80048940; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_SpuIsInAllocateArea_ = 0x800489B0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_SsUtBuildADSR = 0x80047CC8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_SsUtResolveADSR = 0x80047C6C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_bu_init = 0x80049750; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_card_auto = 0x800496E0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_card_info = 0x800496D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_card_load = 0x800496C0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_card_read = 0x80049770; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_card_write = 0x80049720; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+_new_card = 0x80049760; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
 // target: g3org_jp
 StSetRing = 0x80060A08; // LIBCD CDROM member; tools/sdk_members.py, unique placement + signature DB agrees
 _SpuDataCallback = 0x8006208C; // LIBSPU S_DCB member; tools/sdk_members.py, unique placement + signature DB agrees
+
+SsSeqCalledTbyT_guard = 0x80178890; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x80178C9C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x8017FA38; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x8017FAB8; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x8017FABC; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_lmode = 0x8017FA30; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_msg = 0x8002256C; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrixSV = 0x800475CC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+AverageSZ3 = 0x800575B0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+AverageSZ4 = 0x800575C0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ColorCol = 0x80057558; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ColorDpq = 0x80057530; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+DpqColor = 0x800573EC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x800492FC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+LocalLight = 0x800573C8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalClip = 0x8005757C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalClipS = 0x800575A0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColor = 0x80057408; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColor3 = 0x80057424; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorCol = 0x800574CC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorCol3 = 0x800574EC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorDpq = 0x80057460; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorDpq3 = 0x80057484; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x8004F780; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x8004F7A0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x8004F76C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x8004F758; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x8004F72C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x8004F740; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotMatrixC = 0x8004DB18; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTrans = 0x800573A0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTransPers = 0x80057320; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTransPers3 = 0x8005734C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetBackColor = 0x8004BEA0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x800477D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQA = 0x8004BF78; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetDQB = 0x8004BF84; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetData32 = 0x8004BF48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetFarColor = 0x8004BEC0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomOffset = 0x8004BF54; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetGeomScreen = 0x8004BF6C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR0 = 0x8004BE94; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetIR123 = 0x8004BE80; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetMAC123 = 0x8004BF34; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRGBfifo = 0x8004BE6C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetRii = 0x8004BF20; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSXSYfifo = 0x8004BF0C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo3 = 0x8004BEE0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetSZfifo4 = 0x8004BEF4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x80047800; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex0 = 0x8004BE1C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex1 = 0x8004BE2C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertex2 = 0x8004BE3C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetVertexTri = 0x8004BE4C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_nextpause = 0x8006D674; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x8006D5D4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x80064BCC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+gte_rotate_z_matrix = 0x8004D8E8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
 
 // target: mainmenu_jp
 gte_init = 0x80072A44; // LIBGS SCLIB member; tools/sdk_members.py, unique placement
@@ -370,6 +665,8 @@ func_80059D54 = 0x80059D54; // leaf 0x5c: mult opener; ends at func_80059DB0
 // will re-derive what really executes at 0x8005A014.
 data_8005A014 = 0x8005A014; // MODE2 sector framing, was func_ (census above): ABI (a0 device/class id, a1 -1), 18 noise words, zero static writers
 
+
+
 // target: mainmenu_eu
 // State-map words - EU twins of the mainmenu_jp names above (+0x814 /
 // +0x838, per the relocation map measured in src/func_8002C418.c and the
@@ -411,6 +708,34 @@ state_table_5 = 0x800201D0; // state table: -> 0x8002644C
 state_table_6 = 0x800201D4; // state table: -> 0x8002644C
 state_table_7 = 0x800201D8; // state table: -> 0x8002644C
 state_table_8 = 0x800201DC; // state table: -> 0x800263A4
+
+SsSeqCalledTbyT_guard = 0x8018DC28; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x8018E070; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x80194EB8; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x80195738; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x8019573C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_lmode = 0x80194E80; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_msg = 0x80023190; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_crescendo = 0x80085C80; // Snd_crescendo callee entry (the SsSeqCalledTbyT landing's extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrixSV = 0x8005E024; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x8005FCAC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x80066124; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x80066144; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x80066110; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x800660FC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x800660D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x800660E4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotMatrixC = 0x80064494; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x8005E228; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x8005E258; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_decrescendo = 0x80082680; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_nextpause = 0x8008243C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x8008239C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_stop = 0x80086040; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x8007D504; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+func_800459D4_br_800492F8 = 0x800492F8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+gte_rotate_z_matrix = 0x80064264; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
 
 // target: g3_eu
 //
@@ -638,6 +963,8 @@ memcpy_iso9660 = 0x80063330; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy
 // seven maps; kMaxPrograms-vh = +0x128 in the jp/slps trio and +0x124 in the
 // eu trio (short alignment).
 
+
+
 // target: g3org_jp
 _svm_vab_used = 0x8017E038; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3org_jp
 _svm_vab_count = 0x8017FB20; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: g3org_jp
@@ -648,6 +975,8 @@ _svm_vab_tn = 0x801787B0; // LIBSND VS_VH.C bss static (unsigned long[]); eviden
 _svm_brr_start_addr = 0x8017FB6C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
 _svm_vab_start = 0x8017FB24; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
 _svm_vab_total = 0x8017FAE0; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+
+
 
 // target: g3org_eu
 _svm_vab_used = 0x8017E120; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3org_eu
@@ -660,6 +989,50 @@ _svm_brr_start_addr = 0x80180450; // LIBSND VS_VH.C bss static (unsigned long[])
 _svm_vab_start = 0x80180408; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
 _svm_vab_total = 0x801803C4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
 
+SsSeqCalledTbyT_guard = 0x8017897C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_slotbits = 0x80178D84; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_tab = 0x8017FB1C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_nslots = 0x8018039C; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_ntracks = 0x801803A0; // SsSeqCalledTbyT row static (the 79aa6e8d landing's per-target extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_lmode = 0x8017FB14; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsSetLightMode_msg = 0x80022568; // GsSetLightMode row static (the row's landed-C extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_crescendo = 0x8006DAF0; // Snd_crescendo callee entry (the SsSeqCalledTbyT landing's extern); ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
+ApplyMatrixSV = 0x80046F9C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+AverageSZ3 = 0x80056FAC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+AverageSZ4 = 0x80056FBC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ColorCol = 0x80056F54; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ColorDpq = 0x80056F2C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+DpqColor = 0x80056DE8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+GsClearOt_clear = 0x80048C24; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+LocalLight = 0x80056DC4; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalClip = 0x80056F78; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalClipS = 0x80056F9C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColor = 0x80056E04; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColor3 = 0x80056E20; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorCol = 0x80056EC8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorCol3 = 0x80056EE8; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorDpq = 0x80056E5C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+NormalColorDpq3 = 0x80056E80; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomOffset = 0x8004F09C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadGeomScreen = 0x8004F0BC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadRGBfifo = 0x8004F088; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSXSYfifo = 0x8004F074; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo3 = 0x8004F048; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+ReadSZfifo4 = 0x8004F05C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotMatrixC = 0x8004D40C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTrans = 0x80056D9C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTransPers = 0x80056D1C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+RotTransPers3 = 0x80056D48; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetColorMatrix = 0x800471A0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SetTransMatrix = 0x800471D0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_decrescendo = 0x8006A4F0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_nextpause = 0x8006A2AC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_pause = 0x8006A20C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+Snd_stop = 0x8006DEB0; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+SsSeqCalledTbyT_init = 0x80065410; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+gte_rotate_z_matrix = 0x8004D1DC; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
+
 // target: g3_jp
 _svm_vab_used = 0x80170384; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3_jp
 _svm_vab_count = 0x80171E6C; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: g3_jp
@@ -670,6 +1043,8 @@ _svm_vab_tn = 0x8016AAFC; // LIBSND VS_VH.C bss static (unsigned long[]); eviden
 _svm_brr_start_addr = 0x80171EB8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
 _svm_vab_start = 0x80171E70; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
 _svm_vab_total = 0x80171E2C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+
+
 
 // target: g3_eu
 _svm_vab_used = 0x801704A8; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3_eu
@@ -682,6 +1057,8 @@ _svm_brr_start_addr = 0x801727D8; // LIBSND VS_VH.C bss static (unsigned long[])
 _svm_vab_start = 0x80172790; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
 _svm_vab_total = 0x8017274C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
 
+
+
 // target: mainmenu_eu
 _svm_vab_used = 0x8019344C; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: mainmenu_eu
 _svm_vab_count = 0x801957A0; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: mainmenu_eu
@@ -692,6 +1069,8 @@ _svm_vab_tn = 0x8018DAE4; // LIBSND VS_VH.C bss static (unsigned long[]); eviden
 _svm_brr_start_addr = 0x801957EC; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
 _svm_vab_start = 0x801957A4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
 _svm_vab_total = 0x80195760; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+
+
 
 // target: sces_00269
 _svm_vab_used = 0x80119E10; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: sces_00269
@@ -704,6 +1083,8 @@ _svm_brr_start_addr = 0x8011C120; // LIBSND VS_VH.C bss static (unsigned long[])
 _svm_vab_start = 0x8011C0D8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
 _svm_vab_total = 0x8011C094; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
 
+
+
 // target: slps_00270
 _svm_vab_used = 0x8011A894; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: slps_00270
 _svm_vab_count = 0x8011C35C; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: slps_00270
@@ -714,6 +1095,8 @@ _svm_vab_tn = 0x80114F8C; // LIBSND VS_VH.C bss static (unsigned long[]); eviden
 _svm_brr_start_addr = 0x8011C3A8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
 _svm_vab_start = 0x8011C360; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
 _svm_vab_total = 0x8011C31C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+
+
 
 // target: g3_jp
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
@@ -772,6 +1155,8 @@ SsSetStereo = 0x8006AB1C; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x800AA8AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
 memcpy_iso9660 = 0x800629A0; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement; the scan's duplicate-name row func_800629A0.2); evidence under target: g3_jp
+
+
 // target: g3org_eu
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
@@ -829,6 +1214,8 @@ SsSetStereo = 0x80068B28; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x800b7df4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x800A4344: scan-verified]
 
 memcpy_iso9660 = 0x80060784; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: g3org_eu
+
+
 // target: g3org_jp
 //
 // Snd_ callee pins for the SsSeqCalledTbyT landing (window
@@ -894,6 +1281,8 @@ SsSetStereo = 0x80067FB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x800b75f4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x800A3C74: scan-verified]
 
 memcpy_iso9660 = 0x8005FE3C; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: g3org_jp
+
+
 // target: mainmenu_eu
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
@@ -954,6 +1343,8 @@ SsSetStereo = 0x80080CB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x800C8DD4; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
 memcpy_iso9660 = 0x80078698; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: mainmenu_eu
+
+
 // target: mainmenu_jp
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: the LIBETC INTR_VB member's own .data+0 callback slot
@@ -1170,6 +1561,8 @@ Snd_stop = 0x80085478; // LIBSND STOP member .text+0x0 (extent 0x1C0); body byte
 // mainmenu_jp.
 _spu_inTransfer = 0x800C85AC; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - the flag is 8 bytes per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp
 
+
+
 // target: sces_00269
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // video_mode: role-descriptive name for the VMODE member's backing
@@ -1218,6 +1611,8 @@ SsSetStereo = 0x800440E4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sig
 _spu_inTransfer = 0x80065a68; // LIBSPU S_INI member bss static; gp:absolute (retail S_ITC loads it lui+lo even in gp-range slps_00270 - 8-byte flag per Psy-Q 2.60 S_INI xbss, outside the small-data relaxation 4-byte flags get); evidence under target: mainmenu_jp  [addr-updated from 0x8005C988: scan-verified]
 
 memcpy_iso9660 = 0x8003BD40; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: sces_00269
+
+
 // target: slps_00270
 //
 // Snd_ callee pins for the SsSeqCalledTbyT landing (window
@@ -1256,6 +1651,8 @@ memcpy_iso9660 = 0x8003BF4C; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy
 // Names are applied by tools/scan_functions.py - symbols file
 // only, never subsegment names.
 
+
+
 // target: g3_eu  (287 sdk-member adoptions)
 SpuGetReverbModeDepth = 0x80027A3C; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
 GsSetOrign = 0x80027A5C; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1280,7 +1677,7 @@ PClseek = 0x800488D4; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py 
 PCclose = 0x800488F8; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _SN_write = 0x800489C8; // LIBSN ? member .text+0x0 (extent 0x18); sdk_members.py unique placement
 CompMatrix = 0x80048EC0; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
-ApplyMatrixLV = 0x80049408; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x80049408; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x80049568; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x80049598; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 SetVideoMode = 0x8004A030; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
@@ -1551,6 +1948,8 @@ SysEnqIntRP = 0x80071FC0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // SsSetStereo = 0x8006B6D4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees [alias of SsSetStereo at the same address: one curated name per address, the C-referenced name wins]
 // Snd_tempo = 0x8006CEBC; // LIBSND TEMPO member; sdk_members.py unique placement + sig-db agrees [alias of Snd_tempo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: g3_jp  (372 sdk-member adoptions)
 SpuGetReverbModeDepth = 0x80027A40; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
 GsSetOrign = 0x80027A60; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1575,7 +1974,7 @@ PClseek = 0x80048EBC; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py 
 PCclose = 0x80048EE0; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _SN_write = 0x80048FB0; // LIBSN ? member .text+0x0 (extent 0x18); sdk_members.py unique placement
 CompMatrix = 0x800494A8; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
-ApplyMatrixLV = 0x800499F0; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x800499F0; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x80049B50; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x80049B80; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 ResetCallback = 0x8004A618; // LIBETC INTR member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
@@ -1586,7 +1985,7 @@ VSyncCallbacks = 0x8004A6DC; // LIBETC INTR member .text+0xc4 (extent 0x30); sdk
 StopCallback = 0x8004A70C; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 RestartCallback = 0x8004A73C; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x8004AA74; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8004AD00; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x8004AFB8; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_800515D8.c defines memclr here) - the c32d807d census's INTR-member placement (0x80047B94) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x8004AD2C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x8004AD3C; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x8004AD8C; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -1938,6 +2337,8 @@ SysEnqIntRP = 0x80071780; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // SsSetMono = 0x8006AB08; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees [alias of SsSetMono at the same address: one curated name per address, the C-referenced name wins]
 // SsSetStereo = 0x8006AB1C; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees [alias of SsSetStereo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: g3org_eu  (282 sdk-member adoptions)
 SpuGetReverbModeDepth = 0x8002869C; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
 GsSetOrign = 0x800286BC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -1962,7 +2363,7 @@ PClseek = 0x80045D28; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py 
 PCclose = 0x80045D4C; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _SN_write = 0x80045E1C; // LIBSN ? member .text+0x0 (extent 0x18); sdk_members.py unique placement
 CompMatrix = 0x80046314; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
-ApplyMatrixLV = 0x8004685C; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x8004685C; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x800469BC; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x800469EC; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 SetVideoMode = 0x80047484; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
@@ -1976,7 +2377,7 @@ StopCallback = 0x800475A0; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_m
 RestartCallback = 0x800475D0; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 trapIntr = 0x80047720; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x80047908; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-memclr = 0x80047B94; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x80047E4C; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_8004DD4C.c defines memclr here) - the c32d807d census's INTR-member placement (0x8004AD00) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x80047BC0; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x80047BD0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x80047C20; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -2232,6 +2633,8 @@ SysEnqIntRP = 0x8006F414; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // SsSetMono = 0x80068B14; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees [alias of SsSetMono at the same address: one curated name per address, the C-referenced name wins]
 // SsSetStereo = 0x80068B28; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees [alias of SsSetStereo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: g3org_jp  (369 sdk-member adoptions)
 SpuGetReverbModeDepth = 0x800286E8; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
 GsSetOrign = 0x80028708; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -2257,7 +2660,7 @@ PClseek = 0x80046358; // LIBSN ? member .text+0x0 (extent 0x24); sdk_members.py 
 PCclose = 0x8004637C; // LIBSN ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _SN_write = 0x8004644C; // LIBSN ? member .text+0x0 (extent 0x18); sdk_members.py unique placement
 CompMatrix = 0x80046944; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
-ApplyMatrixLV = 0x80046E8C; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x80046E8C; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x80046FEC; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x8004701C; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 ResetCallback = 0x80047AB4; // LIBETC INTR member .text+0x0 (extent 0x30); sdk_members.py unique placement + sig-db agrees
@@ -2269,7 +2672,7 @@ StopCallback = 0x80047BA8; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_m
 RestartCallback = 0x80047BD8; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 trapIntr = 0x80047D28; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x80047F10; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8004819C; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x80048454; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_8004E484.c defines memclr here) - the c32d807d census's INTR-member placement (0x8004819C) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x800481C8; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x800481D8; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x80048228; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -2618,6 +3021,8 @@ SysEnqIntRP = 0x8006EC1C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // Snd_crescendo = 0x8006CD7C; // LIBSND CRES member; sdk_members.py unique placement + sig-db agrees [alias of Snd_crescendo at the same address: one curated name per address, the C-referenced name wins]
 // Snd_tempo = 0x8006D6D8; // LIBSND TEMPO member; sdk_members.py unique placement + sig-db agrees [alias of Snd_tempo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: mainmenu_eu  (283 sdk-member adoptions)
 GsSetOrign = 0x800396CC; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuGetReverbModeDepth = 0x8003AB08; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
@@ -2638,7 +3043,7 @@ strncpy = 0x8005CE8C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py u
 free = 0x8005CE9C; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 exit = 0x8005CEAC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambiguous placement, name agreed by all claimants (LIBC+LIBC2 twins)
 CompMatrix = 0x8005D39C; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
-ApplyMatrixLV = 0x8005D8E4; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x8005D8E4; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x8005DA44; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x8005DA74; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 SetVideoMode = 0x8005E50C; // LIBETC VMODE member .text+0x0 (extent 0x18); sdk_members.py unique placement + sig-db agrees
@@ -2652,7 +3057,7 @@ StopCallback = 0x8005E628; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_m
 RestartCallback = 0x8005E658; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 trapIntr = 0x8005E7A8; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x8005E990; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8005EC1C; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x8005EED4; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_80068474.c defines memclr here) - the c32d807d census's INTR-member placement (0x8005EC1C) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x8005EC48; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x8005EC58; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x8005ECA8; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -2918,6 +3323,8 @@ SysEnqIntRP = 0x800875A4; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // SsSetMono = 0x80080CA4; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees [alias of SsSetMono at the same address: one curated name per address, the C-referenced name wins]
 // SsSetStereo = 0x80080CB8; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees [alias of SsSetStereo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: mainmenu_jp  (205 sdk-member adoptions)
 GsSetOrign = 0x80039734; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
 SpuVmDamperOn = 0x8003B1A0; // LIBSND VM_DON member; sdk_members.py unique placement + sig-db agrees
@@ -2939,7 +3346,7 @@ exit = 0x8005D4CC; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py ambi
 CompMatrix = 0x8005D9BC; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
 ApplyRotMatrix = 0x8005E064; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x8005E094; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
-memclr = 0x8005F214; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x8005F4CC; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_80068B9C.c defines memclr here) - the c32d807d census's INTR-member placement (0x8005F214) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x8005F240; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x8005F250; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x8005F2A0; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -3137,6 +3544,8 @@ SysEnqIntRP = 0x80086D9C; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // SsSetMono = 0x80080124; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees [alias of SsSetMono at the same address: one curated name per address, the C-referenced name wins]
 // SsSetStereo = 0x80080138; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees [alias of SsSetStereo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: sces_00269  (197 sdk-member adoptions)
 SpuGetReverbModeDepth = 0x80026C3C; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
 GsSetOrign = 0x80026C5C; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -3170,7 +3579,7 @@ GetIntrMask = 0x8002E800; // LIBETC INTR member .text+0x164 (extent 0x18); sdk_m
 SetIntrMask = 0x8002E818; // LIBETC INTR member .text+0x17c (extent 0x1c); sdk_members.py unique placement + sig-db agrees
 trapIntr = 0x8002E910; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x8002EAF8; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8002ED84; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x8002F168; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_80031638.c defines memclr here) - the c32d807d census's INTR-member placement (0x8002ED84) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x8002EDB0; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 startIntrDMA = 0x8002EDC0; // LIBETC INTR_DMA member .text+0x0 (extent 0x50); sdk_members.py unique placement + sig-db agrees
 trapIntrDMA = 0x8002EE10; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
@@ -3216,7 +3625,7 @@ scale_view_param = 0x8003375C; // LIBGS MATRIX3 member .text+0x3d4 (extent 0xf0)
 select_max_param = 0x8003384C; // LIBGS MATRIX3 member .text+0x4c4 (extent 0xc8); sdk_members.py unique placement
 len_param = 0x80033914; // LIBGS MATRIX3 member .text+0x58c (extent 0x1c); sdk_members.py unique placement
 TransposeMatrix = 0x80033930; // LIBGTE ? member .text+0x0 (extent 0x40); sdk_members.py unique placement
-ApplyMatrixLV = 0x80033FE8; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x80033FE8; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x80034148; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x80034178; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 gte_rotate_z_matrix = 0x80034980; // LIBGS SCLIB member .text+0x0 (extent 0xb8); sdk_members.py unique placement
@@ -3296,22 +3705,24 @@ SsVabFakeHead = 0x8004415C; // LIBSND VS_VH member .text+0x60 (extent 0x30); sdk
 SsVabOpenHeadWithMode = 0x80044190; // LIBSND VS_VH member .text+0x90 (extent 0x3dc); sdk_members.py unique placement + sig-db agrees
 SpuMalloc = 0x800445D8; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
 _spu_gcSPU = 0x800448A0; // LIBSPU S_M_INT member .text+0x0 (extent 0x308); sdk_members.py unique placement + sig-db agrees
+
+
 // target: slps_00270
 SpuMalloc = 0x800445BC; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
 SsVabFakeBody = 0x80044BA0; // LIBSND VS_VFB member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
 SsUtGetVabHdr = 0x80044C18; // LIBSND UT_GVH member .text+0x0 (extent 0xdc); sdk_members.py unique placement + sig-db agrees
 SsUtGetVagAtr = 0x80044CFC; // LIBSND UT_GVA member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
-SsSetMVol = 0x80044F3C; // LIBSND SCSMVOL member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
+// SsSetMVol = 0x80044F3C; // LIBSND SCSMVOL member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 SpuSetCommonAttr = 0x80044F8C; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
-SsSetSerialVol = 0x80045320; // LIBSND SCSSVOL member; sdk_members.py unique placement + sig-db agrees
-SsVabTransCompleted = 0x80045480; // LIBSND VS_VTC member .text+0x0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
+// SsSetSerialVol = 0x80045320; // LIBSND SCSSVOL member; sdk_members.py unique placement + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
+// SsVabTransCompleted = 0x80045480; // LIBSND VS_VTC member .text+0x0 (extent 0x28); sdk_members.py unique placement + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 SpuIsTransferCompleted = 0x800454AC; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
-SsSeqCalledTbyT = 0x80045554; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees
+// SsSeqCalledTbyT = 0x80045554; // LIBSND SSCALL member .text+0x0 (extent 0x274); sdk_members.py unique placement + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 Snd_tempo = 0x800458CC; // LIBSND TEMPO member; sdk_members.py unique placement + sig-db agrees
 Snd_replay = 0x80045DD4; // LIBSND REPLAY member; sdk_members.py unique placement + sig-db agrees
 Snd_play = 0x80045E3C; // LIBSND PLAY member; sdk_members.py unique placement + sig-db agrees
-_SsUtResolveADSR = 0x80047C6C; // LIBSND ADSR member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
-_SsUtBuildADSR = 0x80047CC8; // LIBSND ADSR member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
+// _SsUtResolveADSR = 0x80047C6C; // LIBSND ADSR member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
+// _SsUtBuildADSR = 0x80047CC8; // LIBSND ADSR member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 SsUtSetReverbDepth = 0x80047E48; // LIBSND UT_REV member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
 SsUtSetReverbFeedback = 0x80047EE0; // LIBSND UT_REV member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
 SsUtSetReverbDelay = 0x80047F20; // LIBSND UT_REV member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
@@ -3324,7 +3735,7 @@ SpuSetReverb = 0x80048BD8; // LIBSPU S_SR member .text+0x0 (extent 0xd0); sdk_me
 SsUtSetVagAtr = 0x80048CA8; // LIBSND UT_SVA member .text+0x0 (extent 0x1c8); sdk_members.py unique placement + sig-db agrees
 _SsSndNextSep = 0x80048E88; // LIBSND NEXT member .text+0x0 (extent 0xfc); sdk_members.py unique placement
 SsUtGetProgAtr = 0x80048F90; // LIBSND UT_GPA member .text+0x0 (extent 0x108); sdk_members.py unique placement + sig-db agrees
-SsSetSerialAttr = 0x8004962C; // LIBSND SCSSATTR member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
+// SsSetSerialAttr = 0x8004962C; // LIBSND SCSSATTR member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 _card_load = 0x800496C0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_info = 0x800496D0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 _card_auto = 0x800496E0; // LIBCARD ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
@@ -3359,6 +3770,8 @@ SysEnqIntRP = 0x8004A9D0; // LIBAPI ? member .text+0x0 (extent 0x10); sdk_member
 // SsSetMono = 0x800440D0; // LIBSND VS_MONO member .text+0x0 (extent 0x14); sdk_members.py unique placement + sig-db agrees [alias of SsSetMono at the same address: one curated name per address, the C-referenced name wins]
 // SsSetStereo = 0x800440E4; // LIBSND VS_MONO member .text+0x14 (extent 0x10); sdk_members.py unique placement + sig-db agrees [alias of SsSetStereo at the same address: one curated name per address, the C-referenced name wins]
 
+
+
 // target: slps_00270  (292 sdk-member adoptions)
 SpuGetReverbModeDepth = 0x80026BF4; // LIBSPU S_GRM member .text+0x0 (extent 0x20); sdk_members.py unique placement
 GsSetOrign = 0x80026C14; // LIBGS EMULIB member .text+0x0 (extent 0x18); sdk_members.py unique placement
@@ -3388,7 +3801,7 @@ StopCallback = 0x8002EBC4; // LIBETC INTR member .text+0xf4 (extent 0x30); sdk_m
 RestartCallback = 0x8002EBF4; // LIBETC INTR member .text+0x124 (extent 0x30); sdk_members.py unique placement + sig-db agrees
 trapIntr = 0x8002ED44; // LIBETC INTR member .text+0x274 (extent 0x1e8); sdk_members.py unique placement + sig-db agrees
 setIntr = 0x8002EF2C; // LIBETC INTR member .text+0x45c (extent 0x154); sdk_members.py unique placement + sig-db agrees
-memclr = 0x8002F1B8; // LIBETC INTR member .text+0x6e4 (extent 0x2c); sdk_members.py unique placement + sig-db agrees
+0x8002F470; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_80031940.c defines memclr here) - the c32d807d census's INTR-member placement (0x8002F1B8) is the parked C-move for the sdk-curation lane: both addresses host byte-identical copies, but the landed definition resolves jal memclr here and the image diverges from retail otherwise (witnessed cron-202611062346: slps 12 bytes at the six INTR-cluster jal words) [memclr-placement conflict class]
 setjmp = 0x8002F1E4; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
 trapIntrDMA = 0x8002F244; // LIBETC INTR_DMA member .text+0x50 (extent 0x184); sdk_members.py unique placement + sig-db agrees
 setIntrDMA = 0x8002F3C8; // LIBETC INTR_DMA member .text+0x1d4 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
@@ -3472,7 +3885,7 @@ GsInit3D = 0x80033854; // LIBGS SCLIB member .text+0x0 (extent 0x78); sdk_member
 GsSetRefView2 = 0x800338CC; // LIBGS MATRIX3 member .text+0x0 (extent 0x3d4); sdk_members.py unique placement
 len_param = 0x80033E4C; // LIBGS MATRIX3 member .text+0x58c (extent 0x1c); sdk_members.py unique placement
 TransposeMatrix = 0x80033E68; // LIBGTE ? member .text+0x0 (extent 0x40); sdk_members.py unique placement
-ApplyMatrixLV = 0x80034520; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement
+// ApplyMatrixLV = 0x80034520; // LIBGTE ? member .text+0x0 (extent 0x160); sdk_members.py unique placement [HELD cron-202611062346: collides with the landed C row of the same name at a different address - the census name cannot label two addresses; the sdk-curation lane owns the reconciliation]
 ApplyRotMatrix = 0x80034680; // LIBGTE ? member .text+0x0 (extent 0x30); sdk_members.py unique placement
 ScaleMatrixL = 0x800346B0; // LIBGTE ? member .text+0x0 (extent 0x130); sdk_members.py unique placement
 MatrixNormal_0 = 0x80035E40; // LIBGTE GEO member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBGTE twins) + sig-db agrees

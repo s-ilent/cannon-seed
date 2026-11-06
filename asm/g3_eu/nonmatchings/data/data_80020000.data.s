@@ -3247,32 +3247,33 @@ dlabel D_800221AC
 .align 2
 enddlabel D_800221AC
 
-.align 2
-nonmatching D_800221C4
+nonmatching spu_timeout_fmt
 
-dlabel D_800221C4
-    /* 29C4 800221C4 */ .asciz "SPU:T/O [%s]\n"
-    /* 5350553A542F4F205B25735D0A000000 */
-.align 2
-enddlabel D_800221C4
+dlabel spu_timeout_fmt
+    /* 29C4 800221C4 5350553A */ .word 0x3A555053
+    /* 29C8 800221C8 542F4F20 */ .word 0x204F2F54
+    /* 29CC 800221CC 5B25735D */ .word 0x5D73255B
+    /* 29D0 800221D0 0A000000 */ .word 0x0000000A
+enddlabel spu_timeout_fmt
 
-.align 2
-nonmatching D_800221D4
+nonmatching spu_timeout_wait_reset
 
-dlabel D_800221D4
-    /* 29D4 800221D4 */ .asciz "wait (reset)"
-    /* 77616974202872657365742900000000 */
-.align 2
-enddlabel D_800221D4
+dlabel spu_timeout_wait_reset
+    /* 29D4 800221D4 77616974 */ .word 0x74696177
+    /* 29D8 800221D8 20287265 */ .word 0x65722820
+    /* 29DC 800221DC 73657429 */ .word 0x29746573
+    /* 29E0 800221E0 00000000 */ .word 0x00000000
+enddlabel spu_timeout_wait_reset
 
-.align 2
-nonmatching D_800221E4
+nonmatching spu_timeout_wait_wrdy
 
-dlabel D_800221E4
-    /* 29E4 800221E4 */ .asciz "wait (wrdy H -> L)"
-    /* 776169742028777264792048202D3E204C290000 */
-.align 2
-enddlabel D_800221E4
+dlabel spu_timeout_wait_wrdy
+    /* 29E4 800221E4 77616974 */ .word 0x74696177
+    /* 29E8 800221E8 20287772 */ .word 0x72772820
+    /* 29EC 800221EC 64792048 */ .word 0x48207964
+    /* 29F0 800221F0 202D3E20 */ .word 0x203E2D20
+    /* 29F4 800221F4 4C290000 */ .word 0x0000294C
+enddlabel spu_timeout_wait_wrdy
 
 nonmatching D_800221F8
 

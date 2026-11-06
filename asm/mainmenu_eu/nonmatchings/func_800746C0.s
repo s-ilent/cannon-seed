@@ -12,7 +12,7 @@ nonmatching func_800746C0, 0x20
 glabel func_800746C0
     /* 54EC0 800746C0 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 54EC4 800746C4 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 54EC8 800746C8 CCD1010C */  jal        func_80074730
+    /* 54EC8 800746C8 CCD1010C */  jal        MDEC_vlc_brk
     /* 54ECC 800746CC 00000000 */   nop
     /* 54ED0 800746D0 1000BF8F */  lw         $ra, 0x10($sp)
     /* 54ED4 800746D4 1800BD27 */  addiu      $sp, $sp, 0x18

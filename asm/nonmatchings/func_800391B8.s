@@ -25,7 +25,7 @@ glabel func_800391B8
     /* 199E8 800391E8 21204002 */  addu       $a0, $s2, $zero
   .L800391EC:
     /* 199EC 800391EC 21282002 */  addu       $a1, $s1, $zero
-    /* 199F0 800391F0 BFEA000C */  jal        func_8003AAFC
+    /* 199F0 800391F0 BFEA000C */  jal        CD_readm
     /* 199F4 800391F4 21306002 */   addu      $a2, $s3, $zero
     /* 199F8 800391F8 03004014 */  bnez       $v0, .L80039208
     /* 199FC 800391FC FFFF1026 */   addiu     $s0, $s0, -0x1

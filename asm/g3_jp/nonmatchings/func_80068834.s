@@ -46,7 +46,7 @@ glabel func_80068834
     /* 490B8 800688B8 21082300 */  addu       $at, $at, $v1
     /* 490BC 800688BC 0000238C */  lw         $v1, 0x0($at)
     /* 490C0 800688C0 5800B797 */  lhu        $s7, 0x58($sp)
-    /* 490C4 800688C4 E0A7010C */  jal        func_80069F80
+    /* 490C4 800688C4 E0A7010C */  jal        SpuVmVSetUp
     /* 490C8 800688C8 21B04300 */   addu      $s6, $v0, $v1
     /* 490CC 800688CC 21500000 */  addu       $t2, $zero, $zero
     /* 490D0 800688D0 1780023C */  lui        $v0, %hi(D_8016AF68)

@@ -18,7 +18,7 @@ glabel func_8002F49C
     /* FCB0 8002F4B0 005324AC */  sw         $a0, %lo(D_80115300)($at)
     /* FCB4 8002F4B4 0D80013C */  lui        $at, %hi(D_800D282C)
     /* FCB8 8002F4B8 2C2822AC */  sw         $v0, %lo(D_800D282C)($at)
-    /* FCBC 8002F4BC B4BA000C */  jal        func_8002EAD0
+    /* FCBC 8002F4BC B4BA000C */  jal        ResetCallback
     /* FCC0 8002F4C0 00000000 */   nop
     /* FCC4 8002F4C4 0020043C */  lui        $a0, (0x20000001 >> 16)
     /* FCC8 8002F4C8 0D80053C */  lui        $a1, %hi(D_800D282C)

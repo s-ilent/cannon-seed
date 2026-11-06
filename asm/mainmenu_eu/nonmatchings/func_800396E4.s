@@ -67,7 +67,7 @@ glabel func_8003975C
     /* 19F80 80039780 21108000 */  addu       $v0, $a0, $zero
     /* 19F84 80039784 21A8A000 */  addu       $s5, $a1, $zero
     /* 19F88 80039788 1000A427 */  addiu      $a0, $sp, 0x10
-    /* 19F8C 8003978C 31DF010C */  jal        func_80077CC4
+    /* 19F8C 8003978C 31DF010C */  jal        CdSearchFile
     /* 19F90 80039790 21284000 */   addu      $a1, $v0, $zero
     /* 19F94 80039794 07004014 */  bnez       $v0, func_800397B4
     /* 19F98 80039798 00000000 */   nop
@@ -280,7 +280,7 @@ glabel func_800399A0
     /* 1A1A8 800399A8 3400B1AF */  sw         $s1, 0x34($sp)
     /* 1A1AC 800399AC 3000B0AF */  sw         $s0, 0x30($sp)
     /* 1A1B0 800399B0 21288000 */  addu       $a1, $a0, $zero
-    /* 1A1B4 800399B4 31DF010C */  jal        func_80077CC4
+    /* 1A1B4 800399B4 31DF010C */  jal        CdSearchFile
     /* 1A1B8 800399B8 1800A427 */   addiu     $a0, $sp, 0x18
     /* 1A1BC 800399BC 07004014 */  bnez       $v0, func_800399DC
     /* 1A1C0 800399C0 00000000 */   nop

@@ -55,7 +55,7 @@ glabel func_8004D944
     /* 2E1E8 8004D9E8 00000000 */  nop
     /* 2E1EC 8004D9EC 03004014 */  bnez       $v0, .L8004D9FC
     /* 2E1F0 8004D9F0 02000434 */   ori       $a0, $zero, 0x2
-    /* 2E1F4 8004D9F4 9E29010C */  jal        func_8004A678
+    /* 2E1F4 8004D9F4 9E29010C */  jal        DMACallback
     /* 2E1F8 8004D9F8 21280000 */   addu      $a1, $zero, $zero
   .L8004D9FC:
     /* 2E1FC 8004D9FC 0980043C */  lui        $a0, %hi(D_80097604)

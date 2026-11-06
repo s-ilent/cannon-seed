@@ -204,7 +204,7 @@ glabel func_8004DCEC
     /* 2E7C4 8004DFC4 21202002 */  addu       $a0, $s1, $zero
     /* 2E7C8 8004DFC8 6800A527 */  addiu      $a1, $sp, 0x68
     /* 2E7CC 8004DFCC 7800B027 */  addiu      $s0, $sp, 0x78
-    /* 2E7D0 8004DFD0 2A3A010C */  jal        func_8004E8A8
+    /* 2E7D0 8004DFD0 2A3A010C */  jal        OuterProduct12
     /* 2E7D4 8004DFD4 21300002 */   addu      $a2, $s0, $zero
     /* 2E7D8 8004DFD8 21200002 */  addu       $a0, $s0, $zero
     /* 2E7DC 8004DFDC 8800B227 */  addiu      $s2, $sp, 0x88
@@ -228,7 +228,7 @@ glabel func_8004DCEC
     /* 2E824 8004E024 0800C2A6 */  sh         $v0, 0x8($s6)
     /* 2E828 8004E028 B000A297 */  lhu        $v0, 0xB0($sp)
     /* 2E82C 8004E02C 21300002 */  addu       $a2, $s0, $zero
-    /* 2E830 8004E030 2A3A010C */  jal        func_8004E8A8
+    /* 2E830 8004E030 2A3A010C */  jal        OuterProduct12
     /* 2E834 8004E034 0E00C2A6 */   sh        $v0, 0xE($s6)
     /* 2E838 8004E038 21200002 */  addu       $a0, $s0, $zero
     /* 2E83C 8004E03C 5939010C */  jal        func_8004E564

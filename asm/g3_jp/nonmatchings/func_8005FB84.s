@@ -12,7 +12,7 @@ nonmatching func_8005FB84, 0x24
 glabel func_8005FB84
     /* 40384 8005FB84 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 40388 8005FB88 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 4038C 8005FB8C 9386010C */  jal        func_80061A4C
+    /* 4038C 8005FB8C 9386010C */  jal        CD_getsector
     /* 40390 8005FB90 00000000 */   nop
     /* 40394 8005FB94 0100422C */  sltiu      $v0, $v0, 0x1
     /* 40398 8005FB98 1000BF8F */  lw         $ra, 0x10($sp)

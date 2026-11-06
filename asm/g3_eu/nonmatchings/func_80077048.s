@@ -56,7 +56,7 @@ glabel SpuMalloc
     /* 4C468 8006BC68 3DAF0108 */  j          .L8006BCF4
     /* 4C46C 8006BC6C 21900000 */   addu      $s2, $zero, $zero
   .L8006BC70:
-    /* 4C470 8006BC70 A4AF010C */  jal        func_8006BE90
+    /* 4C470 8006BC70 A4AF010C */  jal        _spu_gcSPU
     /* 4C474 8006BC74 00000000 */   nop
     /* 4C478 8006BC78 0B80033C */  lui        $v1, %hi(D_800AB9FC)
     /* 4C47C 8006BC7C FCB9638C */  lw         $v1, %lo(D_800AB9FC)($v1)
@@ -136,7 +136,7 @@ glabel SpuMalloc
     /* 4C594 8006BD94 00BA24AC */  sw         $a0, %lo(D_800ABA00)($at)
     /* 4C598 8006BD98 0400D1AC */  sw         $s1, 0x4($a2)
     /* 4C59C 8006BD9C 24104500 */  and        $v0, $v0, $a1
-    /* 4C5A0 8006BDA0 A4AF010C */  jal        func_8006BE90
+    /* 4C5A0 8006BDA0 A4AF010C */  jal        _spu_gcSPU
     /* 4C5A4 8006BDA4 0000C2AC */   sw        $v0, 0x0($a2)
     /* 4C5A8 8006BDA8 0B80023C */  lui        $v0, %hi(D_800ABA04)
     /* 4C5AC 8006BDAC 04BA428C */  lw         $v0, %lo(D_800ABA04)($v0)
@@ -183,7 +183,7 @@ glabel SpuMalloc
     /* 4C648 8006BE48 FFFF8434 */  ori        $a0, $a0, (0xFFFFFFF & 0xFFFF)
     /* 4C64C 8006BE4C 040071AC */  sw         $s1, 0x4($v1)
     /* 4C650 8006BE50 24104400 */  and        $v0, $v0, $a0
-    /* 4C654 8006BE54 A4AF010C */  jal        func_8006BE90
+    /* 4C654 8006BE54 A4AF010C */  jal        _spu_gcSPU
     /* 4C658 8006BE58 000062AC */   sw        $v0, 0x0($v1)
     /* 4C65C 8006BE5C 0B80023C */  lui        $v0, %hi(D_800ABA04)
     /* 4C660 8006BE60 04BA428C */  lw         $v0, %lo(D_800ABA04)($v0)

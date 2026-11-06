@@ -102,7 +102,7 @@ glabel GsTMDdivG4L
     /* 3ACE8 8005A4E8 3400A227 */  addiu      $v0, $sp, 0x34
     /* 3ACEC 8005A4EC 2400A2AF */  sw         $v0, 0x24($sp)
     /* 3ACF0 8005A4F0 3800A227 */  addiu      $v0, $sp, 0x38
-    /* 3ACF4 8005A4F4 F14D010C */  jal        func_800537C4
+    /* 3ACF4 8005A4F4 F14D010C */  jal        RotAverageNclip4
     /* 3ACF8 8005A4F8 2800A2AF */   sw        $v0, 0x28($sp)
     /* 3ACFC 8005A4FC 34004018 */  blez       $v0, .L8005A5D0
     /* 3AD00 8005A500 1400A426 */   addiu     $a0, $s5, 0x14

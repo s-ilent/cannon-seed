@@ -32,7 +32,7 @@ glabel func_80067AF4
     /* 48340 80067B40 2801B6AF */  sw         $s6, 0x128($sp)
     /* 48344 80067B44 21B0E000 */  addu       $s6, $a3, $zero
     /* 48348 80067B48 3401BFAF */  sw         $ra, 0x134($sp)
-    /* 4834C 80067B4C E0A7010C */  jal        func_80069F80
+    /* 4834C 80067B4C E0A7010C */  jal        SpuVmVSetUp
     /* 48350 80067B50 1C01B3AF */   sw        $s3, 0x11C($sp)
     /* 48354 80067B54 0A014014 */  bnez       $v0, .L80067F80
     /* 48358 80067B58 FFFF0224 */   addiu     $v0, $zero, -0x1

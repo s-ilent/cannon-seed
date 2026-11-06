@@ -16,7 +16,7 @@ glabel func_800309A4
     /* 111B0 800309B0 0580053C */  lui        $a1, %hi(D_8004E44C)
     /* 111B4 800309B4 4CE4A524 */  addiu      $a1, $a1, %lo(D_8004E44C)
     /* 111B8 800309B8 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 111BC 800309BC 90C9000C */  jal        func_80032640
+    /* 111BC 800309BC 90C9000C */  jal        memcpy
     /* 111C0 800309C0 14000634 */   ori       $a2, $zero, 0x14
     /* 111C4 800309C4 21100002 */  addu       $v0, $s0, $zero
     /* 111C8 800309C8 1400BF8F */  lw         $ra, 0x14($sp)

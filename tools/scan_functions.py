@@ -833,14 +833,23 @@ def data_gaps(code_ranges, payload_len):
 def preserved_types(yaml_path: Path):
     """Offsets the tree carries with a HAND-set type: `c` for C-matched
     functions. Returns {offset: (type, name, size)}, the set of `pinned`
-    offsets, and the set of `sdk` offsets (byte-verified SDK member rows
-    carved by the v6 rule) - the latter two are pinned-class: hard
+    offsets, the set of `sdk` offsets (byte-verified SDK member rows
+    carved by the v6 rule), and {offset: original line} for every
+    preserved row - the latter two are pinned-class: hard
     no-walk spans whose marker must be re-emitted into the generated
     block. A `c` row carrying an `sdk` marker keeps the ANNOTATION only
     (`sdk_c`): the row is already preserved by type, and a matched C
     function must never join the no-walk pin set - but the marker is
     evidence and must survive the re-scan (it was being dropped, the
     d683dc9 marker-loss class for the sdk annotation).
+
+    The original lines are the cron-202611062346 fix for the marker-loss
+    class's second spelling: an `sdk`/`noseed` marker followed by a hand
+    note (`# 0x448 sdk SsVabOpenHeadWithMode (...)`) defeated the
+    end-of-line anchor, so a PRESERVED row's marker AND its hand note
+    were both dropped at re-scan. The emitter now re-emits the original
+    line verbatim for every preserved row, so markers, hand notes and
+    comment evidence survive every future re-scan by construction.
 
     v3 note: `c` entries are always preserved, and a `data` entry carrying a
     `pinned` marker is preserved too (a range verified by hand to be data).
@@ -859,8 +868,9 @@ def preserved_types(yaml_path: Path):
     sdk = set()
     sdk_c = set()
     noseed = set()
+    lines = {}
     if not yaml_path.exists():
-        return kept, pinned, sdk, sdk_c, noseed
+        return kept, pinned, sdk, sdk_c, noseed, lines
     in_block = False
     for ln in yaml_path.read_text().splitlines():
         if "# BEGIN GENERATED SUBSEGMENTS" in ln:
@@ -896,11 +906,17 @@ def preserved_types(yaml_path: Path):
         # one word past its head). Scoped per row on purpose: unmarked rows
         # behave exactly as before, so existing targets keep byte-identical
         # scans.
-        is_sdk = re.search(r"#\s*0x[0-9A-Fa-f]+\s+sdk\s*$", ln) is not None
-        is_noseed = re.search(r"#\s*0x[0-9A-Fa-f]+\s+noseed\s*$", ln) is not None
+        # The marker regexes anchor on the SIZE token, not end-of-line:
+        # `# 0x448 sdk SsVabOpenHeadWithMode (...)` is an sdk row whose
+        # note follows the marker (the d683dc9 class, second spelling -
+        # the end-of-line form silently de-pinned asm rows carrying notes
+        # and dropped the sdk_c annotation on c rows).
+        is_sdk = re.search(r"#\s*0x[0-9A-Fa-f]+\s+sdk\b", ln) is not None
+        is_noseed = re.search(r"#\s*0x[0-9A-Fa-f]+\s+noseed\b", ln) is not None
         if m.group(2) == "c" or "pinned" in ln or is_sdk:
             off = int(m.group(1), 16) - HDR
             kept[off] = (m.group(2), m.group(3), int(m.group(4), 16))
+            lines[off] = ln.strip()
             if m.group(2) != "c":
                 if is_sdk:
                     sdk.add(off)
@@ -910,7 +926,7 @@ def preserved_types(yaml_path: Path):
                 sdk_c.add(off)
             elif is_noseed:
                 noseed.add(off)
-    return kept, pinned, sdk, sdk_c, noseed
+    return kept, pinned, sdk, sdk_c, noseed, lines
 
 
 def main(argv):
@@ -924,7 +940,7 @@ def main(argv):
     pc0 = header_words[0]
     entry_off = pc0 - BASE
 
-    kept, pinned, sdk, sdk_c, noseed = preserved_types(
+    kept, pinned, sdk, sdk_c, noseed, orig_lines = preserved_types(
         yaml_path := REPO / "config" / f"splat.{target}.yaml")
 
     # Name-uniqueness registry (cron-20261024-0331): preserved rows claim
@@ -1184,8 +1200,15 @@ def main(argv):
     ytext = yaml_path.read_text()
     gen = ["    # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)"]
     for off, typ, name, size in subsegs:
-        # Re-emit the `pinned`/`sdk`/`noseed` marker or the NEXT scan reads
-        # an unmarked row, drops it from kept, and re-types the range.
+        # Preserved rows re-emit their ORIGINAL line verbatim: markers,
+        # hand notes and comment evidence survive every re-scan (the
+        # cron-202611062346 fix). An unmarked row is regenerated from the
+        # walk's fields - re-emit the `pinned`/`sdk`/`noseed` marker or
+        # the NEXT scan reads an unmarked row, drops it from kept, and
+        # re-types the range.
+        if off in orig_lines:
+            gen.append(f"      {orig_lines[off]}")
+            continue
         if off in pinned:
             mark = " pinned"
         elif off in sdk:

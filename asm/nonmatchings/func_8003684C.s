@@ -214,7 +214,7 @@ glabel GsSetRefView2
     /* 143CC 80033BCC 23180300 */  negu       $v1, $v1
     /* 143D0 80033BD0 6C00A3AF */  sw         $v1, 0x6C($sp)
     /* 143D4 80033BD4 23100200 */  negu       $v0, $v0
-    /* 143D8 80033BD8 23DA000C */  jal        func_8003688C
+    /* 143D8 80033BD8 23DA000C */  jal        GsMulCoord2
     /* 143DC 80033BDC 6800A2AF */   sw        $v0, 0x68($sp)
     /* 143E0 80033BE0 5000A28F */  lw         $v0, 0x50($sp)
     /* 143E4 80033BE4 5400A38F */  lw         $v1, 0x54($sp)

@@ -15,7 +15,7 @@ glabel SpuSetTransferStartAddr
     /* 4570C 80064F0C 21808000 */  addu       $s0, $a0, $zero
     /* 45710 80064F10 FFFF0424 */  addiu      $a0, $zero, -0x1
     /* 45714 80064F14 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 45718 80064F18 C492010C */  jal        func_80064B10
+    /* 45718 80064F18 C492010C */  jal        _spu_FsetRXXa
     /* 4571C 80064F1C 21280002 */   addu      $a1, $s0, $zero
     /* 45720 80064F20 0B80013C */  lui        $at, %hi(D_800AA878)
     /* 45724 80064F24 78A822A4 */  sh         $v0, %lo(D_800AA878)($at)

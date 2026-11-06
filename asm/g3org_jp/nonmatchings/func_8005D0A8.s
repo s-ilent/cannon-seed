@@ -25,7 +25,7 @@ glabel func_8005D0A8
     /* 3D8D8 8005D0D8 21204002 */  addu       $a0, $s2, $zero
   .L8005D0DC:
     /* 3D8DC 8005D0DC 21282002 */  addu       $a1, $s1, $zero
-    /* 3D8E0 8005D0E0 7B7A010C */  jal        func_8005E9EC
+    /* 3D8E0 8005D0E0 7B7A010C */  jal        CD_readm
     /* 3D8E4 8005D0E4 21306002 */   addu      $a2, $s3, $zero
     /* 3D8E8 8005D0E8 03004014 */  bnez       $v0, .L8005D0F8
     /* 3D8EC 8005D0EC FFFF1026 */   addiu     $s0, $s0, -0x1

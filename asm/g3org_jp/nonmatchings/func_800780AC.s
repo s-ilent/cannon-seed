@@ -37,7 +37,7 @@ glabel SpuSetReverb
     /* 4D224 8006CA24 00000000 */   nop
     /* 4D228 8006CA28 0B80043C */  lui        $a0, %hi(D_800B7640)
     /* 4D22C 8006CA2C 4076848C */  lw         $a0, %lo(D_800B7640)($a0)
-    /* 4D230 8006CA30 E9B1010C */  jal        func_8006C7A4
+    /* 4D230 8006CA30 E9B1010C */  jal        _SpuIsInAllocateArea_
     /* 4D234 8006CA34 00000000 */   nop
     /* 4D238 8006CA38 09004010 */  beqz       $v0, .L8006CA60
     /* 4D23C 8006CA3C 00000000 */   nop

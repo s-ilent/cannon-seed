@@ -131,7 +131,7 @@ glabel func_80043A58
     /* 243FC 80043BFC 00000000 */   nop
     /* 24400 80043C00 0480043C */  lui        $a0, %hi(SsSeqCalledTbyT)
     /* 24404 80043C04 38558424 */  addiu      $a0, $a0, %lo(SsSeqCalledTbyT)
-    /* 24408 80043C08 D8BA000C */  jal        func_8002EB60
+    /* 24408 80043C08 D8BA000C */  jal        VSyncCallback
     /* 2440C 80043C0C 00000000 */   nop
     /* 24410 80043C10 340F0108 */  j          .L80043CD0
     /* 24414 80043C14 00000000 */   nop
@@ -162,7 +162,7 @@ glabel func_80043A58
     /* 2446C 80043C6C 0C008014 */  bnez       $a0, .L80043CA0
     /* 24470 80043C70 00000000 */   nop
     /* 24474 80043C74 21200000 */  addu       $a0, $zero, $zero
-    /* 24478 80043C78 C0BA000C */  jal        func_8002EB00
+    /* 24478 80043C78 C0BA000C */  jal        InterruptCallback
     /* 2447C 80043C7C 21280000 */   addu      $a1, $zero, $zero
     /* 24480 80043C80 0D80043C */  lui        $a0, %hi(D_800D54A8)
     /* 24484 80043C84 A854848C */  lw         $a0, %lo(D_800D54A8)($a0)
@@ -182,7 +182,7 @@ glabel func_80043A58
     /* 244B8 80043CB8 0480053C */  lui        $a1, %hi(SsSeqCalledTbyT)
     /* 244BC 80043CBC 3855A524 */  addiu      $a1, $a1, %lo(SsSeqCalledTbyT)
   .L80043CC0:
-    /* 244C0 80043CC0 C0BA000C */  jal        func_8002EB00
+    /* 244C0 80043CC0 C0BA000C */  jal        InterruptCallback
     /* 244C4 80043CC4 00000000 */   nop
     /* 244C8 80043CC8 6BBE000C */  jal        func_8002F9AC
     /* 244CC 80043CCC 00000000 */   nop

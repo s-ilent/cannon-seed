@@ -10,8 +10,8 @@
 nonmatching func_8006534C, 0x3C
 
 glabel func_8006534C
-    /* 45B4C 8006534C 0B80023C */  lui        $v0, %hi(D_800AB0B8)
-    /* 45B50 80065350 B8B0428C */  lw         $v0, %lo(D_800AB0B8)($v0)
+    /* 45B4C 8006534C 0B80023C */  lui        $v0, %hi(_spu_RXX)
+    /* 45B50 80065350 B8B0428C */  lw         $v0, %lo(_spu_RXX)($v0)
     /* 45B54 80065354 40200400 */  sll        $a0, $a0, 1
     /* 45B58 80065358 21208200 */  addu       $a0, $a0, $v0
     /* 45B5C 8006535C FFFF0224 */  addiu      $v0, $zero, -0x1

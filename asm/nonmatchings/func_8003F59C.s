@@ -40,8 +40,8 @@ glabel CdRead2
     /* 1BCB0 8003B4B0 6CCC8424 */  addiu      $a0, $a0, %lo(data_ready_callback)
     /* 1BCB4 8003B4B4 55E4000C */  jal        func_80039154
     /* 1BCB8 8003B4B8 00000000 */   nop
-    /* 1BCBC 8003B4BC 0480043C */  lui        $a0, %hi(func_8003BF80)
-    /* 1BCC0 8003B4C0 80BF8424 */  addiu      $a0, $a0, %lo(func_8003BF80)
+    /* 1BCBC 8003B4BC 0480043C */  lui        $a0, %hi(StCdInterrupt)
+    /* 1BCC0 8003B4C0 80BF8424 */  addiu      $a0, $a0, %lo(StCdInterrupt)
     /* 1BCC4 8003B4C4 41E3000C */  jal        func_80038D04
     /* 1BCC8 8003B4C8 00000000 */   nop
   .L8003B4CC:

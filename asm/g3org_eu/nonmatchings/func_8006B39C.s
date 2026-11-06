@@ -78,7 +78,7 @@ glabel func_8006B39C
     /* 4BC90 8006B490 2000A727 */  addiu      $a3, $sp, 0x20
     /* 4BC94 8006B494 4C004486 */  lh         $a0, 0x4C($s2)
     /* 4BC98 8006B498 2C006592 */  lbu        $a1, 0x2C($s3)
-    /* 4BC9C 8006B49C BBB5010C */  jal        func_8006D6EC
+    /* 4BC9C 8006B49C BBB5010C */  jal        SsUtSetVagAtr
     /* 4BCA0 8006B4A0 01003126 */   addiu     $s1, $s1, 0x1
     /* 4BCA4 8006B4A4 0100033C */  lui        $v1, (0x10000 >> 16)
     /* 4BCA8 8006B4A8 1000A293 */  lbu        $v0, 0x10($sp)

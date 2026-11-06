@@ -159,9 +159,9 @@ glabel valiable_init
     /* 13D34 80033534 205522A4 */  sh         $v0, %lo(D_80115520)($at)
     /* 13D38 80033538 1180013C */  lui        $at, %hi(D_80115522)
     /* 13D3C 8003353C 225523A4 */  sh         $v1, %lo(D_80115522)($at)
-    /* 13D40 80033540 E2CA000C */  jal        func_80032B88
+    /* 13D40 80033540 E2CA000C */  jal        SetBlockFill
     /* 13D44 80033544 21200002 */   addu      $a0, $s0, $zero
-    /* 13D48 80033548 E2CA000C */  jal        func_80032B88
+    /* 13D48 80033548 E2CA000C */  jal        SetBlockFill
     /* 13D4C 8003354C 10000426 */   addiu     $a0, $s0, 0x10
     /* 13D50 80033550 01000234 */  ori        $v0, $zero, 0x1
     /* 13D54 80033554 1280013C */  lui        $at, %hi(D_8011C300)

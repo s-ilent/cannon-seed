@@ -13,7 +13,7 @@ glabel func_800798FC
     /* 5A0FC 800798FC E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 5A100 80079900 1000B0AF */  sw         $s0, 0x10($sp)
     /* 5A104 80079904 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 5A108 80079908 4D79010C */  jal        func_8005E534
+    /* 5A108 80079908 4D79010C */  jal        ResetCallback
     /* 5A10C 8007990C 21808000 */   addu      $s0, $a0, $zero
     /* 5A110 80079910 B6E6010C */  jal        func_80079AD8
     /* 5A114 80079914 21200002 */   addu      $a0, $s0, $zero

@@ -121,7 +121,7 @@ glabel GsSetRefView2
     /* 2DB7C 8004D37C 032C1000 */  sra        $a1, $s0, 16
     /* 2DB80 8004D380 78000734 */  ori        $a3, $zero, 0x78
     /* 2DB84 8004D384 00340600 */  sll        $a2, $a2, 16
-    /* 2DB88 8004D388 ED6B010C */  jal        func_8005AFB4
+    /* 2DB88 8004D388 ED6B010C */  jal        Gssub_make_matrix
     /* 2DB8C 8004D38C 03340600 */   sra       $a2, $a2, 16
     /* 2DB90 8004D390 2120A002 */  addu       $a0, $s5, $zero
     /* 2DB94 8004D394 D91C010C */  jal        func_80047364
@@ -170,7 +170,7 @@ glabel GsSetRefView2
     /* 2DC30 8004D430 002C0500 */  sll        $a1, $a1, 16
     /* 2DC34 8004D434 032C0500 */  sra        $a1, $a1, 16
     /* 2DC38 8004D438 00340600 */  sll        $a2, $a2, 16
-    /* 2DC3C 8004D43C ED6B010C */  jal        func_8005AFB4
+    /* 2DC3C 8004D43C ED6B010C */  jal        Gssub_make_matrix
     /* 2DC40 8004D440 03340600 */   sra       $a2, $a2, 16
     /* 2DC44 8004D444 2120A002 */  addu       $a0, $s5, $zero
     /* 2DC48 8004D448 D91C010C */  jal        func_80047364
@@ -194,7 +194,7 @@ glabel GsSetRefView2
     /* 2DC8C 8004D48C 00000000 */  nop
     /* 2DC90 8004D490 27008010 */  beqz       $a0, .L8004D530
     /* 2DC94 8004D494 00000000 */   nop
-    /* 2DC98 8004D498 9E33010C */  jal        func_8004CE78
+    /* 2DC98 8004D498 9E33010C */  jal        GsGetLw
     /* 2DC9C 8004D49C 21286002 */   addu      $a1, $s3, $zero
     /* 2DCA0 8004D4A0 21206002 */  addu       $a0, $s3, $zero
     /* 2DCA4 8004D4A4 5000B027 */  addiu      $s0, $sp, 0x50
@@ -214,7 +214,7 @@ glabel GsSetRefView2
     /* 2DCDC 8004D4DC 23180300 */  negu       $v1, $v1
     /* 2DCE0 8004D4E0 6C00A3AF */  sw         $v1, 0x6C($sp)
     /* 2DCE4 8004D4E4 23100200 */  negu       $v0, $v0
-    /* 2DCE8 8004D4E8 0132010C */  jal        func_8004C804
+    /* 2DCE8 8004D4E8 0132010C */  jal        GsMulCoord2
     /* 2DCEC 8004D4EC 6800A2AF */   sw        $v0, 0x68($sp)
     /* 2DCF0 8004D4F0 5000A28F */  lw         $v0, 0x50($sp)
     /* 2DCF4 8004D4F4 5400A38F */  lw         $v1, 0x54($sp)

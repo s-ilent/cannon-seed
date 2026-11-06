@@ -57,7 +57,7 @@ glabel func_8006BF24
     /* 4C7D4 8006BFD4 032C0500 */  sra        $a1, $a1, 16
     /* 4C7D8 8006BFD8 00341500 */  sll        $a2, $s5, 16
     /* 4C7DC 8006BFDC 03340600 */  sra        $a2, $a2, 16
-    /* 4C7E0 8006BFE0 BBB5010C */  jal        func_8006D6EC
+    /* 4C7E0 8006BFE0 BBB5010C */  jal        SsUtSetVagAtr
     /* 4C7E4 8006BFE4 3C00A727 */   addiu     $a3, $sp, 0x3C
     /* 4C7E8 8006BFE8 FF002432 */  andi       $a0, $s1, 0xFF
     /* 4C7EC 8006BFEC 05008014 */  bnez       $a0, .L8006C004
@@ -89,7 +89,7 @@ glabel func_8006BF24
     /* 4C84C 8006C04C 032C0500 */  sra        $a1, $a1, 16
     /* 4C850 8006C050 00341500 */  sll        $a2, $s5, 16
     /* 4C854 8006C054 03340600 */  sra        $a2, $a2, 16
-    /* 4C858 8006C058 BBB5010C */  jal        func_8006D6EC
+    /* 4C858 8006C058 BBB5010C */  jal        SsUtSetVagAtr
     /* 4C85C 8006C05C 3C00A727 */   addiu     $a3, $sp, 0x3C
     /* 4C860 8006C060 72B00108 */  j          .L8006C1C8
     /* 4C864 8006C064 00000000 */   nop
@@ -165,7 +165,7 @@ glabel func_8006BF24
     /* 4C970 8006C170 032C0500 */  sra        $a1, $a1, 16
     /* 4C974 8006C174 00341500 */  sll        $a2, $s5, 16
     /* 4C978 8006C178 03340600 */  sra        $a2, $a2, 16
-    /* 4C97C 8006C17C BBB5010C */  jal        func_8006D6EC
+    /* 4C97C 8006C17C BBB5010C */  jal        SsUtSetVagAtr
     /* 4C980 8006C180 21380002 */   addu      $a3, $s0, $zero
     /* 4C984 8006C184 72B00108 */  j          .L8006C1C8
     /* 4C988 8006C188 00000000 */   nop
@@ -174,15 +174,15 @@ glabel func_8006BF24
     /* 4C994 8006C194 72B00108 */  j          .L8006C1C8
     /* 4C998 8006C198 00000000 */   nop
     /* 4C99C 8006C19C 21202002 */  addu       $a0, $s1, $zero
-    /* 4C9A0 8006C1A0 23B2010C */  jal        func_8006C88C
+    /* 4C9A0 8006C1A0 23B2010C */  jal        SsUtSetReverbDepth
     /* 4C9A4 8006C1A4 21288000 */   addu      $a1, $a0, $zero
     /* 4C9A8 8006C1A8 72B00108 */  j          .L8006C1C8
     /* 4C9AC 8006C1AC 00000000 */   nop
-    /* 4C9B0 8006C1B0 49B2010C */  jal        func_8006C924
+    /* 4C9B0 8006C1B0 49B2010C */  jal        SsUtSetReverbFeedback
     /* 4C9B4 8006C1B4 21202002 */   addu      $a0, $s1, $zero
     /* 4C9B8 8006C1B8 72B00108 */  j          .L8006C1C8
     /* 4C9BC 8006C1BC 00000000 */   nop
-    /* 4C9C0 8006C1C0 59B2010C */  jal        func_8006C964
+    /* 4C9C0 8006C1C0 59B2010C */  jal        SsUtSetReverbDelay
     /* 4C9C4 8006C1C4 21202002 */   addu      $a0, $s1, $zero
   .L8006C1C8:
     /* 4C9C8 8006C1C8 2800BF8F */  lw         $ra, 0x28($sp)

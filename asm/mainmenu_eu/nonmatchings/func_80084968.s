@@ -40,7 +40,7 @@ glabel func_80084968
     /* 651C8 800849C8 03840200 */  sra        $s0, $v0, 16
     /* 651CC 800849CC 03000016 */  bnez       $s0, .L800849DC
     /* 651D0 800849D0 00000000 */   nop
-    /* 651D4 800849D4 EB15020C */  jal        func_800857AC
+    /* 651D4 800849D4 EB15020C */  jal        SpuSetReverb
     /* 651D8 800849D8 21200000 */   addu      $a0, $zero, $zero
   .L800849DC:
     /* 651DC 800849DC 1780043C */  lui        $a0, %hi(D_801681AC)

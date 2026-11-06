@@ -323,7 +323,7 @@ glabel func_8006E8B8
     /* 4F524 8006ED24 0300E012 */  beqz       $s7, .L8006ED34
     /* 4F528 8006ED28 00000000 */   nop
   .L8006ED2C:
-    /* 4F52C 8006ED2C 72BB010C */  jal        func_8006EDC8
+    /* 4F52C 8006ED2C 72BB010C */  jal        _spu_setReverbAttr
     /* 4F530 8006ED30 1000A427 */   addiu     $a0, $sp, 0x10
   .L8006ED34:
     /* 4F534 8006ED34 0500C013 */  beqz       $fp, .L8006ED4C
@@ -337,7 +337,7 @@ glabel func_8006E8B8
     /* 4F550 8006ED50 D1000434 */   ori       $a0, $zero, 0xD1
     /* 4F554 8006ED54 0B80053C */  lui        $a1, %hi(D_800AA8F8)
     /* 4F558 8006ED58 F8A8A58C */  lw         $a1, %lo(D_800AA8F8)($a1)
-    /* 4F55C 8006ED5C B292010C */  jal        func_80064AC8
+    /* 4F55C 8006ED5C B292010C */  jal        _spu_FsetRXX
     /* 4F560 8006ED60 21300000 */   addu      $a2, $zero, $zero
     /* 4F564 8006ED64 5800A88F */  lw         $t0, 0x58($sp)
     /* 4F568 8006ED68 00000000 */  nop

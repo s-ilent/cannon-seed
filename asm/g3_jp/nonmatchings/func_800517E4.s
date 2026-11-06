@@ -20,11 +20,11 @@ glabel startIntrVSync
     /* 2B8B0 8004B0B0 000062AC */  sw         $v0, 0x0($v1)
     /* 2B8B4 8004B0B4 0980013C */  lui        $at, %hi(D_800974D0)
     /* 2B8B8 8004B0B8 D07420AC */  sw         $zero, %lo(D_800974D0)($at)
-    /* 2B8BC 8004B0BC 652C010C */  jal        func_800518E4
+    /* 2B8BC 8004B0BC 652C010C */  jal        func_8004B194
     /* 2B8C0 8004B0C0 08000534 */   ori       $a1, $zero, 0x8
     /* 2B8C4 8004B0C4 0580053C */  lui        $a1, %hi(trapIntrVSync)
     /* 2B8C8 8004B0C8 ECB0A524 */  addiu      $a1, $a1, %lo(trapIntrVSync)
-    /* 2B8CC 8004B0CC 9229010C */  jal        func_8004A648
+    /* 2B8CC 8004B0CC 9229010C */  jal        InterruptCallback
     /* 2B8D0 8004B0D0 21200000 */   addu      $a0, $zero, $zero
     /* 2B8D4 8004B0D4 0580023C */  lui        $v0, %hi(setIntrVSync)
     /* 2B8D8 8004B0D8 68B14224 */  addiu      $v0, $v0, %lo(setIntrVSync)

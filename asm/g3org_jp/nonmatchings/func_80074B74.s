@@ -15,7 +15,7 @@ glabel Snd_play
     /* 4A3BC 80069BBC 00240400 */  sll        $a0, $a0, 16
     /* 4A3C0 80069BC0 002C0500 */  sll        $a1, $a1, 16
     /* 4A3C4 80069BC4 03240400 */  sra        $a0, $a0, 16
-    /* 4A3C8 80069BC8 F8A6010C */  jal        func_80069BE0
+    /* 4A3C8 80069BC8 F8A6010C */  jal        SeqPlay
     /* 4A3CC 80069BCC 032C0500 */   sra       $a1, $a1, 16
     /* 4A3D0 80069BD0 1000BF8F */  lw         $ra, 0x10($sp)
     /* 4A3D4 80069BD4 1800BD27 */  addiu      $sp, $sp, 0x18

@@ -13,7 +13,7 @@ glabel func_80075660
     /* 55E60 80075660 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 55E64 80075664 1000BFAF */  sw         $ra, 0x10($sp)
     /* 55E68 80075668 21288000 */  addu       $a1, $a0, $zero
-    /* 55E6C 8007566C 6579010C */  jal        func_8005E594
+    /* 55E6C 8007566C 6579010C */  jal        DMACallback
     /* 55E70 80075670 03000434 */   ori       $a0, $zero, 0x3
     /* 55E74 80075674 1000BF8F */  lw         $ra, 0x10($sp)
     /* 55E78 80075678 1800BD27 */  addiu      $sp, $sp, 0x18

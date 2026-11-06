@@ -329,7 +329,7 @@ glabel func_800807CC
     /* 60FDC 800807DC 00000000 */   nop
     /* 60FE0 800807E0 0880043C */  lui        $a0, %hi(SsSeqCalledTbyT)
     /* 60FE4 800807E4 28218424 */  addiu      $a0, $a0, %lo(SsSeqCalledTbyT)
-    /* 60FE8 800807E8 7179010C */  jal        func_8005E5C4
+    /* 60FE8 800807E8 7179010C */  jal        VSyncCallback
     /* 60FEC 800807EC 00000000 */   nop
     /* 60FF0 800807F0 2C020208 */  j          func_800808B0
     /* 60FF4 800807F4 00000000 */   nop
@@ -372,7 +372,7 @@ glabel func_80080830
     /* 6104C 8008084C 0C008014 */  bnez       $a0, func_80080880
     /* 61050 80080850 00000000 */   nop
     /* 61054 80080854 21200000 */  addu       $a0, $zero, $zero
-    /* 61058 80080858 5979010C */  jal        func_8005E564
+    /* 61058 80080858 5979010C */  jal        InterruptCallback
     /* 6105C 8008085C 21280000 */   addu      $a1, $zero, $zero
     /* 61060 80080860 0D80043C */  lui        $a0, %hi(D_800C92BC)
     /* 61064 80080864 BC92848C */  lw         $a0, %lo(D_800C92BC)($a0)
@@ -400,7 +400,7 @@ endlabel func_80080880
 nonmatching func_800808A0, 0x10
 
 glabel func_800808A0
-    /* 610A0 800808A0 5979010C */  jal        func_8005E564
+    /* 610A0 800808A0 5979010C */  jal        InterruptCallback
     /* 610A4 800808A4 00000000 */   nop
     /* 610A8 800808A8 D07C010C */  jal        intr_restart_commit
     /* 610AC 800808AC 00000000 */   nop
@@ -455,7 +455,7 @@ glabel func_80080908
     /* 61134 80080934 00000000 */  nop
     /* 61138 80080938 07004010 */  beqz       $v0, func_80080958
     /* 6113C 8008093C FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 61140 80080940 7179010C */  jal        func_8005E5C4
+    /* 61140 80080940 7179010C */  jal        VSyncCallback
     /* 61144 80080944 21200000 */   addu      $a0, $zero, $zero
     /* 61148 80080948 0D80013C */  lui        $at, %hi(D_800C92B8)
     /* 6114C 8008094C B89220AC */  sw         $zero, %lo(D_800C92B8)($at)
@@ -481,7 +481,7 @@ endlabel func_80080958
 nonmatching func_80080980, 0x14
 
 glabel func_80080980
-    /* 61180 80080980 5979010C */  jal        func_8005E564
+    /* 61180 80080980 5979010C */  jal        InterruptCallback
     /* 61184 80080984 00000000 */   nop
     /* 61188 80080988 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 6118C 8008098C 0D80013C */  lui        $at, %hi(D_800C92BC)

@@ -16,19 +16,19 @@ glabel func_80038B98
     /* 193A4 80038BA4 02000234 */  ori        $v0, $zero, 0x2
     /* 193A8 80038BA8 05000216 */  bne        $s0, $v0, .L80038BC0
     /* 193AC 80038BAC 1400BFAF */   sw        $ra, 0x14($sp)
-    /* 193B0 80038BB0 5DE9000C */  jal        func_8003A574
+    /* 193B0 80038BB0 5DE9000C */  jal        CD_initintr
     /* 193B4 80038BB4 00000000 */   nop
     /* 193B8 80038BB8 FCE20008 */  j          .L80038BF0
     /* 193BC 80038BBC 01000234 */   ori       $v0, $zero, 0x1
   .L80038BC0:
-    /* 193C0 80038BC0 77E9000C */  jal        func_8003A5DC
+    /* 193C0 80038BC0 77E9000C */  jal        CD_init
     /* 193C4 80038BC4 00000000 */   nop
     /* 193C8 80038BC8 09004014 */  bnez       $v0, .L80038BF0
     /* 193CC 80038BCC 21100000 */   addu      $v0, $zero, $zero
     /* 193D0 80038BD0 01000234 */  ori        $v0, $zero, 0x1
     /* 193D4 80038BD4 06000216 */  bne        $s0, $v0, .L80038BF0
     /* 193D8 80038BD8 00000000 */   nop
-    /* 193DC 80038BDC 20E9000C */  jal        func_8003A480
+    /* 193DC 80038BDC 20E9000C */  jal        CD_initvol
     /* 193E0 80038BE0 00000000 */   nop
     /* 193E4 80038BE4 02004014 */  bnez       $v0, .L80038BF0
     /* 193E8 80038BE8 21100000 */   addu      $v0, $zero, $zero

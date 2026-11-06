@@ -26,7 +26,7 @@ glabel func_80067640
     /* 47E74 80067674 2198E000 */  addu       $s3, $a3, $zero
     /* 47E78 80067678 3800BFAF */  sw         $ra, 0x38($sp)
     /* 47E7C 8006767C 2400B1AF */  sw         $s1, 0x24($sp)
-    /* 47E80 80067680 E0A7010C */  jal        func_80069F80
+    /* 47E80 80067680 E0A7010C */  jal        SpuVmVSetUp
     /* 47E84 80067684 2000B0AF */   sw        $s0, 0x20($sp)
     /* 47E88 80067688 21800000 */  addu       $s0, $zero, $zero
     /* 47E8C 8006768C 1780033C */  lui        $v1, %hi(D_8016AF68)

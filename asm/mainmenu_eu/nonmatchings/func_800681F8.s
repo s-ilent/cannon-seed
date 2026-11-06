@@ -14,7 +14,7 @@ glabel startIntrDMA
     /* 3F45C 8005EC5C 0B80043C */  lui        $a0, %hi(D_800B5514)
     /* 3F460 8005EC60 14558424 */  addiu      $a0, $a0, %lo(D_800B5514)
     /* 3F464 8005EC64 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 3F468 8005EC68 B57B010C */  jal        memclr
+    /* 3F468 8005EC68 B57B010C */  jal        func_8005EED4
     /* 3F46C 8005EC6C 08000534 */   ori       $a1, $zero, 0x8
     /* 3F470 8005EC70 03000434 */  ori        $a0, $zero, 0x3
     /* 3F474 8005EC74 0B80023C */  lui        $v0, %hi(D_800B5510)
@@ -22,7 +22,7 @@ glabel startIntrDMA
     /* 3F47C 8005EC7C 0680053C */  lui        $a1, %hi(trapIntrDMA)
     /* 3F480 8005EC80 A8ECA524 */  addiu      $a1, $a1, %lo(trapIntrDMA)
     /* 3F484 8005EC84 000040AC */  sw         $zero, 0x0($v0)
-    /* 3F488 8005EC88 5979010C */  jal        func_8005E564
+    /* 3F488 8005EC88 5979010C */  jal        InterruptCallback
     /* 3F48C 8005EC8C 00000000 */   nop
     /* 3F490 8005EC90 0680023C */  lui        $v0, %hi(setIntrDMA)
     /* 3F494 8005EC94 2CEE4224 */  addiu      $v0, $v0, %lo(setIntrDMA)

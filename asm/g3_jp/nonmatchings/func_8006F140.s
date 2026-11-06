@@ -76,7 +76,7 @@ glabel SsVabTransBodyPartly
     /* 4564C 80064E4C D093010C */  jal        _spu_setInTransfer
     /* 45650 80064E50 01000434 */   ori       $a0, $zero, 0x1
     /* 45654 80064E54 21208002 */  addu       $a0, $s4, $zero
-    /* 45658 80064E58 DF93010C */  jal        func_80064F7C
+    /* 45658 80064E58 DF93010C */  jal        SpuWritePartly
     /* 4565C 80064E5C 21280002 */   addu      $a1, $s0, $zero
     /* 45660 80064E60 0B80023C */  lui        $v0, %hi(D_800AB03C)
     /* 45664 80064E64 3CB0428C */  lw         $v0, %lo(D_800AB03C)($v0)

@@ -65,7 +65,7 @@ glabel func_8006B260
     /* 4BB2C 8006B32C 2B00B7A3 */  sb         $s7, 0x2B($sp)
     /* 4BB30 8006B330 4C004486 */  lh         $a0, 0x4C($s2)
     /* 4BB34 8006B334 2C008592 */  lbu        $a1, 0x2C($s4)
-    /* 4BB38 8006B338 BBB5010C */  jal        func_8006D6EC
+    /* 4BB38 8006B338 BBB5010C */  jal        SsUtSetVagAtr
     /* 4BB3C 8006B33C 21386002 */   addu      $a3, $s3, $zero
     /* 4BB40 8006B340 1000A293 */  lbu        $v0, 0x10($sp)
     /* 4BB44 8006B344 01003126 */  addiu      $s1, $s1, 0x1

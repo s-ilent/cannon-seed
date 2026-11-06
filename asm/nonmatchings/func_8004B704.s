@@ -15,7 +15,7 @@ glabel Snd_play
     /* 264CC 80045CCC 00240400 */  sll        $a0, $a0, 16
     /* 264D0 80045CD0 002C0500 */  sll        $a1, $a1, 16
     /* 264D4 80045CD4 03240400 */  sra        $a0, $a0, 16
-    /* 264D8 80045CD8 3C17010C */  jal        func_80045CF0
+    /* 264D8 80045CD8 3C17010C */  jal        SeqPlay
     /* 264DC 80045CDC 032C0500 */   sra       $a1, $a1, 16
     /* 264E0 80045CE0 1000BF8F */  lw         $ra, 0x10($sp)
     /* 264E4 80045CE4 1800BD27 */  addiu      $sp, $sp, 0x18

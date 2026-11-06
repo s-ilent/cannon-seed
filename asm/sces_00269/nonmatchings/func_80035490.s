@@ -204,7 +204,7 @@ glabel func_80035490
     /* 15F68 80035768 21202002 */  addu       $a0, $s1, $zero
     /* 15F6C 8003576C 6800A527 */  addiu      $a1, $sp, 0x68
     /* 15F70 80035770 7800B027 */  addiu      $s0, $sp, 0x78
-    /* 15F74 80035774 13D8000C */  jal        func_8003604C
+    /* 15F74 80035774 13D8000C */  jal        OuterProduct12
     /* 15F78 80035778 21300002 */   addu      $a2, $s0, $zero
     /* 15F7C 8003577C 21200002 */  addu       $a0, $s0, $zero
     /* 15F80 80035780 8800B227 */  addiu      $s2, $sp, 0x88
@@ -228,7 +228,7 @@ glabel func_80035490
     /* 15FC8 800357C8 0800C2A6 */  sh         $v0, 0x8($s6)
     /* 15FCC 800357CC B000A297 */  lhu        $v0, 0xB0($sp)
     /* 15FD0 800357D0 21300002 */  addu       $a2, $s0, $zero
-    /* 15FD4 800357D4 13D8000C */  jal        func_8003604C
+    /* 15FD4 800357D4 13D8000C */  jal        OuterProduct12
     /* 15FD8 800357D8 0E00C2A6 */   sh        $v0, 0xE($s6)
     /* 15FDC 800357DC 21200002 */  addu       $a0, $s0, $zero
     /* 15FE0 800357E0 42D7000C */  jal        func_80035D08

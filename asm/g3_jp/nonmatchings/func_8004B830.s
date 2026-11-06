@@ -44,7 +44,7 @@ glabel func_8004B830
     /* 2C0A8 8004B8A8 01000434 */   ori       $a0, $zero, 0x1
     /* 2C0AC 8004B8AC 02000434 */  ori        $a0, $zero, 0x2
     /* 2C0B0 8004B8B0 21280000 */  addu       $a1, $zero, $zero
-    /* 2C0B4 8004B8B4 9E29010C */  jal        func_8004A678
+    /* 2C0B4 8004B8B4 9E29010C */  jal        DMACallback
     /* 2C0B8 8004B8B8 000030A2 */   sb        $s0, 0x0($s1)
     /* 2C0BC 8004B8BC 21104002 */  addu       $v0, $s2, $zero
   .L8004B8C0:

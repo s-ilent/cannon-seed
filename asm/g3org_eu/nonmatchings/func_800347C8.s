@@ -411,7 +411,7 @@ glabel func_80034BEC
     /* 15448 80034C48 00000000 */   nop
     /* 1544C 80034C4C 38D30008 */  j          func_80034CE0
     /* 15450 80034C50 00140200 */   sll       $v0, $v0, 16
-    /* 15454 80034C54 DCD1000C */  jal        func_80034770
+    /* 15454 80034C54 DCD1000C */  jal        SsGetNck
     /* 15458 80034C58 00000000 */   nop
     /* 1545C 80034C5C 38D30008 */  j          func_80034CE0
     /* 15460 80034C60 00140200 */   sll       $v0, $v0, 16
@@ -7708,7 +7708,7 @@ glabel func_80039F9C
     /* 1A7FC 80039FFC 00000000 */   nop
     /* 1A800 8003A000 11E80008 */  j          func_8003A044
     /* 1A804 8003A004 00140200 */   sll       $v0, $v0, 16
-    /* 1A808 8003A008 DCD1000C */  jal        func_80034770
+    /* 1A808 8003A008 DCD1000C */  jal        SsGetNck
     /* 1A80C 8003A00C 00000000 */   nop
     /* 1A810 8003A010 11E80008 */  j          func_8003A044
     /* 1A814 8003A014 00140200 */   sll       $v0, $v0, 16
@@ -15846,7 +15846,7 @@ glabel func_8003FE40
     /* 20654 8003FE54 349C20A4 */  sh         $zero, %lo(D_800B9C34)($at)
     /* 20658 8003FE58 0C80013C */  lui        $at, %hi(D_800B9A9C)
     /* 2065C 8003FE5C 9C9A20A4 */  sh         $zero, %lo(D_800B9A9C)($at)
-    /* 20660 8003FE60 E91F010C */  jal        func_80047FA4
+    /* 20660 8003FE60 E91F010C */  jal        VSync
     /* 20664 8003FE64 04000434 */   ori       $a0, $zero, 0x4
     /* 20668 8003FE68 01000234 */  ori        $v0, $zero, 0x1
     /* 2066C 8003FE6C 0C80013C */  lui        $at, %hi(D_800B9C34)
@@ -18471,7 +18471,7 @@ glabel func_80041B7C
     /* 223DC 80041BDC 5C9522AC */  sw         $v0, %lo(D_800B955C)($at)
     /* 223E0 80041BE0 0C80013C */  lui        $at, %hi(D_800B9AFC)
     /* 223E4 80041BE4 FC9A23AC */  sw         $v1, %lo(D_800B9AFC)($at)
-    /* 223E8 80041BE8 0500A010 */  beqz       $a1, .L80041C00
+    /* 223E8 80041BE8 0500A010 */  beqz       $a1, func_80041C00
     /* 223EC 80041BEC 0900A228 */   slti      $v0, $a1, 0x9
-    /* 223F0 80041BF0 03004010 */  beqz       $v0, .L80041C00
+    /* 223F0 80041BF0 03004010 */  beqz       $v0, func_80041C00
 endlabel func_80041B7C

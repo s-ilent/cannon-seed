@@ -329,7 +329,7 @@ glabel func_800686D8
     /* 48EE8 800686E8 00000000 */   nop
     /* 48EEC 800686EC 0780043C */  lui        $a0, %hi(SsSeqCalledTbyT)
     /* 48EF0 800686F0 989F8424 */  addiu      $a0, $a0, %lo(SsSeqCalledTbyT)
-    /* 48EF4 800686F4 4F1D010C */  jal        func_8004753C
+    /* 48EF4 800686F4 4F1D010C */  jal        VSyncCallback
     /* 48EF8 800686F8 00000000 */   nop
     /* 48EFC 800686FC EFA10108 */  j          func_800687BC
     /* 48F00 80068700 00000000 */   nop
@@ -372,7 +372,7 @@ glabel func_8006873C
     /* 48F58 80068758 0C008014 */  bnez       $a0, func_8006878C
     /* 48F5C 8006875C 00000000 */   nop
     /* 48F60 80068760 21200000 */  addu       $a0, $zero, $zero
-    /* 48F64 80068764 371D010C */  jal        func_800474DC
+    /* 48F64 80068764 371D010C */  jal        InterruptCallback
     /* 48F68 80068768 21280000 */   addu      $a1, $zero, $zero
     /* 48F6C 8006876C 0C80043C */  lui        $a0, %hi(D_800B8748)
     /* 48F70 80068770 4887848C */  lw         $a0, %lo(D_800B8748)($a0)
@@ -400,7 +400,7 @@ endlabel func_8006878C
 nonmatching func_800687AC, 0x10
 
 glabel func_800687AC
-    /* 48FAC 800687AC 371D010C */  jal        func_800474DC
+    /* 48FAC 800687AC 371D010C */  jal        InterruptCallback
     /* 48FB0 800687B0 00000000 */   nop
     /* 48FB4 800687B4 AE20010C */  jal        func_800482B8
     /* 48FB8 800687B8 00000000 */   nop
@@ -455,7 +455,7 @@ glabel func_80068814
     /* 49040 80068840 00000000 */  nop
     /* 49044 80068844 07004010 */  beqz       $v0, func_80068864
     /* 49048 80068848 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 4904C 8006884C 4F1D010C */  jal        func_8004753C
+    /* 4904C 8006884C 4F1D010C */  jal        VSyncCallback
     /* 49050 80068850 21200000 */   addu      $a0, $zero, $zero
     /* 49054 80068854 0C80013C */  lui        $at, %hi(D_800B8744)
     /* 49058 80068858 448720AC */  sw         $zero, %lo(D_800B8744)($at)
@@ -481,7 +481,7 @@ endlabel func_80068864
 nonmatching func_8006888C, 0x14
 
 glabel func_8006888C
-    /* 4908C 8006888C 371D010C */  jal        func_800474DC
+    /* 4908C 8006888C 371D010C */  jal        InterruptCallback
     /* 49090 80068890 00000000 */   nop
     /* 49094 80068894 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 49098 80068898 0C80013C */  lui        $at, %hi(D_800B8748)

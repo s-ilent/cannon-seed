@@ -67,7 +67,7 @@ glabel func_8002C65C
     /* CE80 8002C680 21108000 */  addu       $v0, $a0, $zero
     /* CE84 8002C684 21A8A000 */  addu       $s5, $a1, $zero
     /* CE88 8002C688 1000A427 */  addiu      $a0, $sp, 0x10
-    /* CE8C 8002C68C DBEC000C */  jal        func_8003B36C
+    /* CE8C 8002C68C DBEC000C */  jal        CdSearchFile
     /* CE90 8002C690 21284000 */   addu      $a1, $v0, $zero
     /* CE94 8002C694 07004014 */  bnez       $v0, func_8002C6B4
     /* CE98 8002C698 00000000 */   nop
@@ -280,7 +280,7 @@ glabel func_8002C8A0
     /* D0A8 8002C8A8 3400B1AF */  sw         $s1, 0x34($sp)
     /* D0AC 8002C8AC 3000B0AF */  sw         $s0, 0x30($sp)
     /* D0B0 8002C8B0 21288000 */  addu       $a1, $a0, $zero
-    /* D0B4 8002C8B4 DBEC000C */  jal        func_8003B36C
+    /* D0B4 8002C8B4 DBEC000C */  jal        CdSearchFile
     /* D0B8 8002C8B8 1800A427 */   addiu     $a0, $sp, 0x18
     /* D0BC 8002C8BC 07004014 */  bnez       $v0, func_8002C8DC
     /* D0C0 8002C8C0 00000000 */   nop
@@ -714,9 +714,9 @@ glabel func_8002CD18
     /* D590 8002CD90 21200000 */  addu       $a0, $zero, $zero
     /* D594 8002CD94 21280000 */  addu       $a1, $zero, $zero
     /* D598 8002CD98 21300000 */  addu       $a2, $zero, $zero
-    /* D59C 8002CD9C 0ECC000C */  jal        func_80033038
+    /* D59C 8002CD9C 0ECC000C */  jal        GsSortClear
     /* D5A0 8002CDA0 21380002 */   addu      $a3, $s0, $zero
-    /* D5A4 8002CDA4 9BDC000C */  jal        func_8003726C
+    /* D5A4 8002CDA4 9BDC000C */  jal        GsDrawOt
     /* D5A8 8002CDA8 21200002 */   addu      $a0, $s0, $zero
     /* D5AC 8002CDAC 0200422A */  slti       $v0, $s2, 0x2
     /* D5B0 8002CDB0 D9FF4014 */  bnez       $v0, func_8002CD18
@@ -776,7 +776,7 @@ glabel func_8002CE38
     /* D64C 8002CE4C 700A8424 */  addiu      $a0, $a0, %lo(D_80020A70)
     /* D650 8002CE50 81B6000C */  jal        printf
     /* D654 8002CE54 00000000 */   nop
-    /* D658 8002CE58 E4B9000C */  jal        func_8002E790
+    /* D658 8002CE58 E4B9000C */  jal        StopCallback
     /* D65C 8002CE5C 00000000 */   nop
     /* D660 8002CE60 D297000C */  jal        func_80025F48
     /* D664 8002CE64 00000000 */   nop
@@ -1549,7 +1549,7 @@ nonmatching func_8002D644, 0x28
 
 glabel func_8002D644
     /* DE44 8002D644 1800A427 */  addiu      $a0, $sp, 0x18
-    /* DE48 8002D648 DBEC000C */  jal        func_8003B36C
+    /* DE48 8002D648 DBEC000C */  jal        CdSearchFile
     /* DE4C 8002D64C 21280002 */   addu      $a1, $s0, $zero
     /* DE50 8002D650 35004010 */  beqz       $v0, func_8002D728
     /* DE54 8002D654 00000000 */   nop
@@ -1757,7 +1757,7 @@ glabel func_8002D814
     /* E028 8002D828 21808000 */   addu      $s0, $a0, $zero
     /* E02C 8002D82C 1800A427 */  addiu      $a0, $sp, 0x18
     /* E030 8002D830 21280002 */  addu       $a1, $s0, $zero
-    /* E034 8002D834 DBEC000C */  jal        func_8003B36C
+    /* E034 8002D834 DBEC000C */  jal        CdSearchFile
     /* E038 8002D838 21884000 */   addu      $s1, $v0, $zero
     /* E03C 8002D83C 20004010 */  beqz       $v0, func_8002D8C0
     /* E040 8002D840 00000000 */   nop

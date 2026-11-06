@@ -174,15 +174,15 @@ glabel func_8006EAD0
     /* 4F540 8006ED40 5DBB0108 */  j          .L8006ED74
     /* 4F544 8006ED44 00000000 */   nop
     /* 4F548 8006ED48 21202002 */  addu       $a0, $s1, $zero
-    /* 4F54C 8006ED4C 0EBD010C */  jal        func_8006F438
+    /* 4F54C 8006ED4C 0EBD010C */  jal        SsUtSetReverbDepth
     /* 4F550 8006ED50 21288000 */   addu      $a1, $a0, $zero
     /* 4F554 8006ED54 5DBB0108 */  j          .L8006ED74
     /* 4F558 8006ED58 00000000 */   nop
-    /* 4F55C 8006ED5C 34BD010C */  jal        func_8006F4D0
+    /* 4F55C 8006ED5C 34BD010C */  jal        SsUtSetReverbFeedback
     /* 4F560 8006ED60 21202002 */   addu      $a0, $s1, $zero
     /* 4F564 8006ED64 5DBB0108 */  j          .L8006ED74
     /* 4F568 8006ED68 00000000 */   nop
-    /* 4F56C 8006ED6C 44BD010C */  jal        func_8006F510
+    /* 4F56C 8006ED6C 44BD010C */  jal        SsUtSetReverbDelay
     /* 4F570 8006ED70 21202002 */   addu      $a0, $s1, $zero
   .L8006ED74:
     /* 4F574 8006ED74 2800BF8F */  lw         $ra, 0x28($sp)

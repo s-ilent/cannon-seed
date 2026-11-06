@@ -12,7 +12,7 @@ nonmatching func_80084928, 0x20
 glabel func_80084928
     /* 65128 80084928 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 6512C 8008492C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 65130 80084930 EB15020C */  jal        func_800857AC
+    /* 65130 80084930 EB15020C */  jal        SpuSetReverb
     /* 65134 80084934 01000434 */   ori       $a0, $zero, 0x1
     /* 65138 80084938 1000BF8F */  lw         $ra, 0x10($sp)
     /* 6513C 8008493C 1800BD27 */  addiu      $sp, $sp, 0x18
@@ -25,7 +25,7 @@ nonmatching func_80084948, 0x20
 glabel func_80084948
     /* 65148 80084948 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 6514C 8008494C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 65150 80084950 EB15020C */  jal        func_800857AC
+    /* 65150 80084950 EB15020C */  jal        SpuSetReverb
     /* 65154 80084954 21200000 */   addu      $a0, $zero, $zero
     /* 65158 80084958 1000BF8F */  lw         $ra, 0x10($sp)
     /* 6515C 8008495C 1800BD27 */  addiu      $sp, $sp, 0x18

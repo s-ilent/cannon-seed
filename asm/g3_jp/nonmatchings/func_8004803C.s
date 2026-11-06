@@ -1006,7 +1006,7 @@ glabel func_80048A9C
     /* 292AC 80048AAC 07000015 */  bnez       $t0, func_80048ACC
     /* 292B0 80048AB0 4002A48F */   lw        $a0, 0x240($sp)
     /* 292B4 80048AB4 4002A48F */  lw         $a0, 0x240($sp)
-    /* 292B8 80048AB8 FF1F010C */  jal        func_80047FFC
+    /* 292B8 80048AB8 FF1F010C */  jal        strlen
     /* 292BC 80048ABC 00000000 */   nop
     /* 292C0 80048AC0 76000010 */  b          func_80048C9C
     /* 292C4 80048AC4 5002A2AF */   sw        $v0, 0x250($sp)

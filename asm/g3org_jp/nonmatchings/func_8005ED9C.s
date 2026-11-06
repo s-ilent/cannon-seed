@@ -105,7 +105,7 @@ glabel GsTMDdivTF4LFG
     /* 37468 80056C68 3400A227 */  addiu      $v0, $sp, 0x34
     /* 3746C 80056C6C 2400A2AF */  sw         $v0, 0x24($sp)
     /* 37470 80056C70 3800A227 */  addiu      $v0, $sp, 0x38
-    /* 37474 80056C74 F14D010C */  jal        func_800537C4
+    /* 37474 80056C74 F14D010C */  jal        RotAverageNclip4
     /* 37478 80056C78 2800A2AF */   sw        $v0, 0x28($sp)
     /* 3747C 80056C7C 35004018 */  blez       $v0, .L80056D54
     /* 37480 80056C80 0100F726 */   addiu     $s7, $s7, 0x1

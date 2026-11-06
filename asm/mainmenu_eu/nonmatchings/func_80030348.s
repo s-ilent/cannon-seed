@@ -298,7 +298,7 @@ glabel func_8002E3B8
     /* EC84 8002E484 21200000 */   addu      $a0, $zero, $zero
     /* EC88 8002E488 C594000C */  jal        func_80025314
     /* EC8C 8002E48C 00000000 */   nop
-    /* EC90 8002E490 8A79010C */  jal        func_8005E628
+    /* EC90 8002E490 8A79010C */  jal        StopCallback
     /* EC94 8002E494 00000000 */   nop
     /* EC98 8002E498 E87C010C */  jal        func_8005F3A0
     /* EC9C 8002E49C 03000434 */   ori       $a0, $zero, 0x3

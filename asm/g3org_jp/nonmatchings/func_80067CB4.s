@@ -24,7 +24,7 @@ glabel func_80067CB4
     /* 484E0 80067CE0 00000000 */  nop
     /* 484E4 80067CE4 07004010 */  beqz       $v0, .L80067D04
     /* 484E8 80067CE8 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 484EC 80067CEC D11E010C */  jal        func_80047B44
+    /* 484EC 80067CEC D11E010C */  jal        VSyncCallback
     /* 484F0 80067CF0 21200000 */   addu      $a0, $zero, $zero
     /* 484F4 80067CF4 1580013C */  lui        $at, %hi(D_8015515C)
     /* 484F8 80067CF8 5C5120AC */  sw         $zero, %lo(D_8015515C)($at)
@@ -42,7 +42,7 @@ glabel func_80067CB4
     /* 48524 80067D24 7051A58C */  lw         $a1, %lo(D_80155170)($a1)
     /* 48528 80067D28 21200000 */  addu       $a0, $zero, $zero
   .L80067D2C:
-    /* 4852C 80067D2C B91E010C */  jal        func_80047AE4
+    /* 4852C 80067D2C B91E010C */  jal        InterruptCallback
     /* 48530 80067D30 00000000 */   nop
     /* 48534 80067D34 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 48538 80067D38 1580013C */  lui        $at, %hi(D_80155164)

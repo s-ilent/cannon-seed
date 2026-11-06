@@ -15,7 +15,7 @@ glabel func_80037D88
     /* 18590 80037D90 21808000 */  addu       $s0, $a0, $zero
     /* 18594 80037D94 1400B1AF */  sw         $s1, 0x14($sp)
     /* 18598 80037D98 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 1859C 80037D9C 82DF000C */  jal        func_80037E08
+    /* 1859C 80037D9C 82DF000C */  jal        MDEC_vlc
     /* 185A0 80037DA0 2188A000 */   addu      $s1, $a1, $zero
     /* 185A4 80037DA4 21184000 */  addu       $v1, $v0, $zero
     /* 185A8 80037DA8 FFFF0224 */  addiu      $v0, $zero, -0x1

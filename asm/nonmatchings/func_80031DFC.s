@@ -55,7 +55,7 @@ glabel func_80031DFC
     /* 126A0 80031EA0 00000000 */  nop
     /* 126A4 80031EA4 03004014 */  bnez       $v0, .L80031EB4
     /* 126A8 80031EA8 02000434 */   ori       $a0, $zero, 0x2
-    /* 126AC 80031EAC CCBA000C */  jal        func_8002EB30
+    /* 126AC 80031EAC CCBA000C */  jal        DMACallback
     /* 126B0 80031EB0 21280000 */   addu      $a1, $zero, $zero
   .L80031EB4:
     /* 126B4 80031EB4 0580043C */  lui        $a0, %hi(D_8004E4B4)

@@ -29,7 +29,7 @@ glabel func_8005F3A0
     /* 3FBE0 8005F3E0 21280000 */  addu       $a1, $zero, $zero
     /* 3FBE4 8005F3E4 E687010C */  jal        func_80061F98
     /* 3FBE8 8005F3E8 80000634 */   ori       $a2, $zero, 0x80
-    /* 3FBEC 8005F3EC 4D79010C */  jal        func_8005E534
+    /* 3FBEC 8005F3EC 4D79010C */  jal        ResetCallback
     /* 3FBF0 8005F3F0 00000000 */   nop
     /* 3FBF4 8005F3F4 FF00023C */  lui        $v0, (0xFFFFFF >> 16)
     /* 3FBF8 8005F3F8 0B80043C */  lui        $a0, %hi(D_800B55B0)

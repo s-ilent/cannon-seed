@@ -13,7 +13,7 @@ glabel func_8005C2D4
     /* 3CAD4 8005C2D4 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 3CAD8 8005C2D8 1000BFAF */  sw         $ra, 0x10($sp)
     /* 3CADC 8005C2DC 21288000 */  addu       $a1, $a0, $zero
-    /* 3CAE0 8005C2E0 431D010C */  jal        func_8004750C
+    /* 3CAE0 8005C2E0 431D010C */  jal        DMACallback
     /* 3CAE4 8005C2E4 21200000 */   addu      $a0, $zero, $zero
     /* 3CAE8 8005C2E8 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3CAEC 8005C2EC 1800BD27 */  addiu      $sp, $sp, 0x18

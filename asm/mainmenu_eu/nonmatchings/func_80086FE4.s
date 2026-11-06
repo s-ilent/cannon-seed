@@ -13,7 +13,7 @@ glabel _SpuDataCallback
     /* 5A224 80079A24 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 5A228 80079A28 1000BFAF */  sw         $ra, 0x10($sp)
     /* 5A22C 80079A2C 21288000 */  addu       $a1, $a0, $zero
-    /* 5A230 80079A30 6579010C */  jal        func_8005E594
+    /* 5A230 80079A30 6579010C */  jal        DMACallback
     /* 5A234 80079A34 04000434 */   ori       $a0, $zero, 0x4
     /* 5A238 80079A38 1000BF8F */  lw         $ra, 0x10($sp)
     /* 5A23C 80079A3C 1800BD27 */  addiu      $sp, $sp, 0x18

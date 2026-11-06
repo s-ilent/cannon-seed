@@ -329,7 +329,7 @@ glabel func_80043BF8
     /* 24408 80043C08 00000000 */   nop
     /* 2440C 80043C0C 0480043C */  lui        $a0, %hi(SsSeqCalledTbyT)
     /* 24410 80043C10 54558424 */  addiu      $a0, $a0, %lo(SsSeqCalledTbyT)
-    /* 24414 80043C14 CBB9000C */  jal        func_8002E72C
+    /* 24414 80043C14 CBB9000C */  jal        VSyncCallback
     /* 24418 80043C18 00000000 */   nop
     /* 2441C 80043C1C 370F0108 */  j          func_80043CDC
     /* 24420 80043C20 00000000 */   nop
@@ -372,7 +372,7 @@ glabel func_80043C5C
     /* 24478 80043C78 0C008014 */  bnez       $a0, func_80043CAC
     /* 2447C 80043C7C 00000000 */   nop
     /* 24480 80043C80 21200000 */  addu       $a0, $zero, $zero
-    /* 24484 80043C84 B3B9000C */  jal        func_8002E6CC
+    /* 24484 80043C84 B3B9000C */  jal        InterruptCallback
     /* 24488 80043C88 21280000 */   addu      $a1, $zero, $zero
     /* 2448C 80043C8C 0680043C */  lui        $a0, %hi(D_80065F50)
     /* 24490 80043C90 505F848C */  lw         $a0, %lo(D_80065F50)($a0)
@@ -400,7 +400,7 @@ endlabel func_80043CAC
 nonmatching func_80043CCC, 0x10
 
 glabel func_80043CCC
-    /* 244CC 80043CCC B3B9000C */  jal        func_8002E6CC
+    /* 244CC 80043CCC B3B9000C */  jal        InterruptCallback
     /* 244D0 80043CD0 00000000 */   nop
     /* 244D4 80043CD4 2ABD000C */  jal        func_8002F4A8
     /* 244D8 80043CD8 00000000 */   nop
@@ -455,7 +455,7 @@ glabel func_80043D34
     /* 24560 80043D60 00000000 */  nop
     /* 24564 80043D64 07004010 */  beqz       $v0, func_80043D84
     /* 24568 80043D68 FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 2456C 80043D6C CBB9000C */  jal        func_8002E72C
+    /* 2456C 80043D6C CBB9000C */  jal        VSyncCallback
     /* 24570 80043D70 21200000 */   addu      $a0, $zero, $zero
     /* 24574 80043D74 0680013C */  lui        $at, %hi(D_80065F4C)
     /* 24578 80043D78 4C5F20AC */  sw         $zero, %lo(D_80065F4C)($at)
@@ -481,7 +481,7 @@ endlabel func_80043D84
 nonmatching func_80043DAC, 0x14
 
 glabel func_80043DAC
-    /* 245AC 80043DAC B3B9000C */  jal        func_8002E6CC
+    /* 245AC 80043DAC B3B9000C */  jal        InterruptCallback
     /* 245B0 80043DB0 00000000 */   nop
     /* 245B4 80043DB4 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 245B8 80043DB8 0680013C */  lui        $at, %hi(D_80065F50)

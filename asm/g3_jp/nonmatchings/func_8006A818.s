@@ -24,7 +24,7 @@ glabel func_8006A818
     /* 4B044 8006A844 00000000 */  nop
     /* 4B048 8006A848 07004010 */  beqz       $v0, .L8006A868
     /* 4B04C 8006A84C FFFF0224 */   addiu     $v0, $zero, -0x1
-    /* 4B050 8006A850 AA29010C */  jal        func_8004A6A8
+    /* 4B050 8006A850 AA29010C */  jal        VSyncCallback
     /* 4B054 8006A854 21200000 */   addu      $a0, $zero, $zero
     /* 4B058 8006A858 1480013C */  lui        $at, %hi(D_801474A8)
     /* 4B05C 8006A85C A87420AC */  sw         $zero, %lo(D_801474A8)($at)
@@ -42,7 +42,7 @@ glabel func_8006A818
     /* 4B088 8006A888 BC74A58C */  lw         $a1, %lo(D_801474BC)($a1)
     /* 4B08C 8006A88C 21200000 */  addu       $a0, $zero, $zero
   .L8006A890:
-    /* 4B090 8006A890 9229010C */  jal        func_8004A648
+    /* 4B090 8006A890 9229010C */  jal        InterruptCallback
     /* 4B094 8006A894 00000000 */   nop
     /* 4B098 8006A898 FFFF0224 */  addiu      $v0, $zero, -0x1
     /* 4B09C 8006A89C 1480013C */  lui        $at, %hi(D_801474B0)

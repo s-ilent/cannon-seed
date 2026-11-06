@@ -40,7 +40,7 @@ glabel func_8005CD6C
     /* 3D5D4 8005CDD4 20004230 */  andi       $v0, $v0, 0x20
     /* 3D5D8 8005CDD8 05004014 */  bnez       $v0, .L8005CDF0
     /* 3D5DC 8005CDDC 01000234 */   ori       $v0, $zero, 0x1
-    /* 3D5E0 8005CDE0 7E78010C */  jal        func_8005E1F8
+    /* 3D5E0 8005CDE0 7E78010C */  jal        CD_shell
     /* 3D5E4 8005CDE4 FFFF1026 */   addiu     $s0, $s0, -0x1
     /* 3D5E8 8005CDE8 99730108 */  j          .L8005CE64
     /* 3D5EC 8005CDEC FFFF0224 */   addiu     $v0, $zero, -0x1
@@ -49,7 +49,7 @@ glabel func_8005CD6C
     /* 3D5F4 8005CDF4 FF006432 */   andi      $a0, $s3, 0xFF
     /* 3D5F8 8005CDF8 0B80013C */  lui        $at, %hi(D_800B71B4)
     /* 3D5FC 8005CDFC B47120AC */  sw         $zero, %lo(D_800B71B4)($at)
-    /* 3D600 8005CE00 7E78010C */  jal        func_8005E1F8
+    /* 3D600 8005CE00 7E78010C */  jal        CD_shell
     /* 3D604 8005CE04 00000000 */   nop
     /* 3D608 8005CE08 0B002012 */  beqz       $s1, .L8005CE38
     /* 3D60C 8005CE0C 00000000 */   nop
@@ -59,7 +59,7 @@ glabel func_8005CD6C
     /* 3D61C 8005CE1C 02000434 */   ori       $a0, $zero, 0x2
     /* 3D620 8005CE20 21282002 */  addu       $a1, $s1, $zero
     /* 3D624 8005CE24 21300000 */  addu       $a2, $zero, $zero
-    /* 3D628 8005CE28 4777010C */  jal        func_8005DD1C
+    /* 3D628 8005CE28 4777010C */  jal        CD_cw
     /* 3D62C 8005CE2C 21380000 */   addu      $a3, $zero, $zero
     /* 3D630 8005CE30 0A004014 */  bnez       $v0, .L8005CE5C
     /* 3D634 8005CE34 00000000 */   nop
@@ -70,7 +70,7 @@ glabel func_8005CD6C
   .L8005CE44:
     /* 3D644 8005CE44 21282002 */  addu       $a1, $s1, $zero
     /* 3D648 8005CE48 21300000 */  addu       $a2, $zero, $zero
-    /* 3D64C 8005CE4C 4777010C */  jal        func_8005DD1C
+    /* 3D64C 8005CE4C 4777010C */  jal        CD_cw
     /* 3D650 8005CE50 01000734 */   ori       $a3, $zero, 0x1
     /* 3D654 8005CE54 09004010 */  beqz       $v0, .L8005CE7C
     /* 3D658 8005CE58 0100C226 */   addiu     $v0, $s6, 0x1

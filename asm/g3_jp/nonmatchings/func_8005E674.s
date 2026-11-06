@@ -22,7 +22,7 @@ glabel func_8005E674
     /* 3EE98 8005E698 04006214 */  bne        $v1, $v0, .L8005E6AC
     /* 3EE9C 8005E69C 21106000 */   addu      $v0, $v1, $zero
     /* 3EEA0 8005E6A0 21200002 */  addu       $a0, $s0, $zero
-    /* 3EEA4 8005E6A4 F77B010C */  jal        func_8005EFDC
+    /* 3EEA4 8005E6A4 F77B010C */  jal        MDEC_vlc2
     /* 3EEA8 8005E6A8 21282002 */   addu      $a1, $s1, $zero
   .L8005E6AC:
     /* 3EEAC 8005E6AC 1800BF8F */  lw         $ra, 0x18($sp)

@@ -14,7 +14,7 @@ glabel startIntrDMA
     /* 289DC 800481DC 0A80043C */  lui        $a0, %hi(D_800A41D4)
     /* 289E0 800481E0 D4418424 */  addiu      $a0, $a0, %lo(D_800A41D4)
     /* 289E4 800481E4 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 289E8 800481E8 1521010C */  jal        memclr
+    /* 289E8 800481E8 1521010C */  jal        func_80048454
     /* 289EC 800481EC 08000534 */   ori       $a1, $zero, 0x8
     /* 289F0 800481F0 03000434 */  ori        $a0, $zero, 0x3
     /* 289F4 800481F4 0A80023C */  lui        $v0, %hi(D_800A41D0)
@@ -22,7 +22,7 @@ glabel startIntrDMA
     /* 289FC 800481FC 0580053C */  lui        $a1, %hi(trapIntrDMA)
     /* 28A00 80048200 2882A524 */  addiu      $a1, $a1, %lo(trapIntrDMA)
     /* 28A04 80048204 000040AC */  sw         $zero, 0x0($v0)
-    /* 28A08 80048208 B91E010C */  jal        func_80047AE4
+    /* 28A08 80048208 B91E010C */  jal        InterruptCallback
     /* 28A0C 8004820C 00000000 */   nop
     /* 28A10 80048210 0580023C */  lui        $v0, %hi(setIntrDMA)
     /* 28A14 80048214 AC834224 */  addiu      $v0, $v0, %lo(setIntrDMA)

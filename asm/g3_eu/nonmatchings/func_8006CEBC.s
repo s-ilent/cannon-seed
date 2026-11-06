@@ -79,8 +79,8 @@ glabel Snd_tempo
     /* 4D7AC 8006CFAC 8C00E28C */  lw         $v0, 0x8C($a3)
     /* 4D7B0 8006CFB0 00000000 */  nop
     /* 4D7B4 8006CFB4 18006200 */  mult       $v1, $v0
-    /* 4D7B8 8006CFB8 1780043C */  lui        $a0, %hi(D_80171E08)
-    /* 4D7BC 8006CFBC 081E848C */  lw         $a0, %lo(D_80171E08)($a0)
+    /* 4D7B8 8006CFB8 1780043C */  lui        $a0, %hi(_snd_seq_t_max)
+    /* 4D7BC 8006CFBC 081E848C */  lw         $a0, %lo(_snd_seq_t_max)($a0)
     /* 4D7C0 8006CFC0 12100000 */  mflo       $v0
     /* 4D7C4 8006CFC4 80180200 */  sll        $v1, $v0, 2
     /* 4D7C8 8006CFC8 21186200 */  addu       $v1, $v1, $v0

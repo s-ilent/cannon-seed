@@ -12,7 +12,7 @@ nonmatching func_80032394, 0x34
 glabel func_80032394
     /* 12B94 80032394 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 12B98 80032398 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 12B9C 8003239C 9EBD000C */  jal        func_8002F678
+    /* 12B9C 8003239C 9EBD000C */  jal        VSync
     /* 12BA0 800323A0 FFFF0424 */   addiu     $a0, $zero, -0x1
     /* 12BA4 800323A4 F0004224 */  addiu      $v0, $v0, 0xF0
     /* 12BA8 800323A8 0580013C */  lui        $at, %hi(D_8004E4F8)

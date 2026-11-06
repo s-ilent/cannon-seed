@@ -12,7 +12,7 @@ nonmatching func_80043FD8, 0x20
 glabel func_80043FD8
     /* 247D8 80043FD8 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 247DC 80043FDC 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 247E0 80043FE0 CDF3000C */  jal        func_8003CF34
+    /* 247E0 80043FE0 CDF3000C */  jal        _SpuInit
     /* 247E4 80043FE4 01000434 */   ori       $a0, $zero, 0x1
     /* 247E8 80043FE8 1000BF8F */  lw         $ra, 0x10($sp)
     /* 247EC 80043FEC 1800BD27 */  addiu      $sp, $sp, 0x18
@@ -25,7 +25,7 @@ nonmatching func_80043FF8, 0x20
 glabel func_80043FF8
     /* 247F8 80043FF8 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 247FC 80043FFC 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 24800 80044000 CDF3000C */  jal        func_8003CF34
+    /* 24800 80044000 CDF3000C */  jal        _SpuInit
     /* 24804 80044004 21200000 */   addu      $a0, $zero, $zero
     /* 24808 80044008 1000BF8F */  lw         $ra, 0x10($sp)
     /* 2480C 8004400C 1800BD27 */  addiu      $sp, $sp, 0x18

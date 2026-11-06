@@ -59,7 +59,7 @@ glabel func_8004A770
     /* 2AF9C 8004A79C 00000000 */  nop
     /* 2AFA0 8004A7A0 03004014 */  bnez       $v0, func_8004A7B0
     /* 2AFA4 8004A7A4 02000434 */   ori       $a0, $zero, 0x2
-    /* 2AFA8 8004A7A8 431D010C */  jal        func_8004750C
+    /* 2AFA8 8004A7A8 431D010C */  jal        DMACallback
     /* 2AFAC 8004A7AC 21280000 */   addu      $a1, $zero, $zero
 endlabel func_8004A770
 

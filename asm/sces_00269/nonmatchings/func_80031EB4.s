@@ -62,7 +62,7 @@ glabel func_80031EB4
     /* 12774 80031F74 740D8424 */  addiu      $a0, $a0, %lo(D_80020D74)
     /* 12778 80031F78 81B6000C */  jal        printf
     /* 1277C 80031F7C 00000000 */   nop
-    /* 12780 80031F80 06BA000C */  jal        func_8002E818
+    /* 12780 80031F80 06BA000C */  jal        SetIntrMask
     /* 12784 80031F84 21200000 */   addu      $a0, $zero, $zero
     /* 12788 80031F88 0580013C */  lui        $at, %hi(D_8004E170)
     /* 1278C 80031F8C 70E120AC */  sw         $zero, %lo(D_8004E170)($at)
@@ -93,7 +93,7 @@ glabel func_80031EB4
     /* 127F0 80031FF0 000062AC */  sw         $v0, 0x0($v1)
     /* 127F4 80031FF4 0580043C */  lui        $a0, %hi(D_8004E17C)
     /* 127F8 80031FF8 7CE1848C */  lw         $a0, %lo(D_8004E17C)($a0)
-    /* 127FC 80031FFC 06BA000C */  jal        func_8002E818
+    /* 127FC 80031FFC 06BA000C */  jal        SetIntrMask
     /* 12800 80032000 00000000 */   nop
     /* 12804 80032004 04C80008 */  j          .L80032010
     /* 12808 80032008 FFFF0224 */   addiu     $v0, $zero, -0x1

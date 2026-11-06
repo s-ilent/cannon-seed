@@ -11,8 +11,8 @@ nonmatching _SpuSetAnyVoice, 0xB4
 
 glabel _SpuSetAnyVoice
     /* 4B27C 8006AA7C 40380700 */  sll        $a3, $a3, 1
-    /* 4B280 8006AA80 0B80033C */  lui        $v1, %hi(D_800AB0B8)
-    /* 4B284 8006AA84 B8B0638C */  lw         $v1, %lo(D_800AB0B8)($v1)
+    /* 4B280 8006AA80 0B80033C */  lui        $v1, %hi(_spu_RXX)
+    /* 4B284 8006AA84 B8B0638C */  lw         $v1, %lo(_spu_RXX)($v1)
     /* 4B288 8006AA88 40300600 */  sll        $a2, $a2, 1
     /* 4B28C 8006AA8C 2138E300 */  addu       $a3, $a3, $v1
     /* 4B290 8006AA90 2130C300 */  addu       $a2, $a2, $v1

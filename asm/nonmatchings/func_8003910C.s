@@ -12,7 +12,7 @@ nonmatching func_8003910C, 0x24
 glabel func_8003910C
     /* 1990C 8003910C E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 19910 80039110 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 19914 80039114 A0E8000C */  jal        func_8003A280
+    /* 19914 80039114 A0E8000C */  jal        CD_vol
     /* 19918 80039118 00000000 */   nop
     /* 1991C 8003911C 01000234 */  ori        $v0, $zero, 0x1
     /* 19920 80039120 1000BF8F */  lw         $ra, 0x10($sp)

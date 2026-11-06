@@ -13,9 +13,9 @@ glabel _SpuInit
     /* 45414 80064C14 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 45418 80064C18 1000B0AF */  sw         $s0, 0x10($sp)
     /* 4541C 80064C1C 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 45420 80064C20 8629010C */  jal        func_8004A618
+    /* 45420 80064C20 8629010C */  jal        ResetCallback
     /* 45424 80064C24 21808000 */   addu      $s0, $a0, $zero
-    /* 45428 80064C28 448E010C */  jal        func_80063910
+    /* 45428 80064C28 448E010C */  jal        _spu_init
     /* 4542C 80064C2C 21200002 */   addu      $a0, $s0, $zero
     /* 45430 80064C30 3793010C */  jal        SpuStart
     /* 45434 80064C34 00000000 */   nop
@@ -43,7 +43,7 @@ glabel _SpuInit
     /* 4548C 80064C8C E0A820AC */  sw         $zero, %lo(D_800AA8E0)($at)
     /* 45490 80064C90 0B80013C */  lui        $at, %hi(D_800AA8F8)
     /* 45494 80064C94 F8A825AC */  sw         $a1, %lo(D_800AA8F8)($at)
-    /* 45498 80064C98 B292010C */  jal        func_80064AC8
+    /* 45498 80064C98 B292010C */  jal        _spu_FsetRXX
     /* 4549C 80064C9C 21300000 */   addu      $a2, $zero, $zero
     /* 454A0 80064CA0 0B80013C */  lui        $at, %hi(D_800AA8D8)
     /* 454A4 80064CA4 D8A820AC */  sw         $zero, %lo(D_800AA8D8)($at)

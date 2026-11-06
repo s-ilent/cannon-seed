@@ -13,7 +13,7 @@ glabel _SpuDataCallback
     /* 453F0 80064BF0 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 453F4 80064BF4 1000BFAF */  sw         $ra, 0x10($sp)
     /* 453F8 80064BF8 21288000 */  addu       $a1, $a0, $zero
-    /* 453FC 80064BFC 9E29010C */  jal        func_8004A678
+    /* 453FC 80064BFC 9E29010C */  jal        DMACallback
     /* 45400 80064C00 04000434 */   ori       $a0, $zero, 0x4
     /* 45404 80064C04 1000BF8F */  lw         $ra, 0x10($sp)
     /* 45408 80064C08 1800BD27 */  addiu      $sp, $sp, 0x18

@@ -22,7 +22,7 @@ glabel func_8005BB10
     /* 3C334 8005BB34 04006214 */  bne        $v1, $v0, .L8005BB48
     /* 3C338 8005BB38 21106000 */   addu      $v0, $v1, $zero
     /* 3C33C 8005BB3C 21200002 */  addu       $a0, $s0, $zero
-    /* 3C340 8005BB40 1E71010C */  jal        func_8005C478
+    /* 3C340 8005BB40 1E71010C */  jal        MDEC_vlc2
     /* 3C344 8005BB44 21282002 */   addu      $a1, $s1, $zero
   .L8005BB48:
     /* 3C348 8005BB48 1800BF8F */  lw         $ra, 0x18($sp)

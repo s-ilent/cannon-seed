@@ -52,7 +52,7 @@ glabel startIntr
     /* 2AA88 8004A288 C4FF02A6 */   sh        $v0, -0x3C($s0)
     /* 2AA8C 8004A28C 0980033C */  lui        $v1, %hi(D_80097C90)
     /* 2AA90 8004A290 907C638C */  lw         $v1, %lo(D_80097C90)($v1)
-    /* 2AA94 8004A294 DF29010C */  jal        func_8004A77C
+    /* 2AA94 8004A294 DF29010C */  jal        startIntrDMA
     /* 2AA98 8004A298 140062AC */   sw        $v0, 0x14($v1)
     /* 2AA9C 8004A29C 0980043C */  lui        $a0, %hi(D_80097C90)
     /* 2AAA0 8004A2A0 907C848C */  lw         $a0, %lo(D_80097C90)($a0)

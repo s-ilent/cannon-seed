@@ -12,7 +12,7 @@ nonmatching func_80037D68, 0x20
 glabel func_80037D68
     /* 18568 80037D68 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 1856C 80037D6C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 18570 80037D70 76DF000C */  jal        func_80037DD8
+    /* 18570 80037D70 76DF000C */  jal        MDEC_vlc_brk
     /* 18574 80037D74 00000000 */   nop
     /* 18578 80037D78 1000BF8F */  lw         $ra, 0x10($sp)
     /* 1857C 80037D7C 1800BD27 */  addiu      $sp, $sp, 0x18

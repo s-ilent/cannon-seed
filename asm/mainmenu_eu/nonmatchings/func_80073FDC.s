@@ -15,7 +15,7 @@ glabel func_80073FDC
     /* 547E4 80073FE4 21808000 */  addu       $s0, $a0, $zero
     /* 547E8 80073FE8 03000016 */  bnez       $s0, .L80073FF8
     /* 547EC 80073FEC 1400BFAF */   sw        $ra, 0x14($sp)
-    /* 547F0 80073FF0 4D79010C */  jal        func_8005E534
+    /* 547F0 80073FF0 4D79010C */  jal        ResetCallback
     /* 547F4 80073FF4 00000000 */   nop
   .L80073FF8:
     /* 547F8 80073FF8 8CD0010C */  jal        func_80074230

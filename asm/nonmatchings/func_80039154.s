@@ -13,7 +13,7 @@ glabel func_80039154
     /* 19954 80039154 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 19958 80039158 1000BFAF */  sw         $ra, 0x10($sp)
     /* 1995C 8003915C 21288000 */  addu       $a1, $a0, $zero
-    /* 19960 80039160 CCBA000C */  jal        func_8002EB30
+    /* 19960 80039160 CCBA000C */  jal        DMACallback
     /* 19964 80039164 03000434 */   ori       $a0, $zero, 0x3
     /* 19968 80039168 1000BF8F */  lw         $ra, 0x10($sp)
     /* 1996C 8003916C 1800BD27 */  addiu      $sp, $sp, 0x18

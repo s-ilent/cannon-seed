@@ -62,7 +62,7 @@ glabel func_8002189C
     /* 20B0 800218B0 00000000 */   nop
     /* 20B4 800218B4 AFAD000C */  jal        func_8002B6BC
     /* 20B8 800218B8 00000000 */   nop
-    /* 20BC 800218BC F1BA000C */  jal        func_8002EBC4
+    /* 20BC 800218BC F1BA000C */  jal        StopCallback
     /* 20C0 800218C0 00000000 */   nop
     /* 20C4 800218C4 83BE000C */  jal        func_8002FA0C
     /* 20C8 800218C8 03000434 */   ori       $a0, $zero, 0x3
@@ -169,7 +169,7 @@ glabel func_800219F0
     /* 2220 80021A20 18008424 */  addiu      $a0, $a0, %lo(D_80020018)
     /* 2224 80021A24 04B7000C */  jal        printf
     /* 2228 80021A28 00000000 */   nop
-    /* 222C 80021A2C F1BA000C */  jal        func_8002EBC4
+    /* 222C 80021A2C F1BA000C */  jal        StopCallback
     /* 2230 80021A30 00000000 */   nop
     /* 2234 80021A34 4BBD000C */  jal        func_8002F52C
     /* 2238 80021A38 00000000 */   nop
@@ -329,7 +329,7 @@ endlabel func_80021B34
 nonmatching func_80021C5C, 0x44
 
 glabel func_80021C5C
-    /* 245C 80021C5C 9EBD000C */  jal        func_8002F678
+    /* 245C 80021C5C 9EBD000C */  jal        VSync
     /* 2460 80021C60 02000434 */   ori       $a0, $zero, 0x2
     /* 2464 80021C64 B2DE000C */  jal        GsSwapDispBuff
     /* 2468 80021C68 00000000 */   nop
@@ -342,7 +342,7 @@ glabel func_80021C5C
     /* 2484 80021C84 80200400 */  sll        $a0, $a0, 2
     /* 2488 80021C88 1180023C */  lui        $v0, %hi(D_801153A0)
     /* 248C 80021C8C A0534224 */  addiu      $v0, $v0, %lo(D_801153A0)
-    /* 2490 80021C90 E9DD000C */  jal        func_800377A4
+    /* 2490 80021C90 E9DD000C */  jal        GsDrawOt
     /* 2494 80021C94 21208200 */   addu      $a0, $a0, $v0
     /* 2498 80021C98 CD860008 */  j          func_80021B34
     /* 249C 80021C9C 00000000 */   nop
@@ -569,7 +569,7 @@ glabel func_80021EF4
     /* 270C 80021F0C 18008424 */  addiu      $a0, $a0, %lo(D_80020018)
     /* 2710 80021F10 04B7000C */  jal        printf
     /* 2714 80021F14 00000000 */   nop
-    /* 2718 80021F18 F1BA000C */  jal        func_8002EBC4
+    /* 2718 80021F18 F1BA000C */  jal        StopCallback
     /* 271C 80021F1C 00000000 */   nop
     /* 2720 80021F20 4BBD000C */  jal        func_8002F52C
     /* 2724 80021F24 00000000 */   nop
@@ -782,7 +782,7 @@ glabel func_80022158
     /* 29C0 800221C0 FFFF0324 */  addiu      $v1, $zero, -0x1
     /* 29C4 800221C4 0D004310 */  beq        $v0, $v1, func_800221FC
     /* 29C8 800221C8 00000000 */   nop
-    /* 29CC 800221CC 9EBD000C */  jal        func_8002F678
+    /* 29CC 800221CC 9EBD000C */  jal        VSync
     /* 29D0 800221D0 04000434 */   ori       $a0, $zero, 0x4
     /* 29D4 800221D4 B2DE000C */  jal        GsSwapDispBuff
     /* 29D8 800221D8 00000000 */   nop
@@ -790,7 +790,7 @@ glabel func_80022158
     /* 29E0 800221E0 28538424 */  addiu      $a0, $a0, %lo(D_80115328)
     /* 29E4 800221E4 BAAE000C */  jal        func_8002BAE8
     /* 29E8 800221E8 21280002 */   addu      $a1, $s0, $zero
-    /* 29EC 800221EC E9DD000C */  jal        func_800377A4
+    /* 29EC 800221EC E9DD000C */  jal        GsDrawOt
     /* 29F0 800221F0 21202002 */   addu      $a0, $s1, $zero
     /* 29F4 800221F4 08880008 */  j          func_80022020
     /* 29F8 800221F8 00000000 */   nop
@@ -825,7 +825,7 @@ nonmatching func_80022234, 0xC8
 glabel func_80022234
     /* 2A34 80022234 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 2A38 80022238 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 2A3C 8002223C B4BA000C */  jal        func_8002EAD0
+    /* 2A3C 8002223C B4BA000C */  jal        ResetCallback
     /* 2A40 80022240 00000000 */   nop
     /* 2A44 80022244 048A000C */  jal        func_80022810
     /* 2A48 80022248 00000000 */   nop
@@ -1403,7 +1403,7 @@ glabel func_800228F8
     /* 3108 80022908 A053A524 */  addiu      $a1, $a1, %lo(D_801153A0)
     /* 310C 8002290C 21209500 */  addu       $a0, $a0, $s5
     /* 3110 80022910 21288502 */  addu       $a1, $s4, $a1
-    /* 3114 80022914 EECB000C */  jal        func_80032FB8
+    /* 3114 80022914 EECB000C */  jal        GsSortGLine
     /* 3118 80022918 01002626 */   addiu     $a2, $s1, 0x1
     /* 311C 8002291C 01001026 */  addiu      $s0, $s0, 0x1
     /* 3120 80022920 0A00022A */  slti       $v0, $s0, 0xA
@@ -1421,7 +1421,7 @@ glabel func_800228F8
     /* 3150 80022950 21800202 */  addu       $s0, $s0, $v0
     /* 3154 80022954 918D000C */  jal        func_80023644
     /* 3158 80022958 21200002 */   addu      $a0, $s0, $zero
-    /* 315C 8002295C 9EBD000C */  jal        func_8002F678
+    /* 315C 8002295C 9EBD000C */  jal        VSync
     /* 3160 80022960 21200000 */   addu      $a0, $zero, $zero
     /* 3164 80022964 83BE000C */  jal        func_8002FA0C
     /* 3168 80022968 01000434 */   ori       $a0, $zero, 0x1
@@ -1432,7 +1432,7 @@ glabel func_800228F8
     /* 317C 8002297C 19000634 */  ori        $a2, $zero, 0x19
     /* 3180 80022980 5CCD000C */  jal        GsSortClear
     /* 3184 80022984 21380002 */   addu      $a3, $s0, $zero
-    /* 3188 80022988 E9DD000C */  jal        func_800377A4
+    /* 3188 80022988 E9DD000C */  jal        GsDrawOt
     /* 318C 8002298C 21200002 */   addu      $a0, $s0, $zero
     /* 3190 80022990 2800BF8F */  lw         $ra, 0x28($sp)
     /* 3194 80022994 2400B58F */  lw         $s5, 0x24($sp)
@@ -2701,7 +2701,7 @@ glabel func_800237AC
     /* 3FC4 800237C4 04000686 */  lh         $a2, 0x4($s0)
     /* 3FC8 800237C8 06000786 */  lh         $a3, 0x6($s0)
     /* 3FCC 800237CC 80901200 */  sll        $s2, $s2, 2
-    /* 3FD0 800237D0 A2C9000C */  jal        func_80032688
+    /* 3FD0 800237D0 A2C9000C */  jal        GetTPage
     /* 3FD4 800237D4 21280000 */   addu      $a1, $zero, $zero
     /* 3FD8 800237D8 FFFF4A30 */  andi       $t2, $v0, 0xFFFF
     /* 3FDC 800237DC 0000028E */  lw         $v0, 0x0($s0)
@@ -2896,7 +2896,7 @@ glabel func_800239F0
     /* 41F4 800239F4 040085A4 */  sh         $a1, 0x4($a0)
     /* 41F8 800239F8 060086A4 */  sh         $a2, 0x6($a0)
     /* 41FC 800239FC 2128E000 */  addu       $a1, $a3, $zero
-    /* 4200 80023A00 64DB000C */  jal        func_80036D90
+    /* 4200 80023A00 64DB000C */  jal        GsSortSprite
     /* 4204 80023A04 21300000 */   addu      $a2, $zero, $zero
 endlabel func_800239F0
 

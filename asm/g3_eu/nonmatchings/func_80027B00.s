@@ -453,7 +453,7 @@ glabel func_80027FAC
     /* 87C4 80027FC4 0B80013C */  lui        $at, %hi(D_800AC368)
     /* 87C8 80027FC8 68C328A4 */  sh         $t0, %lo(D_800AC368)($at)
     /* 87CC 80027FCC 01000234 */  ori        $v0, $zero, 0x1
-    /* 87D0 80027FD0 2F006214 */  bne        $v1, $v0, .L80028090
+    /* 87D0 80027FD0 2F006214 */  bne        $v1, $v0, func_80028090
     /* 87D4 80027FD4 02000234 */   ori       $v0, $zero, 0x2
     /* 87D8 80027FD8 04000634 */  ori        $a2, $zero, 0x4
     /* 87DC 80027FDC 0B80053C */  lui        $a1, %hi(D_800AC350)

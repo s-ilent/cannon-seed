@@ -40,7 +40,7 @@ glabel func_8005FA0C
     /* 40274 8005FA74 20004230 */  andi       $v0, $v0, 0x20
     /* 40278 8005FA78 05004014 */  bnez       $v0, .L8005FA90
     /* 4027C 8005FA7C 01000234 */   ori       $v0, $zero, 0x1
-    /* 40280 8005FA80 5783010C */  jal        func_80060D5C
+    /* 40280 8005FA80 5783010C */  jal        CD_shell
     /* 40284 8005FA84 FFFF1026 */   addiu     $s0, $s0, -0x1
     /* 40288 8005FA88 C17E0108 */  j          .L8005FB04
     /* 4028C 8005FA8C FFFF0224 */   addiu     $v0, $zero, -0x1
@@ -49,7 +49,7 @@ glabel func_8005FA0C
     /* 40294 8005FA94 FF008432 */   andi      $a0, $s4, 0xFF
     /* 40298 8005FA98 0B80013C */  lui        $at, %hi(D_800AA46C)
     /* 4029C 8005FA9C 6CA420AC */  sw         $zero, %lo(D_800AA46C)($at)
-    /* 402A0 8005FAA0 5783010C */  jal        func_80060D5C
+    /* 402A0 8005FAA0 5783010C */  jal        CD_shell
     /* 402A4 8005FAA4 00000000 */   nop
     /* 402A8 8005FAA8 0B002012 */  beqz       $s1, .L8005FAD8
     /* 402AC 8005FAAC 00000000 */   nop
@@ -59,7 +59,7 @@ glabel func_8005FA0C
     /* 402BC 8005FABC 02000434 */   ori       $a0, $zero, 0x2
     /* 402C0 8005FAC0 21282002 */  addu       $a1, $s1, $zero
     /* 402C4 8005FAC4 21306002 */  addu       $a2, $s3, $zero
-    /* 402C8 8005FAC8 2082010C */  jal        func_80060880
+    /* 402C8 8005FAC8 2082010C */  jal        CD_cw
     /* 402CC 8005FACC 21380000 */   addu      $a3, $zero, $zero
     /* 402D0 8005FAD0 0A004014 */  bnez       $v0, .L8005FAFC
     /* 402D4 8005FAD4 00000000 */   nop
@@ -70,7 +70,7 @@ glabel func_8005FA0C
   .L8005FAE4:
     /* 402E4 8005FAE4 21282002 */  addu       $a1, $s1, $zero
     /* 402E8 8005FAE8 21306002 */  addu       $a2, $s3, $zero
-    /* 402EC 8005FAEC 2082010C */  jal        func_80060880
+    /* 402EC 8005FAEC 2082010C */  jal        CD_cw
     /* 402F0 8005FAF0 21380000 */   addu      $a3, $zero, $zero
     /* 402F4 8005FAF4 07004010 */  beqz       $v0, .L8005FB14
     /* 402F8 8005FAF8 21100000 */   addu      $v0, $zero, $zero
@@ -85,7 +85,7 @@ glabel func_8005FA0C
   .L8005FB14:
     /* 40314 8005FB14 06004014 */  bnez       $v0, .L8005FB30
     /* 40318 8005FB18 21200000 */   addu      $a0, $zero, $zero
-    /* 4031C 8005FB1C D380010C */  jal        func_8006034C
+    /* 4031C 8005FB1C D380010C */  jal        CD_sync
     /* 40320 8005FB20 21286002 */   addu      $a1, $s3, $zero
     /* 40324 8005FB24 02004238 */  xori       $v0, $v0, 0x2
     /* 40328 8005FB28 CD7E0108 */  j          .L8005FB34

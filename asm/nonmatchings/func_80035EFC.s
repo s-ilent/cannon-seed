@@ -23,7 +23,7 @@ glabel GsInitGraph
     /* 138D4 800330D4 2000BFAF */  sw         $ra, 0x20($sp)
     /* 138D8 800330D8 49CC000C */  jal        gpu_init
     /* 138DC 800330DC 1000A2AF */   sw        $v0, 0x10($sp)
-    /* 138E0 800330E0 F2DD000C */  jal        func_800377C8
+    /* 138E0 800330E0 F2DD000C */  jal        gte_init
     /* 138E4 800330E4 00000000 */   nop
     /* 138E8 800330E8 21202002 */  addu       $a0, $s1, $zero
     /* 138EC 800330EC 1280013C */  lui        $at, %hi(PSDIDX)

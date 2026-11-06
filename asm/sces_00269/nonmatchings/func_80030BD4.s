@@ -38,7 +38,7 @@ glabel startIntr
     /* F098 8002E898 38000426 */   addiu     $a0, $s0, 0x38
     /* F09C 8002E89C 03004010 */  beqz       $v0, .L8002E8AC
     /* F0A0 8002E8A0 00000000 */   nop
-    /* F0A4 8002E8A4 44BA000C */  jal        func_8002E910
+    /* F0A4 8002E8A4 44BA000C */  jal        trapIntr
     /* F0A8 8002E8A8 00000000 */   nop
   .L8002E8AC:
     /* F0AC 8002E8AC 0580103C */  lui        $s0, %hi(D_8004CF60)
@@ -52,7 +52,7 @@ glabel startIntr
     /* F0CC 8002E8CC C4FF02A6 */   sh        $v0, -0x3C($s0)
     /* F0D0 8002E8D0 0580033C */  lui        $v1, %hi(intr_start_tab)
     /* F0D4 8002E8D4 ACDF638C */  lw         $v1, %lo(intr_start_tab)($v1)
-    /* F0D8 8002E8D8 70BB000C */  jal        func_8002EDC0
+    /* F0D8 8002E8D8 70BB000C */  jal        startIntrDMA
     /* F0DC 8002E8DC 140062AC */   sw        $v0, 0x14($v1)
     /* F0E0 8002E8E0 0580043C */  lui        $a0, %hi(intr_start_tab)
     /* F0E4 8002E8E4 ACDF848C */  lw         $a0, %lo(intr_start_tab)($a0)

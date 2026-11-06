@@ -27,10 +27,10 @@ glabel SpuWritePartly
     /* 1ECC0 8003E4C0 0680023C */  lui        $v0, %hi(D_80065DD8)
     /* 1ECC4 8003E4C4 D85D428C */  lw         $v0, %lo(D_80065DD8)($v0)
     /* 1ECC8 8003E4C8 21282002 */  addu       $a1, $s1, $zero
-    /* 1ECCC 8003E4CC 7FF8000C */  jal        func_8003E1FC
+    /* 1ECCC 8003E4CC 7FF8000C */  jal        _spu_write
     /* 1ECD0 8003E4D0 04805000 */   sllv      $s0, $s0, $v0
     /* 1ECD4 8003E4D4 FFFF0424 */  addiu      $a0, $zero, -0x1
-    /* 1ECD8 8003E4D8 CDF8000C */  jal        func_8003E334
+    /* 1ECD8 8003E4D8 CDF8000C */  jal        _spu_FsetRXXa
     /* 1ECDC 8003E4DC 21281102 */   addu      $a1, $s0, $s1
     /* 1ECE0 8003E4E0 0680033C */  lui        $v1, %hi(D_80065DE8)
     /* 1ECE4 8003E4E4 E85D638C */  lw         $v1, %lo(D_80065DE8)($v1)

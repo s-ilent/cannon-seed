@@ -29,7 +29,7 @@ glabel func_8002F508
     /* FD48 8002F548 21280000 */  addu       $a1, $zero, $zero
     /* FD4C 8002F54C 40C8000C */  jal        func_80032100
     /* FD50 8002F550 80000634 */   ori       $a2, $zero, 0x80
-    /* FD54 8002F554 A7B9000C */  jal        func_8002E69C
+    /* FD54 8002F554 A7B9000C */  jal        ResetCallback
     /* FD58 8002F558 00000000 */   nop
     /* FD5C 8002F55C FF00023C */  lui        $v0, (0xFFFFFF >> 16)
     /* FD60 8002F560 0580043C */  lui        $a0, %hi(D_8004E060)

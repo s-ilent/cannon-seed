@@ -20,8 +20,8 @@ glabel SpuStart
     /* 454F8 80064CF8 40AD22AC */  sw         $v0, %lo(D_800AAD40)($at)
     /* 454FC 80064CFC F12C010C */  jal        intr_stop_begin
     /* 45500 80064D00 00000000 */   nop
-    /* 45504 80064D04 0680043C */  lui        $a0, %hi(func_80064394)
-    /* 45508 80064D08 94438424 */  addiu      $a0, $a0, %lo(func_80064394)
+    /* 45504 80064D04 0680043C */  lui        $a0, %hi(_spu_FiDMA)
+    /* 45508 80064D08 94438424 */  addiu      $a0, $a0, %lo(_spu_FiDMA)
     /* 4550C 80064D0C 0B80013C */  lui        $at, %hi(D_800AA8D4)
     /* 45510 80064D10 D4A820AC */  sw         $zero, %lo(D_800AA8D4)($at)
     /* 45514 80064D14 FC92010C */  jal        _SpuDataCallback

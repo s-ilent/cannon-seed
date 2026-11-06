@@ -215,7 +215,7 @@ glabel func_8006C2A0
     /* 4CDA0 8006C5A0 00000000 */   nop
     /* 4CDA4 8006C5A4 3C000492 */  lbu        $a0, 0x3C($s0)
     /* 4CDA8 8006C5A8 00000592 */  lbu        $a1, 0x0($s0)
-    /* 4CDAC 8006C5AC 33B6010C */  jal        func_8006D8CC
+    /* 4CDAC 8006C5AC 33B6010C */  jal        _SsSndNextSep
     /* 4CDB0 8006C5B0 2B0000A2 */   sb        $zero, 0x2B($s0)
     /* 4CDB4 8006C5B4 00221100 */  sll        $a0, $s1, 8
     /* 4CDB8 8006C5B8 EB98010C */  jal        func_800663AC

@@ -17,8 +17,8 @@ glabel SpuSetTransferStartAddr
     /* 45E88 80065688 1400BFAF */  sw         $ra, 0x14($sp)
     /* 45E8C 8006568C AA94010C */  jal        func_800652A8
     /* 45E90 80065690 21280002 */   addu      $a1, $s0, $zero
-    /* 45E94 80065694 0B80013C */  lui        $at, %hi(D_800AB0B4)
-    /* 45E98 80065698 B4B022A4 */  sh         $v0, %lo(D_800AB0B4)($at)
+    /* 45E94 80065694 0B80013C */  lui        $at, %hi(_spu_tsa)
+    /* 45E98 80065698 B4B022A4 */  sh         $v0, %lo(_spu_tsa)($at)
     /* 45E9C 8006569C 21100002 */  addu       $v0, $s0, $zero
     /* 45EA0 800656A0 1400BF8F */  lw         $ra, 0x14($sp)
     /* 45EA4 800656A4 1000B08F */  lw         $s0, 0x10($sp)

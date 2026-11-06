@@ -32,13 +32,13 @@ glabel startIntr
     /* 3EF18 8005E718 0855428C */  lw         $v0, %lo(intr_dicr_ptr)($v0)
     /* 3EF1C 8005E71C 21200002 */  addu       $a0, $s0, $zero
     /* 3EF20 8005E720 000045AC */  sw         $a1, 0x0($v0)
-    /* 3EF24 8005E724 077B010C */  jal        func_800681BC
+    /* 3EF24 8005E724 077B010C */  jal        func_8005EC1C
     /* 3EF28 8005E728 1A040534 */   ori       $a1, $zero, 0x41A
     /* 3EF2C 8005E72C 127B010C */  jal        setjmp
     /* 3EF30 8005E730 38000426 */   addiu     $a0, $s0, 0x38
     /* 3EF34 8005E734 03004010 */  beqz       $v0, .L8005E744
     /* 3EF38 8005E738 00000000 */   nop
-    /* 3EF3C 8005E73C EA79010C */  jal        func_8005E7A8
+    /* 3EF3C 8005E73C EA79010C */  jal        trapIntr
     /* 3EF40 8005E740 00000000 */   nop
   .L8005E744:
     /* 3EF44 8005E744 0B80103C */  lui        $s0, %hi(D_800B44B0)

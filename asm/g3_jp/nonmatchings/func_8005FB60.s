@@ -12,7 +12,7 @@ nonmatching func_8005FB60, 0x24
 glabel func_8005FB60
     /* 40360 8005FB60 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 40364 8005FB64 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 40368 8005FB68 3583010C */  jal        func_80060CD4
+    /* 40368 8005FB68 3583010C */  jal        CD_vol
     /* 4036C 8005FB6C 00000000 */   nop
     /* 40370 8005FB70 01000234 */  ori        $v0, $zero, 0x1
     /* 40374 8005FB74 1000BF8F */  lw         $ra, 0x10($sp)

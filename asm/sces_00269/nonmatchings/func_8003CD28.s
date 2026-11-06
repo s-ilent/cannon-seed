@@ -13,7 +13,7 @@ glabel func_8003CD28
     /* 1D528 8003CD28 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 1D52C 8003CD2C 1000B0AF */  sw         $s0, 0x10($sp)
     /* 1D530 8003CD30 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 1D534 8003CD34 A7B9000C */  jal        func_8002E69C
+    /* 1D534 8003CD34 A7B9000C */  jal        ResetCallback
     /* 1D538 8003CD38 21808000 */   addu      $s0, $a0, $zero
     /* 1D53C 8003CD3C C1F3000C */  jal        func_8003CF04
     /* 1D540 8003CD40 21200002 */   addu      $a0, $s0, $zero

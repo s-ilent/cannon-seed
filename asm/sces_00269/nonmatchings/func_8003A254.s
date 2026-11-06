@@ -48,11 +48,11 @@ glabel func_8003A2C8
     /* 1AACC 8003A2CC FFFF4224 */  addiu      $v0, $v0, -0x1
     /* 1AAD0 8003A2D0 FDFF4414 */  bne        $v0, $a0, func_8003A2C8
     /* 1AAD4 8003A2D4 04006324 */   addiu     $v1, $v1, 0x4
-    /* 1AAD8 8003A2D8 A7B9000C */  jal        func_8002E69C
+    /* 1AAD8 8003A2D8 A7B9000C */  jal        ResetCallback
     /* 1AADC 8003A2DC 00000000 */   nop
     /* 1AAE0 8003A2E0 0480053C */  lui        $a1, %hi(func_8003AEEC)
     /* 1AAE4 8003A2E4 ECAEA524 */  addiu      $a1, $a1, %lo(func_8003AEEC)
-    /* 1AAE8 8003A2E8 B3B9000C */  jal        func_8002E6CC
+    /* 1AAE8 8003A2E8 B3B9000C */  jal        InterruptCallback
     /* 1AAEC 8003A2EC 02000434 */   ori       $a0, $zero, 0x2
     /* 1AAF0 8003A2F0 0680033C */  lui        $v1, %hi(D_80065474)
     /* 1AAF4 8003A2F4 7454638C */  lw         $v1, %lo(D_80065474)($v1)

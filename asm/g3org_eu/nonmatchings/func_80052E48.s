@@ -163,7 +163,7 @@ glabel GsGetLs
   .L8004C6D0:
     /* 2CED0 8004C6D0 0000058E */  lw         $a1, 0x0($s0)
     /* 2CED4 8004C6D4 21204002 */  addu       $a0, $s2, $zero
-    /* 2CED8 8004C6D8 5F30010C */  jal        func_8004C17C
+    /* 2CED8 8004C6D8 5F30010C */  jal        GsMulCoord3
     /* 2CEDC 8004C6DC 0400A524 */   addiu     $a1, $a1, 0x4
     /* 2CEE0 8004C6E0 0000028E */  lw         $v0, 0x0($s0)
     /* 2CEE4 8004C6E4 FFFF3126 */  addiu      $s1, $s1, -0x1
@@ -192,7 +192,7 @@ glabel GsGetLs
   .L8004C740:
     /* 2CF40 8004C740 1880043C */  lui        $a0, %hi(D_80178CE4)
     /* 2CF44 8004C744 E48C8424 */  addiu      $a0, $a0, %lo(D_80178CE4)
-    /* 2CF48 8004C748 3E30010C */  jal        func_8004C0F8
+    /* 2CF48 8004C748 3E30010C */  jal        GsMulCoord2
     /* 2CF4C 8004C74C 21284002 */   addu      $a1, $s2, $zero
     /* 2CF50 8004C750 1C00BF8F */  lw         $ra, 0x1C($sp)
     /* 2CF54 8004C754 1800B28F */  lw         $s2, 0x18($sp)

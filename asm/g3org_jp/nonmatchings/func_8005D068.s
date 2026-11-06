@@ -12,7 +12,7 @@ nonmatching func_8005D068, 0x20
 glabel func_8005D068
     /* 3D868 8005D068 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 3D86C 8005D06C 1000BFAF */  sw         $ra, 0x10($sp)
-    /* 3D870 8005D070 637B010C */  jal        func_8005ED8C
+    /* 3D870 8005D070 637B010C */  jal        CD_datasync
     /* 3D874 8005D074 00000000 */   nop
     /* 3D878 8005D078 1000BF8F */  lw         $ra, 0x10($sp)
     /* 3D87C 8005D07C 1800BD27 */  addiu      $sp, $sp, 0x18

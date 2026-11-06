@@ -28,7 +28,7 @@ glabel SsUtGetProgAtr
   .L8006DA10:
     /* 4E210 8006DA10 00840500 */  sll        $s0, $a1, 16
     /* 4E214 8006DA14 03841000 */  sra        $s0, $s0, 16
-    /* 4E218 8006DA18 E19F010C */  jal        func_80067F84
+    /* 4E218 8006DA18 E19F010C */  jal        SpuVmVSetUp
     /* 4E21C 8006DA1C 21280002 */   addu      $a1, $s0, $zero
     /* 4E220 8006DA20 1880023C */  lui        $v0, %hi(D_801789B0)
     /* 4E224 8006DA24 B089428C */  lw         $v0, %lo(D_801789B0)($v0)

@@ -28,7 +28,7 @@ glabel SpuClearReverbWorkArea
     /* 4D058 8006C858 80101000 */  sll        $v0, $s0, 2
     /* 4D05C 8006C85C 21884300 */  addu       $s1, $v0, $v1
     /* 4D060 8006C860 0000248E */  lw         $a0, 0x0($s1)
-    /* 4D064 8006C864 E9B1010C */  jal        func_8006C7A4
+    /* 4D064 8006C864 E9B1010C */  jal        _SpuIsInAllocateArea_
     /* 4D068 8006C868 00000000 */   nop
     /* 4D06C 8006C86C 03004010 */  beqz       $v0, .L8006C87C
     /* 4D070 8006C870 00000000 */   nop
@@ -84,14 +84,14 @@ glabel SpuClearReverbWorkArea
     /* 4D118 8006C918 21980000 */  addu       $s3, $zero, $zero
   .L8006C91C:
     /* 4D11C 8006C91C 02000434 */  ori        $a0, $zero, 0x2
-    /* 4D120 8006C920 F386010C */  jal        func_80061BCC
+    /* 4D120 8006C920 F386010C */  jal        _spu_t
     /* 4D124 8006C924 21284002 */   addu      $a1, $s2, $zero
-    /* 4D128 8006C928 F386010C */  jal        func_80061BCC
+    /* 4D128 8006C928 F386010C */  jal        _spu_t
     /* 4D12C 8006C92C 01000434 */   ori       $a0, $zero, 0x1
     /* 4D130 8006C930 03000434 */  ori        $a0, $zero, 0x3
     /* 4D134 8006C934 0B80053C */  lui        $a1, %hi(D_800B7688)
     /* 4D138 8006C938 8876A524 */  addiu      $a1, $a1, %lo(D_800B7688)
-    /* 4D13C 8006C93C F386010C */  jal        func_80061BCC
+    /* 4D13C 8006C93C F386010C */  jal        _spu_t
     /* 4D140 8006C940 21300002 */   addu      $a2, $s0, $zero
     /* 4D144 8006C944 0B80043C */  lui        $a0, %hi(D_800B7678)
     /* 4D148 8006C948 7876848C */  lw         $a0, %lo(D_800B7678)($a0)

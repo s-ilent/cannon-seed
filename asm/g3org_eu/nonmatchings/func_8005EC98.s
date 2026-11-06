@@ -48,11 +48,11 @@ glabel func_8005ED0C
     /* 3F510 8005ED10 FFFF4224 */  addiu      $v0, $v0, -0x1
     /* 3F514 8005ED14 FDFF4414 */  bne        $v0, $a0, func_8005ED0C
     /* 3F518 8005ED18 04006324 */   addiu     $v1, $v1, 0x4
-    /* 3F51C 8005ED1C 2B1D010C */  jal        func_800474AC
+    /* 3F51C 8005ED1C 2B1D010C */  jal        ResetCallback
     /* 3F520 8005ED20 00000000 */   nop
     /* 3F524 8005ED24 0680053C */  lui        $a1, %hi(func_8005F930)
     /* 3F528 8005ED28 30F9A524 */  addiu      $a1, $a1, %lo(func_8005F930)
-    /* 3F52C 8005ED2C 371D010C */  jal        func_800474DC
+    /* 3F52C 8005ED2C 371D010C */  jal        InterruptCallback
     /* 3F530 8005ED30 02000434 */   ori       $a0, $zero, 0x2
     /* 3F534 8005ED34 0B80033C */  lui        $v1, %hi(D_800B7C6C)
     /* 3F538 8005ED38 6C7C638C */  lw         $v1, %lo(D_800B7C6C)($v1)
@@ -504,7 +504,7 @@ glabel func_8005F270
     /* 3FAA0 8005F2A0 F4FF428E */  lw         $v0, -0xC($s2)
     /* 3FAA4 8005F2A4 FFFF0424 */  addiu      $a0, $zero, -0x1
     /* 3FAA8 8005F2A8 080042AE */  sw         $v0, 0x8($s2)
-    /* 3FAAC 8005F2AC E91F010C */  jal        func_80047FA4
+    /* 3FAAC 8005F2AC E91F010C */  jal        VSync
     /* 3FAB0 8005F2B0 00000000 */   nop
     /* 3FAB4 8005F2B4 E0014224 */  addiu      $v0, $v0, 0x1E0
     /* 3FAB8 8005F2B8 0C0042AE */  sw         $v0, 0xC($s2)

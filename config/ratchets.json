@@ -96,11 +96,12 @@
   "unknown_function 922->940, unknown_data 485->512 (2026-11-03): the SpuVmDamperOn family lands in g3org_eu/mainmenu_eu/mainmenu_jp (nine copies, nine files), same counting as the g3_jp/g3org_jp six.",
   "unknown_function 940->948, unknown_data 512->524 (2026-11-03): the SpuVmDamperOn family completes in the boots (slps_00270 + sces_00269, four copies, four files), same counting.",
   "unknown_data 524->528 (2026-11-03): _SpuIsInAllocateArea lands in g3org_jp (the LIBSPU S_M_UTIL allocate-area walk, member-named row) - one new src file carrying 4 D_ mentions (2 comment + extern + load use).",
-  "unknown_data 528->538 (2026-11-03): the trailing-underscore twin _SpuIsInAllocateArea_ lands in g3org_jp (the unit-converting prologue variant) - one new src file carrying 10 D_ mentions (4 x D_800B7F1C: 2 comment + extern + cursor use; 6 x D_800B75E8: 4 comment + extern + shift-amount use)."
+  "unknown_data 528->538 (2026-11-03): the trailing-underscore twin _SpuIsInAllocateArea_ lands in g3org_jp (the unit-converting prologue variant) - one new src file carrying 10 D_ mentions (4 x D_800B7F1C: 2 comment + extern + cursor use; 6 x D_800B75E8: 4 comment + extern + shift-amount use).",
+  "cron-202611062346 scan-drift unit: 975 -> 1050 - the seven-target scan application re-derived the rescued-code interiors (the 0xa0 merge wave x6 targets, the walk re-typing unmarked data rows per the unmarked-row regeneration law) and the new interior branch labels are honest func_ mentions the decode lanes name later; unknown_data moved 972 -> 755 the other way (the c32d807d adoptions + the ported statics replaced D_ labels with semantic names), so the total placeholder debt DROPPED 1947 -> 1805."
  ],
  "baselines": {
   "unknown_data": 755,
-  "unknown_function": 975
+  "unknown_function": 1050
  },
  "patterns": [
   {

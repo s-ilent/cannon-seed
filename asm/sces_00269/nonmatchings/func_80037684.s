@@ -15,7 +15,7 @@ glabel func_80037684
     /* 17E8C 8003768C 21808000 */  addu       $s0, $a0, $zero
     /* 17E90 80037690 03000016 */  bnez       $s0, .L800376A0
     /* 17E94 80037694 1400BFAF */   sw        $ra, 0x14($sp)
-    /* 17E98 80037698 A7B9000C */  jal        func_8002E69C
+    /* 17E98 80037698 A7B9000C */  jal        ResetCallback
     /* 17E9C 8003769C 00000000 */   nop
   .L800376A0:
     /* 17EA0 800376A0 36DE000C */  jal        func_800378D8

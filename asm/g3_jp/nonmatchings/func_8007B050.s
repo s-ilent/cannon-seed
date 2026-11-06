@@ -84,14 +84,14 @@ glabel SpuClearReverbWorkArea
     /* 4FC7C 8006F47C 21980000 */  addu       $s3, $zero, $zero
   .L8006F480:
     /* 4FC80 8006F480 02000434 */  ori        $a0, $zero, 0x2
-    /* 4FC84 8006F484 CC91010C */  jal        func_80064730
+    /* 4FC84 8006F484 CC91010C */  jal        _spu_t
     /* 4FC88 8006F488 21284002 */   addu      $a1, $s2, $zero
-    /* 4FC8C 8006F48C CC91010C */  jal        func_80064730
+    /* 4FC8C 8006F48C CC91010C */  jal        _spu_t
     /* 4FC90 8006F490 01000434 */   ori       $a0, $zero, 0x1
     /* 4FC94 8006F494 03000434 */  ori        $a0, $zero, 0x3
     /* 4FC98 8006F498 0B80053C */  lui        $a1, %hi(D_800AA940)
     /* 4FC9C 8006F49C 40A9A524 */  addiu      $a1, $a1, %lo(D_800AA940)
-    /* 4FCA0 8006F4A0 CC91010C */  jal        func_80064730
+    /* 4FCA0 8006F4A0 CC91010C */  jal        _spu_t
     /* 4FCA4 8006F4A4 21300002 */   addu      $a2, $s0, $zero
     /* 4FCA8 8006F4A8 0B80043C */  lui        $a0, %hi(D_800AA930)
     /* 4FCAC 8006F4AC 30A9848C */  lw         $a0, %lo(D_800AA930)($a0)

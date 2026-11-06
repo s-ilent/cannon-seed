@@ -22,8 +22,8 @@ glabel SpuWritePartly
     /* 45F14 80065714 0700113C */  lui        $s1, (0x7F000 >> 16)
     /* 45F18 80065718 00F03136 */  ori        $s1, $s1, (0x7F000 & 0xFFFF)
   .L8006571C:
-    /* 45F1C 8006571C 0B80103C */  lui        $s0, %hi(D_800AB0B4)
-    /* 45F20 80065720 B4B01096 */  lhu        $s0, %lo(D_800AB0B4)($s0)
+    /* 45F1C 8006571C 0B80103C */  lui        $s0, %hi(_spu_tsa)
+    /* 45F20 80065720 B4B01096 */  lhu        $s0, %lo(_spu_tsa)($s0)
     /* 45F24 80065724 0B80023C */  lui        $v0, %hi(D_800AB0DC)
     /* 45F28 80065728 DCB0428C */  lw         $v0, %lo(D_800AB0DC)($v0)
     /* 45F2C 8006572C 21282002 */  addu       $a1, $s1, $zero
@@ -34,8 +34,8 @@ glabel SpuWritePartly
     /* 45F40 80065740 21281102 */   addu      $a1, $s0, $s1
     /* 45F44 80065744 0B80033C */  lui        $v1, %hi(D_800AB0EC)
     /* 45F48 80065748 ECB0638C */  lw         $v1, %lo(D_800AB0EC)($v1)
-    /* 45F4C 8006574C 0B80013C */  lui        $at, %hi(D_800AB0B4)
-    /* 45F50 80065750 B4B022A4 */  sh         $v0, %lo(D_800AB0B4)($at)
+    /* 45F4C 8006574C 0B80013C */  lui        $at, %hi(_spu_tsa)
+    /* 45F50 80065750 B4B022A4 */  sh         $v0, %lo(_spu_tsa)($at)
     /* 45F54 80065754 03006014 */  bnez       $v1, .L80065764
     /* 45F58 80065758 21102002 */   addu      $v0, $s1, $zero
     /* 45F5C 8006575C 0B80013C */  lui        $at, %hi(_spu_inTransfer)

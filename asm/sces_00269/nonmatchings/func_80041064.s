@@ -51,7 +51,7 @@ glabel SsVabTransBodyPartly
     /* 1D41C 8003CC1C D8C02124 */  addiu      $at, $at, %lo(_svm_vab_start)
     /* 1D420 8003CC20 21083000 */  addu       $at, $at, $s0
     /* 1D424 8003CC24 0000248C */  lw         $a0, 0x0($at)
-    /* 1D428 8003CC28 FBF7000C */  jal        func_8003DFEC
+    /* 1D428 8003CC28 FBF7000C */  jal        SpuSetTransferStartAddr
     /* 1D42C 8003CC2C 00000000 */   nop
   .L8003CC30:
     /* 1D430 8003CC30 0680123C */  lui        $s2, %hi(D_800655C8)

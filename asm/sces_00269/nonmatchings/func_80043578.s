@@ -13,7 +13,7 @@ glabel func_80043578
     /* 23D78 80043578 E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 23D7C 8004357C 1000B0AF */  sw         $s0, 0x10($sp)
     /* 23D80 80043580 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 23D84 80043584 A7B9000C */  jal        func_8002E69C
+    /* 23D84 80043584 A7B9000C */  jal        ResetCallback
     /* 23D88 80043588 21808000 */   addu      $s0, $a0, $zero
     /* 23D8C 8004358C 05000016 */  bnez       $s0, .L800435A4
     /* 23D90 80043590 00000000 */   nop

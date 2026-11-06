@@ -909,7 +909,7 @@ glabel func_80023B8C
     /* 4390 80023B90 01000234 */  ori        $v0, $zero, 0x1
     /* 4394 80023B94 05006214 */  bne        $v1, $v0, func_80023BAC
     /* 4398 80023B98 00000000 */   nop
-    /* 439C 80023B9C 9721010C */  jal        func_8004865C
+    /* 439C 80023B9C 9721010C */  jal        VSync
     /* 43A0 80023BA0 04000434 */   ori       $a0, $zero, 0x4
     /* 43A4 80023BA4 ED8E0008 */  j          func_80023BB4
     /* 43A8 80023BA8 00000000 */   nop
@@ -918,7 +918,7 @@ endlabel func_80023B8C
 nonmatching func_80023BAC, 0x8
 
 glabel func_80023BAC
-    /* 43AC 80023BAC 9721010C */  jal        func_8004865C
+    /* 43AC 80023BAC 9721010C */  jal        VSync
     /* 43B0 80023BB0 21200000 */   addu      $a0, $zero, $zero
 endlabel func_80023BAC
 
@@ -1001,7 +1001,7 @@ glabel func_80023C44
     /* 4488 80023C88 80200400 */  sll        $a0, $a0, 2
     /* 448C 80023C8C 1880023C */  lui        $v0, %hi(D_80178BD4)
     /* 4490 80023C90 D48B4224 */  addiu      $v0, $v0, %lo(D_80178BD4)
-    /* 4494 80023C94 236C010C */  jal        func_8005B08C
+    /* 4494 80023C94 236C010C */  jal        GsDrawOt
     /* 4498 80023C98 21208200 */   addu      $a0, $a0, $v0
 endlabel func_80023C44
 
@@ -2332,7 +2332,7 @@ glabel func_80024C00
     /* 542C 80024C2C 00020434 */  ori        $a0, $zero, 0x200
     /* 5430 80024C30 F0000534 */  ori        $a1, $zero, 0xF0
     /* 5434 80024C34 21300000 */  addu       $a2, $zero, $zero
-    /* 5438 80024C38 E72F010C */  jal        func_8004BF9C
+    /* 5438 80024C38 E72F010C */  jal        GsInitGraph
     /* 543C 80024C3C 21380000 */   addu      $a3, $zero, $zero
     /* 5440 80024C40 21200000 */  addu       $a0, $zero, $zero
     /* 5444 80024C44 21280000 */  addu       $a1, $zero, $zero
@@ -2420,7 +2420,7 @@ glabel func_80024D38
     /* 5564 80024D64 1D00B0A3 */  sb         $s0, 0x1D($sp)
     /* 5568 80024D68 1E00B0A3 */  sb         $s0, 0x1E($sp)
     /* 556C 80024D6C 21200000 */  addu       $a0, $zero, $zero
-    /* 5570 80024D70 0F6D010C */  jal        func_8005B43C
+    /* 5570 80024D70 0F6D010C */  jal        GsSetFlatLight
     /* 5574 80024D74 1000A527 */   addiu     $a1, $sp, 0x10
     /* 5578 80024D78 2000A0AF */  sw         $zero, 0x20($sp)
     /* 557C 80024D7C 2400A0AF */  sw         $zero, 0x24($sp)
@@ -2429,7 +2429,7 @@ glabel func_80024D38
     /* 5588 80024D88 2D00B0A3 */  sb         $s0, 0x2D($sp)
     /* 558C 80024D8C 2E00B0A3 */  sb         $s0, 0x2E($sp)
     /* 5590 80024D90 01000434 */  ori        $a0, $zero, 0x1
-    /* 5594 80024D94 0F6D010C */  jal        func_8005B43C
+    /* 5594 80024D94 0F6D010C */  jal        GsSetFlatLight
     /* 5598 80024D98 2000A527 */   addiu     $a1, $sp, 0x20
     /* 559C 80024D9C FBFF0224 */  addiu      $v0, $zero, -0x5
     /* 55A0 80024DA0 3000A2AF */  sw         $v0, 0x30($sp)
@@ -2439,7 +2439,7 @@ glabel func_80024D38
     /* 55B0 80024DB0 3D00B0A3 */  sb         $s0, 0x3D($sp)
     /* 55B4 80024DB4 3E00B0A3 */  sb         $s0, 0x3E($sp)
     /* 55B8 80024DB8 02000434 */  ori        $a0, $zero, 0x2
-    /* 55BC 80024DBC 0F6D010C */  jal        func_8005B43C
+    /* 55BC 80024DBC 0F6D010C */  jal        GsSetFlatLight
     /* 55C0 80024DC0 3000A527 */   addiu     $a1, $sp, 0x30
     /* 55C4 80024DC4 FF000434 */  ori        $a0, $zero, 0xFF
     /* 55C8 80024DC8 FF000534 */  ori        $a1, $zero, 0xFF

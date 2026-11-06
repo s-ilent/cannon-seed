@@ -13,7 +13,7 @@ glabel SpuSetNoiseVoice
     /* 6074C 8007FF4C E8FFBD27 */  addiu      $sp, $sp, -0x18
     /* 60750 8007FF50 1000BFAF */  sw         $ra, 0x10($sp)
     /* 60754 8007FF54 CA000634 */  ori        $a2, $zero, 0xCA
-    /* 60758 8007FF58 F1FF010C */  jal        func_8007FFC4
+    /* 60758 8007FF58 F1FF010C */  jal        _SpuSetAnyVoice
     /* 6075C 8007FF5C CB000734 */   ori       $a3, $zero, 0xCB
     /* 60760 8007FF60 1000BF8F */  lw         $ra, 0x10($sp)
     /* 60764 8007FF64 1800BD27 */  addiu      $sp, $sp, 0x18

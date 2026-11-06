@@ -15,7 +15,7 @@ glabel SpuSetTransferStartAddr
     /* 1EC1C 8003E41C 21808000 */  addu       $s0, $a0, $zero
     /* 1EC20 8003E420 FFFF0424 */  addiu      $a0, $zero, -0x1
     /* 1EC24 8003E424 1400BFAF */  sw         $ra, 0x14($sp)
-    /* 1EC28 8003E428 CDF8000C */  jal        func_8003E334
+    /* 1EC28 8003E428 CDF8000C */  jal        _spu_FsetRXXa
     /* 1EC2C 8003E42C 21280002 */   addu      $a1, $s0, $zero
     /* 1EC30 8003E430 0680013C */  lui        $at, %hi(D_80065DB0)
     /* 1EC34 8003E434 B05D22A4 */  sh         $v0, %lo(D_80065DB0)($at)
