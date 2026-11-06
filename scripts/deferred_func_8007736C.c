@@ -137,6 +137,31 @@
  *         was added and re-judged - SAME 122/186, i still homes to s4.
  *         The i-home is allocation-order driven (s2/s4 both free where
  *         the walk allocates; gcc picked s4), not declaration-driven.
+ *    (7) THE -1 NON-PIN SHAPE: REFUTED (cron-202611062116, probe c4,
+ *         judge 122/186 SIZE 756 = identical). The sep2 lever applied to
+ *         the -1 (m1 = -1 + the "=r"/"0" opaque barrier inside the outer
+ *         loop, immediately before the test) does NOT block the hoist:
+ *         the tail def dominates the loop latch (every back edge passes
+ *         it), so loop.c hoists the def+barrier pair regardless; the "0"
+ *         tie then drags the compare onto the hoisted register (s6).
+ *         The sep2 lever's boundary law: the opaque def must sit on a
+ *         CONDITIONAL path that does not dominate the latch (sep2's sits
+ *         on the head-test fall-through arm). With this plus the banked
+ *         findings (the barrier inherits the hoisted input's register;
+ *         def-before-call+use-after = callee-saved; the -1 has no
+ *         nested-loop use), the non-pin shape is refuted from three
+ *         directions - the route to retail's fresh
+ *         `addiu $v0,-1; beq $a0,$v0` is a cc_post rule-class, not a
+ *         source shape.
+ *    (8) THE WALK I-HOME: PARKED AS ITS OWN CLASS (cron-202611062116,
+ *         probes c5a/c5b, judge 122/186 both). Block-scoped `int i;`
+ *         inside the walk block (after AND before the rec/name/off
+ *         pins) leaves i in s4 (sep's dead reg) - the i-home is
+ *         insensitive to declaration scope AND order (four shapes now:
+ *         implicit function-scope, explicit function-scope, block-scope
+ *         after the pins, block-scope before the pins). Retail's s2
+ *         (level's dead reg) is unreachable by source steering; the
+ *         class joins the cc_post reg-field-candidate family.
  */
 
 extern int D_800C8028;               /* mount guard: cached state */
