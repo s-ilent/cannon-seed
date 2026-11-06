@@ -78,4 +78,4 @@ unit:func_8006ABC8 --addiu-at on
 unit:func_8006B780 --addiu-at on
 unit:func_80080D64 --addiu-at on
 unit:func_80044190 --addiu-at on
-unit:func_80049824 --addiu-at on
+unit:func_80044174 --addiu-at on

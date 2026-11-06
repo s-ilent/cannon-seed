@@ -3182,6 +3182,8 @@ SsVabFakeHead = 0x8004415C; // LIBSND VS_VH member .text+0x60 (extent 0x30); sdk
 SsVabOpenHeadWithMode = 0x80044190; // LIBSND VS_VH member .text+0x90 (extent 0x3dc); sdk_members.py unique placement + sig-db agrees
 SpuMalloc = 0x800445D8; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
 _spu_gcSPU = 0x800448A0; // LIBSPU S_M_INT member .text+0x0 (extent 0x308); sdk_members.py unique placement + sig-db agrees
+// target: slps_00270
+SpuMalloc = 0x800445BC; // LIBSPU S_M_M member .text+0x0 (extent 0x2c8); sdk_members.py unique placement + sig-db agrees
 SsVabFakeBody = 0x80044BA0; // LIBSND VS_VFB member .text+0x0 (extent 0x70); sdk_members.py unique placement + sig-db agrees
 SsUtGetVabHdr = 0x80044C18; // LIBSND UT_GVH member .text+0x0 (extent 0xdc); sdk_members.py unique placement + sig-db agrees
 SsUtGetVagAtr = 0x80044CFC; // LIBSND UT_GVA member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees

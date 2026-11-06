@@ -574,7 +574,7 @@ segments:
       - [0x248D8, asm, func_80049788]   # 0x34 sdk
       - [0x2490C, asm, func_800497BC]   # 0x34 sdk
       - [0x24940, asm, func_800497F0]   # 0x34 sdk
-      - [0x24974, asm, func_80049824]   # 0x448 sdk
+      - [0x24974, c, func_80044174]   # 0x448 sdk SsVabOpenHeadWithMode (true-VA name; the row's glabel was pre-renamed to the semantic name at the same address)
       - [0x24DBC, asm, func_800445BC]   # 0x2c8 sdk
       - [0x25084, asm, func_8004A064]   # 0x300 sdk
       - [0x25384, asm, func_8004A364]   # 0x78 sdk
