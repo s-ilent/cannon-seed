@@ -1319,9 +1319,11 @@ D_80066484 = 0x80066484; // type:u16 absolute:true
 D_80114F88 = 0x80114F88; // type:u16
 _svm_stereo_mono = 0x80114FF8; // type:s32
 SsSeqCalledTbyT_guard = 0x8011506C; // type:s32
+D_80115070 = 0x80115070; // type:u16 absolute:true
 SsSeqCalledTbyT_slotbits = 0x80115518; // type:s32
 SsSeqCalledTbyT_tab = 0x8011C274; // type:s32
 SsSeqCalledTbyT_nslots = 0x8011C2F4; // type:s32
 SsSeqCalledTbyT_ntracks = 0x8011C2F8; // type:s32
 PSDIDX = 0x8011C304; // type:s32
+D_8011C35C = 0x8011C35C; // type:u16 absolute:true
 // END GENERATED DATA SYMBOLS

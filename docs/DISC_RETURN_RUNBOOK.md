@@ -856,22 +856,32 @@ identical across all eight copies):
     sces_00269  0x24990  DIFF 4/274  first 0x80044504 = row+0x374  SAME four words
     mainmenu_jp 0x609E4  BLOCKED - SpuMalloc unresolved (the banked adoption gap,
                          sdk-lane; census knows 0x8008062c, the adoptable tag missing)
-    slps_00270  0x24974  BLOCKED - R_MIPS_GPREL16 truncation on D_8011C35C/D_80115070
-                         (the slps layout puts both outside gp reach; retail uses
-                         absolute lui/%hi+%lo for them, the built's small-data
-                         model emits gp-rel)
+    slps_00270  0x24974  DIFF 4/274  first 0x800444E8 = row+0x374  SAME four words
+                         (the far-label lever CLOSED cron-202611061116, see below)
 
-- The five verdicts are the SAME four word-pairs at the SAME word indices as
+- The SIX verdicts are the SAME four word-pairs at the SAME word indices as
   the worked row's d69 record (the [221] srl-vs-slti at row+0x374 and the
   div-temp home pair $2-vs-$3) - ZERO per-twin divergence LIVE; the offline
-  transfer proof now carries live confirmations for every judgeable twin.
-- The slps far-label lever (named, next window): the judge prelude's
-  .extern size override - a post-cc1 big-size .extern for the two labels
-  flips the small-data classification to absolute, matching retail, with
-  the C untouched and the other seven labels staying gp-rel as retail.
-  The literal-address macro probe measured NEGATIVE (219+ diffs - the
-  volatile literal kills the gp web and re-lays the whole function).
-- mainmenu_jp unblocks with the sdk-lane adoption only (not grabbed).
+  transfer proof carries live confirmations for every judgeable twin.
+- THE SLPS FAR-LABEL LEVER CLOSED (cron-202611061116): the mechanism is TWO
+  composed pieces, both already designed into the pipeline.  (1) STAGER:
+  curated `absolute:true` entries for D_8011C35C/D_80115070 in
+  config/symbols.slps_00270.txt make the gp rewrite skip them (the
+  _spu_inTransfer precedent in the same file; retail evidence = the row's
+  own lui/%hi+%lo forms).  (2) GAS: judge_unit.py gained an opt-in sidecar
+  hook - `src/<name>.extern64` (`SYM SIZE` lines) re-declared after cc1's
+  size preamble flips the bare-ref classification (gas is LAST-.extern-wins;
+  the matrix test: 2-alone -> GPREL16, 2-then-64 -> HI16+LO16, 64-then-2 ->
+  GPREL16 again).  The two draft-side routes were measured NEGATIVE: the
+  literal-address macro (219+ diffs, the volatile literal kills the gp web)
+  and the in-body asm(".extern") (the opaque insns barrier the prologue
+  delay fills, +2 words - the sw $17 could not sink into the jal delay).
+  The hook is opt-in (no sidecar = no-op); the worked-row d69 anchor
+  re-judged 4/274 unchanged after the tool change, and the slps_00270
+  whole-image verify stays GREEN on the curated markers.
+- mainmenu_jp is now the ONLY twin without a live verdict, unblocked solely
+  by the sdk-lane SpuMalloc adoption (census knows 0x8008062c, the
+  adoptable tag missing - not grabbed).
 
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 

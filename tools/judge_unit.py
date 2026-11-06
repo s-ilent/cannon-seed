@@ -142,6 +142,46 @@ def judge(target, name, rom, extent, gp_flags, asflags):
              f"{rom:X}", gp_rewrite, gp_info])
     if r.returncode:
         return "STAGE-FAIL", ["  " + ln for ln in r.stderr.strip().splitlines()[-5:]]
+    # Far-label size overrides (the gas last-.extern-wins law): a sidecar
+    # `src/<target>/<name>.extern64` or `src/<name>.extern64` carries
+    # `SYM SIZE` lines; each re-declaration is inserted after cc1's size
+    # preamble so gas classifies that symbol's bare refs by the override
+    # size - the absolute lui/%hi+%lo forms - when a target's data layout
+    # puts the symbol outside its -G8 window but retail addresses it
+    # absolutely (first case: the slps_00270 twin judge, D_8011C35C /
+    # D_80115070, cron-202611061116; the stager side of the same law is
+    # the curated `absolute:true` marker that skips the gp_rel rewrite).
+    # The sidecar rides the staged copy during H.2 runs (cp both, revert
+    # both); the in-body asm(".extern") route was measured NEGATIVE - the
+    # opaque insns barrier the prologue delay fills (+2 words).
+    ov = f"src/{target}/{name}.extern64"
+    if not os.path.exists(os.path.join(REPO, ov)):
+        ov = f"src/{name}.extern64"
+    if os.path.exists(os.path.join(REPO, ov)):
+        overrides = []
+        for ln in open(os.path.join(REPO, ov)):
+            parts = ln.split()
+            if len(parts) == 2 and re.match(r"^[A-Za-z_$][\w$.]*$", parts[0]) \
+                    and parts[1].isdigit():
+                overrides.append((parts[0], parts[1]))
+        if overrides:
+            rspath = os.path.join(REPO, f"{work}.r.s")
+            lines = open(rspath).read().splitlines(keepends=True)
+            for sym, _size in overrides:
+                lines = [l for l in lines
+                         if not re.match(rf"^\s*\.extern\s+{re.escape(sym)}\s*,", l)]
+            ins = max((i for i, l in enumerate(lines)
+                       if re.match(r"^\s*\.extern\s", l)), default=None)
+            if ins is None:
+                for i, l in enumerate(lines):
+                    if l.startswith(".ent") or l.startswith(".text") \
+                            or l.startswith(".section"):
+                        ins = i - 1
+                        break
+            for sym, size in overrides:
+                ins += 1
+                lines.insert(ins, f".extern\t{sym}, {size}\n")
+            open(rspath, "w").write("".join(lines))
     r = run([AS] + asflags + ["-o", f"{work}.o", f"{work}.r.s"])
     if r.returncode:
         return "AS-FAIL", ["  " + ln for ln in r.stderr.strip().splitlines()[-5:]]
