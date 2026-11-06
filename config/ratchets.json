@@ -98,6 +98,10 @@
     "unknown_data 524->528 (2026-11-03): _SpuIsInAllocateArea lands in g3org_jp (the LIBSPU S_M_UTIL allocate-area walk, member-named row) - one new src file carrying 4 D_ mentions (2 comment + extern + load use).",
     "unknown_data 528->538 (2026-11-03): the trailing-underscore twin _SpuIsInAllocateArea_ lands in g3org_jp (the unit-converting prologue variant) - one new src file carrying 10 D_ mentions (4 x D_800B7F1C: 2 comment + extern + cursor use; 6 x D_800B75E8: 4 comment + extern + shift-amount use)."
   ],
+  "baselines": {
+    "unknown_data": 600,
+    "unknown_function": 951
+  },
   "patterns": [
     {
       "name": "unknown_function",
@@ -107,9 +111,5 @@
       "name": "unknown_data",
       "regex": "\\bD_[0-9A-Fa-f]{8}\\b"
     }
-  ],
-  "baselines": {
-    "unknown_function": 948,
-    "unknown_data": 538
-  }
+  ]
 }

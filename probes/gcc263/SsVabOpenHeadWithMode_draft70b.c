@@ -2,6 +2,23 @@
  * cc-post: cc1-O1
  * cc-post: rule15
  * cc-post: rule17 $L19 jdelay addu 4 0
+ * cc-post: lt0-scc 1
+ *
+ * DRAFT 70B+R18 RESOLVED (cron-202611061501, oracle UP): THE [221]
+ * RESIDUAL IS A COMPILER-DIVERGENCE WORD, BRIDGED BY CC_POST RULE 18.
+ * The cc1 -da pass attribution: the n_neg lshiftrt-31 exists already in
+ * the .rtl dump (the very first) - the pick is emit_store_flag at
+ * EXPANSION, no pass introduces it. The scc-path control: a materialized
+ * (x < 5) emits slt (the scc path exists) but const-0 never reaches it
+ * under 12 probed spellings (the sign-extract special case fires first
+ * for op1 == const0) - so vanilla 2.6.3 CANNOT emit retail's
+ * `slti $v0,$v1,0x0` from any (n < 0) spelling; the Sony cc1 evidently
+ * ordered the scc before the sign-extract. Semantics: srl-31 and slti-0
+ * both materialize the sign bit as 0/1 for every input - the rule-18
+ * rewrite (`cc-post: lt0-scc 1` above) is unconditional and byte-exact
+ * vs retail. The div-correction srl-31s never match (followed by addu,
+ * the expand_divmod DIRECT lshiftrt). Expected judge: EXACT 274/274 at
+ * the row 0x448/1096 - the H.5 gate opens.
  *
  * DRAFT 70B LIVE (cron-202611061346, oracle UP): H.2 judged - **DIFF 1/274
  * SIZE-EXACT = THE NEW LIVE RECORD** (d69 4 -> d70b 1; the ladder 143 ->
