@@ -187,6 +187,16 @@ callee-saved home — a pure reorder of mutually independent insns (the same
 argument rule15 documents). Count-checked: the listed set must equal the
 run's register set exactly, loud-fail otherwise.
 
+STATUS (window cron-202611070716, 5915e484): SHIPPED, with one refinement
+the fresh judge artifacts forced — the built form interleaves each import's
+save with its copy (the c3 source shape), so the transform moves each
+listed register's (save, copy) ITEMS to the listed-order front, then the
+remaining pure saves in their built order (reordering only the copies
+cannot fix a sw word). Region parse starts after the frame insn (the guard
+loads precede it); independence guard: no copy reads any copy's dest.
+Live judge at rule19+rule21: SIZE 748, DIFF 145/186, the prologue
+[0]-[67] fully retail-matched.
+
 **Yield / risk**: 4 words. Low risk — the smallest delta on existing
 machinery in the survey.
 
@@ -241,7 +251,9 @@ in the build order despite landing mid-list in the map.
 
 ## 7. Recommended implementation order and per-rule gates
 
-**Order: A -> C -> B -> D.**
+**Order: A -> C -> B -> D.** (STATUS 2026-11-07: A shipped as rule 19,
+window cron-202611070601, 8d7014da; C shipped as rule 21, window
+cron-202611070716, 5915e484; B and D open.)
 - A first: the largest class (~12 words) AND its displacement cascade die
   together; one rule class removes the biggest block and the frame returns
   to retail's layout, which also un-shadows every later word map (later
