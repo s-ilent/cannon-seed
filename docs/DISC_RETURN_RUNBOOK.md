@@ -193,32 +193,29 @@ verbatim 3.3 VMANAGER build - the game's own cc1 2.6.3-PSX compiled it
    0x0c offset rows today; sdk_members.py claims ambiguous at 0x80066E5C,
    a different interior start in the same row). No rename without it.
 
-## Phase F - the func_80084924 cluster (mainmenu_jp; the LIBCD ISO9660 family)
+## Phase F - the func_80084924 cluster (mainmenu_jp; the LIBCD ISO9660 family) - LANDED 6/7 (cron-20261101 through cron-20261102)
 
-State: the offline decode is COMPLETE (cron-20261101-0507/0621) - five
-units + both true heads, structure map + six-step plan banked. Five parked
-drafts: scripts/deferred_func_8007796C.c (fn2, the cached-dir lookup
-leaf), deferred_func_80077CD4.c (the staged directory-stream loader),
-deferred_func_80077A18.c (CD_cachefile, the raw-ISO9660 record parser into
-the 0x40-entry cache), deferred_func_8007736C.c (CdSearchFile, the path
-resolver), deferred_func_80077678.c (CD_newmedia, the PVD reader + root-dir
-indexer; its tail IS the asm row's head fragment). The landing set adds
-two undrafted units: the 0x20 match leaf (0x80077654, the strncmp-12
-ISO9660 8.3 matcher) and memcpy_iso9660 (the func_80077D40 interior, the
-family's qualified name, 7 own-row curated entries one per target).
+State: the spill audit (STEP 1) and the yaml split + C landings (STEP 6)
+are DONE - the spill row data_8008433C was re-typed and split, and the
+units landed as real C one commit each (runbook section updated
+cron-202611061116 after the phase was found stale - it still listed
+steps 1+6 as remaining a week after they landed):
 
-Remaining steps of the banked six-step plan:
+    func_80077654   0x24  C  d7b34e73 (the 0x20 strncmp-12 match leaf)
+    func_80077CD4   0x6c  C  d7b34e73 (the staged directory-stream loader)
+    memcpy_iso9660  0x34  C  d7b34e73 (the rename ride - STEP 6's last piece)
+    func_8007796C   0xac  C  6741422c (fn2, the cached-dir lookup leaf)
+    func_80077678   0x2f4 C  94a5b60f (CD_newmedia, PVD reader + root-dir indexer)
+    func_80077A18   0x2bc C  e2fd89c0 (CD_cachefile, the 18th real-decompiled-C function)
 
-1. STEP 1 - the data_8008433C spill audit on TRUE baselines ONLY
-   (deframe/retype on witnessed trees; the --framing-rows trap is banked).
-   The real unit includes the preceding 0x4b8 "data" row - real code
-   mis-typed data, the intr-cluster precedent. Runtime span 0x5E8 = carve
-   0x4B8 + 0x130 (one sector's framing).
-2. STEP 6 - yaml split into per-function rows + C rows from the drafts +
-   judge on the live oracle + the memcpy_iso9660 rename riding (the
-   mainmenu_jp interior alabel is documented for this parent-row split
-   fix). One target (mainmenu_jp), one landing commit, verify GREEN, 
-   ratchets recomputed.
+The ONLY remaining unit = func_8007736C (CdSearchFile, 0x2e8, still asm;
+the yaml row split of the former 0x4b8 spill row = 0x2e8 + 0x24 + 0x2f4).
+Its import-order K&R probe went NEGATIVE (gcc 2.6.3 drops the asm()
+bindings on K&R param declarations, cron-202611060731) and the live-judged
+residue map 117/186 sits in the parked draft header with the levers
+ordered - the -1-constant register class at 0xc8 = the next named lever.
+verify mainmenu_jp GREEN whole-image re-checked on the witnessed tree
+(cron-202611061116).
 
 Landing-critical facts (banked, preserve them in the C):
 - fn3's gate is a PLAIN bnez: the C tested `if (!CD_cachefile(id))` but
