@@ -234,6 +234,24 @@ if grep -q 'cc-post: site-fresh-const' "$SRC" 2>/dev/null; then
         exit 3
     fi
 fi
+# rule21 composes with any primary flag above: the prologue import-pair
+# order class (the func_8007736C s5-first retail prologue; survey
+# docs/CC_POST_RULE_CLASSES.md section 5, window cron-202611070716): the
+# init-copy order is not first-use-driven in gcc 2.6.3 (declaration order,
+# the K&R form and the asm-input use all refuted - probes kr1/c6), so the
+# (save, copy) pair reorder is a post-pass. Marker arg: <reg>,<reg>[,...]
+# - gcc numeric tokens verbatim, comma-joined; the listed set must equal
+# the region's import-copy set exactly; a bare marker LOUD-FAILS the
+# build. Never combine with cc-post: rule15 on one unit.
+if grep -q 'cc-post: import-order' "$SRC" 2>/dev/null; then
+    R21ARGS=$(grep -o 'cc-post: import-order.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
+    if [ -n "$R21ARGS" ]; then
+        POSTFLAGS="$POSTFLAGS --import-order $R21ARGS"
+    else
+        echo "cc.sh: cc-post: import-order marker present without args (<reg>,<reg>[,...])" >&2
+        exit 3
+    fi
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).

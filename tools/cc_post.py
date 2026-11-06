@@ -256,6 +256,10 @@ SITE_FRESH_CONST = None  # rule 19: site-fresh-const - the hoisted-constant
                          # spill rewrite, as (imm, reg) from the marker
                          # (`cc-post: site-fresh-const <imm> <reg>`); see
                          # _rule19_site_fresh_const
+IMPORT_ORDER = None      # rule 21: import-order - the prologue import-pair
+                         # order, as [reg, ...] from the marker
+                         # (`cc-post: import-order <reg>,<reg>[,...]`); see
+                         # _rule21_import_order
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -1177,6 +1181,123 @@ def _prepass_site_fresh_const(lines: list[str]) -> list[str]:
     return res
 
 
+# rule 21 (import-order; survey docs/CC_POST_RULE_CLASSES.md section 5,
+# window cron-202611070716): the prologue import-pair order class. The
+# func_8007736C built prologue interleaves (sw $s3,0x3c / addu $s3,$a1)
+# before (sw $s5,0x44 / addu $s5,$a0) where retail imports $s5 FIRST
+# (fresh judge artifacts + wordmap [20]-[32], 2026-11-07: retail sw
+# $s5,0x44 / move $s5,$a0 / sw $s3,0x3c / move $s3,$a1). All three
+# source-side order levers are refuted (the c3 declaration order, the K&R
+# register-param form kr1, the early asm-input use c6: judged 127/186,
+# +5 WORSE) - the init-copy order is not first-use-driven in gcc 2.6.3,
+# so the reorder is a post-pass. Transform, shape-verified, loud-fail on
+# any mismatch:
+#   1. within a contiguous instruction run, locate the frame insn
+#      (subu/addiu $sp,$sp,N) and parse the consecutive save/copy region
+#      after it (sw $r,off($sp) = save; addu $r,$s,$zero and
+#      ori $r,$zero,imm = import copy), stopping at the first other insn;
+#   2. the region's copy-dest set must equal the marker's listed set
+#      exactly (count check), and each listed reg needs exactly one copy;
+#   3. independence: no copy may read any copy's dest register (the
+#      attested imports read only incoming args / $zero) - a pure reorder
+#      of mutually independent insns, semantically a no-op;
+#   4. rebuild the region: each listed reg's items (its save + its copy,
+#      in their built internal order) first, in the listed order, then
+#      the remaining items (pure saves: ra, other callee-saves) in their
+#      built order.
+# rule15 and rule21 both reshape the prologue - never combine them on one
+# unit (rule15's parser assumes the batched save run that rule21's pair
+# form does not carry; the attested 7736C shape needs rule21 alone).
+def _rule21_import_order(lines: list[str], order: list[str]):
+    want = [r.lstrip("$") for r in order if r.strip()]
+    if not want or len(want) != len(set(want)):
+        return None
+    for start_line in range(len(lines)):
+        stripped = lines[start_line].strip()
+        if not stripped or not is_instruction(lines[start_line]):
+            continue
+        if not _FRAME_RE.match(stripped):
+            continue
+        items: list[tuple[str, str]] = []  # (kind, reg); kind: save|copy
+        j = start_line + 1
+        while j < len(lines):
+            s = lines[j].strip()
+            if not s or not is_instruction(lines[j]):
+                break
+            mS = _R15_SAVE.match(s)
+            mC = _R15_COPY.match(s)
+            mO = _R15_ORI.match(s) if not mC else None
+            if mS:
+                items.append(("save", mS.group(1)))
+            elif mC:
+                items.append(("copy", mC.group(1)))
+            elif mO:
+                items.append(("copy", mO.group(1)))
+            else:
+                break
+            j += 1
+        if not items:
+            continue
+        dests = [r for k, r in items if k == "copy"]
+        if len(dests) != len(set(dests)) or set(dests) != set(want):
+            continue
+        saves: dict[str, int] = {}
+        ok = True
+        for kind, reg in items:
+            if kind == "save":
+                if reg in saves:
+                    ok = False
+                    break
+                saves[reg] = 1
+        if not ok:
+            continue
+        # independence: no copy reads any copy's dest (incl. its own)
+        bad = False
+        for idx, (kind, reg) in enumerate(items):
+            if kind != "copy":
+                continue
+            s = lines[start_line + 1 + idx].strip()
+            mC = _R15_COPY.match(s)
+            if mC and mC.group(2).lstrip("$") in dests:
+                bad = True
+                break
+        if bad:
+            continue
+        rebuilt: list[str] = []
+        # re-emit from the ORIGINAL lines: walk the region once, taking
+        # each reg's items in their built internal order
+        order_lines: dict[str, list[str]] = {r: [] for r in dests}
+        rest_lines: list[str] = []
+        for off, (kind, reg) in enumerate(items):
+            ln = lines[start_line + 1 + off]
+            if reg in order_lines:
+                order_lines[reg].append(ln)
+            else:
+                rest_lines.append(ln)
+        for reg in want:
+            rebuilt.extend(order_lines[reg])
+        rebuilt.extend(rest_lines)
+        return lines[:start_line + 1] + rebuilt + lines[j:]
+    return None
+
+
+def _prepass_import_order(lines: list[str]) -> list[str]:
+    """Marker rule21 (`cc-post: import-order <reg>,<reg>[,...]`): reorder
+    the prologue import (save, copy) pairs to the listed register order
+    (see _rule21_import_order); loud failure (exit 3) when no region
+    matches - never a silent pass. Only ever fires on marker-carrying
+    units."""
+    res = _rule21_import_order(lines, IMPORT_ORDER)
+    if res is None:
+        sys.stderr.write(
+            "cc_post rule 21: import-order shape not found (need a "
+            "prologue region whose import-copy dest set is exactly "
+            f"{','.join(IMPORT_ORDER)}, each dest with one save and one "
+            "copy, no copy reading another copy's dest)\n")
+        sys.exit(3)
+    return res
+
+
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
     res = list(res)
 
@@ -1576,7 +1697,7 @@ def main() -> None:
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
-    global LT0_SCC, SITE_FRESH_CONST
+    global LT0_SCC, SITE_FRESH_CONST, IMPORT_ORDER
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1633,6 +1754,17 @@ def main() -> None:
             sys.exit(2)
         SITE_FRESH_CONST = (args[k + 1], args[k + 2])
         del args[k : k + 3]
+    if "--import-order" in args:
+        k = args.index("--import-order")
+        # required payload: the comma-joined register order (cc.sh passes
+        # the marker arg verbatim, in position; a bare flag is a usage
+        # error - the rule-17 bare-marker lesson, never a silent default)
+        if len(args) < k + 2 or not args[k + 1]:
+            sys.stderr.write(
+                "usage: cc_post.py --import-order <reg>,<reg>[,...] ...\n")
+            sys.exit(2)
+        IMPORT_ORDER = [r for r in args[k + 1].split(",") if r]
+        del args[k : k + 2]
     if "--lt0-scc" in args:
         k = args.index("--lt0-scc")
         # required payload: the expected site count (cc.sh passes the
@@ -1736,6 +1868,8 @@ def main() -> None:
         lines = _prepass_lt0_scc(lines)
     if SITE_FRESH_CONST is not None:
         lines = _prepass_site_fresh_const(lines)
+    if IMPORT_ORDER is not None:
+        lines = _prepass_import_order(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:
