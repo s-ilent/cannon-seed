@@ -70,6 +70,7 @@ EXPECTED_SITE = [
 EXPECTED_EPILOGUE = [
     "lw\t$31,72($sp)",
     "",                     # the s6 reload deleted
+    "lw\t$21,68($sp)",
 ]
 EXPECTED_FRAME = ".frame\t$sp,80,$31"      # TOTAL unchanged (retail-decoded)
 EXPECTED_SUBU = "subu\t$sp,$sp,80"
