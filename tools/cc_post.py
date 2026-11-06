@@ -252,6 +252,10 @@ LT0_SCC = None           # rule 18: lt0-scc materialization rewrite - the
                          # expected site count from the marker
                          # (`cc-post: lt0-scc <count>`); see
                          # _rule18_lt0_scc
+SITE_FRESH_CONST = None  # rule 19: site-fresh-const - the hoisted-constant
+                         # spill rewrite, as (imm, reg) from the marker
+                         # (`cc-post: site-fresh-const <imm> <reg>`); see
+                         # _rule19_site_fresh_const
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -1019,6 +1023,160 @@ def _prepass_lt0_scc(lines: list[str]) -> list[str]:
     return out
 
 
+_R19_SPREL = re.compile(r"^(sw|lw)\t\$(\w+),(\d+)\(\$sp\)$")
+_R19_FRAME = re.compile(r"^\.frame\t\$sp,(\d+),")
+_R19_MASK = re.compile(r"^\.mask\t0x([0-9a-fA-F]+),")
+_R19_BRANCH_OPS = ("beq", "bne", "blez", "bgtz", "bltz", "bgez",
+                   "bltzal", "bgezal", "j", "jal", "beql", "bnel",
+                   "blezl", "bgtzl")
+
+
+def _rule19_site_fresh_const(lines: list[str], imm: str, reg: str):
+    """Rule 19 (site-fresh-const; survey docs/CC_POST_RULE_CLASSES.md
+    section 3, window cron-202611070601). The hoisted-constant spill
+    class: gcc 2.6.3's regalloc materializes a loop-invariant constant
+    into a callee-saved home
+        addiu $<reg>,$zero,<imm>     <- hoisted before the loop
+        ... beq $X,$<reg>,<label>    <- the site compare
+    with an sw/lw $<reg>,K($sp) spill pair, where retail materializes
+    the constant FRESH at the site into $2 (v0) and never saves the
+    home register (the func_8007736C -1 sentinel: built `addiu
+    $22,$zero,-1` hoisted + `beq $4,$22`; retail `addiu $2,$zero,-1`
+    fresh + `beq $4,$2`, no s6 word, the frame one slot shorter). The
+    source-side escape hatches are all refuted (probe c4: the sep2
+    lever needs a non-latch-dominating conditional def; the "0" tie
+    inherits the hoisted register; def-before-call forces callee-saved)
+    - the fix is a post-pass. Transform, all shape-verified, loud-fail
+    on any mismatch:
+      1. exactly one `addiu $<reg>,$zero,<imm>` (the hoisted def);
+      2. exactly one branch use of $<reg>, one sw, one lw (same K) -
+         any other $<reg> reference loud-fails (the home must be
+         single-purpose or the spill is load-bearing);
+      3. topmost-slot check: every $sp displacement ABOVE K belongs to
+         $31/$ra only (a middle-slot delete would need a
+         gap-preserving remap - reject);
+      4. retarget the branch's $<reg> operand to $2 and insert
+         `addiu $2,$zero,<imm>` directly before the branch, whose
+         nearest preceding instruction must exist and not be a
+         branch/jump (never split a delay-slot pair);
+      5. delete the def and the spill pair;
+      6. frame renumber: every sw/lw displacement above K shifts -4 (ra
+         takes the deleted slot's place; the frame TOTAL and .frame
+         stay - retail keeps the size with the freed slot as top pad,
+         retail-decoded 2026-11-07), the .mask bit for $<reg> clears.
+    Semantics: $<reg> holds the constant on every path (single def),
+    so the fresh $2 def is equivalent on every predecessor; the insert
+    executes unconditionally within its block immediately before the
+    branch, so $2's prior value is dead there by construction. $2 is
+    the assembler scratch - the judge verdict (live only) is the
+    semantic gate, these textual checks are the fast-fail.
+    Returns the rewritten lines or None when the shape does not match
+    (the prepass turns None into a loud exit 3 - never a silent pass).
+    Only ever fires on marker-carrying units."""
+    out = list(lines)
+    regnum = reg.lstrip("$")
+    tok = re.compile(re.escape(reg) + r"(?![0-9])")
+    # comment lines (maspsx's `#nop # DEBUG: ...` notes quote real insns
+    # and would pollute the ref census) never count as references
+    refs = [i for i, ln in enumerate(out)
+            if tok.search(ln) and not ln.strip().startswith("#")]
+    def_line = f"addiu\t${regnum},$zero,{imm}"
+    def_idx = [i for i in refs if out[i].strip() == def_line]
+    if len(def_idx) != 1:
+        return None
+    sw_idx = [i for i in refs
+              if (m := _R19_SPREL.match(out[i].strip()))
+              and m.group(1) == "sw" and m.group(2) == regnum]
+    lw_idx = [i for i in refs
+              if (m := _R19_SPREL.match(out[i].strip()))
+              and m.group(1) == "lw" and m.group(2) == regnum]
+    br_idx = [i for i in refs
+              if out[i].strip().split("\t")[0] in ("beq", "bne")]
+    if len(sw_idx) != 1 or len(lw_idx) != 1 or len(br_idx) != 1:
+        return None
+    k_sw = int(_R19_SPREL.match(out[sw_idx[0]].strip()).group(3))
+    k_lw = int(_R19_SPREL.match(out[lw_idx[0]].strip()).group(3))
+    if k_sw != k_lw:
+        return None
+    k = k_sw
+    others = (set(refs) - set(def_idx) - set(sw_idx)
+              - set(lw_idx) - set(br_idx))
+    if others:
+        return None
+    for ln in out:
+        m = _R19_SPREL.match(ln.strip())
+        if m and int(m.group(3)) > k and m.group(2) != "31":
+            return None  # a non-ra slot sits above K: not the topmost
+    b = br_idx[0]
+    j = b - 1
+    while j >= 0 and not is_instruction(out[j]):
+        j -= 1
+    if j < 0:
+        return None
+    prev_op = out[j].strip().split("\t")[0]
+    if prev_op in _R19_BRANCH_OPS:
+        return None  # never split a delay-slot pair
+    # 4. retarget + (later) insert
+    out[b] = tok.sub(lambda m: "$2", out[b], count=1)
+    # 5. delete def + spill pair (blank lines carry no bytes)
+    out[def_idx[0]] = ""
+    out[sw_idx[0]] = ""
+    out[lw_idx[0]] = ""
+    # 6. frame renumber: displacements above K shift -4
+    for i, ln in enumerate(out):
+        if not _R19_SPREL.match(ln.strip()):
+            continue
+        out[i] = re.sub(r",(\d+)\(\$sp\)",
+                        lambda m: ("," + str(int(m.group(1)) - 4) + "($sp)"
+                                   if int(m.group(1)) > k else m.group(0)),
+                        ln, count=1)
+    fm = None
+    for ln in out:
+        m = _R19_FRAME.match(ln.strip())
+        if m:
+            fm = int(m.group(1))
+            break
+    if fm is None or fm <= k:
+        return None
+    # THE FRAME SIZE STAYS (retail-decoded, mainmenu_jp func_8007736C:
+    # retail `addiu $sp,$sp,-80` with ra at 72 and slot 76 as top pad -
+    # the callee-save area's ra slot shrinks by the deleted register but
+    # gcc's frame TOTAL is unchanged; only the $sp displacements above K
+    # shift). The first implementation renounced the frame to 76 and
+    # judged 150/186 - the retail decode refuted it the same window.
+    for i, ln in enumerate(out):
+        s = ln.strip()
+        mm = _R19_MASK.match(s)
+        if mm and int(regnum) <= 31:
+            mask = int(mm.group(1), 16)
+            if mask & (1 << int(regnum)):
+                out[i] = ln.replace(mm.group(1),
+                                    f"{mask & ~(1 << int(regnum)):08x}", 1)
+    # 4b. insert the fresh def directly before the (retargeted) branch
+    out.insert(b, f"addiu\t$2,$zero,{imm}")
+    return out
+
+
+def _prepass_site_fresh_const(lines: list[str]) -> list[str]:
+    """Marker rule19 (`cc-post: site-fresh-const <imm> <reg>`): retarget
+    the hoisted-constant spill class to retail's fresh $2 def at the
+    compare site, delete the spill pair and renumber the frame (see
+    _rule19_site_fresh_const); loud failure (exit 3) when the shape
+    does not match - never a silent pass. Only ever fires on
+    marker-carrying units."""
+    imm, reg = SITE_FRESH_CONST
+    res = _rule19_site_fresh_const(lines, imm, reg)
+    if res is None:
+        sys.stderr.write(
+            "cc_post rule 19: site-fresh-const shape not found "
+            f"(need exactly one hoisted `addiu {reg},$zero,{imm}` with "
+            "one branch use, one same-slot sw/lw pair, no other refs, "
+            "the slot topmost below $ra, and a non-branch predecessor "
+            "at the compare)\n")
+        sys.exit(3)
+    return res
+
+
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
     res = list(res)
 
@@ -1418,7 +1576,7 @@ def main() -> None:
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
-    global LT0_SCC
+    global LT0_SCC, SITE_FRESH_CONST
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1465,6 +1623,16 @@ def main() -> None:
                 % RULE17_MERGE[1][0])
             sys.exit(2)
         del args[k : k + 6]
+    if "--site-fresh-const" in args:
+        k = args.index("--site-fresh-const")
+        # required payload: `<imm> <reg>` (cc.sh passes the marker args
+        # verbatim, in position; a bare flag is a usage error)
+        if len(args) < k + 3:
+            sys.stderr.write(
+                "usage: cc_post.py --site-fresh-const <imm> <reg> ...\n")
+            sys.exit(2)
+        SITE_FRESH_CONST = (args[k + 1], args[k + 2])
+        del args[k : k + 3]
     if "--lt0-scc" in args:
         k = args.index("--lt0-scc")
         # required payload: the expected site count (cc.sh passes the
@@ -1566,6 +1734,8 @@ def main() -> None:
         lines = _prepass_rule17(lines)
     if LT0_SCC is not None:
         lines = _prepass_lt0_scc(lines)
+    if SITE_FRESH_CONST is not None:
+        lines = _prepass_site_fresh_const(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:

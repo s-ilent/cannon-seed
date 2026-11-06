@@ -217,6 +217,23 @@ if grep -q 'cc-post: lt0-scc' "$SRC" 2>/dev/null; then
     L18N=$(grep -o 'cc-post: lt0-scc.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
     POSTFLAGS="$POSTFLAGS --lt0-scc ${L18N:-1}"
 fi
+# rule19 composes with any primary flag above: the site-fresh-const law -
+# the hoisted-constant spill class (the func_8007736C s6/-1 home; survey
+# docs/CC_POST_RULE_CLASSES.md section 3, window cron-202611070601): gcc
+# 2.6.3 materializes a loop-invariant constant into a callee-saved home
+# (hoisted addiu + sw/lw spill pair + frame one slot taller) where retail
+# materializes it fresh at the compare site into $2 and never saves the
+# home. Marker args: <imm> <reg> - gcc-token verbatim; a bare marker
+# LOUD-FAILS the build.
+if grep -q 'cc-post: site-fresh-const' "$SRC" 2>/dev/null; then
+    R19ARGS=$(grep -o 'cc-post: site-fresh-const.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4}')
+    if [ -n "$R19ARGS" ]; then
+        POSTFLAGS="$POSTFLAGS --site-fresh-const $R19ARGS"
+    else
+        echo "cc.sh: cc-post: site-fresh-const marker present without args (<imm> <reg>)" >&2
+        exit 3
+    fi
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).
