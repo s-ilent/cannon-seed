@@ -92,6 +92,35 @@
  *         it). Next lever order: (iii) the -1 home (a source shape that
  *         pins the -1 materialization to v1), then (ii) the component-loop
  *         size, then (5) last (cosmetic count only if (ii)/(iii) land).
+ *    (5d) PROBE c3 (cron-202611062001, probes/gcc263/func_8007736C_probe_c3.c,
+ *         live judge DIFF 122/186, SIZE 756 vs 744): THE @0xc8 CLASS IS
+ *         CLOSED. Two structural moves: (a) the carried-c component loop -
+ *         one local `c` in v0 carries the char (load A per outer iteration
+ *         feeds the head test; the top NUL check reads the BACK-EDGE value
+ *         with no reload; load B copies; load C is the bottom-test operand;
+ *         load D = the volatile exit re-load; the hop re-enters at the
+ *         MERGED check reusing load A) - kills the old shape's extra
+ *         loop-top load and the hop-target skew; (b) the sep2 lever - the
+ *         bottom test compares against a NON-PINNED local assigned '\\'
+ *         with the "=r"/"0" barrier INSIDE the outer loop body (after the
+ *         head-test branch): the per-iteration opaque def blocks the
+ *         invariant hoist (nested-loop use) -> `ori $v1,$zero,0x5C` at the
+ *         inner preheader per outer iteration + `bne $v0,$v1` = retail
+ *         exact. The old once-before-the-loop barrier does NOT block it.
+ *         NEW findings parked in the c3 header: the -1 home solves in
+ *         isolation via a tail-scoped pinned asm("$2") local (retail's
+ *         addiu $v0,-1 / beq $a0,$v0 exact; a disjoint second $2 pin for
+ *         the walk's anchor compiles and lands both words) BUT the $2 pin
+ *         is function-global and displaces the other v0 scratch pseudos
+ *         (the walk's i slid to s4, DIFF 122 -> 149/152) - a non-pin -1
+ *         shape is still owed. The volatile load D emits a redundant
+ *         `andi $2,$2,0x00ff` at the merge (+1; gcc 2.6.3 volatile reads
+ *         bypass the zero-extend tracking); a plain read gets CSE-eliminated
+ *         (retail's re-load is real); asm volatile("" ::: "memory") kills
+ *         the andi but EATS maspsx delay-slot labels (the '# DEBUG:
+ *         skipped' line) - memory clobbers are a maspsx hazard, banked.
+ *         Remaining: the andi, the -1 home, (ii) the component-loop +2,
+ *         (5) the prologue order, the walk's i-home/off-init positions.
  *    (6) the s2 counter: the cache loop's i must reuse level's s2 (it
  *        does naturally) but built still holds +3 words (189 vs 186)
  *        - re-measure after (5): the residue sits in the loop head
@@ -99,6 +128,15 @@
  *        fresh-v1 placement) and single delay-slot words down the
  *        function (word 50/62/66/74/80/89/93/96/102/108/115, likely
  *        one register-cascade class), then the cache walk 120..188.
+ *        c3 note: the walk's i-home divergence (built s4 vs retail s2,
+ *        with the off-init slid before the searching printf) exists in
+ *        BOTH the unpinned 122 state and the pinned variants - it is a
+ *        separate open class in the walk region, not a $2-pin artifact.
+ *         EXPLICIT-I NOTE: the walk's i was compiling as an IMPLICIT int
+ *         (gnu89) in the staged copy; an explicit function-scope `int i;`
+ *         was added and re-judged - SAME 122/186, i still homes to s4.
+ *         The i-home is allocation-order driven (s2/s4 both free where
+ *         the walk allocates; gcc picked s4), not declaration-driven.
  */
 
 extern int D_800C8028;               /* mount guard: cached state */
@@ -144,33 +182,49 @@ unsigned char *func_8007736C(unsigned char *out, const char *path) {
     level = 0;
     sep = '\\';
     asm("" : "=r" (sep) : "0" (sep));   /* opaque: bottom test re-materializes */
-    while (1) {
-        cur = buf;
-        if (*src == sep) {
-            goto tail;              /* the separator hop: shared tail */
-        }
-        do {
-            if (*(volatile const char *)src == 0) {
+    {
+        /* The carried char (v0): load A feeds the head test, the top NUL
+         * check reuses the back-edge load C (NO reload), the bottom test
+         * compares the carried value, the copy-exit re-loads volatile
+         * (load D), and the separator hop re-enters at the merged NUL
+         * check reusing the head-test load. */
+        unsigned int c;
+        int sep2;
+        while (1) {
+            cur = buf;
+            c = *src;                            /* load A: per outer iteration */
+            if (c == sep) {
+                goto nul_check;                  /* the hop: reuse load A */
+            }
+            sep2 = '\\';                         /* fresh def per outer iteration */
+            asm("" : "=r" (sep2) : "0" (sep2));  /* opaque: blocks the invariant hoist */
+            do {
+                if (c == 0) {
+                    goto final_check;
+                }
+                c = *src;                        /* load B */
+                src++;
+                *cur = c;
+                cur++;
+                c = *src;                        /* load C */
+            } while (c != sep2);
+            c = *(volatile const char *)src;     /* load D: the copy-exit re-load */
+        nul_check:
+            if (c == 0) {
                 goto final_check;
             }
-            *cur = *src;
-            src++;
-            cur++;
-        } while (*(volatile const char *)src != '\\');
-        if (*(volatile const char *)src == 0) {  /* the copy-exit re-load */
-            goto final_check;
-        }
 tail:
-        src++;
-        *cur = 0;
-        id = func_8007796C(id, buf);            /* the a0 chain */
-        if (id == -1) {
-            buf[0] = 0;
-            goto final_check;
-        }
-        level++;
-        if (level >= 8) {
-            break;
+            src++;
+            *cur = 0;
+            id = func_8007796C(id, buf);            /* the a0 chain */
+            if (id == -1) {
+                buf[0] = 0;
+                goto final_check;
+            }
+            level++;
+            if (level >= 8) {
+                break;
+            }
         }
     }
 final_check:
