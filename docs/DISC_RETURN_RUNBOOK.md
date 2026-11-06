@@ -842,6 +842,37 @@ live judges (one staged judge run per twin target) remain the only
 twin work - each is a per-target yaml sed + judge_unit.py run, gated on
 the oracle which is UP as of this window.
 
+THE PER-TWIN H.2 LIVE WAVE (cron-202611061001, oracle UP - the re-provisioned
+witness): the seven d69 twins judged LIVE via per-twin label-adapted drafts
+(probes/gcc263/SsVabOpenHeadWithMode_draft69_<target>.c) - the draft's
+g3org_jp work-area labels are the only twin delta; each twin's 9-label map
+derives positionally from the row streams (the 15-position use order is
+identical across all eight copies):
+
+    g3org_eu    0x493D4  DIFF 4/274  first 0x80068F48 = row+0x374  SAME four words
+    g3_jp       0x4B3C8  DIFF 4/274  first 0x8006AF3C = row+0x374  SAME four words
+    g3_eu       0x4BF80  DIFF 4/274  first 0x8006BAF4 = row+0x374  SAME four words
+    mainmenu_eu 0x61564  DIFF 4/274  first 0x800810D8 = row+0x374  SAME four words
+    sces_00269  0x24990  DIFF 4/274  first 0x80044504 = row+0x374  SAME four words
+    mainmenu_jp 0x609E4  BLOCKED - SpuMalloc unresolved (the banked adoption gap,
+                         sdk-lane; census knows 0x8008062c, the adoptable tag missing)
+    slps_00270  0x24974  BLOCKED - R_MIPS_GPREL16 truncation on D_8011C35C/D_80115070
+                         (the slps layout puts both outside gp reach; retail uses
+                         absolute lui/%hi+%lo for them, the built's small-data
+                         model emits gp-rel)
+
+- The five verdicts are the SAME four word-pairs at the SAME word indices as
+  the worked row's d69 record (the [221] srl-vs-slti at row+0x374 and the
+  div-temp home pair $2-vs-$3) - ZERO per-twin divergence LIVE; the offline
+  transfer proof now carries live confirmations for every judgeable twin.
+- The slps far-label lever (named, next window): the judge prelude's
+  .extern size override - a post-cc1 big-size .extern for the two labels
+  flips the small-data classification to absolute, matching retail, with
+  the C untouched and the other seven labels staying gp-rel as retail.
+  The literal-address macro probe measured NEGATIVE (219+ diffs - the
+  volatile literal kills the gp web and re-lays the whole function).
+- mainmenu_jp unblocks with the sdk-lane adoption only (not grabbed).
+
 ### H.2 - the judge sequence (oracle UP only; one run per draft, in order)
 
 Pre-flight: Phase A witness 8/8 + Phase B verify sweep GREEN (suite 145/145,
