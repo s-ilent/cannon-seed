@@ -248,6 +248,10 @@ RULE17_MERGE = None      # rule 17: merge-polarity invert+trampoline, as
                          # (anchor_label, jdelay_spec) from the marker
                          # (`cc-post: rule17 <$Lerr> jdelay <op> <reg> <imm>`;
                          # see _rule17_on_file)
+LT0_SCC = None           # rule 18: lt0-scc materialization rewrite - the
+                         # expected site count from the marker
+                         # (`cc-post: lt0-scc <count>`); see
+                         # _rule18_lt0_scc
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -730,6 +734,9 @@ _R16_CLOBBERED = frozenset(
 # cron-202611041358; see _rule17_on_file).
 _R17_BEQZ = re.compile(r"^beq\t\$(\w+),\$(0|zero),(\S+)$")
 _R17_BEQZ_SPELL = re.compile(r"^beqz\t\$(\w+),(\S+)$")
+_R18_SRL31 = re.compile(r"^srl\t\$(\w+),\$(\w+),31$")
+_R18_BR = re.compile(r"^(bne|beq)\t\$(\w+),\$(0|zero),(\S+)$")
+_R18_BRZ = re.compile(r"^(bnez|beqz)\t\$(\w+),(\S+)$")
 _R17_JDELAY_OPS = frozenset(("li", "addiu", "addu", "nop"))
 
 
@@ -939,6 +946,77 @@ def _prepass_rule17(lines: list[str]) -> list[str]:
     sys.stderr.write("cc_post rule 17: no merge site (beq $r,$0,%s with a "
                      "filled forward delay) found\n" % anchor)
     sys.exit(3)
+
+
+def _rule18_lt0_scc(lines: list[str]):
+    """Rule 18 (lt0-scc; shipped cron-202611061501). The (x < 0) VALUE
+    materialization: the Sony psyq cc1 emits the scc form
+        slti $d,$s,0
+    where the vanilla gcc 2.6.3 rebuild always takes emit_store_flag's
+    sign-extract special case
+        srl $d,$s,31
+    Proven cron-202611061501 at three levels: (a) the cc1 -da pass dump
+    of the staged unit - the lshiftrt-31 exists already in the .rtl dump
+    (the very first), so the pick happens at expansion (store_flag) and
+    NO pass introduces it; (b) the scc-path control - a materialized
+    (x < 5) emits slt (the scc path exists and fires for nonzero
+    constants) while const-0 never reaches it under any of the 12
+    probed spellings (the special case fires first for op1 == const0);
+    (c) semantics - srl-31 and slti-0 both materialize the sign bit as
+    0/1, identical for every input, so the rewrite is unconditional.
+    Retail anchor: g3org_jp SsVabOpenHeadWithMode row [221] (0x800683D8)
+    = `slti $v0,$v1,0x0` (word 0x28620000) where the built emits
+    `srl $2,$3,31`.
+
+    Site contract: `srl $d,$s,31` whose IMMEDIATE successor tests $d
+    against $0 (bne/beq $d,$0,<label> or bnez/beqz $d,<label>) - the
+    branch test is the value's only use. The div-correction srl-31s
+    (the expand_divmod DIRECT lshiftrt, retail-aligned as-built) are
+    followed by addu and never match.
+
+    Returns (rewritten_lines, count), or None when no site matches (the
+    prepass turns None / a count mismatch into a loud exit 3 - never a
+    silent pass)."""
+    out = list(lines)
+    n = 0
+    for i in range(len(out) - 1):
+        m = _R18_SRL31.match(out[i].strip())
+        if not m:
+            continue
+        dst, src = m.group(1), m.group(2)
+        nxt = out[i + 1].strip()
+        mb = _R18_BR.match(nxt)
+        if mb:
+            if mb.group(2) != dst:
+                continue
+        else:
+            mz = _R18_BRZ.match(nxt)
+            if not mz or mz.group(2) != dst:
+                continue
+        out[i] = "\tslti\t$%s,$%s,0" % (dst, src)
+        n += 1
+    if n == 0:
+        return None
+    return out, n
+
+
+def _prepass_lt0_scc(lines: list[str]) -> list[str]:
+    """Marker rule18 (`cc-post: lt0-scc <count>`): rewrite the (x<0)
+    sign-extract materializations into the retail scc form (see
+    _rule18_lt0_scc); loud failure (exit 3) when no site matches or the
+    rewritten count differs from the marker count - never a silent
+    pass. Only ever fires on marker-carrying units."""
+    res = _rule18_lt0_scc(lines)
+    if res is None:
+        sys.stderr.write("cc_post rule 18: no lt0 site (srl $d,$s,31 "
+                         "followed by a $d-vs-$0 branch) found\n")
+        sys.exit(3)
+    out, n = res
+    if n != LT0_SCC:
+        sys.stderr.write("cc_post rule 18: rewrote %d site(s), marker "
+                         "expects %d\n" % (n, LT0_SCC))
+        sys.exit(3)
+    return out
 
 
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
@@ -1340,6 +1418,7 @@ def main() -> None:
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
+    global LT0_SCC
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1386,6 +1465,25 @@ def main() -> None:
                 % RULE17_MERGE[1][0])
             sys.exit(2)
         del args[k : k + 6]
+    if "--lt0-scc" in args:
+        k = args.index("--lt0-scc")
+        # required payload: the expected site count (cc.sh passes the
+        # marker arg verbatim; a bare flag is a usage error - the rule-17
+        # bare-marker lesson, never a silent default)
+        if len(args) < k + 2:
+            sys.stderr.write("usage: cc_post.py --lt0-scc <count> ...\n")
+            sys.exit(2)
+        try:
+            LT0_SCC = int(args[k + 1])
+        except ValueError:
+            sys.stderr.write("cc_post rule 18: --lt0-scc requires an integer "
+                             "count (usage: cc_post.py --lt0-scc <count> "
+                             "<file.mas.s>); got %s\n" % args[k + 1])
+            sys.exit(2)
+        if LT0_SCC < 1:
+            sys.stderr.write("cc_post rule 18: count must be >= 1\n")
+            sys.exit(2)
+        del args[k : k + 2]
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")
@@ -1466,6 +1564,8 @@ def main() -> None:
         lines = _prepass_rule16(lines)
     if RULE17_MERGE is not None:
         lines = _prepass_rule17(lines)
+    if LT0_SCC is not None:
+        lines = _prepass_lt0_scc(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:

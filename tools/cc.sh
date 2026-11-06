@@ -205,6 +205,18 @@ if grep -q 'cc-post: rule17' "$SRC" 2>/dev/null; then
         exit 3
     fi
 fi
+# rule18 composes with any primary flag above (independent grep): the
+# lt0-scc materialization law - the Sony cc1's emit_store_flag emitted
+# the scc (slti $d,$s,0) for (x < 0) value materializations where the
+# vanilla 2.6.3 rebuild always sign-extracts (srl $d,$s,31); semantics
+# identical (both = the sign bit as 0/1). See cc_post.py
+# _rule18_lt0_scc (SsVabOpenHeadWithMode [221], 2026-11-06). Marker arg:
+# the expected site count (default 1 at the marker site); a count
+# mismatch loud-fails the build.
+if grep -q 'cc-post: lt0-scc' "$SRC" 2>/dev/null; then
+    L18N=$(grep -o 'cc-post: lt0-scc.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
+    POSTFLAGS="$POSTFLAGS --lt0-scc ${L18N:-1}"
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).
