@@ -33,7 +33,7 @@ glabel func_8006BF24
     /* 4C774 8006BF74 2400B5AF */  sw         $s5, 0x24($sp)
     /* 4C778 8006BF78 21A80001 */  addu       $s5, $t0, $zero
     /* 4C77C 8006BF7C 2800BFAF */  sw         $ra, 0x28($sp)
-    /* 4C780 8006BF80 D0A5010C */  jal        func_80069740
+    /* 4C780 8006BF80 D0A5010C */  jal        SsUtGetVagAtr
     /* 4C784 8006BF84 1C00B3AF */   sw        $s3, 0x1C($sp)
     /* 4C788 8006BF88 21980002 */  addu       $s3, $s0, $zero
     /* 4C78C 8006BF8C 00841000 */  sll        $s0, $s0, 16

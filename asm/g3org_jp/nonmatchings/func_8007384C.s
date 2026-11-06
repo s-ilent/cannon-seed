@@ -12,16 +12,16 @@ nonmatching SsUtGetVabHdr, 0xE4
 glabel SsUtGetVabHdr
     /* 492EC 80068AEC 00240400 */  sll        $a0, $a0, 16
     /* 492F0 80068AF0 03240400 */  sra        $a0, $a0, 16
-    /* 492F4 80068AF4 1880013C */  lui        $at, %hi(D_8017E038)
-    /* 492F8 80068AF8 38E02124 */  addiu      $at, $at, %lo(D_8017E038)
+    /* 492F4 80068AF4 1880013C */  lui        $at, %hi(_svm_vab_used)
+    /* 492F8 80068AF8 38E02124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 492FC 80068AFC 21082400 */  addu       $at, $at, $a0
     /* 49300 80068B00 00002390 */  lbu        $v1, 0x0($at)
     /* 49304 80068B04 01000234 */  ori        $v0, $zero, 0x1
     /* 49308 80068B08 2F006214 */  bne        $v1, $v0, .L80068BC8
     /* 4930C 80068B0C FFFF0224 */   addiu     $v0, $zero, -0x1
     /* 49310 80068B10 80100400 */  sll        $v0, $a0, 2
-    /* 49314 80068B14 1880013C */  lui        $at, %hi(D_8017876C)
-    /* 49318 80068B18 6C872124 */  addiu      $at, $at, %lo(D_8017876C)
+    /* 49314 80068B14 1880013C */  lui        $at, %hi(_svm_vab_vh)
+    /* 49318 80068B18 6C872124 */  addiu      $at, $at, %lo(_svm_vab_vh)
     /* 4931C 80068B1C 21082200 */  addu       $at, $at, $v0
     /* 49320 80068B20 0000238C */  lw         $v1, 0x0($at)
     /* 49324 80068B24 00000000 */  nop

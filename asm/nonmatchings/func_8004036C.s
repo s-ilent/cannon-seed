@@ -49,13 +49,13 @@ glabel func_8004036C
     /* 20BF4 800403F4 1800422C */  sltiu      $v0, $v0, 0x18
     /* 20BF8 800403F8 F8FF4014 */  bnez       $v0, .L800403DC
     /* 20BFC 800403FC FFFFA230 */   andi      $v0, $a1, 0xFFFF
-    /* 20C00 80040400 1280013C */  lui        $at, %hi(D_8011C35C)
-    /* 20C04 80040404 5CC320A4 */  sh         $zero, %lo(D_8011C35C)($at)
+    /* 20C00 80040400 1280013C */  lui        $at, %hi(_svm_vab_count)
+    /* 20C04 80040404 5CC320A4 */  sh         $zero, %lo(_svm_vab_count)($at)
     /* 20C08 80040408 21280000 */  addu       $a1, $zero, $zero
     /* 20C0C 8004040C FFFFA230 */  andi       $v0, $a1, 0xFFFF
   .L80040410:
-    /* 20C10 80040410 1280013C */  lui        $at, %hi(D_8011A894)
-    /* 20C14 80040414 94A82124 */  addiu      $at, $at, %lo(D_8011A894)
+    /* 20C10 80040410 1280013C */  lui        $at, %hi(_svm_vab_used)
+    /* 20C14 80040414 94A82124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 20C18 80040418 21082200 */  addu       $at, $at, $v0
     /* 20C1C 8004041C 000020A0 */  sb         $zero, 0x0($at)
     /* 20C20 80040420 0100A524 */  addiu      $a1, $a1, 0x1
@@ -266,8 +266,8 @@ glabel func_8004036C
     /* 20F3C 8004073C 2CA920A0 */  sb         $zero, %lo(D_8011A92C)($at)
     /* 20F40 80040740 1180013C */  lui        $at, %hi(_svm_stereo_mono)
     /* 20F44 80040744 F84F20A4 */  sh         $zero, %lo(_svm_stereo_mono)($at)
-    /* 20F48 80040748 1180013C */  lui        $at, %hi(D_80115070)
-    /* 20F4C 8004074C 705022A4 */  sh         $v0, %lo(D_80115070)($at)
+    /* 20F48 80040748 1180013C */  lui        $at, %hi(kMaxPrograms)
+    /* 20F4C 8004074C 705022A4 */  sh         $v0, %lo(kMaxPrograms)($at)
     /* 20F50 80040750 1003010C */  jal        SsSeqCalledTbyT_init
     /* 20F54 80040754 00000000 */   nop
     /* 20F58 80040758 1400BF8F */  lw         $ra, 0x14($sp)

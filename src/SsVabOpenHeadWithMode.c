@@ -1095,15 +1095,15 @@
  * micro-lever (the a2-chain pair of the -2 stays judge-gated per H.4).
  */
 
-extern unsigned char D_8017E038[];
-extern unsigned short D_8017FB20;
-extern short D_80178894;
-extern unsigned long D_80178704[];
-extern unsigned long D_8017876C[];
-extern unsigned long D_801787B0[];
-extern unsigned long D_8017FAE0[];
-extern unsigned long D_8017FB6C[];
-extern unsigned long D_8017FB24[];
+extern unsigned char _svm_vab_used[];
+extern unsigned short _svm_vab_count;
+extern short kMaxPrograms;
+extern unsigned long _svm_vab_pg[];
+extern unsigned long _svm_vab_vh[];
+extern unsigned long _svm_vab_tn[];
+extern unsigned long _svm_vab_total[];
+extern unsigned long _svm_brr_start_addr[];
+extern unsigned long _svm_vab_start[];
 extern long _spu_getInTransfer(void);
 extern void _spu_setInTransfer(long mode);
 extern long SpuMalloc(long size);
@@ -1174,24 +1174,24 @@ trans_ok:
     }
     if (vb == -1) {
         for (k = 0; k < 0x10; k++) {
-            if (D_8017E038[k] == 0) {
-                D_8017E038[k] = 1;
-                fb = D_8017FB20;                 /* the fb-SPLIT increment (draft15): each alloc path LOADS D_8017FB20 into a temp and the ADD+STORE live at the inc_join label - retail's exact share (per-path lui/lhu, one addiu/lui/sh at the join). A full statement per path duplicates everything (draft14 NEGATIVE); one shared statement merges the loads too (draft13 NEGATIVE). */
+            if (_svm_vab_used[k] == 0) {
+                _svm_vab_used[k] = 1;
+                fb = _svm_vab_count;                 /* the fb-SPLIT increment (draft15): each alloc path LOADS D_8017FB20 into a temp and the ADD+STORE live at the inc_join label - retail's exact share (per-path lui/lhu, one addiu/lui/sh at the join). A full statement per path duplicates everything (draft14 NEGATIVE); one shared statement merges the loads too (draft13 NEGATIVE). */
                 slot = k;
                 goto inc_join;
             }
         }
         goto alloc_check;
     } else {
-        if (D_8017E038[vb] != 0) {
+        if (_svm_vab_used[vb] != 0) {
             goto alloc_check;
         }
-        D_8017E038[vb] = 1;
-        fb = D_8017FB20;
+        _svm_vab_used[vb] = 1;
+        fb = _svm_vab_count;
         slot = vabid_s1;
     }
 inc_join:
-    D_8017FB20 = fb + 1;
+    _svm_vab_count = fb + 1;
 alloc_check:
     hv6 = vh;                                        /* the A2-CHAIN COPY (draft65 v5): retail [76] addu $a2,$s3,$zero rides the ALLOC-VERDICT bnez DELAY - PLAIN form because gcc's dbr refuses asm insns as delay fills (the v4 NOP lesson) while plain copies fill (the v1 magic-beq evidence, the d33 k=0 law); propagation risk known from v1 (the store read the source's home) - measured here to see if the single-copy (no hv-chain) form escapes it the way the draft30 m2 pin did */
     if (slot < 0x10) {
@@ -1199,7 +1199,7 @@ alloc_check:
     }
     goto err;                                        /* NO HEAD FORCE HERE (draft53): the alloc verdict is rule17's anchor (the cc-post trampoline inserts the entry's a0=0) - a source assignment between the verdict and the goto dissolves the beq-far pattern and rule17 exits 3 */
 alloc_ok:
-    D_8017876C[slot] = (unsigned long)hv6;           /* the store reads the A2 home (draft65): retail [83] sw $a2,0($at) - was hv ($4), the d64 scatter's root cause; hv6 is opaque so the operand must be $6 */
+    _svm_vab_vh[slot] = (unsigned long)hv6;           /* the store reads the A2 home (draft65): retail [83] sw $a2,0($at) - was hv ($4), the d64 scatter's root cause; hv6 is opaque so the operand must be $6 */
     __asm__ ("lui %0,0x56" : "=r"(magic_hi));           /* the LUI HALF, OPAQUE (draft66 v2): retail [84] lui $v1,0x56 - the plain assignment magic_hi = 0x560000 got CONSTANT-FOLDED with the ori half back into one 0x564142 materialization (gcc sees both halves at compile time); the asm template is opaque so the fold is impossible and the lui sits at its statement position between the store block and the a0 copy */
     __asm__ ("addu %0,%1,$zero" : "=r"(hv) : "r"(vh));   /* the A0 COPY (draft65 v3): retail [85] addu $a0,$s3,$zero straight-line between the store and the w0 load; the template form forces the $4 materialization and every hv use reads $4 (retail [86] lw $a1,0($a0)) */
     w0 = *(unsigned long *)hv;
@@ -1207,7 +1207,7 @@ alloc_ok:
     w0hi = w0 >> 8;                                  /* the magic-check temp rides $2 (draft29) - retail srl v0,a1,8 */
     base6 = hv6 + 0x20;                              /* the base CHAIN def, RAISED (draft65 v2): reads the COPY ($6 = a2), retail [90] addiu $a2,$a2,0x20 rides the MAGIC BEQ delay - placed above the check so the dbr's back-walk finds it past the needed srl/ori (the v1 m_store position landed straight-line) */
     if (w0hi != magic) {                             /* the compare reads the LOCAL (draft65 v6) - the d28 constant-through-a-variable law */
-        D_8017E038[slot] = 0;
+        _svm_vab_used[slot] = 0;
         hv = 0;                                      /* THE HEAD FORCE (draft53): rides the goto's delay (retail magic-fail entry) */
         goto err;
     }
@@ -1225,20 +1225,20 @@ alloc_ok:
 m40:
     shifted = 0x40;                                  /* the merged fail def (1 insn) - reorg duplicates it into BOTH branch delays and retargets (retail's double ori v0,0x40) */
 m_store:
-    D_80178894 = shifted;                            /* retail sh v0,D_80178894($at) - the def-side m web is GONE */
+    kMaxPrograms = shifted;                            /* retail sh v0,D_80178894($at) - the def-side m web is GONE */
     __asm__ __volatile__ ("" ::: "memory");          /* the m RELOAD barrier: retail re-reads D_80178894 with a sign-extending lh (lui v1/lh v1/nop/slt); gcc 2.6.3 store-forwards the plain read and the volatile read-back came out lhu+manual-extend - the empty asm memory clobber kills the forwarding and emits nothing */
     shifted = *(unsigned short *)(hv + 0x12);        /* the m-check nprogs read rides the $2 pin's second web (draft24): retail's load dst IS v0 here too (the 1128 banked "nprogs v1 (retail v0)"); the plain local is gone */
-    m = D_80178894;                                  /* the m RE-HOME (draft28): m's later uses ride the m-check RELOAD in retail (v1 feeds slt AND sll v0,v1,4 AND blez v1) - CSE-merged with the compare's read, ONE load */
+    m = kMaxPrograms;                                  /* the m RE-HOME (draft28): m's later uses ride the m-check RELOAD in retail (v1 feeds slt AND sll v0,v1,4 AND blez v1) - CSE-merged with the compare's read, ONE load */
     base = base6;                                    /* the s3 := a2 DELAY COPY, RAISED (draft65 v3): retail rides the m-check bne's delay slot (00C09821 @0x80068230) - above the if so the dbr's back-walk (the d33 law) fills the delay with it; the v2 below-the-if position lost the slot to a DUPLICATED sll16 (the barrier blocked the move, the dbr copied); semantically safe - pure reg copy, both fail paths never read base */
     if (m < shifted) {
         register long slot_x asm("$2");              /* the split-temp PINNED (draft25), C89 DECL-ONLY (gcc 2.6.3 rejects mixed decls - the d66 first try parse-error'd): emits nothing, the extend moves to the assignment BELOW the head force */
         hv = 0;                                      /* THE HEAD FORCE FIRST (draft66): retail's shared fail entry @0x80068378 = [a0:=0][sll16][sra16][clear] - the force is the ENTRY HEAD, before the extend; the d65 order (init-decl first) emitted the extend pair ahead of it */
         slot_x = slot;                               /* the SHORT EXTEND at the assignment (draft66): sll $2,$18,16 / sra $2,$2,16 = retail [198]/[199] - both fail tails stay IDENTICAL $2-temp-form sequences for the tail-merge (the d25 law) */
-        D_8017E038[slot_x] = 0;
+        _svm_vab_used[slot_x] = 0;
         goto err;
     }
     __asm__ __volatile__ ("" ::: "memory");          /* the SLL16 FLOAT BLOCKER (draft65 v2, kept): the slot4 extend's sll half floated up and stole the m-check delay in d62/d64; the barrier pins it below the branch - emits nothing */
-    D_80178704[slot] = (unsigned long)base6;
+    _svm_vab_pg[slot] = (unsigned long)base6;
     tpose = m * 0x10;                                /* the offset rides the $2 pin (draft32) - retail sll v0,v1,4 */
     tp = (unsigned long)base + tpose;                /* retail addu a2,s3,v0 (the s3 home = the a2-chain, judge-gated) */
     k = 0;
@@ -1261,7 +1261,7 @@ m_store:
     ap = (long)arr;                                  /* the AP REORDER (draft34): retail's post-exit order is total=0 (0x8006828C) THEN ap (addiu a1,sp,0x10 at 0x80068290) THEN the 787B0 store prep (sll16/sra14/lui/addiu/addu/sw at 0x80068294..AC) - the d33 form had ap after the reads+tp+= (line ~927) and gcc floated total=0 late into the backfill pre-entry; the word itself is already retail-exact (0x27A50010 via the gas addu- imm law), only its POSITION is wrong */
     slot4 = (long)slot << 16 >> 14;                  /* the 787B0 SPLIT-TEMP EXTEND (draft37): the store's index scale as its own pinned statement - retail schedules it BEFORE the bound def (sll v0,s2,16 / sra v0,v0,14 at 0x80068294/98) */
     bound = ap + 1024;                               /* the t0 bound (draft23 lever c) + the BOUND REMAT ORDER (draft37): retail materializes the loop bound ONCE at 0x8006829C - BETWEEN the extend pair and the 787B0 lui; with the extend split out (source-prev) this def's list position lands it exactly there */
-    *(unsigned long *)((char *)D_801787B0 + slot4) = tp;   /* the 787B0 store reads the split temp back through the pin (sw $6,D_801787B0($2)) */
+    *(unsigned long *)((char *)_svm_vab_tn + slot4) = tp;   /* the 787B0 store reads the split temp back through the pin (sw $6,D_801787B0($2)) */
     shifted = *(unsigned short *)(hv + 0x12);        /* the pre-loop nprogs read rides the $2 pin's third disjoint web (draft23 lever a): retail's load dst IS v0 (lhu v0,0x12(a0)); the built rode $3 through the plain local */
     nv = *(unsigned char *)(hv + 0x16);
     tp += shifted << 9;
@@ -1278,14 +1278,14 @@ m_store:
         tp += 2;
         ap += 4;
     } while (ap < bound);
-    D_8017FB6C[slot] = tp;
+    _svm_brr_start_addr[slot] = tp;
     shifted = mode << 16;                         /* the mode SLL16 via the split-temp law (draft17): the $2 pin forces the extend into the TEMP (retail sll v0,s5,16 / bnez v0) instead of in-place on s5; a plain long test has no extend */
     if (shifted != 0) {
         spu = addr;
     } else {
         spu = SpuMalloc(total);
         if (spu == -1) {
-            D_8017E038[slot] = 0;
+            _svm_vab_used[slot] = 0;
             hv = 0;                                      /* THE HEAD FORCE (draft53): the malloc-fail entry's a0=0 (retail entries' delays) */
             goto err;
         }
@@ -1296,17 +1296,17 @@ m_store:
         register long slot_x asm("$2");              /* the split-temp PINNED (draft25), C89 DECL-ONLY (the d66 mixed-decl parse error) - the extend rides the assignment below */
         hv = 0;                                      /* THE HEAD FORCE FIRST (draft66): same reorder as the m-check site - the merged tail's entry = a0:=0 before the extend */
         slot_x = slot;                               /* the extend at the assignment (draft66) = retail's order */
-        D_8017E038[slot_x] = 0;
+        _svm_vab_used[slot_x] = 0;
         goto err;
     }
     if (0) {
     err:
         _spu_setInTransfer((long)hv);                /* THE HEAD FORCE (draft53): the tail reads the $4 pin - the a0=0 lives at the entries/heads, the jal delay is nop (retail @0x0334) */
-        fbtmp = D_8017FB20;                          /* the RMW temp on $3 (draft66 v3): retail [206..209] lui $3/lhu $3/addiu $3,-1/sh $3 */
-        D_8017FB20 = fbtmp - 1;
+        fbtmp = _svm_vab_count;                          /* the RMW temp on $3 (draft66 v3): retail [206..209] lui $3/lhu $3/addiu $3,-1/sh $3 */
+        _svm_vab_count = fbtmp - 1;
         return -1;
     }
-    D_8017FB24[slot] = spu;
+    _svm_vab_start[slot] = spu;
     n = nv & 0xFF;
     n_neg = (n < 0);
     i = 0;                                           /* the I=0 PRE-BRANCH RAISE (draft65 v6): retail's i=0 = addu $a1,$zero,$zero rides the n-check bnez DELAY - above the branch it is the nearest preceding independent set and the dbr's from-above fill moves it into the delay (the d33 law). NOTE (d66 v5 negative): moving it ABOVE n_neg did NOT flip the (n<0) materialization back to slti - still srl $2,$3,31; the d66-v2 trigger for the srl form is elsewhere (the $3-web pressure from the mask/magic pins is the suspect) */
@@ -1325,8 +1325,8 @@ m_store:
             ap2 += 4;
         } while (n2 >= i);
     }
-    D_8017FAE0[slot] = total;
-    D_8017E038[slot] = 2;
+    _svm_vab_total[slot] = total;
+    _svm_vab_used[slot] = 2;
     return slot;
     if (0) {
         (void)&frame_pad;                            /* dead: marks the decl address-taken at parse time only */

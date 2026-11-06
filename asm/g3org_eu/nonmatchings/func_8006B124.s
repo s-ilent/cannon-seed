@@ -59,7 +59,7 @@ glabel func_8006B124
     /* 4B9D8 8006B1D8 21300002 */  addu       $a2, $s0, $zero
     /* 4B9DC 8006B1DC 4C004486 */  lh         $a0, 0x4C($s2)
     /* 4B9E0 8006B1E0 2C008592 */  lbu        $a1, 0x2C($s4)
-    /* 4B9E4 8006B1E4 D0A5010C */  jal        func_80069740
+    /* 4B9E4 8006B1E4 D0A5010C */  jal        SsUtGetVagAtr
     /* 4B9E8 8006B1E8 21386002 */   addu      $a3, $s3, $zero
     /* 4B9EC 8006B1EC 21300002 */  addu       $a2, $s0, $zero
     /* 4B9F0 8006B1F0 2800B7A3 */  sb         $s7, 0x28($sp)

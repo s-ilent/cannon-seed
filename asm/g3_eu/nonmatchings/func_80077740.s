@@ -18,8 +18,8 @@ glabel SsVabFakeBody
     /* 4C9A4 8006C1A4 1000B0AF */   sw        $s0, 0x10($sp)
     /* 4C9A8 8006C1A8 00140400 */  sll        $v0, $a0, 16
     /* 4C9AC 8006C1AC 03840200 */  sra        $s0, $v0, 16
-    /* 4C9B0 8006C1B0 1780013C */  lui        $at, %hi(D_801704A8)
-    /* 4C9B4 8006C1B4 A8042124 */  addiu      $at, $at, %lo(D_801704A8)
+    /* 4C9B0 8006C1B0 1780013C */  lui        $at, %hi(_svm_vab_used)
+    /* 4C9B4 8006C1B4 A8042124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 4C9B8 8006C1B8 21083000 */  addu       $at, $at, $s0
     /* 4C9BC 8006C1BC 00002390 */  lbu        $v1, 0x0($at)
     /* 4C9C0 8006C1C0 02000234 */  ori        $v0, $zero, 0x2
@@ -28,8 +28,8 @@ glabel SsVabFakeBody
     /* 4C9CC 8006C1CC AD95010C */  jal        _spu_setInTransfer
     /* 4C9D0 8006C1D0 21200000 */   addu      $a0, $zero, $zero
     /* 4C9D4 8006C1D4 01000234 */  ori        $v0, $zero, 0x1
-    /* 4C9D8 8006C1D8 1780013C */  lui        $at, %hi(D_801704A8)
-    /* 4C9DC 8006C1DC A8042124 */  addiu      $at, $at, %lo(D_801704A8)
+    /* 4C9D8 8006C1D8 1780013C */  lui        $at, %hi(_svm_vab_used)
+    /* 4C9DC 8006C1DC A8042124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 4C9E0 8006C1E0 21083000 */  addu       $at, $at, $s0
     /* 4C9E4 8006C1E4 000022A0 */  sb         $v0, 0x0($at)
     /* 4C9E8 8006C1E8 7DB00108 */  j          .L8006C1F4

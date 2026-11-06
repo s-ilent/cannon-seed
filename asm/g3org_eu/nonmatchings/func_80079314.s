@@ -16,8 +16,8 @@ glabel SsUtGetProgAtr
     /* 4E1E0 8006D9E0 03240400 */  sra        $a0, $a0, 16
     /* 4E1E4 8006D9E4 1800BFAF */  sw         $ra, 0x18($sp)
     /* 4E1E8 8006D9E8 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 4E1EC 8006D9EC 1880013C */  lui        $at, %hi(D_8017E120)
-    /* 4E1F0 8006D9F0 20E12124 */  addiu      $at, $at, %lo(D_8017E120)
+    /* 4E1EC 8006D9EC 1880013C */  lui        $at, %hi(_svm_vab_used)
+    /* 4E1F0 8006D9F0 20E12124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 4E1F4 8006D9F4 21082400 */  addu       $at, $at, $a0
     /* 4E1F8 8006D9F8 00002390 */  lbu        $v1, 0x0($at)
     /* 4E1FC 8006D9FC 01000234 */  ori        $v0, $zero, 0x1

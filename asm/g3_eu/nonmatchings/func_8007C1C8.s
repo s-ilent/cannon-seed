@@ -17,8 +17,8 @@ glabel SsUtSetVagAtr
     /* 50AA8 800702A8 00240400 */  sll        $a0, $a0, 16
     /* 50AAC 800702AC 03240400 */  sra        $a0, $a0, 16
     /* 50AB0 800702B0 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 50AB4 800702B4 1780013C */  lui        $at, %hi(D_801704A8)
-    /* 50AB8 800702B8 A8042124 */  addiu      $at, $at, %lo(D_801704A8)
+    /* 50AB4 800702B4 1780013C */  lui        $at, %hi(_svm_vab_used)
+    /* 50AB8 800702B8 A8042124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 50ABC 800702BC 21082400 */  addu       $at, $at, $a0
     /* 50AC0 800702C0 00002390 */  lbu        $v1, 0x0($at)
     /* 50AC4 800702C4 01000234 */  ori        $v0, $zero, 0x1

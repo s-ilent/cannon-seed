@@ -16,8 +16,8 @@ glabel func_80048F90
     /* 2979C 80048F9C 03240400 */  sra        $a0, $a0, 16
     /* 297A0 80048FA0 1800BFAF */  sw         $ra, 0x18($sp)
     /* 297A4 80048FA4 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 297A8 80048FA8 1280013C */  lui        $at, %hi(D_80119E10)
-    /* 297AC 80048FAC 109E2124 */  addiu      $at, $at, %lo(D_80119E10)
+    /* 297A8 80048FA8 1280013C */  lui        $at, %hi(_svm_vab_used)
+    /* 297AC 80048FAC 109E2124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 297B0 80048FB0 21082400 */  addu       $at, $at, $a0
     /* 297B4 80048FB4 00002390 */  lbu        $v1, 0x0($at)
     /* 297B8 80048FB8 01000234 */  ori        $v0, $zero, 0x1

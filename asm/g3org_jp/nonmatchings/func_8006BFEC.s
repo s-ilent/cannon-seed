@@ -25,8 +25,8 @@ glabel SsVabTransBodyPartly
     /* 42A2C 8006222C 1000B0AF */   sw        $s0, 0x10($sp)
     /* 42A30 80062230 00140600 */  sll        $v0, $a2, 16
     /* 42A34 80062234 038C0200 */  sra        $s1, $v0, 16
-    /* 42A38 80062238 1880013C */  lui        $at, %hi(D_8017E038)
-    /* 42A3C 8006223C 38E02124 */  addiu      $at, $at, %lo(D_8017E038)
+    /* 42A38 80062238 1880013C */  lui        $at, %hi(_svm_vab_used)
+    /* 42A3C 8006223C 38E02124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 42A40 80062240 21083100 */  addu       $at, $at, $s1
     /* 42A44 80062244 00002390 */  lbu        $v1, 0x0($at)
     /* 42A48 80062248 02000234 */  ori        $v0, $zero, 0x2
@@ -37,8 +37,8 @@ glabel SsVabTransBodyPartly
     /* 42A5C 8006225C 00000000 */  nop
     /* 42A60 80062260 11004014 */  bnez       $v0, .L800622A8
     /* 42A64 80062264 80801100 */   sll       $s0, $s1, 2
-    /* 42A68 80062268 1880013C */  lui        $at, %hi(D_8017FAE0)
-    /* 42A6C 8006226C E0FA2124 */  addiu      $at, $at, %lo(D_8017FAE0)
+    /* 42A68 80062268 1880013C */  lui        $at, %hi(_svm_vab_total)
+    /* 42A6C 8006226C E0FA2124 */  addiu      $at, $at, %lo(_svm_vab_total)
     /* 42A70 80062270 21083000 */  addu       $at, $at, $s0
     /* 42A74 80062274 0000228C */  lw         $v0, 0x0($at)
     /* 42A78 80062278 0B80013C */  lui        $at, %hi(D_800B7D88)
@@ -47,8 +47,8 @@ glabel SsVabTransBodyPartly
     /* 42A84 80062284 847D22AC */  sw         $v0, %lo(D_800B7D84)($at)
     /* 42A88 80062288 DB88010C */  jal        SpuSetTransferMode
     /* 42A8C 8006228C 21200000 */   addu      $a0, $zero, $zero
-    /* 42A90 80062290 1880013C */  lui        $at, %hi(D_8017FB24)
-    /* 42A94 80062294 24FB2124 */  addiu      $at, $at, %lo(D_8017FB24)
+    /* 42A90 80062290 1880013C */  lui        $at, %hi(_svm_vab_start)
+    /* 42A94 80062294 24FB2124 */  addiu      $at, $at, %lo(_svm_vab_start)
     /* 42A98 80062298 21083000 */  addu       $at, $at, $s0
     /* 42A9C 8006229C 0000248C */  lw         $a0, 0x0($at)
     /* 42AA0 800622A0 E888010C */  jal        SpuSetTransferStartAddr
@@ -93,8 +93,8 @@ glabel SsVabTransBodyPartly
     /* 42B2C 8006232C 01000334 */  ori        $v1, $zero, 0x1
     /* 42B30 80062330 0B80013C */  lui        $at, %hi(D_800B7D84)
     /* 42B34 80062334 847D20AC */  sw         $zero, %lo(D_800B7D84)($at)
-    /* 42B38 80062338 1880013C */  lui        $at, %hi(D_8017E038)
-    /* 42B3C 8006233C 38E02124 */  addiu      $at, $at, %lo(D_8017E038)
+    /* 42B38 80062338 1880013C */  lui        $at, %hi(_svm_vab_used)
+    /* 42B3C 8006233C 38E02124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 42B40 80062340 21082200 */  addu       $at, $at, $v0
     /* 42B44 80062344 000023A0 */  sb         $v1, 0x0($at)
   .L80062348:

@@ -2638,7 +2638,7 @@ glabel func_8002A9B8
     /* B1C0 8002A9C0 032C0500 */  sra        $a1, $a1, 16
     /* B1C4 8002A9C4 21300000 */  addu       $a2, $zero, $zero
     /* B1C8 8002A9C8 40390500 */  sll        $a3, $a1, 5
-    /* B1CC 8002A9CC D0A5010C */  jal        func_80069740
+    /* B1CC 8002A9CC D0A5010C */  jal        SsUtGetVagAtr
     /* B1D0 8002A9D0 2138F200 */   addu      $a3, $a3, $s2
     /* B1D4 8002A9D4 01000226 */  addiu      $v0, $s0, 0x1
     /* B1D8 8002A9D8 21804000 */  addu       $s0, $v0, $zero
@@ -2741,7 +2741,7 @@ glabel func_8002AB10
     /* B320 8002AB20 40110500 */  sll        $v0, $a1, 5
     /* B324 8002AB24 0E80073C */  lui        $a3, %hi(D_800DE44C)
     /* B328 8002AB28 4CE4E724 */  addiu      $a3, $a3, %lo(D_800DE44C)
-    /* B32C 8002AB2C D0A5010C */  jal        func_80069740
+    /* B32C 8002AB2C D0A5010C */  jal        SsUtGetVagAtr
     /* B330 8002AB30 21384700 */   addu      $a3, $v0, $a3
     /* B334 8002AB34 00140200 */  sll        $v0, $v0, 16
     /* B338 8002AB38 03140200 */  sra        $v0, $v0, 16

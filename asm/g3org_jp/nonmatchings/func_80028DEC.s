@@ -2609,7 +2609,7 @@ glabel func_8002A9AC
     /* B1AC 8002A9AC C618010C */  jal        free
     /* B1B0 8002A9B0 2120E000 */   addu      $a0, $a3, $zero
     /* B1B4 8002A9B4 04002436 */  ori        $a0, $s1, 0x4
-    /* B1B8 8002A9B8 F29F010C */  jal        func_80067FC8
+    /* B1B8 8002A9B8 F29F010C */  jal        SsVabOpenHead
     /* B1BC 8002A9BC FFFF0524 */   addiu     $a1, $zero, -0x1
     /* B1C0 8002A9C0 0780043C */  lui        $a0, %hi(D_80074A18)
     /* B1C4 8002A9C4 184A8424 */  addiu      $a0, $a0, %lo(D_80074A18)
@@ -2713,7 +2713,7 @@ glabel func_8002AAD4
     /* B310 8002AB10 0280063C */  lui        $a2, %hi(D_8001EC24)
     /* B314 8002AB14 24ECC68C */  lw         $a2, %lo(D_8001EC24)($a2)
     /* B318 8002AB18 0180043C */  lui        $a0, (0x80016604 >> 16)
-    /* B31C 8002AB1C 0CA0010C */  jal        func_80068030
+    /* B31C 8002AB1C 0CA0010C */  jal        SsVabFakeHead
     /* B320 8002AB20 04668434 */   ori       $a0, $a0, (0x80016604 & 0xFFFF)
     /* B324 8002AB24 0000248E */  lw         $a0, 0x0($s1)
     /* B328 8002AB28 9DA2010C */  jal        SsVabFakeBody

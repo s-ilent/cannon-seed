@@ -990,8 +990,8 @@ glabel func_80064B54
     /* 4536C 80064B6C 1800422C */  sltiu      $v0, $v0, 0x18
     /* 45370 80064B70 F8FF4014 */  bnez       $v0, func_80064B54
     /* 45374 80064B74 FFFFA230 */   andi      $v0, $a1, 0xFFFF
-    /* 45378 80064B78 1880013C */  lui        $at, %hi(D_80180404)
-    /* 4537C 80064B7C 040420A4 */  sh         $zero, %lo(D_80180404)($at)
+    /* 45378 80064B78 1880013C */  lui        $at, %hi(_svm_vab_count)
+    /* 4537C 80064B7C 040420A4 */  sh         $zero, %lo(_svm_vab_count)($at)
     /* 45380 80064B80 21280000 */  addu       $a1, $zero, $zero
     /* 45384 80064B84 FFFFA230 */  andi       $v0, $a1, 0xFFFF
 endlabel func_80064B54
@@ -999,8 +999,8 @@ endlabel func_80064B54
 nonmatching func_80064B88, 0x44
 
 glabel func_80064B88
-    /* 45388 80064B88 1880013C */  lui        $at, %hi(D_8017E120)
-    /* 4538C 80064B8C 20E12124 */  addiu      $at, $at, %lo(D_8017E120)
+    /* 45388 80064B88 1880013C */  lui        $at, %hi(_svm_vab_used)
+    /* 4538C 80064B8C 20E12124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 45390 80064B90 21082200 */  addu       $at, $at, $v0
     /* 45394 80064B94 000020A0 */  sb         $zero, 0x0($at)
     /* 45398 80064B98 0100A524 */  addiu      $a1, $a1, 0x1
@@ -1249,8 +1249,8 @@ glabel func_80064E98
     /* 456EC 80064EEC F4E120A0 */  sb         $zero, %lo(D_8017E1F4)($at)
     /* 456F0 80064EF0 1880013C */  lui        $at, %hi(_svm_stereo_mono)
     /* 456F4 80064EF4 088920A4 */  sh         $zero, %lo(_svm_stereo_mono)($at)
-    /* 456F8 80064EF8 1880013C */  lui        $at, %hi(D_80178980)
-    /* 456FC 80064EFC 808922A4 */  sh         $v0, %lo(D_80178980)($at)
+    /* 456F8 80064EF8 1880013C */  lui        $at, %hi(kMaxPrograms)
+    /* 456FC 80064EFC 808922A4 */  sh         $v0, %lo(kMaxPrograms)($at)
     /* 45700 80064F00 0495010C */  jal        SsSeqCalledTbyT_init
     /* 45704 80064F04 00000000 */   nop
     /* 45708 80064F08 1400BF8F */  lw         $ra, 0x14($sp)

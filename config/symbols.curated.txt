@@ -601,6 +601,120 @@ _snd_seq_no_tick = 0x800aba54; // LIBSND SSINIT static (SS_NOTICK flag); evidenc
 // universe fix). Entries INERT until the witnessed window (the
 // yaml row + listing label renames compose there).
 memcpy_iso9660 = 0x80063330; // LIBCD ISO9660 member (the 0x34 13-insn byte-copy leaf; sdk_members.py unique placement); evidence under target: g3_eu
+// ---- LIBSND VAB-open curation pass, window cron-202611061846 (oracle UP
+// disc-free via the hash-proven witness restore; the seven SsVabOpenHeadWithMode
+// twins landed cron-202611061501 carrying 9 distinct D_ tokens each - 63
+// entries here, INERT until each target's next scan) ----
+// Evidence: the psyq 3.3 LIBSND.LIB member VS_VH (srcfile
+// E:\PS-X~~00\SRC\SND\VM\VS_VH.C) exports SsVabOpenHead (text+0x0, 0x34),
+// SsVabOpenHeadSticky (+0x34) and SsVabFakeHead (+0x68) and carries
+// SsVabOpenHeadWithMode as a LOCAL at text+0x9c; member .text = 0x4e4, so the
+// local's body is 0x448 = the landed row extent exactly. Its relocation stream
+// binds nine data externs to body offsets, hi16/lo16 site by site (member
+// offsets minus 0x9c = row offsets):
+//   text+0x120/124 _svm_vab_used       -> row+0x84/0x88
+//   text+0x164/168 _svm_vab_count      -> row+0xc8/0xcc  (retail lhu/sh)
+//   text+0x1dc/1e0 _svm_vab_vh         -> row+0x140/0x144
+//   text+0x248/24c kMaxPrograms        -> row+0x1ac/0x1b0 (retail sh/lh)
+//   text+0x274/278 _svm_vab_pg         -> row+0x1d8/0x1dc
+//   text+0x2d8/2dc _svm_vab_tn         -> row+0x23c/0x240
+//   text+0x350/354 _svm_brr_start_addr -> row+0x2b4/0x2b8
+//   text+0x3fc/400 _svm_vab_start      -> row+0x360/0x364
+//   text+0x494/498 _svm_vab_total      -> row+0x3f8/0x3fc
+// plus 7 further _svm_vab_used and 4 further _svm_vab_count hi/lo sites, all
+// bound. The names are VERBATIM in psyq 3.3 LIBSND.LIB (VS_VH.C's external
+// symbol table; the statics themselves live in xbss - the defining vm objects
+// carry no .text, so the reference table is the evidence). Per-target binding:
+// each twin's asm row read at all 21 sites (g3org_jp func_80068064, g3org_eu
+// func_80068BD4, g3_jp func_8006ABC8, g3_eu func_8006B780, mainmenu_eu
+// func_80080D64; sces_00269 via its row under the stale drifted filename
+// func_80049840.s - 21/21 sites, zero gaps, zero conflicts); slps_00270 is a
+// fully-C target with no asm tree - its map is the source-positional
+// correspondence across the seven twin C files (code bodies normalized-
+// identical, 62 tokens each, positional maps agreeing with the asm-bound maps
+// on all six checkable targets). The landed C rows reference the nine statics
+// 62 times each; the C renames ride the same commit.
+// Internal-layout corroboration: vh-pg = +0x68 and tn-vh = +0x44 hold in all
+// seven maps; kMaxPrograms-vh = +0x128 in the jp/slps trio and +0x124 in the
+// eu trio (short alignment).
+
+// target: g3org_jp
+_svm_vab_used = 0x8017E038; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3org_jp
+_svm_vab_count = 0x8017FB20; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: g3org_jp
+_svm_vab_vh = 0x8017876C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+kMaxPrograms = 0x80178894; // LIBSND VS_VH.C bss static (short); evidence under target: g3org_jp
+_svm_vab_pg = 0x80178704; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+_svm_vab_tn = 0x801787B0; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+_svm_brr_start_addr = 0x8017FB6C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+_svm_vab_start = 0x8017FB24; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+_svm_vab_total = 0x8017FAE0; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_jp
+
+// target: g3org_eu
+_svm_vab_used = 0x8017E120; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3org_eu
+_svm_vab_count = 0x80180404; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: g3org_eu
+_svm_vab_vh = 0x8017885C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
+kMaxPrograms = 0x80178980; // LIBSND VS_VH.C bss static (short); evidence under target: g3org_eu
+_svm_vab_pg = 0x801787F4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
+_svm_vab_tn = 0x801788A0; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
+_svm_brr_start_addr = 0x80180450; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
+_svm_vab_start = 0x80180408; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
+_svm_vab_total = 0x801803C4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3org_eu
+
+// target: g3_jp
+_svm_vab_used = 0x80170384; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3_jp
+_svm_vab_count = 0x80171E6C; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: g3_jp
+_svm_vab_vh = 0x8016AAB8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+kMaxPrograms = 0x8016ABE0; // LIBSND VS_VH.C bss static (short); evidence under target: g3_jp
+_svm_vab_pg = 0x8016AA50; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+_svm_vab_tn = 0x8016AAFC; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+_svm_brr_start_addr = 0x80171EB8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+_svm_vab_start = 0x80171E70; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+_svm_vab_total = 0x80171E2C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_jp
+
+// target: g3_eu
+_svm_vab_used = 0x801704A8; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: g3_eu
+_svm_vab_count = 0x8017278C; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: g3_eu
+_svm_vab_vh = 0x8016ABE4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
+kMaxPrograms = 0x8016AD08; // LIBSND VS_VH.C bss static (short); evidence under target: g3_eu
+_svm_vab_pg = 0x8016AB7C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
+_svm_vab_tn = 0x8016AC28; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
+_svm_brr_start_addr = 0x801727D8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
+_svm_vab_start = 0x80172790; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
+_svm_vab_total = 0x8017274C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: g3_eu
+
+// target: mainmenu_eu
+_svm_vab_used = 0x8019344C; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: mainmenu_eu
+_svm_vab_count = 0x801957A0; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: mainmenu_eu
+_svm_vab_vh = 0x8018DAA0; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+kMaxPrograms = 0x8018DC2C; // LIBSND VS_VH.C bss static (short); evidence under target: mainmenu_eu
+_svm_vab_pg = 0x8018DA38; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+_svm_vab_tn = 0x8018DAE4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+_svm_brr_start_addr = 0x801957EC; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+_svm_vab_start = 0x801957A4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+_svm_vab_total = 0x80195760; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
+
+// target: sces_00269
+_svm_vab_used = 0x80119E10; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: sces_00269
+_svm_vab_count = 0x8011C0D4; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: sces_00269
+_svm_vab_vh = 0x801144CC; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
+kMaxPrograms = 0x801145F0; // LIBSND VS_VH.C bss static (short); evidence under target: sces_00269
+_svm_vab_pg = 0x80114464; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
+_svm_vab_tn = 0x80114510; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
+_svm_brr_start_addr = 0x8011C120; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
+_svm_vab_start = 0x8011C0D8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
+_svm_vab_total = 0x8011C094; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: sces_00269
+
+// target: slps_00270
+_svm_vab_used = 0x8011A894; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: slps_00270
+_svm_vab_count = 0x8011C35C; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: slps_00270
+_svm_vab_vh = 0x80114F48; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+kMaxPrograms = 0x80115070; // LIBSND VS_VH.C bss static (short); evidence under target: slps_00270
+_svm_vab_pg = 0x80114EE0; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+_svm_vab_tn = 0x80114F8C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+_svm_brr_start_addr = 0x8011C3A8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+_svm_vab_start = 0x8011C360; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+_svm_vab_total = 0x8011C31C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: slps_00270
+
 // target: g3_jp
 // ---- SDK adoptions recovered from the generated block that used to sit below the marker (hand-attested facts interleaved after generation; sdk_curated.py re-runs truncate at the marker and would have dropped them). Kept verbatim, grouped per target. ----
 // intr_vb_cb_slots: INTR_VB member .data+0 (8 callback slots;

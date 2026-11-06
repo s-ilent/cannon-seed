@@ -17,8 +17,8 @@ glabel SsUtSetVagAtr
     /* 4D3AC 8006CBAC 00240400 */  sll        $a0, $a0, 16
     /* 4D3B0 8006CBB0 03240400 */  sra        $a0, $a0, 16
     /* 4D3B4 8006CBB4 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 4D3B8 8006CBB8 1880013C */  lui        $at, %hi(D_8017E038)
-    /* 4D3BC 8006CBBC 38E02124 */  addiu      $at, $at, %lo(D_8017E038)
+    /* 4D3B8 8006CBB8 1880013C */  lui        $at, %hi(_svm_vab_used)
+    /* 4D3BC 8006CBBC 38E02124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 4D3C0 8006CBC0 21082400 */  addu       $at, $at, $a0
     /* 4D3C4 8006CBC4 00002390 */  lbu        $v1, 0x0($at)
     /* 4D3C8 8006CBC8 01000234 */  ori        $v0, $zero, 0x1

@@ -103,7 +103,7 @@ glabel func_8006B944
     /* 4C2A0 8006BAA0 21300002 */  addu       $a2, $s0, $zero
     /* 4C2A4 8006BAA4 4C004486 */  lh         $a0, 0x4C($s2)
     /* 4C2A8 8006BAA8 2C008592 */  lbu        $a1, 0x2C($s4)
-    /* 4C2AC 8006BAAC D0A5010C */  jal        func_80069740
+    /* 4C2AC 8006BAAC D0A5010C */  jal        SsUtGetVagAtr
     /* 4C2B0 8006BAB0 21386002 */   addu      $a3, $s3, $zero
     /* 4C2B4 8006BAB4 21300002 */  addu       $a2, $s0, $zero
     /* 4C2B8 8006BAB8 7F00C232 */  andi       $v0, $s6, 0x7F
@@ -158,7 +158,7 @@ glabel func_8006B944
     /* 4C36C 8006BB6C 21300002 */  addu       $a2, $s0, $zero
     /* 4C370 8006BB70 4C004486 */  lh         $a0, 0x4C($s2)
     /* 4C374 8006BB74 2C008592 */  lbu        $a1, 0x2C($s4)
-    /* 4C378 8006BB78 D0A5010C */  jal        func_80069740
+    /* 4C378 8006BB78 D0A5010C */  jal        SsUtGetVagAtr
     /* 4C37C 8006BB7C 21386002 */   addu      $a3, $s3, $zero
     /* 4C380 8006BB80 5D00A293 */  lbu        $v0, 0x5D($sp)
     /* 4C384 8006BB84 21300002 */  addu       $a2, $s0, $zero
@@ -207,7 +207,7 @@ glabel func_8006B944
     /* 4C41C 8006BC1C 21300002 */  addu       $a2, $s0, $zero
     /* 4C420 8006BC20 4C004486 */  lh         $a0, 0x4C($s2)
     /* 4C424 8006BC24 2C008592 */  lbu        $a1, 0x2C($s4)
-    /* 4C428 8006BC28 D0A5010C */  jal        func_80069740
+    /* 4C428 8006BC28 D0A5010C */  jal        SsUtGetVagAtr
     /* 4C42C 8006BC2C 21386002 */   addu      $a3, $s3, $zero
     /* 4C430 8006BC30 5C00A293 */  lbu        $v0, 0x5C($sp)
     /* 4C434 8006BC34 21300002 */  addu       $a2, $s0, $zero

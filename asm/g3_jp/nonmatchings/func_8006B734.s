@@ -17,8 +17,8 @@ glabel func_8006B734
     /* 4BF44 8006B744 00240400 */  sll        $a0, $a0, 16
     /* 4BF48 8006B748 03240400 */  sra        $a0, $a0, 16
     /* 4BF4C 8006B74C 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 4BF50 8006B750 1780013C */  lui        $at, %hi(D_80170384)
-    /* 4BF54 8006B754 84032124 */  addiu      $at, $at, %lo(D_80170384)
+    /* 4BF50 8006B750 1780013C */  lui        $at, %hi(_svm_vab_used)
+    /* 4BF54 8006B754 84032124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 4BF58 8006B758 21082400 */  addu       $at, $at, $a0
     /* 4BF5C 8006B75C 00002390 */  lbu        $v1, 0x0($at)
     /* 4BF60 8006B760 01000234 */  ori        $v0, $zero, 0x1

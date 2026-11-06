@@ -49,13 +49,13 @@ glabel func_80066E5C
     /* 476E4 80066EE4 1800422C */  sltiu      $v0, $v0, 0x18
     /* 476E8 80066EE8 F8FF4014 */  bnez       $v0, .L80066ECC
     /* 476EC 80066EEC FFFFA230 */   andi      $v0, $a1, 0xFFFF
-    /* 476F0 80066EF0 1780013C */  lui        $at, %hi(D_80171E6C)
-    /* 476F4 80066EF4 6C1E20A4 */  sh         $zero, %lo(D_80171E6C)($at)
+    /* 476F0 80066EF0 1780013C */  lui        $at, %hi(_svm_vab_count)
+    /* 476F4 80066EF4 6C1E20A4 */  sh         $zero, %lo(_svm_vab_count)($at)
     /* 476F8 80066EF8 21280000 */  addu       $a1, $zero, $zero
     /* 476FC 80066EFC FFFFA230 */  andi       $v0, $a1, 0xFFFF
   .L80066F00:
-    /* 47700 80066F00 1780013C */  lui        $at, %hi(D_80170384)
-    /* 47704 80066F04 84032124 */  addiu      $at, $at, %lo(D_80170384)
+    /* 47700 80066F00 1780013C */  lui        $at, %hi(_svm_vab_used)
+    /* 47704 80066F04 84032124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 47708 80066F08 21082200 */  addu       $at, $at, $v0
     /* 4770C 80066F0C 000020A0 */  sb         $zero, 0x0($at)
     /* 47710 80066F10 0100A524 */  addiu      $a1, $a1, 0x1
@@ -266,8 +266,8 @@ glabel func_80066E5C
     /* 47A2C 8006722C 5C0420A0 */  sb         $zero, %lo(D_8017045C)($at)
     /* 47A30 80067230 1780013C */  lui        $at, %hi(_svm_stereo_mono)
     /* 47A34 80067234 68AB20A4 */  sh         $zero, %lo(_svm_stereo_mono)($at)
-    /* 47A38 80067238 1780013C */  lui        $at, %hi(D_8016ABE0)
-    /* 47A3C 8006723C E0AB22A4 */  sh         $v0, %lo(D_8016ABE0)($at)
+    /* 47A38 80067238 1780013C */  lui        $at, %hi(kMaxPrograms)
+    /* 47A3C 8006723C E0AB22A4 */  sh         $v0, %lo(kMaxPrograms)($at)
     /* 47A40 80067240 CC9D010C */  jal        SsSeqCalledTbyT_init
     /* 47A44 80067244 00000000 */   nop
     /* 47A48 80067248 1400BF8F */  lw         $ra, 0x14($sp)

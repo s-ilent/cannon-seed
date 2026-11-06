@@ -185,7 +185,7 @@ nonmatching func_800398BC, 0x14
 glabel func_800398BC
     /* 1A0BC 800398BC 21202002 */  addu       $a0, $s1, $zero
     /* 1A0C0 800398C0 00341500 */  sll        $a2, $s5, 16
-    /* 1A0C4 800398C4 D6E5010C */  jal        func_80079758
+    /* 1A0C4 800398C4 D6E5010C */  jal        SsVabTransBodyPartly
     /* 1A0C8 800398C8 03340600 */   sra       $a2, $a2, 16
     /* 1A0CC 800398CC 21A04000 */  addu       $s4, $v0, $zero
 endlabel func_800398BC

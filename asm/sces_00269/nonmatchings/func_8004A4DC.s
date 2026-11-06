@@ -17,8 +17,8 @@ glabel SsUtGetVagAtr
     /* 2550C 80044D0C 00240400 */  sll        $a0, $a0, 16
     /* 25510 80044D10 03240400 */  sra        $a0, $a0, 16
     /* 25514 80044D14 1800BFAF */  sw         $ra, 0x18($sp)
-    /* 25518 80044D18 1280013C */  lui        $at, %hi(D_80119E10)
-    /* 2551C 80044D1C 109E2124 */  addiu      $at, $at, %lo(D_80119E10)
+    /* 25518 80044D18 1280013C */  lui        $at, %hi(_svm_vab_used)
+    /* 2551C 80044D1C 109E2124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 25520 80044D20 21082400 */  addu       $at, $at, $a0
     /* 25524 80044D24 00002390 */  lbu        $v1, 0x0($at)
     /* 25528 80044D28 01000234 */  ori        $v0, $zero, 0x1

@@ -15,16 +15,16 @@ glabel SsUtGetVBaddrInSB
     /* 1E8F8 8003E0F8 10004010 */  beqz       $v0, .L8003E13C
     /* 1E8FC 8003E0FC 00140400 */   sll       $v0, $a0, 16
     /* 1E900 8003E100 03240200 */  sra        $a0, $v0, 16
-    /* 1E904 8003E104 1280013C */  lui        $at, %hi(D_80119E10)
-    /* 1E908 8003E108 109E2124 */  addiu      $at, $at, %lo(D_80119E10)
+    /* 1E904 8003E104 1280013C */  lui        $at, %hi(_svm_vab_used)
+    /* 1E908 8003E108 109E2124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 1E90C 8003E10C 21082400 */  addu       $at, $at, $a0
     /* 1E910 8003E110 00002390 */  lbu        $v1, 0x0($at)
     /* 1E914 8003E114 01000234 */  ori        $v0, $zero, 0x1
     /* 1E918 8003E118 09006214 */  bne        $v1, $v0, .L8003E140
     /* 1E91C 8003E11C FFFF0224 */   addiu     $v0, $zero, -0x1
     /* 1E920 8003E120 80100400 */  sll        $v0, $a0, 2
-    /* 1E924 8003E124 1280013C */  lui        $at, %hi(D_8011C0D8)
-    /* 1E928 8003E128 D8C02124 */  addiu      $at, $at, %lo(D_8011C0D8)
+    /* 1E924 8003E124 1280013C */  lui        $at, %hi(_svm_vab_start)
+    /* 1E928 8003E128 D8C02124 */  addiu      $at, $at, %lo(_svm_vab_start)
     /* 1E92C 8003E12C 21082200 */  addu       $at, $at, $v0
     /* 1E930 8003E130 0000228C */  lw         $v0, 0x0($at)
     /* 1E934 8003E134 50F80008 */  j          .L8003E140
