@@ -65,3 +65,17 @@ unit:func_80069740 --addiu-at on
 # cron-202611041013: addiu-at off folds %lo into the lbu immediate and the
 # loop loses its addiu word, skewing the verdict-2 bne offset one word).
 unit:SsVabOpenHeadWithMode --addiu-at on
+
+# The six region twins of SsVabOpenHeadWithMode (the same VS_VH member
+# body, extent 0x448 in each target: g3org_eu 0x493D4, g3_jp 0x4B3C8,
+# g3_eu 0x4BF80, mainmenu_eu 0x61564, sces_00269 0x24990, slps_00270
+# 0x24974) - they land under their per-target asm row names, so each
+# needs its own unit: entry carrying the SAME at-split law (the
+# D_8017xxxx[k] scan walk + the else-block accesses through the $at
+# 4-insn split; the per-target D_ names differ, the walk shape does not).
+unit:func_80068BD4 --addiu-at on
+unit:func_8006ABC8 --addiu-at on
+unit:func_8006B780 --addiu-at on
+unit:func_80080D64 --addiu-at on
+unit:func_80049840 --addiu-at on
+unit:func_80049824 --addiu-at on
