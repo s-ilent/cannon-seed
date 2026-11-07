@@ -1,6 +1,7 @@
 /* cc-post: sdk-aspsx
  *
- * Real-decompiled-C game function - the func_8002845C row (sces_00269, the boot executable)
+ * Real-decompiled-C game function - the 0x14 sdk c row at yaml 0x7A8C
+ * (sces_00269, the boot executable, true VA 0x8002728C)
  * lands as the psyq libsnd VM_DON member SpuVmDamperOn (the game's own
  * cc1 2.6.3-PSX compiled copy; identity PROVEN by sdk_members.py unique
  * placement + sig-db agrees).
@@ -18,7 +19,7 @@
 
 extern unsigned short D_80066120;
 
-void func_8002845C(void)
+void SpuVmDamperOn(void)
 {
     D_80066120 = 2;
 }
