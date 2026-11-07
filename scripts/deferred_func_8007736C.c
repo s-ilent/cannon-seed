@@ -112,6 +112,37 @@
  *    upstream from the maspsx far-store look-past (pad-lw RETIRED).
  *  - CLOSED (cron-202611021204): the component loop's rotation (do-while
  *    with the entry pre-test, the shared tail, the a0-chain).
+ *    - RULE-23 STATE (cron-202611071601, judge live with rules 21+20+22
+ *      + 24 pos-ops + keep-epilogue staged): THE D2 POSITION MOVER SHIPS
+ *      (rule 23 pos-op, tools/cc_post.py) - DIFF 78 -> 3/186, SIZE 744 =
+ *      RETAIL EXACT, the biggest single-rule ladder movement in the row's
+ *      history (78 words die in one application). The ops: the
+ *      i-init/off-init delay-slot swap = two mods (same addu $x,$0,$zero
+ *      shape, register fields exchanged - $L25:4 delay gets the i-init
+ *      $18, $L27:2 in-block gets the off-init $17); the anchor $v0 route
+ *      (d3) = la $16,D_8014788C-8 -> la $2,D_8014788C (the macro IS
+ *      retail's lui/addiu pair), addu $19,$16,8 -> addiu $16,$2,-8,
+ *      insert addu $19,$2,$zero; the at-split fold-out = insert addiu
+ *      $at,$at,%lo(D_8014788C) after the lui + lbu disp %lo -> 0; the
+ *      cache-copy scheduler = 6 reg-field mods (lw $3/$4/$5 + their sw)
+ *      + 5 nop deletes + 4 sw moves + the tail (sw20 out of the j delay
+ *      after lw20 - the TRUE pre-move order is sw16 BEFORE lw20, the
+ *      first site map had it wrong) + addu $2,$16,$zero into the j
+ *      delay; the epilogue = keep-epilogue marker (the RAW stream is
+ *      already retail's [addiu $sp; j; nop] - the (e) divergence is the
+ *      cc_post DEFAULT epilogue reshape, so the fix is a marker, not an
+ *      op). Suite 224 -> 241 (17 rule-23 tests). Rule-23 spec grammar:
+ *      `cc-post: pos-op <kind>:<label>;<idx>;<mnem>[;<text>]`, one op
+ *      per marker line, sequential, `_` = mnemonic/operand separator
+ *      (FIRST only - symbol D_8014788C survives), cc.sh strips the
+ *      trailing comment closer and joins with |.
+ *      REMAINING 3 = (i) two branch-displacement cascades at 0x80077404
+ *      (beq +1) and 0x80077434 (bne -1) - one word of scheduler
+ *      position inside the component loop span; (ii) 0x800774EC built
+ *      nop vs retail sb $0,0($s1) - the component NUL-sentinel store
+ *      retail schedules where gcc pads (a c8-family source-shape item,
+ *      NOT a pos-op). NEXT: the sb source shape; the two offsets ride
+ *      it.
  *  - CLOSED this window: REMAINING (1) the cache loop's FOUR-STATE
  *    walker form - rec = (unsigned char*)&D_8014788C[-8] (s0, the addiu
  *    s0,v0,-8 setup), name = &D_8014788C[0] (s3), off = the s1 anchor-
