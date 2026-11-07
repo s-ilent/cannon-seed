@@ -383,7 +383,7 @@ segments:
       - [0x17C0C, c, GsClearOt]   # 0x58 sdk
       - [0x17C64, c, GsGetActiveBuff]   # 0x10 sdk
       - [0x17C74, asm, GsSetDrawBuffOffset]   # 0x11c sdk
-      - [0x17D90, asm, func_8003AD60]   # 0xf4 sdk
+      - [0x17D90, asm, GsSwapDispBuff]   # 0xf4 sdk
       - [0x17E84, asm, func_80037684]   # 0x38 sdk
       - [0x17EBC, asm, func_800376BC]   # 0x8c sdk
       - [0x17F48, data, data_80037748]   # 0x60
