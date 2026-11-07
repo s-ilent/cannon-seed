@@ -46,6 +46,28 @@
  *    (`nop # DEBUG: Reuse of '$2'. ...`), and the prepasses run before
  *    main's NOP normalization - rule 20's walk matches by the module NOP
  *    pattern, the regression test pins it.
+ *  - RULE-22 SITE-LIST STARTING POINT (same window, difflib block map of
+ *    the 186-word streams; WORD indices, the wordmap's idx field is
+ *    BYTES = 4x these): (a) w41-43 the copy-exit merge - retail carries
+ *    ONE MORE [lbu,nop] pair than the built (the built's merged test
+ *    reads the carried value, retail re-loads; the built stream is one
+ *    word short here and one word long at the tail - the net-zero
+ *    reshuffle the equal SIZE hides); (b) w118-124 the walk block's
+ *    anchor temp - built lui $16,0x8014 + addiu $16,0x7884-form vs
+ *    retail lui $2,0x8014 / addiu $2,0x788c / addiu $16,$2,-8 /
+ *    move $18,$2 + a fresh addiu $1,$2,0x788c - the reg-field +
+ *    position mover's core site (d2's genuinely-new transform); (c)
+ *    w143-160 the cache-copy scheduler positions (retail's lw/sw
+ *    triple blocks vs the built's extra nops + a duplicated sw/j pair);
+ *    (d) w163-165 the loop-head reg fields (built $20/$4 vs retail
+ *    $18/$2); (e) w183-185 the EPILOGUE position class - retail
+ *    [addiu $sp,0x50; j $31; nop] vs built [j $31; addiu $sp in the
+ *    delay] - the frame-addiu sits OUTSIDE the delay slot in retail,
+ *    one word earlier, a nop fills the delay; (f) the branch/call
+ *    offset +-k cascade (w17/28/30/38/48/60/64/72/78/87/91/100/106/
+ *    126/130) rides the two phase ends, not a separate class. This list
+ *    is the STARTING point only - rule 22 re-derives from a FRESH
+ *    wordmap at implementation time (the tree moves again first).
  *  - CLOSED (cron-202611021158): the mount guard reads D_800C8028; buf is
  *    0x20 bytes; the mount-guard store's load-use nop now derives
  *    upstream from the maspsx far-store look-past (pad-lw RETIRED).
