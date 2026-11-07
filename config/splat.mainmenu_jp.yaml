@@ -716,7 +716,7 @@ segments:
       - [0x60948, asm, func_8008E678]   # 0x34 sdk
       - [0x6097C, asm, func_8008E6AC]   # 0x34 sdk
       - [0x609B0, asm, func_8008E6E0]   # 0x34 sdk
-      - [0x609E4, asm, func_8008E714]   # 0x448 sdk
+      - [0x609E4, c, func_800801E4]   # 0x448 sdk SsVabOpenHeadWithMode (the drifted label renamed to the true VA; the d70b label-adapted draft class per the six landed twins)
       - [0x60E2C, asm, func_8008062C]   # 0x2c8 sdk
       - [0x610F4, asm, func_8008EF54]   # 0x300 sdk
       - [0x613F4, asm, func_8008F254]   # 0x78 sdk

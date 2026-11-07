@@ -1070,6 +1070,17 @@ _svm_brr_start_addr = 0x801957EC; // LIBSND VS_VH.C bss static (unsigned long[])
 _svm_vab_start = 0x801957A4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
 _svm_vab_total = 0x80195760; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_eu
 
+// target: mainmenu_jp
+_svm_vab_used = 0x80193334; // LIBSND VS_VH.C bss static (unsigned char[]); evidence under target: mainmenu_jp
+_svm_vab_count = 0x80194E8C; // LIBSND VS_VH.C bss static (unsigned short); evidence under target: mainmenu_jp
+_svm_vab_vh = 0x8018D980; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_jp
+kMaxPrograms = 0x8018DB10; // LIBSND VS_VH.C bss static (short); evidence under target: mainmenu_jp
+_svm_vab_pg = 0x8018D918; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_jp
+_svm_vab_tn = 0x8018D9C4; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_jp
+_svm_brr_start_addr = 0x80194ED8; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_jp
+_svm_vab_start = 0x80194E90; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_jp
+_svm_vab_total = 0x80194E4C; // LIBSND VS_VH.C bss static (unsigned long[]); evidence under target: mainmenu_jp
+
 
 
 // target: sces_00269

@@ -1878,5 +1878,14 @@ state_record_0 = 0x800C9B3C; // type:s32
 state_record_1 = 0x800C9B44; // type:s32
 _svm_stereo_mono = 0x8018DA40; // type:s32
 PSDIDX = 0x80194E34; // type:s32
+_svm_vab_pg = 0x8018D918; // type:s32
+_svm_vab_vh = 0x8018D980; // type:s32
+_svm_vab_tn = 0x8018D9C4; // type:s32
+kMaxPrograms = 0x8018DB10; // type:s32
+_svm_vab_used = 0x80193334; // type:s32
+_svm_vab_total = 0x80194E4C; // type:s32
+_svm_vab_count = 0x80194E8C; // type:s32
+_svm_vab_start = 0x80194E90; // type:s32
+_svm_brr_start_addr = 0x80194ED8; // type:s32
 // END GENERATED DATA SYMBOLS
 RotAverageNclipColorDpq3_1 = 0x80071F1C; // type:func (pinned member row)

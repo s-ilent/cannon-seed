@@ -98,11 +98,12 @@
     "unknown_data 524->528 (2026-11-03): _SpuIsInAllocateArea lands in g3org_jp (the LIBSPU S_M_UTIL allocate-area walk, member-named row) - one new src file carrying 4 D_ mentions (2 comment + extern + load use).",
     "unknown_data 528->538 (2026-11-03): the trailing-underscore twin _SpuIsInAllocateArea_ lands in g3org_jp (the unit-converting prologue variant) - one new src file carrying 10 D_ mentions (4 x D_800B7F1C: 2 comment + extern + cursor use; 6 x D_800B75E8: 4 comment + extern + shift-amount use).",
     "cron-202611062346 scan-drift unit: 975 -> 1050 - the seven-target scan application re-derived the rescued-code interiors (the 0xa0 merge wave x6 targets, the walk re-typing unmarked data rows per the unmarked-row regeneration law) and the new interior branch labels are honest func_ mentions the decode lanes name later; unknown_data moved 972 -> 755 the other way (the c32d807d adoptions + the ported statics replaced D_ labels with semantic names), so the total placeholder debt DROPPED 1947 -> 1805.",
-    "unknown_function 1050->986, unknown_data 755->800 (2026-11-07): func_8007736C lands as real C (row 0x57B6C, the CdSearchFile resolver, the LAST func_80084924-cluster unit) - +11/+45 are the row's own C-file tokens (externs, uses, the history comments), the same landing cost the seven SsVab twins paid; the function side also absorbs the -75 staleness the 13a19c2d scan baseline carried (HEAD's tree measured 975 against the 1050 baseline before this landing - lower-it-in-the-same-PR remedy, count equals the tree again)."
+    "unknown_function 1050->986, unknown_data 755->800 (2026-11-07): func_8007736C lands as real C (row 0x57B6C, the CdSearchFile resolver, the LAST func_80084924-cluster unit) - +11/+45 are the row's own C-file tokens (externs, uses, the history comments), the same landing cost the seven SsVab twins paid; the function side also absorbs the -75 staleness the 13a19c2d scan baseline carried (HEAD's tree measured 975 against the 1050 baseline before this landing - lower-it-in-the-same-PR remedy, count equals the tree again).",
+    "unknown_function 986->990, unknown_data 800->831 (2026-11-07): the SEVENTH and final SsVabOpenHeadWithMode twin lands as real C (mainmenu_jp row 0x609E4 = VA 0x800801E4, func_800801E4 under the true-VA name) - +4/+31 are the row's own C-file tokens (the same landing cost the six earlier twins paid; the data side is LESS than the sces/slps +62 because the nine VS_VH.C statics already carry their semantic names in the mainmenu_jp symbols via this landing's curated block, so only the D_ history comments and the four bare code refs count)."
   ],
   "baselines": {
-    "unknown_data": 800,
-    "unknown_function": 986
+    "unknown_data": 831,
+    "unknown_function": 990
   },
   "patterns": [
     {
