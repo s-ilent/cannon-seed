@@ -69,16 +69,25 @@ say "git identity + credential helper asserted"
 # baseline is missing or disagrees with its extract twin, restore it; the
 # committed config/sha1 gate stays the only authority (the 4b audit below
 # then reports the truth).
+# TARGET NAME LAW (fixed cron-202611070146): the consumers (baseline_audit.py,
+# witness_check.sh, judge_unit.py, verify.sh) all read baselines/<t>.bin - the
+# restore MUST land at the .bin name. The first 4a draft restored to the
+# extension-less baselines/<t> and its "restored 8 / then 0, idempotent"
+# observation was masked by the .bin files already being correct from the
+# window's manual restore; the next rollback re-seeded the woven .bin set and
+# the witness sat 0/8 BESIDE eight fresh extension-less twins. The stray
+# extension-less copies are removed on sight below.
 if [ -d extract/jp ] || [ -d extract/eu ]; then
     restore_one() {
         # $1 = baseline name, $2 = extract/<region>/<file>;1 (may be absent)
         [ -f "extract/$2" ] || return 0
-        if [ ! -f "baselines/$1" ] || \
-           [ "$(sha1sum < "baselines/$1" | cut -d" " -f1)" != \
+        rm -f "baselines/$1"   # the first-draft extension-less stray, never a consumer
+        if [ ! -f "baselines/$1.bin" ] || \
+           [ "$(sha1sum < "baselines/$1.bin" | cut -d" " -f1)" != \
              "$(sha1sum < "extract/$2" | cut -d" " -f1)" ]; then
             mkdir -p baselines
-            cp "extract/$2" "baselines/$1"
-            say "baselines/$1 restored from extract/$2"
+            cp "extract/$2" "baselines/$1.bin"
+            say "baselines/$1.bin restored from extract/$2"
         fi
     }
     restore_one slps_00270   "jp/SLPS_002.70;1"
