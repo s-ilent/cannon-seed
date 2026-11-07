@@ -544,9 +544,9 @@ segments:
       - [0x2396C, asm, func_8004316C]   # 0xc sdk
       - [0x23978, data, data_80043178]   # 0x200
       - [0x23B78, asm, SpuSetNoiseVoice]   # 0x24 sdk
-      - [0x23B9C, asm, func_800487EC]   # 0x54 sdk
-      - [0x23BF0, asm, func_80048840]   # 0xb4 sdk
-      - [0x23CA4, asm, func_800488F4]   # 0xd4 sdk
+      - [0x23B9C, asm, SpuInitMalloc]   # 0x54 sdk
+      - [0x23BF0, asm, _SpuSetAnyVoice]   # 0xb4 sdk
+      - [0x23CA4, asm, SpuVmVSetUp]   # 0xd4 sdk
       - [0x23D78, asm, func_80043578]   # 0x120 sdk
       - [0x23E98, data, data_80043698]   # 0x2c
       - [0x23EC4, asm, func_800436C4]   # 0x40
@@ -557,32 +557,32 @@ segments:
       - [0x2474C, asm, func_80043F4C]   # 0x14 sdk
       - [0x24760, data, data_80043F60]   # 0x5c
       - [0x247BC, asm, func_80043FBC]   # 0x78
-      - [0x24834, asm, func_800496E4]   # 0x7c sdk
-      - [0x248B0, asm, func_80049760]   # 0x10 sdk
-      - [0x248C0, asm, func_80049770]   # 0x10 sdk
+      - [0x24834, asm, SpuQuit]   # 0x7c sdk
+      - [0x248B0, asm, CloseEvent]   # 0x10 sdk
+      - [0x248C0, asm, DisableEvent]   # 0x10 sdk
       - [0x248D0, c, SsSetMono]   # 0x14 sdk
       - [0x248E4, c, func_80049794]   # 0x10 sdk
-      - [0x248F4, asm, func_800497A4]   # 0x34 sdk
-      - [0x24928, asm, func_800497D8]   # 0x34 sdk
-      - [0x2495C, asm, func_8004980C]   # 0x34 sdk
+      - [0x248F4, asm, SsVabOpenHead]   # 0x34 sdk
+      - [0x24928, asm, SsVabOpenHeadSticky]   # 0x34 sdk
+      - [0x2495C, asm, SsVabFakeHead]   # 0x34 sdk
       - [0x24990, c, func_80044190]   # 0x448 sdk SsVabOpenHeadWithMode (the drifted label renamed to the true VA; 0x80049840 belongs to the 0x8 jr leaf in the func_80049780 block)
       - [0x24DD8, asm, func_800445D8]   # 0x2c8 sdk
-      - [0x250A0, asm, func_8004A080]   # 0x300 sdk
-      - [0x253A0, asm, func_8004A380]   # 0x78 sdk
-      - [0x25418, asm, func_8004A3F8]   # 0xe4 sdk
-      - [0x254FC, asm, func_8004A4DC]   # 0x240 sdk
+      - [0x250A0, asm, _spu_gcSPU]   # 0x300 sdk
+      - [0x253A0, asm, SsVabFakeBody]   # 0x78 sdk
+      - [0x25418, asm, SsUtGetVabHdr]   # 0xe4 sdk
+      - [0x254FC, asm, SsUtGetVagAtr]   # 0x240 sdk
       - [0x2573C, c, SsSetMVol]   # 0x50 sdk
       - [0x2578C, asm, func_80044F8C]   # 0x394 sdk
       - [0x25B20, c, SsSetSerialVol]   # 0x160 sdk
       - [0x25C80, c, SsVabTransCompleted]   # 0x2c sdk
-      - [0x25CAC, asm, func_8004ADBC]   # 0xa8 sdk
+      - [0x25CAC, asm, SpuIsTransferCompleted]   # 0xa8 sdk
       - [0x25D54, c, SsSeqCalledTbyT]   # 0x274 sdk
       - [0x25FC8, asm, func_800457C8]   # 0xa0 sdk
       - [0x26068, asm, func_80045868]   # 0x64 sdk
-      - [0x260CC, asm, func_8004B30C]   # 0x1e0 sdk
+      - [0x260CC, asm, Snd_tempo]   # 0x1e0 sdk
       - [0x262AC, asm, func_80045AAC]   # 0x328
-      - [0x265D4, asm, func_8004B814]   # 0x68 sdk
-      - [0x2663C, asm, func_8004B87C]   # 0x2c sdk
+      - [0x265D4, asm, Snd_replay]   # 0x68 sdk
+      - [0x2663C, asm, Snd_play]   # 0x2c sdk
       - [0x26668, asm, func_80045E68]   # 0x114 sdk
       - [0x2677C, asm, func_80045F7C]   # 0x2b0 sdk
       - [0x26A2C, asm, func_8004622C]   # 0x118 sdk
@@ -612,12 +612,12 @@ segments:
       - [0x28720, asm, func_80047F20]   # 0x40 sdk
       - [0x28760, asm, func_80047F60]   # 0x510 sdk
       - [0x28C70, asm, func_80048470]   # 0x4d0 sdk
-      - [0x29140, asm, func_8004EAA0]   # 0x70 sdk
-      - [0x291B0, asm, func_8004EB10]   # 0x78 sdk
-      - [0x29228, asm, func_8004EB88]   # 0x1a0 sdk
-      - [0x293C8, asm, func_8004ED28]   # 0x10 sdk
-      - [0x293D8, asm, func_8004ED38]   # 0xd0 sdk
-      - [0x294A8, asm, func_8004EE08]   # 0x1cc sdk
+      - [0x29140, asm, _SpuIsInAllocateArea]   # 0x70 sdk
+      - [0x291B0, asm, _SpuIsInAllocateArea_]   # 0x78 sdk
+      - [0x29228, asm, SpuClearReverbWorkArea]   # 0x1a0 sdk
+      - [0x293C8, asm, WaitEvent]   # 0x10 sdk
+      - [0x293D8, asm, SpuSetReverb]   # 0xd0 sdk
+      - [0x294A8, asm, SsUtSetVagAtr]   # 0x1cc sdk
       - [0x29674, c,   func_8004EFD4]   # 0x14 sdk
       - [0x29688, asm, func_80048E88]   # 0x108 sdk
       - [0x29790, asm, func_80048F90]   # 0x10c sdk
@@ -626,21 +626,21 @@ segments:
       - [0x29DD8, asm, func_800495D8]   # 0x28 sdk
       - [0x29E00, asm, func_80049600]   # 0x2c sdk
       - [0x29E2C, c, SsSetSerialAttr]   # 0x94 sdk
-      - [0x29EC0, asm, func_8004F950]   # 0x10 sdk
-      - [0x29ED0, asm, func_8004F960]   # 0x10 sdk
-      - [0x29EE0, asm, func_8004F970]   # 0x10 sdk
+      - [0x29EC0, asm, _card_load]   # 0x10 sdk
+      - [0x29ED0, asm, _card_info]   # 0x10 sdk
+      - [0x29EE0, asm, _card_auto]   # 0x10 sdk
       - [0x29EF0, asm, func_800496F0]   # 0x30
-      - [0x29F20, asm, func_8004F9B0]   # 0x10 sdk
-      - [0x29F30, asm, func_8004F9C0]   # 0x10 sdk
-      - [0x29F40, asm, func_8004F9D0]   # 0x10 sdk
-      - [0x29F50, asm, func_8004F9E0]   # 0x10 sdk
-      - [0x29F60, asm, func_8004F9F0]   # 0x10 sdk
-      - [0x29F70, asm, func_8004FA00]   # 0x10 sdk
+      - [0x29F20, asm, _card_write]   # 0x10 sdk
+      - [0x29F30, asm, InitCARD]   # 0x10 sdk
+      - [0x29F40, asm, StartCARD]   # 0x10 sdk
+      - [0x29F50, asm, _bu_init]   # 0x10 sdk
+      - [0x29F60, asm, _new_card]   # 0x10 sdk
+      - [0x29F70, asm, _card_read]   # 0x10 sdk
       - [0x29F80, asm, func_80049780]   # 0x1224
       - [0x2B1A4, data, data_8004A9A4]   # 0xc
-      - [0x2B1B0, asm, func_80050FD0]   # 0x10 sdk
-      - [0x2B1C0, asm, func_80050FE0]   # 0x10 sdk
-      - [0x2B1D0, asm, func_80050FF0]   # 0x10 sdk
+      - [0x2B1B0, asm, PAD_dr]   # 0x10 sdk
+      - [0x2B1C0, asm, SysDeqIntRP]   # 0x10 sdk
+      - [0x2B1D0, asm, SysEnqIntRP]   # 0x10 sdk
       - [0x2B1E0, data, data_8004A9E0]   # 0x1be20
     # END GENERATED SUBSEGMENTS
   - [0x47000]
