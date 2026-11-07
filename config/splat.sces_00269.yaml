@@ -381,8 +381,8 @@ segments:
       - [0x17BC4, data, data_800373C4]   # 0x38
       - [0x17BFC, asm, FlushCache]   # 0x10 sdk
       - [0x17C0C, c, GsClearOt]   # 0x58 sdk
-      - [0x17C64, c, func_8003AC34]   # 0x10 sdk
-      - [0x17C74, asm, func_8003AC44]   # 0x11c sdk
+      - [0x17C64, c, GsGetActiveBuff]   # 0x10 sdk
+      - [0x17C74, asm, GsSetDrawBuffOffset]   # 0x11c sdk
       - [0x17D90, asm, func_8003AD60]   # 0xf4 sdk
       - [0x17E84, asm, func_80037684]   # 0x38 sdk
       - [0x17EBC, asm, func_800376BC]   # 0x8c sdk
