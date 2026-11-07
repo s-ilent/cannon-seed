@@ -269,6 +269,10 @@ REG_FIELD = None         # rule 22: reg-field - the explicit-site register
                          # (`cc-post: reg-field <old> <new>
                          # <label>:<insn-index>:<mnemonic>[,...]`); see
                          # _rule22_reg_field
+POS_OPS = None           # rule 23: pos-op - the position mover, as a list
+                         # of op specs from the markers
+                         # (`cc-post: pos-op <spec>`; one op per marker
+                         # line, applied sequentially); see _rule23_pos_op
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -1504,6 +1508,169 @@ def _parse_reg_field_sites(spec: str):
     return sites or None
 
 
+# rule 23 (pos-op; survey docs/CC_POST_RULE_CLASSES.md section 6 (d2),
+# window cron-202611071601): the POSITION MOVER. reg-field (rule 22)
+# proved the site-list machinery; this rule adds the position class:
+# inserting, deleting, rewriting and MOVING instructions at explicit
+# label-relative sites - the off-init/i-init delay-slot swap, the anchor
+# $v0 route, the loop-head at-split fold-out, the cache-copy scheduler
+# repositioning and the epilogue reorder on func_8007736C. THE RISK
+# CLASS: moves can cross live ranges - the explicit site list plus per-op
+# shape verification substitutes for liveness analysis exactly as rule
+# 22's does; the judge verdict is the semantic gate; the survey gates
+# this rule behind reg-field for that reason. Never default-on, loud
+# failure on ANY contract miss:
+#   marker `cc-post: pos-op <spec>` - ONE op per marker line, applied
+#   SEQUENTIALLY in marker order, each on the CURRENT stream (later ops
+#   see earlier ops' effects; derive indices accordingly). Specs are
+#   SPACE-FREE (cc.sh passes the joined payload as one shell word);
+#   in insn texts the FIRST `_` separates mnemonic from operands and
+#   every later `_` is literal (symbol D_8014788C survives). Grammar
+#   (`;` separates fields):
+#     i:<label>;<idx>;<mnem>;<insn-text>
+#         insert <insn-text> AFTER the idx-th instruction following
+#         <label> (the anchor insn is verified: mnemonic must match).
+#     d:<label>;<idx>;<mnem>
+#         delete the idx-th instruction following <label>.
+#     m:<label>;<idx>;<mnem>;<new-text>
+#         rewrite the idx-th instruction's text (mnemonic verified
+#         first); leading whitespace preserved.
+#     v:<slabel>;<sidx>;<smnem>;<dlabel>;<didx>;<dmnem>
+#         MOVE: delete the source insn (mnemonic verified) and insert it
+#         after the dst site, which is located in the POST-DELETE stream
+#         (dst indices count the stream as the delete left it).
+#   cc.sh joins all pos-op marker lines with `|` and passes them as ONE
+#   --pos-op payload; op order = marker order in the file.
+
+
+def _rule23_find(lines: list[str], label: str, idx: int, mnem: str):
+    """Rule-22-convention site lookup: the line index of the idx-th
+    is_instruction line after `label`, mnemonic verified. Returns the
+    line index, or None on any contract miss."""
+    label_pos: dict[str, int] = {}
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if (s and not s.startswith(("#", ".")) and s.endswith(":")
+                and not is_instruction(ln)):
+            label_pos.setdefault(s[:-1], i)
+    start = label_pos.get(label)
+    if start is None:
+        return None
+    n = -1
+    for j in range(start + 1, len(lines)):
+        if is_instruction(lines[j]):
+            n += 1
+            if n == idx:
+                st = lines[j].strip()
+                if mnem and st.split(None, 1)[0].lower() != mnem.lower():
+                    return None
+                return j
+    return None
+
+
+def _rule23_emit(text: str, lead: str) -> str:
+    """Decode a marker insn text with the line's lead. The FIRST `_`
+    separates the mnemonic from the operand list (asm mnemonics never
+    contain `_`; the space-free marker contract needs exactly one);
+    every later `_` is LITERAL - symbol names like D_8014788C survive."""
+    i = text.find("_")
+    if i < 0:
+        return lead + text + "\n"
+    return lead + text[:i] + " " + text[i + 1:] + "\n"
+
+
+def _rule23_pos_op(lines: list[str], spec: str):
+    """Apply ONE pos-op spec to the stream; returns the new lines or
+    None on any contract miss (the prepass turns None into exit 3).
+    Spec layout: `<kind>:<label>;<idx>;<mnem>[;<text>]` - the kind is
+    colon-joined to the label in the first `;` field (the marker text
+    keeps the op readable); normalize that here."""
+    parts = spec.split(";")
+    head = parts[0].split(":", 1)
+    if len(head) == 2:
+        parts = [head[0], head[1]] + parts[1:]
+    kind = parts[0]
+    if kind == "i" and len(parts) == 5:
+        label, idx_s, mnem, text = parts[1], parts[2], parts[3], parts[4]
+        if not label or not mnem or not text or not text.strip():
+            return None
+        try:
+            idx = int(idx_s)
+        except ValueError:
+            return None
+        pos = _rule23_find(lines, label, idx, mnem)
+        if pos is None:
+            return None
+        lead = lines[pos][:len(lines[pos]) - len(lines[pos].lstrip())]
+        return lines[:pos + 1] + [_rule23_emit(text, lead)] + lines[pos + 1:]
+    if kind == "d" and len(parts) == 4:
+        label, idx_s, mnem = parts[1], parts[2], parts[3]
+        try:
+            idx = int(idx_s)
+        except ValueError:
+            return None
+        pos = _rule23_find(lines, label, idx, mnem)
+        if pos is None:
+            return None
+        return lines[:pos] + lines[pos + 1:]
+    if kind == "m" and len(parts) == 5:
+        label, idx_s, mnem, text = parts[1], parts[2], parts[3], parts[4]
+        if not text or not text.strip():
+            return None
+        try:
+            idx = int(idx_s)
+        except ValueError:
+            return None
+        pos = _rule23_find(lines, label, idx, mnem)
+        if pos is None:
+            return None
+        lead = lines[pos][:len(lines[pos]) - len(lines[pos].lstrip())]
+        out = list(lines)
+        out[pos] = _rule23_emit(text, lead)
+        return out
+    if kind == "v" and len(parts) == 7:
+        (slabel, sidx_s, smnem,
+         dlabel, didx_s, dmnem) = parts[1:]
+        try:
+            sidx, didx = int(sidx_s), int(didx_s)
+        except ValueError:
+            return None
+        spos = _rule23_find(lines, slabel, sidx, smnem)
+        if spos is None:
+            return None
+        insn_text = lines[spos].strip()
+        after_del = lines[:spos] + lines[spos + 1:]
+        dpos = _rule23_find(after_del, dlabel, didx, dmnem)
+        if dpos is None:
+            return None
+        lead = after_del[dpos][:len(after_del[dpos])
+                                - len(after_del[dpos].lstrip())]
+        # normalize the moved insn to the marker text form: the first
+        # whitespace run becomes the single `_` separator (symbol
+        # underscores stay literal)
+        enc = re.sub(r"\s+", "_", insn_text, count=1)
+        return (after_del[:dpos + 1]
+                + [_rule23_emit(enc, lead)]
+                + after_del[dpos + 1:])
+    return None
+
+
+def _prepass_pos_op(lines: list[str]) -> list[str]:
+    """Marker rule23 (`cc-post: pos-op <spec>` xN): apply the position
+    ops sequentially; loud failure (exit 3) on any malformed spec or
+    contract miss - never a silent pass. Only ever fires on
+    marker-carrying units."""
+    out = lines
+    for spec in POS_OPS:
+        res = _rule23_pos_op(out, spec)
+        if res is None:
+            sys.stderr.write(
+                "cc_post rule 23: pos-op contract miss: %r\n" % spec)
+            sys.exit(3)
+        out = res
+    return out
+
+
 def _prepass_reg_field(lines: list[str]) -> list[str]:
     """Marker rule22 (`cc-post: reg-field <old> <new> <sites>`): rewrite
     the register field at the listed sites (see _rule22_reg_field);
@@ -1928,7 +2095,7 @@ def main() -> None:
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
     global LT0_SCC, SITE_FRESH_CONST, IMPORT_ORDER, VOL_EXTEND
-    global REG_FIELD
+    global REG_FIELD, POS_OPS
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -2047,6 +2214,17 @@ def main() -> None:
             sys.exit(2)
         REG_FIELD = (args[k + 1], args[k + 2], args[k + 3])
         del args[k : k + 4]
+    if "--pos-op" in args:
+        k = args.index("--pos-op")
+        # required payload: the `|`-joined op specs (cc.sh collects ALL
+        # `cc-post: pos-op` marker lines and joins them in file order; a
+        # bare flag is a usage error).
+        if len(args) < k + 2 or not args[k + 1]:
+            sys.stderr.write(
+                "usage: cc_post.py --pos-op <spec>[|<spec>...]\n")
+            sys.exit(2)
+        POS_OPS = [s for s in args[k + 1].split("|") if s]
+        del args[k : k + 2]
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")
@@ -2137,6 +2315,8 @@ def main() -> None:
         lines = _prepass_vol_extend(lines)
     if REG_FIELD is not None:
         lines = _prepass_reg_field(lines)
+    if POS_OPS:
+        lines = _prepass_pos_op(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:

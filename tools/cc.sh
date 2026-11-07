@@ -292,6 +292,21 @@ if grep -q 'cc-post: reg-field' "$SRC" 2>/dev/null; then
         exit 3
     fi
 fi
+# Rule 23 (pos-op; the survey d2 position mover): ONE op per marker
+# line, applied sequentially in file order; specs are `;`-fielded
+# (i:label:idx:mnem:insn / d:label:idx:mnem / m:label:idx:mnem:new /
+# v:slabel:sidx:smnem:dlabel:didx:dmnem), `_` decodes to space. cc.sh
+# collects ALL pos-op markers and joins them with `|` (a character the
+# spec grammar never uses); a bare marker LOUD-FAILS the build.
+if grep -q 'cc-post: pos-op' "$SRC" 2>/dev/null; then
+    R23ARGS=$(grep -o 'cc-post: pos-op.*' "$SRC" 2>/dev/null | sed 's/^cc-post: pos-op[ \t]*//' | sed 's/[ \t]*\*\///' | paste -sd '|' -)
+    if [ -n "$R23ARGS" ]; then
+        POSTFLAGS="$POSTFLAGS --pos-op $R23ARGS"
+    else
+        echo "cc.sh: cc-post: pos-op marker present without args (<spec>)" >&2
+        exit 3
+    fi
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).
