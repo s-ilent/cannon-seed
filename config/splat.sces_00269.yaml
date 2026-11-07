@@ -339,11 +339,11 @@ segments:
       - [0x16708, c, LightColor]   # 0x28
       - [0x16730, c, DpqColorLight]   # 0x28
       - [0x16758, c, DpqColor3]   # 0x3c
-      - [0x16794, asm, func_80035F94]   # 0x24 sdk
+      - [0x16794, c, Intpl]   # 0x24 sdk
       - [0x167B8, c, Square12]   # 0x28 sdk
       - [0x167E0, c, Square0]   # 0x28 sdk
-      - [0x16808, asm, func_80036008]   # 0x20 sdk
-      - [0x16828, asm, func_80036028]   # 0x24 sdk
+      - [0x16808, c, AverageZ3]   # 0x20 sdk
+      - [0x16828, c, AverageZ4]   # 0x24 sdk
       - [0x1684C, c, OuterProduct12]   # 0x58 sdk
       - [0x168A4, c, OuterProduct0]   # 0x58 sdk
       - [0x168FC, c, Lzc]   # 0x18 sdk
