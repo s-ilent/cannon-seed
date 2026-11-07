@@ -346,7 +346,7 @@ segments:
       - [0x16828, asm, func_80036028]   # 0x24 sdk
       - [0x1684C, c, OuterProduct12]   # 0x58 sdk
       - [0x168A4, c, OuterProduct0]   # 0x58 sdk
-      - [0x168FC, data, data_800360FC]   # 0x18
+      - [0x168FC, c, Lzc]   # 0x18 sdk
       - [0x16914, data, data_80039684]   # 0x4 pinned
       - [0x16918, asm, func_80039688]   # 0x7c pinned
       - [0x16994, asm, func_80039704]   # 0x8 pinned

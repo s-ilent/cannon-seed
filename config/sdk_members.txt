@@ -3649,14 +3649,14 @@
 //   0x80065ee8 LIBGTE    ?              unique     LightColor adoptable
 //   0x80065f10 LIBGTE    ?              unique     DpqColorLight adoptable
 //   0x80065f38 LIBGTE    ?              unique     DpqColor3 adoptable
-//   0x80065f74 LIBGTE    ?              unique     Intpl
-//   0x80065f98 LIBGTE    ?              unique     Square12
-//   0x80065fc0 LIBGTE    ?              unique     Square0
-//   0x80065fe8 LIBGTE    ?              unique     AverageZ3
-//   0x80066008 LIBGTE    ?              unique     AverageZ4
+//   0x80065f74 LIBGTE    ?              unique     Intpl adoptable
+//   0x80065f98 LIBGTE    ?              unique     Square12 adoptable
+//   0x80065fc0 LIBGTE    ?              unique     Square0 adoptable
+//   0x80065fe8 LIBGTE    ?              unique     AverageZ3 adoptable
+//   0x80066008 LIBGTE    ?              unique     AverageZ4 adoptable
 //   0x8006602c LIBGTE    ?              unique     OuterProduct12 adoptable
 //   0x80066084 LIBGTE    ?              unique     OuterProduct0 adoptable
-//   0x800660dc LIBGTE    ?              unique     Lzc
+//   0x800660dc LIBGTE    ?              unique     Lzc adoptable
 //   0x800660f8 LIBGS     OBJT           unique     GsLinkObject4 adoptable  (sig-db agree)
 //   0x80066228 LIBGS     2D_SP0         unique     GsSortSprite adoptable  (sig-db agree)
 //   0x80066724 LIBGTE    ?              unique     RotTransPers4 adoptable
@@ -4377,7 +4377,7 @@
 //   0x80036028 LIBGTE    ?              unique     AverageZ4 adoptable
 //   0x8003604c LIBGTE    ?              unique     OuterProduct12 adoptable
 //   0x800360a4 LIBGTE    ?              unique     OuterProduct0 adoptable
-//   0x800360fc LIBGTE    ?              unique     Lzc
+//   0x800360fc LIBGTE    ?              unique     Lzc adoptable
 //   0x80036118 LIBGS     MATRIX         unique     GsInitCoordinate2 adoptable  (sig-db agree)
 //   0x80036194 LIBGS     MATRIX         unique     GsInitCoord2param adoptable  (sig-db agree)
 //   0x800361c0 LIBGS     MATRIX         unique     GsSetLsMatrix adoptable  (sig-db agree)

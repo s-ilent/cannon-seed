@@ -475,13 +475,16 @@ segments:
       - [0x466E8, c, LightColor]   # 0x28
       - [0x46710, c, DpqColorLight]   # 0x28
       - [0x46738, c, DpqColor3]   # 0x3c
-      - [0x46774, data, data_80065F74]   # 0x8c
+      - [0x46774, c, Intpl]   # 0x24 sdk
+      - [0x46798, c, Square12]   # 0x28 sdk
+      - [0x467C0, c, Square0]   # 0x28 sdk
+      - [0x467E8, c, AverageZ3]   # 0x20 sdk
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x50E64, data, data_80070664]   # 0x10 pinned
 # MIGRATE-DROPPED (pure framing, 0 true bytes):       - [0x50E74, data, data_80070674]   # 0x8c
-      - [0x46800, asm, func_80070700.rowdef]   # 0x2c
+      - [0x46808, c, AverageZ4]   # 0x24 sdk
       - [0x4682C, c, OuterProduct12]   # 0x58 sdk
       - [0x46884, c, OuterProduct0]   # 0x58 sdk
-      - [0x468DC, data, data_800660DC]   # 0x18
+      - [0x468DC, c, Lzc]   # 0x18 sdk
       - [0x468F4, data, data_80070864]   # 0x4
       - [0x468F8, asm, func_80070868]   # 0x130 sdk
       - [0x46A28, asm, func_80070998]   # 0x4fc sdk
