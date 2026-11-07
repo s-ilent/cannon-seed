@@ -4102,7 +4102,7 @@
 //   0x80080d50 LIBSND    UT_GVA         unique     SsUtGetVagAtr adoptable  (sig-db agree)
 //   0x80080f90 LIBSND    SCSMVOL        ambiguous  SsSetMVol adoptable  (sig-db agree)
 //   0x80080f90 LIBSND    SSSMV          ambiguous  SsSetMVol adoptable
-//   0x80080fe0 LIBSPU    S_SCA          unique     SpuSetCommonAttr  (sig-db agree)
+//   0x80080fe0 LIBSPU    S_SCA          unique     SpuSetCommonAttr adoptable  (sig-db agree)
 //   0x80081374 LIBSND    SCSSVOL        unique     SsSetSerialVol adoptable  (sig-db agree)
 //   0x800814d4 LIBSND    VS_VTC         unique     SsVabTransCompleted adoptable  (sig-db agree)
 //   0x80081500 LIBSPU    S_ITC          unique     SpuIsTransferCompleted adoptable  (sig-db agree)
