@@ -276,9 +276,14 @@ the carried c — restores retail's extra pair and resolves the +1 phase
 from w41 on; (2) the position mover (d2 proper) for the i-init delay-slot
 site + the off-init in-block move + the anchor $v0 route — the machinery
 now exists to hang it on; (3) the tail phase resolves inside (1)+(2)'s
-cascade (the net-zero reshuffle).** The ladder record stays 144/186 at
-SIZE 744 = retail; the parked c3 best remains the source of record (gate
-5).
+cascade (the net-zero reshuffle).** **UPDATE, same window: (1) EXECUTED
+(probe c8, judged live): DIFF 144 -> 78/186, the component loop
+retail-exact word for word; SIZE 752 = +8 (the entry pair + the walk
+block's position classes); the andi count dropped to one site this
+shape; rule 19's -1 shape contract broke under the restructure (parked
+for re-derivation). The ladder record: 78/186 at SIZE 752; the parked
+c3 best (144/186 at SIZE 744 = retail) remains the SIZE-clean source of
+record until the d2 mover brings c8's SIZE home (gate 5).**
 
 ## 7. Recommended implementation order and per-rule gates
 
