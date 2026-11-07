@@ -347,21 +347,21 @@ segments:
       - [0x1684C, c, OuterProduct12]   # 0x58 sdk
       - [0x168A4, c, OuterProduct0]   # 0x58 sdk
       - [0x168FC, c, Lzc]   # 0x18 sdk
-      - [0x16914, data, data_80039684]   # 0x4 pinned
-      - [0x16918, asm, func_80039688]   # 0x7c pinned
-      - [0x16994, asm, func_80039704]   # 0x8 pinned
+      - [0x16914, data, data_80036114]   # 0x4 pinned
+      - [0x16918, asm, GsInitCoordinate2]   # 0x7c pinned
+      - [0x16994, asm, GsInitCoord2param]   # 0x8 pinned
       - [0x1699C, data, data_8003619C]   # 0x24
-      - [0x169C0, asm, func_80039730]   # 0x30 pinned
-      - [0x169F0, asm, func_80039760]   # 0x9c pinned
-      - [0x16A8C, asm, func_800397FC]   # 0x34 pinned
-      - [0x16AC0, asm, func_80039830]   # 0x94 pinned
-      - [0x16B54, asm, func_800398C4]   # 0x84 pinned
-      - [0x16BD8, asm, func_80039948]   # 0x84 pinned
-      - [0x16C5C, asm, func_800399CC]   # 0x70 pinned
-      - [0x16CCC, asm, func_80039A3C]   # 0x34 pinned
-      - [0x16D00, asm, func_80039A70]   # 0x2c4 sdk
-      - [0x16FC4, asm, func_800367C4]   # 0x94 sdk
-      - [0x17058, asm, func_80039EF8]   # 0x4fc sdk
+      - [0x169C0, asm, GsSetLsMatrix]   # 0x30 pinned
+      - [0x169F0, asm, GsSetLightMatrix]   # 0x9c pinned
+      - [0x16A8C, asm, GsSetLightMatrix2]   # 0x34 pinned
+      - [0x16AC0, asm, GsMulCoord0]   # 0x94 pinned
+      - [0x16B54, asm, GsMulCoord2]   # 0x84 pinned
+      - [0x16BD8, asm, GsMulCoord3]   # 0x84 pinned
+      - [0x16C5C, asm, print_matrix]   # 0x70 pinned
+      - [0x16CCC, asm, print_vector]   # 0x34 pinned
+      - [0x16D00, asm, GsGetLw]   # 0x2c4 sdk
+      - [0x16FC4, asm, _make_packet]   # 0x94 sdk
+      - [0x17058, asm, GsSortSprite]   # 0x4fc sdk
       - [0x17554, c, RotTransPers4]   # 0x80 sdk
       - [0x175D4, c, ReadSZfifo3]   # 0x14 sdk
       - [0x175E8, c, ReadSZfifo4]   # 0x18 sdk
@@ -370,16 +370,16 @@ segments:
       - [0x17628, c, ReadGeomOffset]   # 0x20 sdk
       - [0x17648, c, ReadGeomScreen]   # 0xc sdk
       - [0x17654, asm, func_80036E54]   # 0x28c
-      - [0x178E0, data, data_8003A8B0]   # 0x4 pinned
-      - [0x178E4, asm, func_8003A8B4]   # 0x8 pinned
+      - [0x178E0, data, data_800370E0]   # 0x4 pinned
+      - [0x178E4, asm, GsDefDispBuff]   # 0x8 pinned
       - [0x178EC, asm, func_800370EC]   # 0xa8
-      - [0x17994, asm, func_8003A964]   # 0xc8 sdk
+      - [0x17994, asm, Gssub_make_matrix]   # 0xc8 sdk
       - [0x17A5C, asm, func_8003725C]   # 0x10
-      - [0x17A6C, asm, func_8003726C]   # 0x24 sdk
-      - [0x17A90, asm, func_8003AA60]   # 0x4c sdk
+      - [0x17A6C, asm, GsDrawOt]   # 0x24 sdk
+      - [0x17A90, asm, gte_init]   # 0x4c sdk
       - [0x17ADC, asm, func_800372DC]   # 0xe8
       - [0x17BC4, data, data_800373C4]   # 0x38
-      - [0x17BFC, asm, func_8003ABCC]   # 0x10 sdk
+      - [0x17BFC, asm, FlushCache]   # 0x10 sdk
       - [0x17C0C, c, GsClearOt]   # 0x58 sdk
       - [0x17C64, c, func_8003AC34]   # 0x10 sdk
       - [0x17C74, asm, func_8003AC44]   # 0x11c sdk
