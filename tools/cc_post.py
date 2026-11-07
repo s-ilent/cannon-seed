@@ -260,6 +260,10 @@ IMPORT_ORDER = None      # rule 21: import-order - the prologue import-pair
                          # order, as [reg, ...] from the marker
                          # (`cc-post: import-order <reg>,<reg>[,...]`); see
                          # _rule21_import_order
+VOL_EXTEND = None        # rule 20: vol-extend - the volatile-re-load merge
+                         # andi delete, as the expected site count from the
+                         # marker (`cc-post: vol-extend <count>`); see
+                         # _rule20_vol_extend
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -1298,6 +1302,100 @@ def _prepass_import_order(lines: list[str]) -> list[str]:
     return res
 
 
+# rule 20 (vol-extend; survey docs/CC_POST_RULE_CLASSES.md section 4,
+# shipped cron-202611070146): the volatile-load zero-extend. gcc 2.6.3
+# volatile reads bypass the zero-extend tracking, so the copy-exit
+# re-load's byte gets an explicit `andi $d,$s,0x00ff` at the merge where
+# retail's cc1 feeds the re-load's result to the merged zero-test
+# directly (probe c7 banked the source laws: no C spelling yields both
+# the real re-load AND no andi - a plain read gets CSE-eliminated - and
+# the asm-memory-clobber route breaks maspsx's delay-slot handling, so
+# the fix cannot ride the source).
+_R20_ANDI = re.compile(r"^andi\t\$(\w+),\$(\w+),0x00ff$")
+_R20_LBU = re.compile(r"^lbu\t\$(\w+),")
+_R20_BRZ = re.compile(r"^(?:beqz|bnez)\t\$(\w+),")
+_R20_BR = re.compile(r"^(?:beq|bne)\t\$(\w+),\$(?:0|zero),")
+
+
+def _rule20_vol_extend(lines: list[str]):
+    """Rule 20 site scan. Site contract (shape-verified, never default-on
+    - an `andi $r,$r,0x00ff` is a genuine zero-extend elsewhere in the
+    corpus; the counted marker is the attestation):
+        lbu $s,<...>       <- the volatile re-load
+        [nop]              <- maspsx's load-use fill (the empirical c3
+                              merge site carries exactly one)
+        andi $d,$s,0x00ff  <- THE WORD (blanked; blank lines carry no
+                              bytes for the assembler)
+        [<label>: ...]     <- the merge label carries no bytes
+        beq|bne $d,$0,<l> / beqz|bnez $d,<l>   <- the merged zero test
+    The backward walk skips only nops and non-instruction lines (one nop
+    max, the load-use fill) - any other real instruction between the lbu
+    and the andi breaks the src law; the forward walk skips only
+    non-instruction lines.
+
+    Returns (rewritten_lines, count), or None when no site matches (the
+    prepass turns None / a count mismatch into a loud exit 3 - never a
+    silent pass)."""
+    out = list(lines)
+    n = 0
+    for i, ln in enumerate(out):
+        m = _R20_ANDI.match(ln.strip())
+        if not m:
+            continue
+        dst, src = m.group(1), m.group(2)
+        # backward: the previous real instruction must be the lbu that
+        # defines the andi's src (one maspsx load-use nop tolerated - raw
+        # maspsx emits it DEBUG-annotated: `nop # DEBUG: Reuse of ...`;
+        # the prepasses run BEFORE main's NOP normalization, so the walk
+        # must use the same NOP pattern the main loop normalizes by)
+        j = i - 1
+        while j >= 0 and not is_instruction(out[j]):
+            j -= 1
+        if j >= 0 and NOP.match(out[j].strip()):
+            j -= 1
+            while j >= 0 and not is_instruction(out[j]):
+                j -= 1
+        if j < 0:
+            continue
+        ml = _R20_LBU.match(out[j].strip())
+        if not ml or ml.group(1) != src:
+            continue
+        # forward: the next real instruction must be the zero test on dst
+        k = i + 1
+        while k < len(out) and not is_instruction(out[k]):
+            k += 1
+        if k >= len(out):
+            continue
+        mb = _R20_BRZ.match(out[k].strip()) or _R20_BR.match(out[k].strip())
+        if not mb or mb.group(1) != dst:
+            continue
+        out[i] = ""
+        n += 1
+    if n == 0:
+        return None
+    return out, n
+
+
+def _prepass_vol_extend(lines: list[str]) -> list[str]:
+    """Marker rule20 (`cc-post: vol-extend <count>`): blank the
+    volatile-re-load merge andi (see _rule20_vol_extend); loud failure
+    (exit 3) when no site matches or the deleted count differs from the
+    marker count - never a silent pass. Only ever fires on
+    marker-carrying units."""
+    res = _rule20_vol_extend(lines)
+    if res is None:
+        sys.stderr.write("cc_post rule 20: no vol-extend site (andi $d,$s,"
+                         "0x00ff whose src is the preceding lbu's dest and "
+                         "whose dest feeds the following zero-test) found\n")
+        sys.exit(3)
+    out, n = res
+    if n != VOL_EXTEND:
+        sys.stderr.write("cc_post rule 20: blanked %d site(s), marker "
+                         "expects %d\n" % (n, VOL_EXTEND))
+        sys.exit(3)
+    return out
+
+
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
     res = list(res)
 
@@ -1697,7 +1795,7 @@ def main() -> None:
     global SWAP_REGS, ADDU_COMMUTE_N, DELAY_SB_OUT, SAVE_SWAP, PAD_LW
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
-    global LT0_SCC, SITE_FRESH_CONST, IMPORT_ORDER
+    global LT0_SCC, SITE_FRESH_CONST, IMPORT_ORDER, VOL_EXTEND
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1782,6 +1880,25 @@ def main() -> None:
             sys.exit(2)
         if LT0_SCC < 1:
             sys.stderr.write("cc_post rule 18: count must be >= 1\n")
+            sys.exit(2)
+        del args[k : k + 2]
+    if "--vol-extend" in args:
+        k = args.index("--vol-extend")
+        # required payload: the expected site count (cc.sh passes the
+        # marker arg verbatim; a bare flag is a usage error - the rule-17
+        # bare-marker lesson, never a silent default)
+        if len(args) < k + 2:
+            sys.stderr.write("usage: cc_post.py --vol-extend <count> ...\n")
+            sys.exit(2)
+        try:
+            VOL_EXTEND = int(args[k + 1])
+        except ValueError:
+            sys.stderr.write("cc_post rule 20: --vol-extend requires an integer "
+                             "count (usage: cc_post.py --vol-extend <count> "
+                             "<file.mas.s>); got %s\n" % args[k + 1])
+            sys.exit(2)
+        if VOL_EXTEND < 1:
+            sys.stderr.write("cc_post rule 20: count must be >= 1\n")
             sys.exit(2)
         del args[k : k + 2]
     if "--addiu-imm" in args:
@@ -1870,6 +1987,8 @@ def main() -> None:
         lines = _prepass_site_fresh_const(lines)
     if IMPORT_ORDER is not None:
         lines = _prepass_import_order(lines)
+    if VOL_EXTEND is not None:
+        lines = _prepass_vol_extend(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:

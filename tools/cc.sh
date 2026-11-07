@@ -252,6 +252,23 @@ if grep -q 'cc-post: import-order' "$SRC" 2>/dev/null; then
         exit 3
     fi
 fi
+# rule20 composes with any primary flag above: the volatile-load andi class
+# (the func_8007736C copy-exit re-load merge; survey
+# docs/CC_POST_RULE_CLASSES.md section 4, window cron-202611070146): gcc
+# 2.6.3 volatile reads bypass the zero-extend tracking and emit
+# `andi $2,$2,0x00ff` at the merge where retail's cc1 feeds the re-load's
+# result to the merged zero-test directly. No source spelling yields both
+# the real re-load and no andi (probe c7; the asm-memory-clobber route
+# breaks maspsx's delay-slot handling), so the delete is a post-pass,
+# shape-gated: the andi's src must be the preceding lbu's dest (one
+# load-use nop tolerated) and its dest must feed the following zero-test;
+# never default-on - a 0x00ff andi is a genuine zero-extend elsewhere in
+# the corpus. Marker arg: <count> - the expected site count; a bare marker
+# defaults to 1.
+if grep -q 'cc-post: vol-extend' "$SRC" 2>/dev/null; then
+    R20N=$(grep -o 'cc-post: vol-extend.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
+    POSTFLAGS="$POSTFLAGS --vol-extend ${R20N:-1}"
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).

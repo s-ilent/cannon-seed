@@ -32,6 +32,20 @@
  * LADDER STATE (cron-202611031758, oracle UP disc-free sixteenth
  * rehearsal; probe = judge_unit live; DIFF 170/179 -> 117/186, SIZE 716
  * -> 756 vs 744):
+ *  - RULE-20 STATE (cron-202611070146, judge live with rules 19+21+20
+ *    staged: site-fresh-const -1 $22 + import-order $21,$19 + vol-extend
+ *    1): SIZE 744 = RETAIL for the first time (186 words both sides),
+ *    DIFF 144/186 - the volatile-re-load merge andi is gone. Wordmap
+ *    classes: funct=7, opcode=115 (the walk cluster + the tail phase),
+ *    same-op-imm=4 (68 152 520 600), same-op-mixed=10, same-op-reg=6,
+ *    same-op-target=2 (112 120). Tail map (668+): built[k] == retail[k-1]
+ *    - a one-word phase, OPPOSITE direction to the walk cluster's -2;
+ *    the rule-22 site list comes from a FRESH wordmap at implementation
+ *    time, never a stale one. Raw-maspsx trap banked: the load-use fill
+ *    before the merge andi is DEBUG-annotated
+ *    (`nop # DEBUG: Reuse of '$2'. ...`), and the prepasses run before
+ *    main's NOP normalization - rule 20's walk matches by the module NOP
+ *    pattern, the regression test pins it.
  *  - CLOSED (cron-202611021158): the mount guard reads D_800C8028; buf is
  *    0x20 bytes; the mount-guard store's load-use nop now derives
  *    upstream from the maspsx far-store look-past (pad-lw RETIRED).

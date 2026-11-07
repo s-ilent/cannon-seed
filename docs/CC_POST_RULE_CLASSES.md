@@ -253,7 +253,9 @@ in the build order despite landing mid-list in the map.
 
 **Order: A -> C -> B -> D.** (STATUS 2026-11-07: A shipped as rule 19,
 window cron-202611070601, 8d7014da; C shipped as rule 21, window
-cron-202611070716, 5915e484; B and D open.)
+cron-202611070716, 5915e484; B shipped as rule 20, window
+cron-202611070146 - judged live at SIZE 744 = retail for the first time,
+DIFF 144/186 with the andi gone; only D open.)
 - A first: the largest class (~12 words) AND its displacement cascade die
   together; one rule class removes the biggest block and the frame returns
   to retail's layout, which also un-shadows every later word map (later
