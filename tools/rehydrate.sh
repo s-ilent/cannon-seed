@@ -61,6 +61,36 @@ git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git config credential.helper store
 say "git identity + credential helper asserted"
 
+# --- 4a. baselines from the extract intermediates (the 2026-11-07 restore) ---
+# The disc-return's extraction intermediates at extract/<region>/<file>;1 ARE
+# the TRUE oracle bytes (sha1-identical to the eight committed oracles,
+# proven 2026-11-07 when a rollback ate baselines/ while the disc links were
+# dead - the window restored witness 8/8 from these files alone). If a
+# baseline is missing or disagrees with its extract twin, restore it; the
+# committed config/sha1 gate stays the only authority (the 4b audit below
+# then reports the truth).
+if [ -d extract/jp ] || [ -d extract/eu ]; then
+    restore_one() {
+        # $1 = baseline name, $2 = extract/<region>/<file>;1 (may be absent)
+        [ -f "extract/$2" ] || return 0
+        if [ ! -f "baselines/$1" ] || \
+           [ "$(sha1sum < "baselines/$1" | cut -d" " -f1)" != \
+             "$(sha1sum < "extract/$2" | cut -d" " -f1)" ]; then
+            mkdir -p baselines
+            cp "extract/$2" "baselines/$1"
+            say "baselines/$1 restored from extract/$2"
+        fi
+    }
+    restore_one slps_00270   "jp/SLPS_002.70;1"
+    restore_one sces_00269   "eu/SCES_002.69;1"
+    restore_one mainmenu_jp  "jp/MAINMENU.EXE;1"
+    restore_one mainmenu_eu  "eu/MAINMENU.EXE;1"
+    restore_one g3_jp        "jp/DRAGOON_G3.EXE;1"
+    restore_one g3_eu        "eu/DRAGOON_G3.EXE;1"
+    restore_one g3org_jp     "jp/GOURB_G3ORG.EXE;1"
+    restore_one g3org_eu     "eu/GOURB_G3ORG.EXE;1"
+fi
+
 # --- 4b. baseline oracle audit (read-only guard, NEVER fails the session) ----
 # cron-20261101-0237: a rollback can park the retired woven-era dumps at
 # baselines/ while the committed oracles pin the true de-framed retail -
@@ -170,6 +200,32 @@ else
     say "mipsel binutils intact"
 fi
 
+# --- 7.5 guarded-cc1 witness (the twenty-fifth-rollback lesson, 2026-11-07) --
+# The pipeline's cc1 is NOT the decompals prebuilt at gcc-2.6.3-psx/cc1:
+# since cron-20261022 it is the SOURCE build at gcc-2.6.3-src with the
+# MODIFIED-CC1 guards 1-4 applied (build_cc1_263.sh + patch_cc1_263.sh),
+# wired at build time via QEMU=/usr/bin/env GCCDIR=<source tree> (the source
+# binaries are x86-64; the decompals ones are i386-under-qemu). A rollback
+# restores the prebuilt i386 cc1 and the -x checks above cannot tell the
+# difference: 100+ units stay byte-exact but the three ISO9660 rows in
+# mainmenu_jp (func_8007796C/77678/77A18) drift and ALL image hashes break.
+# slps_00270 --smoke does NOT catch it (that target has no guard-sensitive
+# row) - hence this explicit check and the mainmenu_jp canary in --smoke.
+CC1SRC=/home/z/my-project/tools-local/gcc-2.6.3-src/gcc-2.6.3
+if [ -x /home/z/my-project/tools-local/gcc-2.6.3-psx/cc1 ] && [ ! -x "$CC1SRC/cc1" ]; then
+    say "WARN: guarded cc1 MISSING (rollback ate the source build)"
+    say "      the ISO9660 rows WILL drift - remedy (about 6 min):"
+    say "        sh tools/build_cc1_263.sh && sh tools/patch_cc1_263.sh"
+    say "        then build with: QEMU=/usr/bin/env GCCDIR=$CC1SRC make build TARGET=<t>"
+elif [ -x "$CC1SRC/cc1" ]; then
+    if grep -q "MODIFIED-CC1 (GUARD 4" "$CC1SRC/loop.c" 2>/dev/null && \
+       grep -q "MODIFIED-CC1 (GUARD 3" "$CC1SRC/cse.c" 2>/dev/null; then
+        say "guarded cc1 intact (source tree carries guards 1-4)"
+    else
+        say "WARN: cc1 source tree lost the guards - run: sh tools/patch_cc1_263.sh"
+    fi
+fi
+
 # --- 8. Psy-Q compiler (GCC 2.6.3-psx + qemu-i386, tools-local) ---------------
 # Needed for C matches (tools/cc.sh). get_gcc.sh is idempotent and only
 # hits the network when something is actually missing.
@@ -187,7 +243,19 @@ fi
 "$PYBIN" -c "import splat, spimdisasm, capstone; print('import smoke: OK')" || {
     say "FATAL: toolchain still broken"; exit 1; }
 
+# witness status line (bash-only tool; informational, never fails rehydrate)
+if command -v bash >/dev/null 2>&1 && [ -f tools/witness_check.sh ]; then
+    bash tools/witness_check.sh 2>&1 | tail -1
+fi
+
 END=$(date +%s)
 say "done in $((END - START))s — tree ready (run with --smoke for the full oracle proof)"
-[ "${1:-}" = "--smoke" ] && make verify TARGET=slps_00270
+# the full oracle proof: slps_00270 is the fast whole-image gate, and
+# mainmenu_jp is the guarded-cc1 CANARY (its three ISO9660 rows are the only
+# units in the repo that drift under the unguarded prebuilt cc1 - witnessed
+# live 2026-11-07). Both must pass for a truly green session start.
+if [ "${1:-}" = "--smoke" ]; then
+    make verify TARGET=slps_00270 || exit 1
+    make verify TARGET=mainmenu_jp || exit 1
+fi
 exit 0
