@@ -70,12 +70,12 @@ segments:
       - [0x1C7C, data, data_8002180C]   # 0x10 pinned
       - [0x1C8C, data, data_8002148C]   # 0x380
       - [0x200C, asm, func_8002180C]   # 0x22cc
-      - [0x42D8, asm, func_80024458]   # 0x2e8 pinned
+      - [0x42D8, asm, func_80023AD8]   # 0x2e8 pinned
       - [0x45C0, asm, func_80023DC0]   # 0x3b4
       - [0x4974, asm, func_80024C24]   # 0x194 pinned
-      - [0x4B08, asm, func_80024DB8]   # 0x144 pinned
-      - [0x4C4C, asm, func_80024EFC]   # 0x1a8 pinned
-      - [0x4DF4, asm, func_800250A4]   # 0x20c pinned
+      - [0x4B08, asm, func_80024308]   # 0x144 pinned
+      - [0x4C4C, asm, func_8002444C]   # 0x1a8 pinned
+      - [0x4DF4, asm, func_800245F4]   # 0x20c pinned
       - [0x5000, data, data_80024800]   # 0xc8
       - [0x50C8, asm, func_800248C8]   # 0x2374
       - [0x743C, asm, func_80026C3C]   # 0x20 sdk
@@ -84,7 +84,7 @@ segments:
       - [0x7500, asm, func_80026D00]   # 0x58c
       - [0x7A8C, c,   SpuVmDamperOn]   # 0x14 sdk
       - [0x7AA0, asm, func_800272A0]   # 0x532c
-      - [0xCDCC, asm, func_8002E37C]   # 0x18 sdk
+      - [0xCDCC, asm, func_8002C5CC]   # 0x18 sdk
       - [0xCDE4, asm, func_8002C5E4]   # 0x1350
       - [0xE134, data, data_8002D934]   # 0x90
       - [0xE1C4, asm, bzero]   # 0x10 sdk
