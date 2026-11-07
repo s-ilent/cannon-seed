@@ -25,8 +25,8 @@ glabel SsVabTransBodyPartly
     /* 59630 80078E30 1000B0AF */   sw        $s0, 0x10($sp)
     /* 59634 80078E34 00140600 */  sll        $v0, $a2, 16
     /* 59638 80078E38 038C0200 */  sra        $s1, $v0, 16
-    /* 5963C 80078E3C 1980013C */  lui        $at, %hi(D_80193334)
-    /* 59640 80078E40 34332124 */  addiu      $at, $at, %lo(D_80193334)
+    /* 5963C 80078E3C 1980013C */  lui        $at, %hi(_svm_vab_used)
+    /* 59640 80078E40 34332124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 59644 80078E44 21083100 */  addu       $at, $at, $s1
     /* 59648 80078E48 00002390 */  lbu        $v1, 0x0($at)
     /* 5964C 80078E4C 02000234 */  ori        $v0, $zero, 0x2
@@ -42,8 +42,8 @@ nonmatching func_80078E68, 0x108
 
 glabel func_80078E68
     /* 59668 80078E68 80801100 */  sll        $s0, $s1, 2
-    /* 5966C 80078E6C 1980013C */  lui        $at, %hi(D_80194E4C)
-    /* 59670 80078E70 4C4E2124 */  addiu      $at, $at, %lo(D_80194E4C)
+    /* 5966C 80078E6C 1980013C */  lui        $at, %hi(_svm_vab_total)
+    /* 59670 80078E70 4C4E2124 */  addiu      $at, $at, %lo(_svm_vab_total)
     /* 59674 80078E74 21083000 */  addu       $at, $at, $s0
     /* 59678 80078E78 0000228C */  lw         $v0, 0x0($at)
     /* 5967C 80078E7C 0D80013C */  lui        $at, %hi(D_800C8100)
@@ -52,8 +52,8 @@ glabel func_80078E68
     /* 59688 80078E88 FC8022AC */  sw         $v0, %lo(D_800C80FC)($at)
     /* 5968C 80078E8C DCE3010C */  jal        SpuSetTransferMode
     /* 59690 80078E90 21200000 */   addu      $a0, $zero, $zero
-    /* 59694 80078E94 1980013C */  lui        $at, %hi(D_80194E90)
-    /* 59698 80078E98 904E2124 */  addiu      $at, $at, %lo(D_80194E90)
+    /* 59694 80078E94 1980013C */  lui        $at, %hi(_svm_vab_start)
+    /* 59698 80078E98 904E2124 */  addiu      $at, $at, %lo(_svm_vab_start)
     /* 5969C 80078E9C 21083000 */  addu       $at, $at, $s0
     /* 596A0 80078EA0 0000248C */  lw         $a0, 0x0($at)
     /* 596A4 80078EA4 21E9010C */  jal        SpuSetTransferStartAddr
@@ -98,8 +98,8 @@ glabel func_80078E68
     /* 59730 80078F30 01000334 */  ori        $v1, $zero, 0x1
     /* 59734 80078F34 0D80013C */  lui        $at, %hi(D_800C80FC)
     /* 59738 80078F38 FC8020AC */  sw         $zero, %lo(D_800C80FC)($at)
-    /* 5973C 80078F3C 1980013C */  lui        $at, %hi(D_80193334)
-    /* 59740 80078F40 34332124 */  addiu      $at, $at, %lo(D_80193334)
+    /* 5973C 80078F3C 1980013C */  lui        $at, %hi(_svm_vab_used)
+    /* 59740 80078F40 34332124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 59744 80078F44 21082200 */  addu       $at, $at, $v0
     /* 59748 80078F48 000023A0 */  sb         $v1, 0x0($at)
   .L80078F4C:

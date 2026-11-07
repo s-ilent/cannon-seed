@@ -21,8 +21,8 @@ nonmatching func_8008564C, 0x74
 
 glabel func_8008564C
     /* 65E4C 8008564C 1000B0AF */  sw         $s0, 0x10($sp)
-    /* 65E50 80085650 1980013C */  lui        $at, %hi(D_80193334)
-    /* 65E54 80085654 34332124 */  addiu      $at, $at, %lo(D_80193334)
+    /* 65E50 80085650 1980013C */  lui        $at, %hi(_svm_vab_used)
+    /* 65E54 80085654 34332124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 65E58 80085658 21082400 */  addu       $at, $at, $a0
     /* 65E5C 8008565C 00002390 */  lbu        $v1, 0x0($at)
     /* 65E60 80085660 01000234 */  ori        $v0, $zero, 0x1

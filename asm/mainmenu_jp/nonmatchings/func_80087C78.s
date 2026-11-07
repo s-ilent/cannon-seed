@@ -15,8 +15,8 @@ glabel SsUtGetVBaddrInSB
     /* 5AD90 8007A590 10004010 */  beqz       $v0, .L8007A5D4
     /* 5AD94 8007A594 00140400 */   sll       $v0, $a0, 16
     /* 5AD98 8007A598 03240200 */  sra        $a0, $v0, 16
-    /* 5AD9C 8007A59C 1980013C */  lui        $at, %hi(D_80193334)
-    /* 5ADA0 8007A5A0 34332124 */  addiu      $at, $at, %lo(D_80193334)
+    /* 5AD9C 8007A59C 1980013C */  lui        $at, %hi(_svm_vab_used)
+    /* 5ADA0 8007A5A0 34332124 */  addiu      $at, $at, %lo(_svm_vab_used)
     /* 5ADA4 8007A5A4 21082400 */  addu       $at, $at, $a0
     /* 5ADA8 8007A5A8 00002390 */  lbu        $v1, 0x0($at)
     /* 5ADAC 8007A5AC 01000234 */  ori        $v0, $zero, 0x1
@@ -28,8 +28,8 @@ nonmatching func_8007A5B8, 0x28
 
 glabel func_8007A5B8
     /* 5ADB8 8007A5B8 80100400 */  sll        $v0, $a0, 2
-    /* 5ADBC 8007A5BC 1980013C */  lui        $at, %hi(D_80194E90)
-    /* 5ADC0 8007A5C0 904E2124 */  addiu      $at, $at, %lo(D_80194E90)
+    /* 5ADBC 8007A5BC 1980013C */  lui        $at, %hi(_svm_vab_start)
+    /* 5ADC0 8007A5C0 904E2124 */  addiu      $at, $at, %lo(_svm_vab_start)
     /* 5ADC4 8007A5C4 21082200 */  addu       $at, $at, $v0
     /* 5ADC8 8007A5C8 0000228C */  lw         $v0, 0x0($at)
     /* 5ADCC 8007A5CC 76E90108 */  j          .L8007A5D8

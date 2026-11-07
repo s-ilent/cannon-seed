@@ -3512,6 +3512,7 @@ SsVabFakeBody = 0x80080BF4; // LIBSND VS_VFB member .text+0x0 (extent 0x70); sdk
 SsUtGetVabHdr = 0x80080C6C; // LIBSND UT_GVH member .text+0x0 (extent 0xdc); sdk_members.py unique placement + sig-db agrees
 SsUtGetVagAtr = 0x80080D50; // LIBSND UT_GVA member .text+0x0 (extent 0x23c); sdk_members.py unique placement + sig-db agrees
 SsSetMVol = 0x80080F90; // LIBSND SCSMVOL member; sdk_members.py ambiguous placement, name agreed by all claimants (LIBSND twins) + sig-db agrees
+SpuSetCommonAttr = 0x80080FE0; // LIBSPU S_SCA member .text+0x0 (extent 0x394); sdk_members.py unique placement + sig-db agrees
 SsSetSerialVol = 0x80081374; // LIBSND SCSSVOL member; sdk_members.py unique placement + sig-db agrees
 SsVabTransCompleted = 0x800814D4; // LIBSND VS_VTC member .text+0x0 (extent 0x28); sdk_members.py unique placement + sig-db agrees
 SpuIsTransferCompleted = 0x80081500; // LIBSPU S_ITC member .text+0x0 (extent 0xa8); sdk_members.py unique placement + sig-db agrees
