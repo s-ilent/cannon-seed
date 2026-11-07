@@ -63,6 +63,28 @@
  *      FULL SITE LIST + closure order ((a) c8 source probe first, then
  *      the d2 position mover) banked in docs/CC_POST_RULE_CLASSES.md
  *      section 6 STATUS. Suite 207 -> 224 (17 rule-22 tests).
+ *    - PROBE C8 (cron-202611071331, judge live with rules 21+20:1+22
+ *      staged, rule 19 DROPPED - its shape contract broke under the
+ *      restructure, the -1 home parks for a re-derivation): THE (a)
+ *      PHASE DIES - DIFF 144 -> 78/186, the biggest single-window
+ *      ladder movement in the row's history. The shape is RETAIL-EXACT
+ *      in the component loop (insns 33-50 = retail w36-54 word for
+ *      word): the hop jumps INTO the merged volatile re-load (hop and
+ *      copy-exit converge on [lbu;nop;beqz]), the entry path carries
+ *      the preheader [lbu;nop] pair between the sep2 ori and the top
+ *      NUL check, the back edge branches past it. The volatile-load
+ *      andi: gcc emitted only ONE site this shape (rule 20 count 1) -
+ *      neither new volatile load produced a visible andi before its
+ *      zero-test (the shape re-derivation owed). SIZE 752 = +8: the
+ *      entry pair (+2) + the walk block's position classes (+6, the d2
+ *      mover's territory - anchor $v0 route, at-split in-loop, i-init
+ *      delay slot). REMAINING 78 = the walk block (idx 460-660: the
+ *      d2/d3 position machinery + the same-op-reg i-home sites
+ *      460/480/492/588/608) + the tail (664-740: the epilogue + the
+ *      now-OPPOSITE phase, built long) + six same-op-imm branch
+ *      displacement cascades (68/152/200/296/356/408 - ride the SIZE
+ *      mismatch, not independent). NEXT: the d2 position mover on the
+ *      rule-22 machinery; SIZE and the cascade resolve inside it.
  *  - RULE-22 SITE-LIST STARTING POINT (same window, difflib block map of
  *    the 186-word streams; WORD indices, the wordmap's idx field is
  *    BYTES = 4x these): (a) w41-43 the copy-exit merge - retail carries
