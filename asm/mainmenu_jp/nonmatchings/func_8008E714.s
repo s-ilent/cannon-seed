@@ -225,7 +225,7 @@ glabel func_80080390
     /* 60CA8 800804A8 00141500 */  sll        $v0, $s5, 16
     /* 60CAC 800804AC 0D004014 */  bnez       $v0, .L800804E4
     /* 60CB0 800804B0 2138C002 */   addu      $a3, $s6, $zero
-    /* 60CB4 800804B4 8B01020C */  jal        func_8008062C
+    /* 60CB4 800804B4 8B01020C */  jal        SpuMalloc
     /* 60CB8 800804B8 21200002 */   addu      $a0, $s0, $zero
     /* 60CBC 800804BC 21384000 */  addu       $a3, $v0, $zero
     /* 60CC0 800804C0 FFFF0224 */  addiu      $v0, $zero, -0x1

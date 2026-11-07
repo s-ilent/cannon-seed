@@ -4095,7 +4095,7 @@
 //   0x8008017c LIBSND    VS_VH          unique     SsVabOpenHeadSticky adoptable  (sig-db agree)
 //   0x800801b0 LIBSND    VS_VH          unique     SsVabFakeHead adoptable  (sig-db agree)
 //   0x800801e4 LIBSND    VS_VH          unique     SsVabOpenHeadWithMode adoptable  (sig-db agree)
-//   0x8008062c LIBSPU    S_M_M          unique     SpuMalloc  (sig-db agree)
+//   0x8008062c LIBSPU    S_M_M          unique     SpuMalloc adoptable  (sig-db agree)
 //   0x800808f4 LIBSPU    S_M_INT        unique     _spu_gcSPU adoptable  (sig-db agree)
 //   0x80080bf4 LIBSND    VS_VFB         unique     SsVabFakeBody adoptable  (sig-db agree)
 //   0x80080c6c LIBSND    UT_GVH         unique     SsUtGetVabHdr adoptable  (sig-db agree)
