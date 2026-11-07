@@ -79,7 +79,7 @@ segments:
       - [0x5000, data, data_80024800]   # 0xc8
       - [0x50C8, asm, func_800248C8]   # 0x2374
       - [0x743C, asm, func_80026C3C]   # 0x20 sdk
-      - [0x745C, asm, func_80027CFC]   # 0x18 sdk
+      - [0x745C, asm, GsSetOrign]   # 0x18 sdk
       - [0x7474, data, data_80026C74]   # 0x8c
       - [0x7500, asm, func_80026D00]   # 0x58c
       - [0x7A8C, c,   func_8002845C]   # 0x14 sdk
@@ -87,27 +87,27 @@ segments:
       - [0xCDCC, asm, func_8002E37C]   # 0x18 sdk
       - [0xCDE4, asm, func_8002C5E4]   # 0x1350
       - [0xE134, data, data_8002D934]   # 0x90
-      - [0xE1C4, asm, func_8002FB04]   # 0x10 sdk
-      - [0xE1D4, asm, func_8002FB14]   # 0x10 sdk
-      - [0xE1E4, asm, func_8002FB24]   # 0x10 sdk
-      - [0xE1F4, asm, func_8002FB34]   # 0x10 sdk
-      - [0xE204, asm, func_8002FB44]   # 0x10 sdk
-      - [0xE214, asm, func_8002FB54]   # 0x10 sdk
-      - [0xE224, asm, func_8002FB64]   # 0x10 sdk
-      - [0xE234, asm, func_8002FB74]   # 0x10 sdk
-      - [0xE244, asm, func_8002FB84]   # 0x10 sdk
+      - [0xE1C4, asm, bzero]   # 0x10 sdk
+      - [0xE1D4, asm, malloc]   # 0x10 sdk
+      - [0xE1E4, asm, memset]   # 0x10 sdk
+      - [0xE1F4, asm, strcat]   # 0x10 sdk
+      - [0xE204, asm, printf]   # 0x10 sdk
+      - [0xE214, asm, strlen]   # 0x10 sdk
+      - [0xE224, asm, strcmp]   # 0x10 sdk
+      - [0xE234, asm, strcpy]   # 0x10 sdk
+      - [0xE244, asm, strncat]   # 0x10 sdk
       - [0xE254, asm, func_8002DA54]   # 0xb3c
       - [0xED90, data, data_8002E590]   # 0x4
-      - [0xED94, asm, func_80030804]   # 0x10 sdk
+      - [0xED94, asm, memchr]   # 0x10 sdk
       - [0xEDA4, asm, func_8002E5A4]   # 0x74
       - [0xEE18, data, data_8002E618]   # 0xc
-      - [0xEE24, asm, func_80030894]   # 0x10 sdk
-      - [0xEE34, asm, func_800308A4]   # 0x10 sdk
-      - [0xEE44, asm, func_800308B4]   # 0x10 sdk
-      - [0xEE54, asm, func_800308C4]   # 0x10 sdk
-      - [0xEE64, asm, func_800308D4]   # 0x10 sdk
-      - [0xEE74, c, func_800308E4]   # 0x18 sdk
-      - [0xEE8C, c, func_800308FC]   # 0x10 sdk
+      - [0xEE24, asm, strncmp]   # 0x10 sdk
+      - [0xEE34, asm, strncpy]   # 0x10 sdk
+      - [0xEE44, asm, free]   # 0x10 sdk
+      - [0xEE54, asm, rand]   # 0x10 sdk
+      - [0xEE64, asm, exit]   # 0x10 sdk
+      - [0xEE74, c, SetVideoMode]   # 0x18 sdk
+      - [0xEE8C, c, GetVideoMode]   # 0x10 sdk
       - [0xEE9C, asm, func_8002E69C]   # 0x30 sdk
       - [0xEECC, asm, func_8002E6CC]   # 0x30 sdk
       - [0xEEFC, asm, func_8002E6FC]   # 0x30 sdk
@@ -124,7 +124,7 @@ segments:
       - [0xF44C, c, stopIntr]   # 0xb0 sdk
       - [0xF4FC, asm, func_8003109C]   # 0x88 sdk
       - [0xF584, c,   func_80031124]   # 0x2c sdk
-      - [0xF5B0, asm, func_80031150]   # 0x10 sdk
+      - [0xF5B0, asm, setjmp]   # 0x10 sdk
       - [0xF5C0, asm, func_8002EDC0]   # 0x50 sdk
       - [0xF610, asm, func_8002EE10]   # 0x184 sdk
       - [0xF794, asm, func_8002EF94]   # 0xa8 sdk
@@ -133,25 +133,25 @@ segments:
       - [0xF8C0, asm, func_80031590]   # 0x7c sdk
       - [0xF93C, asm, func_8003160C]   # 0x2c sdk
       - [0xF968, c, func_80031638]   # 0x2c sdk
-      - [0xF994, asm, func_80031664]   # 0x148 sdk
-      - [0xFADC, asm, func_800317AC]   # 0x9c sdk
-      - [0xFB78, asm, func_80031848]   # 0x10 sdk
+      - [0xF994, asm, VSync]   # 0x148 sdk
+      - [0xFADC, asm, v_wait]   # 0x9c sdk
+      - [0xFB78, asm, puts]   # 0x10 sdk
       - [0xFB88, asm, func_8002F388]   # 0x10
-      - [0xFB98, asm, func_80031868]   # 0x10 sdk
-      - [0xFBA8, asm, func_80031878]   # 0x10 sdk
-      - [0xFBB8, asm, func_80031888]   # 0x10 sdk
-      - [0xFBC8, asm, func_80031898]   # 0x10 sdk
-      - [0xFBD8, asm, func_800318A8]   # 0x10 sdk
-      - [0xFBE8, asm, func_800318B8]   # 0x10 sdk
-      - [0xFBF8, asm, func_800318C8]   # 0x10 sdk
-      - [0xFC08, asm, func_800318D8]   # 0x10 sdk
-      - [0xFC18, asm, func_800318E8]   # 0x10 sdk
-      - [0xFC28, asm, func_800318F8]   # 0x10 sdk
-      - [0xFC38, asm, func_80031908]   # 0x10 sdk
-      - [0xFC48, asm, func_80031918]   # 0x10 sdk
-      - [0xFC58, asm, func_80031928]   # 0x10 sdk
-      - [0xFC68, asm, func_80031938]   # 0x10 sdk
-      - [0xFC78, asm, func_80031948]   # 0x10 sdk
+      - [0xFB98, asm, lseek]   # 0x10 sdk
+      - [0xFBA8, asm, close]   # 0x10 sdk
+      - [0xFBB8, asm, write]   # 0x10 sdk
+      - [0xFBC8, asm, SetMem]   # 0x10 sdk
+      - [0xFBD8, asm, EnableEvent]   # 0x10 sdk
+      - [0xFBE8, asm, delete]   # 0x10 sdk
+      - [0xFBF8, asm, format]   # 0x10 sdk
+      - [0xFC08, asm, HookEntryInt]   # 0x10 sdk
+      - [0xFC18, asm, _96_init]   # 0x10 sdk
+      - [0xFC28, asm, LoadExec]   # 0x10 sdk
+      - [0xFC38, asm, ChangeClearPAD]   # 0x10 sdk
+      - [0xFC48, asm, InitHeap]   # 0x10 sdk
+      - [0xFC58, asm, intr_stop_commit]   # 0x10 sdk
+      - [0xFC68, asm, nextfile]   # 0x10 sdk
+      - [0xFC78, asm, OpenEvent]   # 0x10 sdk
       - [0xFC88, asm, func_80031958]   # 0x10 sdk
       - [0xFC98, asm, func_80031968]   # 0x10 sdk
       - [0xFCA8, asm, func_8002F4A8]   # 0x10
