@@ -561,7 +561,7 @@ segments:
       - [0x248B0, asm, CloseEvent]   # 0x10 sdk
       - [0x248C0, asm, DisableEvent]   # 0x10 sdk
       - [0x248D0, c, SsSetMono]   # 0x14 sdk
-      - [0x248E4, c, func_80049794]   # 0x10 sdk
+      - [0x248E4, c, SsSetStereo]   # 0x10 sdk
       - [0x248F4, asm, SsVabOpenHead]   # 0x34 sdk
       - [0x24928, asm, SsVabOpenHeadSticky]   # 0x34 sdk
       - [0x2495C, asm, SsVabFakeHead]   # 0x34 sdk
