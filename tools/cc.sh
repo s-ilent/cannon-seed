@@ -269,6 +269,29 @@ if grep -q 'cc-post: vol-extend' "$SRC" 2>/dev/null; then
     R20N=$(grep -o 'cc-post: vol-extend.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3}')
     POSTFLAGS="$POSTFLAGS --vol-extend ${R20N:-1}"
 fi
+# rule22 composes with any primary flag above: the explicit-site
+# register rewrite (the func_8007736C walk i-home, $s4 -> $s2; survey
+# docs/CC_POST_RULE_CLASSES.md section 6, window cron-202611071331):
+# the counter's home is allocation-order driven in gcc 2.6.3 (probes
+# c5a/c5b: four declaration scopes, all $s4) where retail homes it in
+# $s2 (level's dead register), and the textual .s cannot prove liveness,
+# so the marker's explicit site list IS the attestation - each site is
+# `label:insn-index:mnemonic` (insn-index counts real instructions after
+# the label, 0-based) and every site is shape-verified (mnemonic + the
+# old register token present) with a loud fail on any mismatch; the
+# judge verdict is the semantic gate. Never default-on; the position
+# mover (survey d2) ships only after this machinery proves out. Marker
+# args: <old> <new> <site>[,<site>...] - a bare marker LOUD-FAILS the
+# build.
+if grep -q 'cc-post: reg-field' "$SRC" 2>/dev/null; then
+    R22ARGS=$(grep -o 'cc-post: reg-field.*' "$SRC" 2>/dev/null | head -1 | awk '{print $3, $4, $5}')
+    if [ -n "$R22ARGS" ]; then
+        POSTFLAGS="$POSTFLAGS --reg-field $R22ARGS"
+    else
+        echo "cc.sh: cc-post: reg-field marker present without args (<old> <new> <label>:<idx>:<mnem>[,...])" >&2
+        exit 3
+    fi
+fi
 # Rule 10 composes with any primary flag above: re-inserts the loop-entry
 # guard retail's cc1 pipeline keeps and gcc 2.6.3 folds away (the LIBCD
 # ISO9660 family remnant, CD_newmedia 2026-11-01; see cc_post.py header).

@@ -264,6 +264,11 @@ VOL_EXTEND = None        # rule 20: vol-extend - the volatile-re-load merge
                          # andi delete, as the expected site count from the
                          # marker (`cc-post: vol-extend <count>`); see
                          # _rule20_vol_extend
+REG_FIELD = None         # rule 22: reg-field - the explicit-site register
+                         # rewrite, as (old, new, sites) from the marker
+                         # (`cc-post: reg-field <old> <new>
+                         # <label>:<insn-index>:<mnemonic>[,...]`); see
+                         # _rule22_reg_field
 RULE16_VERDICT = False   # rule 16: verdict-polarity invert+reorder (the
                          # early `if (f() == K) return -1;` verdict: gcc
                          # emits beq-to-tail with the dead -1 in the branch
@@ -1396,6 +1401,133 @@ def _prepass_vol_extend(lines: list[str]) -> list[str]:
     return out
 
 
+# rule 22 (reg-field; survey docs/CC_POST_RULE_CLASSES.md section 6,
+# window cron-202611071331): the explicit-site register rewrite. The
+# func_8007736C walk block homes the 0x40 cache counter i in $s4 (sep's
+# dead register) in every source shape (probes c5a/c5b: four declarations
+# scopes/orders, all identical), where retail homes it in $s2 (level's
+# dead register) - the i-home is allocation-order driven and unreachable
+# by source steering, so the register fields are a post-pass. The AF70
+# decision brief (cron-20261101-0507) banks the same mechanism as its
+# option B; THIS rule is the survey's gated step 1: the site-list
+# machinery ships FIRST, the position mover (d2) only after it proves
+# out. THE EXPLICIT SITE LIST SUBSTITUTES FOR LIVENESS ANALYSIS - the
+# textual .s cannot prove the new register dead at the site (the banked
+# decode says s2 is level's DEAD register, its live range closed before
+# the walk); the judge verdict is the semantic gate. Transform,
+# shape-verified per site, loud-fail on ANY mismatch - never a silent
+# pass, never default-on:
+#   marker `cc-post: reg-field <old> <new> <site>[,<site>...]` where each
+#   site is `label:insn-index:mnemonic` - insn-index counts
+#   is_instruction lines after the label line (0-based; labels,
+#   directives and comments carry no words, so the count is identical
+#   pre- and post-normalization), and the mnemonic pins the expected
+#   insn shape recorded at survey/wordmap time. The rule rewrites EVERY
+#   `$old` register-token occurrence at the listed site (`addu
+#   $20,$20,1` rewrites both fields); the token regex captures maximal
+#   alphanumeric runs, so $2 never matches inside $22. A rewritten site
+#   must still contain $old (the second pass over a duplicate site
+#   loud-fails).
+_R22_REG = re.compile(r"\$([A-Za-z0-9]+)")
+
+
+def _rule22_reg_field(lines: list[str], old: str, new: str,
+                      sites: list[tuple[str, int, str]]):
+    """Rule 22 site scan. Rewrites the register field at the explicitly
+    listed `label:insn-index:mnemonic` sites; returns the rewritten
+    lines, or None when ANY site fails its contract (label unknown, insn
+    index out of range, mnemonic mismatch, no `$old` token at the site) -
+    the prepass turns None into a loud exit 3. Never default-on; only
+    ever fires on marker-carrying units."""
+    old_n = old.lstrip("$").lower()
+    new_n = new.lstrip("$").lower()
+    if not old_n or not new_n or old_n == new_n:
+        return None
+    label_pos: dict[str, int] = {}
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if (s and not s.startswith(("#", ".")) and s.endswith(":")
+                and not is_instruction(ln)):
+            label_pos.setdefault(s[:-1], i)
+    out = list(lines)
+    rewritten = 0
+    for label, idx, mnem in sites:
+        start = label_pos.get(label)
+        if start is None:
+            return None
+        n = -1
+        target = None
+        for j in range(start + 1, len(lines)):
+            if is_instruction(lines[j]):
+                n += 1
+                if n == idx:
+                    target = j
+                    break
+        if target is None:
+            return None
+        st = out[target].strip()
+        head = st.split(None, 1)
+        if mnem and head[0].lower() != mnem.lower():
+            return None
+        toks = [m.group(1).lower() for m in _R22_REG.finditer(st)]
+        if old_n not in toks:
+            return None
+        new_st = _R22_REG.sub(
+            lambda m: ("$" + new_n)
+            if m.group(1).lower() == old_n else m.group(0),
+            st)
+        if new_st == st:
+            return None
+        lead = out[target][:len(out[target]) - len(out[target].lstrip())]
+        out[target] = lead + new_st
+        rewritten += 1
+    if rewritten != len(sites):
+        return None
+    return out
+
+
+def _parse_reg_field_sites(spec: str):
+    """Parse the reg-field site list `<label>:<idx>:<mnemonic>[,...]`.
+    Returns [(label, idx, mnemonic)], or None on any syntax error."""
+    sites = []
+    for item in spec.split(","):
+        parts = item.split(":")
+        if len(parts) != 3 or not parts[0] or not parts[2]:
+            return None
+        try:
+            idx = int(parts[1])
+        except ValueError:
+            return None
+        if idx < 0:
+            return None
+        sites.append((parts[0], idx, parts[2]))
+    return sites or None
+
+
+def _prepass_reg_field(lines: list[str]) -> list[str]:
+    """Marker rule22 (`cc-post: reg-field <old> <new> <sites>`): rewrite
+    the register field at the listed sites (see _rule22_reg_field);
+    loud failure (exit 3) when the args are malformed or any site fails
+    its contract - never a silent pass. Only ever fires on
+    marker-carrying units."""
+    old, new, spec = REG_FIELD
+    sites = _parse_reg_field_sites(spec)
+    if sites is None:
+        sys.stderr.write(
+            "cc_post rule 22: malformed site list %r (need "
+            "<label>:<insn-index>:<mnemonic>[,...])\n" % spec)
+        sys.exit(3)
+    res = _rule22_reg_field(lines, old, new, sites)
+    if res is None:
+        sys.stderr.write(
+            "cc_post rule 22: reg-field sites not satisfied (need %s -> %s "
+            "at %s, each site an existing instruction with the listed "
+            "mnemonic and a $%s register token)\n"
+            % (old, new, spec, old.lstrip("$")))
+        sys.exit(3)
+    return res
+
+
 def _rule1_epilogue_swap(res: list[str]) -> list[str]:
     res = list(res)
 
@@ -1796,6 +1928,7 @@ def main() -> None:
     global PROLOGUE_PARAM_FIRST, ADDIU_IMM, V0_SINK, ADDR_PIN_LATE
     global RULE15_INTERLEAVE, RULE16_VERDICT, R16_JDELAY, RULE17_MERGE
     global LT0_SCC, SITE_FRESH_CONST, IMPORT_ORDER, VOL_EXTEND
+    global REG_FIELD
     args = sys.argv[1:]
     if "--keep-epilogue" in args:
         KEEP_EPILOGUE = True
@@ -1901,6 +2034,19 @@ def main() -> None:
             sys.stderr.write("cc_post rule 20: count must be >= 1\n")
             sys.exit(2)
         del args[k : k + 2]
+    if "--reg-field" in args:
+        k = args.index("--reg-field")
+        # required payload: `<old> <new> <sites>` (cc.sh passes the marker
+        # args verbatim, in position; a bare flag is a usage error - the
+        # rule-17 bare-marker lesson, never a silent default). The site
+        # list is ONE shell word: comma-joined, colon-delimited.
+        if len(args) < k + 4:
+            sys.stderr.write(
+                "usage: cc_post.py --reg-field <old> <new> "
+                "<label>:<idx>:<mnem>[,...] ...\n")
+            sys.exit(2)
+        REG_FIELD = (args[k + 1], args[k + 2], args[k + 3])
+        del args[k : k + 4]
     if "--addiu-imm" in args:
         ADDIU_IMM = True
         args.remove("--addiu-imm")
@@ -1989,6 +2135,8 @@ def main() -> None:
         lines = _prepass_import_order(lines)
     if VOL_EXTEND is not None:
         lines = _prepass_vol_extend(lines)
+    if REG_FIELD is not None:
+        lines = _prepass_reg_field(lines)
     if ADDIU_IMM:
         lines = _prepass_addiu_imm(lines)
     if V0_SINK:
