@@ -46,6 +46,23 @@
  *    (`nop # DEBUG: Reuse of '$2'. ...`), and the prepasses run before
  *    main's NOP normalization - rule 20's walk matches by the module NOP
  *    pattern, the regression test pins it.
+ *    - RULE-22 STATE (cron-202611071331, judge live with rules
+ *      19+21+20+22 staged: reg-field $20->$18 at $L27:2/$L33:2/$L33:3):
+ *      DIFF 144/186 UNCHANGED, SIZE 744 = retail - the reg-field words
+ *      are PHASE-MASKED: the three rewritten words now text-match
+ *      retail's walk-tail insns exactly (`move $s2,$zero` /
+ *      `addiu $s2,$s2,1` / `slti $v0,$s2,0x40`) but sit one word late
+ *      (built[652]/[656] vs retail[648]/[652]) - the +1 phase the (a)
+ *      extra retail [lbu,nop] pair creates; the tail runs the OPPOSITE
+ *      direction (the stray built nop before the return-zero move + the
+ *      epilogue [j|addiu-delay] vs retail [addiu|j|nop]). The (d)
+ *      w163-165 loop-head pair is the SAME i-home class (the $4/$2
+ *      fields there are the phase-shifted name/empty-check operands).
+ *      (e) EVALUATED: not a standalone rule - it is net-zero words only
+ *      TOGETHER with the stray-nop delete, folds into the phase chain.
+ *      FULL SITE LIST + closure order ((a) c8 source probe first, then
+ *      the d2 position mover) banked in docs/CC_POST_RULE_CLASSES.md
+ *      section 6 STATUS. Suite 207 -> 224 (17 rule-22 tests).
  *  - RULE-22 SITE-LIST STARTING POINT (same window, difflib block map of
  *    the 186-word streams; WORD indices, the wordmap's idx field is
  *    BYTES = 4x these): (a) w41-43 the copy-exit merge - retail carries

@@ -249,13 +249,47 @@ time, never trust a stale one.
 [115][120]-[124]+ group). Highest machinery cost in the survey — hence LAST
 in the build order despite landing mid-list in the map.
 
+**STATUS 2026-11-07 (cron-202611071331): the reg-field half of D SHIPPED**
+as rule 22 (`cc-post: reg-field <old> <new> <label>:<idx>:<mnem>[,...]`;
+site = is_instruction-counted index after the label — normalization- and
+prepass-stable because labels/directives/comments carry no words — with
+per-site mnemonic + old-token shape verification and a loud exit 3 on any
+mismatch). The live judged application on staged c3 (rules 19+21+20+22
+composed, no interference): **DIFF stays 144/186 — THE REG-FIELD WORDS ARE
+PHASE-MASKED, exactly as the fresh map predicted**: the three rewritten
+words (i-init `move $s2,$zero` @w121, i++ `addiu $s2,$s2,1` @w163, compare
+`slti $v0,$s2,0x40` @w164) now TEXT-MATCH retail's walk-tail insns exactly
+but sit one word late (built[652]/[656] vs retail[648]/[652]) — the +1
+phase the (a) extra retail [lbu,nop] pair creates, with the tail running
+the OPPOSITE direction (built's stray nop before the return-zero move +
+the epilogue [j|addiu-delay] vs retail [addiu|j|nop]). Fresh site list
+(word indices, built stream): i-home $s4->$s2 = $L27:2 / $L33:2 / $L33:3
+(the (d) w163-165 loop-head pair resolves as the SAME i-home class, not an
+independent site — the $4/$2 fields there are the phase-shifted name/empty-
+check operands). **(e) EVALUATION: NOT a standalone small rule** — the
+class decomposes into the stray pre-return nop (built only) + the
+[addiu|j|nop] reorder, net zero words TOGETHER, so it folds into the
+phase-closure chain, not an independent marker. **Closure order for the
+next windows: (1) the (a) source probe (c8): make the merged NUL check
+re-load *(volatile char*)cur fresh at the hop target instead of testing
+the carried c — restores retail's extra pair and resolves the +1 phase
+from w41 on; (2) the position mover (d2 proper) for the i-init delay-slot
+site + the off-init in-block move + the anchor $v0 route — the machinery
+now exists to hang it on; (3) the tail phase resolves inside (1)+(2)'s
+cascade (the net-zero reshuffle).** The ladder record stays 144/186 at
+SIZE 744 = retail; the parked c3 best remains the source of record (gate
+5).
+
 ## 7. Recommended implementation order and per-rule gates
 
 **Order: A -> C -> B -> D.** (STATUS 2026-11-07: A shipped as rule 19,
 window cron-202611070601, 8d7014da; C shipped as rule 21, window
 cron-202611070716, 5915e484; B shipped as rule 20, window
 cron-202611070146 - judged live at SIZE 744 = retail for the first time,
-DIFF 144/186 with the andi gone; only D open.)
+DIFF 144/186 with the andi gone; D's reg-field half shipped as rule 22,
+window cron-202611071331 - the site-list machinery with the live judged
+phase-mask record above; D's position mover (d2) remains open, closure
+order in the section-6 STATUS block.)
 - A first: the largest class (~12 words) AND its displacement cascade die
   together; one rule class removes the biggest block and the frame returns
   to retail's layout, which also un-shadows every later word map (later
