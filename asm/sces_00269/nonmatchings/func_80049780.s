@@ -9,14 +9,14 @@
 
 nonmatching func_80049780, 0x18
 
-glabel func_80049780_2
+glabel func_80049780
     /* 29F80 80049780 0680033C */  lui        $v1, %hi(D_8006622C)
     /* 29F84 80049784 2C62638C */  lw         $v1, %lo(D_8006622C)($v1)
     /* 29F88 80049788 0680013C */  lui        $at, %hi(D_8006622C)
     /* 29F8C 8004978C 2C6224AC */  sw         $a0, %lo(D_8006622C)($at)
     /* 29F90 80049790 0800E003 */  jr         $ra
     /* 29F94 80049794 21106000 */   addu      $v0, $v1, $zero
-endlabel func_80049780_2
+endlabel func_80049780
 
 nonmatching func_80049798, 0x74
 
@@ -1647,7 +1647,7 @@ glabel func_8004A864
     /* 2B0AC 8004A8AC 04004F8C */  lw         $t7, 0x4($v0)
     /* 2B0B0 8004A8B0 21200000 */  addu       $a0, $zero, $zero
     /* 2B0B4 8004A8B4 0100F835 */  ori        $t8, $t7, 0x1
-    /* 2B0B8 8004A8B8 E025010C */  jal        func_80049780_2
+    /* 2B0B8 8004A8B8 E025010C */  jal        func_80049780
     /* 2B0BC 8004A8BC 040058AC */   sw        $t8, 0x4($v0)
     /* 2B0C0 8004A8C0 03000424 */  addiu      $a0, $zero, 0x3
     /* 2B0C4 8004A8C4 2EBD000C */  jal        ChangeClearRCnt
