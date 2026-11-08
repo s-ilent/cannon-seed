@@ -148,8 +148,8 @@ segments:
       - [0x2A59C, data, data_80049D9C]   # 0x4
       - [0x2A5A0, asm, func_80049DA0]   # 0x28c
       - [0x2A82C, data, data_8004A02C]   # 0x4
-      - [0x2A830, c, func_80050520]   # 0x18
-      - [0x2A848, c, func_80050538]   # 0x10
+      - [0x2A830, c, SetVideoMode]   # 0x18
+      - [0x2A848, c, GetVideoMode]   # 0x10
       - [0x2A858, asm, ResetCallback]   # 0x30 sdk
       - [0x2A888, asm, InterruptCallback]   # 0x30 sdk
       - [0x2A8B8, asm, DMACallback]   # 0x30 sdk
@@ -163,7 +163,7 @@ segments:
       - [0x2A9F0, asm, startIntr]   # 0xdc sdk
       - [0x2AACC, asm, trapIntr]   # 0x1e8 sdk
       - [0x2ACB4, asm, setIntr]   # 0x154 sdk
-      - [0x2AE08, c, func_80050AF8]   # 0xb0 sdk
+      - [0x2AE08, c, stopIntr]   # 0xb0 sdk
       - [0x2AEB8, asm, restartIntr]   # 0x88 sdk
       - [0x2AF40, c, memclr]   # 0x2c sdk
       - [0x2AF6C, asm, setjmp]   # 0x10 sdk
@@ -527,7 +527,7 @@ segments:
       - [0x3EBE4, asm, FlushCache]   # 0x10 sdk
       - [0x3EBF4, c, GsClearOt]   # 0x58 sdk
       - [0x3EC4C, c, GsSetLightMode]   # 0x8c sdk
-      - [0x3ECD8, c, func_80067948]   # 0x10 sdk
+      - [0x3ECD8, c, GsGetActiveBuff]   # 0x10 sdk
       - [0x3ECE8, asm, GsSetDrawBuffOffset]   # 0x11c sdk
       - [0x3EE04, asm, func_8005E604]   # 0x4c4 sdk
       - [0x3F2C8, asm, func_8005EAC8.2]   # 0x68 sdk
@@ -638,7 +638,7 @@ segments:
       - [0x45E44, asm, SpuSetTransferMode]   # 0x34 sdk
       - [0x45E78, asm, SpuSetTransferStartAddr]   # 0x3c sdk
       - [0x45EB4, asm, _spu_setInTransfer]   # 0x2c sdk
-      - [0x45EE0, c, func_8006FBF0]   # 0x10 sdk
+      - [0x45EE0, c, _spu_getInTransfer]   # 0x10 sdk
       - [0x45EF0, asm, SpuWritePartly]   # 0x8c sdk
       - [0x45F7C, asm, SsUtGetVBaddrInSB]   # 0x58 sdk
       - [0x45FD4, asm, func_800657D4]   # 0x29c
@@ -708,8 +708,8 @@ segments:
       - [0x4BDD8, asm, func_8006B5D8]   # 0x14 sdk
       - [0x4BDEC, data, data_8006B5EC]   # 0x5c
       - [0x4BE48, c, func_8006B648]   # 0x78
-      - [0x4BEC0, c, func_80076A10]   # 0x14 sdk
-      - [0x4BED4, c, func_80076A24]   # 0x10 sdk
+      - [0x4BEC0, c, SsSetMono]   # 0x14 sdk
+      - [0x4BED4, c, SsSetStereo]   # 0x10 sdk
       - [0x4BEE4, asm, func_8006B6E4]   # 0x34 sdk
       - [0x4BF18, asm, func_8006B718]   # 0x34 sdk
       - [0x4BF4C, asm, func_8006B74C]   # 0x34 sdk
