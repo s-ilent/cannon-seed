@@ -136,7 +136,7 @@ segments:
       - [0x27494, c,   func_80046C94]   # 0xe8 sdk
       - [0x2757C, c,   func_800492F8]   # 0x110 sdk
       - [0x2768C, asm, func_80046E8C]   # 0x160 sdk
-      - [0x277EC, c, func_8005E064]   # 0x30 sdk
+      - [0x277EC, c, ApplyRotMatrix]   # 0x30 sdk
       - [0x2781C, c, ScaleMatrixL]   # 0x124 sdk
       - [0x27940, asm, func_80047140]   # 0x140
       - [0x27A80, asm, func_80047280]   # 0x48 sdk

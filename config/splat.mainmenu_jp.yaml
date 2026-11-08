@@ -365,7 +365,7 @@ segments:
       - [0x3E31C, data, data_8005DB1C]  # 0x2d8
       - [0x3E5F4, c,   func_800492F8]   # 0x110 sdk
       - [0x3E704, data, data_8005DF04]   # 0x160
-      - [0x3E864, c, func_8005E064]      # 0x30
+      - [0x3E864, c, ApplyRotMatrix]      # 0x30
       - [0x3E894, c, ScaleMatrixL]      # 0x124 sdk
       - [0x3E9B8, data, data_8005E1B8]  # 0x224
       - [0x3EBDC, c, func_8005E3DC]     # 0x10c

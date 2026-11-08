@@ -53,13 +53,26 @@
  * want). The return tail is ApplyMatrixLV's own register-var pattern
  * (addu $2, $6, $0 inside the asm).
  *
- * psyq prototype: long *func_8005E064(long *vec, long *dst, long *out);
+ * psyq prototype: long *ApplyRotMatrix(long *vec, long *dst, long *out);
  * a0 = the packed 2-word vector record (VXY0/VZ0 halves, 8 bytes), a1 =
  * the 3-word destination the IR1-3 stores write, a2 = the pointer the
  * function returns without ever storing through it (the walk's honest
  * observation - the caller's staging, not this body's, gives it meaning).
+ *
+ * Name provenance (window cron-202611081046): the rows retire the
+ * cross-target staging name for the psyq LIBGTE member name
+ * ApplyRotMatrix. config/sdk_anchors.txt pins it at all eight twin sites
+ * (0x80049568/0x80049B50/0x800469BC/0x80046FEC/0x8005DA44/0x8005E064/
+ * 0x80034148/0x80034680, every one "LIBGTE ? member .text+0x0 (extent
+ * 0x30); sdk_members.py unique placement"), config/sdk_members.txt
+ * carries the same eight as adoptable, the eighth twin (slps_00270)
+ * already renders the curated glabel in its committed asm, and the
+ * function has zero callers in committed code. Seven targets consume
+ * this one shared c source through their yaml rows; the ELF-level oracle
+ * proved the body retail-exact at every site before the rename (verify
+ * GREEN for all seven at HEAD).
  */
-long *func_8005E064(long *vec, long *dst, long *out)
+long *ApplyRotMatrix(long *vec, long *dst, long *out)
 {
     register long *ret asm("$2");
     __asm__ volatile(
