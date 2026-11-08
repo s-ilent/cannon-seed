@@ -9,10 +9,16 @@ For each HEALABLE row (drifted auto-name + pin at the true VA, per
 tools/pin_first_census.py), classify:
 
   ZEROEDIT   file exists @drifted-name, content already spells the pin
-             (asm/data glabel; c content mention), and the drifted token
-             appears ONLY in the target's own yaml row + the file's path
-             (+ the target's generated symbols layer). The wave is one
-             git mv + one yaml row re-spell; nothing else.
+             (asm/data glabel; c content mention), the drifted token appears
+             ONLY in the target's own yaml row + the file's path (+ the
+             target's generated symbols layer), the own-yaml mention count
+             is exactly 1, and the pin-named destination is free (v2: the
+             g3_eu batch's three blind-spot guards). The wave is one git mv
+             + one yaml row re-spell; nothing else.
+  SHAREDMERGE  a c row whose pin-named shared top-level src/ file already
+             exists: the ddc7702d motion - body diff-gate, git rm the
+             drifted duplicate, yaml-only re-spell. v2 class (the g3_eu
+             batch routed 8 rows here that v1 called ZEROEDIT).
   RIDER      like ZEROEDIT but the drifted token has N extra reference
              hits inside the TARGET'S OWN layers (caller jals, comments):
              the wave re-spells those hits in the same motion (they are
@@ -105,21 +111,45 @@ def classify(target, off, kind, name, tva, pin):
     own_yaml = f"config/splat.{target}.yaml"
     own_sym = f"config/symbols.{target}.txt"
     prefix_own = (f"asm/{target}/", f"src/{target}/", f"data/{target}/")
-    riders, foreign = [], 0
+    riders, foreign_yaml, foreign_other = [], [], 0
     for hit in out:
         if hit == own_yaml or hit == str(fpath.relative_to(REPO)) or hit == own_sym:
             continue
         if hit.startswith(prefix_own):
             riders.append(hit)
+        elif hit.startswith("config/splat."):
+            foreign_yaml.append(hit)  # another target's yaml spells the token
         else:
-            foreign += 1  # other targets' same-spelled rows: untouched neighbors
+            foreign_other += 1  # symbols layers, docs: untouched neighbors
+    own_yaml_hits = subprocess.run(
+        ["git", "grep", "-c", "--", name, own_yaml],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    own_yaml_count = int(own_yaml_hits.split(":")[1]) if own_yaml_hits else 0
     if drifted_content:
-        return "RESPELL", f"content spells the drifted name; riders={len(riders)} foreign={foreign}"
+        return "RESPELL", f"content spells the drifted name; riders={len(riders)} foreign={foreign_other}"
     if riders:
         return "RIDER", f"content PIN-SPELLED; {len(riders)} own-layer rider file(s): {riders[:3]}"
     if content_ok:
-        return "ZEROEDIT", f"content PIN-SPELLED @drifted-name; foreign={foreign}"
-    return "EXCLUDE", f"content neutral/mismatched (glabel neither pin nor drifted); foreign={foreign}"
+        # v2 guards (cron-202611090647): the g3_eu batch found three v1 blind
+        # spots - a second own-yaml mention (fragment sibling like .2 rows),
+        # the pin-named shared file already at top-level src/, and foreign
+        # yamls naming a shared top-level c file
+        if own_yaml_count != 1:
+            return "EXCLUDE", f"own-yaml token count {own_yaml_count} != 1 (fragment sibling or rider; own pass)"
+        pin_file = next((c for c in file_candidates(target, kind, pin, pin) if c.exists()), None)
+        if pin_file is not None:
+            if kind == "c" and pin_file == REPO / "src" / f"{pin}.c":
+                return "SHAREDMERGE", "pin-named shared file exists (ddc7702d motion; body diff-gated)"
+            return "EXCLUDE", f"destination exists {pin_file.name}"
+        if foreign_yaml and kind == "c":
+            return "EXCLUDE", f"shared-file naming conflict (foreign yaml names the drifted copy: {foreign_yaml}; coordinated multi-row heal)"
+        # asm foreign-config hits are the same-spelled-neighbor law: each
+        # target's own row at its own VA, untouched by this target's heal
+        return "ZEROEDIT", f"content PIN-SPELLED @drifted-name; foreign={foreign_other + len(foreign_yaml)}"
+    return "EXCLUDE", f"content neutral/mismatched (glabel neither pin nor drifted); foreign={foreign_other}"
 
 
 def main():
