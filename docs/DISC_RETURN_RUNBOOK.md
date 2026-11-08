@@ -1,15 +1,19 @@
-# DISC RETURN RUNBOOK (banked cron-20261026-2119; Phases C-G rewritten cron-20261101-0736; Phase H added cron-202611042128)
+# DISC RETURN RUNBOOK (banked cron-20261026-2119; Phases C-G rewritten cron-20261101-0736; Phase H added cron-202611042128; THE LANDING QUEUE CLOSED cron-202611081932 - D/E/F/H landed or superseded, C owner-gated)
 
-The oracle-return window's exact sequence. Phases A/B are the standing
-mechanics; Phases C-F are the OWNER-GATED/parked landing queue (the
-2026-10-27/28 phases landed with the oracle returns - the rule-1 n-load
-generalization is in tools/cc_post.py, GsMapModelingData sits as c rows in
-all six game yaml files - and the block-move twin pair stays parked at its
-banked ceilings, so the stale payloads were rewritten out per this file's
-own convention). Phase H is the CURRENT judge-prep queue: the five parked
-SsVabOpenHeadWithMode drafts (21-25) with the exact judge sequence, the
-per-draft expected pairs, and the landing gate. Sources: docs/TASKS.md
-Log, the parked drafts' headers (THE AUTHORITATIVE per-draft records),
+The oracle-return window's exact sequence. Phases A/B/G are the standing
+mechanics. The LANDING QUEUE IS CLOSED (status cron-202611081932): Phase D
+landed (cron-20261101-1028, 16b1e80e), Phase E landed (cron-20261101-1143,
+eb874cc1), Phase F landed 6/7 through cron-20261107 (func_8007736C the
+last cluster unit), and Phase H is SUPERSEDED - the SsVabOpenHeadWithMode
+chain ended in the SEVENTH AND FINAL twin's landing as real C
+(cron-202611071946, 288af130, seven of seven; draft61 carries the last
+measured-open record, the landing superseded it). Phase C stays
+OWNER-GATED (func_8006AF70/SsSetTickMode at its round-7 ceiling SIZE
+1424 = row / DIFF 4, options A/B banked - the call is Silent's; the psyq
+curation tail rides it). With the ladder closed, a fresh disc set means
+Phase A/B, then judge-prep/audit work per the STANDING SURFACE in
+docs/TASKS.md - NOT the old ladder. Sources: docs/TASKS.md Log (THE
+authoritative record), the parked drafts' headers (per-draft history),
 scripts/bm_unit_decode/STATE.md. Assumes the standard session start already
 ran (probe-first, rehydrate incl. the baseline_audit table, digest gate,
 reset to origin/main, worklog tail read).
@@ -256,7 +260,17 @@ Landing-critical facts (banked, preserve them in the C):
    yyyyMMdd-HHMM>) + the docs/TASKS.md window section in the same push;
    Discord report with `window <t:UNIX:f> -> <t:UNIX:f>` stamps.
 
-## Phase H - the SsVabOpenHeadWithMode landing (g3org_jp row 0x48864, extent 0x448; the five parked drafts 21-25; added cron-202611042128)
+## Phase H - the SsVabOpenHeadWithMode landing (g3org_jp row 0x48864, extent 0x448; the five parked drafts 21-25; added cron-202611042128) - SUPERSEDED (seven of seven twins landed as real C through cron-202611071946)
+
+SUPERSEDED/LANDED: the chain ended in the SEVENTH AND FINAL twin's
+landing as real C (cron-202611071946, 288af130: mainmenu_jp row 0x609E4 =
+VA 0x800801E4, judge EXACT 1096 bytes; six of seven landed
+cron-202611061501 plus the slps twin 5efca5aa). The five parked drafts
+21-25 and the d61-d63 transposition records below are HISTORY - the
+landing superseded them (probes/gcc263/SsVabOpenHeadWithMode_draft61.c
+carries the last measured-open record). Nothing here is a live queue
+item; the sections remain as the method reference for future judge-prep
+waves.
 
 The LIBSND VS_VH .text+0x90 member body: vab slot allocator + VH head
 parser + SPU placer. Identity PROVEN (sdk_members.py unique placement +
