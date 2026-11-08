@@ -21,6 +21,9 @@ options:
   build_path: build
   asm_path: asm/mainmenu_jp/nonmatchings
   asset_path: assets
+  # every c row is landed (src/<TARGET>/ or the shared src/); splat's
+  # stub writer (create_c_files) must never emit top-level src stubs
+  create_c_files: false
   symbol_addrs_path:
     - config/symbols.mainmenu_jp.txt
   ld_script_path: build/mainmenu_jp.ld
