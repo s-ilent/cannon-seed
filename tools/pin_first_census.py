@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Pin-first census for sces_00269: every yaml auto-name row vs the pins.
+"""Pin-first census for a target: every yaml auto-name row vs the pins.
 
-For each splat.sces_00269.yaml row whose name is a true-VA-class auto-name
+Usage: python3 tools/pin_first_census.py [TARGET]  (default sces_00269;
+parameterized cron-202611082317 so the census sweeps all eight targets -
+the 0316 banking was sces-scoped by construction, not by law).
+
+For each splat.<TARGET>.yaml row whose name is a true-VA-class auto-name
 (func_XXXXXXXX / data_XXXXXXXX):
   true_va = row_offset + (vram - start)
   name_va = the VA encoded in the auto-name
   drifted = name_va != true_va
-  pinned  = symbols.sces_00269.txt carries a pin at the true VA
+  pinned  = symbols.<TARGET>.txt carries a pin at the true VA
 
 Reports:
   HEALABLE  drifted AND pinned at the true VA (yaml/file layer may catch up)
@@ -18,7 +22,7 @@ import sys
 from pathlib import Path
 
 REPO = Path("/home/z/my-project/cannon-seed")
-TARGET = "sces_00269"
+TARGET = sys.argv[1] if len(sys.argv) > 1 else "sces_00269"
 AUTO = re.compile(r"^(func|data)_([0-9A-Fa-f]{8})$")
 
 
