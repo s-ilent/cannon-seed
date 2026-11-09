@@ -1,8 +1,9 @@
-/* select_max_param - LIBGS MATRIX3 member, x8 byte-identical own-row wave
+/* select_max_param - LIBGS MATRIX3 member, x8 byte-identical member wave
  * (0xC8, one member per target; the census's seventeenth-return item 3).
- * One src unit per row under the row's own walk name; three targets pin the
- * psyq name in symbols (slps/g3org_jp/mainmenu_jp, "pinned member row");
- * five sit under walk names. Sits between scale_view_param (0xF0) and
+ * One shared true-named unit serves the two pinned rows (g3org_jp 0x2DE94,
+ * slps_00270 0x14584 - the 2026-11-09 RESPELL heal, the setIntrVSync/
+ * CompMatrix consolidation precedent; the other members ride their own
+ * rows). Sits between scale_view_param (0xF0) and
  * len_param (0x1C) in every target - the SDK's own MATRIX3 view cluster
  * (cross-target identities live in the yaml, the symbols file and the
  * landing commit, not repeated here: the headers name no siblings).
@@ -28,7 +29,7 @@
  * already the filled [j $31][move $2,$5] form and rule 3's default
  * un-fill must not fire).
  */
-int func_80036D04(int *param)
+int select_max_param(int *param)
 {
     int max = param[0] < 0 ? -param[0] : param[0];
     int b;
