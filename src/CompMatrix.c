@@ -21,9 +21,9 @@
  * The body stays in ONE asm block: the retail order is all-GTE-sequence
  * and GNU as has no GTE mnemonics (the ApplyMatrixSV law), so the
  * MVMVA kicks are .word spellings; the ctc2 moves assemble natively
- * (the SetRotMatrix law). psyq prototype unattested - auto name kept.
+ * (the SetRotMatrix law). psyq prototype unattested - the definition carries the LIBGTE member name CompMatrix the pins layer attests by sdk_members.py unique placement at the twin sites (the 2026-11-09 RESPELL pass; the body is unchanged).
  */
-long *func_80048EC0(long *m, char *v, long *out)
+long *CompMatrix(long *m, char *v, long *out)
 {
     __asm__ volatile(
         "lw $8, 0($4)\n"
