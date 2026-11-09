@@ -152,12 +152,12 @@ segments:
       - [0x2AF0C, asm, func_8004A70C]   # 0x30 sdk
       - [0x2AF3C, asm, func_8004A73C]   # 0x30 sdk
       - [0x2AF6C, c, func_80050C5C]   # 0x10 sdk
-      - [0x2AF7C, c, func_80050C6C]   # 0x18 sdk
-      - [0x2AF94, c, func_80050C84]   # 0x1c sdk
+      - [0x2AF7C, c, GetIntrMask]   # 0x18 sdk
+      - [0x2AF94, c, SetIntrMask]   # 0x1c sdk
       - [0x2AFB0, asm, func_8004A7B0]   # 0xdc sdk
       - [0x2B08C, asm, func_8004A88C]   # 0x1e8 sdk
       - [0x2B274, asm, func_8004AA74]   # 0x154 sdk
-      - [0x2B3C8, c, func_800511E8]   # 0xb0 sdk
+      - [0x2B3C8, c, stopIntr]   # 0xb0 sdk
       - [0x2B478, asm, restartIntr]   # 0x88 sdk
       - [0x2B500, c,   func_80051320]   # 0x2c sdk
       - [0x2B52C, asm, setjmp]   # 0x10 sdk
@@ -258,8 +258,8 @@ segments:
       - [0x2E87C, asm, func_8004E07C]   # 0xe0 sdk
       - [0x2E95C, asm, func_8004E15C]   # 0x2c sdk
       - [0x2E988, asm, memcpy]   # 0x10 sdk
-      - [0x2E998, c, func_80055008]   # 0x18 sdk
-      - [0x2E9B0, c, func_80055020]   # 0x10 sdk
+      - [0x2E998, c, SetVideoMode]   # 0x18 sdk
+      - [0x2E9B0, c, GetVideoMode]   # 0x10 sdk
       - [0x2E9C0, asm, GPU_cw]   # 0x10 sdk
       - [0x2E9D0, asm, func_8004E1D0]   # 0xc8 sdk
       - [0x2EA98, asm, func_8004E298]   # 0x18 sdk
@@ -519,7 +519,7 @@ segments:
       - [0x3E580, asm, FlushCache]   # 0x10 sdk
       - [0x3E590, c, GsClearOt]   # 0x58 sdk
       - [0x3E5E8, c, GsSetLightMode]   # 0x8c sdk
-      - [0x3E674, c, func_800671B4]   # 0x10 sdk
+      - [0x3E674, c, GsGetActiveBuff]   # 0x10 sdk
       - [0x3E684, asm, GsSetDrawBuffOffset]   # 0x11c sdk
       - [0x3E7A0, asm, func_8005DFA0]   # 0x4c4 sdk
       - [0x3EC64, asm, func_8005E464]   # 0x68 sdk
@@ -632,7 +632,7 @@ segments:
       - [0x456D0, asm, SpuSetTransferMode]   # 0x34 sdk
       - [0x45704, asm, SpuSetTransferStartAddr]   # 0x3c sdk
       - [0x45740, asm, _spu_setInTransfer]   # 0x2c sdk
-      - [0x4576C, c, func_8006F34C]   # 0x10 sdk
+      - [0x4576C, c, _spu_getInTransfer]   # 0x10 sdk
       - [0x4577C, asm, func_80064F7C]   # 0x8c sdk
       - [0x45808, asm, SsUtGetVBaddrInSB]   # 0x58 sdk
       - [0x45860, asm, func_80065060]   # 0x27c sdk
@@ -704,8 +704,8 @@ segments:
       - [0x4B158, asm, func_8006A958]   # 0x16c
       - [0x4B2C4, data, data_8006AAC4]   # 0x4
       - [0x4B2C8, asm, func_8006AAC8]   # 0x40
-      - [0x4B308, c, func_80075D28]   # 0x14 sdk
-      - [0x4B31C, c, func_80075D3C]   # 0x10 sdk
+      - [0x4B308, c, SsSetMono]   # 0x14 sdk
+      - [0x4B31C, c, SsSetStereo]   # 0x10 sdk
       - [0x4B32C, asm, func_8006AB2C]   # 0x34 sdk
       - [0x4B360, asm, func_8006AB60]   # 0x34 sdk
       - [0x4B394, asm, func_8006AB94]   # 0x34 sdk
