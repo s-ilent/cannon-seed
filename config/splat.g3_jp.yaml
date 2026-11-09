@@ -170,7 +170,7 @@ segments:
       - [0x2B874, asm, func_8004B074]   # 0x20 sdk
       - [0x2B894, asm, startIntrVSync]   # 0x58 sdk
       - [0x2B8EC, asm, trapIntrVSync]   # 0x7c sdk
-      - [0x2B968, c, func_800518B8]   # 0x2c sdk
+      - [0x2B968, c, setIntrVSync]   # 0x2c sdk
       - [0x2B994, c,   func_800518E4]   # 0x2c sdk
       - [0x2B9C0, asm, VSync]   # 0x148 sdk
       - [0x2BB08, asm, v_wait]   # 0x9c sdk
