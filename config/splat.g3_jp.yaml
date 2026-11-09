@@ -94,7 +94,7 @@ segments:
       - [0x287AC, asm, bzero]   # 0x10 sdk
       - [0x287BC, asm, malloc]   # 0x10 sdk
       - [0x287CC, asm, memset]   # 0x10 sdk
-      - [0x287DC, asm, func_8004DEDC]   # 0x10 sdk
+      - [0x287DC, asm, strcat]   # 0x10 sdk
       - [0x287EC, asm, printf]   # 0x10 sdk
       - [0x287FC, asm, func_80047FFC]   # 0x10 sdk
       - [0x2880C, asm, strcmp]   # 0x10 sdk
@@ -151,7 +151,7 @@ segments:
       - [0x2AEDC, asm, func_8004A6DC]   # 0x30 sdk
       - [0x2AF0C, asm, func_8004A70C]   # 0x30 sdk
       - [0x2AF3C, asm, func_8004A73C]   # 0x30 sdk
-      - [0x2AF6C, c, func_80050C5C]   # 0x10 sdk
+      - [0x2AF6C, c, CheckCallback]   # 0x10 sdk
       - [0x2AF7C, c, GetIntrMask]   # 0x18 sdk
       - [0x2AF94, c, SetIntrMask]   # 0x1c sdk
       - [0x2AFB0, asm, func_8004A7B0]   # 0xdc sdk

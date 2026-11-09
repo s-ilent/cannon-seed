@@ -101,7 +101,7 @@ segments:
       - [0x258B8, asm, strlen]   # 0x10 sdk
       - [0x258C8, asm, strcmp]   # 0x10 sdk
       - [0x258D8, asm, strcpy]   # 0x10 sdk
-      - [0x258E8, asm, func_8004A9F8]   # 0x10 sdk
+      - [0x258E8, asm, strncat]   # 0x10 sdk
       - [0x258F8, asm, func_800450F8]   # 0xb3c
       - [0x26434, data, data_80045C34]   # 0x4
       - [0x26438, asm, memchr]   # 0x10 sdk
@@ -448,7 +448,7 @@ segments:
       - [0x365DC, asm, func_80055DDC]   # 0x20c sdk
       - [0x367E8, asm, func_80055FE8]   # 0x210 sdk
       - [0x369F8, asm, GsTMDdivTF3LFG]   # 0x300 sdk
-      - [0x36CF8, asm, func_8005E668]   # 0x2a4 sdk
+      - [0x36CF8, asm, GsTMDdivTF4LFG]   # 0x2a4 sdk
       - [0x36F9C, data, data_8005679C]   # 0x27c
       - [0x37218, asm, GsTMDdivTG4LFG]   # 0x304 sdk
       - [0x3751C, c, RotTransPers]   # 0x2c sdk

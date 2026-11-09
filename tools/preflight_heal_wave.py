@@ -22,7 +22,15 @@ tools/pin_first_census.py), classify:
   RIDER      like ZEROEDIT but the drifted token has N extra reference
              hits inside the TARGET'S OWN layers (caller jals, comments):
              the wave re-spells those hits in the same motion (they are
-             enumerated in the manifest).
+             enumerated in the manifest). v3: hits are enumerated
+             WHOLE-TOKEN (a .N fragment sibling's name and a same-spelled
+             real function at another VA are NOT riders - the cron-
+             202611091532 pass proved all six RIDER rows' hits were those
+             two false-positive shapes), and every enumerated hit must
+             still be checked to bind to the row's true VA before the
+             wave re-spells it (branch/jal target resolution; hits that
+             bind to the drift-name's own VA are the real same-named
+             function and STAY).
   RESPELL    the file content spells the drifted name (definition/glabel):
              the wave re-spells content + renames (the 0118aa35 shape).
   NOFILE     no per-target file layer (the shared-copy class): the wave
@@ -45,6 +53,14 @@ REPO = Path("/home/z/my-project/cannon-seed")
 AUTO = re.compile(r"^(func|data)_([0-9A-Fa-f]{8})$")
 PIN = re.compile(r"^(\S+)\s*=\s*0x([0-9A-Fa-f]+)\s*;")
 COUNTED_LAYERS = ("*.c", "*.h", "*.inc")  # the ratchet's counted layers
+
+
+def whole_token(name):
+    """Regex for the bare token: not preceded/followed by a word char, and
+    NOT followed by '.' - so func_X.2 fragment names never match func_X.
+    (cron-202611091532: the substring collision that made every .2-sibling
+    row look like a RIDER)."""
+    return rf"(?<![A-Za-z0-9_]){re.escape(name)}(?![A-Za-z0-9_.])"
 
 
 def load(target):
@@ -97,16 +113,19 @@ def classify(target, off, kind, name, tva, pin):
     text = fpath.read_text()
     if kind == "c":
         content_ok = re.search(rf"\b{re.escape(pin)}\b", text) is not None
-        drifted_content = re.search(rf"\b{re.escape(name)}\b", text) is not None
+        drifted_content = re.search(whole_token(name), text) is not None
     else:
         g = re.search(r"^glabel\s+(\S+)", text, re.M)
         content_ok = g is not None and g.group(1) == pin
-        drifted_content = re.search(rf"\b{re.escape(name)}\b", text) is not None
+        drifted_content = re.search(whole_token(name), text) is not None
     # reference graph: repo-wide hits for the drifted token
     import subprocess
 
     out = subprocess.run(
-        ["git", "grep", "-l", "--", name], cwd=REPO, capture_output=True, text=True
+        ["git", "grep", "-l", "-P", "--", whole_token(name)],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
     ).stdout.splitlines()
     own_yaml = f"config/splat.{target}.yaml"
     own_sym = f"config/symbols.{target}.txt"

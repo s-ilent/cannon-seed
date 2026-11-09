@@ -554,7 +554,7 @@ segments:
       - [0x3FB38, data, data_8005F338]   # 0x20
       - [0x3FB58, asm, func_8005F358]   # 0x20 sdk
       - [0x3FB78, asm, func_8005F378]   # 0x50 sdk
-      - [0x3FBC8, asm, func_80068A98]   # 0x30 sdk
+      - [0x3FBC8, asm, MDEC_vlc_brk]   # 0x30 sdk
       - [0x3FBF8, asm, MDEC_vlc]   # 0x334 sdk
       - [0x3FF2C, asm, func_8005F72C]   # 0x3dc sdk
       - [0x40308, asm, func_8005FB08]   # 0x214 sdk
