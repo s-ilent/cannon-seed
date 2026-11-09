@@ -6,7 +6,7 @@
  * PROVEN by sdk_members.py unique placement + sig-db agrees - the copy
  * at the VM_DON pinned address 0x800447A0).
  *
- * Decode: the byte-twin of this window's func_800294BC landing - the
+ * Decode: the byte-twin of this window's SpuVmDamperOn landing - the
  * same damper-on store leaf (ori v0,zero,0x2 into the value temp, the
  * $at-addressed unsigned-halfword store), differing only in the target
  * static: D_800AC6C4, the second module overlay's damper-state

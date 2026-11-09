@@ -85,7 +85,7 @@ segments:
       - [0x7414, asm, func_80027CB4]   # 0x18 sdk
       - [0x742C, data, data_80026C2C]   # 0x8c
       - [0x74B8, asm, func_80026CB8]   # 0x58c
-      - [0x7A44, c,   func_80028414]   # 0x14 sdk
+      - [0x7A44, c,   SpuVmDamperOn]   # 0x14 sdk
       - [0x7A58, asm, func_80027258]   # 0x5558
       - [0xCFB0, asm, func_8002E560]   # 0x18 sdk
       - [0xCFC8, asm, func_8002C7C8]   # 0x1378

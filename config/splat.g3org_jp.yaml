@@ -84,7 +84,7 @@ segments:
       - [0x8F08, asm, GsSetOrign]   # 0x18 sdk
       - [0x8F20, data, data_80028720]   # 0x8c
       - [0x8FAC, asm, func_800287AC]   # 0x58c
-      - [0x9538, c,   func_8002A298]   # 0x14 sdk
+      - [0x9538, c,   SpuVmDamperOn]   # 0x14 sdk
       - [0x954C, asm, func_80028D4C]   # 0x2220
       - [0xB76C, asm, func_8002C98C]   # 0x18 sdk
       - [0xB784, asm, func_8002AF84]   # 0x6b38
