@@ -91,12 +91,30 @@ def load(target):
 
 
 def file_candidates(target, kind, name, pin):
+    """v4: consult the yaml's options.asm_path (cron-202611091647: slps_00270's
+    asm layer lives at the top-level asm/nonmatchings tree - the hardcoded
+    asm/<target>/nonmatchings guess manufactured the whole NOFILE class and
+    hid five SELF rows' own files during the SELF pass). The per-target dir
+    stays as the fallback; data rows live under <asm_path>/data/."""
+    import yaml
+
+    cfg = yaml.safe_load((REPO / "config" / f"splat.{target}.yaml").read_text())
+    ap = Path(
+        REPO / cfg["options"].get("asm_path", f"asm/{target}/nonmatchings").rstrip("/")
+    )
+    dp = REPO / "asm" / target / "nonmatchings"
     if kind == "asm":
-        return [REPO / "asm" / target / "nonmatchings" / f"{name}.s"]
+        return [ap / f"{name}.s", dp / f"{name}.s"]
     if kind == "c":
         return [REPO / "src" / target / f"{name}.c", REPO / "src" / f"{name}.c"]
     if kind == "data":
-        return [REPO / "data" / target / f"{name}.data.s", REPO / "data" / target / f"{name}.s"]
+        return [
+            ap / "data" / f"{name}.data.s",
+            ap / f"{name}.data.s",
+            dp / "data" / f"{name}.data.s",
+            REPO / "data" / target / f"{name}.data.s",
+            REPO / "data" / target / f"{name}.s",
+        ]
     return []
 
 
