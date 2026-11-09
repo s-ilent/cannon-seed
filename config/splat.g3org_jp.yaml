@@ -206,7 +206,7 @@ segments:
       - [0x29120, asm, ChangeClearPAD]   # 0x10 sdk
       - [0x29130, asm, InitHeap]   # 0x10 sdk
       - [0x29140, asm, intr_stop_commit]   # 0x10 sdk
-      - [0x29150, asm, func_8004EAB0]   # 0x10 sdk
+      - [0x29150, asm, nextfile]   # 0x10 sdk
       - [0x29160, asm, OpenEvent]   # 0x10 sdk
       - [0x29170, asm, read]   # 0x10 sdk
       - [0x29180, asm, TestEvent]   # 0x10 sdk
@@ -377,7 +377,7 @@ segments:
       - [0x2EFA0, asm, func_8004E7A0]   # 0xd0 sdk
       - [0x2F070, asm, func_8004E870]   # 0x120 sdk
       - [0x2F190, asm, func_8004E990]   # 0x120 sdk
-      - [0x2F2B0, asm, func_8004EAB0.2]   # 0x120 sdk
+      - [0x2F2B0, asm, MatrixNormal_2]   # 0x120 sdk
       - [0x2F3D0, data, data_8004EBD0]   # 0xa0
       - [0x2F470, asm, func_8004EC70]   # 0x1fc
       - [0x2F66C, data, data_8004EE6C]   # 0x4

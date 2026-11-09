@@ -1479,8 +1479,8 @@ func_800242E0 = 0x800242E0; // type:func (row name)
 func_80024424 = 0x80024424; // type:func (row name)
 func_800245CC = 0x800245CC; // type:func (row name)
 func_8002C7B0 = 0x8002C7B0; // type:func (row name)
-func_80035268.2 = 0x80035268; // type:func (row name)
-func_80042C84.2 = 0x80042C84; // type:func (row name)
+func_80035268 = 0x80035268; // type:func (row name)
+func_80042C84 = 0x80042C84; // type:func (row name)
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
 intr_start_aux3 = 0x8002CE64; // type:s32
 intr_restart_tail = 0x8002D194; // type:s32

@@ -428,7 +428,7 @@ segments:
       - [0x368B4, asm, GsTMDdivF4LFG]   # 0x270 sdk
       - [0x36B24, data, data_80056324]   # 0x244
       - [0x36D68, asm, func_80056568]   # 0x2c0 sdk
-      - [0x37028, asm, func_8005EAC8]   # 0x288 sdk
+      - [0x37028, asm, GsTMDdivTF3NL]   # 0x288 sdk
       - [0x372B0, asm, GsTMDdivTF4NL]   # 0x284 sdk
       - [0x37534, asm, GsTMDdivTG3NL]   # 0x234 sdk
       - [0x37768, asm, func_80056F68]   # 0x28c sdk
@@ -530,7 +530,7 @@ segments:
       - [0x3ECD8, c, GsGetActiveBuff]   # 0x10 sdk
       - [0x3ECE8, asm, GsSetDrawBuffOffset]   # 0x11c sdk
       - [0x3EE04, asm, func_8005E604]   # 0x4c4 sdk
-      - [0x3F2C8, asm, func_8005EAC8.2]   # 0x68 sdk
+      - [0x3F2C8, asm, gte_set_lc]   # 0x68 sdk
       - [0x3F330, asm, func_8005EB30]   # 0x50 sdk
       - [0x3F380, asm, GsSwapDispBuff]   # 0xf4 sdk
       - [0x3F474, asm, func_8005EC74]   # 0x38 sdk

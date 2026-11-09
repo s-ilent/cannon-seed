@@ -144,7 +144,7 @@ segments:
       - [0x3C98C, data, data_8005C18C]   # 0x90
       - [0x3CA1C, asm, bzero]   # 0x10 sdk
       - [0x3CA2C, asm, malloc]   # 0x10 sdk
-      - [0x3CA3C, asm, func_800651EC]   # 0x10 sdk
+      - [0x3CA3C, asm, memset]   # 0x10 sdk
       - [0x3CA4C, asm, strcat]   # 0x10 sdk
       - [0x3CA5C, asm, printf]   # 0x10 sdk
       - [0x3CA6C, asm, strlen]   # 0x10 sdk
@@ -403,7 +403,7 @@ segments:
       - [0x454C4, asm, func_80064CC4]   # 0xb0 sdk
       - [0x45574, asm, func_80064D74]   # 0x3a8 sdk
       - [0x4591C, asm, func_8006511C]   # 0xd0 sdk
-      - [0x459EC, asm, func_800651EC.2]   # 0x120 sdk
+      - [0x459EC, asm, MatrixNormal_0]   # 0x120 sdk
       - [0x45B0C, asm, func_8006530C]   # 0x120 sdk
       - [0x45C2C, asm, func_8006542C]   # 0x120 sdk
       - [0x45D4C, data, data_8006554C]   # 0xa0
