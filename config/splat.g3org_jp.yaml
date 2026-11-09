@@ -115,7 +115,7 @@ segments:
       - [0x25CD8, asm, func_800454D8]   # 0xd78
       - [0x26A50, data, data_80046250]   # 0x8
       - [0x26A58, asm, memchr]   # 0x10 sdk
-      - [0x26A68, c,   func_8004BDD8]   # 0x90 sdk
+      - [0x26A68, c,   memmove]   # 0x90 sdk
       - [0x26AF8, asm, strncmp]   # 0x10 sdk
       - [0x26B08, asm, strncpy]   # 0x10 sdk
       - [0x26B18, asm, free]   # 0x10 sdk

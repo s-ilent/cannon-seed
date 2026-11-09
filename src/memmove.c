@@ -1,7 +1,9 @@
-/* memmove - LIBC member, x4 byte-identical own-row wave (0x90 row = 0x88
+/* memmove - LIBC member, byte-identical four-member wave (0x90 row = 0x88
  * function + 2 zero tail words).
- * One src unit per row under the row's own walk name; four members, all
- * curated psyq pins (slps/mainmenu_jp/g3_jp/g3org_jp). Every member sits
+ * One shared true-named unit serves the three landed rows (slps_00270 0xF1F0,
+ * g3_jp 0x295CC, g3org_jp 0x26A68 - the 2026-11-09 RESPELL heal, the
+ * setIntrVSync/CompMatrix consolidation precedent; mainmenu_jp's row rides
+ * its own lane). Every member sits
  * flanked by the same 0x10 sdk rows - the SDK's own LIBC cluster
  * (cross-target identities live in the yaml, the symbols file and the
  * landing commit, not repeated here: the headers name no siblings).
@@ -33,9 +35,10 @@
  * memclr hand-asm precedent: bare file-scope asm, no C body, no compiler
  * framing). The unit declares plain `.text` - tools/stage_c.py renames it
  * to the target's `.r_<rom>` section, so one template serves all four
- * carriers - and carries `.globl` + label under the row's own walk name
- * (the row-name==unit-name law; the curated memmove pins carry the
- * identity, zero symbols edits). The retail row is 0x90 = the 0x88
+ * carriers - and carries `.globl` + label under the curated pin name
+ * memmove (the row-name==unit-name law retires here: the true name IS the
+ * unit name now; the curated memmove pins carry the identity, zero
+ * symbols edits). The retail row is 0x90 = the 0x88
  * function + 2 zero tail words, so the unit emits the tail explicitly
  * (`.word 0` x2) - byte-identical to the ROW, the judge's extent bar;
  * in the whole-image build the tail replaces what was linker zero-slack,
@@ -45,8 +48,8 @@ __asm__(
     ".text\n\t"
     ".set\tnoreorder\n\t"
     ".set noreorder\n\t"
-    ".globl func_8004BDD8\n\t"
-    "func_8004BDD8:\n\t"
+    ".globl memmove\n\t"
+    "memmove:\n\t"
         "addiu $sp,$sp,-0x8\n\t"
         "addu $a3,$a0,$zero\n\t"
         "addu $t0,$a1,$zero\n\t"
