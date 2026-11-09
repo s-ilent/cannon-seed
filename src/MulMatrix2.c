@@ -1,6 +1,7 @@
-/* MulMatrix2 - LIBGTE member, x2 byte-identical own-row wave (0x10C).
- * One src unit per row under the row's own walk name; two members, both
- * curated psyq pins (slps, g3_eu). Sits between MulMatrix (0x10C) and the
+/* MulMatrix2 - LIBGTE member, byte-identical member wave (0x10C).
+ * One shared true-named unit serves the two pinned rows (g3_eu 0x2A1EC,
+ * slps_00270 0x15304 - the 2026-11-09 RESPELL heal, the setIntrVSync/
+ * CompMatrix consolidation precedent). Sits between MulMatrix (0x10C) and the
  * landed ApplyMatrixLV c row in both carriers (cross-target identities
  * live in the yaml, the symbols file and the landing commit, not repeated
  * here: the headers name no siblings).
@@ -19,7 +20,7 @@
  * psyq prototype: MATRIX *MulMatrix2(MATRIX *m0, MATRIX *m1) - the two
  * record pointers pass through $4/$5 and the result returns in $2.
  */
-long *func_80037CE4(long *m0, long *m1)
+long *MulMatrix2(long *m0, long *m1)
 {
     register long *ret asm("$2");
     __asm__ volatile(

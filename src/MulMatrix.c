@@ -1,7 +1,9 @@
-/* MulMatrix - LIBGTE member, x3 byte-identical own-row wave (0x10C).
- * One src unit per row under the row's own walk name; three members, two
- * curated psyq pins (slps, g3_eu) + the census-missed member the C8-wave
- * lesson confirmed (mainmenu_eu). Immediately precedes MulMatrix2 (0x10C)
+/* MulMatrix - LIBGTE member, byte-identical member wave (0x10C).
+ * One shared true-named unit serves the two pinned rows (g3_eu 0x2A0E0,
+ * slps_00270 0x151F8 - the 2026-11-09 RESPELL heal, the setIntrVSync/
+ * CompMatrix consolidation precedent; the third member the C8-wave lesson
+ * confirmed rides its own row in mainmenu_eu). Immediately precedes
+ * MulMatrix2 (0x10C)
  * and then the landed ApplyMatrixLV c row in every carrier - the SDK's own
  * GTE matrix cluster (cross-target identities live in the yaml, the
  * symbols file and the landing commit, not repeated here: the headers name
@@ -32,7 +34,7 @@
  * psyq prototype: MATRIX *MulMatrix(MATRIX *m0, MATRIX *m1) - the two
  * record pointers pass through $4/$5 and the result returns in $2.
  */
-long *func_8004FCA0(long *m0, long *m1)
+long *MulMatrix(long *m0, long *m1)
 {
     register long *ret asm("$2");
     __asm__ volatile(
