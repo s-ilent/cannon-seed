@@ -123,7 +123,7 @@ segments:
       - [0x15004, c, func_800379E4]   # 0x2c8
       - [0x152CC, c, func_80037CAC]   # 0x3f0
       - [0x156BC, asm, func_80034EBC]   # 0x4810
-      - [0x19ECC, asm, func_8003D35C]   # 0x18 sdk
+      - [0x19ECC, asm, GsSetOrign]   # 0x18 sdk
       - [0x19EE4, asm, func_800396E4]   # 0x1424
       - [0x1B308, asm, func_8003AB08]   # 0x20 sdk
       - [0x1B328, asm, func_8003EB48]   # 0x18 sdk
@@ -142,24 +142,24 @@ segments:
       - [0x3B670, c, func_8005AE70]     # 0x30
       - [0x3B6A0, asm, func_8005AEA0]   # 0x12ec
       - [0x3C98C, data, data_8005C18C]   # 0x90
-      - [0x3CA1C, asm, func_800651CC]   # 0x10 sdk
-      - [0x3CA2C, asm, func_800651DC]   # 0x10 sdk
+      - [0x3CA1C, asm, bzero]   # 0x10 sdk
+      - [0x3CA2C, asm, malloc]   # 0x10 sdk
       - [0x3CA3C, asm, func_800651EC]   # 0x10 sdk
-      - [0x3CA4C, asm, func_800651FC]   # 0x10 sdk
-      - [0x3CA5C, asm, func_8006520C]   # 0x10 sdk
-      - [0x3CA6C, asm, func_8006521C]   # 0x10 sdk
-      - [0x3CA7C, asm, func_8006522C]   # 0x10 sdk
-      - [0x3CA8C, asm, func_8006523C]   # 0x10 sdk
-      - [0x3CA9C, asm, func_8006524C]   # 0x10 sdk
+      - [0x3CA4C, asm, strcat]   # 0x10 sdk
+      - [0x3CA5C, asm, printf]   # 0x10 sdk
+      - [0x3CA6C, asm, strlen]   # 0x10 sdk
+      - [0x3CA7C, asm, strcmp]   # 0x10 sdk
+      - [0x3CA8C, asm, strcpy]   # 0x10 sdk
+      - [0x3CA9C, asm, strncat]   # 0x10 sdk
       - [0x3CAAC, asm, func_8005C2AC]   # 0xb3c
       - [0x3D5E8, data, data_8005CDE8]   # 0x4
-      - [0x3D5EC, asm, func_80065ECC]   # 0x10 sdk
+      - [0x3D5EC, asm, memchr]   # 0x10 sdk
       - [0x3D5FC, asm, func_8005CDFC]   # 0x74
       - [0x3D670, data, data_8005CE70]   # 0xc
-      - [0x3D67C, asm, func_80065F5C]   # 0x10 sdk
-      - [0x3D68C, asm, func_80065F6C]   # 0x10 sdk
-      - [0x3D69C, asm, func_80065F7C]   # 0x10 sdk
-      - [0x3D6AC, asm, func_80065F8C]   # 0x10 sdk
+      - [0x3D67C, asm, strncmp]   # 0x10 sdk
+      - [0x3D68C, asm, strncpy]   # 0x10 sdk
+      - [0x3D69C, asm, free]   # 0x10 sdk
+      - [0x3D6AC, asm, exit]   # 0x10 sdk
       - [0x3D6BC, asm, func_8005CEBC]   # 0x198
       - [0x3D854, data, data_8005D054]   # 0x8
       - [0x3D85C, asm, func_8005D05C]   # 0x198
@@ -203,48 +203,48 @@ segments:
       - [0x3EE88, c, func_80067AF8]   # 0x10
       - [0x3EE98, c, func_80067B08]   # 0x18
       - [0x3EEB0, c, func_80067B20]   # 0x1c
-      - [0x3EECC, asm, func_80067B3C]   # 0xdc sdk
+      - [0x3EECC, asm, startIntr]   # 0xdc sdk
       - [0x3EFA8, asm, func_8005E7A8]   # 0x1e8 sdk
       - [0x3F190, asm, func_8005E990]   # 0x154 sdk
       - [0x3F2E4, c, func_80068084]   # 0xb0
-      - [0x3F394, asm, func_80068134]   # 0x88 sdk
+      - [0x3F394, asm, restartIntr]   # 0x88 sdk
       - [0x3F41C, c,   func_800681BC]   # 0x2c sdk
-      - [0x3F448, asm, func_800681E8]   # 0x10 sdk
-      - [0x3F458, asm, func_800681F8]   # 0x50 sdk
-      - [0x3F4A8, asm, func_80068248]   # 0x184 sdk
-      - [0x3F62C, asm, func_800683CC]   # 0xa8 sdk
+      - [0x3F448, asm, setjmp]   # 0x10 sdk
+      - [0x3F458, asm, startIntrDMA]   # 0x50 sdk
+      - [0x3F4A8, asm, trapIntrDMA]   # 0x184 sdk
+      - [0x3F62C, asm, setIntrDMA]   # 0xa8 sdk
       - [0x3F6D4, c, func_80068474]   # 0x2c
-      - [0x3F700, asm, func_800684A0]   # 0x58 sdk
-      - [0x3F758, asm, func_800684F8]   # 0x7c sdk
+      - [0x3F700, asm, startIntrVSync]   # 0x58 sdk
+      - [0x3F758, asm, trapIntrVSync]   # 0x7c sdk
       - [0x3F7D4, c, func_80068574]   # 0x2c sdk
       - [0x3F800, c,   func_800686D0]   # 0x2c sdk
-      - [0x3F82C, asm, func_800686FC]   # 0x148 sdk
-      - [0x3F974, asm, func_80068844]   # 0x9c sdk
-      - [0x3FA10, asm, func_800688E0]   # 0x10 sdk
+      - [0x3F82C, asm, VSync]   # 0x148 sdk
+      - [0x3F974, asm, v_wait]   # 0x9c sdk
+      - [0x3FA10, asm, puts]   # 0x10 sdk
       - [0x3FA20, asm, func_8005F220]   # 0x10
-      - [0x3FA30, asm, func_80068900]   # 0x10 sdk
-      - [0x3FA40, asm, func_80068910]   # 0x10 sdk
-      - [0x3FA50, asm, func_80068920]   # 0x10 sdk
-      - [0x3FA60, asm, func_80068930]   # 0x10 sdk
-      - [0x3FA70, asm, func_80068940]   # 0x10 sdk
-      - [0x3FA80, asm, func_80068950]   # 0x10 sdk
-      - [0x3FA90, asm, func_80068960]   # 0x10 sdk
-      - [0x3FAA0, asm, func_80068970]   # 0x10 sdk
-      - [0x3FAB0, asm, func_80068980]   # 0x10 sdk
-      - [0x3FAC0, asm, func_80068990]   # 0x10 sdk
-      - [0x3FAD0, asm, func_800689A0]   # 0x10 sdk
-      - [0x3FAE0, asm, func_800689B0]   # 0x10 sdk
-      - [0x3FAF0, asm, func_800689C0]   # 0x10 sdk
-      - [0x3FB00, asm, func_800689D0]   # 0x10 sdk
-      - [0x3FB10, asm, func_800689E0]   # 0x10 sdk
-      - [0x3FB20, asm, func_800689F0]   # 0x10 sdk
-      - [0x3FB30, asm, func_80068A00]   # 0x10 sdk
+      - [0x3FA30, asm, lseek]   # 0x10 sdk
+      - [0x3FA40, asm, close]   # 0x10 sdk
+      - [0x3FA50, asm, write]   # 0x10 sdk
+      - [0x3FA60, asm, SetMem]   # 0x10 sdk
+      - [0x3FA70, asm, EnableEvent]   # 0x10 sdk
+      - [0x3FA80, asm, delete]   # 0x10 sdk
+      - [0x3FA90, asm, format]   # 0x10 sdk
+      - [0x3FAA0, asm, intr_restart_begin]   # 0x10 sdk
+      - [0x3FAB0, asm, _96_init]   # 0x10 sdk
+      - [0x3FAC0, asm, LoadExec]   # 0x10 sdk
+      - [0x3FAD0, asm, ChangeClearPAD]   # 0x10 sdk
+      - [0x3FAE0, asm, InitHeap]   # 0x10 sdk
+      - [0x3FAF0, asm, intr_stop_commit]   # 0x10 sdk
+      - [0x3FB00, asm, nextfile]   # 0x10 sdk
+      - [0x3FB10, asm, OpenEvent]   # 0x10 sdk
+      - [0x3FB20, asm, read]   # 0x10 sdk
+      - [0x3FB30, asm, TestEvent]   # 0x10 sdk
       - [0x3FB40, asm, func_8005F340]   # 0x10
-      - [0x3FB50, asm, func_80068A20]   # 0x10 sdk
-      - [0x3FB60, asm, func_80068A30]   # 0x10 sdk
-      - [0x3FB70, asm, func_80068A40]   # 0x10 sdk
-      - [0x3FB80, asm, func_80068A50]   # 0x10 sdk
-      - [0x3FB90, asm, func_80068A60]   # 0x10 sdk
+      - [0x3FB50, asm, ChangeClearRCnt]   # 0x10 sdk
+      - [0x3FB60, asm, open]   # 0x10 sdk
+      - [0x3FB70, asm, intr_start_aux6]   # 0x10 sdk
+      - [0x3FB80, asm, firstfile]   # 0x10 sdk
+      - [0x3FB90, asm, ReturnFromException]   # 0x10 sdk
       - [0x3FBA0, asm, func_8005F3A0]   # 0x15c sdk
       - [0x3FCFC, asm, func_8005F4FC]   # 0x114 sdk
       - [0x3FE10, asm, func_8005F610]   # 0x6c sdk
@@ -303,8 +303,8 @@ segments:
       - [0x4254C, asm, func_80061D4C]   # 0x16c sdk
       - [0x426B8, asm, func_80061EB8]   # 0xe0 sdk
       - [0x42798, asm, func_80061F98]   # 0x2c sdk
-      - [0x427C4, asm, func_8006BC84]   # 0x10 sdk
-      - [0x427D4, asm, func_8006BC94]   # 0x10 sdk
+      - [0x427C4, asm, memcpy]   # 0x10 sdk
+      - [0x427D4, asm, GPU_cw]   # 0x10 sdk
       - [0x427E4, asm, func_80061FE4]   # 0xc8 sdk
       - [0x428AC, asm, func_800620AC]   # 0x18 sdk
       - [0x428C4, asm, func_800620C4]   # 0xd0 sdk
@@ -362,11 +362,11 @@ segments:
       - [0x430E8, asm, func_800628E8]   # 0xc sdk
       - [0x430F4, asm, func_800628F4]   # 0xc sdk
       - [0x43100, asm, func_80062900]   # 0x18 sdk
-      - [0x43118, asm, func_8006C838]   # 0x78 sdk
-      - [0x43190, asm, func_8006C8B0]   # 0x158 sdk
-      - [0x432E8, asm, func_8006CA08]   # 0x78 sdk
-      - [0x43360, asm, func_8006CA80]   # 0x27c sdk
-      - [0x435DC, asm, func_8006CCFC]   # 0x168 sdk
+      - [0x43118, asm, GsInitGraph]   # 0x78 sdk
+      - [0x43190, asm, gpu_init]   # 0x158 sdk
+      - [0x432E8, asm, GsInitGraph2]   # 0x78 sdk
+      - [0x43360, asm, valiable_init]   # 0x27c sdk
+      - [0x435DC, asm, GsSortClear]   # 0x168 sdk
       - [0x43744, asm, func_80062F44]   # 0x7c sdk
       - [0x437C0, c, GsInitCoord2param]   # 0x2c sdk
       - [0x437EC, asm, func_80062FEC]   # 0x30 sdk
@@ -377,23 +377,23 @@ segments:
       - [0x43A04, asm, func_80063204]   # 0x84 sdk
       - [0x43A88, asm, func_80063288]   # 0x70 sdk
       - [0x43AF8, asm, func_800632F8]   # 0x34 sdk
-      - [0x43B2C, asm, func_8006D37C]   # 0x98 sdk
+      - [0x43B2C, asm, GsSetDrawBuffClip]   # 0x98 sdk
       - [0x43BC4, c, GsMapModelingData]   # 0x78 sdk
       - [0x43C3C, c, GsGetTimInfo]   # 0xe4 sdk
-      - [0x43D20, asm, func_8006D570]   # 0x2d4 sdk
+      - [0x43D20, asm, GsGetLs]   # 0x2d4 sdk
       - [0x43FF4, asm, func_800637F4]   # 0x2c4 sdk
-      - [0x442B8, asm, func_8006DC38]   # 0x28 sdk
-      - [0x442E0, asm, func_8006DC60]   # 0x78 sdk
+      - [0x442B8, asm, GsSetAmbient]   # 0x28 sdk
+      - [0x442E0, asm, GsInit3D]   # 0x78 sdk
       - [0x44358, asm, func_80063B58]   # 0x3c8 sdk
       - [0x44720, asm, func_80063F20]   # 0xf0 sdk
       - [0x44810, c,   func_80064010]   # 0xc8 sdk
       - [0x448D8, c, len_param]   # 0x1c
-      - [0x448F4, asm, func_8006E3A4]   # 0x50 sdk
+      - [0x448F4, asm, TransposeMatrix]   # 0x50 sdk
       - [0x44944, asm, func_80064144]   # 0x118
       - [0x44A5C, data, data_8006425C]   # 0x8
-      - [0x44A64, asm, func_8006E514]   # 0xb8 sdk
+      - [0x44A64, asm, gte_rotate_z_matrix]   # 0xb8 sdk
       - [0x44B1C, asm, func_8006431C]   # 0x178 sdk
-      - [0x44C94, asm, func_8006E744]   # 0x180 sdk
+      - [0x44C94, asm, RotMatrixC]   # 0x180 sdk
       - [0x44E14, asm, func_80064614]   # 0x178 sdk
       - [0x44F8C, asm, func_8006478C]   # 0x174 sdk
       - [0x45100, asm, func_80064900]   # 0x174 sdk
@@ -431,25 +431,25 @@ segments:
       - [0x46944, c, ReadGeomScreen]   # 0xc sdk
       - [0x46950, asm, func_80066150]   # 0x28c
       - [0x46BDC, data, data_800663DC]   # 0x4
-      - [0x46BE0, asm, func_80070B50]   # 0x94 sdk
-      - [0x46C74, asm, func_80070BE4]   # 0xa0 sdk
+      - [0x46BE0, asm, _make_packet]   # 0x94 sdk
+      - [0x46C74, asm, GsDefDispBuff]   # 0xa0 sdk
       - [0x46D14, asm, func_80066514]   # 0x7f0
-      - [0x47504, asm, func_800715A4]   # 0x1ec sdk
+      - [0x47504, asm, GsTMDdivF3NL]   # 0x1ec sdk
       - [0x476F0, asm, func_80066EF0]   # 0x23c sdk
-      - [0x4792C, asm, func_80071AFC]   # 0x1fc sdk
-      - [0x47B28, asm, func_80071CF8]   # 0x25c sdk
+      - [0x4792C, asm, GsTMDdivG3NL]   # 0x1fc sdk
+      - [0x47B28, asm, GsTMDdivG4NL]   # 0x25c sdk
       - [0x47D84, asm, func_80067584]   # 0x2f8 sdk
-      - [0x4807C, asm, func_8007237C]   # 0x2a0 sdk
+      - [0x4807C, asm, GsTMDdivTF4L]   # 0x2a0 sdk
       - [0x4831C, data, data_80067B1C]   # 0x27c
       - [0x48598, asm, func_80067D98]   # 0x2ec sdk
-      - [0x48884, asm, func_80072CB4]   # 0x284 sdk
-      - [0x48B08, asm, func_80072F38]   # 0x280 sdk
-      - [0x48D88, asm, func_800731B8]   # 0x23c sdk
+      - [0x48884, asm, GsTMDdivTNF3]   # 0x284 sdk
+      - [0x48B08, asm, GsTMDdivTNF4]   # 0x280 sdk
+      - [0x48D88, asm, GsTMDdivTNG3]   # 0x23c sdk
       - [0x48FC4, asm, func_800687C4]   # 0x2a4 sdk
-      - [0x49268, asm, func_800737C8]   # 0x13c sdk
-      - [0x493A4, asm, func_80073904]   # 0x140 sdk
-      - [0x494E4, asm, func_80073A44]   # 0x148 sdk
-      - [0x4962C, asm, func_80073B8C]   # 0x14c sdk
+      - [0x49268, asm, GsTMDfastNF3]   # 0x13c sdk
+      - [0x493A4, asm, GsTMDfastF3NL]   # 0x140 sdk
+      - [0x494E4, asm, GsTMDfastF3L]   # 0x148 sdk
+      - [0x4962C, asm, GsTMDfastF3LFG]   # 0x14c sdk
       - [0x49778, asm, func_80068F78]   # 0x148 sdk
       - [0x498C0, asm, func_800690C0]   # 0x140 sdk
       - [0x49A00, asm, func_80069200]   # 0x190 sdk
@@ -466,13 +466,13 @@ segments:
       - [0x4AA48, c, RotAverageNclip4]   # 0xb0 sdk
       - [0x4AAF8, c, RotAverage3]   # 0x60 sdk
       - [0x4AB58, data, data_8006A358]   # 0x238
-      - [0x4AD90, asm, func_80075680]   # 0x270 sdk
+      - [0x4AD90, asm, GsTMDdivF4LFG]   # 0x270 sdk
       - [0x4B000, data, data_8006A800]   # 0x244
-      - [0x4B244, asm, func_80075C64]   # 0x2c0 sdk
-      - [0x4B504, asm, func_80075F24]   # 0x288 sdk
+      - [0x4B244, asm, GsTMDdivG4LFG]   # 0x2c0 sdk
+      - [0x4B504, asm, GsTMDdivTF3NL]   # 0x288 sdk
       - [0x4B78C, asm, func_8006AF8C]   # 0x284 sdk
-      - [0x4BA10, asm, func_80076560]   # 0x234 sdk
-      - [0x4BC44, asm, func_80076794]   # 0x28c sdk
+      - [0x4BA10, asm, GsTMDdivTG3NL]   # 0x234 sdk
+      - [0x4BC44, asm, GsTMDdivTG4NL]   # 0x28c sdk
       - [0x4BED0, asm, func_8006B6D0]   # 0x16c sdk
       - [0x4C03C, asm, func_8006B83C]   # 0x164 sdk
       - [0x4C1A0, asm, func_8006B9A0]   # 0x170 sdk
@@ -490,10 +490,10 @@ segments:
       - [0x4D4CC, asm, func_8006CCCC]   # 0x198 sdk
       - [0x4D664, asm, func_8006CE64]   # 0x20c sdk
       - [0x4D870, asm, func_8006D070]   # 0x210 sdk
-      - [0x4DA80, asm, func_80078A90]   # 0x300 sdk
+      - [0x4DA80, asm, GsTMDdivTF3LFG]   # 0x300 sdk
       - [0x4DD80, asm, func_8006D580]   # 0x2a4 sdk
       - [0x4E024, data, data_8006D824]   # 0x27c
-      - [0x4E2A0, asm, func_800793E0]   # 0x304 sdk
+      - [0x4E2A0, asm, GsTMDdivTG4LFG]   # 0x304 sdk
       - [0x4E5A4, c, RotTransPers]   # 0x2c sdk
       - [0x4E5D0, c, RotTransPers3]   # 0x54 sdk
       - [0x4E624, c, RotTrans]   # 0x28 sdk
@@ -542,12 +542,12 @@ segments:
       - [0x50B64, data, data_80070364]   # 0x30c
       - [0x50E70, asm, func_80070670]   # 0xac
       - [0x50F1C, data, data_8007071C]   # 0x240
-      - [0x5115C, asm, func_8007C9BC]   # 0x26c sdk
+      - [0x5115C, asm, GsTMDdivF4L]   # 0x26c sdk
       - [0x513C8, data, data_80070BC8]   # 0x244
       - [0x5160C, asm, func_80070E0C]   # 0x2a8 sdk
-      - [0x518B4, asm, func_8007D244]   # 0x1e8 sdk
-      - [0x51A9C, asm, func_8007D42C]   # 0x238 sdk
-      - [0x51CD4, asm, func_8007D664]   # 0x1fc sdk
+      - [0x518B4, asm, GsTMDdivNF3]   # 0x1e8 sdk
+      - [0x51A9C, asm, GsTMDdivNF4]   # 0x238 sdk
+      - [0x51CD4, asm, GsTMDdivNG3]   # 0x1fc sdk
       - [0x51ED0, asm, func_800716D0]   # 0x258 sdk
       - [0x52128, c, RotAverageNclipColorDpq3_1]   # 0x100 sdk
       - [0x52228, asm, func_80071A28]   # 0x248 sdk
@@ -557,26 +557,26 @@ segments:
       - [0x529C8, asm, func_800721C8]   # 0x248 sdk
       - [0x52C10, asm, func_80072410]   # 0x238 sdk
       - [0x52E48, asm, func_80072648]   # 0x10
-      - [0x52E58, asm, func_8007EA48]   # 0xc8 sdk
+      - [0x52E58, asm, Gssub_make_matrix]   # 0xc8 sdk
       - [0x52F20, asm, func_80072720]   # 0x10
       - [0x52F30, asm, func_80072730]   # 0x24 sdk
       - [0x52F54, asm, func_80072754]   # 0x7f8 sdk
       - [0x5374C, asm, func_80072F4C]   # 0x124 sdk
-      - [0x53870, asm, func_8007F6C0]   # 0x4c sdk
+      - [0x53870, asm, gte_init]   # 0x4c sdk
       - [0x538BC, asm, func_800730BC]   # 0xe8
       - [0x539A4, data, data_800731A4]   # 0x38
-      - [0x539DC, asm, func_8007F82C]   # 0x10 sdk
+      - [0x539DC, asm, FlushCache]   # 0x10 sdk
       - [0x539EC, c, GsClearOt]   # 0x58 sdk
       - [0x53A44, c, GsSetLightMode]   # 0x8c sdk
       - [0x53AD0, c, func_8007F920]   # 0x10
-      - [0x53AE0, asm, func_8007F930]   # 0x11c sdk
+      - [0x53AE0, asm, GsSetDrawBuffOffset]   # 0x11c sdk
       - [0x53BFC, asm, func_800733FC]   # 0x4c4 sdk
       - [0x540C0, asm, func_800738C0]   # 0x68 sdk
       - [0x54128, asm, func_80073928]   # 0x50 sdk
-      - [0x54178, asm, func_800800F8]   # 0xf4 sdk
-      - [0x5426C, asm, func_800801EC]   # 0x40 sdk
-      - [0x542AC, asm, func_8008022C]   # 0x2c8 sdk
-      - [0x54574, asm, func_800804F4]   # 0x268 sdk
+      - [0x54178, asm, GsSwapDispBuff]   # 0xf4 sdk
+      - [0x5426C, asm, _mk_spr_packet]   # 0x40 sdk
+      - [0x542AC, asm, _mk_xpndsp]   # 0x2c8 sdk
+      - [0x54574, asm, _mk_normsp]   # 0x268 sdk
       - [0x547DC, asm, func_80073FDC]   # 0x38 sdk
       - [0x54814, asm, func_80074014]   # 0x8c sdk
       - [0x548A0, data, data_800740A0]   # 0x60
@@ -638,13 +638,13 @@ segments:
       - [0x58034, asm, func_80077834]   # 0x10 sdk
       - [0x58044, asm, func_80077844]   # 0xe0 sdk
       - [0x58124, asm, func_80077924]   # 0x16c sdk
-      - [0x58290, asm, func_80084B90]   # 0x90 sdk
-      - [0x58320, asm, func_80084C20]   # 0x28 sdk
-      - [0x58348, asm, func_80084C48]   # 0x28 sdk
-      - [0x58370, asm, func_80084C70]   # 0x28 sdk
-      - [0x58398, asm, func_80084C98]   # 0x10 sdk
+      - [0x58290, asm, CdInit]   # 0x90 sdk
+      - [0x58320, asm, def_cbsync]   # 0x28 sdk
+      - [0x58348, asm, def_cbready]   # 0x28 sdk
+      - [0x58370, asm, def_cbread]   # 0x28 sdk
+      - [0x58398, asm, DeliverEvent]   # 0x10 sdk
       - [0x583A8, asm, func_80077BA8]   # 0x94
-      - [0x5843C, asm, func_80084D3C]   # 0x88 sdk
+      - [0x5843C, asm, StSetStream]   # 0x88 sdk
       - [0x584C4, asm, func_80077CC4]   # 0x2e8 sdk
       - [0x587AC, asm, func_80077FAC]   # 0x24 sdk
       - [0x587D0, asm, func_80077FD0]   # 0x2f4 sdk
@@ -652,23 +652,23 @@ segments:
       - [0x58B70, asm, func_80078370]   # 0x2bc sdk
       - [0x58E2C, asm, func_8007862C]   # 0x6c sdk
       - [0x58E98, asm, func_80078698]   # 0x34 sdk
-      - [0x58ECC, asm, func_800858FC]   # 0x34 sdk
+      - [0x58ECC, asm, StSetChannel]   # 0x34 sdk
       - [0x58F00, c,   func_80078700]   # 0x24 sdk
       - [0x58F24, asm, func_80078724]   # 0x224 sdk
       - [0x59148, asm, func_80078948]   # 0x978 sdk
       - [0x59AC0, c,   func_800792C0]   # 0x34 sdk
       - [0x59AF4, asm, func_800792F4]   # 0x18c sdk
-      - [0x59C80, asm, func_80086910]   # 0x40 sdk
-      - [0x59CC0, asm, func_80086950]   # 0x20 sdk
-      - [0x59CE0, asm, func_80086970]   # 0x30 sdk
-      - [0x59D10, asm, func_800869A0]   # 0x60 sdk
-      - [0x59D70, asm, func_80086A00]   # 0xc4 sdk
-      - [0x59E34, asm, func_80086AC4]   # 0x68 sdk
-      - [0x59E9C, asm, func_80086B2C]   # 0xbc sdk
+      - [0x59C80, asm, init_ring_status]   # 0x40 sdk
+      - [0x59CC0, asm, StSetMask]   # 0x20 sdk
+      - [0x59CE0, asm, StSetRing]   # 0x30 sdk
+      - [0x59D10, asm, StClearRing]   # 0x60 sdk
+      - [0x59D70, asm, StGetNext]   # 0xc4 sdk
+      - [0x59E34, asm, data_ready_callback]   # 0x68 sdk
+      - [0x59E9C, asm, StFreeRing]   # 0xbc sdk
       - [0x59F58, c,   func_80079758]   # 0x170 sdk
-      - [0x5A0C8, asm, func_80086E88]   # 0x34 sdk
+      - [0x5A0C8, asm, SpuSetTransferMode]   # 0x34 sdk
       - [0x5A0FC, asm, func_800798FC]   # 0x128
-      - [0x5A224, asm, func_80086FE4]   # 0x24 sdk
+      - [0x5A224, asm, _SpuDataCallback]   # 0x24 sdk
       - [0x5A248, data, data_80079A48]   # 0x90
       - [0x5A2D8, asm, func_80079AD8]   # 0x548
       - [0x5A820, asm, func_8007A020]   # 0x344 sdk
@@ -680,11 +680,11 @@ segments:
       - [0x5B298, asm, func_8007AA98]   # 0x48 sdk
       - [0x5B2E0, asm, func_8007AAE0]   # 0xa4 sdk
       - [0x5B384, asm, func_8007AB84]   # 0x3c sdk
-      - [0x5B3C0, asm, func_800883E0]   # 0x3c sdk
-      - [0x5B3FC, asm, func_8008841C]   # 0x2c sdk
+      - [0x5B3C0, asm, SpuSetTransferStartAddr]   # 0x3c sdk
+      - [0x5B3FC, asm, _spu_setInTransfer]   # 0x2c sdk
       - [0x5B428, c, func_80088448]   # 0x10
-      - [0x5B438, asm, func_80088458]   # 0x8c sdk
-      - [0x5B4C4, asm, func_800884E4]   # 0x58 sdk
+      - [0x5B438, asm, SpuWritePartly]   # 0x8c sdk
+      - [0x5B4C4, asm, SsUtGetVBaddrInSB]   # 0x58 sdk
       - [0x5B51C, asm, func_8007AD1C]   # 0x29c
       - [0x5B7B8, asm, func_8007AFB8]   # 0x39c sdk
       - [0x5BB54, data, data_8007B354]   # 0x154
@@ -738,10 +738,10 @@ segments:
       - [0x604EC, asm, func_8007FCEC]   # 0x54 sdk
       - [0x60540, asm, func_8007FD40]   # 0xc sdk
       - [0x6054C, data, data_8007FD4C]   # 0x200
-      - [0x6074C, asm, func_8008E34C]   # 0x24 sdk
-      - [0x60770, asm, func_8008E370]   # 0x54 sdk
+      - [0x6074C, asm, SpuSetNoiseVoice]   # 0x24 sdk
+      - [0x60770, asm, SpuInitMalloc]   # 0x54 sdk
       - [0x607C4, asm, func_8007FFC4]   # 0xb4 sdk
-      - [0x60878, asm, func_8008E5A8]   # 0xd4 sdk
+      - [0x60878, asm, SpuVmVSetUp]   # 0xd4 sdk
       - [0x6094C, asm, func_8008014C]   # 0x120 sdk
       - [0x60A6C, data, data_8008026C]   # 0x2c
       - [0x60A98, asm, func_80080298]   # 0x40
@@ -752,32 +752,32 @@ segments:
       - [0x61320, asm, func_80080B20]   # 0x14 sdk
       - [0x61334, data, data_80080B34]   # 0x5c
       - [0x61390, asm, func_80080B90]   # 0x78
-      - [0x61408, asm, func_8008F268]   # 0x7c sdk
-      - [0x61484, asm, func_8008F2E4]   # 0x10 sdk
-      - [0x61494, asm, func_8008F2F4]   # 0x10 sdk
+      - [0x61408, asm, SpuQuit]   # 0x7c sdk
+      - [0x61484, asm, CloseEvent]   # 0x10 sdk
+      - [0x61494, asm, DisableEvent]   # 0x10 sdk
       - [0x614A4, c, func_8008F304]   # 0x14
       - [0x614B8, c, func_8008F318]   # 0x10
       - [0x614C8, asm, func_80080CC8]   # 0x34 sdk
       - [0x614FC, asm, func_80080CFC]   # 0x34 sdk
       - [0x61530, asm, func_80080D30]   # 0x34 sdk
       - [0x61564, c, func_80080D64]   # 0x448 sdk SsVabOpenHeadWithMode
-      - [0x619AC, asm, func_8008F93C]   # 0x2c8 sdk
-      - [0x61C74, asm, func_8008FC04]   # 0x300 sdk
-      - [0x61F74, asm, func_8008FF04]   # 0x78 sdk
+      - [0x619AC, asm, SpuMalloc]   # 0x2c8 sdk
+      - [0x61C74, asm, _spu_gcSPU]   # 0x300 sdk
+      - [0x61F74, asm, SsVabFakeBody]   # 0x78 sdk
       - [0x61FEC, asm, func_800817EC]   # 0xe4 sdk
-      - [0x620D0, asm, func_80090190]   # 0x240 sdk
+      - [0x620D0, asm, SsUtGetVagAtr]   # 0x240 sdk
       - [0x62310, c, SsSetMVol]   # 0x50 sdk
-      - [0x62360, asm, func_80090420]   # 0x394 sdk
+      - [0x62360, asm, SpuSetCommonAttr]   # 0x394 sdk
       - [0x626F4, c, SsSetSerialVol]   # 0x160 sdk
       - [0x62854, c, SsVabTransCompleted]   # 0x2c sdk
-      - [0x62880, asm, func_80090A70]   # 0xa8 sdk
+      - [0x62880, asm, SpuIsTransferCompleted]   # 0xa8 sdk
       - [0x62928, c, SsSeqCalledTbyT]   # 0x274 sdk
-      - [0x62B9C, asm, func_80090D8C]   # 0xa0 sdk
-      - [0x62C3C, asm, func_80090E2C]   # 0x64 sdk
-      - [0x62CA0, asm, func_80090E90]   # 0x1e0 sdk
+      - [0x62B9C, asm, Snd_pause]   # 0xa0 sdk
+      - [0x62C3C, asm, Snd_nextpause]   # 0x64 sdk
+      - [0x62CA0, asm, Snd_tempo]   # 0x1e0 sdk
       - [0x62E80, asm, func_80082680]   # 0x328
-      - [0x631A8, asm, func_800914C8]   # 0x68 sdk
-      - [0x63210, asm, func_80091530]   # 0x2c sdk
+      - [0x631A8, asm, Snd_replay]   # 0x68 sdk
+      - [0x63210, asm, Snd_play]   # 0x2c sdk
       - [0x6323C, asm, func_80082A3C]   # 0x114 sdk
       - [0x63350, asm, func_80082B50]   # 0x2b0 sdk
       - [0x63600, asm, func_80082E00]   # 0x118 sdk
@@ -807,35 +807,35 @@ segments:
       - [0x652F4, asm, func_80084AF4]   # 0x40 sdk
       - [0x65334, asm, func_80084B34]   # 0x510 sdk
       - [0x65844, asm, func_80085044]   # 0x4d0 sdk
-      - [0x65D14, asm, func_80094624]   # 0x70 sdk
-      - [0x65D84, asm, func_80094694]   # 0x78 sdk
-      - [0x65DFC, asm, func_8009470C]   # 0x1a0 sdk
-      - [0x65F9C, asm, func_800948AC]   # 0x10 sdk
+      - [0x65D14, asm, _SpuIsInAllocateArea]   # 0x70 sdk
+      - [0x65D84, asm, _SpuIsInAllocateArea_]   # 0x78 sdk
+      - [0x65DFC, asm, SpuClearReverbWorkArea]   # 0x1a0 sdk
+      - [0x65F9C, asm, WaitEvent]   # 0x10 sdk
       - [0x65FAC, asm, func_800857AC]   # 0xd0 sdk
-      - [0x6607C, asm, func_80094ABC]   # 0x1cc sdk
+      - [0x6607C, asm, SsUtSetVagAtr]   # 0x1cc sdk
       - [0x66248, c,   func_80094C88]   # 0x14 sdk
       - [0x6625C, asm, func_80085A5C]   # 0x108 sdk
-      - [0x66364, asm, func_80094DA4]   # 0x10c sdk
+      - [0x66364, asm, SsUtGetProgAtr]   # 0x10c sdk
       - [0x66470, asm, func_80085C70]   # 0x3d0
       - [0x66840, asm, func_80086040]   # 0x16c sdk
       - [0x669AC, asm, func_800861AC]   # 0x28 sdk
       - [0x669D4, asm, func_800861D4]   # 0x2c sdk
       - [0x66A00, c, SsSetSerialAttr]   # 0x94 sdk
-      - [0x66A94, asm, func_80095604]   # 0x10 sdk
-      - [0x66AA4, asm, func_80095614]   # 0x10 sdk
-      - [0x66AB4, asm, func_80095624]   # 0x10 sdk
+      - [0x66A94, asm, _card_load]   # 0x10 sdk
+      - [0x66AA4, asm, _card_info]   # 0x10 sdk
+      - [0x66AB4, asm, _card_auto]   # 0x10 sdk
       - [0x66AC4, asm, func_800862C4]   # 0x30
-      - [0x66AF4, asm, func_80095664]   # 0x10 sdk
-      - [0x66B04, asm, func_80095674]   # 0x10 sdk
-      - [0x66B14, asm, func_80095684]   # 0x10 sdk
-      - [0x66B24, asm, func_80095694]   # 0x10 sdk
-      - [0x66B34, asm, func_800956A4]   # 0x10 sdk
-      - [0x66B44, asm, func_800956B4]   # 0x10 sdk
+      - [0x66AF4, asm, _card_write]   # 0x10 sdk
+      - [0x66B04, asm, InitCARD]   # 0x10 sdk
+      - [0x66B14, asm, StartCARD]   # 0x10 sdk
+      - [0x66B24, asm, _bu_init]   # 0x10 sdk
+      - [0x66B34, asm, _new_card]   # 0x10 sdk
+      - [0x66B44, asm, _card_read]   # 0x10 sdk
       - [0x66B54, asm, func_80086354]   # 0x1224
       - [0x67D78, data, data_80087578]   # 0xc
-      - [0x67D84, asm, func_80096B54]   # 0x10 sdk
-      - [0x67D94, asm, func_80096B64]   # 0x10 sdk
-      - [0x67DA4, asm, func_80096B74]   # 0x10 sdk
+      - [0x67D84, asm, PAD_dr]   # 0x10 sdk
+      - [0x67D94, asm, SysDeqIntRP]   # 0x10 sdk
+      - [0x67DA4, asm, SysEnqIntRP]   # 0x10 sdk
       - [0x67DB4, data, data_800875B4]   # 0x38a80
       - [0xA0834, asm, func_800C0034]   # 0x3584
       - [0xA3DB8, data, data_800C35B8]   # 0x7248
