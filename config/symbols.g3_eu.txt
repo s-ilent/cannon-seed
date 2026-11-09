@@ -3239,7 +3239,7 @@ func_80071D04 = 0x80071D04; // type:func (branch target)
 func_80071D44 = 0x80071D44; // type:func (branch target)
 func_80071D50 = 0x80071D50; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
-func_8002BBA4 = 0x8002A2B4; // type:func (row name)
+func_8002A2B4 = 0x8002A2B4; // type:func (row name)
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
 GsSetLightMode_msg = 0x80021C14; // type:s32
 spu_timeout_fmt = 0x800221C4; // type:s32

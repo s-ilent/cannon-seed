@@ -80,7 +80,7 @@ segments:
       - [0x8F60, asm, func_80028760]   # 0x58c
       - [0x94EC, c,   SpuVmDamperOn]   # 0x14 sdk
       - [0x9500, asm, func_80028D00]   # 0x2214
-      - [0xB714, asm, func_8002C934]   # 0x18 sdk
+      - [0xB714, asm, func_8002AF14]   # 0x18 sdk
       - [0xB72C, asm, func_8002AF2C]   # 0x9844
       - [0x14F70, asm, func_80034770]   # 0x28 sdk
       - [0x14F98, data, data_80034798]   # 0x30
@@ -768,7 +768,7 @@ segments:
       - [0x4E2E0, asm, func_8006DAE0]   # 0x3d0
       - [0x4E6B0, asm, func_8006DEB0]   # 0x16c sdk
       - [0x4E81C, asm, func_8006E01C]   # 0x28 sdk
-      - [0x4E844, asm, func_80079AB4]   # 0x2c sdk
+      - [0x4E844, asm, func_8006E044]   # 0x2c sdk
       - [0x4E870, c, SsSetSerialAttr]   # 0x94 sdk
       - [0x4E904, asm, _card_load]   # 0x10 sdk
       - [0x4E914, asm, _card_info]   # 0x10 sdk

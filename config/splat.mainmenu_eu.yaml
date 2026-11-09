@@ -70,54 +70,54 @@ segments:
     # BEGIN GENERATED SUBSEGMENTS (tools/scan_functions.py - make scan)
       - [0x800, data, data_80020000]   # 0x3a94
       - [0x4294, asm, func_80023A94]   # 0x19fc
-      - [0x5C90, asm, func_800261A0]   # 0x44 pinned
-      - [0x5CD4, asm, func_800261E4]   # 0x68 pinned
-      - [0x5D3C, asm, func_8002624C]   # 0xec pinned
-      - [0x5E28, asm, func_80026338]   # 0xcc pinned
-      - [0x5EF4, asm, func_80026404]   # 0x60 pinned
+      - [0x5C90, asm, func_80025490]   # 0x44 pinned
+      - [0x5CD4, asm, func_800254D4]   # 0x68 pinned
+      - [0x5D3C, asm, func_8002553C]   # 0xec pinned
+      - [0x5E28, asm, func_80025628]   # 0xcc pinned
+      - [0x5EF4, asm, func_800256F4]   # 0x60 pinned
       - [0x5F54, data, data_80025754]   # 0x88
       - [0x5FDC, asm, func_800257DC]   # 0x3b6c
-      - [0x9B48, asm, func_8002A9D8]   # 0x4b8 pinned
+      - [0x9B48, asm, func_80029348]   # 0x4b8 pinned
       - [0xA000, data, data_80029800]   # 0x14
       - [0xA014, asm, func_80029814]   # 0x98
-      - [0xA0AC, asm, func_8002B06C]   # 0x6b4 pinned
+      - [0xA0AC, asm, func_800298AC]   # 0x6b4 pinned
       - [0xA760, data, data_80029F60]   # 0xc4
       - [0xA824, asm, func_8002A024]   # 0x7f4
-      - [0xB018, asm, func_8002C238]   # 0x16c pinned
-      - [0xB184, asm, func_8002C3A4]   # 0x74 pinned
+      - [0xB018, asm, func_8002A818]   # 0x16c pinned
+      - [0xB184, asm, func_8002A984]   # 0x74 pinned
       - [0xB1F8, c, func_8002C418]   # 0x190 noseed
       - [0xB388, data, data_8002AB88]   # 0x4
       - [0xB38C, asm, func_8002AB8C]   # 0x580
-      - [0xB90C, asm, func_8002CC5C]   # 0x6f4 pinned
-      - [0xC000, asm, func_8002D480]   # 0x800 pinned
-      - [0xC800, asm, func_8002DDB0]   # 0x50 pinned
+      - [0xB90C, asm, func_8002B10C]   # 0x6f4 pinned
+      - [0xC000, asm, func_8002B800]   # 0x800 pinned
+      - [0xC800, asm, func_8002C000]   # 0x50 pinned
       - [0xC850, asm, func_8002C050]   # 0x5c0
       - [0xCE10, c, func_8002E3C0]   # 0x8
       - [0xCE18, c, func_8002E3C8]   # 0x8
       - [0xCE20, data, data_8002C620]   # 0x4
       - [0xCE24, asm, func_8002C624]   # 0x1dc
-      - [0xD000, asm, func_8002E6E0]   # 0x484 pinned
+      - [0xD000, asm, func_8002C800]   # 0x484 pinned
       - [0xD484, asm, func_8002CC84]   # 0x37c
-      - [0xD800, asm, func_8002F010]   # 0x358 pinned
+      - [0xD800, asm, func_8002D000]   # 0x358 pinned
       - [0xDB58, asm, func_8002D358]   # 0x4a8
-      - [0xE000, asm, func_8002F940]   # 0x5c4 pinned
+      - [0xE000, asm, func_8002D800]   # 0x5c4 pinned
       - [0xE5C4, c, func_8002FF04]   # 0x8
-      - [0xE5CC, asm, func_8002FF0C]   # 0x234 pinned
-      - [0xE800, asm, func_80030270]   # 0xd8 pinned
-      - [0xE8D8, asm, func_80030348]   # 0x630 pinned
+      - [0xE5CC, asm, func_8002DDCC]   # 0x234 pinned
+      - [0xE800, asm, func_8002E000]   # 0xd8 pinned
+      - [0xE8D8, asm, func_8002E0D8]   # 0x630 pinned
       - [0xEF08, c, func_80030978]   # 0x8
       - [0xEF10, c, func_80030980]   # 0x8
       - [0xEF18, c, func_80030988]   # 0x8
       - [0xEF20, c, func_80030990]   # 0x8
-      - [0xEF28, asm, func_80030998]   # 0x30 pinned
+      - [0xEF28, asm, func_8002E728]   # 0x30 pinned
       - [0xEF58, c, func_800309C8]   # 0x8
-      - [0xEF60, asm, func_800309D0]   # 0xa0 pinned
-      - [0xF000, asm, func_80030BA0]   # 0x10 pinned
+      - [0xEF60, asm, func_8002E760]   # 0xa0 pinned
+      - [0xF000, asm, func_8002E800]   # 0x10 pinned
       - [0xF010, asm, func_8002E810]   # 0x7f0
-      - [0xF800, asm, func_800314D0]   # 0x800 pinned
-      - [0x10000, asm, func_80031E00]   # 0x800 pinned
-      - [0x10800, asm, func_80032730]   # 0x800 pinned
-      - [0x11000, asm, func_80033060]   # 0x800 pinned
+      - [0xF800, asm, func_8002F000]   # 0x800 pinned
+      - [0x10000, asm, func_8002F800]   # 0x800 pinned
+      - [0x10800, asm, func_80030000]   # 0x800 pinned
+      - [0x11000, asm, func_80030800]   # 0x800 pinned
       - [0x11800, data, data_80031000]   # 0xc8
       - [0x118C8, asm, func_800310C8]   # 0x373c
       - [0x15004, c, func_800379E4]   # 0x2c8
@@ -126,7 +126,7 @@ segments:
       - [0x19ECC, asm, GsSetOrign]   # 0x18 sdk
       - [0x19EE4, asm, func_800396E4]   # 0x1424
       - [0x1B308, asm, func_8003AB08]   # 0x20 sdk
-      - [0x1B328, asm, func_8003EB48]   # 0x18 sdk
+      - [0x1B328, asm, func_8003AB28]   # 0x18 sdk
       - [0x1B340, data, data_8003AB40]   # 0x8c
       - [0x1B3CC, asm, func_8003ABCC]   # 0x58c
       - [0x1B958, c,   SpuVmDamperOn]   # 0x14 sdk

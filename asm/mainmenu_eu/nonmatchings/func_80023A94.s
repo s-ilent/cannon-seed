@@ -846,7 +846,7 @@ glabel func_800244F8
     /* 4D18 80024518 F0AC8484 */  lh         $a0, %lo(D_800CACF0)($a0)
     /* 4D1C 8002451C 0D80053C */  lui        $a1, %hi(D_800CACF8)
     /* 4D20 80024520 F8ACA584 */  lh         $a1, %lo(D_800CACF8)($a1)
-    /* 4D24 80024524 CAEA000C */  jal        func_8003EB48
+    /* 4D24 80024524 CAEA000C */  jal        func_8003AB28
     /* 4D28 80024528 21900000 */   addu      $s2, $zero, $zero
     /* 4D2C 8002452C 0D80043C */  lui        $a0, %hi(D_800CAB78)
     /* 4D30 80024530 78AB8484 */  lh         $a0, %lo(D_800CAB78)($a0)

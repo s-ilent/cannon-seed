@@ -2355,7 +2355,7 @@ endlabel func_8003305C
 nonmatching func_80033120, 0xC
 
 glabel func_80033120
-    /* 13920 80033120 2BA6000C */  jal        func_8002B06C
+    /* 13920 80033120 2BA6000C */  jal        func_800298AC
     /* 13924 80033124 00000000 */   nop
     /* 13928 80033128 FEFF0224 */  addiu      $v0, $zero, -0x2
 endlabel func_80033120

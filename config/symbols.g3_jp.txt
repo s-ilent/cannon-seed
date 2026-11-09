@@ -2982,7 +2982,7 @@ func_80071534 = 0x80071534; // type:func (branch target)
 func_80071574 = 0x80071574; // type:func (branch target)
 func_80071580 = 0x80071580; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
-func_8002BBB4 = 0x8002A2C4; // type:func (row name)
+func_8002A2C4 = 0x8002A2C4; // type:func (row name)
 func_8004DEDC.2 = 0x8004DEDC; // type:func (row name)
 func_80050C5C.2 = 0x80050C5C; // type:func (row name)
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)

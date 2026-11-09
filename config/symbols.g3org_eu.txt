@@ -3054,8 +3054,8 @@ func_8006F158 = 0x8006F158; // type:func (branch target)
 func_8006F198 = 0x8006F198; // type:func (branch target)
 func_8006F1A4 = 0x8006F1A4; // type:func (branch target)
 // END GENERATED FUNCTION SYMBOLS
-func_8002C934 = 0x8002AF14; // type:func (row name)
-func_80079AB4 = 0x8006E044; // type:func (row name)
+func_8002AF14 = 0x8002AF14; // type:func (row name)
+func_8006E044 = 0x8006E044; // type:func (row name)
 // BEGIN GENERATED DATA SYMBOLS (tools/scan_functions.py)
 GsSetLightMode_msg = 0x80022568; // type:s32
 intr_start_aux3 = 0x80042530; // type:s32

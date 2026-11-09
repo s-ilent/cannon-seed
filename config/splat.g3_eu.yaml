@@ -80,7 +80,7 @@ segments:
       - [0x8300, asm, func_80027B00]   # 0x58c
       - [0x888C, c,   SpuVmDamperOn]   # 0x14 sdk
       - [0x88A0, asm, func_800280A0]   # 0x2214
-      - [0xAAB4, asm, func_8002BBA4]   # 0x18 sdk
+      - [0xAAB4, asm, func_8002A2B4]   # 0x18 sdk
       - [0xAACC, asm, func_8002A2CC]   # 0x9588
       - [0x14054, asm, func_80033854]   # 0x28 sdk
       - [0x1407C, data, data_8003387C]   # 0x30

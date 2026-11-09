@@ -56,7 +56,7 @@ glabel func_80022E2C
     /* 36D8 80022ED8 9FAA000C */  jal        func_8002AA7C
     /* 36DC 80022EDC 00000000 */   nop
     /* 36E0 80022EE0 5A000434 */  ori        $a0, $zero, 0x5A
-    /* 36E4 80022EE4 C5AB000C */  jal        func_8002C934
+    /* 36E4 80022EE4 C5AB000C */  jal        func_8002AF14
     /* 36E8 80022EE8 5A000534 */   ori       $a1, $zero, 0x5A
     /* 36EC 80022EEC 0780043C */  lui        $a0, %hi(D_8006F444)
     /* 36F0 80022EF0 44F4848C */  lw         $a0, %lo(D_8006F444)($a0)

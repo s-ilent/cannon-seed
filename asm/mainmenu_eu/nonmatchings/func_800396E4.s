@@ -483,7 +483,7 @@ glabel func_80039B78
     /* 1A3D0 80039BD0 0D80013C */  lui        $at, %hi(D_800CA4DC)
     /* 1A3D4 80039BD4 DCA420A4 */  sh         $zero, %lo(D_800CA4DC)($at)
     /* 1A3D8 80039BD8 F4010434 */  ori        $a0, $zero, 0x1F4
-    /* 1A3DC 80039BDC CAEA000C */  jal        func_8003EB48
+    /* 1A3DC 80039BDC CAEA000C */  jal        func_8003AB28
     /* 1A3E0 80039BE0 F4010534 */   ori       $a1, $zero, 0x1F4
     /* 1A3E4 80039BE4 1E000434 */  ori        $a0, $zero, 0x1E
     /* 1A3E8 80039BE8 E2EB000C */  jal        func_8003AF88
