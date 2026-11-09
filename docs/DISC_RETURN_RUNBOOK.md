@@ -76,15 +76,38 @@ reset to origin/main, worklog tail read).
 only (single-session rule: `ps aux | grep -E 'build.sh|verify.sh|land_wave'
 | grep -v grep` first - if another agent is mid-window, monitor read-only
 and take no build). Suite `python3 -m unittest discover -s tests`
-(133 cases). Ratchets `python3 tools/check_ratchets.py` - counts must
-EQUAL config/ratchets.json (unknown_function 809 / unknown_data 150 at the
-cron-20261101-0736 rewrite; recompute from the tree after every landing -
+(241 cases at cron-202611092303). Ratchets
+`python3 tools/check_ratchets.py` - counts must
+EQUAL config/ratchets.json (unknown_function 960 / unknown_data 831 at
+cron-202611092303; recompute from the tree after every landing -
 higher is a regression, lower lowers the baseline in the SAME commit).
 All green before ANY landing. If `make extract` runs anywhere,
 `git checkout --` the three carrier blobs afterwards
 (asm/mainmenu_eu/nonmatchings/func_80034EBC.s,
 asm/g3_jp/nonmatchings/func_80050108.s,
 asm/g3org_jp/nonmatchings/func_800250FC.s) and re-verify.
+
+GUARDED-CC1 GATE (banked cron-202611092303, the twenty-sixth-rollback
+incident): after any sandbox rollback, heed rehydrate 7.5's WARN
+"guarded cc1 MISSING" BEFORE any verify - the rollback restores the
+prebuilt i386 cc1 and plain `make verify` silently uses it: 100+ units
+stay byte-exact but the guard-sensitive C rows drift deep inside the
+body (slps_00270 failed with 847 bytes inside the func_80044174
+SsVabOpenHeadWithMode twin, head 0x48 + tail byte-exact; NOTE the cmp
+first-diff address read with the main-exe vram formula names the WRONG
+function - localize via gen.ld AT() ranges, the exe carries overlay
+segments with their own VA bases). Remedy:
+sh tools/build_cc1_263.sh && sh tools/patch_cc1_263.sh (~6 min), then
+verify with QEMU=/usr/bin/env
+GCCDIR=/home/z/my-project/tools-local/gcc-2.6.3-src/gcc-2.6.3
+make verify TARGET=<t> (the source cc1 is x86-64 native;
+QEMU=/usr/bin/env bypasses qemu). The maspsx delay-slot patch (rehydrate
+6b) must report BOTH clones patched - a manual `git reset` of the
+out-of-repo clone to upstream master silently kills the per-unit flags
+(upstream has NO --addiu-at CLI, the patch adds it; unknown flags are
+swallowed as assembler args, no error) and rows pinned via
+maspsx_flags.txt drift; restore the clone to e85ecb3 and re-run
+rehydrate.
 
 ## Phase C - the func_8006AF70 row (the SSINIT member, g3_eu; OWNER-GATED)
 
