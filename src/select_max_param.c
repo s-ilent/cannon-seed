@@ -1,8 +1,10 @@
 /* select_max_param - LIBGS MATRIX3 member, x8 byte-identical member wave
  * (0xC8, one member per target; the census's seventeenth-return item 3).
- * One shared true-named unit serves the two pinned rows (g3org_jp 0x2DE94,
+ * One shared true-named unit serves the three rows (g3org_jp 0x2DE94,
  * slps_00270 0x14584 - the 2026-11-09 RESPELL heal, the setIntrVSync/
- * CompMatrix consolidation precedent; the other members ride their own
+ * CompMatrix consolidation precedent - and g3_jp 0x309F8, which collapses
+ * the target's own drifted unit (the 800501F8 walk-name file) into here
+ * after the modulo-definition diff gate; the other members ride their own
  * rows). Sits between scale_view_param (0xF0) and
  * len_param (0x1C) in every target - the SDK's own MATRIX3 view cluster
  * (cross-target identities live in the yaml, the symbols file and the

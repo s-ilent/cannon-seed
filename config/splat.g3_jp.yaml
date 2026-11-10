@@ -342,8 +342,8 @@ segments:
       - [0x304A0, asm, GsSetAmbient]   # 0x28 sdk
       - [0x304C8, asm, GsInit3D]   # 0x78 sdk
       - [0x30540, asm, func_8004FD40]   # 0x3c8 sdk
-      - [0x30908, asm, func_80050108]   # 0xf0 sdk
-      - [0x309F8, c,   func_800501F8]   # 0xc8 sdk
+      - [0x30908, asm, scale_view_param]   # 0xf0 sdk
+      - [0x309F8, c,   select_max_param]   # 0xc8 sdk
       - [0x30AC0, c, len_param]   # 0x1c
       - [0x30ADC, c, TransposeMatrix]   # 0x50 sdk
       - [0x30B2C, asm, func_8005032C]   # 0x118

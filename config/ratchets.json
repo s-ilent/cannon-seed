@@ -110,7 +110,7 @@
   ],
   "baselines": {
     "unknown_data": 831,
-    "unknown_function": 960
+    "unknown_function": 959
   },
   "patterns": [
     {
