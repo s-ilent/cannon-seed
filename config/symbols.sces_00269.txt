@@ -144,6 +144,7 @@ scale_view_param = 0x8003375C; // type:func (pinned member row)
 select_max_param = 0x8003384C; // type:func
 len_param = 0x80033914; // type:func
 TransposeMatrix = 0x80033930; // type:func
+CompMatrix = 0x80033AA0; // type:func
 ApplyRotMatrix = 0x80034148; // type:func
 ScaleMatrixL = 0x80034178; // type:func
 ApplyMatrixSV = 0x80034728; // type:func
