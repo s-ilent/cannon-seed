@@ -81,7 +81,7 @@ nonmatching func_800251B0, 0x28
 
 glabel func_800251B0
     /* 59B0 800251B0 1800A427 */  addiu      $a0, $sp, 0x18
-    /* 59B4 800251B4 1A7D010C */  jal        func_8005F468
+    /* 59B4 800251B4 1A7D010C */  jal        CdSearchFile
     /* 59B8 800251B8 21280002 */   addu      $a1, $s0, $zero
     /* 59BC 800251BC 35004010 */  beqz       $v0, func_80025294
     /* 59C0 800251C0 00000000 */   nop
@@ -289,7 +289,7 @@ glabel func_80025380
     /* 5B94 80025394 21808000 */   addu      $s0, $a0, $zero
     /* 5B98 80025398 1800A427 */  addiu      $a0, $sp, 0x18
     /* 5B9C 8002539C 21280002 */  addu       $a1, $s0, $zero
-    /* 5BA0 800253A0 1A7D010C */  jal        func_8005F468
+    /* 5BA0 800253A0 1A7D010C */  jal        CdSearchFile
     /* 5BA4 800253A4 21884000 */   addu      $s1, $v0, $zero
     /* 5BA8 800253A8 20004010 */  beqz       $v0, func_8002542C
     /* 5BAC 800253AC 00000000 */   nop
@@ -411,7 +411,7 @@ glabel func_8002549C
     /* 5CDC 800254DC ECCDC684 */  lh         $a2, %lo(D_800DCDEC)($a2)
     /* 5CE0 800254E0 0E80073C */  lui        $a3, %hi(D_800DCDEE)
     /* 5CE4 800254E4 EECDE784 */  lh         $a3, %lo(D_800DCDEE)($a3)
-    /* 5CE8 800254E8 9B2D010C */  jal        func_8004B66C
+    /* 5CE8 800254E8 9B2D010C */  jal        GetTPage
     /* 5CEC 800254EC 21280000 */   addu      $a1, $zero, $zero
     /* 5CF0 800254F0 FFFF4830 */  andi       $t0, $v0, 0xFFFF
     /* 5CF4 800254F4 21200000 */  addu       $a0, $zero, $zero
@@ -1089,7 +1089,7 @@ glabel func_80025C44
     /* 6454 80025C54 21280000 */  addu       $a1, $zero, $zero
     /* 6458 80025C58 0000048E */  lw         $a0, 0x0($s0)
     /* 645C 80025C5C 00140200 */  sll        $v0, $v0, 16
-    /* 6460 80025C60 9B2D010C */  jal        func_8004B66C
+    /* 6460 80025C60 9B2D010C */  jal        GetTPage
     /* 6464 80025C64 03A40200 */   sra       $s4, $v0, 16
     /* 6468 80025C68 2140C002 */  addu       $t0, $s6, $zero
     /* 646C 80025C6C 0000038E */  lw         $v1, 0x0($s0)

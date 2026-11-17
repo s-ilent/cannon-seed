@@ -276,7 +276,7 @@ segments:
       - [0x2BE34, c, SetVideoMode]   # 0x18 sdk
       - [0x2BE4C, c, GetVideoMode]   # 0x10 sdk
       - [0x2BE5C, asm, GPU_cw]   # 0x10 sdk
-      - [0x2BE6C, asm, func_8004B66C]   # 0xc8 sdk
+      - [0x2BE6C, asm, GetTPage]   # 0xc8 sdk
       - [0x2BF34, asm, func_8004B734]   # 0x18 sdk
       - [0x2BF4C, asm, func_8004B74C]   # 0xd0 sdk
       - [0x2C01C, asm, func_8004B81C]   # 0x40 sdk
@@ -606,7 +606,7 @@ segments:
       - [0x3FB2C, asm, DeliverEvent]   # 0x10 sdk
       - [0x3FB3C, asm, CdRead2]   # 0xa4 sdk
       - [0x3FBE0, asm, StSetStream]   # 0x88 sdk
-      - [0x3FC68, asm, func_8005F468]   # 0x2e8 sdk
+      - [0x3FC68, asm, CdSearchFile]   # 0x2e8 sdk
       - [0x3FF50, asm, func_8005F750]   # 0x24 sdk
       - [0x3FF74, asm, func_8005F774]   # 0x2f4 sdk
       - [0x40268, asm, func_8005FA68]   # 0xac sdk
