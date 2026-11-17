@@ -690,7 +690,7 @@ state_block_10 = 0x8008A25C; // state map: reset-walker entry (mode 0/0)
 state_record_0 = 0x800CA374; // state map: id record pair, func_80026718 arg 2
 state_record_1 = 0x800CA37C; // state map: id record pair, func_80026718 arg 3
 //
-// EU twin of the mainmenu_jp menu-state flag (src/func_800379E4.c; +0x834
+// EU twin of the mainmenu_jp menu-state flag (src/func_80034804.c; +0x834
 // from the JP address - not a state-map offset): armed 0/1 by the EU
 // wrapper family before invoking the menu primitive func_80025CFC(); no
 // other static reference in the image.

@@ -120,7 +120,7 @@ segments:
       - [0x11000, asm, func_80030800]   # 0x800 pinned
       - [0x11800, data, data_80031000]   # 0xc8
       - [0x118C8, asm, func_800310C8]   # 0x373c
-      - [0x15004, c, func_800379E4]   # 0x2c8
+      - [0x15004, c, func_80034804]   # 0x2c8
       - [0x152CC, c, func_80037CAC]   # 0x3f0
       - [0x156BC, asm, func_80034EBC]   # 0x4810
       - [0x19ECC, asm, GsSetOrign]   # 0x18 sdk
