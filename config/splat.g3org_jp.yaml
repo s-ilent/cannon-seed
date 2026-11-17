@@ -74,7 +74,7 @@ segments:
       - [0x340C, data, data_8002332C]   # 0x3f4 pinned
       - [0x3800, data, data_80023000]   # 0x100
       - [0x3900, asm, func_80023100]   # 0x1ff4
-      - [0x58F4, c, func_800258F4]   # 0x8
+      - [0x58F4, c, func_800250F4]   # 0x8
       - [0x58FC, asm, func_800250FC]   # 0xf80
       - [0x687C, c, func_8002607C]   # 0x14
       - [0x6890, asm, func_80026090]   # 0x54
