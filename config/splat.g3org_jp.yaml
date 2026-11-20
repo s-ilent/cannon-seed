@@ -93,7 +93,7 @@ segments:
       - [0x15350, asm, func_80034B50]   # 0x28 sdk
       - [0x15378, data, data_80034B78]   # 0x30
       - [0x153A8, asm, func_80034BA8]   # 0xd42c
-      - [0x227D4, c,   func_80047094]   # 0x14 sdk
+      - [0x227D4, c,   func_80041FD4]   # 0x14 sdk
       - [0x227E8, asm, func_80041FE8]   # 0xdf8
       - [0x235E0, c, func_80042DE0]   # 0xc
       - [0x235EC, asm, func_80042DEC]   # 0x10a8
@@ -772,7 +772,7 @@ segments:
       - [0x4D1CC, asm, SpuSetReverb]   # 0xd0 sdk
       - [0x4D29C, asm, Snd_nextsep]   # 0x100 sdk
       - [0x4D39C, asm, SsUtSetVagAtr]   # 0x1cc sdk
-      - [0x4D568, c,   func_80078448]   # 0x14 sdk
+      - [0x4D568, c,   func_8006CD68]   # 0x14 sdk
       - [0x4D57C, asm, func_8006CD7C]   # 0x57c sdk
       - [0x4DAF8, asm, func_8006D2F8]   # 0x16c sdk
       - [0x4DC64, asm, func_8006D464]   # 0x28 sdk

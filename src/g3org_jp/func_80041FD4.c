@@ -1,6 +1,6 @@
 /* cc-post: sdk-aspsx
  *
- * Real-decompiled-C game function - the func_80047094 row (g3org_jp) lands as the psyq
+ * Real-decompiled-C game function - the func_80041FD4 row (g3org_jp) lands as the psyq
  * libsnd VM_DON member SpuVmDamperOn (the game's own cc1 2.6.3-PSX
  * compiled copy; identity PROVEN by sdk_members.py unique placement +
  * sig-db agrees).
@@ -18,7 +18,7 @@
 
 extern unsigned short D_800B8DA8;
 
-void func_80047094(void)
+void func_80041FD4(void)
 {
     D_800B8DA8 = 2;
 }
