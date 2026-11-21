@@ -14,7 +14,7 @@
  * exists for a store, so the address goes through the assembler temp).
  * No frame, no callees, no register saves - v0 is left holding the 2
  * the store used.  The same member is compiled three times in g3_eu
- * (this copy, func_80049E50 -> D_800AC6C4, func_8007C394 ->
+ * (this copy, func_800447A0 -> D_800AC6C4, func_80070464 ->
  * D_8016AC24): one per module overlay, each writing its own damper
  * halfword.
  */

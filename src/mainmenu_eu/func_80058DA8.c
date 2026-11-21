@@ -1,14 +1,14 @@
 /* cc-post: sdk-aspsx
  *
- * Real-decompiled-C game function - the func_8007B6CC row (g3_jp) lands as the
- * psyq libsnd VM_DON member SpuVmDamperOn (the game's own cc1
- * 2.6.3-PSX compiled copy; identity PROVEN by sdk_members.py unique
- * placement + sig-db agrees).
+ * Real-decompiled-C game function - the func_80058DA8 row (mainmenu_eu) lands as the psyq
+ * libsnd VM_DON member SpuVmDamperOn (the game's own cc1 2.6.3-PSX
+ * compiled copy; identity PROVEN by sdk_members.py unique placement +
+ * sig-db agrees).
  *
  * Decode: the byte-twin of the landed g3_eu trio (869607c9) - the same
  * damper-on store leaf: the damper-on state constant 2 materializes in
  * v0 (ori v0,zero,0x2, the value temp the sh consumes) and stores as an
- * UNSIGNED HALFWORD into the per-module damper-state static D_8016AAF8 (the
+ * UNSIGNED HALFWORD into the per-module damper-state static D_800CA7B8 (the
  * address temp rides $at: gcc's %hi/%lo expansion for a single-use
  * extern store destination - no destination register exists for a
  * store, so the address goes through the assembler temp).  No frame,
@@ -16,9 +16,9 @@
  * used.
  */
 
-extern unsigned short D_8016AAF8;
+extern unsigned short D_800CA7B8;
 
-void func_8007B6CC(void)
+void func_80058DA8(void)
 {
-    D_8016AAF8 = 2;
+    D_800CA7B8 = 2;
 }

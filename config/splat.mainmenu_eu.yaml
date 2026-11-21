@@ -134,7 +134,7 @@ segments:
       - [0x2617C, asm, func_8004597C]   # 0x28 sdk
       - [0x261A4, data, data_800459A4]   # 0x30
       - [0x261D4, asm, func_800459D4]   # 0x133d4
-      - [0x395A8, c,   func_80061508]   # 0x14 sdk
+      - [0x395A8, c,   func_80058DA8]   # 0x14 sdk
       - [0x395BC, asm, func_80058DBC]   # 0x1eac
       - [0x3B468, c, func_8005AC68]     # 0x30
       - [0x3B498, asm, func_8005AC98]   # 0x19c
@@ -813,7 +813,7 @@ segments:
       - [0x65F9C, asm, WaitEvent]   # 0x10 sdk
       - [0x65FAC, asm, func_800857AC]   # 0xd0 sdk
       - [0x6607C, asm, SsUtSetVagAtr]   # 0x1cc sdk
-      - [0x66248, c,   func_80094C88]   # 0x14 sdk
+      - [0x66248, c,   func_80085A48]   # 0x14 sdk
       - [0x6625C, asm, func_80085A5C]   # 0x108 sdk
       - [0x66364, asm, SsUtGetProgAtr]   # 0x10c sdk
       - [0x66470, asm, func_80085C70]   # 0x3d0
