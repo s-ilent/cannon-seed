@@ -67,6 +67,24 @@ Some C rows contain assembly or special compiler fixups. Work should distinguish
 **binary-exact**, **asm-preserved**, **hybrid C/asm**, **semantic C**,
 and **named/typed semantic C**; these are separate dimensions.
 
+## First game-owned candidate atlas (2026-11-22)
+
+[The G3 rendering preparation/dispatch atlas](research/G3_RENDER_PREP_ATLAS_20261122.md)
+identifies two contiguous, **actual frame-owning routines** in the JP
+main-game assembly (`0x80022E24..0x800232D0`; EU `+0x60`). The
+paired sources have **299 identical opcode/register instruction shapes**
+(208 completely identical words, 91 operand/address differences).
+The shared active-buffer value, 20-byte-stride OT descriptor, graphics
+library calls, VSync and GsDrawOt provide strong evidence for this
+subsystem. This is **static code evidence only**, not a game runtime
+trace or fresh retail-match verification. The actual external callers,
+record layout and draw-dispatch callees remain open.
+
+An additional large, otherwise unattributed assembly row is strongly
+consistent with a standard-library printf-family formatter, called
+with the literal `MAP COUNTER = %d`. This illustrates why code outside
+SDK anchor windows cannot automatically count as game-owned.
+
 ## Current boundaries and unresolved decisions
 
 1. **Owner decision — cross-target names.** The last log records 13
