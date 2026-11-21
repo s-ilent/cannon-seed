@@ -177,29 +177,37 @@ if [ ! -f "$MASPSX_PATCH" ]; then
         say "WARN: tools/maspsx_delay_slot.patch absent at HEAD and origin/main - skipping 6b (pre-patch tree)"
     fi
 fi
-if [ -f "$MASPSX_PATCH" ]; then
-    for MASPSX_DIR in tools-src/maspsx /home/z/my-project/tools-src/maspsx; do
-        if [ ! -d "$MASPSX_DIR" ]; then
-            continue
-        fi
-        # reset first: the patch regrows (cron-20261030-2151 added the addiu_at
-        # flip), so an already-old-patched clone must not skip the new hunks.
-        git -C "$MASPSX_DIR" checkout -- . 2>/dev/null
-        if git -C "$MASPSX_DIR" apply --check "$MASPSX_PATCH" 2>/dev/null; then
-            git -C "$MASPSX_DIR" apply "$MASPSX_PATCH" 2>/dev/null
-            say "maspsx delay-slot patch applied ($MASPSX_DIR)"
-        elif grep -q "line_redefines_reg" "$MASPSX_DIR/maspsx/__init__.py" 2>/dev/null && grep -q "args.addiu_at is not None" "$MASPSX_DIR/maspsx.py" 2>/dev/null; then
-            say "maspsx delay-slot patch already present ($MASPSX_DIR)"
-        else
-            say "WARN: maspsx delay-slot patch failed to apply in $MASPSX_DIR - the landed load-load-nop C rows will not build"
-        fi
-    done
-fi
+[ -f "$MASPSX_PATCH" ] || { say "FATAL: maspsx patch unavailable"; exit 1; }
+MASPSX_REV=e85ecb373828aabea96d7e6400974d4f91ce8c74
+for MASPSX_DIR in tools-src/maspsx /home/z/my-project/tools-src/maspsx; do
+    [ -d "$MASPSX_DIR" ] || continue
+    # An upstream master checkout is not a reproducible toolchain.
+    if ! git -C "$MASPSX_DIR" cat-file -e "${MASPSX_REV}^{commit}" 2>/dev/null; then
+        git -C "$MASPSX_DIR" fetch --depth 1 origin "$MASPSX_REV" \
+            || { say "FATAL: cannot fetch pinned maspsx revision"; exit 1; }
+    fi
+    git -C "$MASPSX_DIR" checkout --detach -q "$MASPSX_REV" \
+        || { say "FATAL: cannot select pinned maspsx revision"; exit 1; }
+    # The historical recovery script already restores and re-patches clones.
+    git -C "$MASPSX_DIR" checkout -- . \
+        || { say "FATAL: cannot reset maspsx before applying patch"; exit 1; }
+    if git -C "$MASPSX_DIR" apply --check "$MASPSX_PATCH" 2>/dev/null; then
+        git -C "$MASPSX_DIR" apply "$MASPSX_PATCH" \
+            || { say "FATAL: cannot apply maspsx patch"; exit 1; }
+    else
+        say "FATAL: maspsx patch does not apply at pinned revision ($MASPSX_DIR)"
+        exit 1
+    fi
+    git -C "$MASPSX_DIR" apply --reverse --check "$MASPSX_PATCH" \
+        || { say "FATAL: maspsx patch not fully applied"; exit 1; }
+    say "maspsx $MASPSX_REV + local patch verified ($MASPSX_DIR)"
+done
 
 # --- 7. mipsel binutils (tools-local, git-ignored) ---------------------------
-TOOLROOT=/home/z/my-project/tools-local/mipsel-root
-AS="$TOOLROOT/usr/bin/mipsel-linux-gnu-as"
-export LD_LIBRARY_PATH="$TOOLROOT/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+TOOLROOT="${TOOLROOT:-/home/z/my-project/tools-local}"
+BINUTILS_ROOT="$TOOLROOT/mipsel-root"
+AS="$BINUTILS_ROOT/usr/bin/mipsel-linux-gnu-as"
+export LD_LIBRARY_PATH="$BINUTILS_ROOT/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 if [ ! -x "$AS" ] || ! "$AS" --version 2>/dev/null | grep -q 2.31.1; then
     say "mipsel binutils missing -> running tools/get_binutils.sh (network)"
     sh tools/get_binutils.sh >/dev/null 2>&1 \
@@ -220,8 +228,8 @@ fi
 # mainmenu_jp (func_8007796C/77678/77A18) drift and ALL image hashes break.
 # slps_00270 --smoke does NOT catch it (that target has no guard-sensitive
 # row) - hence this explicit check and the mainmenu_jp canary in --smoke.
-CC1SRC=/home/z/my-project/tools-local/gcc-2.6.3-src/gcc-2.6.3
-if [ -x /home/z/my-project/tools-local/gcc-2.6.3-psx/cc1 ] && [ ! -x "$CC1SRC/cc1" ]; then
+CC1SRC="$TOOLROOT/gcc-2.6.3-src/gcc-2.6.3"
+if [ -x $TOOLROOT/gcc-2.6.3-psx/cc1 ] && [ ! -x "$CC1SRC/cc1" ]; then
     say "WARN: guarded cc1 MISSING (rollback ate the source build)"
     say "      the ISO9660 rows WILL drift - remedy (about 6 min):"
     say "        sh tools/build_cc1_263.sh && sh tools/patch_cc1_263.sh"
@@ -239,7 +247,7 @@ fi
 # Needed for C matches (tools/cc.sh). get_gcc.sh is idempotent and only
 # hits the network when something is actually missing.
 if [ -x /home/z/my-project/tools-local/gcc-2.6.3-psx/cc1 ] \
-   && [ -x /home/z/my-project/tools-local/qemu-root/usr/bin/qemu-i386-static ]; then
+   && [ -x $TOOLROOT/qemu-root/usr/bin/qemu-i386-static ]; then
     say "gcc-2.6.3-psx + qemu-i386 intact"
 else
     say "Psy-Q compiler missing -> running tools/get_gcc.sh (network)"
@@ -251,6 +259,12 @@ fi
 # --- smoke -------------------------------------------------------------------
 "$PYBIN" -c "import splat, spimdisasm, capstone; print('import smoke: OK')" || {
     say "FATAL: toolchain still broken"; exit 1; }
+
+# Refuse to declare the sandbox ready without the effective pinned tools.
+"$PYBIN" tools/toolchain_preflight.py || {
+    say "FATAL: toolchain is not reproducible; repair above and rerun rehydrate"
+    exit 1
+}
 
 # witness status line (bash-only tool; informational, never fails rehydrate)
 if command -v bash >/dev/null 2>&1 && [ -f tools/witness_check.sh ]; then
