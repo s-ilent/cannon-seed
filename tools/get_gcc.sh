@@ -19,7 +19,7 @@
 set -e
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-TOOLROOT="/home/z/my-project/tools-local"
+TOOLROOT="${TOOLROOT:-/home/z/my-project/tools-local}"
 QEMU="$TOOLROOT/qemu-root/usr/bin/qemu-i386-static"
 GCCDIR="$TOOLROOT/gcc-2.6.3-psx"
 
