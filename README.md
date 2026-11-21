@@ -40,10 +40,15 @@ python3 tools/iso9660_extract.py japan.bin out/ 'SLPS_002.70;1' ...
 
 ## Documentation
 
-Track ongoing progress, rules, and technical findings in the documentation tree:
+Start with the **[current project status](docs/STATUS.md)** and **[current work queue](docs/WORK_QUEUE.md)**. The very large [historical task notebook](docs/TASKS.md) is preserved for evidence, but its old `## Queued` entries are superseded. Use the [research log index](docs/RESEARCH_LOG_INDEX.md) to navigate it.
+
+Track progress, rules, and technical findings in the documentation tree:
 
 | Document | Description |
 | --- | --- |
+| [docs/STATUS.md](docs/STATUS.md) | Evidence-qualified current status and limits of verification |
+| [docs/WORK_QUEUE.md](docs/WORK_QUEUE.md) | Current bounded research, oracle-gated work and owner decisions |
+| [docs/RESEARCH_LOG_INDEX.md](docs/RESEARCH_LOG_INDEX.md) | Topic and chronological index for the retained TASKS.md notebook |
 | [docs/RECON.md](docs/RECON.md) | Measured facts: disc layouts, executables, headers, and toolchain fingerprints |
 | [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md) | Compiler version evidence, build pipeline, and assembly quirks |
 | [docs/WORKFLOW.md](docs/WORKFLOW.md) | Six-phase decompilation lifecycle |
