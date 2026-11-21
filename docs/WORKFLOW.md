@@ -8,7 +8,7 @@ The project goal is a **matching decompilation**: C source that compiles with th
 
 ## Phase 0: Groundwork and legal setup
 
-The repository contains source code only. Do not commit disc images, extracted assets, FMV video, Sony Psy-Q SDK files, compiler binaries, or retail executables. Contributors supply legal retail copies. Build tools read them from git-ignored directories (`disk/`, `sdk/`, `baselines/`, `assets/`). This policy keeps the project publishable.
+The project's intended publishing policy is source-only: do not add disc images, extracted assets, FMV video, Sony Psy-Q SDK files, compiler binaries, or retail executables. Contributors supply their own legal retail copies; build tools normally read them from git-ignored directories (`disk/`, `sdk/`, `baselines/`, `assets/`). **Historical exception still pending separate remediation:** legacy retail executables are tracked under `extract/jp/` and `extract/eu/`. Do not add more; the owner has deferred any destructive history rewrite. See [STATUS.md](STATUS.md).
 
 This repository includes `.gitignore`, pre-commit hooks, and license documentation. Record the target executable name, entry point, and SHA-1 in the README.
 
@@ -45,7 +45,7 @@ A function is finished when it matches byte for byte, uses clear names, uses typ
 
 Automate checks to protect code quality:
 
-* CI rebuilds on each commit.
-* CI verifies the retail SHA-1 hash.
-* CI generates an [objdiff] report rendered through [decomp.dev].
-* Ratchets prevent debt regressions so placeholder counts decrease over time.
+* **Current:** GitHub Actions runs Python unit tests, syntax checks, debt ratchets, and a heuristic progress report on commits and PRs. It **does not** build retail executables or check their SHA-1 (see [CI.md](CI.md)).
+* **Current:** Actual byte equivalence remains the separately provisioned, witnessed eight-target `make verify` process, gated on the attested toolchain.
+* **Future goal, not implemented CI:** reproducible full-oracle verification on an authorized runner and automated visual diffs such as [objdiff]/[decomp.dev].
+* **Current:** Ratchets prevent placeholder-debt regressions; they are not a direct progress measure of semantic C recovery.

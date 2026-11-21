@@ -1,6 +1,6 @@
 # RECON: Galaxian³ (Project Dragoon), Phase 0-1 findings
 
-This document records measured findings from two retail discs. The repository does not store retail discs or executables.
+This document records measured findings from two retail discs. **Publishing-policy discrepancy:** the intended source-only policy is not fully met at this historical revision: eight legacy retail executable files remain tracked under `extract/jp/` and `extract/eu/`. The owner has deferred repository-history remediation; this note neither authorizes redistribution nor changes any binaries. See [STATUS.md](STATUS.md).
 
 ## 1. The discs (provenance)
 

@@ -31,17 +31,21 @@ A passing build verifies binary equivalence only. Reviewers will reject patches 
 
 A change is complete when:
 
-- The function uses semantic C that follows the assembly policy (docs/RULES.md §3).
-- The stock compiler produces an exact object match.
+- For a **semantic-C** claim, the function expresses behavior in comprehensible C and follows the documented assembly-exception policy (docs/RULES.md §3). An asm-backed or hybrid function may be **binary-exact** without meeting this quality tier.
+- The **attested effective compiler and translation pipeline** produce the expected output; unit object comparisons alone are not the final oracle.
 - `make verify` (or `make clean verify`) passes.
 - The pull request lowers baselines in `config/ratchets.json` for any debt reduction.
 - Naming, typing, or boundary claims include supporting evidence.
 
-A file is finished when it matches byte for byte, uses typed structures, uses verified names, avoids hard-coded addresses, and resides in its target subsystem (docs/GUIDELINES.md).
+A file is fully **semantically recovered** when it is byte-exact, uses understandable typed C, has evidenced names, avoids hard-coded addresses, and resides in its target subsystem (docs/GUIDELINES.md). An assembly wrapper that matches still needs semantic recovery. Source-only CI checks do not establish a binary match; see docs/CI.md.
 
 ## Ratchet discipline
 
 Baselines in `config/ratchets.json` must match the current tree. CI fails if debt increases or if an improvement leaves behind an outdated higher baseline. Every cleanup is permanent. Raising a baseline requires an explicit review.
+
+## Current work selection
+
+The current research and landing queue is [docs/WORK_QUEUE.md](docs/WORK_QUEUE.md), with evidence status in [docs/STATUS.md](docs/STATUS.md). [docs/TASKS.md](docs/TASKS.md) is the retained historical log, **not** the current task list.
 
 ## Measurement over transcription
 
