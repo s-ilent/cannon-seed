@@ -63,6 +63,14 @@ SDK C share = SDK-evidenced C / SDK-evidenced code
 Unassigned C share = origin-unattributed C / unattributed code
 ```
 
+One concrete counterexample is `g3_jp:0x8004803C..0x80048DB4`:
+the unattributed code parses printf-style format tokens and is called
+with the literal `MAP COUNTER = %d`. The
+[G3 render-path atlas](research/G3_RENDER_PREP_ATLAS_20261122.md)
+records the instruction and data evidence. This is SDK-like but not
+formally mapped to an archive member, so the tool correctly leaves it
+**unattributed** instead of guessing.
+
 An `UNATTRIBUTED` label **must not be relabeled "game"** without
 positive evidence (link records, cross-revision relocation, ownership,
 control/data flow, etc.). The explicit unassigned group prevents an
