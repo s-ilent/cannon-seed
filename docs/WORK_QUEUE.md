@@ -32,23 +32,25 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Two bounded runs completed (2026-11-22):**
+**Three bounded runs completed (2026-11-22):**
 [G3 render-path atlas](research/G3_RENDER_PREP_ATLAS_20261122.md)
-locates the complete JP preparation/submission functions, and the
-[HUD/font queue and frame loop follow-up](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
-resolves the first two dispatch callees, identifies the per-buffer
-**Psy-Q `GsOT`** headers (0x14 bytes), reconstructs the bounded 10-entry
-text queue and 64-glyph rendering helpers, and establishes the exact
-**outer frame loop** that calls preparation, text reset, indirect
-mode dispatch and submission in sequence.
+locates preparation/submission;
+[HUD/font queue and frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
+resolves the per-buffer **Psy-Q `GsOT`**, ten-entry text queue,
+glyph helpers and exact main frame loop; and the
+[mode sequence controller atlas](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
+enumerates all eight JP/EU callback slots (seven distinct targets),
+identifies `WAIT_FOR_START`, `INIT_SEQUENCE`, `MAIN_SEQUENCE`,
+`WAIT_FOR_RESTART` from retained diagnostic strings, and traces
+five- and eight-entry nested state machines.
 
-**Next specific R1 question:** enumerate the **eight function pointers**
-in the main-game mode dispatch table at JP `D_8008AF1C` / EU
-`D_8008B734` and investigate ONE callback's game-owned state accesses
-and OT submissions. In parallel, the isolated 0xE100-byte-per-buffer
-packet workbase and sprite resource key `0x707` are mapped behaviors
-but not fully attributed assets. **Do not restart the completed two
-callee or frame caller investigations as new discoveries.**
+**Next specific R1 question:** trace one sustained
+`MAIN_SEQUENCE` helper (`func_80044F60` or `func_80044B7C`)
+into actual game-owned packet generation and **proven OT submission**.
+The mode callbacks themselves contain no direct verified sprite-sort
+call. The 0xE100 packet workbase allocation bounds and resource key
+`0x707` remain open. **Do not re-enumerate the resolved mode table
+or repeat the completed HUD/frame-loop research as new findings.**
 
 
 **Target:** `g3_jp` first; `g3_eu` for comparison.
