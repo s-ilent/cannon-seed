@@ -33,7 +33,7 @@ PY ?= $(PY_RESOLVED)
 # --- Bare-make guard --------------------------------------------------------
 # LSD rule 2, generalised: every build goes through the oracle gate. The hook
 # installed by `make hooks` blocks in-repo `make` except the targets listed
-# here (extract, progress, nonmatchings, ratchets, hooks, clean) — none of
+# here (extract, progress, coverage, nonmatchings, ratchets, hooks, clean) — none of
 # which produce a byte.
 .DEFAULT_GOAL := _bare-make-blocked
 
@@ -47,6 +47,7 @@ _bare-make-blocked:
 	@echo "  make scan                 bootstrap the code/data map (MIPS-I scan)"
 	@echo "  make map                  regenerate the load-map measurement"
 	@echo "  make progress             matched / nonmatching function report"
+	@echo "  make coverage             mapped-byte, SDK-provenance, source-quality report"
 	@echo "  make nonmatchings         list functions that do not match yet"
 	@echo "  make ratchets             placeholder / debt ratchet audit"
 	@echo "  make hooks                install git hooks that protect the oracle"
@@ -105,6 +106,13 @@ scan:
 .PHONY: progress
 progress:
 	$(PY) tools/progress.py
+
+
+# All mapped byte spans come from the committed YAML and SDK anchor census.
+# No retail inputs or compiler required (PyYAML needed).
+.PHONY: coverage
+coverage:
+	$(PY) tools/coverage_report.py
 
 .PHONY: nonmatchings
 nonmatchings:
