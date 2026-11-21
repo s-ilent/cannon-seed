@@ -17,6 +17,8 @@ make verify
 
 `make verify` builds the image and checks its checksum against retail, printing `OK: build matches retail ...` on success. A bare `make` command is blocked intentionally to prevent unverified builds from running.
 
+GitHub Actions runs **source-only CI** (lint, Python tests, debt ratchets, and a progress report). A green CI check does **not** certify a byte-identical retail build. The full oracle requires the locally provisioned baselines and pinned toolchain; see [docs/CI.md](docs/CI.md).
+
 | Command | Action |
 | --- | --- |
 | `make verify TARGET=<t>` | Build and verify image SHA-1 against retail |
