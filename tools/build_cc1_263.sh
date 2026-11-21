@@ -29,6 +29,7 @@ GCCSRC="${GCCSRC:-$TOOLROOT/gcc-2.6.3-src}"
 TARBALL_SHA256="71f673849f4dc7f20aba6ba1ecb6221c6704ef3152779aef15602e974ae3c140"
 TARBALL_URL="https://gcc.gnu.org/pub/gcc/old-releases/gcc-2/gcc-2.6.3.tar.bz2"
 RECIPE="$TOOLROOT/old-gcc-src"
+RECIPE_REV="cf70ec58bce58128732062bc9930045c82904cbb"
 
 if [ -x "$GCCSRC/gcc-2.6.3/cc1" ]; then
     echo "[build_cc1] cc1 already built at $GCCSRC/gcc-2.6.3/cc1 - nothing to do"
@@ -55,6 +56,12 @@ if [ ! -f "$RECIPE/gcc-2.6.3-psx.Dockerfile" ]; then
     rm -rf "$RECIPE"
     git clone --depth 1 https://github.com/decompals/old-gcc.git "$RECIPE"
 fi
+# The patch recipe is part of the effective compiler. Pin it rather than
+# silently consuming whatever master served on the day of reprovisioning.
+if ! git -C "$RECIPE" cat-file -e "${RECIPE_REV}^{commit}" 2>/dev/null; then
+    git -C "$RECIPE" fetch --depth 1 origin "$RECIPE_REV"
+fi
+git -C "$RECIPE" checkout --detach -q "$RECIPE_REV"
 
 # --- 3. extract + patch ----------------------------------------------
 cd "$GCCSRC"
