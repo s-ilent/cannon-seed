@@ -124,7 +124,7 @@ Using full committed ASM instruction streams and the project `compare_asm_window
 | `8002E9F4 → 8002E7C4` TMD draw stage | 162 | 146 | **162/162** |
 | `8002EC7C → 8002EA4C` projected sprite stage | 166 | 156 | **166/166** |
 | `80054DC4 → 80054808` named library polygon callback | 82 | 81 | **82/82** |
-| **Total** | **595** | **532** | **595/595** |
+| **Total** | **595** | **530** | **595/595** |
 
 Comparisons cover **only these bounded windows**; the EU dispatcher is already C and deliberately not included. Source-only structural agreement is **not** proof of full-function identity, asset compatibility, executed runtime behavior or successful eight-target retail SHA-1 rebuild. To reproduce two main windows locally, run:
 
