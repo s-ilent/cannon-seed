@@ -12,6 +12,7 @@ checks. **It does not mean any PS-X executable was rebuilt or matched retail.**
 | Offline Python unit tests | Disc-free tests, including the `cc_post` rule suite; at least 200 tests must be discovered; failures are fatal |
 | Placeholder/debt ratchets | `tools/check_ratchets.py`; the current tree must match `config/ratchets.json` |
 | Function census | `tools/progress.py --json` runs and publishes `progress-report`; counts are approximate, not binary-match evidence |
+| Code-span coverage | `tools/coverage_report.py --strict --json --rows` adds `coverage.json` to the same artifact, with mapped C vs ASM bytes, SDK-evidenced vs unattributed origin, and explicit semantic reviews. **Not executable code coverage, semantic completion, or retail verification.** |
 
 The offline suite deliberately does not require CHDs, PlayStation executables,
 the Psy-Q archives, a working MIPS linker, or the patched GCC compiler. Tests
@@ -67,6 +68,7 @@ python3 -m compileall -q tools scripts tests
 PYTHONPATH=tools python3 -m unittest discover -s tests -p 'test_*.py' -v
 python3 tools/check_ratchets.py
 python3 tools/progress.py --json
+python3 tools/coverage_report.py --strict --json --rows > coverage.json
 ```
 
 The unit suite needs PyYAML 6.0.3 and optionally Capstone 5.0.7, both
