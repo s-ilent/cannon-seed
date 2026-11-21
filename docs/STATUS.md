@@ -86,10 +86,14 @@ not a game runtime trace or a fresh retail-match verification.
 The [mode-sequence follow-up](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
 enumerates eight frame-dispatch slots (seven distinct callbacks),
 recovers diagnostic sequence labels and nested start/restart state
-machines, and traces a four-record restart initializer. The mode
-handler's output to individual GPU packet producers is **not yet proven**.
-**Still open:** concrete game-object packet sorting, packet-workbuffer
-allocation bounds, and asset `0x707`.
+machines, and traces a four-record restart initializer. The
+[FOBJ sprite-path investigation](research/G3_FOBJ_SPRITE_PATH_20261122.md)
+now **proves** a 100×6-byte 2D sprite-command queue, its reset and
+slave/system-mode producers, sprite-resource staging and
+`GsSortSprite` OT submission, with structurally matched JP/EU MIPS.
+**Not yet proven:** ownership/submission of actual 3D world polygons
+or TMD objects, packet-workbase allocation bounds, sprite resource
+`0x707`, or a fresh retail executable match.
 
 An additional large, otherwise unattributed assembly row is strongly
 consistent with a standard-library printf-family formatter, called

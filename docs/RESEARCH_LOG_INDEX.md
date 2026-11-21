@@ -17,6 +17,7 @@ silently deleting apparent duplicates.
 - [G3 JP/EU graphics preparation and display-submit atlas (2026-11-22)](research/G3_RENDER_PREP_ATLAS_20261122.md): measured 299-instruction cross-region skeleton over two complete function bodies; buffer-indexed ordering-table clearing, VSync/swap/draw submission, and a non-game formatting false positive. **Static only**; no new retail or runtime witness.
 - [G3 HUD font queue and main frame loop (2026-11-22)](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md): resolves the 20-byte OT record to `GsOT`, reconstructs bounded 10-entry `{text,x,y}` queue and 64-glyph sprites, identifies both first draw callees and traces the JP/EU outer frame loop and mode dispatch. **Static only**.
 - [G3 main-mode sequence controller (2026-11-22)](research/G3_MODE_SEQUENCE_ATLAS_20261122.md): enumerates the full JP/EU 8-slot dispatch (7 distinct handlers), identifies named start/main/restart states and nested jump tables, and traces timer/record state transitions. **Static only**; mode-specific OT packet producer remains unproven.
+- [G3 FOBJ sprite queue and slave-system dispatch (2026-11-22)](research/G3_FOBJ_SPRITE_PATH_20261122.md): verifies a separate 100-entry/6-byte sprite command queue (JP/EU), 12-way display-state producers, 36-byte GsSPRITE lookup/staging and the direct `GsSortSprite` OT edge; also reclassifies the two MAIN_SEQUENCE helpers. **Static only**; 3D/TMD world polygon path still open.
 
 ## Fast navigation
 

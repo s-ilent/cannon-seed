@@ -32,25 +32,27 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Three bounded runs completed (2026-11-22):**
-[G3 render-path atlas](research/G3_RENDER_PREP_ATLAS_20261122.md)
-locates preparation/submission;
+**Four bounded runs completed (2026-11-22):**
+[G3 render path](research/G3_RENDER_PREP_ATLAS_20261122.md)
+establishes frame preparation/submission; the
 [HUD/font queue and frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
-resolves the per-buffer **Psy-Q `GsOT`**, ten-entry text queue,
-glyph helpers and exact main frame loop; and the
-[mode sequence controller atlas](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
-enumerates all eight JP/EU callback slots (seven distinct targets),
-identifies `WAIT_FOR_START`, `INIT_SEQUENCE`, `MAIN_SEQUENCE`,
-`WAIT_FOR_RESTART` from retained diagnostic strings, and traces
-five- and eight-entry nested state machines.
+identifies Psy-Q `GsOT`, a ten-entry text queue and the outer
+loop; the [mode sequence atlas](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
+enumerates its eight callback slots and nested submodes; and the
+[FOBJ sprite-path atlas](research/G3_FOBJ_SPRITE_PATH_20261122.md)
+proves a separate **100-entry × 6-byte sprite-command queue**, its
+12-way slave/system-mode producers, staging layout and direct
+**`GsSortSprite`** ordering-table submission in both JP and EU.
 
-**Next specific R1 question:** trace one sustained
-`MAIN_SEQUENCE` helper (`func_80044F60` or `func_80044B7C`)
-into actual game-owned packet generation and **proven OT submission**.
-The mode callbacks themselves contain no direct verified sprite-sort
-call. The 0xE100 packet workbase allocation bounds and resource key
-`0x707` remain open. **Do not re-enumerate the resolved mode table
-or repeat the completed HUD/frame-loop research as new findings.**
+**Next specific R1 question:** trace an actual **3D world/TMD
+geometry** producer into its Psy-Q OT polygon/object sorter.
+Start from `func_8002E9F4`, `func_8002EC7C` and neighboring
+coordinate/matrix-dependent render stages, carefully separating
+mesh/polygon rendering from **FOBJ's already proven 2D sprite path**.
+The earlier `MAIN_SEQUENCE` helpers are command-stream handling
+and four-record ranking, *not* direct FOBJ emitters. Packet-workbase
+allocation bounds, sprite resource `0x707`, and retail verification
+remain open. **Do not repeat the completed FOBJ/sequence census.**
 
 
 **Target:** `g3_jp` first; `g3_eu` for comparison.
