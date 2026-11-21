@@ -621,7 +621,7 @@ segments:
       - [0x293C8, asm, WaitEvent]   # 0x10 sdk
       - [0x293D8, asm, SpuSetReverb]   # 0xd0 sdk
       - [0x294A8, asm, SsUtSetVagAtr]   # 0x1cc sdk
-      - [0x29674, c,   func_8004EFD4]   # 0x14 sdk
+      - [0x29674, c,   func_80048E74]   # 0x14 sdk
       - [0x29688, asm, func_80048E88]   # 0x108 sdk
       - [0x29790, asm, func_80048F90]   # 0x10c sdk
       - [0x2989C, asm, func_8004909C]   # 0x3d0

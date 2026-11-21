@@ -626,7 +626,7 @@ segments:
       - [0x292DC, asm, SpuSetReverb]   # 0xd0 sdk
       - [0x293AC, asm, Snd_nextsep]   # 0x100 sdk
       - [0x294AC, asm, SsUtSetVagAtr]   # 0x1cc sdk
-      - [0x29678, c,   func_8004EFD8]   # 0x14 sdk
+      - [0x29678, c,   func_80048E78]   # 0x14 sdk
       - [0x2968C, asm, func_80048E8C]   # 0x57c sdk
       - [0x29C08, asm, func_80049408]   # 0x16c sdk
       - [0x29D74, asm, func_80049574]   # 0x28 sdk
