@@ -24,9 +24,9 @@
  *   delay slot stays a nop.
  * - Both callees discard their return values: no sibling-call
  *   rewrite, the second jal runs straight into the epilogue.
- * - func_80037CD0 (the third call's jal inside func_80037CAC) is the
+ * - func_80034AF0 (the third call's jal inside func_80034ACC) is the
  *   shared entry other code jumps into, and func_8003B568 jumps to
- *   0x80037CB0 (func_80037CAC's $ra spill): both resolve by address
+ *   0x80034AD0 (func_80034ACC's $ra spill): both resolve by address
  *   through build.sh's two-pass auto-definition, exactly like JP's
  *   func_80037D2C, and the oracle checks the bytes those jumps land on.
  */
@@ -35,7 +35,7 @@ extern void func_80025CFC(void);
 extern void func_80035664(int, int);
 extern int func_80035A18(int);
 
-void func_80037CAC(void)
+void func_80034ACC(void)
 {
     func_80035664(7, 0);
     func_80035664(7, 1);
@@ -43,7 +43,7 @@ void func_80037CAC(void)
     func_80025CFC();
 }
 
-void func_80037CF0(void)
+void func_80034B10(void)
 {
     func_80035664(7, 0);
     func_80035664(7, 1);
@@ -52,7 +52,7 @@ void func_80037CF0(void)
     func_80025CFC();
 }
 
-void func_80037D40(void)
+void func_80034B60(void)
 {
     func_80035664(7, 0);
     func_80035664(7, 1);
@@ -62,79 +62,79 @@ void func_80037D40(void)
     func_80025CFC();
 }
 
-void func_80037D9C(void)
+void func_80034BBC(void)
 {
     func_80035664(8, 1);
     func_80025CFC();
 }
 
-void func_80037DC8(void)
+void func_80034BE8(void)
 {
     func_80035664(8, 0);
     func_80025CFC();
 }
 
-void func_80037DF4(void)
+void func_80034C14(void)
 {
     func_80035664(10, 1);
     func_80025CFC();
 }
 
-void func_80037E20(void)
+void func_80034C40(void)
 {
     func_80035664(10, 0);
     func_80025CFC();
 }
 
-void func_80037E4C(void)
+void func_80034C6C(void)
 {
     func_80035664(11, 1);
     func_80025CFC();
 }
 
-void func_80037E78(void)
+void func_80034C98(void)
 {
     func_80035664(11, 0);
     func_80025CFC();
 }
 
-void func_80037EA4(void)
+void func_80034CC4(void)
 {
     func_80035664(13, 0);
     func_80025CFC();
 }
 
-void func_80037ED0(void)
+void func_80034CF0(void)
 {
     func_80035664(13, 1);
     func_80025CFC();
 }
 
-void func_80037EFC(void)
+void func_80034D1C(void)
 {
     func_80035664(13, 2);
     func_80025CFC();
 }
 
-void func_80037F28(void)
+void func_80034D48(void)
 {
     func_80035664(13, 3);
     func_80025CFC();
 }
 
-void func_80037F54(void)
+void func_80034D74(void)
 {
     func_80035664(14, 1);
     func_80025CFC();
 }
 
-void func_80037F80(void)
+void func_80034DA0(void)
 {
     func_80035664(14, 0);
     func_80025CFC();
 }
 
-void func_80037FAC(void)
+void func_80034DCC(void)
 {
     int seq;
 
@@ -147,19 +147,19 @@ void func_80037FAC(void)
     func_80025CFC();
 }
 
-void func_80038018(void)
+void func_80034E38(void)
 {
     func_80035664(12, 0);
     func_80025CFC();
 }
 
-void func_80038044(void)
+void func_80034E64(void)
 {
     func_80035664(15, 0);
     func_80025CFC();
 }
 
-void func_80038070(void)
+void func_80034E90(void)
 {
     func_80035664(15, 1);
     func_80025CFC();

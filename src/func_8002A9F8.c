@@ -57,7 +57,7 @@ extern int func_80035A18(int);
 
 register int r_v0 asm("$2");
 
-void func_8002C418(void)
+void func_8002A9F8(void)
 {
     int s1;
     int *s0;
