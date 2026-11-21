@@ -13,6 +13,21 @@ rows/source files, existing branch/PR work, and current
 numbers below are the last historical snapshot, not a promise about a
 newer tree.
 
+## Source-only measurement before selecting a research region
+
+Run `python3 tools/coverage_report.py --strict --json --rows` and use
+`origin_unattributed_asm_bytes` to identify **candidate** non-SDK areas,
+not confirmed game functions. Inspect any large span's containing YAML
+and actual assembly, then use SDK archive evidence and call/data flow
+to establish genuine game ownership. The reporting semantics are in
+[COVERAGE.md](COVERAGE.md). `make coverage` prints a compact summary.
+
+**Semantic audit discipline:** adding `config/coverage_reviews.json` entries
+requires a per-row source review and rationale. A file without detected
+inline asm is merely a *candidate for semantic review*, not automatic
+semantic-C progress. Shared code repeated in different targets contributes
+multiple **target instances** to byte totals.
+
 ## Ready: bounded read-only research
 
 ### R1 — Game-code recovery atlas (first independent research track)
@@ -62,9 +77,11 @@ target yaml consumers.
 assembly-preserved, register-pinned, special-rule hybrids or thin wrappers?
 What game structures are still opaque?
 
-**Method:** classify no more than 10–20 functions in one pass; verify
-which targets **actually compile** the source rather than deducing target
-ownership from the filename. Keep binary-match evidence separate from C
+**Method:** classify no more than 10–20 functions in one pass; use the
+per-target `coverage_report.py --json --rows` output to verify which YAML
+rows actually compile each source, rather than deducing ownership from
+the filename. Extend `config/coverage_reviews.json` only after examining
+the **entire** row, and record a narrow evidence-backed tier. Keep binary-match evidence separate from C
 semantic quality. Include samples from `g3_jp` where possible.
 
 **Deliverable:** a small reusable evidence-backed classification table,
