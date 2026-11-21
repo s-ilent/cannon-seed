@@ -32,15 +32,23 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**First bounded run completed (2026-11-22):**
+**Two bounded runs completed (2026-11-22):**
 [G3 render-path atlas](research/G3_RENDER_PREP_ATLAS_20261122.md)
-measures the complete `0x80022E24..0x800232D0` JP preparation and
-dispatch functions (EU entry offsets +0x60), a shared per-buffer state
-record, the graphics submit/swap calls, and corrected spimdisasm
-interior-label boundaries. **Next specific R1 question:** trace
-`func_8002F200` and `func_8002F660`, the first two nine-way dispatch
-callees, and establish the incoming xrefs and 20-byte record layout.
-Do not re-report the same two routines as a fresh discovery.
+locates the complete JP preparation/submission functions, and the
+[HUD/font queue and frame loop follow-up](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
+resolves the first two dispatch callees, identifies the per-buffer
+**Psy-Q `GsOT`** headers (0x14 bytes), reconstructs the bounded 10-entry
+text queue and 64-glyph rendering helpers, and establishes the exact
+**outer frame loop** that calls preparation, text reset, indirect
+mode dispatch and submission in sequence.
+
+**Next specific R1 question:** enumerate the **eight function pointers**
+in the main-game mode dispatch table at JP `D_8008AF1C` / EU
+`D_8008B734` and investigate ONE callback's game-owned state accesses
+and OT submissions. In parallel, the isolated 0xE100-byte-per-buffer
+packet workbase and sprite resource key `0x707` are mapped behaviors
+but not fully attributed assets. **Do not restart the completed two
+callee or frame caller investigations as new discoveries.**
 
 
 **Target:** `g3_jp` first; `g3_eu` for comparison.
