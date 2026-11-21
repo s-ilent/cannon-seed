@@ -1,0 +1,2 @@
+setjmp = 0x8002EDB0; // LIBC ? member .text+0x0 (extent 0x10); sdk_members.py unique placement
+0x8002F168; // LIBETC member .text+0x6e4 copy (extent 0x2c); the C-DEFINITION SITE (src/func_80031638.c defines memclr here) - the parked C-move for the sdk-curation lane: emclr-placement conflict class]

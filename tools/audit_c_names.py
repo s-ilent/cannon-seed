@@ -135,6 +135,11 @@ def main():
                     help="report names used by more than one target "
                          "(the shared cross-target name convention vs "
                          "target-unique stale names)")
+    ap.add_argument("--adjudicate", action="store_true",
+                    help="classify every mismatch row against "
+                         "sdk_anchors.txt + symbols.curated.txt "
+                         "(SHARED / PARKED / CARVE-CANDIDATE / NOTE / OPEN) "
+                         "and recount the per-target fair-game set")
     args = ap.parse_args()
 
     cfg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "config")
@@ -192,6 +197,9 @@ def main():
         print("== TARGET-UNIQUE MISMATCHES (single-target stale names): %d"
               % len(stale))
 
+    if args.adjudicate:
+        adjudicate(all_rows, cfg)
+
     print("== TOTAL:")
     for t in types:
         st = totals[t]
@@ -200,6 +208,153 @@ def main():
                  st["curated"]))
     print("== census complete (read-only, exit 0)")
     return 0
+
+
+# ---------------------------------------------------------------------------
+# --adjudicate: the evidence overlay for the mismatch class.
+#
+# The census's target-unique class OVERCOUNTS the fair-game set: the memclr
+# family (the LIBETC INTR/INTR_DMA/INTR_VB copies + their C-definition
+# sites) and the other sdk-anchor rows host their identity in
+# config/sdk_anchors.txt / config/symbols.curated.txt, and the cross-target
+# shared names are the owner-gated naming call.  The 2026-11-21 windows
+# (cron-202611202216, cron-202611210611) adjudicated these by hand — twice —
+# and corrected the queue both times.  This pass codifies it: every
+# mismatch row is classified against the anchored/curated evidence so the
+# queue's fair-game recount is mechanical instead of per-window archaeology.
+#
+# Classes (the queue policy rides docs/TASKS.md, not here):
+#   SHARED         cross-target name on >1 target — owner-gated naming call
+#   PARKED-MEMCLR  sdk_anchors symbol `memclr` — the sdk-curation lane
+#   PARKED-CURATED curated entry carries the parked/conflict-class language
+#   CARVE-CANDIDATE sdk_anchors pins a real member (e.g. SpuVmDamperOn
+#                  VM_DON LIBSND) — the carve-name repair class; the
+#                  four-leg chain still closes per row before any re-spell
+#   CURATED-NOTE   curated entry documents the row supportively
+#   OPEN           no anchor, no curated entry — four-leg chain per the
+#                  3ccee159 precedent decides
+#
+# Read-only; ALWAYS exits 0 (convention: tools/baseline_audit.py).
+
+ANCHOR_RE = re.compile(
+    r"^(0x[0-9A-Fa-f]{8})\s+(0x[0-9A-Fa-f]+)\s+(\S+)\s+(\S+)\s+(\S+)"
+    r"(?:\s+(.*))?$"
+)
+CURATED_RE = re.compile(r"^(?:(\w+)\s*=\s*)?(0x[0-9A-Fa-f]{8})\s*;\s*(.*)$")
+MEMCLR_SYMBOLS = {"memclr"}
+PARKED_LANGUAGE = ("emclr-placement conflict class", "parked")
+
+
+def parse_sdk_anchors(path):
+    """placement int -> list of anchor records (symbol, member, library, tags, line)."""
+    out = {}
+    if not os.path.exists(path):
+        return out
+    with open(path, "r", encoding="utf-8") as fh:
+        for lineno, line in enumerate(fh, 1):
+            s = line.strip()
+            if not s or s.startswith("//"):
+                continue
+            m = ANCHOR_RE.match(s)
+            if not m:
+                continue
+            out.setdefault(int(m.group(1), 16), []).append({
+                "symbol": m.group(3),
+                "member": m.group(4),
+                "library": m.group(5),
+                "tags": (m.group(6) or "").split(),
+                "line": lineno,
+                "raw": s,
+            })
+    return out
+
+
+def parse_curated(path):
+    """placement int -> list of curated records (name, comment, line)."""
+    out = {}
+    if not os.path.exists(path):
+        return out
+    with open(path, "r", encoding="utf-8") as fh:
+        for lineno, line in enumerate(fh, 1):
+            s = line.strip()
+            if not s or s.startswith("//"):
+                continue
+            m = CURATED_RE.match(s)
+            if not m:
+                continue
+            out.setdefault(int(m.group(2), 16), []).append({
+                "name": m.group(1) or "",
+                "comment": (m.group(3) or "").strip(),
+                "line": lineno,
+            })
+    return out
+
+
+def classify_mismatch(row, shared_names, anchors, curated):
+    """(class, evidence) for one mismatch row against the anchored/curated overlay."""
+    if row["name"] in shared_names:
+        return "SHARED", "cross-target shared name — owner-gated naming call"
+    anch = anchors.get(row["placement"])
+    if anch:
+        a = anch[0]
+        ev = "sdk_anchors %d: %s" % (a["line"], a["raw"])
+        if a["symbol"] in MEMCLR_SYMBOLS:
+            return "PARKED-MEMCLR", ev
+        return "CARVE-CANDIDATE", ev
+    cur = curated.get(row["placement"])
+    if cur:
+        c = cur[0]
+        ev = "curated %d: %s" % (c["line"], c["comment"])
+        if any(t in c["comment"] for t in PARKED_LANGUAGE):
+            return "PARKED-CURATED", ev
+        return "CURATED-NOTE", ev
+    return "OPEN", "no anchor, no curated entry — four-leg chain per 3ccee159"
+
+
+def adjudicate(all_rows, cfg_dir):
+    """Print the per-target fair-game recount; returns nothing (exit 0 path)."""
+    by_name = {}
+    for r in all_rows:
+        by_name.setdefault(r["name"], []).append(r)
+    shared_names = {n for n, rows in by_name.items() if len(rows) > 1}
+    anchors = parse_sdk_anchors(os.path.join(cfg_dir, "sdk_anchors.txt"))
+    curated = parse_curated(os.path.join(cfg_dir, "symbols.curated.txt"))
+
+    classes = ("SHARED", "PARKED-MEMCLR", "PARKED-CURATED",
+               "CARVE-CANDIDATE", "CURATED-NOTE", "OPEN")
+    fair = {"CARVE-CANDIDATE", "CURATED-NOTE", "OPEN"}
+    per = {}
+    for r in all_rows:
+        if r["status"] != "mismatch":
+            continue
+        cls, ev = classify_mismatch(r, shared_names, anchors, curated)
+        r["cls"] = cls
+        r["ev"] = ev
+        per.setdefault(r["target"], []).append(r)
+
+    print("== ADJUDICATION (mismatch rows vs sdk_anchors + curated):")
+    total_fair = 0
+    for tgt in sorted(per):
+        rows = per[tgt]
+        counts = {c: 0 for c in classes}
+        for r in rows:
+            counts[r["cls"]] += 1
+        tf = sum(counts[c] for c in fair)
+        total_fair += tf
+        print("   %s: MISMATCH=%d fair=%d (shared=%d parked=%d carve=%d "
+              "note=%d open=%d)"
+              % (tgt, len(rows), tf, counts["SHARED"],
+                 counts["PARKED-MEMCLR"] + counts["PARKED-CURATED"],
+                 counts["CARVE-CANDIDATE"], counts["CURATED-NOTE"],
+                 counts["OPEN"]))
+        for r in rows:
+            print("     %-14s %s off=0x%X -> %s  %s"
+                  % (r["cls"], r["name"], r["off"], fmt(r["placement"]),
+                     r["ev"]))
+    print("   FAIR-GAME recount: %d rows (each still closes the four-leg "
+          "chain before any re-spell)" % total_fair)
+    print("   lanes: mainmenu_jp rows are lane-owned (do NOT grab); "
+          "shared names are the owner's naming call.")
 
 
 if __name__ == "__main__":

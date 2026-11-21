@@ -1,0 +1,4 @@
+// fixture: three anchors, the shape of config/sdk_anchors.txt
+0x8004AB24 0x2C memclr INTR_VB LIBETC unique
+0x800447A0 0x14 SpuVmDamperOn VM_DON LIBSND unique
+0x8002ED84 0x2C memclr INTR LIBETC unique
