@@ -181,6 +181,11 @@ fi
 MASPSX_REV=e85ecb373828aabea96d7e6400974d4f91ce8c74
 for MASPSX_DIR in tools-src/maspsx /home/z/my-project/tools-src/maspsx; do
     [ -d "$MASPSX_DIR" ] || continue
+    # Existing recovery deliberately restores modified clone files before
+    # selecting the pinned base; otherwise checkout can refuse local patch
+    # changes that conflict with the target revision.
+    git -C "$MASPSX_DIR" checkout -- . \
+        || { say "FATAL: cannot reset maspsx before selecting revision"; exit 1; }
     # An upstream master checkout is not a reproducible toolchain.
     if ! git -C "$MASPSX_DIR" cat-file -e "${MASPSX_REV}^{commit}" 2>/dev/null; then
         git -C "$MASPSX_DIR" fetch --depth 1 origin "$MASPSX_REV" \
