@@ -32,28 +32,35 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Four bounded runs completed (2026-11-22):**
-[G3 render path](research/G3_RENDER_PREP_ATLAS_20261122.md)
-establishes frame preparation/submission; the
-[HUD/font queue and frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
-identifies Psy-Q `GsOT`, a ten-entry text queue and the outer
-loop; the [mode sequence atlas](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
-enumerates its eight callback slots and nested submodes; and the
+**Five bounded runs completed (2026-11-22):**
+[G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
+identifies staging/submission;
+[HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
+recovers Psy-Q GsOT, ten-entry font queue and game frame;
+[mode sequence atlas](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
+enumerates eight game-state callbacks and submodes;
 [FOBJ sprite-path atlas](research/G3_FOBJ_SPRITE_PATH_20261122.md)
-proves a separate **100-entry × 6-byte sprite-command queue**, its
-12-way slave/system-mode producers, staging layout and direct
-**`GsSortSprite`** ordering-table submission in both JP and EU.
+proves a 100×6-byte 2D sprite command queue, 12-way display-state
+dispatcher and GsSortSprite OT submission; and the
+[3D TMD polygon-path atlas](research/G3_TMD_GEOMETRY_TO_OT_20261122.md)
+now proves **descriptor creation → GsLinkObject4 → 0x6C-byte
+3D scene records → GsSortObject4J-like dispatcher → GsTMDfast*
+polygon packet insertion → GsDrawOt** in JP, with EU corroboration.
+It separates projected 0x7C-byte sprite/billboard records from both
+TMD geometry and the earlier FOBJ HUD.
 
-**Next specific R1 question:** trace an actual **3D world/TMD
-geometry** producer into its Psy-Q OT polygon/object sorter.
-Start from `func_8002E9F4`, `func_8002EC7C` and neighboring
-coordinate/matrix-dependent render stages, carefully separating
-mesh/polygon rendering from **FOBJ's already proven 2D sprite path**.
-The earlier `MAIN_SEQUENCE` helpers are command-stream handling
-and four-record ranking, *not* direct FOBJ emitters. Packet-workbase
-allocation bounds, sprite resource `0x707`, and retail verification
-remain open. **Do not repeat the completed FOBJ/sequence census.**
-
+**Next specific R1 question:** recover the **game-owned model/scene
+instance schema and updates**: map 0x18-byte descriptors at
+`D_80166360` through the creation helpers to the 0x6C-byte
+world record array `D_80138DB4`, then identify the producers and
+per-frame transform/animation state. Do not repeat SDK polygon
+callback re-enumeration as game-function recovery.
+**Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
+already retail-matched C row (historical claim), but functions as
+a Psy-Q **`GsSortObject4J`-like** TMD dispatcher. Investigate
+archive/member evidence separately; **do not rename or change its
+C row/coverage ownership unilaterally**. Packet-workbuffer allocation
+bounds, sprite resource `0x707`, and current retail oracle remain open.
 
 **Target:** `g3_jp` first; `g3_eu` for comparison.
 

@@ -91,9 +91,19 @@ machines, and traces a four-record restart initializer. The
 now **proves** a 100×6-byte 2D sprite-command queue, its reset and
 slave/system-mode producers, sprite-resource staging and
 `GsSortSprite` OT submission, with structurally matched JP/EU MIPS.
-**Not yet proven:** ownership/submission of actual 3D world polygons
-or TMD objects, packet-workbase allocation bounds, sprite resource
-`0x707`, or a fresh retail executable match.
+The [3D TMD geometry atlas](research/G3_TMD_GEOMETRY_TO_OT_20261122.md)
+now **proves** game-owned scene records, `GsLinkObject4`,
+matrix/light setup, TMD primitive-mode dispatch, concrete
+20-byte polygon packet construction/OT linking in `GsTMDfastF3L`,
+and the eventual `GsDrawOt` call. A separate 0x7C-stride
+3D-projected sprite path uses `GsSortSprite`, not TMD callbacks.
+**Ownership caution:** EU `src/func_80052038.c` is an already
+retail-matched C routine by historical report, but its TMD dispatcher
+semantics suggest Psy-Q `GsSortObject4J` (unconfirmed member
+attribution). No source or symbolic rename was made.
+**Still open:** game-owned model/animation semantics, actual
+TMD-dispatcher SDK archive provenance, packet-workbase allocation
+bounds, sprite resource `0x707`, and a current retail build witness.
 
 An additional large, otherwise unattributed assembly row is strongly
 consistent with a standard-library printf-family formatter, called
