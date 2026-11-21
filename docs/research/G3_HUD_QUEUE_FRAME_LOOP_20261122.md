@@ -338,12 +338,21 @@ been established in this pass.
 
 Separately, `func_8005DBE0` receives
 `D_8014773C + active_buffer * 0xE100`.
-It sits next to recognised LIBGS routines
-but is not currently named by the SDK-anchor
-file. **Potential `GsSetWorkBase`-like packet
-base setup** is plausible, *not verified*;
-inspect its body and identify its actual
-global store before adopting that name.
+It sits next to recognised LIBGS routines but is not
+currently named by the SDK-anchor file. Its complete
+four-instruction body is available in
+[func_8005DBE0.s](../../asm/g3_jp/nonmatchings/func_8005DBE0.s):
+`sw $a0, D_8016AA40; jr $ra`.
+That same global is loaded and updated by the
+[SDK-identified `GsSortSprite` body](../../asm/g3_jp/nonmatchings/func_80051D14.s)
+(`0x80051D78/7C` and `0x800521E4/E8`). Therefore
+**the work-base setter behavior is directly verified**:
+the 0xE100-stride buffer base is installed as the
+LIBGS GPU packet allocation cursor consumed by
+sprite sorting. The canonical SDK **name**
+`GsSetWorkBase` is strongly supported but is
+**not yet established from an archived member/signature**;
+no shared symbol was renamed.
 
 ## 8. Recommended next bounded research
 
