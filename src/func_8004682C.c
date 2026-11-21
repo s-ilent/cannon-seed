@@ -20,23 +20,23 @@
  */
 extern void func_8004427C(short, short, short);
 
-void func_8004C4CC(short x, short y)
+void func_8004682C(short x, short y)
 {
     func_8004427C((short)(x * 4 + 0x100), y, 0x14);
 }
 
-void func_8004C508(short x, short y)
+void func_80046868(short x, short y)
 {
     func_8004427C(x, y, 0x17);
 }
 
-void func_8004C538(void)
+void func_80046898(void)
 {
     func_8004427C(0x3DC, -0x73, -0x53);
     func_8004427C(0x3DF, -0x46, -0x49);
 }
 
-void func_8004C570(void)
+void func_800468D0(void)
 {
     func_8004427C(0x3E8, 0x73, -0x53);
     func_8004427C(0x3E0, 0x46, -0x49);

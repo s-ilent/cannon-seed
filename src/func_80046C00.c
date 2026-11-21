@@ -4,7 +4,7 @@
  * src/func_8005AE70.c verbatim (12 words; jal w6, const w7 = 34060017),
  * the only per-target delta being the callee (g3_jp's helper
  * func_80044614). g3_eu's copy of this shape is already landed inside
- * src/func_8004C4CC.c (its func_8004C508 member) - this file lands the
+ * src/func_8004682C.c (its func_80046868 member) - this file lands the
  * next three carvable copies of the pair's second half.
  *
  * Census site (build/invariant_census.txt, fresh oracle 2026-10-24):

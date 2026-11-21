@@ -2,11 +2,11 @@
  * wrapper family member for g3org_jp, staged from the sibling-finder
  * sweep's fourth proposal (docs/TASKS.md, d6d87685):
  *
- *   g3org_jp 0x80043E94 <- g3_eu/func_8004C508 +0x30  score 0.97
+ *   g3org_jp 0x80043E94 <- g3_eu/func_80046868 +0x30  score 0.97
  *
  * The census candidate is the interior sub-block `func_80043E94, 0x30` of
  * g3org_jp's unlanded walk row func_80042DEC.s. Its word stream is the
- * second wrapper's SHAPE (src/func_8004C4CC.c's func_8004C508 member) with
+ * second wrapper's SHAPE (src/func_8004682C.c's func_80046868 member) with
  * the NEW third-argument constant 0x4B - the SAME new member as
  * mainmenu_eu's func_8005AC68 (src/func_8005AC68.c): one C-source shape,
  * two targets, the NormalColor3 one-src-many-targets class. Only the

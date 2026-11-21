@@ -2,12 +2,12 @@
  * wrapper family member for mainmenu_eu, staged from the sibling-finder
  * sweep's second proposal (docs/TASKS.md, d6d87685):
  *
- *   mainmenu_eu 0x8005AE70 <- g3_eu/func_8004C508 +0x30  score 0.97
+ *   mainmenu_eu 0x8005AE70 <- g3_eu/func_80046868 +0x30  score 0.97
  *
  * The census candidate is the interior sub-block `func_8005AE70, 0x30` of
  * mainmenu_eu's unlanded walk row func_80058DBC.s. Its word stream is the
- * SECOND wrapper of the landed g3_eu row func_8004C4CC
- * (src/func_8004C4CC.c, the func_8004C508 member) verbatim - plain
+ * SECOND wrapper of the landed g3_eu row func_8004682C
+ * (src/func_8004682C.c, the func_80046868 member) verbatim - plain
  * short extends, the 0x17 third argument - with the one expected
  * per-target delta: the callee is mainmenu_eu's helper func_80058884
  * where g3_eu's copy calls func_8004427C. The 0.97 (vs the first

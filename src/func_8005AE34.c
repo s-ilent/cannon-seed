@@ -2,18 +2,18 @@
  * wrapper family member for mainmenu_eu, staged from the sibling-finder
  * sweep's strongest proposal (docs/TASKS.md, d6d87685):
  *
- *   mainmenu_eu 0x8005AE34 <- g3_eu/func_8004C4CC +0x3C  score 0.99 EXACT
+ *   mainmenu_eu 0x8005AE34 <- g3_eu/func_8004682C +0x3C  score 0.99 EXACT
  *
  * The census candidate is the interior sub-block `func_8005AE34, 0x3C` of
  * mainmenu_eu's unlanded walk row func_80058DBC.s, called three times from
  * the same row (jal sites 0x8005A944 / 0x8005A9D4 / 0x8005ABFC). Its word
- * stream is the FIRST wrapper of the landed g3_eu row func_8004C4CC
- * (src/func_8004C4CC.c) verbatim - the *4-fold extend (sll 16 / sra 14),
+ * stream is the FIRST wrapper of the landed g3_eu row func_8004682C
+ * (src/func_8004682C.c) verbatim - the *4-fold extend (sll 16 / sra 14),
  * the +0x100, the 0x14 third argument - with the one expected per-target
  * delta: the callee is mainmenu_eu's helper func_80058884 (unlanded, its
  * glabel lives in func_800459D4.s) where g3_eu's copy calls func_8004427C.
  *
- * The row's own header note (src/func_8004C4CC.c) documents the shaping
+ * The row's own header note (src/func_8004682C.c) documents the shaping
  * law this copy shares: void wrappers (return discarded), old-ABI short
  * extends at entry, positive 16-bit immediates load with ori in the jal
  * delay slot, epilogue lw $ra + nop + jr $ra with the frame release in

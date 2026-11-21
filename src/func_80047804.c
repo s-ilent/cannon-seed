@@ -2,13 +2,13 @@
  *
  * Sequence-reset wrapper: one no-arg call into the palette/UV reset
  * helper, then two immediate triples into the same palette-fade helper
- * the wrapper cluster at 0x8004C4CC drives (0x3EE/0x3EF x keys,
+ * the wrapper cluster at 0x8004682C drives (0x3EE/0x3EF x keys,
  * 0x3C/0x73 y keys, -0x5E third argument).
  *
  * Shaping notes (GCC 2.6.3 -O2 -G8, MIPS1):
  * - Real frame this time (0x18, ra saved at 0x10): three calls deep, so
  *   cc1 keeps the return address across both helper calls; the wrapper
- *   cluster at 0x8004C4CC had none.
+ *   cluster at 0x8004682C had none.
  * - Immediate triples: positive 16-bit values load with ori, the
  *   negative third argument with addiu, and it materializes in the jal
  *   delay slot - same movsi selection as the cluster.
@@ -26,7 +26,7 @@
 extern void func_80047844(void);
 extern void func_8004427C(short, short, short);
 
-void func_8004D704(void)
+void func_80047804(void)
 {
     func_80047844();
     func_8004427C(0x3EE, 0x3C, -0x5E);

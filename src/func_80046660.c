@@ -16,8 +16,8 @@
  * re-homes as [0x26E90, asm, func_80046690] # 0x19C on the row's own
  * interior glabel. Zero renames: the row's callers already spell
  * func_80046660. Then make verify TARGET=g3_eu. g3_eu's 0x17 sibling
- * needs no cut (already landed inside src/func_8004C4CC.c as its
- * func_8004C508 member).
+ * needs no cut (already landed inside src/func_8004682C.c as its
+ * func_80046868 member).
  */
 extern void func_8004427C(short, short, short);
 

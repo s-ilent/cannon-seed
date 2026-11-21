@@ -2,11 +2,11 @@
  * wrapper family member for mainmenu_eu, staged from the sibling-finder
  * sweep's third proposal (docs/TASKS.md, d6d87685):
  *
- *   mainmenu_eu 0x8005AC68 <- g3_eu/func_8004C508 +0x30  score 0.97
+ *   mainmenu_eu 0x8005AC68 <- g3_eu/func_80046868 +0x30  score 0.97
  *
  * The census candidate is the interior sub-block `func_8005AC68, 0x30` of
  * mainmenu_eu's unlanded walk row func_80058DBC.s. Its word stream is the
- * second wrapper's SHAPE (src/func_8004C4CC.c's func_8004C508 member) with
+ * second wrapper's SHAPE (src/func_8004682C.c's func_80046868 member) with
  * a NEW third-argument constant: 0x4B, not 0x17 - a FIFTH member of the
  * family the landed g3_eu row does not carry (g3_eu has 0x14, 0x17 and the
  * two two-call wrappers). The 0.97 score is the scorer's immediate-overlap
