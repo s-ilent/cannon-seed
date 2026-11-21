@@ -83,8 +83,13 @@ and identifies the real **JP frame loop `0x80042C6C..0x80042D4C`**
 which calls the preparations, queue reset, indirect game-mode update,
 and rendering submission in that order. **Static code evidence only**,
 not a game runtime trace or a fresh retail-match verification.
-**Still open:** mode-table entries, game-owned behavior in other dispatch
-callees, packet-workbuffer allocation bounds, and asset `0x707`.
+The [mode-sequence follow-up](research/G3_MODE_SEQUENCE_ATLAS_20261122.md)
+enumerates eight frame-dispatch slots (seven distinct callbacks),
+recovers diagnostic sequence labels and nested start/restart state
+machines, and traces a four-record restart initializer. The mode
+handler's output to individual GPU packet producers is **not yet proven**.
+**Still open:** concrete game-object packet sorting, packet-workbuffer
+allocation bounds, and asset `0x707`.
 
 An additional large, otherwise unattributed assembly row is strongly
 consistent with a standard-library printf-family formatter, called
