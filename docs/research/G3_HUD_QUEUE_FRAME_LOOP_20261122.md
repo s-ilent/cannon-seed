@@ -196,8 +196,10 @@ shows the implementation:
 - Walks the null-terminated string, draws one glyph per
   byte through `func_80025108`, incrementing x by
   `advance` (here 12 pixels).
-- Passes through the same OT pointer and a font priority
-  (the fixed fifth arg, used as advance).
+- Passes the same OT pointer to each single-glyph helper. The
+  **fifth argument 12 is character advance, not font priority**;
+  `func_80025108` passes a separate constant **OT priority 0**
+  when calling `GsSortSprite`.
 
 `func_80025108` computes
 `glyph = (unsigned_byte + 0xE0) & 0xFF`,
