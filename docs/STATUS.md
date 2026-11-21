@@ -76,9 +76,15 @@ paired sources have **299 identical opcode/register instruction shapes**
 (208 completely identical words, 91 operand/address differences).
 The shared active-buffer value, 20-byte-stride OT descriptor, graphics
 library calls, VSync and GsDrawOt provide strong evidence for this
-subsystem. This is **static code evidence only**, not a game runtime
-trace or fresh retail-match verification. The actual external callers,
-record layout and draw-dispatch callees remain open.
+subsystem. The [HUD/frame-loop follow-up](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
+identifies the record as the standard 20-byte **Psy-Q `GsOT` header**,
+traces a ten-entry `{text,x,y}` HUD font queue and 64-glyph sprites,
+and identifies the real **JP frame loop `0x80042C6C..0x80042D4C`**
+which calls the preparations, queue reset, indirect game-mode update,
+and rendering submission in that order. **Static code evidence only**,
+not a game runtime trace or a fresh retail-match verification.
+**Still open:** mode-table entries, game-owned behavior in other dispatch
+callees, packet-workbuffer allocation bounds, and asset `0x707`.
 
 An additional large, otherwise unattributed assembly row is strongly
 consistent with a standard-library printf-family formatter, called

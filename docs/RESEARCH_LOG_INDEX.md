@@ -15,6 +15,7 @@ silently deleting apparent duplicates.
 ## New game-specific static investigations
 
 - [G3 JP/EU graphics preparation and display-submit atlas (2026-11-22)](research/G3_RENDER_PREP_ATLAS_20261122.md): measured 299-instruction cross-region skeleton over two complete function bodies; buffer-indexed ordering-table clearing, VSync/swap/draw submission, and a non-game formatting false positive. **Static only**; no new retail or runtime witness.
+- [G3 HUD font queue and main frame loop (2026-11-22)](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md): resolves the 20-byte OT record to `GsOT`, reconstructs bounded 10-entry `{text,x,y}` queue and 64-glyph sprites, identifies both first draw callees and traces the JP/EU outer frame loop and mode dispatch. **Static only**.
 
 ## Fast navigation
 
@@ -43,7 +44,7 @@ sed -n '16354,16365p' docs/TASKS.md
 | Cross-region identity and matching | tools/pair_report.py, tools/near_twin_census.py, docs/MATCHING.md | Requires live witnessed baselines/build ELFs; identity percentages do not prove function ownership |
 | SDK member ownership, archives, relocations | tools/sdk_members.py, tools/omf_pubsyms.py, tools/sdk_anchors.py | Distinguish real Psy-Q members, veneers, game code and library member tails |
 | Main-menu continuation web | [FABRIC.md](FABRIC.md) | Addresses and frame/continuation assumptions already investigated; read before another flattening or naive C conversion |
-| Read-only game-code boundaries | [GRID.md](GRID.md), [G3 render-path atlas](research/G3_RENDER_PREP_ATLAS_20261122.md), tools/invariant_census.py, tools/xref_census.py | Confirmed instruction-level JP/EU structure for render preparation/submission; still requires incoming-xref and callee semantics research |
+| Read-only game-code boundaries | [GRID.md](GRID.md), [G3 render path](research/G3_RENDER_PREP_ATLAS_20261122.md), [HUD + frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md), tools/invariant_census.py, tools/xref_census.py | Preparation/submission incoming callers, typed OT record and two HUD callees now resolved; next is game-mode dispatch table and gameplay ownership |
 | Unit-code diff and postprocessing | [CC_POST_RULE_CLASSES.md](CC_POST_RULE_CLASSES.md), tools/wordmap.py, tools/cc_post.py | Many speculative register/allocation fixes already tested; no fresh attempt without a new hypothesis |
 | Disc recovery and parked oracle work | [DISC_RETURN_RUNBOOK.md](DISC_RETURN_RUNBOOK.md) | **Landing ladder mostly closed**, Phase C remains owner-gated; don't restart retired Phase D/E/F/H |
 | Runtime evidence | [RUNTIME.md](RUNTIME.md) | Optional observed execution only, not full program coverage or proof of match |
