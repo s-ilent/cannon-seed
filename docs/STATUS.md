@@ -1,8 +1,9 @@
 # Project status
 
-**Reviewed 2026-11-22** against `main` at `2d5e0673` (after the
-source-only CI and toolchain-integrity merges). This document is the
-**current orientation page**, not a running log. For actionable work see
+**Reviewed 2026-11-22** against the source-only CI/toolchain cleanup
+(`dfd10e79`, `2d5e0673`) and subsequent mapped-code coverage research.
+This document is the **current orientation page**, not a running log;
+recompute live metrics on HEAD before making a matching claim. For actionable work see
 [WORK_QUEUE.md](WORK_QUEUE.md); for historical evidence and experiment
 notes see [TASKS.md](TASKS.md) and [RESEARCH_LOG_INDEX.md](RESEARCH_LOG_INDEX.md).
 
