@@ -2,12 +2,12 @@
 
 This project builds C source that compiles byte for byte to the retail executables in `config/sha1/`. Read README.md for setup instructions and layout.
 
-Keep this file short. Focus on rules and the loop. Do not write project state or progress numbers here. Check state with `python3 tools/progress.py` and `python3 tools/check_ratchets.py`. Full conventions live in `docs/RULES.md`, `docs/GUIDELINES.md`, and `docs/MATCHING.md`. The **current work queue** lives in `docs/WORK_QUEUE.md`; consult `docs/STATUS.md` for evidence-qualified state. `docs/TASKS.md` is the preserved historical notebook — its October `## Queued` header is not current. Navigate it through `docs/RESEARCH_LOG_INDEX.md`.
+Keep this file short. Focus on rules and the loop. Do not write project state or progress numbers here. Check state with `python3 tools/progress.py`, `python3 tools/coverage_report.py` and `python3 tools/check_ratchets.py`. Function counts and source-only C byte coverage are distinct metrics; see `docs/COVERAGE.md`. Full conventions live in `docs/RULES.md`, `docs/GUIDELINES.md`, and `docs/MATCHING.md`. The **current work queue** lives in `docs/WORK_QUEUE.md`; consult `docs/STATUS.md` for evidence-qualified state. `docs/TASKS.md` is the preserved historical notebook — its October `## Queued` header is not current. Navigate it through `docs/RESEARCH_LOG_INDEX.md`.
 
 ## Hard rules
 
 1. **Never edit `config/sha1/**`.** These files contain retail SHA-1 hashes. Editing a hash file invalidates the oracle. Git hooks block edits.
-2. **Run all builds through `make verify`.** A bare `make` command does not check byte matching and is blocked. Permitted non-build targets: `extract`, `progress`, `nonmatchings`, `ratchets`, `hooks`, `clean`.
+2. **Run all builds through `make verify`.** A bare `make` command does not check byte matching and is blocked. Permitted non-build targets: `extract`, `progress`, `coverage`, `nonmatchings`, `ratchets`, `hooks`, `clean`.
 3. **Never add game executables, disc images, or Sony files.** Keep `disk/`, `sdk/`, `lib/`, `include/psyq/`, `assets/`, and `baselines/` in `.gitignore`. Users supply these files locally. Legacy tracked `extract/{jp,eu}` executables are a separately deferred history-remediation issue, not precedent for adding more.
 4. **Never edit `asm/`.** Splat regenerates assembly files. Curate symbol names in `config/symbols.curated.txt` — the scanner rewrites the per-target symbols files, so only a curated name survives. Update segmentation in `config/splat.*.yaml`.
 5. **Keep the toolchain pinned.** Use the exact compiler version, binutils, flags, and maspsx. Current baseline: Psy-Q GCC 2.6.3 (SDK strings dated 1995-10).
@@ -39,7 +39,7 @@ This script restores git configuration, credentials, the virtual environment (`t
    If the build fails without a compiler error, isolate differences:
    `cmp -l build/<target>.bin baselines/<target>.bin | head`
    Convert the byte offset to a VRAM address per instructions in `tools/verify.sh`. Verify each target touched.
-3. Check progress and ratchets: `make progress`, `make ratchets`. Rename symbols by curating them in `config/symbols.curated.txt`, not by search and replace across the tree — `asm/` is regenerated and the per-target symbols file is rewritten by the scanner, so only a curated name survives (see "Naming what you find").
+3. Check progress, provenance and ratchets: `make progress`, `make coverage`, `make ratchets`. The coverage report labels bytes outside SDK anchors as **origin-unattributed**, never automatically "game"; only manually reviewed C rows count as semantically reviewed. Rename symbols by curating them in `config/symbols.curated.txt`, not by search and replace across the tree — `asm/` is regenerated and the per-target symbols file is rewritten by the scanner, so only a curated name survives (see "Naming what you find").
 4. Non-matching C code must not remain active. Put near-matches in `#ifdef NON_MATCHING` with the `INCLUDE_ASM` stub in the `#else` block. Mark matching quirks with a `/* MATCHING: */` comment.
 
 ## Runtime evidence (optional)

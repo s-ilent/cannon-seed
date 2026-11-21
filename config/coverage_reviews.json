@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "scope": "Small source-inspected demonstration set; classification is per target YAML C row, not all C functions. Do not auto-label remaining rows. Reviews describe readable source content only and do not assert a newly witnessed retail SHA-1 match.",
+  "reviews": [
+    {
+      "target": "g3_jp",
+      "name": "func_800469F8",
+      "source": "src/func_800469F8.c",
+      "tier": "semantic_c",
+      "evidence": "Plain C palette-fade wrapper: forwards two arguments and constant 0x4B; one bounded function. This is a qualitative source review, not a new binary witness."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_80046BC4",
+      "source": "src/func_80046BC4.c",
+      "tier": "semantic_c",
+      "evidence": "Plain C palette-fade wrapper and constant/vector setup; source comments identify the cross-target twin and observed call arguments."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_80046C00",
+      "source": "src/func_80046C00.c",
+      "tier": "semantic_c",
+      "evidence": "Plain C palette-fade wrapper: forwards x/y and constant 0x17; narrow source-level semantic claim only."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_80044B38",
+      "source": "src/g3_jp/func_80044B38.c",
+      "tier": "semantic_c",
+      "evidence": "Psy-Q LIBSND VM_DON store leaf in plain C assigning damper-state constant 2; classified as SDK-evidenced if anchor overlaps."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_80047804",
+      "source": "src/func_80047804.c",
+      "tier": "semantic_c",
+      "evidence": "Sequence-reset wrapper in ordinary C: named call sequence with fixed argument triples; adjacent asm remains outside this row."
+    },
+    {
+      "target": "mainmenu_jp",
+      "name": "func_80037A44",
+      "source": "src/func_80037A44.c",
+      "tier": "semantic_c",
+      "evidence": "Plain C main-menu dispatch wrapper family (35 functions); call sequences and state stores are readable although the underlying helper names are placeholders."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_80034804",
+      "source": "src/func_80034804.c",
+      "tier": "semantic_c",
+      "evidence": "Plain C menu wrapper cluster (16 functions), readable calls and state initialization; not a claim of typed subsystem recovery."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_80034ACC",
+      "source": "src/func_80034ACC.c",
+      "tier": "semantic_c",
+      "evidence": "Plain C tail of the main-menu wrapper family (19 functions), matching the JP counterpart's call sequences."
+    },
+    {
+      "target": "mainmenu_jp",
+      "name": "func_8002C478",
+      "source": "src/func_8002C478.c",
+      "tier": "hybrid",
+      "evidence": "Main-menu state-reset function contains register-bound r_v0 and instruction-specific inline-asm store/barrier sequences; meaningful C mixed with manual assembly."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8002A9F8",
+      "source": "src/func_8002A9F8.c",
+      "tier": "hybrid",
+      "evidence": "EU twin of main-menu state-reset function uses the same register-bound and asm-sensitive matching technique."
+    },
+    {
+      "target": "g3_jp",
+      "name": "CompMatrix",
+      "source": "src/CompMatrix.c",
+      "tier": "asm_preserved",
+      "evidence": "Named SDK GTE transform wrapper, but implementation is chiefly one long volatile assembly block, not semantically recovered C."
+    },
+    {
+      "target": "g3_eu",
+      "name": "MulMatrix",
+      "source": "src/MulMatrix.c",
+      "tier": "asm_preserved",
+      "evidence": "Named SDK GTE matrix multiply whose whole body is hand-transcribed assembly with register-pinned return."
+    },
+    {
+      "target": "slps_00270",
+      "name": "MulMatrix",
+      "source": "src/MulMatrix.c",
+      "tier": "asm_preserved",
+      "evidence": "Same shared asm-backed MulMatrix source compiled for the boot target; cross-target instance counted separately."
+    }
+  ]
+}

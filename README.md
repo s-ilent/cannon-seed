@@ -23,7 +23,8 @@ GitHub Actions runs **source-only CI** (lint, Python tests, debt ratchets, and a
 | --- | --- |
 | `make verify TARGET=<t>` | Build and verify image SHA-1 against retail |
 | `make extract TARGET=<t>` | Split target executable with [splat] |
-| `make progress` | Report current matched function counts |
+| `make progress` | Report heuristic matched function counts |
+| `make coverage` | Report mapped C/ASM bytes, SDK provenance and reviewed source tiers (source-only) |
 | `make nonmatchings` | List functions that do not match yet |
 | `make ratchets` | Audit placeholder and debt ratchets |
 | `make hooks` | Install git safety hooks |
@@ -47,6 +48,7 @@ Track progress, rules, and technical findings in the documentation tree:
 | Document | Description |
 | --- | --- |
 | [docs/STATUS.md](docs/STATUS.md) | Evidence-qualified current status and limits of verification |
+| [docs/COVERAGE.md](docs/COVERAGE.md) | Coverage denominator, SDK overlap logic, source review provenance and caveats |
 | [docs/WORK_QUEUE.md](docs/WORK_QUEUE.md) | Current bounded research, oracle-gated work and owner decisions |
 | [docs/RESEARCH_LOG_INDEX.md](docs/RESEARCH_LOG_INDEX.md) | Topic and chronological index for the retained TASKS.md notebook |
 | [docs/RECON.md](docs/RECON.md) | Measured facts: disc layouts, executables, headers, and toolchain fingerprints |

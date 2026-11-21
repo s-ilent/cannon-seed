@@ -1,8 +1,9 @@
 # Project status
 
-**Reviewed 2026-11-22** against `main` at `2d5e0673` (after the
-source-only CI and toolchain-integrity merges). This document is the
-**current orientation page**, not a running log. For actionable work see
+**Reviewed 2026-11-22** against the source-only CI/toolchain cleanup
+(`dfd10e79`, `2d5e0673`) and subsequent mapped-code coverage research.
+This document is the **current orientation page**, not a running log;
+recompute live metrics on HEAD before making a matching claim. For actionable work see
 [WORK_QUEUE.md](WORK_QUEUE.md); for historical evidence and experiment
 notes see [TASKS.md](TASKS.md) and [RESEARCH_LOG_INDEX.md](RESEARCH_LOG_INDEX.md).
 
@@ -23,6 +24,9 @@ cross-region comparison and remains a separate binary oracle.
 | Baseline witness | **Reported 8/8 STRICT** in the same historical run | Historical copies matched `config/sha1/*.sha1`; current host must re-witness |
 | Current effective build preflight | Merged `2d5e0673` | Refuses missing/unattested guarded GCC, wrong maspsx patch/revision, binutils or Python versions; needs exercise in provisioned build host |
 | Function progress | ~873/26,078 counted target-specific function instances (~3.35%) in the 2026-11-22 source-only census | **Heuristic**: C definitions vs assembly glabels, counts shared sources per target; not semantic-C completion |
+| **Mapped byte coverage (source-only)** | **4.71%** of YAML-mapped C+ASM bytes belong to C rows across eight target instances (first 2026-11-22 coverage run) | Distinct from function counts; the segmentation may hide executable code in data rows |
+| **SDK vs unattributed origins** | C share **9.18%** of SDK-evidenced mapped code vs **1.60%** of origin-unattributed mapped code | SDK evidence comes from committed member anchors; unassigned code is **not yet proven game code** |
+| **Assembly involvement / reviewed C** | ~66.2 KiB of C-mapped rows have detected inline asm; only ~3.6 KiB have explicit semantic-C source reviews | Source-unit syntax flag vs manually inspected bounded sample, neither a new retail hash witness |
 | Identifier debt | `unknown_function=959`, `unknown_data=831`, from November 21 matching log | Token counts in ratchets, **not distinct unknown functions/data** |
 | Carve-name census | 75 address-name mismatches, 144 placement matches at `a13c6f92` | **Historical** name/VA-placement census; mismatches include intentional shared names and parked exceptions |
 
@@ -30,6 +34,7 @@ cross-region comparison and remains a separate binary oracle.
 
 ```sh
 python3 tools/progress.py
+python3 tools/coverage_report.py
 python3 tools/check_ratchets.py
 python3 tools/audit_c_names.py --cross --adjudicate
 python3 tools/baseline_audit.py
@@ -54,6 +59,8 @@ that a function has been semantically reconstructed into understandable C.
 - Significant SDK, glue-code and short-wrapper reconstruction. The **game
   proper remains overwhelmingly assembly-backed** despite the successful
   round-trip builds.
+
+See [COVERAGE.md](COVERAGE.md) for the byte-span denominator, SDK evidence and curated source-quality review schema. The total C-mapped byte share remains primarily SDK-heavy: **do not interpret the 1.60% unattributed C share as a validated gameplay completion figure**.
 
 Do not interpret the 3.35% metric as a percentage of gameplay logic understood.
 Some C rows contain assembly or special compiler fixups. Work should distinguish
