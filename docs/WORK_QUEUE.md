@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Five bounded runs completed (2026-11-22):**
+**Six bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -41,20 +41,26 @@ recovers Psy-Q GsOT, ten-entry font queue and game frame;
 enumerates eight game-state callbacks and submodes;
 [FOBJ sprite-path atlas](research/G3_FOBJ_SPRITE_PATH_20261122.md)
 proves a 100×6-byte 2D sprite command queue, 12-way display-state
-dispatcher and GsSortSprite OT submission; and the
+dispatcher and GsSortSprite OT submission; the
 [3D TMD polygon-path atlas](research/G3_TMD_GEOMETRY_TO_OT_20261122.md)
-now proves **descriptor creation → GsLinkObject4 → 0x6C-byte
+proves **descriptor creation → GsLinkObject4 → 0x6C-byte
 3D scene records → GsSortObject4J-like dispatcher → GsTMDfast*
-polygon packet insertion → GsDrawOt** in JP, with EU corroboration.
-It separates projected 0x7C-byte sprite/billboard records from both
-TMD geometry and the earlier FOBJ HUD.
+polygon packet insertion → GsDrawOt** in JP, with EU corroboration; and the
+[communication buffer schema](research/G3_COMM_BUFFER_SCHEMA_20261122.md)
+now proves `D_80166360` is a **per-frame immediate-mode 0x18-byte request
+pool** (literal "Communication Buffer" string evidence) with a bump
+allocator, 756-record capacity gate, laser (`mylaser.c`) and object-spawn
+producer systems, the corrected dispatch consumption rule and the 0x6C
+record field map.
 
-**Next specific R1 question:** recover the **game-owned model/scene
-instance schema and updates**: map 0x18-byte descriptors at
-`D_80166360` through the creation helpers to the 0x6C-byte
-world record array `D_80138DB4`, then identify the producers and
-per-frame transform/animation state. Do not repeat SDK polygon
-callback re-enumeration as game-function recovery.
+**Next specific R1 question:** recover the **producer-side object record
+schema**: the laser record (lifetime `+0x26`, effect id `+0x28`, position
+`+0x3C..+0x40`, velocity `+0x44..+0x4A`, hit_req `+0x80`) and the spawn-API
+object record (`+0x4..+0xC` position, `+0x30` id) — pool bases, sizes,
+creators/destroyers; then the `D_800ABBE4` model-table builder and the
+`\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
+frame-local staging; do not convert builders before a producer-side
+landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
 already retail-matched C row (historical claim), but functions as
 a Psy-Q **`GsSortObject4J`-like** TMD dispatcher. Investigate
