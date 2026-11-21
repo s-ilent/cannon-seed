@@ -1,80 +1,86 @@
-# =============================================================================
-# CI — continuous verification (Phase 5 of docs/WORKFLOW.md)
-#
-# Four jobs:
-#   lint         cheap hygiene checks on the tracked tree
-#   ratchets     placeholder/debt counts may not increase (docs/RULES.md §4.4)
-#   progress     measure the tree, upload the report as an artifact
-#   oracle-gate  rebuild and compare the whole image with retail
-#
-# The oracle-gate needs the retail executable, which is never committed.
-# Two options used by the source projects:
-#   * parasite-eve-decomp: contributors run `make verify` locally; CI runs
-#     the source-only subset.
-#   * lsddecomp: CI reads the private files (disc, converted SDK) from a
-#     private repository via a secret, so the public pipeline still runs the
-#     full gate end to end. Wire that up when you have a private deps repo.
-# =============================================================================
-name: CI
+# GitHub-hosted CI can validate the committed source, not the retail oracle.
+# Byte-identical builds require separately provisioned retail baselines and
+# the exact historical compiler / assembler environment (docs/CI.md).
+name: CI (source-only)
 
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: source-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint:
+  hygiene:
+    name: Source hygiene
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Trailing whitespace in tracked code
         run: |
-          # *.md is exempt: two trailing spaces are a markdown hard line
-          # break, so the rule would police a legitimate formatting feature.
+          # Markdown deliberately permits trailing spaces for hard breaks.
           if git grep -InE ' +$' -- '*.c' '*.h' '*.inc' '*.py' '*.yaml'; then
-            echo "::error::trailing whitespace found"; exit 1
+            echo "::error::trailing whitespace found"
+            exit 1
           fi
       - name: Merge-conflict markers
         run: |
-          if git grep -InE '^(<<<<<<<|>>>>>>>)( |$)' -- . ; then
-            echo "::error::conflict markers found"; exit 1
+          if git grep -InE '^(<<<<<<<|>>>>>>>)( |$)' -- .; then
+            echo "::error::conflict markers found"
+            exit 1
           fi
-      - name: Python tooling compiles
-        run: python3 -m compileall -q tools
+      - name: Python syntax (tools, scripts, tests)
+        run: python3 -m compileall -q tools scripts tests
 
-  ratchets:
+  unit-tests:
+    name: Offline Python unit tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Placeholder / debt ratchets
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install PyYAML==6.0.3 capstone==5.0.7
+      - name: Discover and run tests
+        env:
+          PYTHONPATH: tools
+        run: |
+          python - <<'PY'
+          import unittest
+
+          suite = unittest.defaultTestLoader.discover("tests", pattern="test_*.py")
+          count = suite.countTestCases()
+          print(f"Discovered {count} unit tests", flush=True)
+          if count < 200:
+              raise SystemExit("Test discovery returned too few tests (expected at least 200)")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+
+  ratchets:
+    name: Placeholder/debt ratchets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Enforce ratchet baselines
         run: python3 tools/check_ratchets.py
 
   progress:
+    name: Function census (informational)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Measure the tree
+      - uses: actions/checkout@v6
+      - name: Measure committed source
         run: |
           python3 tools/progress.py --json > progress.json
           cat progress.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: progress-report
           path: progress.json
-
-  oracle-gate:
-    runs-on: ubuntu-latest
-    # FILL: wire the real gate when your pipeline exists.
-    # Option A (private deps repo, lsddecomp-style): check out your private
-    #   repo with a deploy key/secret into baselines/ (+ sdk/lib), then run
-    #   `make verify` unconditionally.
-    steps:
-      - uses: actions/checkout@v4
-      - name: Oracle gate (requires retail baseline)
-        run: |
-          if [ ! -f baselines/main.bin ]; then
-            echo "::notice::No retail baseline in the clone — template mode."
-            echo "::notice::Contributors run 'make verify' locally; wire a"
-            echo "::notice::private deps repo (see header comment) for CI."
-            exit 0
-          fi
-          make verify
+          if-no-files-found: error
