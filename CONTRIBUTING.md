@@ -49,4 +49,4 @@ The current research and landing queue is [docs/WORK_QUEUE.md](docs/WORK_QUEUE.m
 
 ## Measurement over transcription
 
-Track progress using tools: `make progress`, `make nonmatchings`, and `make ratchets`. Do not paste numbers into documentation. Record lessons in `docs/` with evidence or inside commit messages.
+Track progress using tools: `make progress`, `make coverage`, `make nonmatchings`, and `make ratchets`. The new byte-span metric and curated semantic review tiers are explained in [docs/COVERAGE.md](docs/COVERAGE.md); no source-only metric proves a retail hash match or complete gameplay understanding. Do not paste numbers into documentation. Record lessons in `docs/` with evidence or inside commit messages.
