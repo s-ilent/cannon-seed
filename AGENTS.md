@@ -8,10 +8,10 @@ Keep this file short. Focus on rules and the loop. Do not write project state or
 
 1. **Never edit `config/sha1/**`.** These files contain retail SHA-1 hashes. Editing a hash file invalidates the oracle. Git hooks block edits.
 2. **Run all builds through `make verify`.** A bare `make` command does not check byte matching and is blocked. Permitted non-build targets: `extract`, `progress`, `nonmatchings`, `ratchets`, `hooks`, `clean`.
-3. **Never commit game executables, disc images, or Sony files.** Keep `disk/`, `sdk/`, `lib/`, `include/psyq/`, `assets/`, and `baselines/` in `.gitignore`. Users supply these files locally.
+3. **Never add game executables, disc images, or Sony files.** Keep `disk/`, `sdk/`, `lib/`, `include/psyq/`, `assets/`, and `baselines/` in `.gitignore`. Users supply these files locally. Legacy tracked `extract/{jp,eu}` executables are a separately deferred history-remediation issue, not precedent for adding more.
 4. **Never edit `asm/`.** Splat regenerates assembly files. Curate symbol names in `config/symbols.curated.txt` — the scanner rewrites the per-target symbols files, so only a curated name survives. Update segmentation in `config/splat.*.yaml`.
 5. **Keep the toolchain pinned.** Use the exact compiler version, binutils, flags, and maspsx. Current baseline: Psy-Q GCC 2.6.3 (SDK strings dated 1995-10).
-6. **No register pinning.** Do not use `register T v asm("$N")` or extended asm constraints to force register choices. Use `__asm__("")` only as a scheduling barrier. Place direct COP2/GTE assembly instructions in approved macro headers.
+6. **No new register pinning or extended-asm workarounds without an explicitly reviewed exception.** Existing asm-backed C matches are technical debt, not semantic-C completion. Keep instruction-sensitive GTE/COP2 exceptions evidence-backed. See `docs/RULES.md` §3.
 
 ## Sandbox re-provision recovery
 
@@ -21,7 +21,7 @@ If the sandbox resets, restore configuration with this command:
 sh tools/rehydrate.sh        # add --smoke for a full oracle check
 ```
 
-This script restores git configuration, credentials, the virtual environment (`tools/make_wheelhouse.sh`), maspsx, and mipsel binutils. The current image-build toolchain additionally requires an attested guarded GCC 2.6.3 source build; `rehydrate.sh` now **fails closed** if the preflight cannot confirm it. If the compiler was lost, run `sh tools/build_cc1_263.sh && sh tools/patch_cc1_263.sh`, then rerun `rehydrate.sh`. See `docs/TOOLCHAIN.md`. If the tree lags origin, run `git fetch origin && git reset --hard origin/main`, then **RE-RUN `sh tools/rehydrate.sh`** — a stale-HEAD rehydrate predates the current step-6b patch state (cron-202611050728: the clones kept an old patch without the `--addiu-at` knob and every build silently mis-expanded its bare-symbol accesses; the rerun is idempotent and re-applies `tools/maspsx_delay_slot.patch` to BOTH maspsx clone locations). Push completed work regularly.
+This script restores git configuration, credentials, the virtual environment (`tools/make_wheelhouse.sh`), maspsx, and mipsel binutils. The current image-build toolchain additionally requires an attested guarded GCC 2.6.3 source build; `rehydrate.sh` now **fails closed** if the preflight cannot confirm it. If the compiler was lost, run `sh tools/build_cc1_263.sh && sh tools/patch_cc1_263.sh`, then rerun `rehydrate.sh`. See `docs/TOOLCHAIN.md`. If the tree lags origin, first inspect `git status`, uncommitted changes, the current branch and concurrent agent work. Fetch origin and update only when doing so is safe; **never blindly reset a dirty worktree or another worker's branch**. After a confirmed source-tree update, **RE-RUN `sh tools/rehydrate.sh`** — a stale-HEAD rehydrate predates the current step-6b patch state (cron-202611050728: the clones kept an old patch without the `--addiu-at` knob and every build silently mis-expanded its bare-symbol accesses; the rerun is idempotent and re-applies `tools/maspsx_delay_slot.patch` to BOTH maspsx clone locations). Push completed work regularly.
 
 ## The loop
 
