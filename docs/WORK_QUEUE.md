@@ -30,7 +30,18 @@ multiple **target instances** to byte totals.
 
 ## Ready: bounded read-only research
 
-### R1 — Game-code recovery atlas (first independent research track)
+### R1 — Game-code recovery atlas (independent research track)
+
+**First bounded run completed (2026-11-22):**
+[G3 render-path atlas](research/G3_RENDER_PREP_ATLAS_20261122.md)
+measures the complete `0x80022E24..0x800232D0` JP preparation and
+dispatch functions (EU entry offsets +0x60), a shared per-buffer state
+record, the graphics submit/swap calls, and corrected spimdisasm
+interior-label boundaries. **Next specific R1 question:** trace
+`func_8002F200` and `func_8002F660`, the first two nine-way dispatch
+callees, and establish the incoming xrefs and 20-byte record layout.
+Do not re-report the same two routines as a fresh discovery.
+
 
 **Target:** `g3_jp` first; `g3_eu` for comparison.
 
