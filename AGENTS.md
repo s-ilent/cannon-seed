@@ -2,7 +2,7 @@
 
 This project builds C source that compiles byte for byte to the retail executables in `config/sha1/`. Read README.md for setup instructions and layout.
 
-Keep this file short. Focus on rules and the loop. Do not write project state or progress numbers here. Check state with `python3 tools/progress.py` and `python3 tools/check_ratchets.py`. Full conventions live in `docs/RULES.md`, `docs/GUIDELINES.md`, and `docs/MATCHING.md`. Queued tasks live in `docs/TASKS.md`.
+Keep this file short. Focus on rules and the loop. Do not write project state or progress numbers here. Check state with `python3 tools/progress.py` and `python3 tools/check_ratchets.py`. Full conventions live in `docs/RULES.md`, `docs/GUIDELINES.md`, and `docs/MATCHING.md`. The **current work queue** lives in `docs/WORK_QUEUE.md`; consult `docs/STATUS.md` for evidence-qualified state. `docs/TASKS.md` is the preserved historical notebook — its October `## Queued` header is not current. Navigate it through `docs/RESEARCH_LOG_INDEX.md`.
 
 ## Hard rules
 
@@ -21,9 +21,12 @@ If the sandbox resets, restore configuration with this command:
 sh tools/rehydrate.sh        # add --smoke for a full oracle check
 ```
 
-This script restores git configuration, credentials, the virtual environment (`tools/make_wheelhouse.sh`), maspsx, and mipsel binutils. If the tree lags origin, run `git fetch origin && git reset --hard origin/main`, then **RE-RUN `sh tools/rehydrate.sh`** — a stale-HEAD rehydrate predates the current step-6b patch state (cron-202611050728: the clones kept an old patch without the `--addiu-at` knob and every build silently mis-expanded its bare-symbol accesses; the rerun is idempotent and re-applies `tools/maspsx_delay_slot.patch` to BOTH maspsx clone locations). Push completed work regularly.
+This script restores git configuration, credentials, the virtual environment (`tools/make_wheelhouse.sh`), maspsx, and mipsel binutils. The current image-build toolchain additionally requires an attested guarded GCC 2.6.3 source build; `rehydrate.sh` now **fails closed** if the preflight cannot confirm it. If the compiler was lost, run `sh tools/build_cc1_263.sh && sh tools/patch_cc1_263.sh`, then rerun `rehydrate.sh`. See `docs/TOOLCHAIN.md`. If the tree lags origin, run `git fetch origin && git reset --hard origin/main`, then **RE-RUN `sh tools/rehydrate.sh`** — a stale-HEAD rehydrate predates the current step-6b patch state (cron-202611050728: the clones kept an old patch without the `--addiu-at` knob and every build silently mis-expanded its bare-symbol accesses; the rerun is idempotent and re-applies `tools/maspsx_delay_slot.patch` to BOTH maspsx clone locations). Push completed work regularly.
 
 ## The loop
+
+**Without witnessed retail baselines and a passing toolchain preflight, stay in read-only research mode.** Do not claim matches based on unit scores, outdated logs, green source-only CI, or speculative C edits. For bounded independent work use `docs/WORK_QUEUE.md` (R1–R3).
+
 
 1. Edit code in `src/` or `include/`. Keep functions in ROM-address order. Use C89 syntax (`/* */` comments, declarations at block tops). The target compiler treats `char` as unsigned; use `s8` for signed bytes.
 2. Verify against the retail target:
