@@ -3,6 +3,18 @@
 **Static research window:** 2026-11-22. **Status:** new bounded analysis,
 source-only; no new retail-image build or runtime trace.
 
+**Follow-up resolves previously open questions:**
+[G3 HUD/font queue and outer frame loop atlas](G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
+identifies the 20-byte per-buffer record as **Psy-Q `GsOT`**, confirms
+`GsSetWorkBase`-like packet cursor behavior, traces the two initial
+HUD dispatch callees (`func_8002F200`/`func_8002F660`), and locates
+the real **JP outer loop at `0x80042C6C..0x80042D4C`**. That loop calls
+preparation and submission in order, resetting the font queue before
+indirect mode dispatch. It also identifies `func_8005E6C4` and
+`func_8005E740` as **LIBPRESS `DecDCTin`/`DecDCTout`** by anchored
+SDK signatures. Treat the superseded "not yet established" notes below
+as a record of this first pass, not as the current unresolved queue.
+
 Scope: Japanese main-game executable, ROM/file offsets
 `0x32FC..0x3AD0`, runtime VAs `0x80022AFC..0x800232D0`.
 Cross-region target: `g3_eu` at **JP VA + 0x60** over these sampled
@@ -223,8 +235,9 @@ The original rule was conservative enough to preserve this distinction.
 | **4 (small first C experiment)** | JP `22D58..22D9C` and two 0x44-byte siblings | Simple two-`strcat` wrappers; three independent prologues/returns, trivial to model as semantic C, exercised by text/path code | Limited gameplay value; cannot land without toolchain and retail verifier; splitting existing 0x4F44-byte ASM row changes packaging |
 | **Do not prioritize** | JP `4803C..48DB4` / EU `47CA4..487E0` | Likely libc formatting implementation, not gameplay; large false-positive in naive "unassigned code = game" analysis | Psy-Q member/signature attribution still missing |
 
-The next bounded R1 experiment should **map the actual nine buffer
-dispatch callees and the two function entry xrefs**. Start with
+The next bounded R1 experiment should **map the remaining buffer
+dispatch callees and frame-level state table**; the first two callees
+and the outer caller are now resolved in the follow-up atlas. Start with
 `func_8002F200` and `func_8002F660`, the first two stage calls
 receiving the 20-byte-stride pointer, and classify their side effects
 (including GTE/GPU commands). This is higher value than matching more
