@@ -47,7 +47,7 @@ if [ -z "${QEMU:-}" ] && [ "${GCCDIR:-}" = "$CC1SRC" ]; then
 fi
 QEMU="${QEMU:-$TOOLROOT/qemu-root/usr/bin/qemu-i386-static}"
 GCCDIR="${GCCDIR:-$TOOLROOT/gcc-2.6.3-psx}"
-MASPSX="${MASPSX:-/home/z/my-project/tools-src/maspsx/maspsx.py}"
+MASPSX="${MASPSX:-$REPO/tools-src/maspsx/maspsx.py}"
 
 AS="$TOOLROOT/mipsel-root/usr/bin/mipsel-linux-gnu-as"
 export LD_LIBRARY_PATH="$TOOLROOT/mipsel-root/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"

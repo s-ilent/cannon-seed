@@ -2,6 +2,73 @@
 
 This document details the toolchain used to reproduce project binaries. Components under **Proven** are required for `make verify`.
 
+## Current effective image-build toolchain (November 2026)
+
+**This section supersedes the historical stock-compiler setup below.** The
+byte-exact pipeline now uses a locally rebuilt, modified GCC 2.6.3 (Sony PSX)
+compiler with guards 1–4 from `tools/patch_cc1_263.sh`, **not** the
+`decompals/old-gcc` prebuilt cc1. The latter is useful for differential
+experiments, but produced verified image drift when a sandbox reset selected
+it automatically. Source-level guard comments alone do not prove a compiler
+binary contains those changes.
+
+`tools/build.sh` invokes a **fail-closed preflight** before assembling or
+compiling any part of an image:
+
+```sh
+python3 tools/toolchain_preflight.py
+make verify TARGET=slps_00270
+```
+
+The preflight requires:
+
+1. The guarded compiler at `${TOOLROOT:-/home/z/my-project/tools-local}/gcc-2.6.3-src/gcc-2.6.3`, all four guard markers, and a matching local binary/source/patch SHA-256 rebuild attestation (`.cannon-seed-guarded-cc1.json`).
+2. The native compiler launcher (`QEMU=/usr/bin/env`, or unset) and no
+   `GCCDIR` override selecting the prebuilt/experimental compiler.
+3. The exact upstream `mkst/maspsx` revision
+   `e85ecb373828aabea96d7e6400974d4f91ce8c74` **plus** the complete
+   in-repo `tools/maspsx_delay_slot.patch`, tested with `git apply
+   --reverse --check`. The default clone is `tools-src/maspsx`.
+4. GNU MIPS little-endian assembler, linker and objcopy reporting 2.31.1.
+5. The pinned Python versions of splat64, spimdisasm and PyYAML.
+
+`TOOLROOT` consistently identifies the parent of `mipsel-root` and both
+compiler directories, not `mipsel-root` itself. The maspsx path can be
+overridden with `MASPSX` only when the selected clone has the same pinned
+revision and patch.
+
+### Preparing or recovering the environment
+
+```sh
+sh tools/rehydrate.sh
+# If the guarded compiler is absent, or its attestation is outdated:
+sh tools/build_cc1_263.sh
+sh tools/patch_cc1_263.sh
+python3 tools/toolchain_preflight.py
+# Full-image gate, only with witnessed retail baseline:
+make verify TARGET=slps_00270
+```
+
+`build_cc1_263.sh` now checks out the `decompals/old-gcc` build recipe
+at `cf70ec58bce58128732062bc9930045c82904cbb`, and keeps the
+existing SHA-256 gate on the upstream GCC tarball. The final
+`patch_cc1_263.sh` rebuild records hashes for `cpp`, `cc1`, the three
+guard-bearing source files and the patch script. A changed file or missing
+attestation fails the next full-image build. **This is integrity evidence
+for the locally generated artifacts, not a cryptographic proof that the
+binary matches a separately published reference compiler hash.**
+
+`rehydrate.sh` pins maspsx and checks the patch, and now refuses to claim
+the environment is ready if this preflight fails. It does not silently use
+the prebuilt compiler. The explicit recovery commands above are required
+when a sandbox reset removes the guarded source build.
+
+A standalone `tools/cc.sh` invocation deliberately remains unrestricted:
+matching probes often compare stock, patched and experimental compilers.
+Those experiments cannot be promoted to whole-image matches until this
+preflight and the retail image SHA-1 gate pass.
+
+
 ## Proven: the oracle is green with this exact stack
 
 | Component | Version / source | Role |

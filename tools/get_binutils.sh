@@ -14,7 +14,7 @@
 set -eu
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-ROOT="${TOOLROOT:-/home/z/my-project/tools-local/mipsel-root}"
+ROOT="${TOOLROOT:-/home/z/my-project/tools-local}/mipsel-root"
 AS="$ROOT/usr/bin/mipsel-linux-gnu-as"
 DEBDIR="$REPO/../tools-local/deb"
 MIRROR="https://archive.debian.org/debian/pool/main/b/binutils"

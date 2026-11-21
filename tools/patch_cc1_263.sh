@@ -40,7 +40,8 @@
 
 set -e
 
-GCCSRC="${GCCSRC:-/home/z/my-project/tools-local/gcc-2.6.3-src/gcc-2.6.3}"
+REPO="$(cd "$(dirname "$0")/.." && pwd)"
+GCCSRC="${GCCSRC:-${TOOLROOT:-/home/z/my-project/tools-local}/gcc-2.6.3-src/gcc-2.6.3}"
 [ -f "$GCCSRC/cc1" ] || { echo "patch_cc1: no cc1 at $GCCSRC - run tools/build_cc1_263.sh first" >&2; exit 1; }
 
 python3 - "$GCCSRC" <<'EOF'
@@ -153,4 +154,5 @@ EOF
 echo "[patch_cc1] rebuilding cc1 (cse.c + fold-const.o + link)..."
 cd "$GCCSRC"
 make cpp cc1 xgcc CFLAGS="-std=gnu89 -static -fcommon -Dbsd4_4 -Dmips -DHAVE_STRERROR" >/dev/null 2>&1 || make cpp cc1 xgcc CFLAGS="-std=gnu89 -static -fcommon -Dbsd4_4 -Dmips -DHAVE_STRERROR"
+python3 "$REPO/tools/toolchain_preflight.py" --record-guarded-cc1 "$GCCSRC"
 echo "[patch_cc1] done: guarded cc1 at $GCCSRC/cc1"

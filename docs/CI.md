@@ -28,7 +28,11 @@ that old workflow.
 ## Actual matching verification
 
 Only a witnessed, complete-image `make verify` against the immutable SHA-1
-oracle is authoritative. In a separately provisioned build environment:
+oracle is authoritative. `tools/build.sh` now refuses full-image builds
+unless `tools/toolchain_preflight.py` verifies the guarded compiler
+attestation, pinned and patched maspsx, binutils and Python dependencies.
+This preflight runs **locally**, not in the source-only GitHub Actions jobs.
+In a separately provisioned build environment:
 
 ```sh
 sh tools/witness_check.sh

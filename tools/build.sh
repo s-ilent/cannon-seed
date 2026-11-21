@@ -26,12 +26,13 @@ if [ -z "$PY" ]; then
     done
 fi
 [ -n "$PY" ] || PY=python3
-MASPSX="${MASPSX:-/home/z/my-project/tools-src/maspsx/maspsx.py}"
-TOOLROOT="${TOOLROOT:-/home/z/my-project/tools-local/mipsel-root}"
-export LD_LIBRARY_PATH="$TOOLROOT/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-AS="$TOOLROOT/usr/bin/mipsel-linux-gnu-as"
-LD="$TOOLROOT/usr/bin/mipsel-linux-gnu-ld"
-OBJCOPY="$TOOLROOT/usr/bin/mipsel-linux-gnu-objcopy"
+MASPSX="${MASPSX:-$REPO/tools-src/maspsx/maspsx.py}"
+TOOLROOT="${TOOLROOT:-/home/z/my-project/tools-local}"
+BINUTILS_ROOT="$TOOLROOT/mipsel-root"
+export LD_LIBRARY_PATH="$BINUTILS_ROOT/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+AS="$BINUTILS_ROOT/usr/bin/mipsel-linux-gnu-as"
+LD="$BINUTILS_ROOT/usr/bin/mipsel-linux-gnu-ld"
+OBJCOPY="$BINUTILS_ROOT/usr/bin/mipsel-linux-gnu-objcopy"
 
 TARGET="${TARGET:-slps_00270}"
 LD_SCRIPT="build/${TARGET}.gen.ld"
@@ -45,6 +46,11 @@ OUT_ELF="build/${TARGET}.elf"
 ASFLAGS="-march=mips64 -mabi=32 -EL -G0 -I include -I asm/nonmatchings"
 
 fail() { echo "build: $*" >&2; exit 2; }
+
+# Before touching any image objects, refuse an unguarded/stale compiler,
+# unpatched maspsx, or mismatched binutils. Standalone cc.sh probes may
+# still select experimental compiler variants; retail image builds may not.
+"$PY" tools/toolchain_preflight.py || fail "toolchain preflight failed (see docs/TOOLCHAIN.md)"
 
 # --- per-target/per-unit maspsx flag overrides -------------------------------
 # tools/maspsx_flags.txt scopes flag overrides to a retail target or a single
