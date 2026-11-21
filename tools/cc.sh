@@ -29,6 +29,22 @@ set -e
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 TOOLROOT="${TOOLROOT:-/home/z/my-project/tools-local}"
+# The guarded source-built cc1 (build_cc1_263.sh + patch_cc1_263.sh, guards
+# 1-4) is the pipeline of record since cron-20261022. A rollback silently
+# restores the decompals prebuilt i386 cc1, and plain `make verify` then
+# compiles the guard-sensitive rows differently (window cron-202611211415:
+# sces_00269 848 B inside the SsVabOpenHeadWithMode twin AT range, g3_eu
+# 4122 B - all byte-exact under the gate). So when the guarded source build
+# exists, prefer it by DEFAULT (caller exports still win), and bypass qemu
+# for it: the source binaries are x86-64 native, the prebuilt ones are
+# i386-under-qemu-i386. The explicit witness stays in rehydrate 7.5.
+CC1SRC="$TOOLROOT/gcc-2.6.3-src/gcc-2.6.3"
+if [ -z "${GCCDIR:-}" ] && [ -x "$CC1SRC/cc1" ]; then
+    GCCDIR="$CC1SRC"
+fi
+if [ -z "${QEMU:-}" ] && [ "${GCCDIR:-}" = "$CC1SRC" ]; then
+    QEMU="/usr/bin/env"
+fi
 QEMU="${QEMU:-$TOOLROOT/qemu-root/usr/bin/qemu-i386-static}"
 GCCDIR="${GCCDIR:-$TOOLROOT/gcc-2.6.3-psx}"
 MASPSX="${MASPSX:-/home/z/my-project/tools-src/maspsx/maspsx.py}"
