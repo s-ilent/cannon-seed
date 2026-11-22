@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Six bounded runs completed (2026-11-22):**
+**Seven bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -51,12 +51,14 @@ now proves `D_80166360` is a **per-frame immediate-mode 0x18-byte request
 pool** (literal "Communication Buffer" string evidence) with a bump
 allocator, 756-record capacity gate, laser (`mylaser.c`) and object-spawn
 producer systems, the corrected dispatch consumption rule and the 0x6C
-record field map.
+record field map. The [laser producer pool](research/G3_LASER_POOL_20261122.md)
+proves the persistent 32×0x84 pool, allocator/back-reference, three-mode
+fallthrough, origin-relative endpoint and final emission after release.
 
-**Next specific R1 question:** recover the **producer-side object record
-schema**: the laser record (lifetime `+0x26`, effect id `+0x28`, position
-`+0x3C..+0x40`, velocity `+0x44..+0x4A`, hit_req `+0x80`) and the spawn-API
-object record (`+0x4..+0xC` position, `+0x30` id) — pool bases, sizes,
+**Next specific R1 question:** follow the laser allocator wrapper's four
+callers to their parent object pool(s), resolve the 124×0xAC array and
+back-reference teardown, then recover the spawn-API object record
+(`+0x4..+0xC` position, `+0x30` id) — pool bases, sizes,
 creators/destroyers; then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
