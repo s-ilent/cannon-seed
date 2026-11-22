@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Eighteen bounded runs completed (2026-11-22):**
+**Nineteen bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -92,7 +92,9 @@ custom metadata clock, and moving origin/rotation/displacement writers.
 
 The [proximity and shared health atlas](research/G3_PROXIMITY_HEALTH_20261122.md) resolves 80035348, shared 10000-unit health, collision angles, difficulty multipliers, damage counter, alarm and death gate.
 
-**Next specific R1 question:** census the remaining object controllers, classify their common motion/collision/damage paths, and identify candidates for boss architecture. Trace the third direct damage caller 8003AC2C. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
+The [object census and composite candidates](research/G3_OBJECT_CENSUS_COMPOSITES_20261122.md) maps all 29 nondefault slots, finds 35/10/5 child allocations in types 80/88/89, and resolves direct damage caller 8003AC2C.
+
+**Next specific R1 question:** trace type 80 child hit/rotation and parent completion, then type 89 decoder 8003B2FC and child-count writers; connect these to victory/defeat state transitions. Boss identities provisional. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
