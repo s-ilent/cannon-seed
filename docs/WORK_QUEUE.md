@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Eight bounded runs completed (2026-11-22):**
+**Nine bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -60,9 +60,14 @@ resolves the four laser wrapper callers to 4×0x8C player records, the
 124×0xAC collision-participating object array, 74/100/124 allocator bounds,
 trigger cadence and hit-mask writes. Release does not clear the owner
 back-reference on the inspected path; external lifecycle is still open.
+The [damage and score atlas](research/G3_HIT_DAMAGE_SCORE_20261122.md)
+proves four-gunner arbitration, rotating hit priority, fractional
+and whole-stage durability, packed-decimal score awards and a
+representative non-collidable death transition.
 
-**Next specific R1 question:** trace target+0x2A consumers and the creation/teardown
-family (8003D9FC, table D_8008A220), then the `D_800ABBE4` model-table builder and the
+**Next specific R1 question:** decode damage dispatch tables jtbl_80020CF4 and
+jtbl_80020D0C (witnessed local baseline or symbolic evidence), then trace
+object creation/teardown (8003D9FC, table D_8008A220), then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
