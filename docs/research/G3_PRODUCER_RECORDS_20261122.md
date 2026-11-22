@@ -483,3 +483,60 @@ clamp), `def+0x28`, `def+0x2A` (phase period), `def+0x2C` (phase step),
 SDK attribution of the dispatchers remains a separate lane. No builder or
 record is converted before a producer-side landing decision (WORK_QUEUE R1
 gate).
+
+---
+
+**R1 pass 9 — 2026-11-22 (third bounded run, same window).** The §13 next
+read executed: the 0x31 morph-target body. Dispatch row verified:
+`D_8008A2F4 + 0x31·4 = 0x8008A3B8 → func_80037D58` (`data_80080048.data.s`
+line 14410).
+
+## 14. Type 0x31 — the emitter body
+
+**Morph sequence recap (from §11):** the 0x1C handler's `lh(+0x2E) < 0` arm
+runs `func_80038968`, which sets the type word `+0x0 = 0x31` **and then
+calls the 0x31 pair inline** — `func_80037E0C(obj, obj)` then
+`func_80037D58(obj)` — before the next frame's dispatch ever sees the new
+type.
+
+- **`func_80037E0C(obj_new, obj_old)`**: reads `lh(def_old+0xC)` (the dying
+  object's definition field `+0xC` = the **template selector**) and calls
+  `func_80037E38(obj_new, idx)`.
+- **`func_80037E38(obj, idx)`** — the 0x31 initializer: copies a **packed
+  8-halfword parameter template from `D_8008A740`** (16 bytes per entry,
+  `idx × 0x10`): `template[0..4] → +0x10/+0x12/+0x14/+0x16/+0x18`,
+  `template[5] → +0x1C` and **`+0x1A = −template[5]`** (the phase starts
+  negated), `+0x1E = 0`, `+0x28 = 0`.
+- **`func_80037D58(obj)`** — the per-frame emitter step (the dispatch-table
+  handler for 0x31): `+0x12 += lhu(+0x1E)` (0 at init); the phase
+  `sum = lhu(+0x1A) + lhu(+0x1C)` stored back to `+0x1A`; **live gate:
+  `(sum & 0xFFFF) < lhu(+0x18)`** (template[4] = the lifetime modulus) —
+  falling through while alive, `sh zero, +0x0` (kill) once the phase reaches
+  the modulus; while alive: **`+0x30 = lhu(+0x10) + (sum>>4)`** (the
+  resource selector advances with the phase, same shape as the 0x18 phase
+  path) and a spawn arm per `+0x26`: `== 0 → func_80031EC0` (=
+  `func_80031F60(obj, 4)`), `!= 0 → func_80031F40` (=
+  `func_80031F60(obj, 5)`).
+- **`func_80031F60(obj, flag)`** — the spawner core behind all the
+  spawn-family entries met in passes 6–9: gates on **`lh(D_800AC29C)`**
+  (pass 6's enable word) and the **756-record capacity check
+  `lh(D_800AC014) < 0x2F4`** (else `printf(D_80020B84)`), i.e. the request
+  is written into the Communication Buffer. The flag selects the request
+  kind: 0/1 (`func_80031C5C`/`func_80031CDC` via `func_80031CFC`, the 0x18
+  arms), **4** (`func_80031EC0`, the 0x31 emitter) and **5**
+  (`func_80031F40`).
+
+**Field semantics for type 0x31 (per-type overlay on the 0xAC record):**
+`+0x10..+0x18` = the template's parameter halfwords (period/modulus/lifetime
+class), `+0x1A/+0x1C` = the phase pair (init `−template[5]` /
+`template[5]`), `+0x12` angle advance by `+0x1E`, `+0x30` = phase-indexed
+resource selector. The pass-8 `+0x18/+0x1C/+0x20` trig reading applies to
+the prologue-running types; type 0x31 re-purposes the same bytes — the field
+map is per-type.
+
+**New globals banked:** template table `D_8008A740` (0x10-byte entries,
+indexed by `def+0xC`); spawner core `func_80031F60` with flags 0/1/4/5.
+
+**Next read (R1, unchanged priority):** the PCSX-Redux trace (§10/§13), then
+the remaining type bodies — the emitter's spawn arms make `func_80031F60`'s
+flag-4/5 request formats the natural companion read.
