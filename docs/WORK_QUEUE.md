@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Seven bounded runs completed (2026-11-22):**
+**Eight bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -55,11 +55,14 @@ record field map. The [laser producer pool](research/G3_LASER_POOL_20261122.md)
 proves the persistent 32×0x84 pool, allocator/back-reference, three-mode
 fallthrough, origin-relative endpoint and final emission after release.
 
-**Next specific R1 question:** follow the laser allocator wrapper's four
-callers to their parent object pool(s), resolve the 124×0xAC array and
-back-reference teardown, then recover the spawn-API object record
-(`+0x4..+0xC` position, `+0x30` id) — pool bases, sizes,
-creators/destroyers; then the `D_800ABBE4` model-table builder and the
+The [gunner and target pool atlas](research/G3_GUNNER_TARGET_POOL_20261122.md)
+resolves the four laser wrapper callers to 4×0x8C player records, the
+124×0xAC collision-participating object array, 74/100/124 allocator bounds,
+trigger cadence and hit-mask writes. Release does not clear the owner
+back-reference on the inspected path; external lifecycle is still open.
+
+**Next specific R1 question:** trace target+0x2A consumers and the creation/teardown
+family (8003D9FC, table D_8008A220), then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
