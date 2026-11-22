@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-seven bounded runs completed (2026-11-22):**
+**Twenty-eight bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -110,7 +110,9 @@ The [shared resource resolver atlas](research/G3_SHARED_RESOURCE_RESOLVERS_20261
 
 The [resource render metadata atlas](research/G3_RESOURCE_RENDER_METADATA_20261122.md) proves model attribute bit6 selects no-normal-lighting triangle variants, +0C is OT depth shift, and texture +0C is direct sprite OT priority; seven consumer windows agree across four targets.
 
-**Next specific R1 question:** recover OT setup, draw direction, bucket capacity and resource layering policy. Extend shared-function atlas as useful; archive offset and texture lookup remain guarded matching candidates, not authorized source landings. Actual STR/TMD validation remains separate; CHD extraction tooling is absent.
+The [OT/video layering atlas](research/G3_OT_VIDEO_LAYERING_20261123.md) proves 14-bit / 16384-entry double-buffered reverse ordering tables in all four scenario EXEs, six physical address bounds, five authored sprite-priority bands, explicit ClearOTagR/DrawOTag backend, and the four-target 52-instruction LoadImage/DrawSync VRAM video strip uploader immediately preceding GsDrawOt. Video is not an OT primitive.
+
+**Next specific R1 question:** inspect full-frame GPU clear/fill packet insertion and texture priority 12/14 identity/producers, with special attention to video-background occlusion. Assess real OTZ range for shift-zero models and packet workbuffer high-water mark through runtime/provisioned STR samples when available. Archive offset and texture lookup remain guarded matching candidates, not authorized source landings. CHD extraction currently blocked again by container ClientError; no retail binary-match claim.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
