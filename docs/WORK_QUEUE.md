@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-three bounded runs completed (2026-11-22):**
+**Twenty-four bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -102,7 +102,9 @@ The [player count and scaling atlas](research/G3_PLAYER_COUNT_SCALING_20261122.m
 
 The [gameinfo/playrec atlas](research/G3_GAMEINFO_PLAYREC_20261122.md) recovers named settings API, difficulty mapping, count override setter/default, and replay infrastructure. DRAGOON startup passes zero to separate object-mode selector.
 
-**Next specific R1 question:** resolve nonzero mission schedule/config alias and type98; audit TMD/TIM archive loader. Input/replay storage and callers remain useful follow-up; actual STR/TMD extraction remains separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
+The [alternate-mode and placeholder atlas](research/G3_ALTERNATE_MODE_PLACEHOLDERS_20261122.md) resolves the invalid nonzero static schedule alias and six inert type98 records, distinguishes active short config views, and identifies nested 74/100/124 object pool prefix boundaries.
+
+**Next specific R1 question:** trace TMD/TIM archive loader and resource resolution, then plan matching C conversions using both original build oracles; actual STR/TMD extraction remains separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
