@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Ten bounded runs completed (2026-11-22):**
+**Eleven bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -67,11 +67,13 @@ representative non-collidable death transition.
 The [fragment effects atlas](research/G3_FRAGMENT_EFFECTS_20261122.md)
 resolves 8003D9FC to a specialized type-0x38 constructor, with 10-byte
 fragment records, two launch policies, motion and boundary conversion.
+The [mission scripting atlas](research/G3_MISSION_SCRIPTING_20261122.md)
+recovers section/environment timelines, primary/secondary encounter lists,
+object descriptor layouts, general constructors and dual-clock scripts.
 
-**Next specific R1 question:** decode damage dispatch tables jtbl_80020CF4 and
-jtbl_80020D0C (witnessed local baseline or symbolic evidence), then trace
-the general object creation/dispatch path (80034068 cursor decoder,
-80030BEC frame-called pass), then the `D_800ABBE4` model-table builder and the
+**Next specific R1 question:** obtain witnessed structural metadata for authored timeline,
+configuration, dispatch and command/damage jump tables; trace the third
+object cursor +0x5C and mission clock writer, then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
