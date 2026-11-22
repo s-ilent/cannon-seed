@@ -68,3 +68,19 @@ No source changes, binary publication, build/runtime claims. Earlier docs' open 
 ## Next
 
 TMD/TIM archive loader and resource resolution (80024760/80024910 et al), then systemic matching-decompilation plan using independent leaf routines and both build oracles. Actual disc STR/TMD analysis separately when execution becomes available; do not assert parser correctness against uninspected assets.
+
+
+## Addendum: cross-executable Gourb witness
+
+Following the owner's Zolgear-lineage hypothesis, inspected existing private GOURB/G3ORG.EXE blobs JP d10cad84f9f0070d5f631d19c2cdbf7674139082 / EU 062afcfc25510e67575a7fb33ec66f884ad20176 at head 518a9112. Blob identity returned by repository; no new SHA-1 calculation. Searched aligned words for the exact three-entry section table shape (0,6302,FFFF with four in-image pointers). One candidate in each Gourb executable: JP 80076DA0, EU 8007757C.
+
+Bounded traversal of four 8-byte schedule lists per region, stopping at FFFF, requiring each descriptor pointer to be within loaded image, cap 2000 entries. Both regions terminate correctly, all counts and min/max relative ticks and configuration-ID histograms agree.
+
+| Section start | List | JP pointer | EU pointer | Entries | Relative tick range |
+|---|---|---|---|---:|---|
+|0|primary|80092224|80092A00|761|62–6022|
+|0|secondary|80076810|80076FEC|32|606–4200|
+|6302|primary|800939F4|800941D0|400|7–3200|
+|6302|secondary|80076C7C|31|1430–3000|
+
+Total 1224 authored entries. This is structural cross-executable corroboration of the retained nonzero timeline's purpose: Gourb has populated data for exactly the same section boundary as Dragoon's malformed alternate table. No assertion of runtime reachability until Gourb loader and scheduler references traced. Gourb JP also contains Doldva and SPARKBIT diagnostics (KUUBO_DIED 80021A54, DOL_SUCS 80021A60, SPARKBIT_INIT 80021B14, SPARKBIT_HAKAI 80021B30), strong evidence of shared scenario implementation. Zolgear (1994) as an upstream engine ancestor remains plausible but not proven by this evidence; direct comparison to arcade ROM or developer documentation needed. Distinguish sequential section list from player-voted route branching. References: original Namco PS product page https://www.bandainamcoent.co.jp/cs/list/galaxian3/ ; official series history https://ugsf-series.com/en/ . No extracted game data committed. Recommend future cross-target engine matching and differential table census; archive investigation remains queued.
