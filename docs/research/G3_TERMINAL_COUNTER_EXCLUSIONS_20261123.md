@@ -68,7 +68,7 @@ Reaching stage 5 early does not merely wait for 3888: it **reduces back to stage
 
 ## D. JP/EU corroboration
 
-Compared tracked source instruction words, address-shifted `EU = JP - 0x398` *for these windows only*. `shape` compares opcode/register fields and masks immediate fields of I-type instructions and target of J/JAL. All nine listed sequences have full shape agreement; instruction-word identity is a stricter count. This does not establish full-function equivalence, exhaust runtime `jalr`, or constitute a retail hash/build test.
+Compared tracked source instruction words, address-shifted `EU = JP - 0x398` *for these windows only*. `shape` compares opcode/register fields and masks immediate fields of I-type instructions and target of J/JAL. All ten listed sequences have full shape agreement; instruction-word identity is a stricter count. This does not establish full-function equivalence, exhaust runtime `jalr`, or constitute a retail hash/build test.
 
 | JP window (exclusive) | EU start | Instructions | Identical words | Matching shapes |
 | --- | --- | ---: | ---: | ---: |
