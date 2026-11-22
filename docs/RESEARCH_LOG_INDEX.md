@@ -27,6 +27,8 @@ silently deleting apparent duplicates.
 
 - [G3 hit arbitration, damage and score (2026-11-22)](research/G3_HIT_DAMAGE_SCORE_20261122.md): proves hard-coded four-gunner arbitration, rotating hit priority, fractional durability and signed terminal threshold, packed-decimal score awards, and a representative non-collidable death transition. 348/348 JP/EU normalized instructions, 320 exact. **Static only**; damage jump-table class mapping pending.
 
+- [G3 table-driven fragment/debris objects (2026-11-22)](research/G3_FRAGMENT_EFFECTS_20261122.md): resolves 10-byte sentinel-terminated fragment records, two launch policies, shared type-0x38 constructor, angular motion, lifetime and boundary conversion to type 0x31. 519/519 JP/EU normalized instructions, 468 exact. **Static only**.
+
 ## Fast navigation
 
 ```sh
