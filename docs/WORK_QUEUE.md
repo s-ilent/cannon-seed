@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Nine bounded runs completed (2026-11-22):**
+**Ten bounded runs completed (through 2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -74,7 +74,7 @@ resource link via `+0x2A`, the camera-anchor triple and the EU model table
 runtime-computed control flow (`jalr` through a register / a pointer built
 at run time); and/or continue the handler map into the remaining type
 bodies (`0x13/0x14/0x15/0x1A/0x1E/0x21/0x29/0x2A/0x30/0x31/0x36/0x47`),
-the 0x31 morph target was read in pass 9 (the emitter body: packed 8-halfword template table D_8008A740 indexed by def+0xC, phase-pair lifetime with kill-at-modulus, per-frame resource selector and spawn flags 4/5 through the func_80031F60 spawner core); the companion read is func_80031F60's flag-4/5 request formats, then the remaining type bodies. The render arrays are
+the 0x31 morph target was read in pass 9 (the emitter body: packed 8-halfword template table D_8008A740 indexed by def+0xC, phase-pair lifetime with kill-at-modulus, per-frame resource selector and spawn flags 4/5 through the func_80031F60 spawner core); the [pass-10 companion read](research/G3_PROJECTED_SPRITE_REQUESTS_20261123.md) now closes flag-4/5 request formats through the 0x34-row sprite resource lookup and 0x7C projected-sprite GsSortSprite path, and proves type 7 is rejected by this builder. **Next:** trace the origin of the type-0x31 +0x26 coordinate mode and the remaining active type handlers. The render arrays are
 proven frame-local staging; do not convert builders before a producer-side
 landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
