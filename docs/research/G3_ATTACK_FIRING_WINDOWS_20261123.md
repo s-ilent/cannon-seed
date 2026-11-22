@@ -51,12 +51,20 @@ row = (s16)D_800ABDFC;
 column = (s16)D_800AC164;
 base = *(s16 *)(cfg + 0x34 + 2 * (7 * row + column));
 jitter = *(s16 *)(cfg + 0x32);
-func_80031468();  // modifies RNG state
+func_80031468();  // D_800AC50C = (5 * old_state + 1) & 0xFFFF
 rng = (s16)D_800AC50C;
 obj->attackCooldown = (s16)(base + ((2 * jitter * rng) >> 16) - jitter);
 ```
 
-**Caution:** This is a table-index formula, not a verified attribution of row/column to difficulty, gunner count or game mode. It assumes indices in the authored 6×7 range when describing the data grid; this pass has not established out-of-range safety. Signed multiplication, arithmetic right shift and low-halfword storage matter. A reset value `N >= 0` yields the next attempt after `N+1` enabled dispatcher invocations under otherwise continuous updates, because countdown is **pre**decremented. The signed RNG distribution has not been established.
+**Caution:** This is a table-index formula, not a verified attribution of row/column to difficulty, gunner count or game mode. It assumes indices in the authored 6×7 range when describing the data grid; this pass has not established out-of-range safety. Signed multiplication, arithmetic right shift and low-halfword storage matter. A reset value `N >= 0` yields the next attempt after `N+1` enabled dispatcher invocations under otherwise continuous updates, because countdown is **pre**decremented. The shared generator **is** specifically `func_80031468` (JP `80031468..80031490`, EU `800310D0..800310F8`): it reads signed `D_800AC50C`, computes `5*state+1`, then stores the low 16 bits to the same address. Hence `state'=(5*state+1) mod 65536`; the resulting signed halfword ranges from `-32768` through `32767`. For a positive jitter `j`, `((2*j*(s16)state)>>16)-j` has an **exact bounded offset from `-2j` through `-1`**, using arithmetic (floor) right shift. This is *not* symmetric additive jitter. When `j=5` the offset is **-10..-1**; for the unscheduled `cfg 0x40` with `j=8`, **-16..-1**.
+
+| Parent cfg | Grid base range | Post-reset cooldown range | Next attempt when continuously enabled |
+| --- | ---: | ---: | ---: |
+| `0x41 / 0x52` (method 5) | 30–55 | **20–54** | **21–55** enabled calls to dispatcher |
+| `0x51` (method 6) | 40 | **30–39** | **31–40** enabled calls |
+| `0x40` (unscheduled method 6) | 30–40 | 14–39 | 15–40 enabled calls *if reachable* |
+
+The LCG's parameters satisfy the **full-period criterion modulo `2^16`** (`c=1` odd, `a=5 ≡ 1 mod 4`): iterating *this recurrence alone* visits all 65,536 states before repeating, regardless of seed. This is a mathematical property, **not** proof of the user's in-game random sequence: other game components can also call the shared generator, and runtime reinitialization has not been excluded. The exact distribution of values **sampled by these particular emitters** during play remains unobserved.
 
 | Parent config | Runtime type | Child | `cfg+0x32` jitter | 6×7 base-delay table |
 | --- | --- | --- | ---: | --- |
@@ -68,7 +76,7 @@ Also compared unscheduled cfg `0x40` jitter **8** and all 42 cells with EU, in a
 
 ### 5. JP/EU control-flow corroboration
 
-JP source `asm/g3_jp/nonmatchings/func_80033C44.s`; EU source `asm/g3_eu/nonmatchings/func_800338AC.s`. All windows below use **EU VA = JP VA − 0x398**, exclusive upper bound. Instruction words were recovered by undoing comment-byte endianness; shapes retain opcode/register fields and mask jump targets and I-type immediates (R-type words verbatim). Some windows overlap earlier passes; the total is the **scope of this pass's paired comparison**, not an assertion of wholly new unique coverage.
+JP source `asm/g3_jp/nonmatchings/func_80033C44.s`; EU source `asm/g3_eu/nonmatchings/func_800338AC.s`. The short RNG helper instead lies in JP `asm/g3_jp/nonmatchings/func_8002A2DC.s` and EU `asm/g3_eu/nonmatchings/func_8002A2CC.s`; its EU base is also JP − `0x398`. All windows below use **EU VA = JP VA − 0x398**, exclusive upper bound. Instruction words were recovered by undoing comment-byte endianness; shapes retain opcode/register fields and mask jump targets and I-type immediates (R-type words verbatim). Some windows overlap earlier passes; the total is the **scope of this pass's paired comparison**, not an assertion of wholly new unique coverage.
 
 | JP range (exclusive end) | Subject | Words | Exact | Same shapes |
 | --- | --- | ---: | ---: | ---: |
@@ -81,7 +89,8 @@ JP source `asm/g3_jp/nonmatchings/func_80033C44.s`; EU source `asm/g3_eu/nonmatc
 | `80036D2C..80036E14` | 0x70 child end-state | 58 | 54 | 58 |
 | `80036E14..80037094` | 0x71 dispatch/enable/death | 160 | 140 | 160 |
 | `80037094..80037250` | 0x71 final-effect handler | 111 | 104 | 111 |
-| **Total** | | **772** | **677** | **772** |
+| `80031468..80031490` | 16-bit LCG helper | 10 | 8 | 10 |
+| **Total** | | **782** | **685** | **782** |
 
 JP data: `data_80071790.data.s`, `data_80080048.data.s`. EU data: `data_80071FD0.data.s`, `data_8008002C.data.s`. No assumption that normalized instruction shape comparison proves full retail matching or execution.
 
@@ -89,6 +98,6 @@ JP data: `data_80071790.data.s`, `data_80080048.data.s`. EU data: `data_80071FD0
 
 1. **Conditional firing versus contact:** the actual angular gates `func_80036658`, producer allocator occupancy and child orientation may reject attempted shots even in the verified windows. A runtime trace should record `obj+0x32/+0x68/+0x24`, parent config `+0x2A/+0x2C`, child `+0x60/+0x6C`, `D_800ABFA4`, the first/second script halfwords and successful vs failed `func_80035688` return values.
 2. **Shot geometry/visual identity:** correlate cfg `0x60` resource selector `0x14` (radius 280, damage 20) and cfg `0x61` resource `0x17` (radius 100, damage 10) to private TMD or runtime capture; no speculative on-screen identification.
-3. **Harder static continuation:** trace whether `D_800ABDFC` and `D_800AC164` are restricted to the 6×7 configured cooldown grid, and what `func_80031468` does to the signed RNG halfword so cooldown intervals can be precisely bounded. Also preserve the independent `cfg 0x4A→0x68` zero-lifetime runtime watchpoint and orphan cfg `0x74` alternate-mode question.
+3. **Harder static continuation:** trace whether `D_800ABDFC` and `D_800AC164` are restricted to the 6×7 configured cooldown grid, and identify the actual **global-state selector semantics**; the LCG recurrence and mathematical cooldown bounds are now decoded, but the **runtime sampling/interleaving** of random values across emitters remains open. Also preserve the independent `cfg 0x4A→0x68` zero-lifetime runtime watchpoint and orphan cfg `0x74` alternate-mode question.
 
 This report establishes **conditional firing windows and the code paths that attempt attacks**, not witnessed gameplay shot counts, damage events or results-counter credits.
