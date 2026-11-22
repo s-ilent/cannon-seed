@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Thirty-one bounded runs completed (2026-11-23):**
+**Thirty-two bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -94,7 +94,7 @@ The [proximity and shared health atlas](research/G3_PROXIMITY_HEALTH_20261122.md
 
 The [object census and composite candidates](research/G3_OBJECT_CENSUS_COMPOSITES_20261122.md) maps all 29 nondefault slots, finds 35/10/5 child allocations in types 80/88/89, and resolves direct damage caller 8003AC2C.
 
-The [Doldva rotating reactor atlas](research/G3_DOLDVA_REACTOR_20261122.md) identifies type 80 through KUUBO_DIED/DOL_SUCS, recovers cylindrical geometry, rotation, hit aggregation/five stages and exclusive tick-3888 success gate.
+The [Doldva rotating reactor atlas](research/G3_DOLDVA_REACTOR_20261122.md) identifies type 80 through KUUBO_DIED/DOL_SUCS, recovers cylindrical geometry, rotation and hit aggregation/five stages. **Pass-32 correction:** tick 3888 is the earliest permitted success gate (before it the fifth stage is decremented), not an exclusive last-chance cutoff.
 
 The [SPARKBIT final objective atlas](research/G3_SPARKBIT_FINAL_OBJECTIVE_20261122.md) resolves type 89, five independent targets, specialized countdown script, rotation acceleration, success and timeout result gates.
 
@@ -116,7 +116,9 @@ The [GPU clear and ranking-layer atlas](research/G3_GPU_CLEAR_RANKING_LAYERS_202
 
 The [four-gunner ranking and results atlas](research/G3_GUNNER_RESULTS_RANKING_20261123.md) proves per-gunner score +0x34 feeds a stable descending score sort, competition ranks, and four 16-byte result records, with formatted six-digit score glyphs and two distinct global metric/counter outputs. Six code windows (301 instructions) structurally match in four retail game executables. The second numeric counter is a snapshot of a global object transition tally; the percentage-like metric tracks a 10,000-scaled mission condition with adaptive smoothing.
 
-The [participation masks and credited terminal-counter atlas](research/G3_GUNNER_PARTICIPATION_TERMINAL_COUNTER_20261123.md) (pass 31) establishes that the live 32-bit four-gunner participation mask is snapshotted to the 16-bit results-column mask, traces its join/reset/score eligibility, and classifies the five global counter increments as three ordinary fatal-transition sites (one shared across three types) plus Doldva and SPARKBIT objective success. Eight JP/EU source windows agree in all 352 opcode/register shapes.\n\n**Next specific R1 question:** verify the displayed text/artwork for the snapshotted credited terminal-event count and participation columns, then test uncounted deaths/timeouts versus the five credited terminal branches. Keep exact kill-counter naming and live runtime behavior evidence-qualified. Safe runtime OTZ bound and 0xE100 packet buffer checks remain independently open. Archive offset and texture resolver are unlanded matching C candidates. CHD extraction blocked by container ClientError; no new retail build/oracle claim.
+The [participation masks and credited terminal-counter atlas](research/G3_GUNNER_PARTICIPATION_TERMINAL_COUNTER_20261123.md) (pass 31) establishes that the live 32-bit four-gunner participation mask is snapshotted to the 16-bit results-column mask, traces its join/reset/score eligibility, and classifies the five global counter increments as three ordinary fatal-transition sites (one shared across three types) plus Doldva and SPARKBIT objective success. Eight JP/EU source windows agree in all 352 opcode/register shapes.
+
+The [terminal-event exclusion atlas](research/G3_TERMINAL_COUNTER_EXCLUSIONS_20261123.md) (pass 32) contrasts counted 0x81 death-to-effect with uncounted fatal 0x12/0x13/0x14 and type-80 fragment morphs, establishes separate five-child SPARKBIT destruction vs one parent success credit, checks independent timeout/removal paths, and corrects the Doldva tick-3888 branch polarity directly from JP/EU assembly. Ten windows 143/143 structural shapes (108 exact). **Do not describe the global result tally as every kill or all objects despawned.**\n\n**Next specific R1 question:** trace creation/producer origins for damageable runtime object types 0x12/0x13/0x14 (no authored initial spawns) to distinguish enemy objects from internally generated effects, and identify the counter caption/four-column indicator sprites via a controlled runtime capture or private TIM/STR assets. The Doldva tick-3888 earliest-completion-gate correction is now closed statically; a runtime witness for the exact frame and SPARKBIT cancellation remains open. Keep exact kill-counter naming and live runtime behavior evidence-qualified. Safe runtime OTZ bound and 0xE100 packet buffer checks remain independently open. Archive offset and texture resolver are unlanded matching C candidates. CHD extraction blocked by container ClientError; no new retail build/oracle claim.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
