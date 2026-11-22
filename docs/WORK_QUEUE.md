@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Seventeen bounded runs completed (2026-11-22):**
+**Eighteen bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -90,10 +90,9 @@ The [stream clock and vehicle pose atlas](research/G3_STREAM_CLOCK_POSE_20261122
 resolves the 0x50-byte STR metadata copy, absolute mission time as twice the
 custom metadata clock, and moving origin/rotation/displacement writers.
 
-**Next specific R1 question:** reconstruct the STR payload/sector contract and
-build a guarded local metadata extractor with synthetic tests. Actual route
-and seconds cadence require privately supplied mission STR data; do not guess.
-Recover proximity response 80035348 and TMD archive loader/offset format.
+The [proximity and shared health atlas](research/G3_PROXIMITY_HEALTH_20261122.md) resolves 80035348, shared 10000-unit health, collision angles, difficulty multipliers, damage counter, alarm and death gate.
+
+**Next specific R1 question:** census the remaining object controllers, classify their common motion/collision/damage paths, and identify candidates for boss architecture. Trace the third direct damage caller 8003AC2C. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
