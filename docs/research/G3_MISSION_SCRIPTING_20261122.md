@@ -182,6 +182,8 @@ negates step if difference negative, stores step and negated
 difference. Word load implies alignment constraint in authored data;
 no invented padding rules. Exact motion flag meaning needs consumers.
 
+**Pass 12 correction and closure:** [retail dispatch atlas](G3_RETAIL_DISPATCH_TABLES_20261122.md) recovers the actual 18-entry opcode and full 256-entry object dispatch tables. Type 60 is the first scripted family, 68 the second, 38 the fragment updater. The opcode -3 handler is game-specific despite the current SsGetNck SDK anchor; adjudication pending. Source-only uncertainty about these table entries is superseded by the independently SHA-1 verified private executable inputs.
+
 ## Next
 
 Recover actual data table entries using a witnessed local extraction
