@@ -148,6 +148,8 @@ hit arbitration, and if +0x2E negative changes +0 to 0x31 and calls
 The shared motion helper thus also serves a hit-participating path;
 do not infer every object reaching it is inherently non-collidable.
 
+**Pass 11 continuation:** [mission scripting atlas](G3_MISSION_SCRIPTING_20261122.md) resolves 80030FF8 as a general spawn constructor, 80030DBC as an encounter scheduler and 80034068 as a variable-width object-local command decoder used with two clocks.
+
 ## Next
 
 The actual general spawn/configuration path is still open.
