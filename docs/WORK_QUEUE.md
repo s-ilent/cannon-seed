@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty bounded runs completed (2026-11-22):**
+**Twenty-one bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -96,7 +96,9 @@ The [object census and composite candidates](research/G3_OBJECT_CENSUS_COMPOSITE
 
 The [Doldva rotating reactor atlas](research/G3_DOLDVA_REACTOR_20261122.md) identifies type 80 through KUUBO_DIED/DOL_SUCS, recovers cylindrical geometry, rotation, hit aggregation/five stages and exclusive tick-3888 success gate.
 
-**Next specific R1 question:** trace type 89 decoder 8003B2FC, five child lifecycle/count writers and final victory/defeat transitions; identify D_800AC164 selector. Type 89 identity provisional. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
+The [SPARKBIT final objective atlas](research/G3_SPARKBIT_FINAL_OBJECTIVE_20261122.md) resolves type 89, five independent targets, specialized countdown script, rotation acceleration, success and timeout result gates.
+
+**Next specific R1 question:** recover D_800AC164 from its writers and four gunner records; distinguish gunner count, difficulty and encounter gates. Follow D_800ABDFC settings and remaining objective bypasses. Type 89 internal identity confirmed by SPARKBIT_HAKAI and VICTORY/DEFEAT sequence. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
