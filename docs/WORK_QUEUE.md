@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Thirty-four bounded runs completed (2026-11-23):**
+**Thirty-five bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -124,7 +124,9 @@ The [spawned attack-object provenance atlas](research/G3_ATTACK_CHILD_PROVENANCE
 
 The [attack-variant continuation](research/G3_ATTACK_VARIANTS_20261123.md) (pass 34) maps method-1 type-0x18 proximity logic and finds a **static zero-initial-lifetime anomaly** in the cfg 0x4A→0x68 constructor (short cfg +0xBE reads the zero halfword immediately before the config pointer table). The damage-capable type-0x18 handler expires this child before first proximity processing unless runtime state/data changes. Alternative cfg 0x74 differs from active type-0x13 cfg 0x76 by only six of 94 halfwords, including a larger possible contact-distance bound; no parent cfg+0x2C selects it among 125 decodable entries. Five additional JP/EU code windows match 411/411 instruction shapes (359 exact).
 
-**Next specific R1 question:** look for mutation of initial `80089D38` JP / `8008A550` EU or any post-allocation writer to type-0x18 child `+0x6C`; determine whether the nominally proximity-damaging cfg 0x4A→0x68 attack can survive its first handler tick. Investigate cfg 0x74 selection through alternate-mode/script or computed dispatch without asserting it is dead. Results caption/art, runtime contact and counter watchpoints remain open. Safe runtime OTZ bounds and 0xE100 packet-buffer checks remain separate. Archive offset and texture resolver are unlanded matching-C candidates. No new retail build/oracle claim.
+The [emitter lifetime follow-up](research/G3_ATTACK_EMITTER_LIFETIMES_20261123.md) (pass 35) resolves the apparent blanket type-0x18 inactivity: method 1 for cfg 0x4A→0x68 reads zero from the short child config's out-of-record +0xBE (expiry on first handler update), whereas **methods 5 and 6** from the authored type-0x70/0x71 controllers construct child cfg 0x60/0x61 using the valid +0x28 field **300**. The latter have distinct proximity thresholds 280/100 and base vehicle damage 20/10, making live contact mechanically possible (not observed). Six short type-0x18 templates and 273/273 JP/EU matching instruction shapes checked (241 exact).
+
+**Next specific R1 question:** establish phase/clock/enable conditions of type-0x70/0x71 method-5/6 emissions and whether their child cfg 0x60/0x61 actually reaches proximity contact during gameplay. Validate method-1 cfg 0x4A→0x68 zero lifetime with a runtime watchpoint; maintain alternative type-0x13 cfg 0x74 as **unassigned**, not universally unused. Results caption/art and global counter watchpoints remain open; safe OTZ/packet-buffer research and matching-C conversion gates remain separate. Do not claim a new retail oracle or live gameplay run.
 
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
