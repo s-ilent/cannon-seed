@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Thirty-five bounded runs completed (2026-11-23):**
+**Thirty-six bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -126,7 +126,9 @@ The [attack-variant continuation](research/G3_ATTACK_VARIANTS_20261123.md) (pass
 
 The [emitter lifetime follow-up](research/G3_ATTACK_EMITTER_LIFETIMES_20261123.md) (pass 35) resolves the apparent blanket type-0x18 inactivity: method 1 for cfg 0x4A→0x68 reads zero from the short child config's out-of-record +0xBE (expiry on first handler update), whereas **methods 5 and 6** from the authored type-0x70/0x71 controllers construct child cfg 0x60/0x61 using the valid +0x28 field **300**. The latter have distinct proximity thresholds 280/100 and base vehicle damage 20/10, making live contact mechanically possible (not observed). Six short type-0x18 templates and 273/273 JP/EU matching instruction shapes checked (241 exact).
 
-**Next specific R1 question:** establish phase/clock/enable conditions of type-0x70/0x71 method-5/6 emissions and whether their child cfg 0x60/0x61 actually reaches proximity contact during gameplay. Validate method-1 cfg 0x4A→0x68 zero lifetime with a runtime watchpoint; maintain alternative type-0x13 cfg 0x74 as **unassigned**, not universally unused. Results caption/art and global counter watchpoints remain open; safe OTZ/packet-buffer research and matching-C conversion gates remain separate. Do not claim a new retail oracle or live gameplay run.
+The [scripted firing-window and RNG atlas](research/G3_ATTACK_FIRING_WINDOWS_20261123.md) (pass 36) decodes **12 authored mode-zero parent encounters** with two section-relative script timestamps each: five cfg 0x41/type 0x70 at tick 1336 operate conditionally before 1792; five cfg 0x51/type 0x71 at 1875 have deadlines 2153–2189; two cfg 0x52/type 0x70 at 1875 finish at 2173/2185. All first enable timestamps predate event spawn (first eligibility upon initialization). Type-0x70 has linked phase-(-1) child enabling its own attack gate; type-0x71 gates attacks directly in phase 1. Shared cooldown uses 6×7 config table and a **16-bit LCG `(5*state+1) mod 65536`**: static interval bounds 21–55 enabled dispatcher calls for scheduled method5, 31–40 for method6, **not measured shots**. JP/EU 12/12 script pairs, 172/172 table/jitter halfwords and 782/782 normalized instructions (685 exact).
+
+**Next specific R1 question:** trace the angular/aiming predicate and parent/child encounter geometry for method-5/6 type-0x18 to determine which *scripted opportunities* can actually create live hazards (rather than counting every timer trigger as a projectile). Recover row/column global-selector semantics for the 6×7 cooldown tables and runtime sampling/interleaving of the deterministic shared RNG. Retain runtime watchpoints for cfg 0x4A→0x68 zero lifetime and the unassigned cfg 0x74 alternate-mode path. Results caption/art, global result counter, safe OTZ/packet research and matching-C/SDK boundaries remain independent; no retail build or runtime contact witness claimed.
 
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
