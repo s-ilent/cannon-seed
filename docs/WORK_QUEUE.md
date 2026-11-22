@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twelve bounded runs completed (2026-11-22):**
+**Thirteen bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -74,10 +74,12 @@ The [retail dispatch atlas](research/G3_RETAIL_DISPATCH_TABLES_20261122.md)
 verifies both tracked private original EXE blobs against committed SHA-1
 oracles, resolves all 256 dispatch slots, 18 opcode entries, both damage
 jump tables, and records the SsGetNck attribution conflict.
+The [mission inventory](research/G3_MISSION_INVENTORY_20261122.md)
+counts 857 authored mode-zero events, 730 descriptors, 23 config IDs,
+and decodes 177 field-qualified dual-clock script streams in both regions.
 
-**Next specific R1 question:** inventory actual mission section and descriptor tables from the
-hash-matched private inputs, validate script alignment and sentinel rules,
-trace third cursor +0x5C and the mission clock writer; then the `D_800ABBE4` model-table builder and the
+**Next specific R1 question:** trace third cursor +0x5C (type 90 and scripted families),
+mission clock writer, mode-nonzero aliased data and type 98; then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
