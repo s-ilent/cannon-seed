@@ -88,4 +88,6 @@ The comparison was computed from the two tracked generated source files. It is *
 
 ## E. Next specific question
 
+> **Pass-33 closure of this specific question:** [attack-child provenance](G3_ATTACK_CHILD_PROVENANCE_20261123.md) establishes the three zero-authored-initial-count runtime types are emitted by the attack dispatcher from type 0x68, 0x81 and SPARKBIT type 0x89 configurations. Their uncredited deaths are now understood as spawned attacks, rather than evidence that routine authored enemy deaths are not credited. The separate display-artwork question remains open.
+
 Determine the **producer/origin and intended gameplay role** of the zero-authored-initial-count but damageable 0x12/0x13/0x14 types, then determine whether the results-screen artwork names the credited event count (or contains only a number). Their origin matters before arguing the count excludes ordinary “enemies.” For a runtime sanity experiment, watch `D_800AC08C`, `D_800AC144`, `parent+0x84` in SPARKBIT and the `3888/4096` gate in Doldva, recording whether all expected success/timeout states can reach the results snapshot. Keep private retail assets out of Git.
