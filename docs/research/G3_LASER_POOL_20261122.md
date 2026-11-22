@@ -99,6 +99,8 @@ for two axes; +0x44 is used separately. The original fixed-point
 representation needs its own review. Caller +0x64 is a back-reference,
 but whether it is cleared after slot release remains unproven.
 
+**Pass 8 continuation:** [gunner and target pool atlas](G3_GUNNER_TARGET_POOL_20261122.md) resolves all four caller arguments to the separate 4×0x8C gunner array, not the 124×0xAC collision participant pool. It also confirms the inspected release path leaves the owner back-reference unchanged.
+
 ## Candidate landing and next step
 
 The reset loop and first-free allocator are reasonable small semantic-C
