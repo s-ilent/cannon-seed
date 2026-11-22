@@ -37,6 +37,9 @@ silently deleting apparent duplicates.
 
 - [G3 movement segment interpreter (2026-11-22)](research/G3_MOVEMENT_SEGMENTS_20261122.md): recovers 24-byte path records, six coordinate/destination modes, fixed-point pursuit, 261 paths/553 segments (all JP/EU equal), and peak-bin type 1D lead. 813/813 normalized instructions. Clock rate unresolved.
 
+- [G3 type 0x1D constructor and active 0x1C controller (pass 15)](research/G3_TYPE1D_CONTROLLER_20261122.md): config 0x66 -> 0x7B, two-phase hit-capable controller and lifecycle transitions.
+- [G3 type 0x1D formations and TMD resource map (pass 16)](research/G3_TYPE1D_FORMATIONS_20261122.md): all 74 events in six waves, one-record heading initialization, conditional fixed-point movement and 307 identical JP/EU model resource rows, including 0x9F -> TMD.DAT index 57. Static only.
+
 ## Fast navigation
 
 ```sh
