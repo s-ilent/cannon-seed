@@ -132,6 +132,18 @@ with links to source/yaml rows, not an unverified global percentage.
 
 ### R3 — Read-only status of the retained naming exceptions
 
+**Delivered 2026-11-22:**
+[the decision brief](research/R3_SHARED_NAME_DECISION_BRIEF_20261122.md) —
+the 13 cross-target names decompose into travelling definition names
+(Class A, 15 by-construction mismatches) and the mainmenu pair-family
+(Class B, 16 rows + the `func_80030990` sces asm third holder); four options
+with costs, a four-rule collision policy, unchanged parked/laned
+exceptions. **Awaiting the owner's ratification; no renames made.**
+Membership re-checks stay cheap:
+`python3 tools/audit_c_names.py --cross --adjudicate`.
+
+<details><summary>Original task text (retired)</summary>
+
 **Target:** the last recorded 13 cross-target shared-name cases,
 mainmenu_jp's 20 reserved name/placement rows, and the known parked
 memclr/INTR and `func_800629A0`/`func_80036CFC` exceptions.
@@ -144,6 +156,8 @@ or automatically "fix" intentional shared-name mismatches.**
 **Deliverable:** a decision brief with options for shared canonical name
 vs region-local alias, with proposed collision policy and complete impact
 surface. This can be worked on without the retail baseline.
+
+</details>
 
 ## Ready only with full retail oracle
 
