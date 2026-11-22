@@ -35,6 +35,8 @@ silently deleting apparent duplicates.
 
 - [G3 mission inventory (2026-11-22)](research/G3_MISSION_INVENTORY_20261122.md): 857 authored mode-zero events, 730 descriptors, 23 config indices, 177 field-qualified scripts and 243 active commands; all corresponding event metadata and script contents agree between verified regional originals. Mode-nonzero aliased data and default type 98 remain open.
 
+- [G3 movement segment interpreter (2026-11-22)](research/G3_MOVEMENT_SEGMENTS_20261122.md): recovers 24-byte path records, six coordinate/destination modes, fixed-point pursuit, 261 paths/553 segments (all JP/EU equal), and peak-bin type 1D lead. 813/813 normalized instructions. Clock rate unresolved.
+
 ## Fast navigation
 
 ```sh
