@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Thirty-three bounded runs completed (2026-11-23):**
+**Thirty-four bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -122,7 +122,10 @@ The [terminal-event exclusion atlas](research/G3_TERMINAL_COUNTER_EXCLUSIONS_202
 
 The [spawned attack-object provenance atlas](research/G3_ATTACK_CHILD_PROVENANCE_20261123.md) (pass 33) traces zero-initial-authored types 0x12, 0x13, 0x14 to the shared 11-way enemy attack dispatcher: type 0x68 cfg 0x20/0x26 creates cfg 0x79/type 0x12; type 0x81 cfg 0x4B creates cfg 0x76/type 0x13; SPARKBIT type 0x89 cfg 0x48 creates cfg 0x75/type 0x14 through its child attacks. Vehicle-contact damage uses the shared health system, while killing these attack objects does not increment the results tally. Type 0x14 uses projected sprites. All nine selected JP/EU configs match in key fields and 262/262 code instruction shapes agree; type-0x13 variant cfg 0x74 remains unresolved.
 
-**Next specific R1 question:** resolve whether orphan cfg 0x74 (second type-0x13 attack template) can be selected in alternate modes or through indirect script paths, and map the type-0x18 companion from type-0x81 cfg 0x4A. Identify the results-screen counter caption and four-gunner column artwork with a runtime capture/private asset inspection, or keep the semantics evidence-qualified. A controlled watchpoint run should distinguish spawned attack deaths, qualifying vehicle damage and credited parent/objective deaths; live runtime verification remains open. Safe runtime OTZ bound and 0xE100 packet buffer checks remain independently open. Archive offset and texture resolver are unlanded matching C candidates. CHD extraction blocked by container ClientError; no new retail build/oracle claim.
+The [attack-variant continuation](research/G3_ATTACK_VARIANTS_20261123.md) (pass 34) maps method-1 type-0x18 proximity logic and finds a **static zero-initial-lifetime anomaly** in the cfg 0x4A→0x68 constructor (short cfg +0xBE reads the zero halfword immediately before the config pointer table). The damage-capable type-0x18 handler expires this child before first proximity processing unless runtime state/data changes. Alternative cfg 0x74 differs from active type-0x13 cfg 0x76 by only six of 94 halfwords, including a larger possible contact-distance bound; no parent cfg+0x2C selects it among 125 decodable entries. Five additional JP/EU code windows match 411/411 instruction shapes (359 exact).
+
+**Next specific R1 question:** look for mutation of initial `80089D38` JP / `8008A550` EU or any post-allocation writer to type-0x18 child `+0x6C`; determine whether the nominally proximity-damaging cfg 0x4A→0x68 attack can survive its first handler tick. Investigate cfg 0x74 selection through alternate-mode/script or computed dispatch without asserting it is dead. Results caption/art, runtime contact and counter watchpoints remain open. Safe runtime OTZ bounds and 0xE100 packet-buffer checks remain separate. Archive offset and texture resolver are unlanded matching-C candidates. No new retail build/oracle claim.
+
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
