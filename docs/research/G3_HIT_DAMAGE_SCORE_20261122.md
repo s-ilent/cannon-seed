@@ -141,6 +141,8 @@ The following 80037094-family path decrements +0x6C and +0x6E,
 uses a 74-slot allocator at 80037148, and has a target+0 clear at
 80037238; exact phase dispatch and effect meanings still need tracing.
 
+**Pass 10 continuation:** [fragment effects atlas](G3_FRAGMENT_EFFECTS_20261122.md) identifies 8003D9FC and D_8008A220 as a specialized destruction-fragment family, not the general enemy constructor. The general spawn path remains open.
+
 ## Next
 
 Decode the two damage jump tables from available non-copyrighted
