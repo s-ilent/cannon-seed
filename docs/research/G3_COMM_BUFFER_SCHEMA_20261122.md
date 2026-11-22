@@ -43,6 +43,8 @@ consumer (same frame):
   └─ draw stages func_8002E9F4 / func_8002EC7C (previous atlas)
 ```
 
+**Pass 7 correction and continuation:** see [the persistent laser pool atlas](G3_LASER_POOL_20261122.md). Producer position fields are signed halfwords, not words; endpoint calculations are relative to a saved origin, and the final scan emits even after clearing the active word. The four direction terms are not established as independent velocity components.
+
 ## 1. Pool lifecycle (verified)
 
 | Element | Address (JP) | Evidence |
