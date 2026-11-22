@@ -50,6 +50,8 @@ silently deleting apparent duplicates.
 
 - [G3 SPARKBIT final objective (pass 21)](research/G3_SPARKBIT_FINAL_OBJECTIVE_20261122.md): identifies type 89 through named final sequence, five independent rotating targets, countdown command stream, adaptive rotation, damage tables and victory/timeout/health-failure split; 1586/1586 corresponding instructions, 552 matching config halfwords.
 
+- [G3 effective player count and scaling (pass 22)](research/G3_PLAYER_COUNT_SCALING_20261122.md): traces local entry/removal, four gunner records versus explicit 1..6 effective count override, fixed-memory accessor, encounter eligibility counts and independent damage difficulty; 513 corresponding instruction shapes.
+
 ## Fast navigation
 
 ```sh
