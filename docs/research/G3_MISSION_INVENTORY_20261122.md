@@ -136,6 +136,8 @@ also serves as config index 50 hex (runtime type 90), so trace
 runtime setup, table mutation or deliberate overlay semantics.
 No independent runtime witness yet.
 
+**Pass 14 continuation:** [movement atlas](G3_MOVEMENT_SEGMENTS_20261122.md) resolves 261 movement streams and 553 segments for types 60/68, plus the precise type composition of the peak spawn bin. The third pointer is a movement stream for these families, not universally for every object type.
+
 ## 5. Next
 
 Trace third stream and +5C consumers (especially type 90 and types
