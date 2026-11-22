@@ -33,6 +33,8 @@ silently deleting apparent duplicates.
 
 - [G3 retail dispatch tables (2026-11-22)](research/G3_RETAIL_DISPATCH_TABLES_20261122.md): independently SHA-1 verifies both already-tracked private original executable blobs; recovers 256 object dispatch slots, 18 opcode entries and both five-entry damage tables (284/284 region-normalized pointers). Identifies concrete SsGetNck SDK extent/provenance conflict. Static verified-input witness only; no binary/source changes.
 
+- [G3 mission inventory (2026-11-22)](research/G3_MISSION_INVENTORY_20261122.md): 857 authored mode-zero events, 730 descriptors, 23 config indices, 177 field-qualified scripts and 243 active commands; all corresponding event metadata and script contents agree between verified regional originals. Mode-nonzero aliased data and default type 98 remain open.
+
 ## Fast navigation
 
 ```sh
