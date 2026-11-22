@@ -60,6 +60,7 @@ silently deleting apparent duplicates.
 - [G3 shared resource resolvers (pass 26)](research/G3_SHARED_RESOURCE_RESOLVERS_20261122.md): complete four-target leaf boundaries, 89 relocation-equivalent instructions, logical and archive-index texture lookup, asymmetric miss outputs, and ranked matching-C candidates.
 - [G3 resource rendering metadata (pass 27)](research/G3_RESOURCE_RENDER_METADATA_20261122.md): proves model attributes, no-normal-lighting triangle dispatch, OT depth shift and direct sprite priority, plus four-target field-flow comparison.
 - [G3 reverse OT and video VRAM layering (pass 28)](research/G3_OT_VIDEO_LAYERING_20261123.md): four-target 14-bit OT allocation, high-to-low DrawOTag order, sprite priority groups, and shared 52-instruction video strip uploader / DrawSync before scene drawing.
+- [G3 GPU clears and ranking sprite tiers (pass 29)](research/G3_GPU_CLEAR_RANKING_LAYERS_20261123.md): direct ClearImage/GsSortClear inventory across four EXEs, distinct two-buffer black-image render loop, rank-mode bitmask tiles at priority 14, decimal digits at priority 12, and three paired four-target structural windows.
 
 ## Fast navigation
 
