@@ -46,6 +46,8 @@ silently deleting apparent duplicates.
 
 - [G3 object controller census and composite-object candidates (pass 19)](research/G3_OBJECT_CENSUS_COMPOSITES_20261122.md): maps all 29 nondefault dispatch entries to observed behavior, rewalks 857 authored events, finds types 80/88/89 composite hierarchies, resolves third direct damage caller and links type 89 to mission state; 576 corresponding instructions and 156 matching child-table data halfwords. Boss identities provisional.
 
+- [G3 Doldva rotating reactor (pass 20)](research/G3_DOLDVA_REACTOR_20261122.md): proves type 80 identity via KUUBO_DIED/DOL_SUCS, reconstructs cylindrical geometry, 384-unit roll, five cumulative damage stages, timed success gate and regional audio difference. 887/887 corresponding instruction shapes.
+
 ## Fast navigation
 
 ```sh
