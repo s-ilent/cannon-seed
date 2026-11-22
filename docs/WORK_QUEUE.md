@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-eight bounded runs completed (2026-11-23):**
+**Twenty-nine bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -112,7 +112,9 @@ The [resource render metadata atlas](research/G3_RESOURCE_RENDER_METADATA_202611
 
 The [OT/video layering atlas](research/G3_OT_VIDEO_LAYERING_20261123.md) proves 14-bit / 16384-entry double-buffered reverse ordering tables in all four scenario EXEs, two nonoverlapping OT tag arrays per target, five authored sprite-priority bands, explicit ClearOTagR/DrawOTag backend, and the four-target 52-instruction LoadImage/DrawSync VRAM video strip uploader immediately preceding GsDrawOt. Video is not an OT primitive.
 
-**Next specific R1 question:** inspect full-frame GPU clear/fill packet insertion and texture priority 12/14 identity/producers, with special attention to video-background occlusion. Assess real OTZ range for shift-zero models and packet workbuffer high-water mark through runtime/provisioned STR samples when available. Archive offset and texture lookup remain guarded matching candidates, not authorized source landings. CHD extraction currently blocked again by container ClientError; no retail binary-match claim.
+The [GPU clear and ranking-layer atlas](research/G3_GPU_CLEAR_RANKING_LAYERS_20261123.md) establishes that normal video-overlaid game frames do not call ClearImage/GsSortClear directly, while a separate black-background static-image loop uses ClearImage(512×480), GsSortClear at OT bucket 16383, and a bucket-0 sprite. Texture priority-12 IDs 0x1FB–0x204 are ranking decimal digits and priority-14 IDs 0x3FA–0x3FD are four ranking indicator resources, with full four-executable code-shape corroboration.
+
+**Next specific R1 question:** trace ranking-mode display/score state producers (D_80170394, D_800AC394, D_800ABD9C) and classify what its four columns signify; separately assess OTZ bounds for shift-zero models and 0xE100 packet work-buffer high-water using safe runtime instrumentation when possible. The archive offset and texture resolver remain unlanded matching C candidates. CHD extraction is still blocked by container ClientError. No new retail-image build claim.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
