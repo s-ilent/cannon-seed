@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Thirty bounded runs completed (2026-11-23):**
+**Thirty-one bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -116,7 +116,7 @@ The [GPU clear and ranking-layer atlas](research/G3_GPU_CLEAR_RANKING_LAYERS_202
 
 The [four-gunner ranking and results atlas](research/G3_GUNNER_RESULTS_RANKING_20261123.md) proves per-gunner score +0x34 feeds a stable descending score sort, competition ranks, and four 16-byte result records, with formatted six-digit score glyphs and two distinct global metric/counter outputs. Six code windows (301 instructions) structurally match in four retail game executables. The second numeric counter is a snapshot of a global object transition tally; the percentage-like metric tracks a 10,000-scaled mission condition with adaptive smoothing.
 
-**Next specific R1 question:** recover participation-mask lifecycles for D_800AC17C and D_800AC2F4, and classify all five terminal-transition increments to D_800AC08C before assigning an exact in-game counter name. Safe runtime OTZ bound and 0xE100 packet buffer checks remain independently open. Archive offset and texture resolver are unlanded matching C candidates. CHD extraction blocked by container ClientError; no new retail build/oracle claim.
+The [participation masks and credited terminal-counter atlas](research/G3_GUNNER_PARTICIPATION_TERMINAL_COUNTER_20261123.md) (pass 31) establishes that the live 32-bit four-gunner participation mask is snapshotted to the 16-bit results-column mask, traces its join/reset/score eligibility, and classifies the five global counter increments as three ordinary fatal-transition sites (one shared across three types) plus Doldva and SPARKBIT objective success. Eight JP/EU source windows agree in all 352 opcode/register shapes.\n\n**Next specific R1 question:** verify the displayed text/artwork for the snapshotted credited terminal-event count and participation columns, then test uncounted deaths/timeouts versus the five credited terminal branches. Keep exact kill-counter naming and live runtime behavior evidence-qualified. Safe runtime OTZ bound and 0xE100 packet buffer checks remain independently open. Archive offset and texture resolver are unlanded matching C candidates. CHD extraction blocked by container ClientError; no new retail build/oracle claim.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
