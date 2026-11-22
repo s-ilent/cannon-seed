@@ -40,6 +40,8 @@ silently deleting apparent duplicates.
 - [G3 type 0x1D constructor and active 0x1C controller (pass 15)](research/G3_TYPE1D_CONTROLLER_20261122.md): config 0x66 -> 0x7B, two-phase hit-capable controller and lifecycle transitions.
 - [G3 type 0x1D formations and TMD resource map (pass 16)](research/G3_TYPE1D_FORMATIONS_20261122.md): all 74 events in six waves, one-record heading initialization, conditional fixed-point movement and 307 identical JP/EU model resource rows, including 0x9F -> TMD.DAT index 57. Static only.
 
+- [G3 stream-synchronized mission clock and world origin (pass 17)](research/G3_STREAM_CLOCK_POSE_20261122.md): recovers 0x50-byte custom STR metadata extraction, absolute tick = twice metadata clock, streamed pose and displacement, late scale change and 418 JP/EU corresponding instructions. Actual movie payload and seconds cadence remain unverified.
+
 ## Fast navigation
 
 ```sh
