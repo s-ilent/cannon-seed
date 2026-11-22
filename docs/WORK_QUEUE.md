@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Thirteen bounded runs completed (2026-11-22):**
+**Fourteen bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -77,9 +77,13 @@ jump tables, and records the SsGetNck attribution conflict.
 The [mission inventory](research/G3_MISSION_INVENTORY_20261122.md)
 counts 857 authored mode-zero events, 730 descriptors, 23 config IDs,
 and decodes 177 field-qualified dual-clock script streams in both regions.
+The [movement atlas](research/G3_MOVEMENT_SEGMENTS_20261122.md)
+resolves 24-byte records, six destination modes and 261 paths/553 segments.
+The largest spawn bin contains 74 type-1D events; follow its initializer
+and continuation to investigate the possible atmosphere wave.
 
-**Next specific R1 question:** trace third cursor +0x5C (type 90 and scripted families),
-mission clock writer, mode-nonzero aliased data and type 98; then the `D_800ABBE4` model-table builder and the
+**Next specific R1 question:** trace type 1D and config 66, determine mission clock writer,
+mode-nonzero aliased data and type 98; then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
