@@ -1,0 +1,34 @@
+# G3 four-target resource resolver atlas
+
+R1 pass 26, 2026-11-22. Input HEAD c035f64cbcf60534d6461e6cf9cccc0246349e6c (PR #10). Continues [pass 25](G3_RESOURCE_ARCHIVES_20261122.md). Source/static original EXE comparison only; no new full-image matching build, C/YAML change, or raw asset publication.
+
+## Complete leaf boundaries and shared implementation
+
+Read tracked original EXEs through private repository file API (base64, decoded locally in analysis), same four blob identities listed in pass 25. Skip 0x800-byte PS-X EXE header, index 32-bit little-endian words relative to load VA 80020000. Correct pass 25's resolver *references* to full function entries (LUI is preceding instruction). Entries below end exclusively at start + size, including return delay slot.
+
+| Leaf | Bytes | Dragoon JP | Dragoon EU | Gourb JP | Gourb EU |
+|---|---:|---|---|---|---|
+| Model logical ID | 0x6C | 8002F368 | 8002F138 | 80030010 | 8002FD98 |
+| Texture logical ID | 0x54 | 8002F3D4 | 8002F1A4 | 8003007C | 8002FE04 |
+| Texture archive index | 0x60 | 8002F428 | 8002F1F8 | 800300D0 | 8002FE58 |
+| Archive offset | 0x44 | 80024910 | 80024970 | 800252D4 | 800252EC |
+
+Exact words vs Dragoon JP per function (EU/Gourb JP/Gourb EU): 25/24/24 of 27; 19/18/18 of 21; 22/21/21 of 24; 16/16/16 of 17. All remaining differences are the relocated J destination within each leaf and LUI/LW addressing its table-pointer global. No other words change (82/79/79 exact of 89; all 89 relocation-equivalent). Initial discovery scans 80022400..80048000 at 4-byte alignment, comparing opcode/register shape with J/JAL destination and LUI/ADDIU/load/store immediates masked; unique best hits for each bounded window. Final audit compares complete raw words and checks every delta rather than treating masked similarity as equivalence. 356 bytes shared, 1424 target-instance bytes; not newly matched C.
+
+YAML owners for first three, in same target order: raw 0xAADC func_8002A2DC, 0xAACC func_8002A2CC, 0xB784 func_8002AF84, 0xB72C func_8002AF2C (all asm). Archive offset owners: raw 0x32FC func_80022AFC, 0x335C func_80022B5C, 0x58FC func_800250FC, 0x58FC func_800250FC (all asm). Raw offset = VA - 80020000 + 0x800. See [JP YAML](../../config/splat.g3_jp.yaml), [EU YAML](../../config/splat.g3_eu.yaml), [Gourb JP YAML](../../config/splat.g3org_jp.yaml), [Gourb EU YAML](../../config/splat.g3org_eu.yaml). JP listings [resource leaves](../../asm/g3_jp/nonmatchings/func_8002A2DC.s) and [archive](../../asm/g3_jp/nonmatchings/func_80022AFC.s). Splat glabels can be interior basic blocks, not reliable function starts. No start anchors in the four target sections of [SDK anchors](../../config/sdk_anchors.txt); other executables' coincident VAs must not be confused with these. Positive game ownership evidence is the scenario-specific table layouts and direct renderer/loader callers.
+
+## Resource resolution ABI (JP)
+
+- Model: table pointer global 800ABBE4; 20-byte records, ID at +0, index +4, metadata +8/+0C, initialized model pointer +10 hex. First matching logical ID wins; sentinel -1 stops iteration. Returns initialized pointer in v0 and writes row+8 to *a1, row+0C to *a2. Missing ID returns -1 and writes zero to *a1; *a2 receives incoming t3 (not initialized on missing path in this function). Do NOT invent a deterministic second output on failure. Callers 8002E38C (ID from descriptor halfword +8, sign-extended) and 8002E508 check -1 before success path. Model with negative archive index can also return initialized -1 even when logical ID exists. Both callers present at corresponding offsets in all four executables.
+- Texture ID: global 800ABBEC, records stride 52, sentinel ID=-1. Match row+0 to a0, store row+0C to *a1, return row+0x10 (36-byte descriptor). Miss returns -1 and leaves *a1 untouched. First occurrence wins even for duplicate ID 3A0. Does not reject disabled descriptor flags here. JP callers 8002DC68, 8002E7A4, 8002E8E8, 8002EF98, 8002F0BC, 8002F2E8, 8002F720. FOBJ witness 8002E8E8 passes signed halfword resource key and stack out pointer; checks -1 then copies descriptor into staged sprite (see [FOBJ atlas](G3_FOBJ_SPRITE_PATH_20261122.md)). 8002EF98 passes literal 0x700. Direct JAL scan over 80022400..80048000 yields seven JP-region and six EU-region sites in each scenario; no claim of absent indirect callers.
+- Texture index: same table/sentinel, compares row+4 instead of row+0, outputs and miss behavior identical. Direct JAL scan over same range finds zero sites in all four binaries. It is a retained shared leaf, not evidence for an active archive-index caller. First matching row wins when texture indices alias.
+- Archive offset: index <0 returns -1; otherwise load signed s32 offset from base+4*index, truncate offset/4 toward zero, multiply by four and add base (gp+54). 17 words; only local J destination varies. Five direct JAL sites per target in measured range. JP 80024AE0, 800250B8, 8002DE7C, 8002DF68, 80030050. Not an SDK helper.
+
+## Matching campaign ranking
+
+1. Archive offset leaf: 68 bytes; only local branch address changes, same gp-relative access and signed division idiom. Candidate C must preserve signed truncation, -1 sentinel, zero offset and unchecked positive index. Do not substitute arithmetic right shift for signed division. Test compiler output for the exact branch delay slots and small-data access. No checked/sanitized rewrite in a matching lane.
+2. Texture logical-ID lookup: 84 bytes; table-specific but same layout/first-match behavior across all four, no calls. Use explicit 52-byte record stride and 36-byte initialized sprite descriptor; do not make output unconditional on miss or filter flags. Texture index sibling is similar but no observed direct use; lower gameplay priority. Model lookup is deferred because the missing-path t3 output is not defensible as portable semantic C without more ABI/compiler evidence.
+
+Both first candidates currently interior to large asm rows. A true landing requires exact entry/exit carve, target-specific global addressing, all extant basic-block labels/xrefs preserved, guarded GCC 2.6.3 toolchain and baseline witness. Verify per-target full-image SHA-1; if common source/header resolver changes, verify all eight. No new compiler proof in pass 26. Current container starts and exposes both private CHDs, but no chdman/libchdr found in executable/library search, and no direct Git network access; local coverage/name audit was not run. This pass used pinned YAML/anchors and original EXEs rather than claiming fresh local census.
+
+Next: investigate renderer-side descriptor output metadata consumers and one more game-owned shared leaf family, or establish a real guarded compiler witness for archive offset/texture lookup before source conversion. Actual CHD extraction remains a separate task.
