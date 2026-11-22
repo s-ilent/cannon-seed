@@ -72,7 +72,7 @@ Entry windows scanned from each entry until first linear JR RA or 0x250 bytes, w
 | 89 | 8003ADB8 | 1 | composite parent and children, global end-state flag |
 | 90 | 80031628 | 1 | diagnostic/80034E0C lead, command reader pending |
 
-Among 29 nondefault slots 14 have authored initial type counts; one additional authored type 98 maps to default. Zero authored count does not imply unused; 1C/31/38 are proven internal transitions/effects.
+Among 29 nondefault slots 15 have authored initial type counts; one additional authored type 98 maps to default. Zero authored count does not imply unused; 1C/31/38 are proven internal transitions/effects.
 
 ## 3. Type 80: large composite controller, Doldva candidate
 
