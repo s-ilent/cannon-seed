@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-nine bounded runs completed (2026-11-23):**
+**Thirty bounded runs completed (2026-11-23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -114,7 +114,9 @@ The [OT/video layering atlas](research/G3_OT_VIDEO_LAYERING_20261123.md) proves 
 
 The [GPU clear and ranking-layer atlas](research/G3_GPU_CLEAR_RANKING_LAYERS_20261123.md) establishes that normal video-overlaid game frames do not call ClearImage/GsSortClear directly, while a separate black-background static-image loop uses ClearImage(512×480), GsSortClear at OT bucket 16383, and a bucket-0 sprite. Texture priority-12 IDs 0x1FB–0x204 are ranking decimal digits and priority-14 IDs 0x3FA–0x3FD are four ranking indicator resources, with full four-executable code-shape corroboration.
 
-**Next specific R1 question:** trace ranking-mode display/score state producers (D_80170394, D_800AC394, D_800ABD9C) and classify what its four columns signify; separately assess OTZ bounds for shift-zero models and 0xE100 packet work-buffer high-water using safe runtime instrumentation when possible. The archive offset and texture resolver remain unlanded matching C candidates. CHD extraction is still blocked by container ClientError. No new retail-image build claim.
+The [four-gunner ranking and results atlas](research/G3_GUNNER_RESULTS_RANKING_20261123.md) proves per-gunner score +0x34 feeds a stable descending score sort, competition ranks, and four 16-byte result records, with formatted six-digit score glyphs and two distinct global metric/counter outputs. Six code windows (301 instructions) structurally match in four retail game executables. The second numeric counter is a snapshot of a global object transition tally; the percentage-like metric tracks a 10,000-scaled mission condition with adaptive smoothing.
+
+**Next specific R1 question:** recover participation-mask lifecycles for D_800AC17C and D_800AC2F4, and classify all five terminal-transition increments to D_800AC08C before assigning an exact in-game counter name. Safe runtime OTZ bound and 0xE100 packet buffer checks remain independently open. Archive offset and texture resolver are unlanded matching C candidates. CHD extraction blocked by container ClientError; no new retail build/oracle claim.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
