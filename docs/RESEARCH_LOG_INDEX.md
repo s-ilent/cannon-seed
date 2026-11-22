@@ -52,6 +52,8 @@ silently deleting apparent duplicates.
 
 - [G3 effective player count and scaling (pass 22)](research/G3_PLAYER_COUNT_SCALING_20261122.md): traces local entry/removal, four gunner records versus explicit 1..6 effective count override, fixed-memory accessor, encounter eligibility counts and independent damage difficulty; 513 corresponding instruction shapes.
 
+- [G3 gameinfo and play recording (pass 23)](research/G3_GAMEINFO_PLAYREC_20261122.md): recovers named 18-index settings API, two banks, effective-player override initialized disabled, LEVEL/TUNE_LEVE difficulty mapping, MUTEKI_MODE, 5311 sample replay buffer and independent mission-mode selectors; 924 corresponding instruction shapes.
+
 ## Fast navigation
 
 ```sh
