@@ -140,6 +140,8 @@ rules are not established. Do not treat the pointer as an owning smart
 reference or assume exclusivity (the same owner can attempt multiple
 allocations). No exhaustive cross-file pointer-use claim.
 
+**Pass 9 continuation:** [hit arbitration, damage and score](G3_HIT_DAMAGE_SCORE_20261122.md) traces hit-mask consumers, proves the four-gunner cap in multiple systems, and identifies durability and score storage. Network limits remain unknown.
+
 ## Next
 
 Follow target+2A consumers and target creation/teardown, especially
