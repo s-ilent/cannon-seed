@@ -749,3 +749,86 @@ stream steppers `D_800ABE54` (8-byte rows) and `D_800AC244` in the walk entry.
 projected — the 0x6C/0x7C record build from the 0x18 request, which closes
 the request→render-surface chain end to end), and/or the PCSX-Redux trace
 (§10/§13, the only remaining §6 hypothesis).
+
+## 16. Pass 11 — the consumer constructors: the 0x18 request → 0x6C/0x7C record build
+
+Reads from the witnessed retail `baselines/g3_jp.bin` (same mapping as §15).
+The dispatch slots of §15.3 decode as follows (`desc` = the 0x18 request
+record, `rec` = the 0x6C/0x7C record cursor; the returned value is −1 on
+success, 0 on lookup failure — the consumer drops zero-return records, the
+pass-6 convention re-confirmed at every constructor).
+
+### 16.1 World constructors (a1 = the D_80138DB4 cursor)
+
+- **case 0 — `func_8002E184`**: kind → `rec+0x0`; the position words
+  `lw(desc+0x4/0x8/0xC)` are **camera-relative** — each is reduced by the
+  camera anchor `D_8016AC18/1C/20` before `func_8002E4B8(rec, resid,
+  relX, relY, relZ, lhu(desc+0x10), lhu(desc+0x12), lhu(desc+0x14))`. The
+  case-0/kind-0x20 producers therefore emit positions in CAMERA SPACE.
+- **case 1 — `func_8002E20C`**: the absolute variant — the position is the
+  three **upper halfwords** `lh(desc+0x6/0xA/0xE)` of the same words
+  (16-bit absolute coordinates), no anchor subtraction.
+- **case 3 — `func_8002E270`**: the halfword coordinates
+  `lh(desc+0x6/0xA/0xE)` go through **`func_800326A8`** (a three-word
+  transform of the local triple) before the shared builder.
+- **case 0xE — `func_8002E318` (the laser descriptor constructor)**: the
+  position words go through `func_800326A8`; the resource id is
+  `lhu(desc+0x2) + 8` (the pass-6 laser-id fact) through
+  `func_8002F368`; a model header is copied into `rec+0x14` and mapped at
+  `rec+0x4` (`func_8004F12C`/`func_80051BE4`), `rec+0x8 = rec+0x14` (the
+  coordinate pointer), `rec+0x64 =` the resource pointer; the three angle
+  halfwords round `>>4` (bgez + 15) and feed a rotation set
+  (`func_80047DA0`/`func_8002F534`/`func_8004A1B0` with the `0x4000/0x4000/
+  0x2000` scale triple); `rec+0x2C/0x30/0x34` = the transformed position
+  doubled with Y negated; **`rec+0x0 = 3` forced** (the pass-6 note), the
+  resource word → `rec+0x4`.
+
+### 16.2 Projected constructors (a1 = the D_8013F9B4 cursor)
+
+- **case 4 — `func_8002E640`**: camera-relative words minus the anchor, no
+  angle halfwords → `func_8002E770`.
+- **case 5 — `func_8002E6A8`**: absolute halfword coordinates →
+  `func_8002E770`.
+- **case 7 — `func_8002E6EC`**: halfword coordinates through
+  `func_800326A8` → `func_8002E770`.
+
+### 16.3 The shared builders
+
+- **`func_8002E4B8(rec, resid, X, Y, Z, a0, a1, a2)`** — world: resource
+  lookup `func_8002F368(resid, out0, out1)`; −1 → return 0 (drop). Copy the
+  model header to `rec+0x14`, map at `rec+0x4` (`func_8004F12C`/
+  `func_80051BE4`), `rec+0x8 = rec+0x14`, `rec+0x64 =` resource; the three
+  angle halfwords round `>>4`; **the third angle gets a +0x8000 half-turn
+  bias** before the rotation set; Z lands via the stack.
+- **`func_8002E770(rec, resid, X, Y, Z)`** — projected: resource lookup
+  **`func_8002F3D4`** (a different table — see §16.4); −1 → return 0;
+  **AND `rec kind == 7` → return 0 even on a successful lookup** — kind 7 is
+  a dead end end-to-end (the jump table still routes it, the builder
+  rejects it). Build: header copy to `rec+0x2C` (`func_8004F12C`),
+  `rec+0x44/0x48/0x4C = 0`, sprite-style build from the resource words into
+  `rec+0x4..`.
+
+### 16.4 The two resource lookups — the §6 population question sharpens
+
+- **`func_8002F368(id, out0, out1)`** — the **world/TMD lookup**: walks rows
+  of 0x14 bytes whose head pointer is **`lw(D_800ABBE4)`** (the pass-7 model
+  table pointer!); row `+0x0` = id (−1 sentinel terminates), match reads
+  `+0x8 → out0`, `+0xC → out1`, `+0x10 →` return. This is a THIRD accessor
+  beyond the unreached setter/mapper walks of §5/§10 — and it is on the
+  **per-frame consumer path**: every world constructor calls it. Since
+  `D_800ABBE4` image-initializes to 0 (pass 8) and the game demonstrably
+  renders, **the table must be populated at run time** — the strongest
+  constraint yet on the remaining §6 hypothesis (the PCSX-Redux trace).
+- **`func_8002F3D4(id, out0)`** — the **projected/sprite lookup**: walks rows
+  of 0x34 bytes whose head pointer is **`lw(D_800ABBEC)`** (the pass-7
+  second table); row `+0x0` = id (−1 sentinel), match reads `+0xC → out0`
+  and returns row `+0x10` as the base. Same runtime-population constraint.
+
+**Pass-11 verdict:** the request→render-surface chain is closed end to end —
+producer core record format (§15.1) → consumer `kind & 0xF` dispatch
+(§15.3) → per-case constructor semantics (this section) → shared builders →
+the two resource tables whose runtime population is the last open question.
+**Next read (R1):** the PCSX-Redux trace on `0x8002DE2C`/`D_800ABBE4`/
+`D_800ABBEC` per RUNTIME.md — now with the sharp question "what writes the
+two table head pointers at runtime"; optionally `func_800326A8` (the
+constructor transform) to label the case-3/7 coordinate space.

@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Ten bounded runs completed (2026-11-22/23):**
+**Eleven bounded runs completed (2026-11-22/23):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -69,28 +69,20 @@ and banking the definition-chain step, the 0x31 type morph, the laser-contact
 resource link via `+0x2A`, the camera-anchor triple and the EU model table
 `D_800AC428`.
 
-**Next specific R1 question:** the PCSX-Redux trace on `0x8002DE2C` /
-`D_800ABBE4` per RUNTIME.md — the only remaining population hypothesis is
-runtime-computed control flow (`jalr` through a register / a pointer built
-at run time). The handler map is now complete for every live type:
-pass 9 read the 0x31 emitter body and pass 10 (atlas §15) closed the
-spawn-request system end to end — the 16 wrapper thunks + two live cores
-(`func_80031CFC` world-family / `func_80031F60` projected-family, record
-formats banked incl. the producer-side proof of the 0x1C0→0x1C2 model-table
-fact), the consumer `kind & 0xF` jump table at `D_80020AF0` (world
-constructors for kinds 0x0/0x1/0x3/0x20/0x21, projected for 0x4/0x5, drop
-slots for the rest, one garbage slot), the corrected type map (types
-0x15/0x1A/0x1E/0x21/0x2A/0x36/0x47 are the kill stub — supersedes pass 6's
-"gameplay handlers" note), the four remaining bodies (0x30 moving emitter,
-0x29 timed burst with the reverse allocator + child 0x31 emitter, 0x13 the
-wander body with the mod-3 resource twist, 0x14 the looping emitter whose
-phase wraps by the modulus) and the pass-9 argument-order correction
-(`func_80037E0C(def_source, init_target)`); EU corroborated (kill stub
-byte-identical, all gameplay handlers at a uniform −0x398 block shift).
-The natural next read is the consumer constructors themselves
-(`func_8002E184/2E20C/2E270/2E318` world, `func_8002E640/2E6A8/2E6EC`
-projected — the 0x18 request → 0x6C/0x7C record build, closing the
-request→render-surface chain). The render arrays are
+**Next specific R1 question:** the PCSX-Redux trace per RUNTIME.md — pass 11
+(atlas §16) closed the request→render-surface chain end to end: the consumer
+constructors decode per case (case 0/4 camera-relative words minus the
+D_8016AC18/1C/20 anchor, case 1/5 absolute halfword coordinates, case 3/7
+halfwords through the `func_800326A8` transform, case 0xE the laser
+constructor with id+8 and the forced type-3 word), the shared builders
+`func_8002E4B8` (world) / `func_8002E770` (projected, which hard-rejects
+kind 7 — dead end-to-end), and the two resource lookups
+`func_8002F368` (world/TMD; head = `lw(D_800ABBE4)`, 0x14-byte rows) and
+`func_8002F3D4` (projected/sprite; head = `lw(D_800ABBEC)`, 0x34-byte rows).
+Since both tables image-initialize to 0 and the game renders, the tables
+MUST be populated at run time — the sharp PCSX-Redux question is now "what
+writes the two table head pointers at runtime"; optionally `func_800326A8`
+to label the case-3/7 coordinate space. The render arrays are
 proven frame-local staging; do not convert builders before a producer-side
 landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
