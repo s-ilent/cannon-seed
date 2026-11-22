@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-five bounded runs completed (2026-11-22):**
+**Twenty-six bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -106,7 +106,9 @@ The [alternate-mode and placeholder atlas](research/G3_ALTERNATE_MODE_PLACEHOLDE
 
 The [resource archive atlas](research/G3_RESOURCE_ARCHIVES_20261122.md) resolves flat offset lookup, TIM upload/free, TMD in-place mapping, region-specific texture indices, and four-target common loader shapes.
 
-**Next specific R1 question:** build a four-target shared-function atlas, starting with well-bounded game-owned leaves and resource loaders; identify safe matching C candidates and reproducible build witnesses. Resource resolver consumers and actual STR/TMD validation remain separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
+The [shared resource resolver atlas](research/G3_SHARED_RESOURCE_RESOLVERS_20261122.md) proves four complete game-owned leaves (89 instructions, all relocation-equivalent across four targets), logical ID vs archive-index lookup, miss-path output distinctions, and two ranked matching-C candidates.
+
+**Next specific R1 question:** trace model/texture resolver output metadata through renderer-side descriptor consumers, then extend the shared-function atlas with another bounded game-owned family. Archive offset and logical texture lookup are candidates for a guarded matching witness, not authorized source landings. Actual STR/TMD validation remains separate; container startup works again and both CHDs are accessible, but CHD extraction tooling is absent.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
