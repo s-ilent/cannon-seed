@@ -66,6 +66,8 @@ silently deleting apparent duplicates.
 - [G3 terminal-event exclusions and Doldva gate correction (pass 32)](research/G3_TERMINAL_COUNTER_EXCLUSIONS_20261123.md): fatal-hit 0x12/0x13/0x14 and type-0x80 auxiliary fragment routes can morph to 0x31 without a results-count increment; five SPARKBIT children account separately from the one credited parent success; timeout/cancellation paths are uncredited. **Corrects** pass-20/pass-31 Doldva 3888 comparison: completion permitted at/after gate, not before. Ten matched JP/EU instruction-shape windows (143/143, 108 exact words).
 - [G3 spawned attack objects and counter exclusions (pass 33)](research/G3_ATTACK_CHILD_PROVENANCE_20261123.md): traces zero-authored types 0x12/0x13/0x14 to the 11-way attack dispatcher and parent config selectors (type 0x68 cases 0x20/0x26 → child cfg 0x79, type 0x81 cfg 0x4B → child cfg 0x76, and SPARKBIT type 0x89 cfg 0x48 → child cfg 0x75). Verifies player-vehicle damage/kill-discard paths, projected-sprite type 0x14, nine JP/EU config rows and 262/262 instruction shapes; extra type-0x13 cfg 0x74 remains unassigned.
 
+- [G3 attack variants and lifetime anomaly (pass 34)](research/G3_ATTACK_VARIANTS_20261123.md): maps type-0x81 cfg 0x4A's attack-case-1 child cfg 0x68/type 0x18, establishes non-shootable proximity handler and the initial zero-lifetime expiry caused by a short config +0xBE read; compares alternative type-0x13 cfg 0x74 versus active cfg 0x76 (six differing halfwords, larger hypothetical distance bound), and records no cfg 0x74 child links among 125 decodable pointer-table entries. 411/411 JP/EU normalized instructions, 359 exact; static only, no runtime/matching witness.
+
 ## Fast navigation
 
 ```sh
