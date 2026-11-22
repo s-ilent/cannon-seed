@@ -143,6 +143,8 @@ uses a 74-slot allocator at 80037148, and has a target+0 clear at
 
 **Pass 10 continuation:** [fragment effects atlas](G3_FRAGMENT_EFFECTS_20261122.md) identifies 8003D9FC and D_8008A220 as a specialized destruction-fragment family, not the general enemy constructor. The general spawn path remains open.
 
+**Pass 12 closure:** [retail dispatch atlas](G3_RETAIL_DISPATCH_TABLES_20261122.md) reads both actual jump tables from SHA-1 verified regional retail inputs. Classes 1/3 use the fractional 75/100 arm; 2/4 use direct stage/progress with conditional award; class 0 shares the out-of-range fallback. Class names still unknown.
+
 ## Next
 
 Decode the two damage jump tables from available non-copyrighted
