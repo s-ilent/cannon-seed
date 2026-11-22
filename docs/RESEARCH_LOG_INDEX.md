@@ -23,6 +23,8 @@ silently deleting apparent duplicates.
 
 - [G3 laser producer pool (2026-11-22)](research/G3_LASER_POOL_20261122.md): proves a 32×0x84 persistent laser pool, first-free allocation and caller back-reference, same-call mode fallthrough, origin-relative endpoint calculation and final submission on slot release; all 430 compared instruction shapes agree across JP/EU. **Static only**.
 
+- [G3 gunner and target object pools (2026-11-22)](research/G3_GUNNER_TARGET_POOL_20261122.md): traces all four laser wrapper callers to a distinct 4×0x8C gunner array, recovers trigger cadence, proves the 124×0xAC collision participant/allocator pool with 74/100/124 prefix bounds, and maps per-pass hit notification; 590 JP/EU instruction shapes agree. **Static only**.
+
 ## Fast navigation
 
 ```sh
