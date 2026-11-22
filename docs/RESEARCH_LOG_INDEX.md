@@ -21,6 +21,45 @@ silently deleting apparent duplicates.
 - [G3 TMD scene geometry to OT (2026-11-22)](research/G3_TMD_GEOMETRY_TO_OT_20261122.md): maps game descriptor traversal, GsLinkObject4, 0x6C world scene records, linked TMD dispatch through named Psy-Q callbacks, 20-byte GPU polygon packets, OT links and GsDrawOt; separates 0x7C projected sprites. **Static only**; EU existing matching C dispatcher is an unadjudicated SDK ownership candidate.
 - [G3 communication buffer schema (2026-11-22)](research/G3_COMM_BUFFER_SCHEMA_20261122.md): proves `D_80166360` is the literal "Communication Buffer" (source error string) — a per-frame 0x18-byte request pool with bump allocator `func_8003EE70`, 756-record capacity gate, laser (`mylaser.c` evidence) and object-spawn producer systems, the corrected 15-way dispatch consumption rule (0xE/!bit4 → world, bit4 → projected) and the 0x6C record field map; render arrays are immediate-mode staging rebuilt every frame. **Static only**.
 
+- [G3 laser producer pool (2026-11-22)](research/G3_LASER_POOL_20261122.md): proves a 32×0x84 persistent laser pool, first-free allocation and caller back-reference, same-call mode fallthrough, origin-relative endpoint calculation and final submission on slot release; all 430 compared instruction shapes agree across JP/EU. **Static only**.
+
+- [G3 gunner and target object pools (2026-11-22)](research/G3_GUNNER_TARGET_POOL_20261122.md): traces all four laser wrapper callers to a distinct 4×0x8C gunner array, recovers trigger cadence, proves the 124×0xAC collision participant/allocator pool with 74/100/124 prefix bounds, and maps per-pass hit notification; 590 JP/EU instruction shapes agree. **Static only**.
+
+- [G3 hit arbitration, damage and score (2026-11-22)](research/G3_HIT_DAMAGE_SCORE_20261122.md): proves hard-coded four-gunner arbitration, rotating hit priority, fractional durability and signed terminal threshold, packed-decimal score awards, and a representative non-collidable death transition. 348/348 JP/EU normalized instructions, 320 exact. **Static only**; damage jump-table class mapping pending.
+
+- [G3 table-driven fragment/debris objects (2026-11-22)](research/G3_FRAGMENT_EFFECTS_20261122.md): resolves 10-byte sentinel-terminated fragment records, two launch policies, shared type-0x38 constructor, angular motion, lifetime and boundary conversion to type 0x31. 519/519 JP/EU normalized instructions, 468 exact. **Static only**.
+
+- [G3 mission scheduling and object scripts (2026-11-22)](research/G3_MISSION_SCRIPTING_20261122.md): recovers environment/section timelines, two encounter spawn streams, general object constructors, 124-way slot iteration, section-time and local-time object scripts and variable-width command handlers. 839/839 JP/EU normalized instructions, 711 exact. **Static only**; authored table contents and opcode numbers remain open.
+
+- [G3 retail dispatch tables (2026-11-22)](research/G3_RETAIL_DISPATCH_TABLES_20261122.md): independently SHA-1 verifies both already-tracked private original executable blobs; recovers 256 object dispatch slots, 18 opcode entries and both five-entry damage tables (284/284 region-normalized pointers). Identifies concrete SsGetNck SDK extent/provenance conflict. Static verified-input witness only; no binary/source changes.
+
+- [G3 mission inventory (2026-11-22)](research/G3_MISSION_INVENTORY_20261122.md): 857 authored mode-zero events, 730 descriptors, 23 config indices, 177 field-qualified scripts and 243 active commands; all corresponding event metadata and script contents agree between verified regional originals. Mode-nonzero aliased data and default type 98 remain open.
+
+- [G3 movement segment interpreter (2026-11-22)](research/G3_MOVEMENT_SEGMENTS_20261122.md): recovers 24-byte path records, six coordinate/destination modes, fixed-point pursuit, 261 paths/553 segments (all JP/EU equal), and peak-bin type 1D lead. 813/813 normalized instructions. Clock rate unresolved.
+
+- [G3 type 0x1D constructor and active 0x1C controller (pass 15)](research/G3_TYPE1D_CONTROLLER_20261122.md): config 0x66 -> 0x7B, two-phase hit-capable controller and lifecycle transitions.
+- [G3 type 0x1D formations and TMD resource map (pass 16)](research/G3_TYPE1D_FORMATIONS_20261122.md): all 74 events in six waves, one-record heading initialization, conditional fixed-point movement and 307 identical JP/EU model resource rows, including 0x9F -> TMD.DAT index 57. Static only.
+
+- [G3 stream-synchronized mission clock and world origin (pass 17)](research/G3_STREAM_CLOCK_POSE_20261122.md): recovers 0x50-byte custom STR metadata extraction, absolute tick = twice metadata clock, streamed pose and displacement, late scale change and 418 JP/EU corresponding instructions. Actual movie payload and seconds cadence remain unverified.
+
+- [G3 proximity response and shared Dragoon health (pass 18)](research/G3_PROXIMITY_HEALTH_20261122.md): resolves 10000-unit shared health, angular collision gates, eight damage multiplier rows, fighter contact damage, smoothing/alarm and named death transition; 302/302 regional instruction shapes. Static only.
+
+- [G3 object controller census and composite-object candidates (pass 19)](research/G3_OBJECT_CENSUS_COMPOSITES_20261122.md): maps all 29 nondefault dispatch entries to observed behavior, rewalks 857 authored events, finds types 80/88/89 composite hierarchies, resolves third direct damage caller and links type 89 to mission state; 576 corresponding instructions and 156 matching child-table data halfwords. Boss identities provisional.
+
+- [G3 Doldva rotating reactor (pass 20)](research/G3_DOLDVA_REACTOR_20261122.md): proves type 80 identity via KUUBO_DIED/DOL_SUCS, reconstructs cylindrical geometry, 384-unit roll, five cumulative damage stages, timed success gate and regional audio difference. 887/887 corresponding instruction shapes.
+
+- [G3 SPARKBIT final objective (pass 21)](research/G3_SPARKBIT_FINAL_OBJECTIVE_20261122.md): identifies type 89 through named final sequence, five independent rotating targets, countdown command stream, adaptive rotation, damage tables and victory/timeout/health-failure split; 1586/1586 corresponding instructions, 552 matching config halfwords.
+
+- [G3 effective player count and scaling (pass 22)](research/G3_PLAYER_COUNT_SCALING_20261122.md): traces local entry/removal, four gunner records versus explicit 1..6 effective count override, fixed-memory accessor, encounter eligibility counts and independent damage difficulty; 513 corresponding instruction shapes.
+
+- [G3 gameinfo and play recording (pass 23)](research/G3_GAMEINFO_PLAYREC_20261122.md): recovers named 18-index settings API, two banks, effective-player override initialized disabled, LEVEL/TUNE_LEVE difficulty mapping, MUTEKI_MODE, 5311 sample replay buffer and independent mission-mode selectors; 924 corresponding instruction shapes.
+
+- [G3 alternate schedule and placeholders (pass 24)](research/G3_ALTERNATE_MODE_PLACEHOLDERS_20261122.md): proves invalid nonzero schedule/config alias, six inert type98 records, short config views and nested 74/100/124 object-pool limits; 431 corresponding instruction shapes and 256 normalized dispatch pointers.
+
+- [G3 resource archives and shared loaders (pass 25)](research/G3_RESOURCE_ARCHIVES_20261122.md): resolves archive offset lookup, TIM upload/free and TMD in-place relocation, 307 model mappings, 273 texture entries with all archive indices region-specific, and six common loader windows across four scenario executables.
+- [G3 shared resource resolvers (pass 26)](research/G3_SHARED_RESOURCE_RESOLVERS_20261122.md): complete four-target leaf boundaries, 89 relocation-equivalent instructions, logical and archive-index texture lookup, asymmetric miss outputs, and ranked matching-C candidates.
+- [G3 resource rendering metadata (pass 27)](research/G3_RESOURCE_RENDER_METADATA_20261122.md): proves model attributes, no-normal-lighting triangle dispatch, OT depth shift and direct sprite priority, plus four-target field-flow comparison.
+
 ## Fast navigation
 
 ```sh

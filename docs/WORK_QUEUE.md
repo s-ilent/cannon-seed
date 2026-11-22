@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Six bounded runs completed (2026-11-22):**
+**Twenty-seven bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -51,14 +51,67 @@ now proves `D_80166360` is a **per-frame immediate-mode 0x18-byte request
 pool** (literal "Communication Buffer" string evidence) with a bump
 allocator, 756-record capacity gate, laser (`mylaser.c`) and object-spawn
 producer systems, the corrected dispatch consumption rule and the 0x6C
-record field map.
+record field map. The [laser producer pool](research/G3_LASER_POOL_20261122.md)
+proves the persistent 32×0x84 pool, allocator/back-reference, three-mode
+fallthrough, origin-relative endpoint and final emission after release.
 
-**Next specific R1 question:** recover the **producer-side object record
-schema**: the laser record (lifetime `+0x26`, effect id `+0x28`, position
-`+0x3C..+0x40`, velocity `+0x44..+0x4A`, hit_req `+0x80`) and the spawn-API
-object record (`+0x4..+0xC` position, `+0x30` id) — pool bases, sizes,
-creators/destroyers; then the `D_800ABBE4` model-table builder and the
-`\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
+The [gunner and target pool atlas](research/G3_GUNNER_TARGET_POOL_20261122.md)
+resolves the four laser wrapper callers to 4×0x8C player records, the
+124×0xAC collision-participating object array, 74/100/124 allocator bounds,
+trigger cadence and hit-mask writes. Release does not clear the owner
+back-reference on the inspected path; external lifecycle is still open.
+The [damage and score atlas](research/G3_HIT_DAMAGE_SCORE_20261122.md)
+proves four-gunner arbitration, rotating hit priority, fractional
+and whole-stage durability, packed-decimal score awards and a
+representative non-collidable death transition.
+The [fragment effects atlas](research/G3_FRAGMENT_EFFECTS_20261122.md)
+resolves 8003D9FC to a specialized type-0x38 constructor, with 10-byte
+fragment records, two launch policies, motion and boundary conversion.
+The [mission scripting atlas](research/G3_MISSION_SCRIPTING_20261122.md)
+recovers section/environment timelines, primary/secondary encounter lists,
+object descriptor layouts, general constructors and dual-clock scripts.
+The [retail dispatch atlas](research/G3_RETAIL_DISPATCH_TABLES_20261122.md)
+verifies both tracked private original EXE blobs against committed SHA-1
+oracles, resolves all 256 dispatch slots, 18 opcode entries, both damage
+jump tables, and records the SsGetNck attribution conflict.
+The [mission inventory](research/G3_MISSION_INVENTORY_20261122.md)
+counts 857 authored mode-zero events, 730 descriptors, 23 config IDs,
+and decodes 177 field-qualified dual-clock script streams in both regions.
+The [movement atlas](research/G3_MOVEMENT_SEGMENTS_20261122.md)
+resolves 24-byte records, six destination modes and 261 paths/553 segments.
+The [type-1D controller](research/G3_TYPE1D_CONTROLLER_20261122.md)
+resolves config 66 to 7B and active type 1C.
+The [formation and model atlas](research/G3_TYPE1D_FORMATIONS_20261122.md)
+resolves all 74 events in six waves, the one-record heading initializer,
+conditional fixed-point movement and the 307-row TMD resource table, with
+resource 9F mapped to archive index 57.
+
+The [stream clock and vehicle pose atlas](research/G3_STREAM_CLOCK_POSE_20261122.md)
+resolves the 0x50-byte STR metadata copy, absolute mission time as twice the
+custom metadata clock, and moving origin/rotation/displacement writers.
+
+The [proximity and shared health atlas](research/G3_PROXIMITY_HEALTH_20261122.md) resolves 80035348, shared 10000-unit health, collision angles, difficulty multipliers, damage counter, alarm and death gate.
+
+The [object census and composite candidates](research/G3_OBJECT_CENSUS_COMPOSITES_20261122.md) maps all 29 nondefault slots, finds 35/10/5 child allocations in types 80/88/89, and resolves direct damage caller 8003AC2C.
+
+The [Doldva rotating reactor atlas](research/G3_DOLDVA_REACTOR_20261122.md) identifies type 80 through KUUBO_DIED/DOL_SUCS, recovers cylindrical geometry, rotation, hit aggregation/five stages and exclusive tick-3888 success gate.
+
+The [SPARKBIT final objective atlas](research/G3_SPARKBIT_FINAL_OBJECTIVE_20261122.md) resolves type 89, five independent targets, specialized countdown script, rotation acceleration, success and timeout result gates.
+
+The [player count and scaling atlas](research/G3_PLAYER_COUNT_SCALING_20261122.md) resolves D_800AC164, four local slots versus 1..6 effective-count override, independent difficulty row, and 692–857 encounter eligibility.
+
+The [gameinfo/playrec atlas](research/G3_GAMEINFO_PLAYREC_20261122.md) recovers named settings API, difficulty mapping, count override setter/default, and replay infrastructure. DRAGOON startup passes zero to separate object-mode selector.
+
+The [alternate-mode and placeholder atlas](research/G3_ALTERNATE_MODE_PLACEHOLDERS_20261122.md) resolves the invalid nonzero static schedule alias and six inert type98 records, distinguishes active short config views, and identifies nested 74/100/124 object pool prefix boundaries.
+
+The [resource archive atlas](research/G3_RESOURCE_ARCHIVES_20261122.md) resolves flat offset lookup, TIM upload/free, TMD in-place mapping, region-specific texture indices, and four-target common loader shapes.
+
+The [shared resource resolver atlas](research/G3_SHARED_RESOURCE_RESOLVERS_20261122.md) proves four complete game-owned leaves (89 instructions, all relocation-equivalent across four targets), logical ID vs archive-index lookup, miss-path output distinctions, and two ranked matching-C candidates.
+
+The [resource render metadata atlas](research/G3_RESOURCE_RENDER_METADATA_20261122.md) proves model attribute bit6 selects no-normal-lighting triangle variants, +0C is OT depth shift, and texture +0C is direct sprite OT priority; seven consumer windows agree across four targets.
+
+**Next specific R1 question:** recover OT setup, draw direction, bucket capacity and resource layering policy. Extend shared-function atlas as useful; archive offset and texture lookup remain guarded matching candidates, not authorized source landings. Actual STR/TMD validation remains separate; CHD extraction tooling is absent.
+Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
