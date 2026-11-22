@@ -44,6 +44,8 @@ silently deleting apparent duplicates.
 
 - [G3 proximity response and shared Dragoon health (pass 18)](research/G3_PROXIMITY_HEALTH_20261122.md): resolves 10000-unit shared health, angular collision gates, eight damage multiplier rows, fighter contact damage, smoothing/alarm and named death transition; 302/302 regional instruction shapes. Static only.
 
+- [G3 object controller census and composite-object candidates (pass 19)](research/G3_OBJECT_CENSUS_COMPOSITES_20261122.md): maps all 29 nondefault dispatch entries to observed behavior, rewalks 857 authored events, finds types 80/88/89 composite hierarchies, resolves third direct damage caller and links type 89 to mission state; 576 corresponding instructions and 156 matching child-table data halfwords. Boss identities provisional.
+
 ## Fast navigation
 
 ```sh
