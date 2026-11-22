@@ -58,6 +58,7 @@ silently deleting apparent duplicates.
 
 - [G3 resource archives and shared loaders (pass 25)](research/G3_RESOURCE_ARCHIVES_20261122.md): resolves archive offset lookup, TIM upload/free and TMD in-place relocation, 307 model mappings, 273 texture entries with all archive indices region-specific, and six common loader windows across four scenario executables.
 - [G3 shared resource resolvers (pass 26)](research/G3_SHARED_RESOURCE_RESOLVERS_20261122.md): complete four-target leaf boundaries, 89 relocation-equivalent instructions, logical and archive-index texture lookup, asymmetric miss outputs, and ranked matching-C candidates.
+- [G3 resource rendering metadata (pass 27)](research/G3_RESOURCE_RENDER_METADATA_20261122.md): proves model attributes, no-normal-lighting triangle dispatch, OT depth shift and direct sprite priority, plus four-target field-flow comparison.
 
 ## Fast navigation
 
