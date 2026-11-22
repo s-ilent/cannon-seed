@@ -42,6 +42,8 @@ silently deleting apparent duplicates.
 
 - [G3 stream-synchronized mission clock and world origin (pass 17)](research/G3_STREAM_CLOCK_POSE_20261122.md): recovers 0x50-byte custom STR metadata extraction, absolute tick = twice metadata clock, streamed pose and displacement, late scale change and 418 JP/EU corresponding instructions. Actual movie payload and seconds cadence remain unverified.
 
+- [G3 proximity response and shared Dragoon health (pass 18)](research/G3_PROXIMITY_HEALTH_20261122.md): resolves 10000-unit shared health, angular collision gates, eight damage multiplier rows, fighter contact damage, smoothing/alarm and named death transition; 302/302 regional instruction shapes. Static only.
+
 ## Fast navigation
 
 ```sh
