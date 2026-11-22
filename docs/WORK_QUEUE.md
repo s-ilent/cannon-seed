@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Sixteen bounded runs completed (2026-11-22):**
+**Seventeen bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -86,9 +86,15 @@ resolves all 74 events in six waves, the one-record heading initializer,
 conditional fixed-point movement and the 307-row TMD resource table, with
 resource 9F mapped to archive index 57.
 
-**Next specific R1 question:** determine the mission clock and moving world
-origin/velocity writers; recover proximity response 80035348 and archive
-loader/offset format. Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
+The [stream clock and vehicle pose atlas](research/G3_STREAM_CLOCK_POSE_20261122.md)
+resolves the 0x50-byte STR metadata copy, absolute mission time as twice the
+custom metadata clock, and moving origin/rotation/displacement writers.
+
+**Next specific R1 question:** reconstruct the STR payload/sector contract and
+build a guarded local metadata extractor with synthetic tests. Actual route
+and seconds cadence require privately supplied mission STR data; do not guess.
+Recover proximity response 80035348 and TMD archive loader/offset format.
+Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
