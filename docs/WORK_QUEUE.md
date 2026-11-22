@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Six bounded runs completed (2026-11-22):**
+**Seven bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -51,16 +51,23 @@ now proves `D_80166360` is a **per-frame immediate-mode 0x18-byte request
 pool** (literal "Communication Buffer" string evidence) with a bump
 allocator, 756-record capacity gate, laser (`mylaser.c`) and object-spawn
 producer systems, the corrected dispatch consumption rule and the 0x6C
-record field map.
+record field map; and the [producer records atlas](research/G3_PRODUCER_RECORDS_20261122.md)
+decodes both producer pools — `D_8016B014` (124 × 0xAC objects, two scan
+bounds, 256-way type dispatch `D_8008A2F4`, three creation paths, complete
+field map) and `D_80163944` (32 × 0x84 lasers, `lsr_mode` lifecycle) — plus
+the `D_800ABBE4` 0x14-row model table schema, the `func_80024910`
+offset-directory resolver and the `\\DRAGOON\\TMD.DAT;1` loader family,
+recording the negative result that the table setter and loaders are
+**unreached** in the static g3_jp image.
 
-**Next specific R1 question:** recover the **producer-side object record
-schema**: the laser record (lifetime `+0x26`, effect id `+0x28`, position
-`+0x3C..+0x40`, velocity `+0x44..+0x4A`, hit_req `+0x80`) and the spawn-API
-object record (`+0x4..+0xC` position, `+0x30` id) — pool bases, sizes,
-creators/destroyers; then the `D_800ABBE4` model-table builder and the
-`\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
-frame-local staging; do not convert builders before a producer-side
-landing decision.
+**Next specific R1 question:** open the gameplay handler bodies
+(`func_8003442C`/`func_8003416C`/`func_800385F4`/`func_800341E8`) to extend
+the object field map into the `+0x34..+0x54` and `+0x6C..+0x84`
+handler-owned regions, and close the §6 population question: byte-level
+scan of the retail g3_jp executable for `jal`/`j` encodings targeting
+`0x8002DE2C`, then a PCSX-Redux trace on `0x8002DE2C`/`D_800ABBE4` per
+RUNTIME.md. The render arrays are proven frame-local staging; do not
+convert builders before a producer-side landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
 already retail-matched C row (historical claim), but functions as
 a Psy-Q **`GsSortObject4J`-like** TMD dispatcher. Investigate
