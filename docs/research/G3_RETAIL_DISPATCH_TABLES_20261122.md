@@ -145,6 +145,8 @@ directly and award as conditioned by remaining durability. Alternate
 clear A8. Names/physical meaning of the five weapon classes are
 not assumed; trace gunner+88 writers next.
 
+**Pass 13 continuation:** [mission inventory](G3_MISSION_INVENTORY_20261122.md) inventories both mode-zero sections and validates all 177 dual-clock stream references. The nonzero schedule points to aliased data and is not yet decoded.
+
 ## 4. Next
 
 We can now extract the actual mission timeline, configuration pointers
