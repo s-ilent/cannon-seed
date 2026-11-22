@@ -70,6 +70,8 @@ silently deleting apparent duplicates.
 
 - [G3 type-0x18 emitter lifetime provenance (pass 35)](research/G3_ATTACK_EMITTER_LIFETIMES_20261123.md): resolves the apparent zero-lifetime contradiction: method 1 initializes cfg 0x68/type 0x18 from out-of-record cfg+0xBE=0 (first-update expiry), while methods 5/6 from authored type-0x70/0x71 parents initialize cfg 0x60/0x61 from cfg+0x28=300 (eligible for actual 0x18 motion/contact). Verifies distinct proximity thresholds 280/100 and base vehicle damage 20/10, six short type-0x18 record tails in JP/EU, and 273/273 JP/EU instruction shapes (241 exact). Static only.
 
+- [G3 type-0x70/0x71 firing windows and deterministic cadence (pass 36)](research/G3_ATTACK_FIRING_WINDOWS_20261123.md): recovers first/second timestamp activation/deadline for 12 authored mode-zero secondary encounters (JP/EU 12/12 pairs); type-0x70 linked phase-(-1) child and type-0x71 direct phase-1 firing gates; 6x7 cooldown tables and deterministic signed 16-bit LCG `state=(5*state+1) mod 65536`, yielding method-5 21–55 and method-6 31–40 eligible-update attempt intervals across configured rows, before hit/allocator/angle restrictions. 782/782 JP/EU normalized code instructions (685 exact); 172/172 cooldown halfwords. Static only.
+
 ## Fast navigation
 
 ```sh
