@@ -56,6 +56,8 @@ silently deleting apparent duplicates.
 
 - [G3 alternate schedule and placeholders (pass 24)](research/G3_ALTERNATE_MODE_PLACEHOLDERS_20261122.md): proves invalid nonzero schedule/config alias, six inert type98 records, short config views and nested 74/100/124 object-pool limits; 431 corresponding instruction shapes and 256 normalized dispatch pointers.
 
+- [G3 resource archives and shared loaders (pass 25)](research/G3_RESOURCE_ARCHIVES_20261122.md): resolves archive offset lookup, TIM upload/free and TMD in-place relocation, 307 model mappings, 273 texture entries with all archive indices region-specific, and six common loader windows across four scenario executables.
+
 ## Fast navigation
 
 ```sh
