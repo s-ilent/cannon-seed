@@ -48,6 +48,8 @@ silently deleting apparent duplicates.
 
 - [G3 Doldva rotating reactor (pass 20)](research/G3_DOLDVA_REACTOR_20261122.md): proves type 80 identity via KUUBO_DIED/DOL_SUCS, reconstructs cylindrical geometry, 384-unit roll, five cumulative damage stages, timed success gate and regional audio difference. 887/887 corresponding instruction shapes.
 
+- [G3 SPARKBIT final objective (pass 21)](research/G3_SPARKBIT_FINAL_OBJECTIVE_20261122.md): identifies type 89 through named final sequence, five independent rotating targets, countdown command stream, adaptive rotation, damage tables and victory/timeout/health-failure split; 1586/1586 corresponding instructions, 552 matching config halfwords.
+
 ## Fast navigation
 
 ```sh
