@@ -540,3 +540,212 @@ indexed by `def+0xC`); spawner core `func_80031F60` with flags 0/1/4/5.
 **Next read (R1, unchanged priority):** the PCSX-Redux trace (§10/§13), then
 the remaining type bodies — the emitter's spawn arms make `func_80031F60`'s
 flag-4/5 request formats the natural companion read.
+
+## 15. Pass 10 — the spawn-request kinds end to end, and the remaining type bodies
+
+All reads below are from the witnessed retail images (`baselines/g3_jp.bin`,
+`baselines/g3_eu.bin`), disassembled with the operative mapping
+`VA = file_off + 0x8001F800` (verified twice: the allocator body the atlas
+attributes to `func_800315AC` sits at file_off 0x11DAC, and the 256-entry
+dispatch table the walk loads as `D_8008A2F4` sits at file_off 0x8AAF4 —
+256 pointer words, every one 0x8003xxxx-0x8004xxxx).
+
+### 15.1 The producer cores
+
+The request-writing system decomposes into **16 wrapper thunks + two live
+cores + one dead core**. Every wrapper is the same 24-byte thunk:
+`addiu sp,sp,-24; sw ra,16(sp); jal CORE; li a1,K; lw ra; jr; addiu sp,sp,24`
+— the only difference is the immediate `K`, the **request kind**.
+
+- **`func_80031CFC(obj, kind)` — core A** (the world-family writer): gates on
+  `lh(D_800AC29C)` (the pass-6 enable word) and `lh(D_800AC014) < 756` (else
+  `printf(D_80020B84)`, the "Over flow Communication Buffer !" string). The
+  record is written at `lw(D_800AC2CC)` (the bump cursor):
+  - **plain form**: `+0x0 = kind`; `+0x2 = lhu(obj+0x30)` (the resource id);
+    `+0x4..+0xF` = the three words `obj+0x4/+0x8/+0xC` (position);
+    `+0x10 = lhu(obj+0x10)`, `+0x12 = lhu(obj+0x12)`, `+0x14 = lhu(obj+0x14)`;
+    **`+0x16 = 4`**; then `count+1 → D_800AC014`, `cursor += 0x18`.
+  - **special form** (`obj+0x30 == 0x1C0` **and** `lhu(D_800AC16C) < 0x21C0` —
+    the byte budget): identical layout but **`+0x2 = 0x1C2` forced** — the
+    pass-7 model-table fact ("`+0x30 == 0x1C0` forces desc id `0x1C2`") is
+    here **proven at the producer side** for the first time.
+- **`func_80031F60(obj, kind)` — core B** (the projected-family writer, the
+  0x31 emitter's spawn core): same two gates; record layout differs in the
+  halfword tail — `+0x10 = lhu(obj+0x12)`, `+0x12 = lhu(obj+0x14)`,
+  `+0x14 = lhu(obj+0x16)` (one halfword later than core A), `+0x16 = 0`.
+- **`func_80032034` — core C** (kind `0xC` hardcoded): plain-form fields,
+  `+0x16 = 0` — **zero static callers, dead**.
+
+### 15.2 The wrapper table (whole-image jal census on the retail g3_jp image)
+
+| thunk | kind | core | static jal refs | callers |
+|---|---|---|---|---|
+| `func_80031BFC` | 0x22 | A | 0 | dead |
+| `func_80031C1C` | 0x2 | A | 0 | dead |
+| `func_80031C3C` | 0x20 | A | 15 | 0x800318dc (walk region) + 14 handler sites |
+| `func_80031C5C` | 0x0 | A | 23 | the 0x18 arms (pass 8) + walk region + 20 handler sites |
+| `func_80031C7C` | 0x23 | A | 0 | dead |
+| `func_80031C9C` | 0x3 | A | 8 | 0x80030da4 + seven sites in the 0x800456xx-0x800458xx cluster |
+| `func_80031CBC` | 0x21 | A | 1 | 0x800395dc |
+| `func_80031CDC` | 0x1 | A | 8 | always paired with a kind-0 site |
+| `func_80031E60` | 0x26 | B | 0 | dead |
+| `func_80031E80` | 0x6 | B | 0 | dead |
+| `func_80031EA0` | 0x24 | B | 0 | dead |
+| `func_80031EC0` | 0x4 | B | 2 | the 0x31 emitter + the 0x14 handler |
+| `func_80031EE0` | 0x27 | B | 0 | dead |
+| `func_80031F00` | 0x7 | B | 0 | dead |
+| `func_80031F20` | 0x25 | B | 0 | dead |
+| `func_80031F40` | 0x5 | B | 2 | the 0x31 emitter + the 0x14 handler |
+
+**Live kinds: 0x0/0x1/0x3/0x20/0x21 (world family) and 0x4/0x5 (projected
+family).** Ten producer paths (kinds 0x2/0x6/0x7/0xC/0x22-0x27) are
+assembler-emitted but unreached from any static `jal`.
+
+### 15.3 The consumer dispatch — the request kind's meaning
+
+`func_8002DFD8` (the pass-6 consumer) walks `D_800AC014` records in 0x18
+strides and dispatches on **`kind & 0xF`** through the 16-entry jump table at
+**`D_80020AF0`** (`jr` at 0x8002e06c):
+
+| case | target | meaning |
+|---|---|---|
+| 0x0 | `func_8002E184` | world constructor (`a1` = s1 cursor, `D_80138DB4`) |
+| 0x1 | `func_8002E20C` | world constructor |
+| 0x2 | 0x8002e134 | **drop** (record skipped) |
+| 0x3 | `func_8002E270` | world constructor |
+| 0x4 | `func_8002E640` | projected constructor (`a1` = s2 cursor, `D_8013F9B4`) |
+| 0x5 | `func_8002E6A8` | projected constructor |
+| 0x6 | 0x8002e134 | **drop** |
+| 0x7 | `func_8002E6EC` | projected constructor |
+| 0x8-0xD | 0x8002e134 | drop |
+| 0xE | `func_8002E318` | world constructor (the 0xE special) |
+| 0xF | `0x61766E49` | **string bytes, not code** — unreachable garbage slot |
+
+So the `0x20`-bit forms (`0x20/0x21/0x22/0x23`) are a two-bit modifier the
+jump table ignores (`0x20→case 0`, `0x21→case 1`, `0x22→case 2 = drop`,
+`0x23→case 3`). Combined with the accept rule (nonzero return + kind == 0xE →
+world; kind & 4, != 0xE → projected; else world — pass 6), the live kinds
+mean: **0x0/0x1/0x3/0x20/0x21 → world 0x6C TMD records; 0x4/0x5 → projected
+0x7C records**. The 0x31 emitter's spawn arms (`func_80031EC0`/`func_80031F40`,
+pass 9) therefore spawn **billboard/projected sprites**, not world TMDs.
+
+### 15.4 The walk and the corrected type map
+
+Entry `func_80030BEC` = pre-step `func_80030C7C` (an 8-byte-row stream
+stepper: pointer `D_800ABE54` advances while `lh(D_800AC014)` is below the
+row's count halfword, storing `D_800ABF5C`/`D_800ABE3C`) + pre-step
+`func_80030DBC` (the byte-budget twin, pointer `D_800AC244`) + walk
+`func_80030CC8`: 124 slots × 0xAC from `D_8016B014`, `handler =
+D_8008A2F4[type]`, `jalr`, then `func_80031468` (the per-object RNG step)
+after every slot. The walk itself never frees — handlers decide everything.
+
+**Correction of the pass-6 note** ("0x13/14/15/19/1A/1D/1E/21/29/2A/30/31/36/47
+gameplay handlers"): the table rows for **0x15/0x1A/0x1E/0x21/0x2A/0x36/0x47
+are all the two-instruction KILL stub `0x80030D4C`** (`jr ra; sh zero,0(a0)`
+— kill = type word → 0 = the allocators' free marker). These seven are
+kill-on-walk marker types. The real gameplay handler set is
+**{0x13, 0x14, 0x18, 0x19, 0x1C, 0x1D, 0x29, 0x30, 0x31}**, plus 0x1/0x2/0x3
+= three mini-thunks (`0x80030D5C/D7C/D9C`) that emit the kind 0x0/0x1/0x3
+world-render requests for the object while it lives, and 0x7 = no-op.
+
+### 15.5 The remaining type bodies
+
+- **Type 0x30 — `func_80037D0C` (moving emitter)**: `+0x4/+0x8/+0xC +=`
+  `lw(+0x38/+0x3C/+0x40)` (the pass-8 velocity triple, raw words — no Q16
+  shift here), then **falls into `func_80037D58` inline** — the full 0x31
+  emitter step (phase/lifetime/kill-at-modulus, resource selector, kind-4/5
+  spawn arms). A velocity-driven emitter sharing the 0x31 machinery.
+- **Type 0x29 — `func_80037FB4` (timed burst)**: countdown `+0x6C` per frame;
+  at the countdown==2 arm: `+0x70` decrement (0 → `+0x6C = 0` → morph next
+  frame), `+0x6E = lhu(+0x84)`, then spawn a child via
+  `func_80037F44(obj)` — the **reverse first-free allocator** over the live
+  bound `D_8016E1CC` (= base + 74·0xAC, walking DOWN to base; sibling
+  `func_80037F1C` scans from the full bound `D_80170364`). Child init:
+  type = 0x31, `+0x26 = lhu(obj+0x26)`, position = obj position + a
+  fixed-point direction triple composed from `lh(+0x18/+0x1A/+0x1C)` and
+  scaled ×−100 (normalized by extra `<<1 >>16` rounds only when `+0x26==0`),
+  then `func_80037EA0(old, new)` — the angle-rate divider (calls the template
+  init, then `new+0x1E = (lhu(new+0x12)/2) / (lhu(new+0x18)/4)` with
+  break-guarded division, `new+0x12 = lhu(new+0x12)/2`). Every frame (not
+  just the transition arm) fires a kind-0/1 request for the object itself by
+  `+0x26`. At expiry (countdown wrap or child spawn failed): `func_8003D87C`
+  (reads `def+0xE`, indexes the handler-pointer table `D_8008A220`, spawns via
+  `func_80031558` when the row is valid), then **type = 0x30** and the 0x31
+  init + emitter step inline — the same morph sequence as the 0x1C/0x13 arms.
+- **Type 0x13 — `func_8003DDC0` (the wander body)**, the richest:
+  (1) `lh(+0x2A)` != 0 → `func_80034C60(obj, def)` — a per-bit `srav` scan of
+  `lh(+0x2A)` against a 4-row × 0x8C table at `D_801474FC` indexed by the
+  rotating counter `lh(D_800ABE5C)` (the walk pre-step's stored halfword);
+  (2) `lh(+0x2E) < 0` → the 0x31 morph arm (`func_80037E0C(obj,obj)`, type =
+  0x31, `func_80037D58`);
+  (3) countdown `+0x6C` → kill at wrap;
+  (4) `func_80033274` + `func_8003DFE4` + `func_800334AC` — the 0x6E secondary
+  countdown inside `func_8003DFE4` re-arms the **camera-anchor triple**
+  `+0x48/+0x4C/+0x50 = D_8016AC18/1C/20` when `+0x26==0` (pass 8's 0x1C
+  pattern), then `func_800332C4`;
+  (5) velocity integration with the Q16-shift-when-`+0x26==0` rule, then
+  `func_80034748(obj)` — the **distance-from-camera-anchor evaluator**
+  (Σ(pos−anchor)² per axis when `+0x26==0`);
+  (6) radius gate: return < `lw(+0xA4)` → `func_800351D0(obj)` (a marker/HUD
+  registration keyed on the pass-8 conditional `D_800ABF9C` with the constant
+  pairs `0x1555/0x16C1` vs `0x1A4F`) then **morph to 0x31**; world bounds
+  |pos| > 0xF423FF (±16,000,000) → kill;
+  (7) resource selector with a **mod-3 phase twist**:
+  `+0x30 = lhu(def+0x2) + (countdown % 3)`;
+  (8) wander angles: `+0x10 = lhu(D_800ABF34) + ((rng>>3 & 0x3FF) − 512)` →
+  trig (`func_80030454`) → `+0x18`; same shape for `+0x12`/`D_800ABF44` →
+  `+0x1C` and `+0x14` → `+0x20`; then `+0x14 += lhu(def+0xBA)` → trig →
+  `+0x24` (rng = `D_800AC50C`, pass 7);
+  (9) `func_800337B8(obj)`.
+- **Type 0x14 — `func_8003E060` (looping mobile emitter)**: the 0x13 frame
+  body (def chain, anchor arm, sub-steps `func_80033274`/`func_8003E22C`/
+  `func_800334AC`, Q16/raw velocity integration, anchor-distance radius gate
+  → `func_800351D0` → **morph 0x31**, ±16M kill, countdown kill) PLUS the
+  emitter phase path **with the wrap twist**: `sum = lhu(+0x1A) + lhu(+0x1C)`;
+  if `(s16)sum < lh(+0x18)` → `+0x1A = sum`, else **`+0x1A = sum − lh(+0x18)`**
+  — the phase **wraps by the modulus instead of killing** (a looping emitter,
+  vs 0x31's one-shot kill-at-modulus); then `+0x30 = lhu(+0x10) +
+  ((u16)phase >> 4)` and the kind-4/5 spawn arms by `+0x26` — the exact
+  0x31 emitter tail.
+
+### 15.6 Argument-order correction (pass 9, §14)
+
+`func_80037E0C(a0, a1)` reads the definition from **a0** (`lw(a0+0x60)`,
+`idx = lh(def+0xC)`) and initializes **a1** (`a0 = a1` then
+`func_80037E38(a1, idx)`). The true signature is therefore
+**`func_80037E0C(def_source, init_target)`** — pass 9's "(obj_new, obj_old)"
+label had the arguments flipped. The substance stands (the template selector
+comes from `def+0xC` of the dying object; the object being initialized
+receives it) because every morph-arm call site passes `(obj, obj)`; the
+0x29 child spawn is the one site where the order is visible:
+`func_80037EA0(old, new)` → `func_80037E0C(old, new)` — the **old object's**
+template drives the **child's** init.
+
+### 15.7 EU twin corroboration
+
+The EU walk (`0x80030944`) reads the same shape: pool base `D_8016B138`,
+124 × 0xAC slots, dispatch table **`D_8008AB0C`** (256 words, 227 = the kill
+stub `0x800309B4`), RNG step `func_800310D0` per slot. The EU kill stub is
+**byte-identical** to JP's (`jr ra; sh zero,0(a0)`). Every gameplay handler
+sits at a **uniform −0x398 block shift** from its JP twin (0x13→0x8003DA28,
+0x14→0x8003DCC8, 0x18→0x80034094, 0x19→0x80033DD4, 0x1C→0x8003825C,
+0x1D→0x80033E50, 0x29→0x80037C1C, 0x30→0x80037974, 0x31→0x800379C0) — the
+type-handler block is body-identical across the twins. The kill-shared type
+set {0x15, 0x1A, 0x1E, 0x21, 0x2A, 0x36, 0x47} is identical in both tables.
+
+### 15.8 New globals banked
+
+Consumer jump table `D_80020AF0` (16 words, `kind & 0xF`); kill stub
+`0x80030D4C` (EU `0x800309B4`); flag table `D_801474FC` (4 × 0x8C) with its
+counter `D_800ABE5C`; handler-pointer table `D_8008A220` (indexed by
+`def+0xE`, consumed by `func_8003D87C`); reverse allocators `func_80037F1C`
+(full 124-span) / `func_80037F44` (live 74-span); anchor-distance evaluator
+`func_80034748`; marker registration `func_800351D0` (`D_800ABF9C`-modeled);
+angle divider `func_80037EA0`; pre-morph spawn-from-table `func_8003D87C`;
+stream steppers `D_800ABE54` (8-byte rows) and `D_800AC244` in the walk entry.
+
+**Next read (R1):** the consumer constructors themselves
+(`func_8002E184/2E20C/2E270/2E318` world, `func_8002E640/2E6A8/2E6EC`
+projected — the 0x6C/0x7C record build from the 0x18 request, which closes
+the request→render-surface chain end to end), and/or the PCSX-Redux trace
+(§10/§13, the only remaining §6 hypothesis).
