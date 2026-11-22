@@ -29,6 +29,8 @@ silently deleting apparent duplicates.
 
 - [G3 table-driven fragment/debris objects (2026-11-22)](research/G3_FRAGMENT_EFFECTS_20261122.md): resolves 10-byte sentinel-terminated fragment records, two launch policies, shared type-0x38 constructor, angular motion, lifetime and boundary conversion to type 0x31. 519/519 JP/EU normalized instructions, 468 exact. **Static only**.
 
+- [G3 mission scheduling and object scripts (2026-11-22)](research/G3_MISSION_SCRIPTING_20261122.md): recovers environment/section timelines, two encounter spawn streams, general object constructors, 124-way slot iteration, section-time and local-time object scripts and variable-width command handlers. 839/839 JP/EU normalized instructions, 711 exact. **Static only**; authored table contents and opcode numbers remain open.
+
 ## Fast navigation
 
 ```sh
