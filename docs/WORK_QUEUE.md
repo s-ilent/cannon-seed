@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Eleven bounded runs completed (2026-11-22):**
+**Twelve bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -70,10 +70,14 @@ fragment records, two launch policies, motion and boundary conversion.
 The [mission scripting atlas](research/G3_MISSION_SCRIPTING_20261122.md)
 recovers section/environment timelines, primary/secondary encounter lists,
 object descriptor layouts, general constructors and dual-clock scripts.
+The [retail dispatch atlas](research/G3_RETAIL_DISPATCH_TABLES_20261122.md)
+verifies both tracked private original EXE blobs against committed SHA-1
+oracles, resolves all 256 dispatch slots, 18 opcode entries, both damage
+jump tables, and records the SsGetNck attribution conflict.
 
-**Next specific R1 question:** obtain witnessed structural metadata for authored timeline,
-configuration, dispatch and command/damage jump tables; trace the third
-object cursor +0x5C and mission clock writer, then the `D_800ABBE4` model-table builder and the
+**Next specific R1 question:** inventory actual mission section and descriptor tables from the
+hash-matched private inputs, validate script alignment and sentinel rules,
+trace third cursor +0x5C and the mission clock writer; then the `D_800ABBE4` model-table builder and the
 `\\DRAGOON\\TMD.DAT;1` resource-id mapping. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
