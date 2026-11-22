@@ -61,6 +61,7 @@ silently deleting apparent duplicates.
 - [G3 resource rendering metadata (pass 27)](research/G3_RESOURCE_RENDER_METADATA_20261122.md): proves model attributes, no-normal-lighting triangle dispatch, OT depth shift and direct sprite priority, plus four-target field-flow comparison.
 - [G3 reverse OT and video VRAM layering (pass 28)](research/G3_OT_VIDEO_LAYERING_20261123.md): four-target 14-bit OT allocation, high-to-low DrawOTag order, sprite priority groups, and shared 52-instruction video strip uploader / DrawSync before scene drawing.
 - [G3 GPU clears and ranking sprite tiers (pass 29)](research/G3_GPU_CLEAR_RANKING_LAYERS_20261123.md): direct ClearImage/GsSortClear inventory across four EXEs, distinct two-buffer black-image render loop, rank-mode bitmask tiles at priority 14, decimal digits at priority 12, and three paired four-target structural windows.
+- [G3 four-gunner results and mission counters (pass 30)](research/G3_GUNNER_RESULTS_RANKING_20261123.md): four gunner scores +0x34 → stable descending score sort, competition-style ranks, 16-byte result records, %06d score glyph rendering, adaptive 10,000-scaled mission percentage, snapshot object terminal count, and six 4-target matching code windows.
 
 ## Fast navigation
 
