@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Seven bounded runs completed (2026-11-22):**
+**Eight bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -58,16 +58,25 @@ field map) and `D_80163944` (32 × 0x84 lasers, `lsr_mode` lifecycle) — plus
 the `D_800ABBE4` 0x14-row model table schema, the `func_80024910`
 offset-directory resolver and the `\\DRAGOON\\TMD.DAT;1` loader family,
 recording the negative result that the table setter and loaders are
-**unreached** in the static g3_jp image.
+**unreached** in the static g3_jp image — a negative pass 8 then **closed at
+byte level on both twins**: every word of the witnessed retail executables
+scanned, zero `jal`/`j`/literal/lui-pair references reach the block, all
+branch hits branch-internal (the block is branch-closed), leaving only
+runtime-computed control flow; pass 8 also decoded the four gameplay handler
+bodies (types 0x18/0x19/0x1C/0x1D), extending the object field map into
+`+0x34..+0x54`/`+0x6C..+0x84`, mechanizing the `+0x30` resource selector,
+and banking the definition-chain step, the 0x31 type morph, the laser-contact
+resource link via `+0x2A`, the camera-anchor triple and the EU model table
+`D_800AC428`.
 
-**Next specific R1 question:** open the gameplay handler bodies
-(`func_8003442C`/`func_8003416C`/`func_800385F4`/`func_800341E8`) to extend
-the object field map into the `+0x34..+0x54` and `+0x6C..+0x84`
-handler-owned regions, and close the §6 population question: byte-level
-scan of the retail g3_jp executable for `jal`/`j` encodings targeting
-`0x8002DE2C`, then a PCSX-Redux trace on `0x8002DE2C`/`D_800ABBE4` per
-RUNTIME.md. The render arrays are proven frame-local staging; do not
-convert builders before a producer-side landing decision.
+**Next specific R1 question:** the PCSX-Redux trace on `0x8002DE2C` /
+`D_800ABBE4` per RUNTIME.md — the only remaining population hypothesis is
+runtime-computed control flow (`jalr` through a register / a pointer built
+at run time); and/or continue the handler map into the remaining type
+bodies (`0x13/0x14/0x15/0x1A/0x1E/0x21/0x29/0x2A/0x30/0x31/0x36/0x47`),
+with the 0x31 morph target as the natural next read. The render arrays are
+proven frame-local staging; do not convert builders before a producer-side
+landing decision.
 **Owner/SDK provenance gate:** EU `src/func_80052038.c` is an
 already retail-matched C row (historical claim), but functions as
 a Psy-Q **`GsSortObject4J`-like** TMD dispatcher. Investigate

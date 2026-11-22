@@ -266,3 +266,220 @@ by the complete maps in §3/§4.
 SDK attribution of the dispatchers remains a separate lane. No builder or
 record is converted before a producer-side landing decision (WORK_QUEUE R1
 gate).
+
+---
+
+**R1 pass 8 — 2026-11-22 (same day, second bounded run).** The §9 question
+answered in full: the §6 population check is **closed at byte level on both
+twins**, and the four gameplay handler bodies are decoded, extending the
+object field map into `+0x34..+0x54` and `+0x6C..+0x84` (plus mechanizing
+`+0x30`). Method: every 32-bit word of the witnessed retail executables
+(`baselines/g3_jp.bin` sha1 `994a680c…`, 143,872 words; `baselines/g3_eu.bin`
+sha1 `39030a75…`, 144,384 words) was scanned for immediate-encoded references
+to the unreached block; the handler bodies were read from
+`asm/g3_jp/nonmatchings/func_80033C44.s` / `func_8002A2DC.s`. No C conversion,
+no rename, no coverage change.
+
+## 10. §6 closed at byte level: no static reference reaches the block
+
+Scan script swept **all 143,872 (JP) / 144,384 (EU) words** of the retail
+images (not just extracted rows) for every statically encodable reference
+form. VA mapping `VA = 0x80020000 + off − 0x800` validated at the setter stub
+itself (`0x8002DE2C`: `lui $at, 0x800B; sw $a0, 0xBBE4($at); jr ra; nop` —
+words `3C01800B AC24BBE4 03E00008 00000000`).
+
+**JP targets scanned:** `0x8002DE2C` (setter), `0x8002DE3C` (mapper walk 1),
+`0x8002DECC` (second-table setter), `0x8002DF4C` (mapper walk 2), loader
+family `0x80024738`/`0x80024760`/`0x800247C8`/`0x8002488C`/`0x80024954`/
+`0x800249BC`; tables `0x800ABBE4`/`0x800ABBEC`.
+
+1. **`jal`/`j` encodings** (`0x0Cxxxxxx`/`0x08xxxxxx`): **zero hits** for all
+   ten functions across the whole image.
+2. **Literal address words** (`.word`-style data references): **zero hits**
+   for the ten function addresses and both table addresses — not even a
+   data-side pointer to `D_800ABBE4` exists in the image.
+3. **`lui` + `ori`/`addiu` materialization pairs** building any scanned
+   address: **zero hits** outside the setter stubs themselves.
+4. **Conditional branches** targeting the block window
+   `[0x8002DE2C, 0x8002DFD8)`: **ten hits, every one with both source and
+   target inside the block** (sources `0x8002DE60`–`0x8002DFAC`; targets the
+   walk bodies `0x8002DEB4`–`0x8002DFB4`, including the two 0x14-row and
+   0x34-row loop-backs `0x8002DEAC→0x8002DE6C` and `0x8002DFAC→0x8002DF3C`).
+   The block is **branch-closed**: nothing enters it.
+
+A wider first-pass window `[0x8002DE2C, 0x8002E100)` produced exactly one
+additional branch — `0x8002E144 → 0x8002E040` — classified as the
+**Communication Buffer consumer's own loop**: `func_8002E134` counts `s3`
+against `lh(D_800AC014)` (the request count, pass 6) advancing `s0` by the
+0x18-byte request stride, back into its own request-processing body
+`func_8002E040`; its dispatch arms advance the record cursor by **0x7C** for
+bit-4 requests (`addiu $s2, $s2, 0x7C` at `0x8002E120`), re-confirming pass
+6's corrected consumption rule at the instruction level. Its span merely
+abuts the unreached block; it does not enter it.
+
+**EU corroboration:** the EU twin of the block was located and scanned
+(`baselines/g3_eu.bin`). Setter stub **`0x8002DBFC`** =
+`lui $at, %hi(D_800AC428); sw $a0, %lo(D_800AC428)($at); jr ra; nop` — the EU
+model table is **`D_800AC428`** (JP `D_800ABBE4` twin, new bank); mapper walk
+**`0x8002DC0C..0x8002DC84`** (0x14-row walk, −1 sentinel, resolver
+`func_80024970` = JP `func_80024910` +0x60, `GsMapModelingData(resolved+4)`
+at `0x8002DC68`); loader family = the JP six at +0x60
+(`0x80024798`/`0x800247C0`/`0x80024828`/`0x800248EC`/`0x800249B4`/
+`0x80024A1C`, confirmed by the `0x54($gp)` sites at `0x80024798`–
+`0x800248E0`). Scan result over 144,384 words: **zero `jal`/`j`, zero
+literal words, zero lui-pairs; four branch hits, all four with source AND
+target inside the walk** (`0x8002DC30→0x8002DC84`, `0x8002DC44→0x8002DC5C`,
+`0x8002DC54→0x8002DC64`, `0x8002DC7C→0x8002DC3C`).
+
+**Conclusion (§6 resolved, evidence-maximal):** no statically encodable
+reference — jump, branch, literal, or immediate materialization — reaches
+the setter stubs, the mapper walks, or the loader family in **either** retail
+image. Combined with §6's original finding (the only write to `D_800ABBE4`
+is the stub store), the population path is now confined to
+**runtime-computed control flow** (`jalr` through a register, or a pointer
+built at run time) — forms that cannot appear as static encodings by
+definition. The definitive check is the **PCSX-Redux watchpoint/trace on
+`0x8002DE2C` / `D_800ABBE4` per `docs/RUNTIME.md`**, unchanged as the next
+step; the static side of the question is closed.
+
+## 11. The four gameplay handler bodies (types 0x18/0x19/0x1C/0x1D)
+
+Dispatch rows verified in `data_80080048.data.s` (the 256-entry table
+`D_8008A2F4`): `0x8008A354 → func_8003442C` (type **0x18**), `0x8008A358 →
+func_8003416C` (**0x19**), `0x8008A364 → func_800385F4` (**0x1C**),
+`0x8008A368 → func_800341E8` (**0x1D**); the flanking entries are the shared
+default `func_80030D4C`.
+
+**Shared machinery:**
+
+- **`func_8003427C(obj)` — the definition-chain step** (called at entry by
+  the 0x19 and 0x1D handlers): `func_800327F8` life-check first (via
+  `func_80032A40` halfword sign test; non-negative → `func_80032838`); then
+  the object's definition pointer `+0x60` is **replaced by
+  `D_80089D3C[def+0x2]`** — the definition chain advances one step through
+  the same pointer table pass 7's spawner uses — and the object's type word
+  `+0x0` is **rewritten** from `newdef+0x0` (halfword). So the type word is
+  *not* spawn-immutable: the chain walk retypes the object every step.
+  `+0x30 = lhu(newdef+0x2)` (the resource selector, below), and the three
+  angle fields `+0x10/+0x12/+0x14` are evaluated through **`func_80030454`
+  — the quadrant-dispatched trig evaluator (LUT `D_8008D660`, `andi 0x3FFE`
+  index mask)** — into `+0x18`/`+0x1C`/`+0x20`; `func_80032364` mixes the
+  `+0x18`/`+0x1C` trig pair into three halfword outputs consumed by the
+  per-`+0x26` velocity assembly.
+- **`func_80034974(obj, out, out2)` — the space-dispatched coordinate
+  extract:** `+0x26` selects 0 → word path (`+0x4/+0x8/+0xC` minus the
+  camera triple `D_8016AC18/1C/20`, through `func_80032448`), 1/2 → halfword
+  path (`lh +0x6/+0xA/+0xE`), else `printf(D_80020CD0)`. `func_80034748`
+  dispatches the same selector for its distance metric (0 → squared word
+  distance from the camera triple; 1/2 → squared halfword norms; else
+  `printf(D_80020C8C)`).
+- **`func_800352A0(obj)`** — the destruction-effect spawn (position extract
+  via `func_80034EC0`, `D_800ABF9C`-selected constants `0x1A4F`/`0x16C1`
+  with base `0x1555`, capped jitter, `func_80035348`).
+
+**Type 0x18 — `func_8003442C`** (0x5C + fall-through cluster): countdown
+`+0x6C` (lhu) −−, kill on negative; `func_800345A4` advances the travel
+accumulator `+0x34` by `clamp(+0x44 − +0x34, ±lw(def+0x24))`; velocity
+assembly `func_800345E8`: **`+0x3C = 2×(+0x36 × lh(+0x18))`**,
+`mid = (2×(+0x36 × lh(+0x1A)))>>16`, **`+0x38 = 2×(mid × lh(+0x1C))`**,
+**`+0x40 = 2×(mid × lh(+0x1E))`** — heading `+0x36` scaled by the halves of
+the trig words (Q16 velocity: high half = integer part, low = fraction).
+Then the integration twin: position `+0x4/+0x8/+0xC` += velocity>>16 (the
+`+0x26==0` path sra's first, the `+0x26!=0` path integrates the full words —
+per-type coordinate-space selection), `func_80034974` heading extract
+`+0x4000`-biased; `(heading+0x4000) < (+0x36)²` → `func_800352A0` + kill;
+`> 0xF423FF` → kill; else the **phase counter `+0x6E`**: `+= lhu(def+0x2C)`
+wrapped against `lhu(def+0x2A)` (modulo), then **`+0x30 = lhu(def+0x2) +
+(phase>>4)`** — the resource selector advances with the phase; finally spawn
+`func_80031C5C(obj)` (`+0x26==0`) / `func_80031CDC(obj)` (else) — both are
+`func_80031CFC(obj, flag)` with flag 0/1.
+
+**Type 0x19 — `func_8003416C`** (0x54): chain step; live objects: `+0x6E = 0`,
+`+0x28 = 0`, `+0x36 = lh(+0x46)`, `+0x6C = lhu(def+0x28)` (reload timer from
+the new definition); **`+0xA4 = (lh(+0x46) + (lh(D_800ABF9C) ? 0x104 :
+0x6E))²`** — the square, with `D_800ABF9C` selecting the addend.
+
+**Type 0x1C — `func_800385F4`** (0x5C + cluster): if `+0x2A != 0`:
+`func_80034C60(a1=def)` (indexes the `D_801474FC` table by `lh(D_800ABE5C)`,
+stride `0x8C`); **`+0x30 = lhu(def+0x2 + 2×(+0x2A))`** — the laser-contact
+halfword pass 6 banks selects a resource sub-table at `def+0x2`;
+`lh(+0x2E) < 0` → **`func_80038968`: type word `+0x0 = 0x31` (the object
+MORPHS to type 0x31)** + `func_80037E0C`/`func_80037D58`. If `+0x2A == 0`:
+`+0x24` selects 0 → countdown arm `func_8003869C` (`+0x6C`−−, kill negative;
+`+0x36 ≥ +0x46` state gate; transition path sets `+0x24 = 1` and **`+0x44 =
+lw(def+0xB4)`**), 1 → **`func_80038734`: `+0x48 = D_8016AC18, +0x4C =
+D_8016AC1C, +0x50 = D_8016AC20` — the camera position triple copied into the
+object** (else a five-call update chain), then the integration twin
+`func_800387BC` (same shape as 0x18's, relative-motion source triple
+`D_8016AC38/3A/3C`, squared-radius gate `D_800ABF9C ? 0x10810 : 0x2F44`,
+re-roll path `func_8003890C`: `+0x14 += lhu(def+0xBC)`, trig refresh, then
+`func_800337B8`).
+
+**Type 0x1D — `func_800341E8`** (0x84): chain step; inits from the new
+definition: `+0x24 = 0`, `+0x28 = 1`, `+0x2A = 0`, `+0x6C = lhu(def+0xBE)`,
+`+0x2E = lhu(def+0x14)`, `+0x34 = lw(+0x44)`, `+0x2C = lhu(def+0xA)`,
+`+0x46 = lhu(def+0xB4)`, `+0x48 = +0x4C = +0x50 = 0`,
+**`+0xA4 = (lh(+0x46) + 0x6E)²`**.
+
+## 12. The object field map, extended (pass 8 regions in bold)
+
+| Field | Meaning (verified writes/reads) | Owner |
+| --- | --- | --- |
+| `+0x0` | type word — **rewritten by the chain step and the 0x31 morph** | prologue / `func_80038968` |
+| `+0x4/+0x8/+0xC` | position words, `+=` Q16 velocity>>16 per frame | 0x18/0x1C integration |
+| `+0x10/+0x12/+0x14` | **angle inputs** (`func_80030454` operands; `+0x14 += lhu(def+0xBC)` on re-roll) | prologue / re-roll |
+| `+0x18/+0x1C/+0x20` | **trig evaluations of the angles** (word-valued; halves feed the velocity assembly) | prologue / `func_80030454` |
+| `+0x24` | **state selector** (0x1C: 0 countdown → 1 camera-anchor; init 0 for 0x1D) | 0x1C cluster |
+| `+0x28` | contact flag (laser walk clears; **0x19 inits 0, 0x1D inits 1**) | both |
+| `+0x2A` | **laser-contact index** — selects `def+0x2 + 2×(+0x2A)` resource sub-table; 0x1D inits 0 | 0x1C read |
+| `+0x2C` | **0x1D init `lhu(def+0xA)`** | 0x1D |
+| `+0x2E` | **0x1D init `lhu(def+0x14)`; 0x1C signed gate for the 0x31 morph** | 0x1D/0x1C |
+| `+0x30` | resource selector — **mechanized**: chain step `lhu(newdef+0x2)`; 0x18 phase add `(phase>>4)`; 0x1C contact-indexed | prologue + handlers |
+| `+0x34` | **travel accumulator** (0x18: chase `+0x44` clamped `±def+0x24`; 0x1D init `= +0x44`) | `func_800345A4` |
+| `+0x38/+0x3C/+0x40` | **Q16 velocity words** (high = integer integrated, low = fraction; assembly arithmetic verbatim in §11) | `func_800345E8` |
+| `+0x44` | **travel target** (0x18 chases; 0x1C transition writes `lw(def+0xB4)`) | 0x18/0x1C |
+| `+0x46` | **heading halfword** (0x1D init `lhu(def+0xB4)`; feeds 0x19's `+0xA4` square and 0x1C's state gate) | 0x1D |
+| `+0x48/+0x4C/+0x50` | **camera-anchor words** (0x1C arm copies `D_8016AC18/1C/20`; 0x1D inits 0) | `func_80038734` |
+| `+0x52..+0x56` | laser aim source (pass 6, untouched here) | laser |
+| `+0x6C` | **per-type timer** (0x18/0x1C: countdown, kill negative; 0x19 init `def+0x28`; 0x1D init `def+0xBE`) | handlers |
+| `+0x6E` | **0x18 phase counter** (`+= def+0x2C` mod `def+0x2A`; 0x19 inits 0) | `func_8003442C` |
+| `+0x70..+0x80` | **not touched by any of the four bodies or their helpers** — open | — |
+| `+0x84` | clone-chain child link (pass 7) | `func_8003A66C` |
+| `+0xA4` | **squared constant** `(lh(+0x46) + (D_800ABF9C ? 0x104 : 0x6E))²` | 0x19/0x1D |
+
+**New globals banked:** camera world triple `D_8016AC18/1C/20` (three
+independent clusters agree); relative-motion halfword triple
+`D_8016AC38/3A/3C` (0x1C); mode modifier `D_800ABF9C` (0x19 `+0xA4` addend,
+0x1C radius bound `0x10810 : 0x2F44`, 0x352A0 constants); trig LUT
+`D_8008D660`; per-wave table `D_801474FC` × `lh(D_800ABE5C)` stride `0x8C`;
+**EU model table `D_800AC428`**; EU block addresses (§10).
+
+**Definition-side fields consumed:** `def+0x0` (type word), `def+0x2`
+(resource base + sub-table), `def+0xA`, `def+0x14`, `def+0x24` (travel
+clamp), `def+0x28`, `def+0x2A` (phase period), `def+0x2C` (phase step),
+`def+0xB4`, `def+0xBC`, `def+0xBE`.
+
+## 13. Verified vs inferred (pass 8) and the next question
+
+- **High confidence:** every field write/read above (instruction-exact), the
+  byte-level scan method and its zero-hit results on both twins, the
+  branch-closed block, the dispatch rows, the EU block addresses.
+- **Interpretation (medium):** "position/velocity/heading/angle" names; the
+  Q16 fixed-point reading of `+0x38/+0x3C/+0x40` (the high/low half usage is
+  instruction-verified, the fixed-point framing is inference); the
+  laser-contact → resource sub-table link via `+0x2A` (the field is written
+  by the laser walk per pass 6 and read as an index here — the *mechanism*
+  is proven, the gameplay wording is interpretation).
+- **Negative closed:** no static reference reaches the model-table block on
+  either twin (§10) — the §6 static question is done; only the runtime trace
+  remains.
+- **Next specific R1 question:** the PCSX-Redux trace on `0x8002DE2C` /
+  `D_800ABBE4` per `docs/RUNTIME.md` (the runtime-computed-control-flow
+  hypothesis is the only one left), and/or continue the handler map into the
+  remaining type bodies (`0x13/0x14/0x15/0x1A/0x1E/0x21/0x29/0x2A/0x30/
+  0x31/0x36/0x47`) — the 0x31 morph target body is the natural next read.
+
+**Ownership guard (carried):** EU `src/func_80052038.c` stays untouched;
+SDK attribution of the dispatchers remains a separate lane. No builder or
+record is converted before a producer-side landing decision (WORK_QUEUE R1
+gate).
