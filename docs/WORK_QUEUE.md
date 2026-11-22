@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-two bounded runs completed (2026-11-22):**
+**Twenty-three bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -100,7 +100,9 @@ The [SPARKBIT final objective atlas](research/G3_SPARKBIT_FINAL_OBJECTIVE_202611
 
 The [player count and scaling atlas](research/G3_PLAYER_COUNT_SCALING_20261122.md) resolves D_800AC164, four local slots versus 1..6 effective-count override, independent difficulty row, and 692–857 encounter eligibility.
 
-**Next specific R1 question:** trace fixed 80010000 control interface producers, especially 80010B2A; then resolve nonzero mission schedule/config alias and type98. Actual STR/TMD extraction remains separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
+The [gameinfo/playrec atlas](research/G3_GAMEINFO_PLAYREC_20261122.md) recovers named settings API, difficulty mapping, count override setter/default, and replay infrastructure. DRAGOON startup passes zero to separate object-mode selector.
+
+**Next specific R1 question:** resolve nonzero mission schedule/config alias and type98; audit TMD/TIM archive loader. Input/replay storage and callers remain useful follow-up; actual STR/TMD extraction remains separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
