@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-four bounded runs completed (2026-11-22):**
+**Twenty-five bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -104,7 +104,9 @@ The [gameinfo/playrec atlas](research/G3_GAMEINFO_PLAYREC_20261122.md) recovers 
 
 The [alternate-mode and placeholder atlas](research/G3_ALTERNATE_MODE_PLACEHOLDERS_20261122.md) resolves the invalid nonzero static schedule alias and six inert type98 records, distinguishes active short config views, and identifies nested 74/100/124 object pool prefix boundaries.
 
-**Next specific R1 question:** trace TMD/TIM archive loader and resource resolution, then plan matching C conversions using both original build oracles; actual STR/TMD extraction remains separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
+The [resource archive atlas](research/G3_RESOURCE_ARCHIVES_20261122.md) resolves flat offset lookup, TIM upload/free, TMD in-place mapping, region-specific texture indices, and four-target common loader shapes.
+
+**Next specific R1 question:** build a four-target shared-function atlas, starting with well-bounded game-owned leaves and resource loaders; identify safe matching C candidates and reproducible build witnesses. Resource resolver consumers and actual STR/TMD validation remain separate. STR extraction remains blocked on container startup; both CHDs are now project inputs. Recover TMD archive loader/offset format separately.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
