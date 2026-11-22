@@ -8,7 +8,7 @@ The first section of mode zero contains 12 precisely arranged timed emitters, no
 
 ## 1. Original 12 placements, not synthetic spawn samples
 
-The mode-zero first section `D_80079C54` points to secondary list `D_80078E14` in JP; The EU secondary list is `D_8007962C`; the first-section table pointer itself is a separate relocation and is not used here. Each list entry is `u16 local_tick; u16 unused_here; u32 descriptor_ptr`. Descriptor is `u16 flag, u16 cfg_index, s32 x/y/z, s16 angle0/angle1/angle2, u16 padding, u32 script_ptr`. Fields below were read by address from the tracked JP list and then paired against EU at **JP+0x818** for event addresses and descriptor pointers.
+The mode-zero first section `D_80079C54` points to secondary list `D_80078E14` in JP. The EU counterpart is `D_8007962C` (JP + `0x818`). Each list entry is `u16 local_tick; u16 unused_here; u32 descriptor_ptr`. Descriptor is `u16 flag, u16 cfg_index, s32 x/y/z, s16 angle0/angle1/angle2, u16 padding, u32 script_ptr`. Fields below were read by address from the tracked JP list and then paired against EU at **JP+0x818** for event addresses and descriptor pointers.
 
 | Cfg | Tick | JP descriptor | X | Y | Z | Angle `+0x10` | Yaw `+0x12` | Angle `+0x14` |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
