@@ -21,6 +21,8 @@ silently deleting apparent duplicates.
 - [G3 TMD scene geometry to OT (2026-11-22)](research/G3_TMD_GEOMETRY_TO_OT_20261122.md): maps game descriptor traversal, GsLinkObject4, 0x6C world scene records, linked TMD dispatch through named Psy-Q callbacks, 20-byte GPU polygon packets, OT links and GsDrawOt; separates 0x7C projected sprites. **Static only**; EU existing matching C dispatcher is an unadjudicated SDK ownership candidate.
 - [G3 communication buffer schema (2026-11-22)](research/G3_COMM_BUFFER_SCHEMA_20261122.md): proves `D_80166360` is the literal "Communication Buffer" (source error string) — a per-frame 0x18-byte request pool with bump allocator `func_8003EE70`, 756-record capacity gate, laser (`mylaser.c` evidence) and object-spawn producer systems, the corrected 15-way dispatch consumption rule (0xE/!bit4 → world, bit4 → projected) and the 0x6C record field map; render arrays are immediate-mode staging rebuilt every frame. **Static only**.
 
+- [G3 type 0x1D constructor / 0x1C active controller (2026-11-22)](research/G3_TYPE1D_CONTROLLER_20261122.md): resolves configuration 0x66 → 0x7B, model/resource 0x9F, hit processing, two-phase update and destruction; both retail input hashes verified, JP/EU constructor skeleton and configuration corroborated. **Static only**; actual encounter identification remains open.
+
 ## Fast navigation
 
 ```sh
