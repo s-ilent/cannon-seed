@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twenty-six bounded runs completed (2026-11-22):**
+**Twenty-seven bounded runs completed (2026-11-22):**
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
@@ -108,7 +108,9 @@ The [resource archive atlas](research/G3_RESOURCE_ARCHIVES_20261122.md) resolves
 
 The [shared resource resolver atlas](research/G3_SHARED_RESOURCE_RESOLVERS_20261122.md) proves four complete game-owned leaves (89 instructions, all relocation-equivalent across four targets), logical ID vs archive-index lookup, miss-path output distinctions, and two ranked matching-C candidates.
 
-**Next specific R1 question:** trace model/texture resolver output metadata through renderer-side descriptor consumers, then extend the shared-function atlas with another bounded game-owned family. Archive offset and logical texture lookup are candidates for a guarded matching witness, not authorized source landings. Actual STR/TMD validation remains separate; container startup works again and both CHDs are accessible, but CHD extraction tooling is absent.
+The [resource render metadata atlas](research/G3_RESOURCE_RENDER_METADATA_20261122.md) proves model attribute bit6 selects no-normal-lighting triangle variants, +0C is OT depth shift, and texture +0C is direct sprite OT priority; seven consumer windows agree across four targets.
+
+**Next specific R1 question:** recover OT setup, draw direction, bucket capacity and resource layering policy. Extend shared-function atlas as useful; archive offset and texture lookup remain guarded matching candidates, not authorized source landings. Actual STR/TMD validation remains separate; CHD extraction tooling is absent.
 Mode-nonzero aliased data and type 98 remain open. The render arrays are proven
 frame-local staging; do not convert builders before a producer-side
 landing decision.
