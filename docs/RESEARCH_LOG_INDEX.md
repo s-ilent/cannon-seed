@@ -31,6 +31,8 @@ silently deleting apparent duplicates.
 
 - [G3 mission scheduling and object scripts (2026-11-22)](research/G3_MISSION_SCRIPTING_20261122.md): recovers environment/section timelines, two encounter spawn streams, general object constructors, 124-way slot iteration, section-time and local-time object scripts and variable-width command handlers. 839/839 JP/EU normalized instructions, 711 exact. **Static only**; authored table contents and opcode numbers remain open.
 
+- [G3 retail dispatch tables (2026-11-22)](research/G3_RETAIL_DISPATCH_TABLES_20261122.md): independently SHA-1 verifies both already-tracked private original executable blobs; recovers 256 object dispatch slots, 18 opcode entries and both five-entry damage tables (284/284 region-normalized pointers). Identifies concrete SsGetNck SDK extent/provenance conflict. Static verified-input witness only; no binary/source changes.
+
 ## Fast navigation
 
 ```sh
