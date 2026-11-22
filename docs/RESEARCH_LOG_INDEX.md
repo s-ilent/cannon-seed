@@ -54,6 +54,8 @@ silently deleting apparent duplicates.
 
 - [G3 gameinfo and play recording (pass 23)](research/G3_GAMEINFO_PLAYREC_20261122.md): recovers named 18-index settings API, two banks, effective-player override initialized disabled, LEVEL/TUNE_LEVE difficulty mapping, MUTEKI_MODE, 5311 sample replay buffer and independent mission-mode selectors; 924 corresponding instruction shapes.
 
+- [G3 alternate schedule and placeholders (pass 24)](research/G3_ALTERNATE_MODE_PLACEHOLDERS_20261122.md): proves invalid nonzero schedule/config alias, six inert type98 records, short config views and nested 74/100/124 object-pool limits; 431 corresponding instruction shapes and 256 normalized dispatch pointers.
+
 ## Fast navigation
 
 ```sh
