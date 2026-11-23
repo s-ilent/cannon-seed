@@ -130,14 +130,20 @@ repeat its summary.
 
 ### R2 — Cross-target source reuse and semantic-quality classification
 
-**Pass 1 delivered 2026-11-23:**
+**Passes 1–2 delivered 2026-11-23:**
 [the classification sample](research/G3_R2_SOURCE_REUSE_CLASSIFICATION_20261123.md) —
-16 shared C rows (x5–x8 instances) fully read and tiered: 7 semantic_c,
-9 asm_preserved (the whole sampled GTE math family), 0 hybrid; the three
-sampled unknown-name rows are GTE compose-rotation members, not game
-logic; registry extended at g3_jp instances only (reviewed rows 5 → 21,
-528 → 4,180 bytes). **Next R2 frame: the origin-unattributed C rows;
-the hybrid tier remains unsampled.**
+pass 1: 16 shared C rows (x5–x8 instances) fully read and tiered: 7
+semantic_c, 9 asm_preserved (the whole sampled GTE math family), 0
+hybrid; the three sampled unknown-name rows are GTE compose-rotation
+members, not game logic. Pass 2: the origin-unattributed C frame —
+10 more rows registered (the g3_jp 0x1CC hand-asm subdivision four-up =
+game-owned rendering; SetVertex0-2/ReadSZfifo3/4 = SDK members in an
+evidence gap; func_800642A0 g3_eu = the first live hybrid, a real
+decompiled SPU-init driver). Registry now 39 entries; g3_jp reviewed
+rows 5 → 30, reviewed bytes 528 → 6,112; g3_jp's unattributed C
+population fully reviewed. **Next R2 frame: the g3_eu/mainmenu_eu
+unattributed singletons; beyond that, coordinate with R1 on asm-row
+wrapper boundaries instead of duplicating.**
 
 **Target:** a bounded sample of current `src/` C rows and their actual
 target yaml consumers.

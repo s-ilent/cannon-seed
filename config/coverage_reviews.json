@@ -204,6 +204,76 @@
       "source": "src/_SsUtBuildADSR.c",
       "tier": "semantic_c",
       "evidence": "LIBSND _SsUt ADSR packer: plain readable C halfword record -> two SPU ADSR attribute words (signed flag fields, shift-then-mask rate pack); no inline asm; entire file read."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_8005A13C",
+      "source": "src/func_8005A13C.c",
+      "tier": "asm_preserved",
+      "evidence": "Recursive triangle-subdivision driver, front half (0x1CC of the x20 byte-identical wave): the whole body is one file-scope __asm__ string of verbatim retail hand-asm bytes (depth cull, screen X/Y bands, midpoint splitter); no plain C algorithm. Game-owned rendering code, not SDK."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_8005A92C",
+      "source": "src/func_8005A92C.c",
+      "tier": "asm_preserved",
+      "evidence": "Same hand-asm subdivision unit as func_8005A13C (x20 wave member, differing only in the .globl row name); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_8005B42C",
+      "source": "src/func_8005B42C.c",
+      "tier": "asm_preserved",
+      "evidence": "Same hand-asm subdivision unit as func_8005A13C (x20 wave member); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_8005BD4C",
+      "source": "src/func_8005BD4C.c",
+      "tier": "asm_preserved",
+      "evidence": "Same hand-asm subdivision unit as func_8005A13C (x20 wave member); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "SetVertex0",
+      "source": "src/SetVertex0.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE fifo member: two lwc2 cop2 loads into VXY0/VZ0 via one volatile asm line; cop2 unreachable from plain C; row unattributed because no committed SDK anchor evidence covers it, not because it is game code."
+    },
+    {
+      "target": "g3_jp",
+      "name": "SetVertex1",
+      "source": "src/SetVertex1.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE fifo member: two lwc2 loads into VXY1/VZ1, SetVertex0's second-slot twin; whole body inline asm; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "SetVertex2",
+      "source": "src/SetVertex2.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE fifo member: two lwc2 loads into VXY2/VZ2, SetVertex0's third-slot twin; whole body inline asm; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "ReadSZfifo3",
+      "source": "src/ReadSZfifo3.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE fifo member: three swc2 stores of SZ1/SZ2/SZ3 through one volatile asm sequence per store; whole body inline asm; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "ReadSZfifo4",
+      "source": "src/ReadSZfifo4.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE fifo member: four swc2 stores of SZ0..SZ3; whole body inline asm; not semantic C."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_800642A0",
+      "source": "src/func_800642A0.c",
+      "tier": "hybrid",
+      "evidence": "The game-side SPU reset/init driver (_spu_init family, 0x548): the algorithm is real decompiled C (nine x3 software-timeout spins, SPUSTAT wait with retry, 24-voice table sweep, register sweep, convergent finish) with exactly ONE zero-byte memory-clobber barrier asm pinning the li-in-place shape law; registered as hybrid because semantic_c forbids inline asm while the substance is C. psyq 3.3 LIBSPU carries the same idiom but is not byte-identical (game copy compiled by the game's own cc1)."
     }
   ]
 }
