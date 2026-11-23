@@ -166,3 +166,84 @@ R2 lane's remaining value is sampling the **asm** rows' C-wrapper
 boundaries, which overlaps R1's ownership work — coordinate there
 instead of duplicating.
 
+## Pass 3 (2026-11-23, later window) — the g3_eu/mainmenu_eu unattributed-C singletons
+
+Bounded **read-only source review** per the frame above: 13 rows, every
+row's entire source file read, every placement verified against its live
+target YAML row (never the filename), registry entries added at the
+sampled instances only. Excluded from the frame: the 0x1CC wave members
+(pass 2's game-owned classification, instance registration pending), the
+owner gate `func_80052038`, the fifo family (ReadSZfifo3/4, SetVertex0-2
+— classified at the g3_jp instances in pass 2), and the rows already
+registered before this pass (g3_eu func_80047804 semantic_c, MulMatrix
+asm_preserved, func_800642A0 hybrid; mainmenu_eu func_80034ACC /
+func_80034804 semantic_c, func_8002A9F8 hybrid). No source, YAML, asm or
+oracle change.
+
+| Row (instance VA) | Tier | Extent | Evidence (full read) |
+| --- | --- | --- | --- |
+| [func_80067690](../../../src/func_80067690.c) g3_eu 0x80067690 | **hybrid** | 0x438 | The libsnd SVM (VMANAGER) init, member identity proven (psyq row-stream kind-0x30 walk + def-row offset math, header note); real decompiled C (zero sweeps 0xC0/0x18/0x10, register-ternary 0x18 voice cap, per-voice 0x34-stride record init by DLABEL indexing, SPU voice-register run through `*D_800AB874`) with register-asm locals ($5/$4/$2 pins), two zero-byte barriers and one materializer. Single caller func_8006AC04 (`ori a0,0x18` delay slot). `_svm_damper` rename claim owner-gated (omf_pubsyms pin) — no rename exercised. |
+| [func_80048908](../../../src/func_80048908.c) g3_eu 0x80048908 | **hybrid** | 0xc0 | Write-all host loop over the LIBSN `_SN_write` member: unsigned 0x8000 chunk guard, accumulate/bail −1, stop on short write, len==0 shares the return-total tail; one register-asm var pins `total` to $18 (the banked _SN_write idiom), rest plain C. |
+| [func_8004682C](../../../src/func_8004682C.c) g3_eu 0x8004682C | semantic_c | 0xdc | Four thin void wrappers over the palette-fade/UV helper func_8004427C (`x*4+0x100`/`0x14`, `0x17`, two constant-pair calls); plain C, no asm; shaping laws read off the landed retail assembly. |
+| [func_80062840](../../../src/func_80062840.c) g3_eu 0x80062840 | semantic_c | 0x94 | CD host-command glue: command 0xE with a one-byte stack arg, optional `flags&0x100` arm registering `data_ready_callback` + func_80063364 through the CD callback pair, shared 0x1B continuation. |
+| [func_8006B648](../../../src/func_8006B648.c) g3_eu 0x8006B648 | semantic_c | 0x78 | Three functions: range-guarded slot clear (`idx>=3` → 0, else zero the halfword at `*D_800ABA5C + idx*16`, return 1) + two delay-slot constant wrappers feeding func_800653AC (1, 0). |
+| [func_8006AD50](../../../src/func_8006AD50.c) g3_eu 0x8006AD50 | semantic_c | 0x40 | Two one-call wrappers feeding func_8006AC04 with constants 0/1 materialized in the jal delay slot; game-authored glue (both jal'd from func_80028140). |
+| [func_80046660](../../../src/func_80046660.c) g3_eu 0x80046660 | semantic_c | 0x30 | The 0x4B palette-fade wrapper, word stream identical to mainmenu_eu's func_8005AC68 with only the callee delta (func_8004427C vs func_80058884). |
+| [func_8004E29C](../../../src/func_8004E29C.c) g3_eu 0x8004E29C | semantic_c | 0x20 | Non-leaf wrapper forwarding to the target-curated local LIBGTE SetGeomScreen copy; a0 passthrough is the whole marshalling; game-authored (caller func_80022B5C). |
+| [func_8005E16C](../../../src/func_8005E16C.c) g3_eu 0x8005E16C | semantic_c | 0x10 | Fixed-slot long store committing the argument into D_80171EA0; reached from func_80022B5C. |
+| [func_8005E244](../../../src/func_8005E244.c) g3_eu 0x8005E244 | semantic_c | 0x10 | Fixed-slot long store into D_8016AB6C; reached from func_8002A2CC and func_80022B5C. |
+| [func_8005AE34](../../../src/func_8005AE34.c) mainmenu_eu 0x8005AE34 | semantic_c | 0x3c | Palette-fade wrapper family member — the g3_eu func_8004682C first wrapper's word stream verbatim (`x*4+0x100` fold, `0x14` third arg) with callee func_80058884. |
+| [func_8005AC68](../../../src/func_8005AC68.c) mainmenu_eu 0x8005AC68 | semantic_c | 0x30 | Palette-fade wrapper carrying the family's **fifth constant 0x4B** (not in the landed g3_eu row); the same twelve-word body also sits at g3org_jp (src/func_80043E94.c) — one C shape, three targets, callee extern is the only per-target delta. |
+| [func_8005AE70](../../../src/func_8005AE70.c) mainmenu_eu 0x8005AE70 | semantic_c | 0x30 | Palette-fade wrapper, the g3_eu second-wrapper shape verbatim (`0x17` third arg) with callee func_80058884. Same NAME as g3_eu's separate 0x1CC wave row at the same VA 0x3B670 — a shared-name case owned by the R3 lane; classification only, no rename. |
+
+Registry delta: 39 → 52 entries; g3_eu reviewed rows 3 → 13 (9
+semantic_c / 3 hybrid / 1 asm_preserved), reviewed bytes 1,684 → 3,620
+of 18,340; mainmenu_eu reviewed rows 3 → 6 (5 semantic_c / 1 hybrid),
+reviewed bytes 2,120 → 2,276 of 14,156. All-target reviewed rows now 26
+semantic_c / 5 hybrid / 21 asm_preserved (14,396 bytes). Suite 299/299
+after the extension; `--strict` accepts all entries.
+
+### Pass-3 findings
+
+1. **The EU singleton population is ordinary game-side C, not one more
+   SDK cluster.** 11 of 13 rows are semantic_c with zero inline asm —
+   the palette-fade wrapper family (constants 0x14/0x17/0x4B across
+   g3_eu/mainmenu_eu/g3org_jp, callee extern the only per-target
+   delta), CD host-command glue, the init-driver constant wrappers, the
+   slot-clear trio and two fixed-slot stores. The strongest multi-target
+   one-src class yet seen in the C tier: func_8005AC68's twelve-word
+   body is byte-identical across three targets.
+2. **The hybrid pair is register-pinned decompiled C, heavier than pass
+   2's single-barrier precedent.** func_80067690 pins three registers
+   ($5/$4/$2) with two zero-byte barriers and one materializer; the SVM
+   identity is *proven*, not inferred — the game's own cc1 2.6.3-PSX
+   build of the libsnd VMANAGER init. func_80048908 pins `total` to $18.
+   Both sit at their landing ceiling short of a compiler-flag exception;
+   neither is a semantic-C candidate.
+3. **A same-name different-row case is documented, not "fixed".**
+   mainmenu_eu's func_8005AE70 (0x30 wrapper) and g3_eu's func_8005AE70
+   (0x1CC wave member, per-target override source `src/g3_eu/`
+   func_8005AE70.c) live at the same VA 0x3B670 in their respective
+   images. Shared-name ownership belongs to the R3 lane; this pass
+   registered the classification and renamed nothing.
+4. **Frame accounting closes exactly.** g3_eu's 7,316 unattributed row
+   bytes = 1,936 this pass + 1,352 func_800642A0 (reviewed) + 64
+   func_80047804 (reviewed) + 1,840 wave + 2,032 owner gate + 92 fifo
+   family. mainmenu_eu's 4,224 = 156 this pass + 2,120 pre-registered
+   big three + 1,840 wave + 44 fifo + 64 eight-byte mini family. The
+   only unreviewed EU unattributed-C left is therefore the wave
+   instances, the owner gate, the fifo instance registrations, and
+   mainmenu_eu's eight 8-byte mini rows (64 bytes).
+
+### Next R2 step (after pass 3)
+
+**Pass 4 (tiny, closes the EU frame):** the mainmenu_eu 8-byte mini
+family (func_8002E3C0/func_8002E3C8/func_8002FF04/func_80030978/
+func_80030980/func_80030988/func_80030990/func_800309C8 — 8 rows,
+64 bytes) plus instance-level registration of the already-classified
+wave/fifo rows if instance byte-credit is wanted. func_80030990 is an
+R3 Class-B shared name — classification only there. After that the EU
+unattributed-C frame is fully reviewed and the R2 lane's remaining
+value is the asm-row wrapper-boundary sampling, which overlaps R1's
+ownership work — coordinate there instead of duplicating.
+

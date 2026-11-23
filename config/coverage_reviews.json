@@ -274,6 +274,97 @@
       "source": "src/func_800642A0.c",
       "tier": "hybrid",
       "evidence": "The game-side SPU reset/init driver (_spu_init family, 0x548): the algorithm is real decompiled C (nine x3 software-timeout spins, SPUSTAT wait with retry, 24-voice table sweep, register sweep, convergent finish) with exactly ONE zero-byte memory-clobber barrier asm pinning the li-in-place shape law; registered as hybrid because semantic_c forbids inline asm while the substance is C. psyq 3.3 LIBSPU carries the same idiom but is not byte-identical (game copy compiled by the game's own cc1)."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_80067690",
+      "source": "src/func_80067690.c",
+      "tier": "hybrid",
+      "evidence": "Full row read (0x438): the libsnd SVM (VMANAGER) init, member identity proven by the psyq row-stream kind-0x30 walk + def-row offset math (header note, cron-20261101-0536). Real decompiled C body - zero sweeps 0xC0/0x18/0x10, register-ternary 0x18 voice cap, per-voice 0x34-stride record init by DLABEL indexing, SPU voice-register run through *D_800AB874, main-volume/mask tail - with register-asm locals ($5/$4/$2 pins), two zero-byte memory-clobber barriers and one asm materializer: register-pinned asm under the hybrid tier. Single caller func_8006AC04 (delay ori a0,0x18). The _svm_damper rename claim stays owner-gated (omf_pubsyms archive walk stops early); no rename exercised here."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_80048908",
+      "source": "src/func_80048908.c",
+      "tier": "hybrid",
+      "evidence": "Full row read (0xc0, one body across six spimdisasm pieces): write-all host loop over the LIBSN _SN_write member - unsigned 0x8000 chunk guard, accumulate total, bail -1 on host failure, stop on short write, len==0 entry shares the return-total tail via the if(len!=0) wrap. One explicit-asm register var pins total to $18 (the banked _SN_write idiom); the rest is plain C - hybrid."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_8004682C",
+      "source": "src/func_8004682C.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0xdc, four wrappers - the entire translation unit inspected): thin void wrappers over the palette-fade/UV helper func_8004427C ((x*4+0x100)/y/0x14, x/y/0x17, and two constant-pair calls); plain C, no inline asm. Shaping notes (old-ABI short sign-extends, ori-vs-addiu immediate class, delay-slot argument materialization) read off the landed retail assembly."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_80062840",
+      "source": "src/func_80062840.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x94): CD host-command glue - LIBCD command 0xE with a one-byte stack argument, optional flags&0x100 arm registering data_ready_callback + func_80063364 through the CD callback-registration pair, shared 0x1B continuation call bracketing the body; plain C, no inline asm."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_8006B648",
+      "source": "src/func_8006B648.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x78, three functions - the entire row inspected): range-guarded slot clear (idx>=3 returns 0, else zeroes the halfword at *D_800ABA5C + idx*16 and returns 1) plus two one-call wrappers feeding func_800653AC with constants 1 and 0 through the jal delay slot; plain C, no inline asm."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_8006AD50",
+      "source": "src/func_8006AD50.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x40, two wrappers - the entire row inspected): one-call wrappers feeding func_8006AC04 with constants 0 and 1 materialized in the jal delay slot (addu a0,zero,zero / ori a0,zero,1); plain C, no inline asm; game-authored glue (both jal'd from func_80028140)."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_80046660",
+      "source": "src/func_80046660.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x30): the 0x4B palette-fade wrapper - word stream identical to mainmenu_eu's func_8005AC68 with the one expected per-target callee delta (func_8004427C vs func_80058884); plain C, no inline asm."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_8004E29C",
+      "source": "src/func_8004E29C.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x20): non-leaf wrapper forwarding its argument to the target-curated local LIBGTE SetGeomScreen copy; a0 passthrough is the whole argument marshalling; plain C, no inline asm; game-authored (caller func_80022B5C)."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_8005E16C",
+      "source": "src/func_8005E16C.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x10): fixed-slot long store committing the argument into D_80171EA0 (array-declared extern keeps cc1 on the fused lui/%lo pair); plain C, no inline asm; reached from func_80022B5C."
+    },
+    {
+      "target": "g3_eu",
+      "name": "func_8005E244",
+      "source": "src/func_8005E244.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x10): fixed-slot long store into D_8016AB6C, same decode class as func_8005E16C on its own datum; plain C, no inline asm; reached from func_8002A2CC and func_80022B5C."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8005AE34",
+      "source": "src/func_8005AE34.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x3c): palette-fade wrapper family member - the g3_eu func_8004682C first wrapper's word stream verbatim (x*4+0x100 folded into the sign-extend, 0x14 third argument) with the mainmenu_eu callee func_80058884; plain C, no inline asm."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8005AC68",
+      "source": "src/func_8005AC68.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x30): palette-fade wrapper carrying the family's fifth constant 0x4B, which the landed g3_eu row does not have; the same twelve-word body also sits at g3org_jp (src/func_80043E94.c) with callee func_80041AB0 - one C-source shape, three targets; here callee func_80058884; plain C, no inline asm."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8005AE70",
+      "source": "src/func_8005AE70.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x30): palette-fade wrapper, the g3_eu second-wrapper shape verbatim (0x17 third argument) with callee func_80058884; plain C, no inline asm. Same NAME as g3_eu's separate 0x1CC wave row at the same VA 0x3B670 (a shared-name case owned by the R3 lane) - classification only, no rename, no yaml change."
     }
   ]
 }

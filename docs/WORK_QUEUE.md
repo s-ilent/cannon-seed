@@ -130,7 +130,7 @@ repeat its summary.
 
 ### R2 — Cross-target source reuse and semantic-quality classification
 
-**Passes 1–2 delivered 2026-11-23:**
+**Passes 1–3 delivered 2026-11-23:**
 [the classification sample](research/G3_R2_SOURCE_REUSE_CLASSIFICATION_20261123.md) —
 pass 1: 16 shared C rows (x5–x8 instances) fully read and tiered: 7
 semantic_c, 9 asm_preserved (the whole sampled GTE math family), 0
@@ -139,11 +139,20 @@ members, not game logic. Pass 2: the origin-unattributed C frame —
 10 more rows registered (the g3_jp 0x1CC hand-asm subdivision four-up =
 game-owned rendering; SetVertex0-2/ReadSZfifo3/4 = SDK members in an
 evidence gap; func_800642A0 g3_eu = the first live hybrid, a real
-decompiled SPU-init driver). Registry now 39 entries; g3_jp reviewed
-rows 5 → 30, reviewed bytes 528 → 6,112; g3_jp's unattributed C
-population fully reviewed. **Next R2 frame: the g3_eu/mainmenu_eu
-unattributed singletons; beyond that, coordinate with R1 on asm-row
-wrapper boundaries instead of duplicating.**
+decompiled SPU-init driver). Pass 3: the g3_eu/mainmenu_eu
+unattributed-C singletons — 13 rows fully read and placed against their
+live YAML rows: 11 semantic_c (the palette-fade wrapper family with
+per-target callee deltas, CD host-command glue, init-driver constant
+wrappers, slot-clear trio, fixed-slot stores) + 2 hybrid (the
+identity-proven SVM init func_80067690, register pins $5/$4/$2; the
+_SN_write write-all loop, `total` pinned to $18), 0 asm_preserved.
+Registry now 52 entries (26 semantic_c / 5 hybrid / 21 asm_preserved,
+14,396 reviewed bytes); g3_eu reviewed bytes 1,684 → 3,620, mainmenu_eu
+2,120 → 2,276. **Next R2 frame: pass 4 closes the EU unattributed-C
+frame — the mainmenu_eu 8-byte mini family (8 rows / 64 bytes) plus
+instance-level registration of the already-classified wave/fifo rows;
+beyond that, coordinate with R1 on asm-row wrapper boundaries instead
+of duplicating.**
 
 **Target:** a bounded sample of current `src/` C rows and their actual
 target yaml consumers.
