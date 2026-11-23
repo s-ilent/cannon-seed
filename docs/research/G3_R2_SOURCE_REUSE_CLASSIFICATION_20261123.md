@@ -296,3 +296,72 @@ owner gate.
 3. Then the asm-row wrapper-boundary sampling, which overlaps R1's
    ownership work — coordinate there instead of duplicating.
 
+
+## Pass 5 (same window) — the wave/fifo instance registration
+
+The pass-4 next-step item 1 executed: the 15 pending target instances of
+the two pass-2 classifications are registered — the 0x1CC hand-asm
+subdivision wave (4 instances per target) and the LIBGTE fifo family
+(SetVertex0-2 + ReadSZfifo3/4 at g3_eu; ReadSZfifo3/4 only at
+mainmenu_eu, which does not carry the SetVertex trio as live `c` rows —
+its 44 fifo bytes are exactly the ReadSZfifo pair). Bounded **mechanical
+bookkeeping, no new source reads**: the classification evidence was
+banked by pass 2's full reads at the g3_jp instances; this pass
+re-verified the two mechanical facts per instance and registered them.
+
+1. **Wave identity re-verified mechanically.** All eight EU wave-member
+   bodies are byte-identical to the pass-2-reviewed g3_jp func_8005A13C
+   modulo each file's own row name (normalize the name, whitespace-
+   collapsed compare) — including the two per-target override sources
+   (`src/g3_eu/func_8005AE70.c`, `src/mainmenu_eu/func_8006F34C.c`),
+   which are the same unit at 7,081 bytes each.
+2. **Placement verified twice.** Every instance checked against the
+   live YAML-derived `coverage_report.py --json --rows` output AND
+   directly against `config/splat.g3_eu.yaml` /
+   `config/splat.mainmenu_eu.yaml` (row present as a live `c` row; VRAM
+   and extent per the report). Tier `asm_preserved` carried from pass 2.
+   No source, YAML, asm or oracle change.
+
+| Instances | Tier | Placement (live YAML) | Basis |
+| --- | --- | --- | --- |
+| g3_eu func_80059B80 / func_8005A370 / func_8005AE70 / func_8005B790 | asm_preserved | 0x80059b80 / 0x8005a370 / 0x8005ae70 / 0x8005b790, 0x1cc each | pass-2 wave classification; body ≡ g3_jp func_8005A13C modulo row name |
+| g3_eu SetVertex0 / SetVertex1 / SetVertex2 | asm_preserved | 0x8004e2bc / 0x8004e2cc / 0x8004e2dc, 0x10 each | pass-2 fifo classification (LIBGTE, lwc2 cop2 loads) |
+| g3_eu ReadSZfifo3 / ReadSZfifo4 | asm_preserved | 0x80051bf4 (0x14) / 0x80051c08 (0x18) | pass-2 fifo classification (LIBGTE, swc2 SZ stores) |
+| mainmenu_eu func_8006E05C / func_8006E84C / func_8006F34C / func_8006FC6C | asm_preserved | 0x8006e05c / 0x8006e84c / 0x8006f34c / 0x8006fc6c, 0x1cc each | pass-2 wave classification; body ≡ g3_jp func_8005A13C modulo row name |
+| mainmenu_eu ReadSZfifo3 / ReadSZfifo4 | asm_preserved | 0x800660d0 (0x14) / 0x800660e4 (0x18) | pass-2 fifo classification (LIBGTE, swc2 SZ stores) |
+
+Registry delta: 60 → 75 entries (34 semantic_c / 5 hybrid /
+36 asm_preserved); all-target reviewed bytes 14,460 → 18,276 (+1,932
+g3_eu, +1,884 mainmenu_eu); g3_eu reviewed rows 13 → 22 (bytes 3,620 →
+5,552), mainmenu_eu reviewed rows 14 → 20 (bytes 2,340 → 4,224). Suite
+299/299 after the extension; `--strict` accepts all entries.
+
+### The EU unattributed-C frame after pass 5 — accounting
+
+- **mainmenu_eu is CLOSED at the instance level.** All 4,224
+  unattributed-C bytes now sit on reviewed rows (2,340 singletons +
+  1,884 wave/fifo instances); zero unreviewed unattributed-C rows
+  remain in the target.
+- **g3_eu holds exactly two unreviewed unattributed-C rows, both gated
+  outside R2.** The live frame reconciles exactly: 7,360 unattributed
+  bytes = 5,284 on reviewed rows (5,552 reviewed of which 268 are
+  anchor-covered) + 2,032 owner-gated func_80052038 (the SDK-ownership
+  gate, do-NOT-grab) + 44 unattributed of func_8006AC04's 0x14c row
+  (the disc-return runbook's Phase D landing target, runbook-gated).
+- The wave is now registered at 12 of its 20 instances (g3_jp 4,
+  g3_eu 4, mainmenu_eu 4); g3org_jp/g3org_eu (8 instances) remain a
+  future mechanical pass of this same motion, and mainmenu_jp's
+  instances are lane-owned — untouched here.
+
+### Next R2 step (after pass 5)
+
+1. The boot-target unattributed-C rows (sces_00269 ~5 rows / ~92 bytes;
+   slps_00270 ~5 rows / ~108 bytes beyond its registered row) are the
+   last untouched C frame — **check the do-NOT-grab lanes first**
+   (slps boot copies = scan lane; the sces setIntr family is parked)
+   before sampling.
+2. The g3org_jp/g3org_eu wave/fifo instance registration (8 + pair
+   instances) — the same mechanical motion as this pass, whenever the
+   lane is next opened.
+3. Then the asm-row wrapper-boundary sampling, which overlaps R1's
+   ownership work — coordinate there instead of duplicating.
