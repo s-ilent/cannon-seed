@@ -365,6 +365,62 @@
       "source": "src/func_8005AE70.c",
       "tier": "semantic_c",
       "evidence": "Full row read (0x30): palette-fade wrapper, the g3_eu second-wrapper shape verbatim (0x17 third argument) with callee func_80058884; plain C, no inline asm. Same NAME as g3_eu's separate 0x1CC wave row at the same VA 0x3B670 (a shared-name case owned by the R3 lane) - classification only, no rename, no yaml change."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8002E3C0",
+      "source": "src/func_8002E3C0.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x8002e3c0): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8002E3C8",
+      "source": "src/func_8002E3C8.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x8002e3c8): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_8002FF04",
+      "source": "src/func_8002FF04.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x8002ff04): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_80030978",
+      "source": "src/func_80030978.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x80030978): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_80030980",
+      "source": "src/func_80030980.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x80030980): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_80030988",
+      "source": "src/func_80030988.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x80030988): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_80030990",
+      "source": "src/func_80030990.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x80030990): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml. Same name as sces_00269's 0xcc sdk-tagged asm row (the R3 Class-B shared-name family) — classification only, no rename, no yaml change."
+    },
+    {
+      "target": "mainmenu_eu",
+      "name": "func_800309C8",
+      "source": "src/func_800309C8.c",
+      "tier": "semantic_c",
+      "evidence": "Full row read (0x8, mainmenu_eu 0x800309c8): the entire source is one empty void function; the retail row is exactly the two-instruction return, so the empty body IS the full behavior; no inline asm. Placement verified against config/splat.mainmenu_eu.yaml."
     }
   ]
 }

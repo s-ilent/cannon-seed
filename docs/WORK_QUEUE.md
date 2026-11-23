@@ -146,13 +146,17 @@ per-target callee deltas, CD host-command glue, init-driver constant
 wrappers, slot-clear trio, fixed-slot stores) + 2 hybrid (the
 identity-proven SVM init func_80067690, register pins $5/$4/$2; the
 _SN_write write-all loop, `total` pinned to $18), 0 asm_preserved.
-Registry now 52 entries (26 semantic_c / 5 hybrid / 21 asm_preserved,
-14,396 reviewed bytes); g3_eu reviewed bytes 1,684 → 3,620, mainmenu_eu
-2,120 → 2,276. **Next R2 frame: pass 4 closes the EU unattributed-C
-frame — the mainmenu_eu 8-byte mini family (8 rows / 64 bytes) plus
-instance-level registration of the already-classified wave/fifo rows;
-beyond that, coordinate with R1 on asm-row wrapper boundaries instead
-of duplicating.**
+Pass 4 (same window): the mainmenu_eu 8-byte mini family — 8 rows of
+one empty void function each, the empty body IS the retail two-instruction
+return; registered semantic_c (func_80030990 is an R3 Class-B shared
+name — classification only).
+Registry now 60 entries (34 semantic_c / 5 hybrid / 21 asm_preserved,
+14,460 reviewed bytes); g3_eu reviewed bytes 1,684 → 3,620, mainmenu_eu
+2,120 → 2,340. **The EU unattributed-C frame is fully reviewed at the
+singleton level; the remaining R2 value is the optional wave/fifo
+instance bookkeeping, then the boot-target C rows (check the
+do-NOT-grab lanes first), then the asm-row wrapper-boundary sampling —
+which overlaps R1; coordinate there instead of duplicating.**
 
 **Target:** a bounded sample of current `src/` C rows and their actual
 target yaml consumers.

@@ -247,3 +247,52 @@ unattributed-C frame is fully reviewed and the R2 lane's remaining
 value is the asm-row wrapper-boundary sampling, which overlaps R1's
 ownership work — coordinate there instead of duplicating.
 
+## Pass 4 (same window) — the mainmenu_eu 8-byte mini family
+
+The frame above executed immediately: all eight rows fully read, every
+placement verified against `config/splat.mainmenu_eu.yaml`
+(0xCE10/0xCE18/0xE5C4/0xEF08/0xEF10/0xEF18/0xEF20/0xEF58, each 0x8).
+Each source is **one empty void function** — the retail row is exactly
+the two-instruction return, so the empty body IS the full behavior; all
+eight registered `semantic_c` with per-row placement evidence.
+func_80030990 additionally shares its name with sces_00269's 0xcc
+sdk-tagged **asm** row (the R3 Class-B family) — classification only,
+no rename, no yaml change.
+
+Registry delta: 52 → 60 entries (34 semantic_c / 5 hybrid /
+21 asm_preserved, 14,460 reviewed bytes); mainmenu_eu reviewed bytes
+2,276 → 2,340 (semantic_c 1,940), of 14,156. Suite 299/299; `--strict`
+accepts all entries.
+
+### The EU unattributed-C frame after pass 4 — accounting
+
+Every g3_eu/mainmenu_eu unattributed-C **singleton** is now reviewed:
+
+- **g3_eu** (7,316 row bytes): 3,620 reviewed across this doc (pass 3 +
+  pre-existing func_80047804/MulMatrix/func_800642A0); the only
+  unreviewed remainder is 1,840 wave instances (classified game-owned
+  in pass 2 at the g3_jp instances; per-instance registration pending) +
+  2,032 owner-gated func_80052038 + 92 fifo instances (classified SDK
+  in pass 2; per-instance registration pending).
+- **mainmenu_eu** (4,224 row bytes): 2,340 reviewed; the only
+  unreviewed remainder is 1,840 wave instances + 44 fifo instances,
+  both already classified in pass 2.
+
+The EU unattributed-C frame is therefore **fully reviewed at the
+singleton level** — zero unknown-content rows remain; what is left is
+instance-level bookkeeping of already-classified families and the
+owner gate.
+
+### Next R2 step (after pass 4)
+
+1. Optional bookkeeping pass: register the wave/fifo **instance**
+   entries (g3_eu/mainmenu_eu) to convert the pass-2 classification
+   into instance byte-credit — mechanical, no new reads.
+2. The last untouched unattributed-C frame is the boot targets
+   (sces_00269 ~5 rows / ~92 bytes; slps_00270 ~5 rows / ~108 bytes
+   beyond its registered row) — **check the do-NOT-grab lanes first**
+   (slps boot copies = scan lane; the sces setIntr family is parked)
+   before sampling.
+3. Then the asm-row wrapper-boundary sampling, which overlaps R1's
+   ownership work — coordinate there instead of duplicating.
+
