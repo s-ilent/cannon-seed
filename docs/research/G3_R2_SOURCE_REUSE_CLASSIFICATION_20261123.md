@@ -336,7 +336,26 @@ g3_eu, +1,884 mainmenu_eu); g3_eu reviewed rows 13 → 22 (bytes 3,620 →
 5,552), mainmenu_eu reviewed rows 14 → 20 (bytes 2,340 → 4,224). Suite
 299/299 after the extension; `--strict` accepts all entries.
 
-### The EU unattributed-C frame after pass 5 — accounting
+### Pass 5b (same window) — the same motion at the g3org pair
+
+The lane-free targets took the identical mechanical motion immediately:
+15 more instances (g3org_jp 9 = 4 wave + all five fifo members;
+g3org_eu 6 = 4 wave + the ReadSZfifo pair — g3org_eu, like mainmenu_eu,
+does not carry the SetVertex trio as live `c` rows). The same two
+mechanical facts re-verified per instance: all eight g3org wave bodies
+byte-identical to g3_jp func_8005A13C modulo the row name (8/8), and
+all 15 rows present in `config/splat.g3org_jp.yaml` /
+`config/splat.g3org_eu.yaml` at the live report's VRAM/extents
+(g3org_jp SetVertex0-2 at 0x8004be1c/2c/3c, ReadSZfifo3/4 at
+0x8004f72c/0x8004f740; g3org_eu ReadSZfifo3/4 at 0x8004f048/0x8004f05c;
+the waves at 0x800575d8/0x80057dc8/0x800588c8/0x800591e8 and
+0x80056fd4/0x800577c4/0x800582c4/0x80058be4). No source, YAML, asm or
+oracle change. Registry 75 → 90 entries (34 semantic_c / 5 hybrid /
+51 asm_preserved); all-target reviewed bytes 18,276 → 22,092 (+3,816 =
+wave 8 × 0x1cc 3,680 + fifo 92 + 44). Suite 299/299; `--strict`
+accepts all entries.
+
+### The unattributed-C frames after pass 5/5b — accounting
 
 - **mainmenu_eu is CLOSED at the instance level.** All 4,224
   unattributed-C bytes now sit on reviewed rows (2,340 singletons +
@@ -348,20 +367,26 @@ g3_eu, +1,884 mainmenu_eu); g3_eu reviewed rows 13 → 22 (bytes 3,620 →
   anchor-covered) + 2,032 owner-gated func_80052038 (the SDK-ownership
   gate, do-NOT-grab) + 44 unattributed of func_8006AC04's 0x14c row
   (the disc-return runbook's Phase D landing target, runbook-gated).
-- The wave is now registered at 12 of its 20 instances (g3_jp 4,
-  g3_eu 4, mainmenu_eu 4); g3org_jp/g3org_eu (8 instances) remain a
-  future mechanical pass of this same motion, and mainmenu_jp's
-  instances are lane-owned — untouched here.
+- The wave is now registered at 16 of its 20 instances (g3_jp /
+  g3_eu / mainmenu_eu / g3org_jp / g3org_eu, 4 each); only
+  mainmenu_jp's 4 instances stay unregistered — lane-owned, untouched
+  here. The fifo family is registered at 19 instances (g3_jp 5,
+  g3_eu 5, mainmenu_eu 2, g3org_jp 5, g3org_eu 2) — exactly the five
+  targets that carry the members as live `c` rows.
 
-### Next R2 step (after pass 5)
+### Next R2 step (after pass 5/5b)
 
 1. The boot-target unattributed-C rows (sces_00269 ~5 rows / ~92 bytes;
    slps_00270 ~5 rows / ~108 bytes beyond its registered row) are the
    last untouched C frame — **check the do-NOT-grab lanes first**
    (slps boot copies = scan lane; the sces setIntr family is parked)
    before sampling.
-2. The g3org_jp/g3org_eu wave/fifo instance registration (8 + pair
-   instances) — the same mechanical motion as this pass, whenever the
-   lane is next opened.
+2. The g3org singleton populations are the last unregistered non-lane
+   frames (g3org_eu 4 rows / 164 bytes: func_800250F4, func_80043AB4,
+   func_80043C80, func_80043CBC; g3org_jp 9 rows / 244 bytes incl.
+   func_80043E94 — the palette-fade family member already classified at
+   mainmenu_eu, whose g3org_jp instance needs its own full read, not a
+   mechanical copy) — bounded full-read classification passes, same
+   discipline as pass 3.
 3. Then the asm-row wrapper-boundary sampling, which overlaps R1's
    ownership work — coordinate there instead of duplicating.

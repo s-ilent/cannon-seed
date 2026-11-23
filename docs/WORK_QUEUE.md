@@ -150,21 +150,26 @@ Pass 4 (same window): the mainmenu_eu 8-byte mini family — 8 rows of
 one empty void function each, the empty body IS the retail two-instruction
 return; registered semantic_c (func_80030990 is an R3 Class-B shared
 name — classification only).
-Pass 5 (same window): the wave/fifo INSTANCE registration — the 15
-pending target instances of pass 2's classifications registered at
-g3_eu (9) and mainmenu_eu (6): the 0x1CC subdivision wave (body
+Pass 5 (same window): the wave/fifo INSTANCE registration — all 30
+pending target instances of pass 2's classifications registered at the
+four lane-free targets (g3_eu 9, mainmenu_eu 6, g3org_jp 9, g3org_eu
+6): the 0x1CC subdivision wave (16 of its 20 instances; every body
 byte-identical to g3_jp func_8005A13C modulo the row name, re-verified
-mechanically) and the LIBGTE fifo family; placements double-checked
-against the live report and the target YAMLs. Registry now 75 entries
-(34 semantic_c / 5 hybrid / 36 asm_preserved, 18,276 reviewed bytes);
-g3_eu reviewed bytes 3,620 → 5,552, mainmenu_eu 2,340 → 4,224.
-**mainmenu_eu's unattributed-C frame is fully reviewed AND registered
-(4,224 of 4,224); g3_eu's only unreviewed unattributed-C rows are the
-two gated ones (func_80052038 owner gate, func_8006AC04 runbook-gated
-partial). The remaining R2 value is the boot-target C rows (check the
-do-NOT-grab lanes first), the g3org wave/fifo instance pass, then the
-asm-row wrapper-boundary sampling — which overlaps R1; coordinate
-there instead of duplicating.**
+mechanically) and the LIBGTE fifo family (19 instances across the five
+targets that carry the members); placements double-checked against the
+live report and the target YAMLs; mainmenu_jp's instances lane-owned
+and untouched. Registry now 90 entries (34 semantic_c / 5 hybrid /
+51 asm_preserved, 22,092 reviewed bytes); g3_eu reviewed bytes
+3,620 → 5,552, mainmenu_eu 2,340 → 4,224. **mainmenu_eu's
+unattributed-C frame is fully reviewed AND registered (4,224 of
+4,224); g3_eu's only unreviewed unattributed-C rows are the two gated
+ones (func_80052038 owner gate, func_8006AC04 runbook-gated partial);
+the g3org singleton populations (g3org_eu 164 bytes / 4 rows, g3org_jp
+244 bytes / 9 rows) are the last unregistered non-lane frames. The
+remaining R2 value is the boot-target C rows (check the do-NOT-grab
+lanes first), the g3org singleton passes, then the asm-row
+wrapper-boundary sampling — which overlaps R1; coordinate there
+instead of duplicating.**
 
 **Target:** a bounded sample of current `src/` C rows and their actual
 target yaml consumers.

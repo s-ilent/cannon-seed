@@ -526,6 +526,111 @@
       "source": "src/ReadSZfifo4.c",
       "tier": "asm_preserved",
       "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - four swc2 stores of SZ0..SZ3; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.mainmenu_eu.yaml (mainmenu_eu 0x800660e4, extent 0x18)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_800575D8",
+      "source": "src/func_800575D8.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x800575d8, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_80057DC8",
+      "source": "src/func_80057DC8.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80057dc8, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_800588C8",
+      "source": "src/func_800588C8.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x800588c8, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_800591E8",
+      "source": "src/func_800591E8.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x800591e8, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "SetVertex0",
+      "source": "src/SetVertex0.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - two lwc2 cop2 loads into VXY0/VZ0 via one volatile asm line; cop2 unreachable from plain C; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8004be1c, extent 0x10)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "SetVertex1",
+      "source": "src/SetVertex1.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - two lwc2 loads into VXY1/VZ1, SetVertex0's second-slot twin; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8004be2c, extent 0x10)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "SetVertex2",
+      "source": "src/SetVertex2.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - two lwc2 loads into VXY2/VZ2, SetVertex0's third-slot twin; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8004be3c, extent 0x10)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "ReadSZfifo3",
+      "source": "src/ReadSZfifo3.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - three swc2 stores of SZ1/SZ2/SZ3 through one volatile asm sequence per store; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8004f72c, extent 0x14)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "ReadSZfifo4",
+      "source": "src/ReadSZfifo4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - four swc2 stores of SZ0..SZ3; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8004f740, extent 0x18)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_80056FD4",
+      "source": "src/func_80056FD4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x80056fd4, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_800577C4",
+      "source": "src/func_800577C4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x800577c4, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_800582C4",
+      "source": "src/func_800582C4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x800582c4, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_80058BE4",
+      "source": "src/func_80058BE4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 wave classification (the full source read banked at the g3_jp instances): the 0x1cc game-owned recursive triangle-subdivision driver feeding a display-list builder; this instance's body byte-identical to g3_jp func_8005A13C modulo the row name (re-verified this window); whole body verbatim retail bytes in one file-scope __asm__ string; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x80058be4, extent 0x1cc)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "ReadSZfifo3",
+      "source": "src/ReadSZfifo3.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - three swc2 stores of SZ1/SZ2/SZ3 through one volatile asm sequence per store; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x8004f048, extent 0x14)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "ReadSZfifo4",
+      "source": "src/ReadSZfifo4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - four swc2 stores of SZ0..SZ3; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x8004f05c, extent 0x18)."
     }
   ]
 }
