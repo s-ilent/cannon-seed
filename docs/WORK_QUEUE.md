@@ -130,6 +130,15 @@ repeat its summary.
 
 ### R2 — Cross-target source reuse and semantic-quality classification
 
+**Pass 1 delivered 2026-11-23:**
+[the classification sample](research/G3_R2_SOURCE_REUSE_CLASSIFICATION_20261123.md) —
+16 shared C rows (x5–x8 instances) fully read and tiered: 7 semantic_c,
+9 asm_preserved (the whole sampled GTE math family), 0 hybrid; the three
+sampled unknown-name rows are GTE compose-rotation members, not game
+logic; registry extended at g3_jp instances only (reviewed rows 5 → 21,
+528 → 4,180 bytes). **Next R2 frame: the origin-unattributed C rows;
+the hybrid tier remains unsampled.**
+
 **Target:** a bounded sample of current `src/` C rows and their actual
 target yaml consumers.
 

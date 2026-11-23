@@ -92,6 +92,118 @@
       "source": "src/MulMatrix.c",
       "tier": "asm_preserved",
       "evidence": "Same shared asm-backed MulMatrix source compiled for the boot target; cross-target instance counted separately."
+    },
+    {
+      "target": "g3_jp",
+      "name": "SsSeqCalledTbyT",
+      "source": "src/SsSeqCalledTbyT.c",
+      "tier": "semantic_c",
+      "evidence": "LIBSND SSCALL sequencer tick dispatcher, plain readable C over the 0xAC-stride track table (guard re-entry, slotbits scan, nested 0x10/0x20/0x40/0x80 play arms inside the 0x01 arm, raw-arg 0x04 stop arm); no inline asm; entire file read this window."
+    },
+    {
+      "target": "g3_jp",
+      "name": "SsSetSerialVol",
+      "source": "src/SsSetSerialVol.c",
+      "tier": "semantic_c",
+      "evidence": "LIBSND SSSETSV member: builds the 0x28-byte SpuSetCommonAttr record with mask 0xC0/0xC00 per serial and the vl*0x7FFF/0x7F clamped scaling; plain readable C, no inline asm; entire file read."
+    },
+    {
+      "target": "g3_jp",
+      "name": "ScaleMatrixL",
+      "source": "src/ScaleMatrixL.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE left-scaling matrix member: the whole product pipeline is one volatile extended-asm block with register-pinned ret/last variables; the C wrapper only assigns m[4] and returns; algorithm not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "ScaleMatrix",
+      "source": "src/ScaleMatrix.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE right-scaling matrix member: same all-asm block shape as ScaleMatrixL (five unrolled multu product blocks, frameless jr with delay-slot store); C wrapper is m[4]=last + return; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "GsGetTimInfo",
+      "source": "src/GsGetTimInfo.c",
+      "tier": "semantic_c",
+      "evidence": "LIBGS SCLIB TIM walker: plain readable C over the packed TIM header (bit-3 image-present leg, CLUT round-down-to-4 offset, separate pixel/clut walkers); no inline asm; entire file read."
+    },
+    {
+      "target": "g3_jp",
+      "name": "GsSetLightMode",
+      "source": "src/GsSetLightMode.c",
+      "tier": "semantic_c",
+      "evidence": "LIBGS SCLIB light-mode setter: plain readable C goto-chain over modes 0..3 with the shared lmode static and the printf error leg; no inline asm; entire file read."
+    },
+    {
+      "target": "g3_jp",
+      "name": "GsClearOt",
+      "source": "src/GsClearOt.c",
+      "tier": "semantic_c",
+      "evidence": "LIBGS SCLIB OT clearer: plain readable C struct writer (top/bottom/tail with the 4<<width byte span) plus one forwarded clear call; no inline asm; entire file read."
+    },
+    {
+      "target": "g3_jp",
+      "name": "OuterProduct12",
+      "source": "src/OuterProduct12.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE outer-product member: entire body is one volatile asm block including the GTE op .word spelling (cop2 control save/install, lwc2/swc2 vector moves); unreachable from plain C; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "ApplyMatrixSV",
+      "source": "src/ApplyMatrixSV.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE short-vector transform: entire body is one volatile asm block (five ctc2 rotation loads, lwc2 vector, mvmva .word, mfc2/sh stores, register-var return); not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_800492F8",
+      "source": "src/func_800492F8.c",
+      "tier": "asm_preserved",
+      "evidence": "GTE rotation-matrix composer (0x110 whole-row class): SetRotMatrix head plus three strided MVMVA 0x4A486012 passes, whole body one volatile asm block ending in the addu $2 tail; not semantic C. psyq prototype unattested - auto name kept."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_8005E4E8",
+      "source": "src/func_8005E4E8.c",
+      "tier": "asm_preserved",
+      "evidence": "GTE compose-rotation in-place member (0x10c): stages from (a1), three MVMVA passes over the packed interleave, commits at (a1); whole body one volatile asm block; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "func_8005E3DC",
+      "source": "src/func_8005E3DC.c",
+      "tier": "asm_preserved",
+      "evidence": "GTE compose-rotation copy-form member (0x10c): byte-identical twin of func_8005E4E8 except commit destination ((a0) instead of (a1)) and return register staging; whole body one volatile asm block; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "RotAverageNclipColorDpq3_1",
+      "source": "src/RotAverageNclipColorDpq3_1.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE per-vertex nclip/ncds lighting member: three single rtps, per-vertex IR0 restore before each NCDS, nclip/avsz3 .word spellings; whole body one volatile asm block with retail branch words pinned; not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "RotTransPers4",
+      "source": "src/RotTransPers4.c",
+      "tier": "asm_preserved",
+      "evidence": "LIBGTE rtpt+rtps projection member: whole body one volatile asm block (three-vertex rtpt, stacked-arg SXY stores, combined FLAG, SZ3>>2 return through the register var); not semantic C."
+    },
+    {
+      "target": "g3_jp",
+      "name": "GsMapModelingData",
+      "source": "src/GsMapModelingData.c",
+      "tier": "semantic_c",
+      "evidence": "LIBGS SCLIB TMD reloc walker: plain readable C two-walk head with the addend spelled through the fixed base r (flag test, count read, three-field += base loop); no inline asm; entire file read."
+    },
+    {
+      "target": "g3_jp",
+      "name": "_SsUtBuildADSR",
+      "source": "src/_SsUtBuildADSR.c",
+      "tier": "semantic_c",
+      "evidence": "LIBSND _SsUt ADSR packer: plain readable C halfword record -> two SPU ADSR attribute words (signed flag fields, shift-then-mask rate pack); no inline asm; entire file read."
     }
   ]
 }
