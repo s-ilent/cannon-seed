@@ -280,7 +280,7 @@ mode-1-only; the machinery is region- and mode-invariant.
 
 ## Next R1 question
 
-The script subsystem is now decoded end to end — interpreter, ticker,
+~~The script subsystem is now decoded end to end — interpreter, ticker,
 selector, corpus, clock, latch, tables, EU twins — with the absent-band
 *intent* the only open item, and it is data-curation-shaped rather than
 mechanism-shaped. The natural next reads, in value order: (1) label the
@@ -293,4 +293,12 @@ firers (the EU aliases of the 9 func_80045054 callers) to confirm the
 latch arbitration is region-invariant; (3) the two conversion candidates
 (func_80044F60 0xE4, func_80044B7C 0x1B0) remain recorded-with-
 precondition (walk-row split first) — NOT scheduled without the split
-decision.
+decision.~~
+
+**(1) Done in [G3_SCRIPT_NOTE_ON_20261125.md](G3_SCRIPT_NOTE_ON_20261125.md)**
+(pass 15, same window): every script command is a psyq SsUtKeyOn VAB
+note-on (prog = handler id; volumes = per-program multiplier × global
+L/R scalers; tone bytes from the runtime table D_800CFF88); the
+SsSetSerialVol wrappers belong to a separate consumer (open). The
+remaining reads: the runtime tone-table writers, the EU direct-fire
+twins, and the walk-row split decision.
