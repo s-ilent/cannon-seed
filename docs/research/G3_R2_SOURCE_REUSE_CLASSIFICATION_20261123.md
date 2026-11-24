@@ -390,3 +390,63 @@ accepts all entries.
    discipline as pass 3.
 3. Then the asm-row wrapper-boundary sampling, which overlaps R1's
    ownership work — coordinate there instead of duplicating.
+
+
+## Pass 6 (2026-11-24, window cron-20261124-0609) — the g3org singleton populations
+
+The pass-5/5b next-step item 2 executed: both g3org singleton frames
+fully read and classified — 13 instances over 12 shared source files
+(the func_800250F4 file serves both targets). Every row's entire source
+read this window, every placement verified against the live
+YAML-derived report AND directly against `config/splat.g3org_eu.yaml` /
+`config/splat.g3org_jp.yaml`; registry entries added at the sampled
+instances only. No source, YAML, asm or oracle change.
+
+| Row (instance VA) | Tier | Extent | Evidence (full read) |
+| --- | --- | --- | --- |
+| [func_800250F4](../../../src/func_800250F4.c) g3org_eu + g3org_jp 0x800250F4 | semantic_c | 0x8 each | Empty void function — the retail row is exactly the two-instruction return, the empty body IS the full behavior (pass-4 mini-family precedent); one shared file, two instances. |
+| [func_80043AB4](../../../src/func_80043AB4.c) g3org_eu 0x80043AB4 | semantic_c | 0x30 | Palette-fade wrapper, the 0x4B pair family member: forwards x, y and constant 0x4B to this target's helper func_800416D0; word stream is the landed mainmenu_eu reference func_8005AC68 verbatim with only the callee delta (file header, oracle-proven). |
+| [func_80043C80](../../../src/func_80043C80.c) g3org_eu 0x80043C80 | semantic_c | 0x3c | Palette-fade wrapper, the func_8005AE34 shape (signed x*4+0x100 fold, 0x14 third argument), callee func_800416D0; mainmenu_eu reference verbatim modulo the callee (census word-eq 14/15). |
+| [func_80043CBC](../../../src/func_80043CBC.c) g3org_eu 0x80043CBC | semantic_c | 0x30 | Palette-fade wrapper, the second-wrapper shape (constant 0x17), callee func_800416D0; mainmenu_eu func_8005AE70 verbatim modulo the callee (oracle probe). |
+| [func_8002607C](../../../src/func_8002607C.c) g3org_jp 0x8002607C | asm_preserved | 0x14 | Bare file-scope hand-asm unit, no C body: lui/addiu materializes 0x8007441C then three lw loads (v0/v1/a0). |
+| [func_800260E4](../../../src/func_800260E4.c) g3org_jp 0x800260E4 | asm_preserved | 0x14 | Same hand-asm class: addiu folds the row base +0x455C, four lw loads (v0/v1/a0/a1). |
+| [func_80031ABC](../../../src/func_80031ABC.c) g3org_jp 0x80031ABC | asm_preserved | 0x10 | Hand-asm unit: absolute store of $v0 to 0x800C8D68, jr/nop. |
+| [func_80042DE0](../../../src/func_80042DE0.c) g3org_jp 0x80042DE0 | asm_preserved | 0xc | Hand-asm unit: dual store sw $v0, 0x1C($a0) with the jr delay slot carrying sw $v0, 0x20($a0). |
+| [func_80043E94](../../../src/func_80043E94.c) g3org_jp 0x80043E94 | semantic_c | 0x30 | Palette-fade wrapper, the 0x4B member with callee func_80041AB0 — this instance's own full read as the doc requires (not a mechanical copy): one bounded plain-C forwarding function, no inline asm. |
+| [func_80044060](../../../src/func_80044060.c) g3org_jp 0x80044060 | semantic_c | 0x3c | Palette-fade wrapper, the func_8005AE34 shape, callee func_80041AB0; mainmenu_eu reference verbatim modulo the callee. |
+| [func_8004409C](../../../src/func_8004409C.c) g3org_jp 0x8004409C | semantic_c | 0x30 | Palette-fade wrapper, the second-wrapper shape (0x17), callee func_80041AB0; mainmenu_eu func_8005AE70 verbatim modulo the callee. |
+| [func_80048864](../../../src/func_80048864.c) g3org_jp 0x80048864 | asm_preserved | 0xc | Hand-asm unit: syscall; jr; nop. |
+
+Registry delta: 90 → 103 entries (42 semantic_c / 5 hybrid /
+56 asm_preserved); g3org_eu reviewed bytes 1,884 → 2,048, g3org_jp
+1,932 → 2,176; all-target reviewed bytes 22,092 → 22,500. Placement
+verified twice per row; for the five hand-asm units the files' `.r_`
+section tags independently match the yaml offsets
+(.r_0000687C/68E4/122BC/235E0/29064). Suite 299/299 after the
+extension; `--strict` accepts all entries.
+
+### The g3org frames after pass 6 — accounting
+
+Both g3org unattributed-C frames are now **fully reviewed AND
+registered, exactly like mainmenu_eu**:
+
+- **g3org_eu** (2,048 unattributed-C bytes): 2,048 on reviewed rows —
+  1,840 wave instances (pass 5b) + 44 fifo instances (pass 5b) + 164
+  singletons (this pass). Zero unreviewed unattributed-C rows remain.
+- **g3org_jp** (2,176 unattributed-C bytes): 2,176 on reviewed rows —
+  1,840 wave + 92 fifo (pass 5b) + 244 singletons (this pass: 164
+  semantic_c + 80 hand-asm). Zero unreviewed unattributed-C rows remain.
+
+### Next R2 step (after pass 6)
+
+1. The boot-target unattributed-C rows (sces_00269 5 rows / 92 bytes;
+   slps_00270 6 rows / 108 bytes) are the last untouched C frame. The
+   do-NOT-grab check resolves cleanly: sces's five rows are exactly the
+   LIBGTE fifo family (SetVertex0-2 + ReadSZfifo3/4), NOT the parked
+   setIntr family; slps's rows are the same five fifo members plus
+   func_80024F00 (0x10), a matched live c row with its own source — not
+   a scan-lane boot-copy row. A pass 7 = the fifo instance registration
+   at both boot targets (mechanical, pass-2 classification) plus the one
+   new full read.
+2. Then the asm-row wrapper-boundary sampling, which overlaps R1's
+   ownership work — coordinate there instead of duplicating.

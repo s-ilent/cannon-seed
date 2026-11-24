@@ -631,6 +631,97 @@
       "source": "src/ReadSZfifo4.c",
       "tier": "asm_preserved",
       "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances): LIBGTE fifo member - four swc2 stores of SZ0..SZ3; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x8004f05c, extent 0x18)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_800250F4",
+      "source": "src/func_800250F4.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read of the shared file): empty void function - the retail row is exactly the two-instruction return, the empty body IS the full behavior (pass-4 mini-family precedent); plain C, no asm. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x800250f4, extent 0x8)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_80043AB4",
+      "source": "src/func_80043AB4.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): plain C palette-fade wrapper, the 0x4B pair family member - forwards x, y and constant 0x4B to this target's helper func_800416D0; word stream is the landed mainmenu_eu reference func_8005AC68 verbatim with only the callee delta (file header, oracle-proven via probe_0x4B_sites.py); one bounded function, no inline asm. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x80043ab4, extent 0x30)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_80043C80",
+      "source": "src/func_80043C80.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): plain C palette-fade wrapper, the func_8005AE34 shape - signed x*4+0x100 fold, 0x14 third argument, callee this target's func_800416D0; word stream is the landed mainmenu_eu reference verbatim with only the callee delta (file header, census word-eq 14/15); no inline asm. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x80043c80, extent 0x3c)."
+    },
+    {
+      "target": "g3org_eu",
+      "name": "func_80043CBC",
+      "source": "src/func_80043CBC.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): plain C palette-fade wrapper, the second-wrapper shape - forwards x, y and constant 0x17 to this target's helper func_800416D0; word stream is the landed mainmenu_eu reference func_8005AE70 verbatim with only the callee delta (file header, oracle probe); no inline asm. Placement verified against the live YAML-derived report and config/splat.g3org_eu.yaml (g3org_eu 0x80043cbc, extent 0x30)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_800250F4",
+      "source": "src/func_800250F4.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read of the shared file): empty void function - the retail row is exactly the two-instruction return, the empty body IS the full behavior (pass-4 mini-family precedent); plain C, no asm. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x800250f4, extent 0x8)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_8002607C",
+      "source": "src/func_8002607C.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): bare file-scope hand-asm unit, no C body - lui/addiu materializes 0x8007441C then three lw loads (v0/v1/a0); the algorithm lives in verbatim retail hand asm, not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8002607c, extent 0x14; the file's .r_0000687C section tag matches the yaml offset)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_800260E4",
+      "source": "src/func_800260E4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): bare file-scope hand-asm unit, no C body - addiu folds the row-base +0x455C then four lw loads (v0/v1/a0/a1); the algorithm lives in verbatim retail hand asm, not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x800260e4, extent 0x14; the file's .r_000068E4 section tag matches the yaml offset)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_80031ABC",
+      "source": "src/func_80031ABC.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): bare file-scope hand-asm unit, no C body - absolute store of $v0 to 0x800C8D68 then jr/nop; the algorithm lives in verbatim retail hand asm, not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80031abc, extent 0x10; the file's .r_000122BC section tag matches the yaml offset)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_80042DE0",
+      "source": "src/func_80042DE0.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): bare file-scope hand-asm unit, no C body - dual store sw $v0, 0x1C($a0) with the jr delay slot carrying sw $v0, 0x20($a0); the algorithm lives in verbatim retail hand asm, not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80042de0, extent 0xc; the file's .r_000235E0 section tag matches the yaml offset)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_80043E94",
+      "source": "src/func_80043E94.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read, this instance's own read as the doc requires - not a mechanical copy): plain C palette-fade wrapper, the 0x4B pair family member - forwards x, y and constant 0x4B to this target's helper func_80041AB0; one bounded function, no inline asm. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80043e94, extent 0x30)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_80044060",
+      "source": "src/func_80044060.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): plain C palette-fade wrapper, the func_8005AE34 shape - signed x*4+0x100 fold, 0x14 third argument, callee this target's func_80041AB0; word stream is the landed mainmenu_eu reference verbatim with only the callee delta (file header, census word-eq 14/15); no inline asm. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80044060, extent 0x3c)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_8004409C",
+      "source": "src/func_8004409C.c",
+      "tier": "semantic_c",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): plain C palette-fade wrapper, the second-wrapper shape - forwards x, y and constant 0x17 to this target's helper func_80041AB0; word stream is the landed mainmenu_eu reference func_8005AE70 verbatim with only the callee delta (file header, oracle probe); no inline asm. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x8004409c, extent 0x30)."
+    },
+    {
+      "target": "g3org_jp",
+      "name": "func_80048864",
+      "source": "src/func_80048864.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-6 classification (full source read): bare file-scope hand-asm unit, no C body - syscall; jr; nop; the algorithm lives in verbatim retail hand asm, not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80048864, extent 0xc; the file's .r_00029064 section tag matches the yaml offset)."
     }
   ]
 }
