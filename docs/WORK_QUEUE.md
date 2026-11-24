@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Eleven bounded runs completed (2026-11-22/23):**
+**Twelve bounded runs completed (2026-11-22/23, plus pass 12 on 2026-11-24):** the pass-12 note [G3 script interpreter + 4-lane rank](research/G3_SCRIPT_INTERP_LANE_RANK_20261124.md) decodes the two remaining unnamed slot-4 stage helpers, the 46-command script table and the script stream base; the earlier eleven:
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
