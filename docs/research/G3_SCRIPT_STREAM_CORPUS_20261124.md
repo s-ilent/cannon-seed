@@ -21,9 +21,13 @@ The script machinery has **two independent cursors into the same
   D_800ABA08.
 - **Selector** func_80044AC0 (same file): for slot `a1` (bounds-checked
   `a1 == 0 || a1 >= 9` → bail; valid 1..8) picks
-  `D_8008B1A8[(a0+v1)*4 + a1]` → the interpreter cursor, and
-  `D_8008AF9C[a1]` → the ticker cursor; zeroes the counter; stores `a0`
-  to D_800ABEAC.
+  `D_8008B1A8[mode*12 + slot]` (word index; byte stride mode*48 +
+  slot*4, mode = lh(D_800AC1D4) — **corrected in the pass-14 window**;
+  the earlier "(a0+v1)*4 + a1" reading was a misparse) → the
+  interpreter cursor, and `D_8008AF9C[slot]` → the ticker cursor;
+  zeroes the counter; stores the timer source lhu(D_800AC16C) to
+  D_800ABEAC. The invalid-slot bail tail-merges into the adjacent
+  func_80044B38 leaf's `jr` (see the pass-14 note).
 - **Interpreter** (first channel) func_80044F60: per pair, when the
   counter reaches the frame gate, dispatches the payload halfword as a
   command through func_80045088/func_800450F4 → func_8002FA9C (the
@@ -140,15 +144,22 @@ are not script content.
 | Pointer tables D_8008AF9C (12) / D_8008B1A8 (24×4-word) | verified | data_80080048.data.s dlabels |
 | Corpus decode (regions A/B, stub bank) | verified | halfword decode of the extracted blob (this window's script) |
 | Stub bank + region-B absent commands | verified | decode vs the pass-12 table |
-| Absent-command mechanism (2nd table / third reader / inert) | open | none found in the mapped image |
-| Payload role of the ticker's committed pairs | open | no reader found |
+| Absent-command mechanism (2nd table / third reader / inert) | ~~open~~ resolved by pass 14 | [G3_SCRIPT_ABSENT_COMMANDS_20261125.md](G3_SCRIPT_ABSENT_COMMANDS_20261125.md): no patcher, no reader; position-consuming no-ops + latch consumption |
+| Payload role of the ticker's committed pairs | ~~open~~ resolved by pass 14 | nothing reads them — pure timeline tracker confirmed |
 
 ## Next R1 question
 
-Label the nine region-B scripts' commands handler-by-handler (the
+~~Label the nine region-B scripts' commands handler-by-handler (the
 multiplier values + the SsSetSerialVol sites give the sound semantics),
 then answer the absent-command question: sweep the full g3_jp image
 for any second consumer of the committed pair region (the ticker
 cursor's committed halfwords) before concluding inertness. The EU
 ticker/selector twins (the EU aliases of func_80042BF0/func_80044AC0)
-should be pinned to the EU script blob in the same pass.
+should be pinned to the EU script blob in the same pass.~~
+
+**Answered in [G3_SCRIPT_ABSENT_COMMANDS_20261125.md](G3_SCRIPT_ABSENT_COMMANDS_20261125.md)**
+(pass 14): no second consumer exists; absent commands advance the
+stream and consume the once-latch; the EU machinery and corpus are
+fully pinned — the 3 mode-1 variant scripts are the only JP/EU
+divergence (JP absent band, EU present payloads over the same gates).
+The handler-by-handler labeling remains the open next read.

@@ -32,7 +32,7 @@ multiple **target instances** to byte totals.
 
 ### R1 — Game-code recovery atlas (independent research track)
 
-**Twelve bounded runs completed (2026-11-22/23, plus pass 12 on 2026-11-24):** the pass-12 note [G3 script interpreter + 4-lane rank](research/G3_SCRIPT_INTERP_LANE_RANK_20261124.md) decodes the two remaining unnamed slot-4 stage helpers, the 46-command script table and the script stream base; the earlier eleven:
+**Fourteen bounded runs completed (2026-11-22..25):** the pass-14 note [G3 script absent-command resolution + EU pin](research/G3_SCRIPT_ABSENT_COMMANDS_20261125.md) closes both pass-13 open questions (no second consumer anywhere — cursor/stream/labels/tables swept; no table patcher; absent commands advance the stream and consume the once-latch; the counter clock + latch lifecycle + mode-handler vector decoded; the complete EU twin machinery pinned and the EU corpus machine-compared — the 3 mode-1 variant scripts are the only JP/EU divergence: JP absent band vs EU present payloads over identical gates); the pass-13 note [G3 script stream corpus](research/G3_SCRIPT_STREAM_CORPUS_20261124.md) decodes the {frame-gate, payload} two-channel format and the whole mapped corpus; the pass-12 note [G3 script interpreter + 4-lane rank](research/G3_SCRIPT_INTERP_LANE_RANK_20261124.md) decodes the two remaining unnamed slot-4 stage helpers, the 46-command script table and the script stream base; the earlier eleven:
 [G3 render preparation](research/G3_RENDER_PREP_ATLAS_20261122.md)
 identifies staging/submission;
 [HUD/font queue and outer frame loop](research/G3_HUD_QUEUE_FRAME_LOOP_20261122.md)
