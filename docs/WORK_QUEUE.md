@@ -171,6 +171,31 @@ lanes first), the g3org singleton passes, then the asm-row
 wrapper-boundary sampling — which overlaps R1; coordinate there
 instead of duplicating.**
 
+**Passes 6–7 delivered 2026-11-24 (window cron-20261124-0609):**
+pass 6 — the g3org singleton populations: 13 instances over 12 shared
+files fully read and registered (8 semantic_c: the empty-void pair +
+three palette-fade wrappers per target, callees func_800416D0 /
+func_80041AB0; 5 asm_preserved bare hand-asm units at g3org_jp); both
+g3org unattributed-C frames close exactly (g3org_eu 2,048 of 2,048;
+g3org_jp 2,176 of 2,176). Pass 7 (same window) — the boot-target C
+rows: the do-NOT-grab check held (sces's five rows are the fifo
+family, not the parked setIntr family; slps's rows are fifo + a
+matched live c row), one full read (slps func_80024F00, the boot
+targets' first review, hybrid: volatile hand-asm nop + the real C
+store boot_flag_0 = 0) plus ten mechanical fifo instance
+registrations; sces closes at 92 of 92, slps at 108 of 108. Registry
+now 114 entries (42 semantic_c / 6 hybrid / 66 asm_preserved,
+22,700 reviewed bytes); fifo registered at 29 of its 30 live
+instances (mainmenu_jp's ReadSZfifo4 lane-owned). **The unattributed-C
+classification frame is exhausted at every lane-free target: closed at
+g3_jp (pass 2), mainmenu_eu (pass 5), g3org_eu/g3org_jp (pass 6),
+sces_00269/slps_00270 (pass 7); the only unreviewed unattributed-C
+rows left campaign-wide are mainmenu_jp's lane-owned frame and g3_eu's
+two gated rows (func_80052038 SDK-ownership gate, func_8006AC04's
+44-byte runbook Phase D tail). The lane's remaining value is the
+asm-row wrapper-boundary sampling — which overlaps R1; coordinate
+there instead of duplicating.**
+
 **Target:** a bounded sample of current `src/` C rows and their actual
 target yaml consumers.
 

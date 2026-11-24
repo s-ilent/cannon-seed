@@ -722,6 +722,83 @@
       "source": "src/func_80048864.c",
       "tier": "asm_preserved",
       "evidence": "Instance registration of the R2 pass-6 classification (full source read): bare file-scope hand-asm unit, no C body - syscall; jr; nop; the algorithm lives in verbatim retail hand asm, not semantic C. Placement verified against the live YAML-derived report and config/splat.g3org_jp.yaml (g3org_jp 0x80048864, extent 0xc; the file's .r_00029064 section tag matches the yaml offset)."
+    },
+    {
+      "target": "sces_00269",
+      "name": "SetVertex0",
+      "source": "src/SetVertex0.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/SetVertex0.c serves every target): LIBGTE fifo member - two lwc2 cop2 vertex loads; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.sces_00269.yaml (sces_00269 0x80032900, extent 0x10)."
+    },
+    {
+      "target": "sces_00269",
+      "name": "SetVertex1",
+      "source": "src/SetVertex1.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/SetVertex1.c serves every target): LIBGTE fifo member - two lwc2 cop2 vertex loads; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.sces_00269.yaml (sces_00269 0x80032910, extent 0x10)."
+    },
+    {
+      "target": "sces_00269",
+      "name": "SetVertex2",
+      "source": "src/SetVertex2.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/SetVertex2.c serves every target): LIBGTE fifo member - two lwc2 cop2 vertex loads; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.sces_00269.yaml (sces_00269 0x80032920, extent 0x10)."
+    },
+    {
+      "target": "sces_00269",
+      "name": "ReadSZfifo3",
+      "source": "src/ReadSZfifo3.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/ReadSZfifo3.c serves every target): LIBGTE fifo member - swc2 stores of the SZ lanes (SZ0..SZ2); whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.sces_00269.yaml (sces_00269 0x80036dd4, extent 0x14)."
+    },
+    {
+      "target": "sces_00269",
+      "name": "ReadSZfifo4",
+      "source": "src/ReadSZfifo4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/ReadSZfifo4.c serves every target): LIBGTE fifo member - four swc2 stores of SZ0..SZ3; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.sces_00269.yaml (sces_00269 0x80036de8, extent 0x18)."
+    },
+    {
+      "target": "slps_00270",
+      "name": "func_80024F00",
+      "source": "src/func_80024F00.c",
+      "tier": "hybrid",
+      "evidence": "Instance registration of the R2 pass-7 classification (full source read this pass): void body = one volatile hand-asm nop + the real C store boot_flag_0 = 0 (gp-relative, 0x3C($gp) = 0x80063268); the file header's ~620-compile probe sweep proves the leading nop is cc1-impossible, so the volatile asm is the settled faithful reproduction of a hand-asm stub; registered hybrid because semantic_c forbids inline asm while the substance is C (the func_800642A0 rationale). Placement verified against the live YAML-derived report and config/splat.slps_00270.yaml (slps_00270 0x80024f00, extent 0x10)."
+    },
+    {
+      "target": "slps_00270",
+      "name": "SetVertex0",
+      "source": "src/SetVertex0.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/SetVertex0.c serves every target): LIBGTE fifo member - two lwc2 cop2 vertex loads; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.slps_00270.yaml (slps_00270 0x80032e38, extent 0x10)."
+    },
+    {
+      "target": "slps_00270",
+      "name": "SetVertex1",
+      "source": "src/SetVertex1.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/SetVertex1.c serves every target): LIBGTE fifo member - two lwc2 cop2 vertex loads; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.slps_00270.yaml (slps_00270 0x80032e48, extent 0x10)."
+    },
+    {
+      "target": "slps_00270",
+      "name": "SetVertex2",
+      "source": "src/SetVertex2.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/SetVertex2.c serves every target): LIBGTE fifo member - two lwc2 cop2 vertex loads; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.slps_00270.yaml (slps_00270 0x80032e58, extent 0x10)."
+    },
+    {
+      "target": "slps_00270",
+      "name": "ReadSZfifo3",
+      "source": "src/ReadSZfifo3.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/ReadSZfifo3.c serves every target): LIBGTE fifo member - swc2 stores of the SZ lanes (SZ0..SZ2); whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.slps_00270.yaml (slps_00270 0x8003730c, extent 0x14)."
+    },
+    {
+      "target": "slps_00270",
+      "name": "ReadSZfifo4",
+      "source": "src/ReadSZfifo4.c",
+      "tier": "asm_preserved",
+      "evidence": "Instance registration of the R2 pass-2 classification (the full source read banked at the g3_jp instances; the same shared src/ReadSZfifo4.c serves every target): LIBGTE fifo member - four swc2 stores of SZ0..SZ3; whole body inline asm; row unattributed for lack of committed SDK anchor evidence, not because it is game code; not semantic C. Placement verified against the live YAML-derived report and config/splat.slps_00270.yaml (slps_00270 0x80037320, extent 0x18)."
     }
   ]
 }

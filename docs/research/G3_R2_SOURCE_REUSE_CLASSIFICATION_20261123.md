@@ -450,3 +450,51 @@ registered, exactly like mainmenu_eu**:
    new full read.
 2. Then the asm-row wrapper-boundary sampling, which overlaps R1's
    ownership work — coordinate there instead of duplicating.
+
+
+## Pass 7 (same window) — the boot-target C rows
+
+The pass-6 next-step item 1 executed. The do-NOT-grab check held:
+sces_00269's five unattributed C rows are exactly the LIBGTE fifo
+family, not the parked setIntr family; slps_00270's rows are the same
+five fifo members plus func_80024F00, a matched live c row with its own
+source, not a scan-lane boot-copy row. One full read (func_80024F00)
+plus ten mechanical fifo instance registrations, placements verified
+against the live report AND `config/splat.sces_00269.yaml` /
+`config/splat.slps_00270.yaml`. No source, YAML, asm or oracle change.
+
+| Row (instance VA) | Tier | Extent | Evidence |
+| --- | --- | --- | --- |
+| [func_80024F00](../../../src/func_80024F00.c) slps_00270 0x80024F00 | **hybrid** | 0x10 | Full read this pass: volatile hand-asm nop + the real C store `boot_flag_0 = 0` (gp-relative, 0x3C($gp) = 0x80063268); the header's ~620-compile probe sweep proves the leading nop is cc1-impossible, so the volatile asm is the settled faithful reproduction of a hand-asm stub; hybrid per the func_800642A0 rationale — semantic_c forbids inline asm while the substance is C. The boot targets' first review. |
+| SetVertex0/1/2 sces 0x80032900-20, slps 0x80032E38-58 | asm_preserved | 0x10 each | Pass-2 fifo classification (two lwc2 cop2 loads); shared source serves every target. |
+| ReadSZfifo3/4 sces 0x80036DD4/E8, slps 0x8003730C/20 | asm_preserved | 0x14/0x18 | Pass-2 fifo classification (swc2 SZ stores); shared source serves every target. |
+
+Registry delta: 103 → 114 entries (42 semantic_c / 6 hybrid /
+66 asm_preserved); sces_00269 review bytes 0 → 92, slps_00270 268 →
+376; all-target reviewed bytes 22,500 → 22,700. Suite 299/299;
+`--strict` accepts all entries.
+
+### The unattributed-C frames after pass 7 — campaign accounting
+
+- **sces_00269: CLOSED** — 92 of 92 unattributed-C bytes on reviewed
+  rows. **slps_00270: CLOSED** — 108 of 108. Both g3org targets and
+  mainmenu_eu closed at passes 5b/6/5 respectively. **g3_jp closed at
+  pass 2.**
+- The only unreviewed unattributed-C rows left campaign-wide are the
+  lane-owned ones: mainmenu_jp's frame (lane-owned, untouched here) and
+  g3_eu's two gated rows (func_80052038 SDK-ownership gate;
+  func_8006AC04's 44-byte partial tail, runbook Phase D).
+- The fifo family is now registered at **29 instances across the seven
+  lane-free targets that carry the members** (g3_jp 5, g3_eu 5,
+  g3org_jp 5, sces 5, slps 5, g3org_eu 2, mainmenu_eu 2); the only
+  unregistered live instance is mainmenu_jp's ReadSZfifo4 — lane-owned
+  (30 live instances campaign-wide). The subdivision wave stands at 16
+  of its 20 (mainmenu_jp's 4 stay lane-owned).
+
+### Next R2 step (after pass 7)
+
+The C-row classification frame is exhausted at every lane-free target.
+The lane's remaining value is the asm-row wrapper-boundary sampling,
+which overlaps R1's ownership work — coordinate there instead of
+duplicating; and the R3 shared-name brief still awaits owner
+ratification (no renames anywhere in passes 6/7).
