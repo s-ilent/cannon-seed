@@ -24,7 +24,9 @@ names are contiguous instruction ranges inside it:
   `jr $ra` at func_80044D08's tail). `func_80044D2C` starts the next
   real unit.
 - **func_80044F60**: real body 0x80044F60..0x80045044 (0xE4 bytes; the
-  returns sit in the shared epilogue block func_80045044).
+  returns sit in the shared epilogue block func_80045044). The real stream format
+  (frame-gated pairs) is established in
+  [G3_SCRIPT_STREAM_CORPUS_20261124.md](G3_SCRIPT_STREAM_CORPUS_20261124.md).
 
 ## func_80044F60 — the per-frame script command interpreter (0xE4)
 
@@ -40,15 +42,22 @@ func_80044F60/func_80044FE4/func_80045034/func_8004503C/func_80045044):
 3. **Terminator**: opcode −1 → return **without committing** the cursor
    (the epilogue restores s0 from the stack; the store to D_800ABE14 at
    func_8004503C happens only on the dispatch path).
-4. **Wait-gate**: if the signed halfword operand 1 read from the stream
-   satisfies `*D_800AC384 < operand` → return **without committing**
-   (the operand is re-read next frame — a frame-count wait opcode).
-5. **Mode-gate**: if the signed mode `*D_800ABF9C` != operand 1 → the
-   general dispatch; if mode matches **and** opcode ∈ {0xC, 0xD, 0xE,
-   0xF} → return without commit (a mode-gated opcode class).
-6. **Dispatch**: opcode < 0 → `func_800450F4(op, arg1, arg2, arg3)` (the
-   long form: three more inline halfword args, sign-extended); opcode ≥ 0
-   → `func_80045088(op)` (short form). Both executors re-test the 0x20
+4. **Frame gate (corrected in the pass-13 window)**: the stream is a
+   sequence of {frame-gate halfword, payload halfword} pairs; the FIRST
+   halfword of each pair is a frame gate — while the shared per-frame
+   counter `*D_800AC384` is still below it, the interpreter returns
+   **without committing** (the pair is retried next frame). The counter
+   is zeroed by the script reset func_80044A90 and the script selector
+   func_80044AC0; the second channel ticker func_80042BF0 shares it
+   (see [the pass-13 corpus note](G3_SCRIPT_STREAM_CORPUS_20261124.md)).
+5. **Mode-gate (corrected in the pass-13 window)**: the payload halfword
+   is the command; if the signed mode `*D_800ABF9C` equals 1 **and** the
+   command ∈ {0xC, 0xD, 0xE, 0xF} → return without commit (a
+   mode-1-suppressed command class); otherwise the general dispatch.
+6. **Dispatch** (the payload halfword, sign-extended): < 0 →
+   `func_800450F4(op, arg1, arg2, arg3)` (the long form: three more
+   inline halfword args, sign-extended); ≥ 0 → `func_80045088(op)` (short
+   form). Both executors re-test the 0x20
    gate; the short form additionally fires only when the once-latch
    `*D_800AC58C` is clear and sets it — the long form has no latch.
 7. **Commit**: only the dispatch path stores `s0` back to D_800ABE14.
