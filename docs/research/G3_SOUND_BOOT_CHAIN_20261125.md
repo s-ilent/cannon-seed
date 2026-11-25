@@ -11,7 +11,14 @@ word at `0x80016600`. Source-only: no retail SHA-1 comparison, no
 runtime capture, no C conversion, **no rename** (the two game-owned
 loaders keep their func_ names; the psyq rows the init calls are
 already adopted sdk-symbol names, not touched), no YAML or oracle
-change. Zero prior-pass corrections.
+change. Zero prior-pass corrections. One **same-window correction**
+to this note itself (the pass-14 precedent): the first reading
+called the re-attach "no tone refill" and recorded a refill-site
+open remainder — the re-attach's success branch into the shared fill
+loop at func_80029EC0 was hidden by the chunk split (the branch
+`bne $v0, $v1, func_80029EC0` leaves the func_80029E2C chunk); the
+corrected reading below closes the module-swap model with no open
+remainder.
 
 ## The three runtime words — single writers, machine-checked
 
@@ -122,7 +129,9 @@ separate subsystem, not sound.
 ## The re-attach path — the module-swap sound boot (func_80029E2C)
 
 The second function in the sound group re-attaches to the EXISTING
-resident state without touching the disc:
+resident state without touching the disc, and **it re-fills the
+tone array** (the success branch `bne $v0, $v1, func_80029EC0` at
+the VabHdr check crosses the chunk split into the shared fill loop):
 
 ```
 SsInitHot() (func_8006A1C8; SSINIT/S_IH placements, sig-db agree)
@@ -136,9 +145,29 @@ SsVabFakeHead(0x80016604, lw(0x80016600), lw(D_8001EC24))
 SsVabFakeBody(lw(0x80016600))
 SsUtGetVabHdr(vabId, D_800CFF64) — refresh the local VabHdr copy
 == -1 → printf(D_80020808) = "SsUtGetVabHdr err\n"
+   (both paths continue — the error path falls through into the
+    refill loop with s0 = 0 from the bne delay slot)
+THE FILL LOOP (func_80029EC0): for prog = 0..0x3D (slti bound 0x3E,
+    the SAME bound as the full init):
+    SsUtGetVagAtr(vabId, prog, 0, D_800CFF84 + prog*0x20)
+    == -1 → printf(D_8002081C) = "SsUtGetVagAtr err\n"
+       (the full init's loop func_80029D64 has no per-record error
+        printf — the re-attach's loop is the more defensive copy)
+THE VOLUME TAIL (func_80029F0C): D_800ABB54 = D_800ABB5C = 0x5A;
+    lh(D_800ABF9C) picks 0x65 vs 0x7F → D_800ABB64/D_800ABB6C;
+    SsSetSerialAttr(0, 0, 1); SsSetSerialVol(0, lhu, lhu);
+    SsSetStereo(); return
+    — the same tail the full init's loop exit reaches
+      (0x80029D64's fall-through into the shared 0x5A stores);
+      unlike the full init the re-attach does NOT re-read
+      SsUtGetVBaddrInSB (the SPU address is already resident at
+      0x8001EC24 and the FakeBody re-registration restores the
+      library's mapping)
 ```
 
-No CD access, no re-open, no re-transfer — and **no VagAtr refill**.
+No CD access, no re-open, no re-transfer — and the library serves
+VagAtr out of the FakeHead-registered resident header, so the refill
+runs entirely below the disc.
 
 ### Who runs which (the caller census, machine-checked)
 
@@ -164,19 +193,18 @@ No CD access, no re-open, no re-transfer — and **no VagAtr refill**.
   same holds for the byte-twin groups in g3_eu/g3org_eu/g3org_jp/
   mainmenu_jp.
 
-### The consequence, recorded as the open remainder
+### The consequence — the module-swap model closes
 
 g3_jp's crt0 (entry 0x80047EF0) zeroes `.bss` [0x800ABA8C,
 0x80171F04) — the tone array 0x800CFF84 and the voice cache
 0x800D0744 are inside — while the below-image sound words
 (0x80016600/0x80016604/0x8001EC24) sit outside and survive the
-module swap. So after a g3-family boot the tone array is zeroed and
-the re-attach does not refill it; the executor would read zero
-note/fine bytes. The refill path that must exist on retail — an
-SsUtGetVagAtr loop or an equivalent copy reached from a site this
-sweep does not cover (an un-split region outside data_80022878's
-main, or a boot-order subtlety in the mainmenu→g3 hand-off) — is
-the recorded open remainder. No mechanism invented.
+module swap. The re-attach repairs the zeroing in full: its own
+SsUtGetVagAtr loop re-fills all 62 tone records from the
+FakeHead-registered resident header before any script runs. **Every
+module boot leaves the sound system fully live** — the boot-chain
+modules via the disc-backed full init, the g3-family modules via the
+disc-free re-attach. No open remainder.
 
 ## The below-image resident layout (the sound struct at 0x80016600)
 
@@ -231,19 +259,20 @@ and the fill chain are region-invariant.
 | Boot-chain callers of the full init | verified | slps 0x80021838, sces 0x80021854, mainmenu_eu 0x800241AC |
 | g3-family re-attach-only boot | verified | main 0x80022548 jal word 0x0C00A78B; encoding sweep over all data rows |
 | crt0 zeroes the tone array on every module load | verified | entry 0x80047EF0 loop bounds 0x800ABA8C..0x80171F04 (exe.json pc0) |
-| The g3 tone-array refill site | **open** | no refill site in split code or data-encoded jumps; the retail path remains to be located |
+| The re-attach re-fills all 62 tone records | verified | the cross-chunk success branch bne -1 → func_80029EC0 + the fill loop with the same 0x3E bound + the "SsUtGetVagAtr err\n" string |
 
 ## Next R1 question
 
-(1) Locate the g3-family tone-array refill: sweep the remaining
-un-split code regions of g3_jp (the data_80022878 main body beyond
-0x800225E4 and its callees into the giant chunk) for a SsUtGetVagAtr
-call chain or an inline copy from the resident header's VagAtr area
-(0x80016E24+) into 0x800CFF84 — this closes the "what plays when"
-score's last static gap. (2) The music-lane state the giant chunk
-writes (D_800CFF00/CFF04/CFF14/CFF24, D_80165242 strides, the
-func_80029840 lane dispatcher and its four mode handlers
-func_80029200/func_800292E8/func_800293C4/func_800293FC) — the
-separate mixer/sequencer lane's own boot and tick. (3) When disc
-links return: Phase A/B per the runbook (the ladder stays closed);
-the fresh-set request rides every report.
+(1) The music-lane state the giant chunk writes (D_800CFF00/CFF04/
+CFF14/CFF24, D_80165242 strides, the func_80029840 lane dispatcher
+and its four mode handlers func_80029200/func_800292E8/func_800293C4/
+func_800293FC, and the note2pitch table D_800AB048) — the separate
+mixer/sequencer lane's own boot and tick, the pass-12 "separate
+mixer lane" made concrete. (2) The note/fine VALUES: the corpus's
+"what plays when" score is now a static read — the resident header
+is a disc file's byte image, so the 62 programs' center/shift values
+can be transcribed once the SE.VH bytes are available from a retail
+capture (the tone array is runtime RAM; the header bytes themselves
+are not in the mapped image). (3) When disc links return: Phase A/B
+per the runbook (the ladder stays closed); the fresh-set request
+rides every report.
