@@ -152,6 +152,14 @@ Snd_stop = 0x8006FE5C; // ported verbatim from the committed symbols file (cron-
 SsSeqCalledTbyT_init = 0x80067730; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
 gte_rotate_z_matrix = 0x8005044C; // ported verbatim from the committed symbols file (cron-202611062346 scan-drift unit, the 2adb7d81 port class)
 
+// R1 pass 22 (cron-20261126-2209): the exit-guard words' owners decoded (docs/research/G3_EXIT_GUARD_OWNERS_20261127.md); six game data words banked INERT per the c32d807d convention - scan-time symbols-file input only, no yaml/asm row moves until a lane runs a scan; all six g3_jp-unique (no other target's namespace, no sdk placement, no R3 shared-name class)
+attract_variant = 0x800ABF9C; // the attract timeline variant selector - sole writer func_80030838 (two-variant checkpoint-pack initializer; the only caller is main's raw jal word 0x0C00C20E at 0x800224EC with a0=0 -> variant A: checkpoints 50..410 step 45, D_800ABE34=490, D_800ABFFC=1), variant B static-dead, constant-0 switch for ~40 frame-region readers
+attract_outcome = 0x800ABFC4; // the attract outcome selector - 1 = VICTORY_INIT (func_80041B98/func_80041C08 via func_80022DE0(D_80021208)), 2 = DEFEAT_INIT (func_80042054, D_80021268) / DEAD_END (func_800423C0, D_800212B0) / func_80041AEC; outcome 2 selects the higher STAR_MODE7 exit threshold in the func_80043EEC gate
+attract_stream_len2 = 0x800AC294; // the STAR_MODE7 length mirror - sole writer func_80022EC8 = (StGetNext record +0x8) << 1 via func_8002B20C, re-derived each service tick (not an accumulator); read by the four exit-gate slti compares (len >= thr -> the func_80043FAC exit trio fires immediately)
+attract_step_cnt = 0x800AC164; // the mode-4 step counter - armed by func_80022F24 from getter(9)'s return (1..6 at mode D_800AC5AC==4), cleared in the func_80042F18 (" WAIT_STEP0") and func_800447A8 packs, +1 per func_80043730 step call, -1 per func_800239F4 tick when D_800ABF6C[s0]==0; the func_80023D24 counter-expiry exit arm (+ script cmd 0x35) fires at 0
+vsync_grace_cnt = 0x800AB276; // the vsync grace countdown (gp+0xA, gp=0x800AB26C) - re-armed 0x32 by func_8002377C every tick while mode not in {2,0x32}, decremented by func_80023910; the func_800238C4 mode-5/tick2==4 exit arm requires it fully decayed to 0
+st_next_rec = 0x800ABB74; // the StGetNext out-record pointer (the func_8002AE78 retry loop's a1; func_8002AEA0 compares rec+8 against a requested length); its +0x8 field is the source of attract_stream_len2
+
 // target: slps_00270
 startIntrDMA = 0x8002F1F4; // LIBETC INTR_DMA member; tools/sdk_members.py, unique placement + signature DB agrees; pinned member row
 GsDefDispBuff = 0x8003761C; // LIBGS SCLIB member; tools/sdk_members.py, unique placement; body stores x/x2/y/y2 display-env halfwords; pinned member row
